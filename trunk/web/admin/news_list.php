@@ -5,7 +5,7 @@ if (!isset($_SESSION['administrator'])){
 	exit(1);
 }
 echo "<title>Problem List</title>";
-echo "<center><h2>Problem List</h2></center>";
+echo "<center><h2>news List</h2></center>";
 $sql="select `news_id`,`user_id`,`title`,`time`,`defunct` FROM `news` order by `news_id` desc";
 $result=mysql_query($sql) or die(mysql_error());
 echo "<center><table width=90% border=1>";
