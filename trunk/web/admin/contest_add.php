@@ -12,8 +12,8 @@ $description="";
 	require_once("../include/db_info.inc.php");
 	require_once("../include/check_post_key.php");
 	
-	$starttime=intval($_POST['syear'])."-".intval($_POST['smonth'])."-".intval($_POST['sday'])." ".intval($_POST['shour']).":".intval($_POST['sminute']).":00";
-	$endtime=intval($_POST['eyear'])."-".intval($_POST['emonth'])."-".intval($_POST['eday'])." ".intval($_POST['ehour']).":".intval($_POST['eminute']).":00";
+	$starttime=$_POST['syear']." ".intval($_POST['shour']).":".intval($_POST['sminute']).":00";
+	$endtime=$_POST['eyear']." ".intval($_POST['ehour']).":".intval($_POST['eminute']).":00";
 	//	echo $starttime;
 	//	echo $endtime;
 
@@ -23,7 +23,7 @@ $description="";
         if (get_magic_quotes_gpc ()){
                 $title = stripslashes ($title);
                 $private = stripslashes ($private);
-                $description = stripslashes ($description);
+             //   $description = stripslashes ($description);
         }
 
 	$title=mysql_real_escape_string($title);
@@ -118,25 +118,115 @@ else if(isset($_POST['problem2contest'])){
 			mysql_free_result($result);
 }  
   include_once("../fckeditor/fckeditor.php") ;
-?>
+if(isset($OJ_LANG)){
+		require_once("../lang/$OJ_LANG.php");
+		
+	}else{
+		require_once("../lang/en.php");
+	}
 	
+
+	
+?>
+    <link type="text/css" rel="Stylesheet" href="../date/styles/main.css" />
+    <script type="text/javascript" language="javascript" src="../date/scripts/jquery.js"></script>
+    <script type="text/javascript" language="javascript" src="../date/scripts/eye-base.js"></script>
+    <script type="text/javascript" language="javascript" src="../date/scripts/eye-all.js"></script>
+    
 	<form method=POST >
 	<p align=center><font size=4 color=#333399>Add a Contest</font></p>
 	<p align=left>Title:<input class=input-xxlarge  type=text name=title size=71 value="<?php echo isset($title)?$title:""?>"></p>
 	<p align=left>Start Time:<br>&nbsp;&nbsp;&nbsp;
-	Year:<input  class=input-mini type=text name=syear value=<?php echo date('Y')?> size=4 >
-	Month:<input class=input-mini  type=text name=smonth value=<?php echo date('m')?> size=2 >
-	Day:<input class=input-mini type=text name=sday size=2 value=<?php echo date('d')?> >&nbsp;
-	Hour:<input class=input-mini    type=text name=shour size=2 value=<?php echo date('H')?>>&nbsp;
-	Minute:<input class=input-mini    type=text name=sminute value=00 size=2 ></p>
-	<p align=left>End Time:<br>&nbsp;&nbsp;&nbsp;
-	Year:<input class=input-mini    type=text name=eyear value=<?php echo date('Y')?> size=4 >
-	Month:<input class=input-mini    type=text name=emonth value=<?php echo date('m')?> size=2 >
+	Date:<input onClick="eye.datePicker.show(this);"  class=input type=text name=syear size=4 >
 	
-	Day:<input class=input-mini  type=text name=eday size=2 value=<?php echo date('d')+(date('H')+4>23?1:0)?>>&nbsp;
-	Hour:<input class=input-mini  type=text name=ehour size=2 value=<?php echo (date('H')+4)%24?>>&nbsp;
-	Minute:<input class=input-mini  type=text name=eminute value=00 size=2 ></p>
-	Public:<select name=private><option value=0>Public</option><option value=1>Private</option></select>
+	Hour:<select class=input-mini name=shour value='<?php echo (date('H'))%24?>'>
+	       <option value=0>0</option>
+	       <option value=0>1</option>
+	       <option value=0>2</option>
+	       <option value=0>3</option>
+	       <option value=0>4</option>
+	       <option value=0>5</option>
+	       <option value=0>6</option>
+	       <option value=0>7</option>
+	       <option value=0>8</option>
+	       <option value=0>9</option>
+	       <option value=0>10</option>
+	       <option value=0>11</option>
+	       <option value=0>12</option>
+	       <option value=0>13</option>
+	       <option value=0>14</option>
+	       <option value=0>15</option>
+	       <option value=0>16</option>
+	       <option value=0>17</option>
+	       <option value=0>18</option>
+	       <option value=0>19</option>
+	       <option value=0>21</option>
+	       <option value=0>22</option>
+	       <option value=0>23</option>
+	       
+	     </select>
+	
+	&nbsp;
+	Minute:<select class=input-mini name=sminute value=00  >
+	       <option value=0>0</option>
+	       <option value=0>5</option>
+	       <option value=0>10</option>
+	       <option value=0>15</option>
+	       <option value=0>25</option>
+	       <option value=0>30</option>
+	       <option value=0>35</option>
+	       <option value=0>40</option>
+	       <option value=0>45</option>
+	       <option value=0>50</option>
+	       <option value=0>55</option>
+	
+	</select><p align=left>End Time:<br>&nbsp;&nbsp;&nbsp;
+	Date:<input onclick="eye.datePicker.show(this);"  class=input type=text name=eyear size=4 >
+	Hour:<select class=input-mini name=ehour value='<?php echo (date('H')+4)%24?>'>
+	       <option value=0>0</option>
+	       <option value=0>1</option>
+	       <option value=0>2</option>
+	       <option value=0>3</option>
+	       <option value=0>4</option>
+	       <option value=0>5</option>
+	       <option value=0>6</option>
+	       <option value=0>7</option>
+	       <option value=0>8</option>
+	       <option value=0>9</option>
+	       <option value=0>10</option>
+	       <option value=0>11</option>
+	       <option value=0>12</option>
+	       <option value=0>13</option>
+	       <option value=0>14</option>
+	       <option value=0>15</option>
+	       <option value=0>16</option>
+	       <option value=0>17</option>
+	       <option value=0>18</option>
+	       <option value=0>19</option>
+	       <option value=0>21</option>
+	       <option value=0>22</option>
+	       <option value=0>23</option>
+	       
+	     </select>
+	
+	&nbsp;
+	Minute:<select class=input-mini name=eminute value=00  >
+	       <option value=0>0</option>
+	       <option value=0>5</option>
+	       <option value=0>10</option>
+	       <option value=0>15</option>
+	       <option value=0>25</option>
+	       <option value=0>30</option>
+	       <option value=0>35</option>
+	       <option value=0>40</option>
+	       <option value=0>45</option>
+	       <option value=0>50</option>
+	       <option value=0>55</option>
+	
+	</select></p><br>
+	<p  align=left>
+	<?php echo $MSG_Public?>:<select name=private><option value=0>Public</option><option value=1>Private</option></select>
+	
 	Language:<select name="lang[]" multiple="multiple"    style="height:220px">
 	<?php
 $lang_count=count($language_ext);
@@ -172,6 +262,7 @@ $fck_description->Create() ;
 	*可以将学生学号从Excel整列复制过来，然后要求他们用学号做UserID注册,就能进入Private的比赛作为作业和测验。
 	<p><input type=submit value=Submit name=submit><input type=reset value=Reset name=reset></p>
 	</form>
+
 <?php }
 require_once("../oj-footer.php");
 
