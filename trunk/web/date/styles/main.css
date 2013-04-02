@@ -1,0 +1,59 @@
+﻿/*Clear margin and padding*/
+html,body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,input,p,blockquote,th,td
+{
+	margin: 0;
+	padding: 0;
+}
+ 
+/*Clear border*/
+html,body,img
+{
+	border: 0;
+}
+
+/*Body*/
+body
+{
+	font-family: '宋体',verdana,arial,tahoma,helvetica;
+	font-size: 12px;
+	color: #666666;
+	line-height: 20px;
+	text-align: center;
+}
+
+/*===================================== a href =======================================*/
+
+/*a*/
+a
+{
+    color: #006093;
+    text-decoration: underline;
+}
+
+/*a:link*/
+a:link
+{
+    color: #006093;
+    text-decoration: none;
+}
+
+/*a:visited*/
+a:visited
+{
+    color: #006093;
+    text-decoration: none;
+}
+
+/*a:hover*/
+a:hover
+{
+    color: #ff6600;
+    text-decoration: underline;
+}
+
+/*a:active*/
+a:active
+{
+    color: #ff6600;
+    text-decoration: underline;
+}
