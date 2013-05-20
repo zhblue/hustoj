@@ -133,16 +133,49 @@ if(isset($_POST['do'])){
 	}
 }
 ?>
-<b>Update DataBase</b>
-	Create New Tables ,drop useless columes.
-	<b>Necessary for using plagiarism detection.</b>
-	<form action='update_db.php' method=post>
-		<?php require_once("../include/set_post_key.php");?>
-		<input type='hidden' name='do' value='do'>
-		<input type=submit value=Update>
-	</form>
-	
-<?php if (file_exists("update_pw.php")) {	?>
-   <a href="update_pw.php">Upgrade all users password storage form to get more security.</a>
-   * only do once !
-<?php }?>
+
+
+<html>
+  <head>
+    <title>OJ Administration</title>
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Cache-Control" content="no-cache">
+    <meta http-equiv="Content-Language" content="zh-cn">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <link rel=stylesheet href='admin.css' type='text/css'>
+  </head>
+<body>
+
+
+
+<div class="container-fluid">
+  <?php require_once("admin-bar.php"); ?>
+  <div class="row-fluid top-space">
+    <div class="span2" >
+      <div class="menu-group"  >
+        <?php require_once("menu.php") ?>
+      </div>
+    </div>
+    <div class="span10">
+      <div class="database col align-center">
+        <div class="news-header align-center">Update DataBase<hr/></div>
+          <div style="font-size:16px;">Create New Tables ,drop useless columes.</div>
+          <div style="font-size:16px;"><b>Necessary for using plagiarism detection.</b></div>
+
+          <form action='update_db.php' method=post>
+            <?php require_once("../include/set_post_key.php");?>
+            <input type='hidden' name='do' value='do'>
+            <input class="btn" type=submit value=Update>
+          </form>
+          
+        <?php if (file_exists("update_pw.php")) { ?>
+           <a href="update_pw.php">Upgrade all users password storage form to get more security.</a>
+           * only do once !
+        <?php }?>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

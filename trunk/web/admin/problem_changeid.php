@@ -75,16 +75,47 @@ function writable($path){
 	}	
 	if($show_form){
 ?>
-<b>Change ProblemID</b>
-	<ol>
-	<li>Problem
-	<form action='problem_changeid.php' method=post>
-		Move<input type=input name='from'>->
-		<input type=input name='to'>
-		<input type='hidden' name='do' value='do'>
-		<input type=submit value=submit>
-		<?php require_once("../include/set_post_key.php");?>
-	</form>
-	
-<?php }
-?>
+
+<html>
+	<head>
+		<title>OJ Administration</title>
+		<meta http-equiv="Pragma" content="no-cache">
+		<meta http-equiv="Cache-Control" content="no-cache">
+		<meta http-equiv="Content-Language" content="zh-cn">
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<link rel=stylesheet href='admin.css' type='text/css'>
+	</head>
+<body>
+
+
+
+<div class="container-fluid">
+	<?php require_once("admin-bar.php"); ?>
+	<div class="row-fluid top-space">
+		<div class="span2" >
+			<div class="menu-group"  >
+				<?php require_once("menu.php") ?>
+			</div>
+		</div>
+		<div class="span10">
+			<div class="col align-center changeid">
+				<div class="news-header">Change ProblemID<hr/></div>
+
+					MOVE THE PROBLEM ID FROM A TO B
+					<form action='problem_changeid.php' method=post>
+						Move <input type=input name='from'><b> -></b>
+						<input type=input name='to'>
+						<input type='hidden' name='do' value='do'>
+						<input type=submit value=submit>
+						<?php require_once("../include/set_post_key.php");?>
+					</form>
+					
+				<?php }
+				?>
+			</div>
+		</div>
+	</div>
+</div>
+
+</body>
+</html>

@@ -25,9 +25,11 @@ $lost_email=$_POST['email'];
  if($row && $row['email']==$lost_email&&strpos($lost_email,'@')){
    $_SESSION['lost_user_id']=$lost_user_id;
    $_SESSION['lost_key']=strtoupper(substr(MD5($user_id.rand(0,9999999)),0,16));
-
-   mail($lost_email,"DON'T REPLY THIS MAIL:Reset Password",'Your online judge password reset key is:'.$_SESSION['lost_key'], 'From: do-not-reply@hustoj.googlecode.com' );
+                
+   $sql=" update `users` set password='".pwGen($_SESSION['lost_key'])."'WHERE `user_id`='".mysql_real_escape_string($lost_user_id)."'";
+   $result=mysql_query($sql);
    require("template/".$OJ_TEMPLATE."/lostpassword2.php");
+
 
  }else{
 

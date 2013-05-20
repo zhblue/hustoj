@@ -7,28 +7,24 @@
 <body>
 <div id="wrapper">
         <?php require_once("oj-header.php");?>
-<div id=main>
-        <form action=lostpassword2.php method=post>
-        <center>
-        <table width=400 algin=center>
-        <tr><td width=200><?php echo $MSG_USER_ID?>:<td width=200><input name="user_id" type="text" size=20></tr>
-        <tr><td>Key in your <?php echo $MSG_EMAIL?>:<td><input name="lost_key" type="text" size=20></tr>
-        <?php if($OJ_VCODE){?>
-                <tr><td><?php echo $MSG_VCODE?>:</td>
-                        <td><input name="vcode" size=4 type=text><img alt="click to change" src=vcode.php onclick="this.src='vcode.php#'+Math.random()">*</td>
-                </tr>
-                <?php }?>
-        <tr><td><td><input name="submit" type="submit" size=10 value="Submit">
-</tr>
-        </table>
-        <center>
-</form>
+        <div class="container">
+                <div class="row">
+                        <div class="span12">
+                                <div class="hero-unit">
+                                        <p>
+                                                <span>您的密码被重置为:</span>
+                                                <?php print_r($_SESSION['lost_key']); ?>
+                                                <div>推荐您登录以后即刻修改密码以防忘记此随机密码</div>
+                                        </p>
+                                </div>
+                        </div>
+                </div>
+        </div>
 
-<div id=foot>
-        <?php require_once("oj-footer.php");?>
+        <div id=foot>
+                <?php require_once("oj-footer.php");?>
 
-</div><!--end foot-->
-</div><!--end main-->
+        </div><!--end foot-->
 </div><!--end wrapper-->
 </body>
 </html>

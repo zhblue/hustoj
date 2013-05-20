@@ -15,13 +15,44 @@ if(isset($_POST['do'])){
 $msg=file_get_contents($OJ_SAE?"saestor://web/msg.txt":"msg.txt");
 
 ?>
-	<b>Set Message</b>
-	<form action='setmsg.php' method='post'>
-		<textarea name='msg' rows=25 class="input input-xxlarge" ><?php echo $msg?></textarea><br>
-		<input type='hidden' name='do' value='do'>
-		<input type='submit' value='change'>
-		<?php require_once("../include/set_post_key.php");?>
-	</form>
-	
-<?php require_once('../oj-footer.php');
-?>
+
+
+
+<html>
+	<head>
+		<title>OJ Administration</title>
+		<meta http-equiv="Pragma" content="no-cache">
+		<meta http-equiv="Cache-Control" content="no-cache">
+		<meta http-equiv="Content-Language" content="zh-cn">
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<link rel=stylesheet href='admin.css' type='text/css'>
+	</head>
+<body>
+
+
+
+<div class="container-fluid">
+	<?php require_once("admin-bar.php"); ?>
+	<div class="row-fluid top-space">
+		<div class="span2" >
+			<div class="menu-group"  >
+				<?php require_once("menu.php") ?>
+			</div>
+		</div>
+		<div class="span10">
+			<div class="msg col">
+				<div class="news-header align-center" style="padding-bottom:10px;">Set Message</div>
+				<form action='setmsg.php' method='post'>
+					<textarea name='msg' rows=25 class="input input-xxlarge" ><?php echo $msg?></textarea><br>
+					<input type='hidden' name='do' value='do'>
+					<input class="btn" type='submit' value='change'>
+					<?php require_once("../include/set_post_key.php");?>
+				</form>
+				
+			</div>
+		</div>
+	</div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,297 @@
+/*!
+ * author slixurd
+ * For the Online Judge Admin page
+ */
+
+ @import url(../bootstrap/css/bootstrap.css);
+
+.menu-btn{
+
+	text-decoration: none;
+	padding: 5px 10px;
+    display: list-item;
+    background: #242a2f;
+    min-width: 168px;
+    border: none;
+    color: #faf7f9;
+    font-weight: bold;
+    border-radius: 5px;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    text-shadow: -0.8px 0.5px 0.4px #333;
+    margin-top: 3px;
+    width: 100%;
+    text-align: center;
+    box-shadow: 0 0 4px 0 #242a2f;
+    -webkit-box-shadow: 0 0 4px 0 #242a2f;
+    -moz-box-shadow: 0 0 4px 0 #242a2f;
+    background-image: -webkit-linear-gradient(bottom, #242a2f, #1a1f1b);
+
+
+}
+
+.top-space{
+	margin-top: 52px;
+}
+
+body{
+	background-image: url("../image/back.png");
+	opacity: 0.95;
+}
+
+.menu-group{
+	padding-top: 15px;
+}
+
+.col{
+	background:#f9f9f9;
+	-webkit-border-radius: 5px;
+    border-radius: 5px;
+    -moz-border-radius: 5px;
+    box-shadow: 0 0 18px 0 #242a2f;
+    -webkit-box-shadow: 0 0 18px 0 #242a2f;
+    -moz-box-shadow: 0 0 18px 0 #242a2f;
+    min-width: 240px;
+}
+
+.align-center{
+	left:auto;
+	text-align:center;
+	text-align:-webkit-center;
+	vertical-align: center;
+
+}
+
+.clear-float{
+	float: none;
+}
+
+.btn-group .btn{
+	float: none;
+}
+
+div .bottom-space{
+    margin-bottom: 20px;
+}
+
+.marginTop{
+    margin-top: 15px;
+}
+
+.news-header{
+    padding-top: 15px;
+    font-size: 22px;
+}
+.news-content{
+    background:#f9f9f9;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+    -moz-border-radius: 5px;
+    box-shadow: 0 0 18px 0 #242a2f;
+    -webkit-box-shadow: 0 0 18px 0 #242a2f;
+    -moz-box-shadow: 0 0 18px 0 #242a2f;
+    min-width: 708px;
+    max-width: 900px;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+    padding-bottom: 6px;
+}
+
+.h2-head{
+    padding-top: 30px;
+    padding-bottom: 15px;
+}
+.h-head{
+    padding-top: 30px;
+    padding-bottom: 15px;
+    font-size: 28px;
+}
+
+.a-color{
+    color: #eee;
+}
+
+button a:hover{
+    color:#04ca3f;
+}
+
+.add-contest-p p{
+    text-align: center;
+}
+
+.add-contest-p input{
+    margin-bottom: 0;
+}
+
+.bk{
+    background:#f9f9f9;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+    -moz-border-radius: 5px;
+    box-shadow: 0 0 18px 0 #242a2f;
+    -webkit-box-shadow: 0 0 18px 0 #242a2f;
+    -moz-box-shadow: 0 0 18px 0 #242a2f;
+    min-width: 240px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.button-align input{
+    margin-bottom: 0;
+}
+
+.content-center{
+    margin-left:auto;margin-right:auto;margin-top:20px;
+    left:auto;
+    text-align:center;
+    text-align:-webkit-center;
+    vertical-align: center;
+
+}
+
+.padding-center{
+    padding-top: 10px;
+    padding-bottom: 15px;
+}
+
+.content-center input{
+    margin-bottom: 0;
+}
+
+.content-center div{
+    padding-top: 5px;
+}
+
+.text-notcenter{
+    margin-left:auto;
+    margin-right:auto;
+    margin-top:20px;
+    text-align:center;
+    text-align:-webkit-center;
+    vertical-align: center;
+
+
+}
+.changepass{
+    margin: 0 auto;
+    width: 280px;
+    font-size: 16px;
+    height: 175px;
+    padding-top: 10px;
+    background:#f9f9f9;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+    -moz-border-radius: 5px;
+    box-shadow: 0 0 18px 0 #242a2f;
+    -webkit-box-shadow: 0 0 18px 0 #242a2f;
+    -moz-box-shadow: 0 0 18px 0 #242a2f;
+    padding-left: 20px;
+    padding-right: 20px;
+    margin-top: 45px;
+}
+.changepass .change{
+    margin: 0 auto;
+    width:170px;
+    font-size: 20px;
+    margin-top: 20px;
+}
+.changepass .btn{
+    margin-left: 110px;
+    margin-top: 8px;
+}
+.changepass .in{
+    width: 80%;
+}
+.changepass .in-title{
+    width: 20%;
+}
+
+.msg{
+    width: 530px;
+    height: 550px;
+    margin:  30px auto;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+.msg .btn{
+    width: 140px;
+    margin-left: 195px;
+}
+
+.rejudge{
+    width: 300px;
+    height: 240px;
+    margin:  30px auto;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+.span10 hr{
+    border-top: 1px solid rgb(209, 209, 208);
+}
+
+.give-source{
+    width: 300px;
+    height: 310px;
+    margin:  30px auto;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+.give-source input{
+    width: 95%;
+}
+
+.database{
+    width: 460px;
+    height: 250px;
+    margin:  30px auto;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+.database .btn{
+    margin-top: 15px;
+}
+
+.copy-problem{
+    width: 400px;
+    height: 370px;
+    margin:  30px auto;
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-top: 10px;
+    font-size: 14px;
+
+}
+.copy-problem ol {
+    list-style: none;
+}
+
+.changeid{
+    width: 600px;
+    height: 210px;
+    margin:  30px auto;
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-top: 10px;
+    font-size: 14px;
+}
+.changeid input{
+    margin-bottom: 0;
+}
+
+.menu-btn a:hover{
+    color: red;
+    text-decoration: none;
+}
+.menu-btn .a-color{
+     width: 120px;
+}
+
+.return{
+    font-size: 20px;
+    float: right;
+}

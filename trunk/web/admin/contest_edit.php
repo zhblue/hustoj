@@ -15,7 +15,7 @@ if (isset($_POST['syear']))
 	$private=mysql_real_escape_string($_POST['private']);
 	if (get_magic_quotes_gpc ()) {
         $title = stripslashes ( $title);
-        //$description = stripslashes ( $description);
+        $description = stripslashes ( $description);
   }
    $lang=$_POST['lang'];
    $langmask=0;
