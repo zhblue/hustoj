@@ -13,6 +13,7 @@
 
 <body>
 <hr>
+<h4>
 <ol>
 	<li>
 		<a href="../status.php" target="main"><b><?php echo $MSG_SEEOJ?></b></a>
@@ -95,6 +96,7 @@ if (isset($OJ_ONLINE)&&$OJ_ONLINE){
 	<a href="http://code.google.com/p/freeproblemset/" target="main"><b>FreeProblemSet</b></a>
 
 </ol>
+</h4>
 <?php if (isset($_SESSION['administrator'])&&!$OJ_SAE){
 ?>
 	<a href="problem_copy.php" target="main" title="Create your own data"><font color="eeeeee">CopyProblem</font></a> <br>
