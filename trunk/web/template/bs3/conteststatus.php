@@ -29,11 +29,11 @@
 <?php
 ?>
 <form id=simform class=form-inline action="status.php" method="get">
-<?php echo $MSG_PROBLEM_ID?>:<input class="form-control" type=text size=4 name=problem_id value='<?php echo $problem_id?>'>
-<?php echo $MSG_USER?>:<input class="form-control" type=text size=4 name=user_id value='<?php echo $user_id?>'>
+<?php echo $MSG_PROBLEM_ID?>:<input class="form-control" type=text size=4 name=problem_id value='<?php echo htmlspecialchars($problem_id, ENT_QUOTES)?>'>
+<?php echo $MSG_USER?>:<input class="form-control" type=text size=4 name=user_id value='<?php echo htmlspecialchars($user_id, ENT_QUOTES)?>'>
 <?php if (isset($cid)) echo "<input type='hidden' name='cid' value='$cid'>";?>
 <?php echo $MSG_LANG?>:<select class="form-control" size="1" name="language">
-<?php if (isset($_GET['language'])) $language=$_GET['language'];
+<?php if (isset($_GET['language'])) $language=intval($_GET['language']);
 else $language=-1;
 if ($language<0||$language>=count($language_name)) $language=-1;
 if ($language==-1) echo "<option value='-1' selected>All</option>";
