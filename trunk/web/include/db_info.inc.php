@@ -5,9 +5,9 @@
 
 // connect db 
 static 	$DB_HOST="localhost";
-static 	$DB_NAME="jol";
-static 	$DB_USER="root";
-static 	$DB_PASS="root";
+static 	$DB_NAME="hustojdb";
+static 	$DB_USER="'DBUSERNAME'";
+static 	$DB_PASS="'DBPASSWORD'";
 
 static 	$OJ_NAME="HUSTOJ";
 static 	$OJ_HOME="./";
