@@ -5,6 +5,8 @@
 #	and down here
 #and run this with root
 
+#mkdir /var/www/judge/JudgeOnline
+#cd trunk/install
 #CENTOS/REDHAT/FEDORA WEBBASE=/var/www/html APACHEUSER=apache 
 WEBBASE=/var/www/html
 APACHEUSER=www-data
