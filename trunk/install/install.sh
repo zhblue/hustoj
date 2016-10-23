@@ -8,8 +8,8 @@
 #CENTOS/REDHAT/FEDORA WEBBASE=/var/www/html APACHEUSER=apache 
 WEBBASE=/var/www/html
 APACHEUSER=www-data
-DBUSER=root
-DBPASS=root
+DBUSER='DBUSERNAME'
+DBPASS='DBPASSWORD'
 
 #try install tools
 sudo apt-get install make flex g++ clang libmysql++-dev php5 apache2 mysql-server php5-mysql php5-gd php5-cli mono-gmcs subversion
@@ -19,21 +19,19 @@ sudo yum -y update
 sudo yum -y install php httpd php-mysql mysql-server php-xml php-gd gcc-c++  mysql-devel php-mbstring glibc-static flex
 sudo /etc/init.d/mysqld start
 
-sudo svn checkout https://github.com/zhblue/hustoj/trunk/trunk hustoj-read-only
-
 #create user and homedir
 sudo  /usr/sbin/useradd -m -u 1536 judge
 
 
 
 #compile and install the core
-cd hustoj-read-only/core/
+cd ../core/
 sudo ./make.sh
 cd ../..
 #install web and db
-sudo cp -R hustoj-read-only/web $WEBBASE/JudgeOnline
-sudo chmod -R 771 $WEBBASE/JudgeOnline
-sudo chown -R $APACHEUSER $WEBBASE/JudgeOnline
+sudo cp -R trunk/web $WEBBASE/judge
+sudo chmod -R 771 $WEBBASE/judge
+sudo chown -R $APACHEUSER $WEBBASE/judge
 sudo mysql -h localhost -u$DBUSER -p$DBPASS < db.sql
 
 #create work dir set default conf
