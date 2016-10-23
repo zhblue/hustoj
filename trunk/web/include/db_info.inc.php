@@ -11,7 +11,7 @@ static 	$DB_PASS="'DBPASSWORD'";
 
 static 	$OJ_NAME="HUSTOJ";
 static 	$OJ_HOME="./";
-static 	$OJ_ADMIN="root@localhost";
+static 	$OJ_ADMIN="it@cnsa.hs.kr";
 static 	$OJ_DATA="/home/judge/data";
 static 	$OJ_BBS="discuss3";//"bbs" for phpBB3 bridge or "discuss" for mini-forum
 static  $OJ_ONLINE=false;
