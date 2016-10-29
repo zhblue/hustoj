@@ -1,6 +1,6 @@
 set names utf8; 
-create database jol;
-use jol;
+create database hustojdb;
+use hustojdb;
 
 CREATE TABLE  `compileinfo` (
   `solution_id` int(11) NOT NULL DEFAULT 0,

@@ -5,18 +5,18 @@
 
 // connect db 
 static 	$DB_HOST="localhost";
-static 	$DB_NAME="jol";
+static 	$DB_NAME="hustojdb";
 static 	$DB_USER="root";
-static 	$DB_PASS="root";
+static 	$DB_PASS="kanamori";
 
 static 	$OJ_NAME="HUSTOJ";
 static 	$OJ_HOME="./";
-static 	$OJ_ADMIN="root@localhost";
+static 	$OJ_ADMIN="it@cnsa.hs.kr";
 static 	$OJ_DATA="/home/judge/data";
 static 	$OJ_BBS="discuss3";//"bbs" for phpBB3 bridge or "discuss" for mini-forum
 static  $OJ_ONLINE=false;
-static  $OJ_LANG="en";
-static  $OJ_SIM=false; 
+static  $OJ_LANG="ko";
+static  $OJ_SIM=true; 
 static  $OJ_DICT=false;
 static  $OJ_LANGMASK=0; //1mC 2mCPP 4mPascal 8mJava 16mRuby 32mBash 1008 for security reason to mask all other language
 static  $OJ_EDITE_AREA=true;//true: syntax highlighting is active
@@ -41,13 +41,13 @@ static $OJ_OPENID_PWD = '8a367fe87b1e406ea8e94d7d508dcf01';
 static  $OJ_WEIBO_AUTH=false;
 static  $OJ_WEIBO_AKEY='1124518951';
 static  $OJ_WEIBO_ASEC='df709a1253ef8878548920718085e84b';
-static  $OJ_WEIBO_CBURL='http://192.168.0.108/JudgeOnline/login_weibo.php';
+static  $OJ_WEIBO_CBURL='http://192.168.0.108/judge/login_weibo.php';
 
 /* renren config here */
 static  $OJ_RR_AUTH=false;
 static  $OJ_RR_AKEY='d066ad780742404d85d0955ac05654df';
 static  $OJ_RR_ASEC='c4d2988cf5c149fabf8098f32f9b49ed';
-static  $OJ_RR_CBURL='http://192.168.0.108/JudgeOnline/login_renren.php';
+static  $OJ_RR_CBURL='http://192.168.0.108/judge/login_renren.php';
 /* qq config here */
 static  $OJ_QQ_AUTH=false;
 static  $OJ_QQ_AKEY='1124518951';

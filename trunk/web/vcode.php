@@ -34,7 +34,7 @@ header("Pramga: no-cache");
 	$vcodetype = 'n';
 	
 	$width = 15 * $len;
-	$height = 24;
+	$height = 34;
 	/* 生成随机字符串并写入SESSION */
 	$vcode = get_rand_string($len, $vcodetype);
 	$_SESSION['vcode'] = $vcode;
@@ -72,7 +72,7 @@ header("Pramga: no-cache");
 		imagesetpixel($im, $pointX, $pointY, $pointColor);
 	}
 	
-	imagettftext($im, 15, 0, 4, 20, $stringColor, "include/Vera.ttf", $vcode);
+	imagettftext($im, 15, 0, 5, 24, $stringColor, "include/Vera.ttf", $vcode);
 	$image_out = 'Image' . $imgtype;
 	$image_out($im);
 	@ImageDestroy($im);
