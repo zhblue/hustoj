@@ -1,1 +1,1 @@
-系统演示中，各语言支持不保证完整。Swift OC 判题MacOS测试中，暂未开源。
+Welcome to CNSA Online Judge
