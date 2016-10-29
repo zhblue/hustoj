@@ -34,6 +34,7 @@ cd ../..
 sudo cp -R trunk/web $WEBBASE/judge
 sudo chmod -R 771 $WEBBASE/judge
 sudo chown -R $APACHEUSER $WEBBASE/judge
+cd trunk/install
 sudo mysql -h localhost -u$DBUSER -p$DBPASS < db.sql
 
 #create work dir set default conf
