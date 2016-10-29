@@ -19,8 +19,8 @@
 
 # PATH should only include /usr/* if it runs after the mountnfs.sh script
 
-export LANG="zh_CN.UTF-8"
-export LANGUAGE="zh_CN:zh"
+export LANG="ko_KR.UTF-8"
+export LANGUAGE="ko_KR:zh"
 export PATH="/home/judge/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games"
 
 PATH=/sbin:/usr/sbin:/bin:/usr/bin:/usr/local/bin
