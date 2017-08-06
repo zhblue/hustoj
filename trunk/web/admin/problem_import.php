@@ -30,7 +30,7 @@ if you fail on import big files[10M+],try enlarge your [memory_limit]  setting i
 	   if(!file_exists("../upload"))mkdir("../upload");
 	   if(!writable("../upload")){
 	   	 
-		   echo "../upload is not writable, <b>chmod 770</b> to it.<br>";
+		   echo "../upload is not writable, <b>chmod 770</b> and <b>chown www-data -R</b> to it.<br>";
 		   $show_form=false;
 	   }
 	}	
