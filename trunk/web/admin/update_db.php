@@ -138,6 +138,8 @@ $tsql[24]="alter table solution modify column pass_rate decimal(3,2) NOT NULL DE
 $csql[25]="";
 $tsql[25]="ALTER TABLE  `solution` CHANGE  `ip`  `ip` CHAR( 46 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT  '';";
 
+$csql[26]="";
+$tsql[26]="ALTER TABLE  `problem` ADD  `order_num` int(11);";
 
 if(isset($_POST['do'])){
 	require_once("../include/check_post_key.php");

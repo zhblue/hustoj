@@ -70,6 +70,7 @@ $MSG_TEST_RUN="Test Running Done";
 	$MSG_TITLE="Title";
 	$MSG_SOURCE="Source/Category";
 	$MSG_SUBMIT="Submit";
+	$MSG_ORDER_NUM="OrderNum";
 	
 	//ranklist.php
 	$MSG_Number="No.";

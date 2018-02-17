@@ -77,12 +77,12 @@ if(isset($_GET['search'])&&trim($_GET['search'])!=""){
 
 if (isset($_SESSION[$OJ_NAME.'_'.'administrator'])){
 	
-	$sql="SELECT `problem_id`,`title`,`source`,`submit`,`accepted` FROM `problem` WHERE $filter_sql ";
+	$sql="SELECT `problem_id`,`title`,`source`,`submit`,`accepted`,`order_num` FROM `problem` WHERE $filter_sql ";
 	
 }
 else{
 	$now=strftime("%Y-%m-%d %H:%M",time());
-	$sql="SELECT `problem_id`,`title`,`source`,`submit`,`accepted` FROM `problem` ".
+	$sql="SELECT `problem_id`,`title`,`source`,`submit`,`accepted`,`order_mum` FROM `problem` ".
 	"WHERE `defunct`='N' and $filter_sql AND `problem_id` NOT IN(
 		SELECT  `problem_id` 
 		FROM contest c
@@ -95,7 +95,7 @@ else{
 	) ";
 
 }
-$sql.=" ORDER BY `problem_id`";
+$sql.=" ORDER BY `order_num`,`problem_id`";
 
 if(isset($_GET['search'])&&trim($_GET['search'])!=""){
 	$result=pdo_query($sql,$search,$search);
@@ -125,7 +125,7 @@ foreach ($result as $row){
 	$view_problemset[$i][3]="<div class='center'><nobr>".mb_substr($row['source'],0,8,'utf8')."</nobr></div >";
 	$view_problemset[$i][4]="<div class='center'><a href='status.php?problem_id=".$row['problem_id']."&jresult=4'>".$row['accepted']."</a></div>";
 	$view_problemset[$i][5]="<div class='center'><a href='status.php?problem_id=".$row['problem_id']."'>".$row['submit']."</a></div>";
-	
+	$view_problemset[$i][6]="<div class='center'>".$row['order_num']."</div>";;
 	
 	$i++;
 }
