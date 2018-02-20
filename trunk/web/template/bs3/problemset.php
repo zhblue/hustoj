@@ -65,6 +65,7 @@ for ($i=$start;$i<=$end;$i++){
 <th class='hidden-xs' width='10%'><?php echo $MSG_SOURCE?></th>
 <th style="cursor:hand" width=60 ><?php echo $MSG_AC?></th>
 <th style="cursor:hand" width=60 ><?php echo $MSG_SUBMIT?></th>
+<th width='20'  class='hidden-xs' ><?php echo $MSG_ORDER_NUM?></th>
 </tr>
 </thead>
 <tbody>

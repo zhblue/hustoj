@@ -29,6 +29,7 @@ $result=pdo_query($sql,intval($_GET['id']));
 <p>Problem Id: <?php echo $row['problem_id']?></p>
 <input type=hidden name=problem_id value='<?php echo $row['problem_id']?>'>
 <p><?php echo $MSG_TITLE?>:<input class="input-xxlarge" type=text name=title value='<?php echo htmlentities($row['title'],ENT_QUOTES,"UTF-8")?>'></p>
+<?php echo $MSG_ORDER_NUM?>:<input class="input-mini" type=text name=order_num size=20 value='<?php echo $row['order_num']?>'>
 <?php echo $MSG_Time_Limit?>:<input class="input-mini" type=text name=time_limit size=20 value='<?php echo $row['time_limit']?>'>S
 <?php echo $MSG_Memory_Limit?>:<input class="input-mini" type=text name=memory_limit size=20 value='<?php echo $row['memory_limit']?>'>MByte</p>
 <p><?php echo $MSG_Description?>:<br><textarea class="kindeditor" rows=13 name=description cols=120><?php echo htmlentities($row['description'],ENT_QUOTES,"UTF-8")?></textarea></p>
@@ -55,6 +56,7 @@ require_once("../include/check_post_key.php");
 $id=intval($_POST['problem_id']);
 if(!(isset($_SESSION[$OJ_NAME.'_'."p$id"])||isset($_SESSION[$OJ_NAME.'_'.'administrator']))) exit();	
 $title=$_POST['title'];
+$order_num=$_POST['order_num'];
 $time_limit=$_POST['time_limit'];
 $memory_limit=$_POST['memory_limit'];
 $description=$_POST['description'];
@@ -80,6 +82,7 @@ if (get_magic_quotes_gpc ()) {
 	$source = stripslashes ( $source); 
 	$spj = stripslashes ( $spj);
 	$source = stripslashes ( $source );
+	$order_num = stripslashes ( $order_num );
 }
 $basedir=$OJ_DATA."/$id";
 echo "Sample data file Updated!<br>";
@@ -98,10 +101,10 @@ echo "Sample data file Updated!<br>";
 	$spj=intval($spj);
 	
 $sql="UPDATE `problem` set `title`=?,`time_limit`=?,`memory_limit`=?,
-	`description`=?,`input`=?,`output`=?,`sample_input`=?,`sample_output`=?,`hint`=?,`source`=?,`spj`=?,`in_date`=NOW()
+	`description`=?,`input`=?,`output`=?,`sample_input`=?,`sample_output`=?,`hint`=?,`source`=?,`spj`=?,`in_date`=NOW(),`order_num`=?
 	WHERE `problem_id`=?";
 
-@pdo_query($sql,$title,$time_limit,$memory_limit,$description,$input,$output,$sample_input,$sample_output,$hint,$source,$spj,$id) ;
+@pdo_query($sql,$title,$time_limit,$memory_limit,$description,$input,$output,$sample_input,$sample_output,$hint,$source,$spj,$order_num,$id) ;
 echo "Edit OK!";
 
 

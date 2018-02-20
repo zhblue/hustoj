@@ -81,6 +81,7 @@ $MSG_Compile_OK="人品问题-愚人节快乐";
 	$MSG_TITLE="标题";
 	$MSG_SOURCE="来源/分类";
 	$MSG_SUBMIT="提交";
+	$MSG_ORDER_NUM="序号";
 	
 	//ranklist.php
 	$MSG_Number="名次";

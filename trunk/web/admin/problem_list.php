@@ -42,7 +42,7 @@ if($keyword) {
 	$sql="select `problem_id`,`title`,`accepted`,`in_date`,`defunct` FROM `problem` where title like ? or source like ?";
 	$result=pdo_query($sql,$keyword,$keyword);
 }else{
-	$sql="select `problem_id`,`title`,`accepted`,`in_date`,`defunct` FROM `problem` where problem_id>=? and problem_id<=? order by `problem_id` desc";
+	$sql="select `problem_id`,`title`,`accepted`,`in_date`,`defunct`,`order_num` FROM `problem` where problem_id>=? and problem_id<=? order by `order_num` asc,`problem_id` desc";
 	$result=pdo_query($sql,$pstart,$pend);
 }
 ?>
@@ -53,13 +53,13 @@ if($keyword) {
 <?php
 echo "<center><table class='table table-striped' width=90% border=1>";
 echo "<form method=post action=contest_add.php>";
-echo "<tr><td colspan=8>";
+echo "<tr><td colspan=9>";
 echo "<input type=checkbox onchange='$(\"input[type=checkbox]\").prop(\"checked\", this.checked)'>";
 echo "<input type=submit name='problem2contest' value='CheckToNewContest'>";
 echo "<tr><td>PID<td>Title<td>AC<td>Date";
 if(isset($_SESSION[$OJ_NAME.'_'.'administrator'])||isset($_SESSION[$OJ_NAME.'_'.'problem_editor'])){
         if(isset($_SESSION[$OJ_NAME.'_'.'administrator']))   echo "<td>Status<td>Delete";
-        echo "<td>Edit<td>TestData</tr>";
+        echo "<td>Edit<td>TestData<td>OrderNum</tr>";
 }
 foreach($result as $row){
         echo "<tr>";
@@ -82,11 +82,12 @@ foreach($result as $row){
                 if(isset($_SESSION[$OJ_NAME.'_'.'administrator'])||isset($_SESSION[$OJ_NAME.'_'."p".$row['problem_id']])){
                         echo "<td><a href=problem_edit.php?id=".$row['problem_id']."&getkey=".$_SESSION[$OJ_NAME.'_'.'getkey'].">Edit</a>";
 			echo "<td><a href='javascript:phpfm(".$row['problem_id'].");'>TestData</a>";
+			echo "<td>".$row['order_num'];
                 }
         }
         echo "</tr>";
 }
-echo "<tr><td colspan=8><input type=submit name='problem2contest' value='CheckToNewContest'>";
+echo "<tr><td colspan=9><input type=submit name='problem2contest' value='CheckToNewContest'>";
 echo "</tr></form>";
 echo "</table></center>";
 ?>
