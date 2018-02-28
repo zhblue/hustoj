@@ -1,14 +1,21 @@
-<?php require("admin-header.php");
+<?php
+
+require(dirname(__FILE__) ."/../admin/admin-header.php");
         if(isset($OJ_LANG)){
                 require_once("../lang/$OJ_LANG.php");
         }
-require_once("../include/set_get_key.php");
+require_once(dirname(__FILE__) ."/../include/set_get_key.php");
+require_once(dirname(__FILE__) ."/market.inc.php");
 if (!(isset($_SESSION[$OJ_NAME.'_'.'administrator'])
                 ||isset($_SESSION[$OJ_NAME.'_'.'contest_creator'])
                 ||isset($_SESSION[$OJ_NAME.'_'.'problem_editor'])
                 )){
         echo "<a href='../loginpage.php'>Please Login First!</a>";
         exit(1);
+}
+if(market_isLogin() == "noLogin")//isLogin noLogin
+{
+    echo market_login();
 }
 if(isset($_GET['keyword']))
 	$keyword=$_GET['keyword'];
@@ -53,18 +60,13 @@ if($keyword) {
 <?php
 echo "<center><table class='table table-striped' width=90% border=1>";
 echo "<form method=post action=contest_add.php>";
-echo "<tr><td colspan=8>";
-
-echo "&nbsp;&nbsp;<input type=submit name='problem2contest' value='CheckToNewContest'>";
-echo "&nbsp;&nbsp;&nbsp;&nbsp;<input type=button ID='Available' value='Available'>";
-echo "&nbsp;&nbsp;&nbsp;&nbsp;<input type=button Id='Reserved' value='Reserved'>";
-echo "&nbsp;&nbsp;&nbsp;&nbsp;<input type=button Id='Delete' value='Delete'>";
+echo "<tr><td colspan=9>";
+echo "&nbsp;&nbsp;题库网址：".$OJ_MARKET_HOST . " &nbsp;&nbsp;账号：".$OJ_MARKET_USERNAME ;
 echo "<tr><td>PID";
-echo "<input type=checkbox onchange='$(\"input[type=checkbox]\").prop(\"checked\", this.checked)'>";
+//echo "<input type=checkbox onchange='$(\"input[type=checkbox]\").prop(\"checked\", this.checked)'>";
 echo "<td>Title<td>AC<td>Date";
 if(isset($_SESSION[$OJ_NAME.'_'.'administrator'])||isset($_SESSION[$OJ_NAME.'_'.'problem_editor'])){
-        if(isset($_SESSION[$OJ_NAME.'_'.'administrator']))   echo "<td>Status<td>Delete";
-        echo "<td>Edit<td>TestData";
+		echo "<td>push</tr>";
 }
 foreach($result as $row){
         echo "<tr>";
@@ -74,25 +76,12 @@ foreach($result as $row){
         echo "<td>".$row['accepted'];
         echo "<td>".$row['in_date'];
   if(isset($_SESSION[$OJ_NAME.'_'.'administrator'])||isset($_SESSION[$OJ_NAME.'_'.'problem_editor'])){
-                if(isset($_SESSION[$OJ_NAME.'_'.'administrator'])){
-                        echo "<td><a href=problem_df_change.php?id=".$row['problem_id']."&getkey=".$_SESSION[$OJ_NAME.'_'.'getkey'].">"
-                        .($row['defunct']=="N"?"<span titlc='click to reserve it' class=green>Available</span>":"<span class=red title='click to be available'>Reserved</span>")."</a><td>";
-                        if($OJ_SAE||function_exists("system")){
-                              ?>
-                              <a href=# onclick='javascript:if(confirm("Delete?")) location.href="problem_del.php?id=<?php echo $row['problem_id']?>&getkey=<?php echo $_SESSION[$OJ_NAME.'_'.'getkey']?>";'>
-                              Delete</a>
-                              <?php
-                        }
-                }
-                if(isset($_SESSION[$OJ_NAME.'_'.'administrator'])||isset($_SESSION[$OJ_NAME.'_'."p".$row['problem_id']])){
-                        echo "<td><a href=problem_edit.php?id=".$row['problem_id']."&getkey=".$_SESSION[$OJ_NAME.'_'.'getkey'].">Edit</a>";
-			echo "<td><a href='javascript:phpfm(".$row['problem_id'].");'>TestData</a>";
-                }
-
+				echo "<td>";
+				echo "<input type=button class='pushproblem' value='push' disabled title_md5=".md5($row['title'])." problem-id=".$row['problem_id'].">";
         }
         echo "</tr>";
 }
-echo "<tr><td colspan=8><input type=submit name='problem2contest' value='CheckToNewContest'>";
+echo "<tr><td colspan=9><input type=submit name='problem2contest' value='CheckToNewContest'>";
 echo "</tr></form>";
 echo "</table></center>";
 ?>
@@ -167,6 +156,47 @@ $(document).ready(function(){
 						alert(result);
 					console.log(result == 'ok');
 					console.log(result);
+                }
+        );
+  });
+var marketHost = '<?php echo $OJ_MARKET_HOST ?>' ;
+	$(".pushproblem").each(function(index){
+        var url = location.href;
+     //   console.log(url);        console.log(marketHost);
+        if (url.startWith(marketHost)) {
+            return;
+        }
+		var title_md5=$(this).attr('title_md5');
+		var _self = $(this);
+        $.post("../market/hasProblem.php",
+                {title_md5:title_md5},
+                function(data,status){
+					if(data == 2)
+						_self.attr('title',"可以推送");
+					else if(data == 1)
+						_self.val("已存在");
+					else
+						_self.val("异常");
+					if(iGetInnerText(data) !='2')_self.attr("disabled",true);	else _self.attr("disabled",false);
+                    //_self.attr("disabled",false);
+					console.log(data);
+					//alert(data);
+                }
+        );
+	});
+    $(".pushproblem").click(function(){
+        var problem_id=$(this).attr('problem-id');
+		var _self = $(this);
+        $.post("../market/problem_push_by_Id_ajax.php",
+                {problem_id:problem_id},
+                function(data,status){
+					if(iGetInnerText(data) =='ok')
+						_self.val('ok');
+					else
+						_self.val('no');
+					_self.attr('title',data);
+					console.log(data);
+				//	alert(data);
                 }
         );
   });

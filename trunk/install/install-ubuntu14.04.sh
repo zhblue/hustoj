@@ -3,11 +3,13 @@ apt-get update
 apt-get install -y subversion
 /usr/sbin/useradd -m -u 1536 judge
 cd /home/judge/
-svn co https://github.com/zhblue/hustoj/trunk/trunk/ src
+svn co https://github.com/shiningrise/hustoj/trunk/trunk/ src
 
 echo 'mysql-server-5.5 mysql-server/root_password password ""' | sudo debconf-set-selections
 echo 'mysql-server-5.5 mysql-server/root_password_again password ""' | sudo debconf-set-selections
-apt-get install -y make flex g++ clang libmysqlclient-dev libmysql++-dev php5-fpm php5-memcache memcached nginx mysql-server php5-mysql php5-gd fp-compiler openjdk-7-jdk
+apt-get install -y make flex g++ clang libmysqlclient-dev libmysql++-dev php5-fpm php5-memcache memcached nginx mysql-server php5-mysql php5-gd fp-compiler openjdk-7-jdk \
+	curl libcurl3 libcurl3-dev php5-curl \
+	python python3 
 USER=`cat /etc/mysql/debian.cnf |grep user|head -1|awk  '{print $3}'`
 PASSWORD=`cat /etc/mysql/debian.cnf |grep password|head -1|awk  '{print $3}'`
 CPU=`grep "cpu cores" /proc/cpuinfo |head -1|awk '{print $4}'`
@@ -28,6 +30,9 @@ sed -i "s/OJ_RUNNING=1/OJ_RUNNING=$CPU/g" etc/judge.conf
 
 sed -i "s/DB_USER=\"root\"/DB_USER=\"$USER\"/g" src/web/include/db_info.inc.php
 sed -i "s/DB_PASS=\"root\"/DB_PASS=\"$PASSWORD\"/g" src/web/include/db_info.inc.php
+
+sed -i "s/DB_USER=\"root\"/DB_USER=\"$USER\"/g" src/web/config/system.conf.php
+sed -i "s/DB_PASS=\"root\"/DB_PASS=\"$PASSWORD\"/g" src/web/config/system.conf.php
 
 chown www-data src/web/upload data
 if grep client_max_body_size /etc/nginx/nginx.conf ; then 

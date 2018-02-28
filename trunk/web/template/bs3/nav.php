@@ -1,4 +1,4 @@
-<?php 
+<?php
 	$url=basename($_SERVER['REQUEST_URI']);
 	$dir=basename(getcwd());
 	if($dir=="discuss3") $path_fix="../";
@@ -36,29 +36,31 @@
 	      <?php $ACTIVE="class='active'"?>
               <li <?php if ($dir=="discuss3") echo " $ACTIVE";?>><a href="<?php echo $path_fix?>bbs.php"><?php echo $MSG_BBS?></a></li>
               <li <?php if ($url=="faqs.php") echo " $ACTIVE";?>><a href="<?php echo $path_fix?>faqs.php"><?php echo $MSG_FAQ?></a></li>
+<?php if(!isset($_GET['cid'])){
+?>
               <li <?php if ($url=="problemset.php") echo " $ACTIVE";?>><a href="<?php echo $path_fix?>problemset.php"><?php echo $MSG_PROBLEMS?></a></li>
               <li <?php if ($url=="category.php") echo " $ACTIVE";?>><a href="<?php echo $path_fix?>category.php"><?php echo $MSG_SOURCE?></a></li>
               <li <?php if ($url=="status.php") echo " $ACTIVE";?>><a href="<?php echo $path_fix?>status.php"><?php echo $MSG_STATUS?></a></li>
               <li <?php if ($url=="ranklist.php") echo " $ACTIVE";?>><a href="<?php echo $path_fix?>ranklist.php"><?php echo $MSG_RANKLIST?></a></li>
-              <li <?php if ($url=="recent-contest.php") echo " $ACTIVE";?>><a href="<?php echo $path_fix?>recent-contest.php"><?php echo $MSG_RECENT_CONTEST?></a></li>
               <li <?php if ($url=="contest.php") echo " $ACTIVE";?>><a href="<?php echo $path_fix?>contest.php"><?php echo $MSG_CONTEST?></a></li>
+<?php }?>
 <?php if(isset($_GET['cid'])){
 	$cid=intval($_GET['cid']);
 ?>
 	      <li><a>[</a></li>
-              <li class="active" ><a href="<?php echo $path_fix?>contest.php?cid=<?php echo $cid?>">
+              <li <?php if ($url=="contest.php?cid=".$cid) echo " $ACTIVE";?>><a href="<?php echo $path_fix?>contest.php?cid=<?php echo $cid?>">
 			<?php echo $MSG_PROBLEMS?>
 	      </a></li>
-               <li  class="active" ><a href="<?php echo $path_fix?>status.php?cid=<?php echo $cid?>">
+               <li <?php if ($url=="status.php?cid=".$cid) echo " $ACTIVE";?>><a href="<?php echo $path_fix?>status.php?cid=<?php echo $cid?>">
 			<?php echo $MSG_STATUS?>
 	      </a></li>
-              <li  class="active" ><a href="<?php echo $path_fix?>contestrank.php?cid=<?php echo $cid?>">
+              <li <?php if ($url=="contestrank.php?cid=".$cid) echo " $ACTIVE";?>><a href="<?php echo $path_fix?>contestrank.php?cid=<?php echo $cid?>">
 			<?php echo $MSG_RANKLIST?>
 	      </a></li>
-              <li  class="active" ><a href="<?php echo $path_fix?>contestrank-oi.php?cid=<?php echo $cid?>">OI
+              <li <?php if ($url=="contestrank-oi.php?cid=".$cid) echo " $ACTIVE";?>><a href="<?php echo $path_fix?>contestrank-oi.php?cid=<?php echo $cid?>">OI
 			<?php echo $MSG_RANKLIST?>
 	      </a></li>
-              <li  class="active" ><a href="<?php echo $path_fix?>conteststatistics.php?cid=<?php echo $cid?>">
+              <li <?php if ($url=="conteststatistics.php?cid=".$cid) echo " $ACTIVE";?>><a href="<?php echo $path_fix?>conteststatistics.php?cid=<?php echo $cid?>">
 			<?php echo $MSG_STATISTICS?>
 	      </a></li>
 	      <li><a>]</a></li>

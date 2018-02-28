@@ -1,5 +1,5 @@
 <?php 
-	require_once("./include/my_func.inc.php");
+	require_once(dirname(__FILE__) . "/../include/my_func.inc.php");
     
 	function check_login($user_id,$password){
 		

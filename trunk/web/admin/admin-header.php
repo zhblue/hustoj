@@ -1,5 +1,5 @@
 <?php 
-require_once("../include/db_info.inc.php");
+require_once(dirname(__FILE__) ."/../include/db_info.inc.php");
 ;?>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <link rel=stylesheet href='../include/hoj.css' type='text/css'>
@@ -17,7 +17,7 @@ $("document").ready(function (){
 	echo "<a href='../loginpage.php'>Please Login First!</a>";
 	exit(1);
 }
-require_once("../template/$OJ_TEMPLATE/css.php");
-if(file_exists("../lang/$OJ_LANG.php")) require_once("../lang/$OJ_LANG.php");
+require_once(dirname(__FILE__) ."/../template/$OJ_TEMPLATE/css.php");
+if(file_exists(dirname(__FILE__) ."/../lang/$OJ_LANG.php")) require_once(dirname(__FILE__) ."/../lang/$OJ_LANG.php");
 ?>
 

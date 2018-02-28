@@ -1,7 +1,7 @@
 <?php 
 
 	$dir=basename(getcwd());
-	if($dir=="discuss3"||$dir=="admin") $path_fix="../";
+	if($dir=="discuss3"||$dir=="admin"||$dir=="market") $path_fix="../";
 	else $path_fix="";
 ?>
 

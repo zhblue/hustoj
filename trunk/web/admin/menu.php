@@ -77,6 +77,9 @@ if (isset($_SESSION[$OJ_NAME.'_'.'administrator'])){
 if (isset($_SESSION[$OJ_NAME.'_'.'administrator'])){
 ?><li>
 	<a class='btn btn-primary' href="problem_export.php" target="main"><b><?php echo $MSG_EXPORT.$MSG_PROBLEM?></b></a>
+    <li><a class='btn btn-primary' href="../market/problem_market_index.php" target="main"><b>题库市场</b></a>
+		<a class='btn btn-primary' href="../market/problem_list.php" target="main"><b>分享题目</b></a>
+    <li><a class='btn btn-primary' href="config.php" target="main"><b>系统设置</b></a>
 <?php }
 if (isset($_SESSION[$OJ_NAME.'_'.'administrator'])){
 ?><li>
@@ -98,7 +101,6 @@ if (isset($OJ_ONLINE)&&$OJ_ONLINE){
 	<a class='btn btn-primary' href="https://github.com/zhblue/freeproblemset/" target="_blank"><b>FreeProblemSet</b></a>
 <li>
 	<a class='btn btn-primary' href="http://tk.hustoj.com" target="_blank"><b>自助题库</b></a>
-<li>
 	<a class='btn btn-primary' href="http://shang.qq.com/wpa/qunwpa?idkey=d52c3b12ddaffb43420d308d39118fafe5313e271769277a5ac49a6fae63cf7a" target="_blank">手机QQ加官方群23361372</a>
 
 </ol>

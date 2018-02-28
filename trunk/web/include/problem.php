@@ -10,7 +10,7 @@ function addproblem($title, $time_limit, $memory_limit, $description, $input, $o
 	//echo $sql;
 	$pid =pdo_query( $sql,$title,$time_limit,$memory_limit,$description,$input,$output,
 			$sample_input,$sample_output,$hint,$source,$spj ) ;
-	echo "<br>Add $pid  ";
+	//echo "<br>Add $pid  ";
 	if (isset ( $_POST ['contest_id'] )) {
 		$cid =intval($_POST ['contest_id']);
 		$sql = "select count(*) FROM `contest_problem` WHERE `contest_id`=?";

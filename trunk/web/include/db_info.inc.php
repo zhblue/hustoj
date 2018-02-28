@@ -65,6 +65,51 @@ static  $OJ_QQ_AKEY='1124518951';
 static  $OJ_QQ_ASEC='df709a1253ef8878548920718085e84b';
 static  $OJ_QQ_CBURL='192.168.0.108';
 
+//题库市场账号配置
+static  $OJ_MARKET_HOST = "http://tk.wxy1.cn";
+static  $OJ_MARKET_USERNAME = "hustoj";
+static  $OJ_MARKET_PASSWORD = "e10adc3949ba59abbe56e057f20f883e";
+
+$filename = dirname(__FILE__)."/../config/system.conf.php";
+$config = parse_ini_file($filename);
+if($config)
+{
+    $DB_HOST=$config['DB_HOST'];
+    $DB_NAME=$config['DB_NAME'];
+    $DB_USER=$config['DB_USER'];
+    $DB_PASS=$config['DB_PASS'];
+
+	$OJ_NAME = $config['OJ_NAME'];
+
+	$OJ_HOME = $config['OJ_HOME'];
+	$OJ_BBS = $config['OJ_BBS'];
+	$OJ_ONLINE =  boolval($config['OJ_ONLINE']);
+	$OJ_LANG = $config['OJ_LANG'];
+	$OJ_SIM = boolval($config['OJ_SIM']);
+	$OJ_DICT = boolval($config['OJ_DICT']);
+	$OJ_LANGMASK = intval($config['OJ_LANGMASK']);
+	$OJ_EDITE_AREA = boolval($config['OJ_EDITE_AREA']);
+	$OJ_AUTO_SHARE = boolval($config['OJ_AUTO_SHARE']);
+	$OJ_CSS = $config['OJ_CSS'];
+	$OJ_VCODE = boolval($config['OJ_VCODE']);
+	$OJ_APPENDCODE = boolval($config['OJ_APPENDCODE']);
+	$OJ_CE_PENALTY = boolval($config['OJ_CE_PENALTY']);
+	$OJ_TEMPLATE = $config['OJ_TEMPLATE'];
+
+	$OJ_LOGIN_MOD = $config['OJ_LOGIN_MOD'];
+	$OJ_REGISTER = boolval($config['OJ_REGISTER']);
+	$OJ_REG_NEED_CONFIRM = boolval($config['OJ_REG_NEED_CONFIRM']);
+	$OJ_RANK_LOCK_PERCENT = intval($config['OJ_RANK_LOCK_PERCENT']);
+	$OJ_SHOW_DIFF = boolval($config['OJ_SHOW_DIFF']);
+	$OJ_TEST_RUN = boolval($config['OJ_TEST_RUN']);
+	$OJ_BLOCKLY = boolval($config['OJ_BLOCKLY']);
+	$OJ_ENCODE_SUBMIT = boolval($config['OJ_ENCODE_SUBMIT']);
+
+	$OJ_MARKET_HOST = $config['OJ_MARKET_HOST'];
+	$OJ_MARKET_USERNAME = $config['OJ_MARKET_USERNAME'];
+	$OJ_MARKET_PASSWORD = $config['OJ_MARKET_PASSWORD'];
+}
+
 //if(date('H')<5||date('H')>21||isset($_GET['dark'])) $OJ_CSS="dark.css";
 if( isset($_SERVER['HTTP_ACCEPT_LANGUAGE']) && strstr($_SERVER['HTTP_ACCEPT_LANGUAGE'],"zh-CN")) {
         $OJ_LANG="cn";
