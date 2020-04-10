@@ -180,6 +180,20 @@ bool read_buf(char * buf, const char * key, char * value) {
 	}
 	return 0;
 }
+
+bool read_env(const char *key, char *value, int len){
+	char* env;
+	if (env=getenv(key)){
+		strncpy(value,env,len);
+		trim(value);
+		if (DEBUG)
+			printf("%s\n", value);
+		return true;
+	}
+	return false;
+	
+}
+
 void read_int(char * buf, const char * key, int * value) {
 	char buf2[BUFFER_SIZE];
 	if (read_buf(buf, key, buf2))
