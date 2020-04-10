@@ -181,10 +181,10 @@ bool read_buf(char * buf, const char * key, char * value) {
 	return 0;
 }
 
-bool read_env(const char *key, char *value, int len){
+bool read_raw_env(const char *key, char *value){
 	char* env;
 	if (env=getenv(key)){
-		strncpy(value,env,len);
+		strcpy(value, env);
 		trim(value);
 		if (DEBUG)
 			printf("%s = %s\n", key, value);
@@ -206,9 +206,39 @@ void read_int_env(const char* key, int* value){
 	if(env=getenv(key)){
 		sscanf(env,"%d",value);
 		if(DEBUG){
-			printf("%s = %d\n", key, value);
+			printf("%s = %d\n", key, *value);
 		}
 	}
+}
+
+void init_env_conf(){
+	read_raw_env( "OJ_HOST_NAME", host_name);
+	read_raw_env( "OJ_USER_NAME", user_name);
+	read_raw_env( "OJ_PASSWORD", password);
+	read_raw_env( "OJ_DB_NAME", db_name);
+	read_int_env( "OJ_PORT_NUMBER", &port_number);
+	read_int_env( "OJ_RUNNING", &max_running);
+	read_int_env( "OJ_SLEEP_TIME", &sleep_time);
+	read_int_env( "OJ_TOTAL", &oj_tot);
+
+	read_int_env( "OJ_MOD", &oj_mod);
+
+	read_int_env( "OJ_HTTP_JUDGE", &http_judge);
+	read_raw_env( "OJ_HTTP_BASEURL", http_baseurl);
+	read_raw_env( "OJ_HTTP_USERNAME", http_username);
+	read_raw_env( "OJ_HTTP_PASSWORD", http_password);
+	read_raw_env( "OJ_LANG_SET", oj_lang_set);
+			
+	read_int_env( "OJ_UDP_ENABLE", &oj_udp);
+    read_raw_env( "OJ_UDP_SERVER", oj_udpserver);
+    read_int_env( "OJ_UDP_PORT", &oj_udpport);
+
+	read_int_env( "OJ_REDISENABLE", &oj_redis);
+    read_raw_env( "OJ_REDISSERVER", oj_redisserver);
+    read_int_env( "OJ_REDISPORT", &oj_redisport);
+    read_raw_env( "OJ_REDISAUTH", oj_redisauth);
+    read_raw_env( "OJ_REDISQNAME", oj_redisqname);
+    read_int_env( "OJ_TURBO_MODE", &turbo_mode);
 }
 
 // read the configue file
@@ -267,6 +297,7 @@ void init_mysql_conf() {
 		sleep_tmp = sleep_time;
 		//	fclose(fp);
 	}
+	init_env_conf();
 }
 
 void run_client(int runid, int clientid) {
