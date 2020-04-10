@@ -187,7 +187,7 @@ bool read_env(const char *key, char *value, int len){
 		strncpy(value,env,len);
 		trim(value);
 		if (DEBUG)
-			printf("%s\n", value);
+			printf("%s = %s\n", key, value);
 		return true;
 	}
 	return false;
@@ -200,6 +200,17 @@ void read_int(char * buf, const char * key, int * value) {
 		sscanf(buf2, "%d", value);
 
 }
+
+void read_int_env(const char* key, int* value){
+	char* env;
+	if(env=getenv(key)){
+		sscanf(env,"%d",value);
+		if(DEBUG){
+			printf("%s = %d\n", key, value);
+		}
+	}
+}
+
 // read the configue file
 void init_mysql_conf() {
 	FILE *fp = NULL;
