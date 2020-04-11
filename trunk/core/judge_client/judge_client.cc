@@ -436,6 +436,42 @@ void read_int(char *buf, const char *key, int *value)
 		sscanf(buf2, "%d", value);
 }
 
+
+bool read_raw_env(const char *key, char *value){
+	char* env;
+	if (env=getenv(key)){
+		strcpy(value, env);
+		trim(value);
+		if (DEBUG)
+			printf("env: %s = %s\n", key, value);
+		return true;
+	}
+	return false;
+	
+}
+
+void read_int_env(const char* key, int* value){
+	char* env;
+	if(env=getenv(key)){
+		sscanf(env,"%d",value);
+		if(DEBUG){
+			printf("env: %s = %d\n", key, *value);
+		}
+	}
+}
+
+
+void read_double_env(const char* key, double* value){
+	char* env;
+	if(env=getenv(key)){
+		sscanf(env, "%lf", value);
+		if(DEBUG){
+			printf("env: %s = %lf\n", key, *value);
+		}
+	}
+}
+
+
 FILE *read_cmd_output(const char *fmt, ...)
 {
 	char cmd[BUFFER_SIZE];
@@ -452,6 +488,34 @@ FILE *read_cmd_output(const char *fmt, ...)
 
 	return ret;
 }
+
+void init_env_conf(){
+    read_raw_env( "OJ_HOST_NAME", host_name);
+    read_raw_env( "OJ_USER_NAME", user_name);
+    read_raw_env( "OJ_PASSWORD", password);
+    read_raw_env( "OJ_DB_NAME", db_name);
+    read_int_env( "OJ_PORT_NUMBER", &port_number);
+    read_int_env( "OJ_JAVA_TIME_BONUS", &java_time_bonus);
+    read_int_env( "OJ_JAVA_MEMORY_BONUS", &java_memory_bonus);
+    read_int_env( "OJ_SIM_ENABLE", &sim_enable);
+    read_raw_env( "OJ_JAVA_XMS", java_xms);
+    read_raw_env( "OJ_JAVA_XMX", java_xmx);
+    read_int_env( "OJ_HTTP_JUDGE", &http_judge);
+    read_raw_env( "OJ_HTTP_BASEURL", http_baseurl);
+    read_raw_env( "OJ_HTTP_USERNAME", http_username);
+    read_raw_env( "OJ_HTTP_PASSWORD", http_password);
+    read_int_env( "OJ_HTTP_DOWNLOAD", &http_download);
+    read_int_env( "OJ_OI_MODE", &oi_mode);
+    read_int_env( "OJ_FULL_DIFF", &full_diff);
+    read_int_env( "OJ_SHM_RUN", &shm_run);
+    read_int_env( "OJ_USE_MAX_TIME", &use_max_time);
+    read_int_env( "OJ_TIME_LIMIT_TO_TOTAL", &time_limit_to_total);
+    read_int_env( "OJ_USE_PTRACE", &use_ptrace);
+    read_int_env( "OJ_COMPILE_CHROOT", &compile_chroot);
+    read_int_env( "OJ_TURBO_MODE", &turbo_mode);
+	read_double_env( "OJ_CPU_COMPENSATION", &cpu_compensation);
+}
+
 // read the configue file
 void init_mysql_conf()
 {
@@ -500,7 +564,7 @@ void init_mysql_conf()
 		//fclose(fp);
 	}
 //	fclose(fp);
-	
+	init_env_conf();
  	if(strcmp(http_username,"IP")==0){
                   FILE * fjobs = read_cmd_output("ifconfig|grep 'inet'|awk -F: '{printf $2}'|awk  '{printf $1}'");
                   fscanf(fjobs, "%s", http_username);
