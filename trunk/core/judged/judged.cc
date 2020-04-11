@@ -175,7 +175,7 @@ bool read_buf(char * buf, const char * key, char * value) {
 		strcpy(value, buf + after_equal(buf));
 		trim(value);
 		if (DEBUG)
-			printf("%s\n", value);
+			printf("file: %s = %s\n", key, value);
 		return 1;
 	}
 	return 0;
