@@ -229,68 +229,66 @@ void init_file_conf(){
 	fp = fopen("./etc/judge.conf", "r");
 	if (fp != NULL) {
 		while (fgets(buf, BUFFER_SIZE - 1, fp)) {
-			read_buf(buf, "OJ_HOST_NAME", host_name);
-			read_buf(buf, "OJ_USER_NAME", user_name);
-			read_buf(buf, "OJ_PASSWORD", password);
-			read_buf(buf, "OJ_DB_NAME", db_name);
-			read_int(buf, "OJ_PORT_NUMBER", &port_number);
-			read_int(buf, "OJ_RUNNING", &max_running);
-			read_int(buf, "OJ_SLEEP_TIME", &sleep_time);
-			read_int(buf, "OJ_TOTAL", &oj_tot);
+			read_buf(buf, "OJ_HOST_NAME", 				host_name);
+			read_buf(buf, "OJ_USER_NAME", 				user_name);
+			read_buf(buf, "OJ_PASSWORD", 				password);
+			read_buf(buf, "OJ_DB_NAME", 				db_name);
+			read_int(buf, "OJ_PORT_NUMBER", 			&port_number);
+			read_int(buf, "OJ_RUNNING", 				&max_running);
+			read_int(buf, "OJ_SLEEP_TIME", 				&sleep_time);
+			read_int(buf, "OJ_TOTAL", 					&oj_tot);
 
-			read_int(buf, "OJ_MOD", &oj_mod);
+			read_int(buf, "OJ_MOD", 					&oj_mod);
 
-			read_int(buf, "OJ_HTTP_JUDGE", &http_judge);
-			read_buf(buf, "OJ_HTTP_BASEURL", http_baseurl);
-			read_buf(buf, "OJ_HTTP_USERNAME", http_username);
-			read_buf(buf, "OJ_HTTP_PASSWORD", http_password);
-			read_buf(buf, "OJ_LANG_SET", oj_lang_set);
+			read_int(buf, "OJ_HTTP_JUDGE", 				&http_judge);
+			read_buf(buf, "OJ_HTTP_BASEURL", 			http_baseurl);
+			read_buf(buf, "OJ_HTTP_USERNAME", 			http_username);
+			read_buf(buf, "OJ_HTTP_PASSWORD", 			http_password);
+			read_buf(buf, "OJ_LANG_SET", 				oj_lang_set);
 			
-			read_int(buf, "OJ_UDP_ENABLE", &oj_udp);
-            read_buf(buf, "OJ_UDP_SERVER", oj_udpserver);
-            read_int(buf, "OJ_UDP_PORT", &oj_udpport);
+			read_int(buf, "OJ_UDP_ENABLE", 				&oj_udp);
+            read_buf(buf, "OJ_UDP_SERVER", 				oj_udpserver);
+            read_int(buf, "OJ_UDP_PORT", 				&oj_udpport);
 
-			read_int(buf, "OJ_REDISENABLE", &oj_redis);
-            read_buf(buf, "OJ_REDISSERVER", oj_redisserver);
-            read_int(buf, "OJ_REDISPORT", &oj_redisport);
-            read_buf(buf, "OJ_REDISAUTH", oj_redisauth);
-            read_buf(buf, "OJ_REDISQNAME", oj_redisqname);
-            read_int(buf, "OJ_TURBO_MODE", &turbo_mode);
-
-
+			read_int(buf, "OJ_REDISENABLE",			 	&oj_redis);
+            read_buf(buf, "OJ_REDISSERVER", 			oj_redisserver);
+            read_int(buf, "OJ_REDISPORT", 				&oj_redisport);
+            read_buf(buf, "OJ_REDISAUTH", 				oj_redisauth);
+            read_buf(buf, "OJ_REDISQNAME", 				oj_redisqname);
+            read_int(buf, "OJ_TURBO_MODE", 				&turbo_mode);
 		}
 		fclose(fp);
 	}
 }
 
 void init_env_conf(){
-	read_raw_env( "OJ_HOST_NAME", host_name);
-	read_raw_env( "OJ_USER_NAME", user_name);
-	read_raw_env( "OJ_PASSWORD", password);
-	read_raw_env( "OJ_DB_NAME", db_name);
-	read_int_env( "OJ_PORT_NUMBER", &port_number);
-	read_int_env( "OJ_RUNNING", &max_running);
-	read_int_env( "OJ_SLEEP_TIME", &sleep_time);
-	read_int_env( "OJ_TOTAL", &oj_tot);
+	read_raw_env( "OJ_HOST_NAME", 				host_name);
+	read_raw_env( "OJ_USER_NAME", 				user_name);
+	read_raw_env( "OJ_PASSWORD", 				password);
+	read_raw_env( "OJ_DB_NAME", 				db_name);
+	read_int_env( "OJ_PORT_NUMBER", 			&port_number);
+	read_int_env( "OJ_RUNNING", 				&max_running);
+	read_int_env( "OJ_SLEEP_TIME", 				&sleep_time);
+	read_int_env( "OJ_TOTAL",			 		&oj_tot);
 
-	read_int_env( "OJ_MOD", &oj_mod);
+	read_int_env( "OJ_MOD", 					&oj_mod);
 
-	read_int_env( "OJ_HTTP_JUDGE", &http_judge);
-	read_raw_env( "OJ_HTTP_BASEURL", http_baseurl);
-	read_raw_env( "OJ_HTTP_USERNAME", http_username);
-	read_raw_env( "OJ_HTTP_PASSWORD", http_password);
-	read_raw_env( "OJ_LANG_SET", oj_lang_set);
+	read_int_env( "OJ_HTTP_JUDGE", 				&http_judge);
+	read_raw_env( "OJ_HTTP_BASEURL", 			http_baseurl);
+	read_raw_env( "OJ_HTTP_USERNAME", 			http_username);
+	read_raw_env( "OJ_HTTP_PASSWORD", 			http_password);
+	read_raw_env( "OJ_LANG_SET", 				oj_lang_set);
 			
-	read_int_env( "OJ_UDP_ENABLE", &oj_udp);
-    read_raw_env( "OJ_UDP_SERVER", oj_udpserver);
-    read_int_env( "OJ_UDP_PORT", &oj_udpport);
+	read_int_env( "OJ_UDP_ENABLE", 				&oj_udp);
+    read_raw_env( "OJ_UDP_SERVER", 				oj_udpserver);
+    read_int_env( "OJ_UDP_PORT", 				&oj_udpport);
 
-	read_int_env( "OJ_REDISENABLE", &oj_redis);
-    read_raw_env( "OJ_REDISSERVER", oj_redisserver);
-    read_int_env( "OJ_REDISPORT", &oj_redisport);
-    read_raw_env( "OJ_REDISAUTH", oj_redisauth);
-    read_raw_env( "OJ_REDISQNAME", oj_redisqname);
-    read_int_env( "OJ_TURBO_MODE", &turbo_mode);
+	read_int_env( "OJ_REDISENABLE", 			&oj_redis);
+    read_raw_env( "OJ_REDISSERVER", 			oj_redisserver);
+    read_int_env( "OJ_REDISPORT", 				&oj_redisport);
+    read_raw_env( "OJ_REDISAUTH", 				oj_redisauth);
+    read_raw_env( "OJ_REDISQNAME", 				oj_redisqname);
+    read_int_env( "OJ_TURBO_MODE", 				&turbo_mode);
 }
 
 // read the configue file
