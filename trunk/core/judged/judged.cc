@@ -181,19 +181,6 @@ bool read_buf(char * buf, const char * key, char * value) {
 	return 0;
 }
 
-bool read_raw_env(const char *key, char *value){
-	char* env;
-	if (env=getenv(key)){
-		strcpy(value, env);
-		trim(value);
-		if (DEBUG)
-			printf("%s = %s\n", key, value);
-		return true;
-	}
-	return false;
-	
-}
-
 void read_int(char * buf, const char * key, int * value) {
 	char buf2[BUFFER_SIZE];
 	if (read_buf(buf, key, buf2))
@@ -201,12 +188,26 @@ void read_int(char * buf, const char * key, int * value) {
 
 }
 
+bool read_raw_env(const char *key, char *value){
+	char* env;
+	if (env=getenv(key)){
+		strcpy(value, env);
+		trim(value);
+		if (DEBUG){
+			printf("env: %s = %s\n", key, value);
+		}
+		return true;
+	}
+	return false;
+	
+}
+
 void read_int_env(const char* key, int* value){
 	char* env;
 	if(env=getenv(key)){
 		sscanf(env,"%d",value);
 		if(DEBUG){
-			printf("%s = %d\n", key, *value);
+			printf("env: %s = %d\n", key, *value);
 		}
 	}
 }
