@@ -489,36 +489,7 @@ FILE *read_cmd_output(const char *fmt, ...)
 	return ret;
 }
 
-void init_env_conf(){
-    read_raw_env( "OJ_HOST_NAME", host_name);
-    read_raw_env( "OJ_USER_NAME", user_name);
-    read_raw_env( "OJ_PASSWORD", password);
-    read_raw_env( "OJ_DB_NAME", db_name);
-    read_int_env( "OJ_PORT_NUMBER", &port_number);
-    read_int_env( "OJ_JAVA_TIME_BONUS", &java_time_bonus);
-    read_int_env( "OJ_JAVA_MEMORY_BONUS", &java_memory_bonus);
-    read_int_env( "OJ_SIM_ENABLE", &sim_enable);
-    read_raw_env( "OJ_JAVA_XMS", java_xms);
-    read_raw_env( "OJ_JAVA_XMX", java_xmx);
-    read_int_env( "OJ_HTTP_JUDGE", &http_judge);
-    read_raw_env( "OJ_HTTP_BASEURL", http_baseurl);
-    read_raw_env( "OJ_HTTP_USERNAME", http_username);
-    read_raw_env( "OJ_HTTP_PASSWORD", http_password);
-    read_int_env( "OJ_HTTP_DOWNLOAD", &http_download);
-    read_int_env( "OJ_OI_MODE", &oi_mode);
-    read_int_env( "OJ_FULL_DIFF", &full_diff);
-    read_int_env( "OJ_SHM_RUN", &shm_run);
-    read_int_env( "OJ_USE_MAX_TIME", &use_max_time);
-    read_int_env( "OJ_TIME_LIMIT_TO_TOTAL", &time_limit_to_total);
-    read_int_env( "OJ_USE_PTRACE", &use_ptrace);
-    read_int_env( "OJ_COMPILE_CHROOT", &compile_chroot);
-    read_int_env( "OJ_TURBO_MODE", &turbo_mode);
-	read_double_env( "OJ_CPU_COMPENSATION", &cpu_compensation);
-}
-
-// read the configue file
-void init_mysql_conf()
-{
+void init_file_conf(){
 	FILE *fp = NULL;
 	char buf[BUFFER_SIZE];
 	host_name[0] = 0;
@@ -536,34 +507,65 @@ void init_mysql_conf()
 	{
 		while (fgets(buf, BUFFER_SIZE - 1, fp))
 		{
-			read_buf(buf, "OJ_HOST_NAME", host_name);
-			read_buf(buf, "OJ_USER_NAME", user_name);
-			read_buf(buf, "OJ_PASSWORD", password);
-			read_buf(buf, "OJ_DB_NAME", db_name);
-			read_int(buf, "OJ_PORT_NUMBER", &port_number);
-			read_int(buf, "OJ_JAVA_TIME_BONUS", &java_time_bonus);
-			read_int(buf, "OJ_JAVA_MEMORY_BONUS", &java_memory_bonus);
-			read_int(buf, "OJ_SIM_ENABLE", &sim_enable);
-			read_buf(buf, "OJ_JAVA_XMS", java_xms);
-			read_buf(buf, "OJ_JAVA_XMX", java_xmx);
-			read_int(buf, "OJ_HTTP_JUDGE", &http_judge);
-			read_buf(buf, "OJ_HTTP_BASEURL", http_baseurl);
-			read_buf(buf, "OJ_HTTP_USERNAME", http_username);
-			read_buf(buf, "OJ_HTTP_PASSWORD", http_password);
-			read_int(buf, "OJ_HTTP_DOWNLOAD", &http_download);
-			read_int(buf, "OJ_OI_MODE", &oi_mode);
-			read_int(buf, "OJ_FULL_DIFF", &full_diff);
-			read_int(buf, "OJ_SHM_RUN", &shm_run);
-			read_int(buf, "OJ_USE_MAX_TIME", &use_max_time);
-			read_int(buf, "OJ_TIME_LIMIT_TO_TOTAL", &time_limit_to_total);
-			read_int(buf, "OJ_USE_PTRACE", &use_ptrace);
-			read_int(buf, "OJ_COMPILE_CHROOT", &compile_chroot);
-			read_int(buf, "OJ_TURBO_MODE", &turbo_mode);
-			read_double(buf, "OJ_CPU_COMPENSATION", &cpu_compensation);
+			read_buf(buf, "OJ_HOST_NAME", 				host_name);
+			read_buf(buf, "OJ_USER_NAME", 				user_name);
+			read_buf(buf, "OJ_PASSWORD", 				password);
+			read_buf(buf, "OJ_DB_NAME", 				db_name);
+			read_int(buf, "OJ_PORT_NUMBER",			 	&port_number);
+			read_int(buf, "OJ_JAVA_TIME_BONUS", 		&java_time_bonus);
+			read_int(buf, "OJ_JAVA_MEMORY_BONUS",	 	&java_memory_bonus);
+			read_int(buf, "OJ_SIM_ENABLE", 				&sim_enable);
+			read_buf(buf, "OJ_JAVA_XMS", 				java_xms);
+			read_buf(buf, "OJ_JAVA_XMX", 				java_xmx);
+			read_int(buf, "OJ_HTTP_JUDGE",		 		&http_judge);
+			read_buf(buf, "OJ_HTTP_BASEURL", 			http_baseurl);
+			read_buf(buf, "OJ_HTTP_USERNAME", 			http_username);
+			read_buf(buf, "OJ_HTTP_PASSWORD", 			http_password);
+			read_int(buf, "OJ_HTTP_DOWNLOAD", 			&http_download);
+			read_int(buf, "OJ_OI_MODE", 				&oi_mode);
+			read_int(buf, "OJ_FULL_DIFF", 				&full_diff);
+			read_int(buf, "OJ_SHM_RUN", 				&shm_run);
+			read_int(buf, "OJ_USE_MAX_TIME", 			&use_max_time);
+			read_int(buf, "OJ_TIME_LIMIT_TO_TOTAL", 	&time_limit_to_total);
+			read_int(buf, "OJ_USE_PTRACE", 				&use_ptrace);
+			read_int(buf, "OJ_COMPILE_CHROOT", 			&compile_chroot);
+			read_int(buf, "OJ_TURBO_MODE", 				&turbo_mode);
+			read_double(buf, "OJ_CPU_COMPENSATION", 	&cpu_compensation);
 		}
-		//fclose(fp);
+		fclose(fp);
 	}
-//	fclose(fp);
+}
+
+void init_env_conf(){
+    read_raw_env( "OJ_HOST_NAME",				host_name);
+    read_raw_env( "OJ_USER_NAME", 				user_name);
+    read_raw_env( "OJ_PASSWORD", 				password);
+    read_raw_env( "OJ_DB_NAME", 				db_name);
+    read_int_env( "OJ_PORT_NUMBER", 			&port_number);
+    read_int_env( "OJ_JAVA_TIME_BONUS",	 		&java_time_bonus);
+    read_int_env( "OJ_JAVA_MEMORY_BONUS", 		&java_memory_bonus);
+    read_int_env( "OJ_SIM_ENABLE", 				&sim_enable);
+    read_raw_env( "OJ_JAVA_XMS", 				java_xms);
+    read_raw_env( "OJ_JAVA_XMX", 				java_xmx);
+    read_int_env( "OJ_HTTP_JUDGE", 				&http_judge);
+    read_raw_env( "OJ_HTTP_BASEURL", 			http_baseurl);
+    read_raw_env( "OJ_HTTP_USERNAME", 			http_username);
+    read_raw_env( "OJ_HTTP_PASSWORD", 			http_password);
+    read_int_env( "OJ_HTTP_DOWNLOAD", 			&http_download);
+    read_int_env( "OJ_OI_MODE", 				&oi_mode);
+    read_int_env( "OJ_FULL_DIFF", 				&full_diff);
+    read_int_env( "OJ_SHM_RUN", 				&shm_run);
+    read_int_env( "OJ_USE_MAX_TIME", 			&use_max_time);
+    read_int_env( "OJ_TIME_LIMIT_TO_TOTAL", 	&time_limit_to_total);
+    read_int_env( "OJ_USE_PTRACE", 				&use_ptrace);
+    read_int_env( "OJ_COMPILE_CHROOT", 			&compile_chroot);
+    read_int_env( "OJ_TURBO_MODE", 				&turbo_mode);
+	read_double_env( "OJ_CPU_COMPENSATION", 	&cpu_compensation);
+}
+
+void init_mysql_conf()
+{
+	init_file_conf();
 	init_env_conf();
  	if(strcmp(http_username,"IP")==0){
                   FILE * fjobs = read_cmd_output("ifconfig|grep 'inet'|awk -F: '{printf $2}'|awk  '{printf $1}'");

@@ -212,38 +212,7 @@ void read_int_env(const char* key, int* value){
 	}
 }
 
-void init_env_conf(){
-	read_raw_env( "OJ_HOST_NAME", host_name);
-	read_raw_env( "OJ_USER_NAME", user_name);
-	read_raw_env( "OJ_PASSWORD", password);
-	read_raw_env( "OJ_DB_NAME", db_name);
-	read_int_env( "OJ_PORT_NUMBER", &port_number);
-	read_int_env( "OJ_RUNNING", &max_running);
-	read_int_env( "OJ_SLEEP_TIME", &sleep_time);
-	read_int_env( "OJ_TOTAL", &oj_tot);
-
-	read_int_env( "OJ_MOD", &oj_mod);
-
-	read_int_env( "OJ_HTTP_JUDGE", &http_judge);
-	read_raw_env( "OJ_HTTP_BASEURL", http_baseurl);
-	read_raw_env( "OJ_HTTP_USERNAME", http_username);
-	read_raw_env( "OJ_HTTP_PASSWORD", http_password);
-	read_raw_env( "OJ_LANG_SET", oj_lang_set);
-			
-	read_int_env( "OJ_UDP_ENABLE", &oj_udp);
-    read_raw_env( "OJ_UDP_SERVER", oj_udpserver);
-    read_int_env( "OJ_UDP_PORT", &oj_udpport);
-
-	read_int_env( "OJ_REDISENABLE", &oj_redis);
-    read_raw_env( "OJ_REDISSERVER", oj_redisserver);
-    read_int_env( "OJ_REDISPORT", &oj_redisport);
-    read_raw_env( "OJ_REDISAUTH", oj_redisauth);
-    read_raw_env( "OJ_REDISQNAME", oj_redisqname);
-    read_int_env( "OJ_TURBO_MODE", &turbo_mode);
-}
-
-// read the configue file
-void init_mysql_conf() {
+void init_file_conf(){
 	FILE *fp = NULL;
 	char buf[BUFFER_SIZE];
 	host_name[0] = 0;
@@ -290,15 +259,50 @@ void init_mysql_conf() {
 
 
 		}
-#ifdef _mysql_h
-		sprintf(query,
-				"SELECT solution_id FROM solution WHERE language in (%s) and result<2 and MOD(solution_id,%d)=%d ORDER BY result ASC,solution_id ASC limit %d",
-				oj_lang_set, oj_tot, oj_mod, 2 *max_running );
-#endif
-		sleep_tmp = sleep_time;
-		//	fclose(fp);
+		fclose(fp);
 	}
+}
+
+void init_env_conf(){
+	read_raw_env( "OJ_HOST_NAME", host_name);
+	read_raw_env( "OJ_USER_NAME", user_name);
+	read_raw_env( "OJ_PASSWORD", password);
+	read_raw_env( "OJ_DB_NAME", db_name);
+	read_int_env( "OJ_PORT_NUMBER", &port_number);
+	read_int_env( "OJ_RUNNING", &max_running);
+	read_int_env( "OJ_SLEEP_TIME", &sleep_time);
+	read_int_env( "OJ_TOTAL", &oj_tot);
+
+	read_int_env( "OJ_MOD", &oj_mod);
+
+	read_int_env( "OJ_HTTP_JUDGE", &http_judge);
+	read_raw_env( "OJ_HTTP_BASEURL", http_baseurl);
+	read_raw_env( "OJ_HTTP_USERNAME", http_username);
+	read_raw_env( "OJ_HTTP_PASSWORD", http_password);
+	read_raw_env( "OJ_LANG_SET", oj_lang_set);
+			
+	read_int_env( "OJ_UDP_ENABLE", &oj_udp);
+    read_raw_env( "OJ_UDP_SERVER", oj_udpserver);
+    read_int_env( "OJ_UDP_PORT", &oj_udpport);
+
+	read_int_env( "OJ_REDISENABLE", &oj_redis);
+    read_raw_env( "OJ_REDISSERVER", oj_redisserver);
+    read_int_env( "OJ_REDISPORT", &oj_redisport);
+    read_raw_env( "OJ_REDISAUTH", oj_redisauth);
+    read_raw_env( "OJ_REDISQNAME", oj_redisqname);
+    read_int_env( "OJ_TURBO_MODE", &turbo_mode);
+}
+
+// read the configue file
+void init_mysql_conf() {
+	init_file_conf();
 	init_env_conf();
+#ifdef _mysql_h
+	sprintf(query,
+			"SELECT solution_id FROM solution WHERE language in (%s) and result<2 and MOD(solution_id,%d)=%d ORDER BY result ASC,solution_id ASC limit %d",
+			oj_lang_set, oj_tot, oj_mod, 2 *max_running );
+#endif
+	sleep_tmp = sleep_time;
 }
 
 void run_client(int runid, int clientid) {
