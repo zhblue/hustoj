@@ -41,6 +41,10 @@ var $ = mdui.$;
 .mdui-select-menu {
     min-height: 300px !important;
 }
+
+.side-bar {
+    transition: all 0.3s ease-in-out;
+}
 </style>
 
 <!-- Fonts -->

@@ -1,4 +1,4 @@
-<div class="mdui-drawer" id="main-drawer">
+<div class="mdui-drawer side-bar" id="main-drawer">
     <div class="mdui-list mdui-m-t-1 mdui-color-white">
         <!-- Menu -->
         <a class="mdui-list-item mdui-ripple <?php if (!$url || strpos($url, "index.php") !== false) echo "mdui-list-item-active"; ?>"
