@@ -103,7 +103,7 @@
                     echo '<td><a class="mdui-text-color-theme-accent" href="problemset.php?search='.urlencode($row["source"]).'">'.$row["source"].'</td>';
                     echo '<td><a class="mdui-text-color-theme-accent" href="status.php?problem_id='.$row["problem_id"].'&jresult=4">'.$row["accepted"].'</td>';
                     echo '<td><a class="mdui-text-color-theme-accent" href="status.php?problem_id='.$row["problem_id"].'">'.$row["submit"].'</td>';
-                    echo '<td>'.sprintf("%.02lf%%", 100 * $row['accepted'] / $row['submit']).'</td>';
+                    echo '<td>'.sprintf("%.02lf%%", 100 * $row['accepted'] / ($row['submit'] || 1)).'</td>';
                     echo '</tr>';
                 }
                 ?>
