@@ -45,6 +45,8 @@
                 href="<?php echo $path_fix?>problemset.php"><i class="list icon"></i><?php echo $MSG_PROBLEMS?> </a>
             <a class="item <?php if ($url=="category.php") echo "active";?>"
                 href="<?php echo $path_fix?>category.php"><i class="globe icon"></i><?php echo $MSG_SOURCE?></a>
+                <a class="item <?php if ($url=="problem_list.php") echo "active";?>"
+                href="<?php echo $path_fix?>problem_list.php"><i class="globe icon"></i><?php echo "题单"?></a>
             <a class="item <?php if ($url=="contest.php") echo "active";?>" href="<?php echo $path_fix?>contest.php<?php if(isset($_SESSION[$OJ_NAME."_user_id"])) echo "?my" ?>" ><i
                     class="calendar icon"></i> <?php echo $MSG_CONTEST?></a>
             <a class="item <?php if ($url=="status.php") echo "active";?>" href="<?php echo $path_fix?>status.php"><i
