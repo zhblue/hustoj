@@ -54,7 +54,7 @@ foreach ($list as $i => &$set) {
     
     foreach ($ret as $k => &$problem) {
       $problem_id = $problem['problem_id'];
-      if (array_key_exists($roblem_id, $submit_arr)) {
+      if (array_key_exists($problem_id, $submit_arr)) {
         if (array_key_exists($problem_id, $accepted_arr)) {
           $problem['status'] = 1;
           $subset['acc_number']++;
@@ -130,7 +130,7 @@ foreach ($list as $i => &$set) {
                 <?php foreach ($set['sublist'] as $j => $subset) {
                   $title = ($j + 1) . '. ' . $subset['title'];
                 ?>
-                  <div class="title active">
+                  <div class="title ">
                     <i class="dropdown icon"></i>
                     <?php echo $title ?>
                     <div style="float:right">
@@ -138,7 +138,7 @@ foreach ($list as $i => &$set) {
                       <div class="ui green label" style="width: 35px;"><?php echo $subset['acc_number'] ?></div>
                     </div>
                   </div>
-                  <div class="content active">
+                  <div class="content ">
                     <table class="ui single line selectable table center aligned">
                       <thead>
                         <tr>
