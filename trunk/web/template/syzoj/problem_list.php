@@ -20,38 +20,53 @@ if (isset($_SESSION[$OJ_NAME . '_' . 'user_id'])) {
   }
 }
 
-foreach ($list as $i => $set) {
-  foreach ($set['sublist'] as $j => $subset) {
-    $problems = $subset['problems'];
-    $ins = str_repeat("?,", count($problems) - 1) . "?";
-    $sql = "SELECT problem_id, title, accepted, submit FROM problem WHERE problem_id in ($ins)";
-    // echo $sql;
-    $ret = @pdo_query($sql, ...$problems);
-
-    $list[$i]['sublist'][$j]['number'] = count($problems);
-    $list[$i]['sublist'][$j]['acc_number'] = 0;
-    foreach ($ret as $k => $problem) {
-      if ($submit_arr[$problem['problem_id']]) {
-        if ($accepted_arr[$problem['problem_id']]) {
-          $ret[$k]['status'] = 1;
-          $list[$i]['sublist'][$j]['acc_number']++;
-        } else {
-          $ret[$k]['status'] = -1;
-        }
-      }
-      $ret[$k]['rate'] = $problem['submit'] == 0 ? "0.0%" : sprintf("%.2f%%", $problem['accepted'] / $problem['submit'] * 100);
-    }
-    $list[$i]['sublist'][$j]['problems'] = $ret;
+$all_problems = [];
+foreach($list as $set) {
+  foreach($set['sublist'] as $subset) {
+    $p = $subset['problems'];
+    array_push($all_problems, ...$p);
   }
 }
-// foreach ($list as $i => $set) {
-//   foreach($set['sublist'] as $j => $subset) {
-//     foreach($subset['problems'] as $row){
-//       print_r($row);
-//       echo "<br>";
-//     }
-//   }
-// }
+$ins = str_repeat("?,", count($all_problems) - 1) . "?";
+$sql = "SELECT problem_id, title, accepted, submit FROM problem WHERE problem_id in ($ins)";
+
+
+$ret = @pdo_query($sql, ...$all_problems);
+$problemsMap = [];
+foreach($ret as $problem) {
+  $problemsMap[$problem['problem_id']] = $problem;
+}
+
+// print_r($problemsMap);
+
+
+foreach ($list as $i => &$set) {
+  foreach ($set['sublist'] as $j => &$subset) {
+    $problems = $subset['problems'];
+
+    $subset['number'] = count($problems);
+    $subset['acc_number'] = 0;
+
+    $ret = [];
+    foreach($problems as $problem) {
+      array_push($ret, $problemsMap[$problem]);
+    }
+    
+    foreach ($ret as $k => &$problem) {
+      $problem_id = $problem['problem_id'];
+      if (array_key_exists($roblem_id, $submit_arr)) {
+        if (array_key_exists($problem_id, $accepted_arr)) {
+          $problem['status'] = 1;
+          $subset['acc_number']++;
+        } else {
+          $problem['status'] = -1;
+        }
+      }
+      $problem['rate'] = $problem['submit'] == 0 ? "0.0%" : sprintf("%.2f%%", $problem['accepted'] / $problem['submit'] * 100);
+    }
+    $subset['problems'] = $ret;
+  }
+}
 ?>
 <style>
   #list {
@@ -115,7 +130,7 @@ foreach ($list as $i => $set) {
                 <?php foreach ($set['sublist'] as $j => $subset) {
                   $title = ($j + 1) . '. ' . $subset['title'];
                 ?>
-                  <div class="title ">
+                  <div class="title active">
                     <i class="dropdown icon"></i>
                     <?php echo $title ?>
                     <div style="float:right">
@@ -123,7 +138,7 @@ foreach ($list as $i => $set) {
                       <div class="ui green label" style="width: 35px;"><?php echo $subset['acc_number'] ?></div>
                     </div>
                   </div>
-                  <div class="content ">
+                  <div class="content active">
                     <table class="ui single line selectable table center aligned">
                       <thead>
                         <tr>
