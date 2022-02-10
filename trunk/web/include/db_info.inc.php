@@ -17,6 +17,7 @@ static 	$OJ_BBS=false; //设为"discuss3" 启用， "bbs" for phpBB3 bridge or "
 static  $OJ_ONLINE=false;  //是否记录在线情况
 static  $OJ_LANG="en";  //默认语言
 static  $OJ_SIM=false;  //显示相似度
+static  $OJ_TIDAN_ENABLE=false; //题单开关，题单前端显示的对应文件：problem_list_data.php
 static  $OJ_DICT=false; //显示在线翻译
 static  $OJ_LANGMASK=1637684; //TIOBE index top 10, calculator :   https://pigeon-developer.github.io/hustoj-langmask/   -524288 to get matlab(octave)
 static  $OJ_ACE_EDITOR=true;  // 是否启用有高亮提示的提交代码输入框
