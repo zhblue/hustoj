@@ -18,6 +18,7 @@
 	$MSG_STATISTICS="统计";
 	$MSG_USERINFO="用户信息";
 	$MSG_MAIL="短消息";
+	$MSG_PROBLEM_LIST="题单";
 	
 	//status.php
 	$MSG_Pending="等待";
