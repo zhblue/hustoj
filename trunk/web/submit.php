@@ -187,7 +187,7 @@ $source = $_POST['source'];
 $input_text = "";
 
 if (isset($_POST['input_text'])) {
-  $input_text = $_POST['input_text'];
+  $input_text = htmlentities($_POST['input_text']);
 }
 
 
