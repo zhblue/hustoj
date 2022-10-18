@@ -81,7 +81,7 @@
 </script>
 </body>
 </html>
-					<!--<embed src="http://47.110.135.197/movie/demo1.mp4" width="650" height="357.5" autostart="false" loop="false">-->
+					
 					</div>
             </div>
         </div>
