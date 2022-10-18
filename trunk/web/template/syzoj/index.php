@@ -56,6 +56,34 @@
                     </tbody>
                 </table>
             </div>
+                  <h4 class="ui top attached block header"><i class="ui beer icon"></i>视频推送</h4>
+            <div class="ui bottom attached segment">
+                <div class="panel-body content" id="data_ref_vedio">
+<body>
+<div class="Dplayer_box">
+    <div class="player_av">
+        <div id="player1"></div>
+    </div>
+</div>
+<script src="/template/syzoj/js/DPlayer.min.js"></script>
+<script>
+   
+    var dp = new DPlayer({
+        
+        element: document.getElementById('player1'),
+        video: {
+              url: 'https://noiresources.ccf.org.cn/NOI2022%E5%AE%A3%E4%BC%A0%E7%89%87.mp4',
+               pic: 'image/video.png',
+        },
+        
+        
+    });
+</script>
+</body>
+</html>
+					<!--<embed src="http://47.110.135.197/movie/demo1.mp4" width="650" height="357.5" autostart="false" loop="false">-->
+					</div>
+            </div>
         </div>
         <div class="right floated five wide column">
             <h4 class="ui top attached block header"><i class="ui rss icon"></i> <?php echo $MSG_RECENT_PROBLEM;?> </h4>
