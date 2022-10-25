@@ -13,7 +13,7 @@
 <table class="table">
   <tbody>
     <tr>
-      <td><a class='btn btn-block btn-sm' href="../status.php" target="_top"><b><?php echo $MSG_SEEOJ?></b></a></td>
+      <td><a class='btn btn-block btn-sm' href="../index.php" target="_top"><b><?php echo $MSG_SEEOJ?></b></a></td>
       <td><p><?php echo $MSG_HELP_SEEOJ?></p></td>
     </tr>
 

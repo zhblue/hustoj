@@ -23,7 +23,7 @@
 <a class='btn btn-block btn-sm' href="help.php" target="main" title="<?php echo $MSG_ADMIN?>"><b><?php echo $MSG_ADMIN?></b></a>
 <hr>
 
-<a class='btn btn-block btn-sm' href="../status.php" target="_top" title="<?php echo $MSG_HELP_SEEOJ?>"><b><?php echo $MSG_SEEOJ?></b></a><br>
+<a class='btn btn-block btn-sm' href="../index.php" target="_top" title="<?php echo $MSG_HELP_SEEOJ?>"><b><?php echo $MSG_SEEOJ?></b></a><br>
 
 <center>
 <div class="btn-group-vertical" role="menu">
