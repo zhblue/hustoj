@@ -19,7 +19,7 @@ class TM{
         var $user_id;
         var $nick;
 	var $total;
-        function TM(){
+        function __construct(){
                 $this->solved=0;
                 $this->time=0;
                 $this->p_wa_num=array(0);
