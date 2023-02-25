@@ -66,7 +66,9 @@
       </div>
     </div>
   </div>
-
+  <div class="ui existing  segment <?php if(empty($summary)) echo "hide "; ?> " >
+    <?php echo $summary?>
+  </div>
 <?php if (!isset($_GET['search'])){ ?>
 
 <div style="margin-bottom: 30px; ">

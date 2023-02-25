@@ -18,7 +18,7 @@
 	$MSG_STATISTICS="统计";
 	$MSG_USERINFO="用户信息";
 	$MSG_MAIL="短消息";
-	
+  $MSG_FENLEI="分类描述编辑";
 	//status.php
 	$MSG_Pending="等待";
 	$MSG_Pending_Rejudging="等待重判";

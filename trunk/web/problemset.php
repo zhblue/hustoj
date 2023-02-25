@@ -9,6 +9,18 @@ require_once('./include/memcache.php');
 require_once('./include/setlang.php');
 
 $view_title = "Problem Set";
+// 获取分类摘要
+if (isset($_GET['search']) && trim($_GET['search'])!="") {
+	$result = pdo_query($sql,$search,$search,$search);
+		
+	$sql = "SELECT summary FROM `problem_source` WHERE `source`=?";
+	$_result = pdo_query($sql, $_GET['search']);
+	$summary = isset($_result[0]['summary']) ? $_result[0]['summary'] : '';
+}
+else {
+	$result = mysql_query_cache($sql);
+}
+
 
 //remember page
 $page = "1";
