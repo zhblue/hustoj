@@ -148,6 +148,8 @@ background-size: 100%">
                     class="tasks icon"></i><?php echo $MSG_STATUS?></a>
             <a class="desktop-only item <?php if ($url=="ranklist.php") echo "active";?> "
                 href="<?php echo $path_fix?>ranklist.php"><i class="signal icon"></i> <?php echo $MSG_RANKLIST?></a>
+            <a class="desktop-only item <?php if ($url=="upload.php") echo "active";?> "
+                href="<?php echo $path_fix?>upload.php"><i class="file icon"></i> <?php echo '文件上传'?></a>
             <!--<a class="item <?php //if ($url=="contest.php") echo "active";?>" href="/discussion/global"><i class="comments icon"></i> 讨论</a>-->
             <a class="desktop-only item <?php if ($url=="faqs.php") echo "active";?>" href="<?php echo $path_fix?>faqs.php"><i
                     class="help circle icon"></i> <?php echo $MSG_FAQ?></a>
