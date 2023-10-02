@@ -157,13 +157,7 @@ if( isset($OJ_NOIP_KEYWORD) && $OJ_NOIP_KEYWORD ){
 	if($flag)
 	{	
 		$row[ 'accepted' ] = '<font color="red"> ? </font>';
-		
-        // 使用$OJ_NOIP_TISHI 条件语句确定是否显示提示信息
-        if (isset($OJ_NOIP_TISHI) && $OJ_NOIP_TISHI) {
-            //$row['hint'] = $MSG_NOIP_NOHINT;
-        } else {
-            $row['hint'] = $MSG_NOIP_NOHINT;
-        }
+		$row[ 'hint' ] = $MSG_NOIP_NOHINT;
 	}
 }
 /////////////////////////Template
