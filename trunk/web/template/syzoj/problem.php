@@ -31,6 +31,20 @@ div[class*=ace_br] {
     cursor: pointer;
     box-shadow: 0 2px 4px rgba(0,0,0,0.05), 0 2px 4px rgba(0,0,0,0.05);
 }
+table tr td{
+	border:1px solid grey;
+	text-align:center; /* 居中对齐 */
+	width:180px;
+	height:30px;
+}
+table th{
+	border:1px solid grey;
+    text-align:center;
+	width:180px;
+	height:30px;
+	background-color:#9e9e9ea1;
+	
+}
 </style>
 <script src="<?php echo $OJ_CDN_URL.$path_fix."template/$OJ_TEMPLATE/"?>clipboard.min.js"></script>
 <script src="<?php echo $OJ_CDN_URL.$path_fix."template/bs3/"?>marked.min.js"></script>
