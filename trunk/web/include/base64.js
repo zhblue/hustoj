@@ -1,4 +1,4 @@
-var keyStr = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
+var keyStr = "3WiPZ+xr/yKf5OdQ6UATHYItebL8B0njk192cJRNagGm7hoECvFVpqw4DsMlzuXS=";
 //将Ansi编码的字符串进行Base64编码
 function encode64(input) {
 var output = "";
