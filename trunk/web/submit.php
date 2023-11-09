@@ -193,7 +193,8 @@ if (isset($_POST['input_text'])) {
 
 
 if (isset($_POST['encoded_submit'])) {
-  $source = base64_decode($source);
+  include "base64.php";
+  $source = decode64($source);
 }
 
 $input_text = preg_replace("(\r\n)", "\n", $input_text);
