@@ -2,6 +2,7 @@
 require_once "include/db_info.inc.php";
 require_once "include/my_func.inc.php";
 require_once "include/email.class.php";
+require_once "include/base64.php";
 
 if(isset($OJ_CSRF) && $OJ_CSRF && $OJ_TEMPLATE=="bs3" && !isset($_SESSION[$OJ_NAME.'_'.'http_judge']))
   require_once(dirname(__FILE__)."/include/csrf_check.php");
@@ -193,7 +194,7 @@ if (isset($_POST['input_text'])) {
 
 
 if (isset($_POST['encoded_submit'])) {
-  include "base64.php";
+
   $source = decode64($source);
 }
 
