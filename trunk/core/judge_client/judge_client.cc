@@ -3454,9 +3454,11 @@ int main(int argc, char **argv)
 	//DIR *dp;
 	dirent *dirp;
 	// using http to get remote test data files
-	if (p_id > 0 && http_judge && http_download)
+	if (p_id > 0 && http_judge && http_download == 1)
 		get_test_file(work_dir, p_id);
-
+	// using rsync to get remote test data files, using id_rsa to login ,change src/install/rsync.sh if need
+        if (p_id > 0 && http_download == 2 )
+		execute_cmd("%s/src/install/rsync.sh %d",oj_home,p_id);
 	
 	struct dirent **namelist;
         int namelist_len;
@@ -3595,7 +3597,7 @@ int main(int argc, char **argv)
 			continue;
 		mark=mark_of_name(dirp->d_name);
 		total_mark+=mark;
-		if (http_judge && http_download && (!data_list_has(dirp->d_name)))
+		if (http_judge && ( http_download==1 ) && (!data_list_has(dirp->d_name)))
 			continue;
 
 		prepare_files(dirp->d_name, namelen, infile, p_id, work_dir, outfile,
