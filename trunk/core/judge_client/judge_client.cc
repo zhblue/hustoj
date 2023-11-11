@@ -3422,7 +3422,7 @@ int main(int argc, char **argv)
         if(spj!=2){
                 Compile_OK = compile(lang, work_dir);
         }
-	if (Compile_OK != 0 && !spj)
+	if ( Compile_OK != 0 && spj!=2 )
 	{
 		addceinfo(solution_id);
 		update_solution(solution_id, OJ_CE, 0, 0, 0, 0, 0.0);
