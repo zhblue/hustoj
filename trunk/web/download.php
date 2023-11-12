@@ -25,7 +25,7 @@ if(count($data)>0){
 	    exit(0);
    }
    if(isset($OJ_NOIP_KEYWORD)&&$OJ_NOIP_KEYWORD){
-	$now = strftime("%Y-%m-%d %H:%M",time());
+	$now =  date('Y-m-d H:i', time());
 	$sql = "select 1 from `contest` where contest_id=? and `start_time` < ? and `end_time` > ? and `title` like ?";
         $rrs = pdo_query($sql, $cid ,$now , $now , "%$OJ_NOIP_KEYWORD%");
         $flag = count($rrs) > 0 ;
