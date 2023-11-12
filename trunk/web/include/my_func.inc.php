@@ -208,7 +208,7 @@ function sec2str($sec){
   return sprintf("%02d:%02d:%02d",$sec/3600,$sec%3600/60,$sec%60);
 }
 function is_running($cid){
-   $now=strftime("%Y-%m-%d %H:%M",time());
+$now=date('Y-m-d H:i', time());
   $sql="SELECT count(*) FROM `contest` WHERE `contest_id`=? AND `end_time`>?";
   $result=pdo_query($sql,$cid,$now);
   $row=$result[0];
