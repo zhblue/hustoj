@@ -17,7 +17,7 @@ if (!isset($_SESSION[$OJ_NAME . '_' . 'user_id'])) {
 require_once "include/memcache.php";
 require_once "include/const.inc.php";
 
-$now = strftime("%Y-%m-%d %H:%M", time());
+$now =  date('Y-m-d H:i', time());
 $user_id = $_SESSION[$OJ_NAME.'_'.'user_id'];
 $language = intval($_POST['language']);
 
@@ -262,7 +262,7 @@ if ($len > 65536) {
 if (!$OJ_BENCHMARK_MODE) {
   // last submit
   if(!isset($OJ_SUBMIT_COOLDOWN_TIME))  $OJ_SUBMIT_COOLDOWN_TIME = 5;
-  $now = strftime("%Y-%m-%d %X", time()-$OJ_SUBMIT_COOLDOWN_TIME);
+  $now =  date('Y-m-d H:i', time()-$OJ_SUBMIT_COOLDOWN_TIME);
   $sql = "SELECT `in_date`,solution_id FROM `solution` WHERE `user_id`=? AND in_date>? ORDER BY `in_date` DESC LIMIT 1";
   $res = pdo_query($sql, $user_id, $now);
 
@@ -375,7 +375,7 @@ if (~$OJ_LANGMASK&(1<<$language)) {
                 }
         }
         /*   //prepare system ready for even worse robots
-        $now = strftime("%Y-%m-%d %X", time()-$OJ_SUBMIT_COOLDOWN_TIME * 6 );
+        $now =  date('Y-m-d H:i', time()-$OJ_SUBMIT_COOLDOWN_TIME * 6 );
         $sql="select count(1) from solution where user_id=? and in_date > ?";
         $count=pdo_query($sql,$user_id,$now);
         if($count>=$OJ_POISON_BOT_COUNT){
