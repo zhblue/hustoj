@@ -22,7 +22,7 @@ else
 ?>
 
 <?php
-$now = strftime("%Y-%m-%d %H:%M", time());
+$now = $now =  date('Y-m-d H:i', time());
 
 $sql = "SELECT 1 FROM `contest_problem` WHERE `problem_id` = ? AND `contest_id` IN (SELECT `contest_id` FROM `contest` WHERE `start_time`<? AND `end_time`>? AND `title` LIKE ?)";
 
@@ -95,7 +95,7 @@ if ($start+$sz > $acuser)
   $sz = $acuser-$start;
 
 //check whether the problem in a contest
-$now = strftime("%Y-%m-%d %H:%M", time());
+
 $sql = "SELECT 1 FROM `contest_problem` WHERE `problem_id`=$id AND `contest_id` IN (SELECT `contest_id` FROM `contest` WHERE `start_time`<? AND `end_time`>?)";
 $rrs = pdo_query($sql, $now, $now);
 $flag = count($rrs)==0;
