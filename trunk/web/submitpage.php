@@ -78,7 +78,7 @@ if (isset($_GET['sid'])) {
 		}
 		// 检查是否使用中
 		//echo $now.'*'.$end_time;
-		$now = strftime("%Y-%m-%d %H:%M", time());
+		$now = date('Y-m-d H:i', time());
 		$sql="select contest_id from contest where contest_id in (select contest_id from contest_problem where problem_id=?) 
 									and start_time < '$now' and end_time > '$now' ";
 		if($need_check_using){
