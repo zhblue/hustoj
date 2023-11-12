@@ -83,7 +83,7 @@ if (isset($_SESSION[$OJ_NAME.'_'.'administrator'])) {  //all problems
 }else if ($OJ_FREE_PRACTICE){  // open free practice without limit of contest using	
     $filter_sql .= " and defunct='N' ";
 }else {  //page problems (not include in contests period)
-	$now = strftime("%Y-%m-%d %H:%M",time());
+	$now =  date('Y-m-d H:i', time());
 	$filter_sql.=" and `defunct`='N' AND `problem_id` NOT IN (
 					SELECT  `problem_id`
 						FROM contest c
