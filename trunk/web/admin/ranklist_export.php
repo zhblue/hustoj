@@ -11,9 +11,9 @@
   echo "<a href='../loginpage.php'>Please Login First!</a>";
   exit(1);
 }
-        
+        $now =  date('Y-m-d H:i', time());
         if(isset($OJ_NOIP_KEYWORD)&&$OJ_NOIP_KEYWORD){
-		$now = strftime("%Y-%m-%d %H:%M",time());
+		
         	$sql="select count(contest_id) from contest where start_time<'$now' and end_time>'$now' and title like '%$OJ_NOIP_KEYWORD%'";
 		$row=pdo_query($sql);
 		$cols=$row[0];
@@ -66,7 +66,7 @@
                                 case 'w':
                                         $monday=mktime(0, 0, 0, date("m"),date("d")-(date("w")+7)%8+1, date("Y"))                                                            ;
                                         //$monday->subDays(date('w'));
-                                        $s=strftime("%Y-%m-%d",$monday);
+                                        $s= date('Y-m-d H:i', $monday);
                                         break;
                                 case 'm':
                                         $s=date('Y').'-'.date('m').'-01';
