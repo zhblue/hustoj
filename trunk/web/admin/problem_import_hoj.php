@@ -86,14 +86,14 @@ function import_json($json) {
       $memory_limit /= 1024;
 
     $description = "[md]\n".$qduoj_problem->{'description'}."\n[/md]";
-    $input = "";
-    $output = "";
+    $input = "[md]\n".$qduoj_problem->{'input'}."\n[/md]";
+    $output = "[md]\n".$qduoj_problem->{'output'}."\n[/md]";
     $examples=$qduoj_problem->{'examples'};
     $sample_input = strip($examples,"input");
     $sample_output = strip($examples,"output");;
     echo "sin:".$sample_input."<br>";
     echo "sout:".$sample_output."<br>";
-    $hint = "";
+    $hint = "[md]\n".$qduoj_problem->{'hint'}."\n[/md]";
     $source ="";
     echo json_decode($json)->{'tags'}->{'value'};				
     $spj=0;
