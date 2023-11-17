@@ -41,7 +41,7 @@
                  echo "<tr onclick='$(this).attr(\"class\",\"active\");'  ondblclick='$(this).attr(\"class\",\"\");' >";
 
                 echo "<td>";
-                  if($nick[0]!="*"){
+                  if(isset($nick[0])&&$nick[0]!="*"){
                     if($rank==1)
                       echo "<div class=\"ui yellow ribbon label\">";
                     else if($rank==2)
