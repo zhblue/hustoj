@@ -79,15 +79,15 @@
 
 ## 自带的5种模板演示
 
-[syzoj主题](http://syzoj.hustoj.com/)  added by[@renbaoshuo](https://github.com/renbaoshuo)
+[syzoj主题](http://demo.hustoj.com/)  added by[@renbaoshuo](https://github.com/renbaoshuo)
 
-[bs3原版](http://bs3.hustoj.com/)
+[bs3原版](http://demo.hustoj.com/?tp=bs3)
 
-[sweet主题](http://sweet.hustoj.com/)
+[sweet主题](http://demo.hustoj.com/?tp=sweet)
 
-[bshark主题](http://bshark.hustoj.com/)  added by [@yemaster](https://github.com/yemaster)
+[bshark主题](http://demo.hustoj.com/?tp=bshark)  added by [@yemaster](https://github.com/yemaster)
 
-[mdui主题](http://mdui.hustoj.com/)  added by[@renbaoshuo](https://github.com/renbaoshuo)
+[mdui主题](http://demo.hustoj.com/?tp=mdui)  added by[@renbaoshuo](https://github.com/renbaoshuo)
 
 > 修改 `db_info.inc.php[默认位置/home/judge/src/web/include]` 中 `$OJ_TEMPLATE` 的值，即可使用上述模板。
 
