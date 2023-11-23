@@ -46,9 +46,12 @@
 
         if($OJ_LANG == "cn")
           echo "权限异常，请先去执行sudo chmod 775 -R $OJ_DATA <br> 和 sudo chgrp -R ".get_current_user()." $OJ_DATA <br>";
-
+	  
         $show_form = false;
+	if(get_current_user()=="www")
+	  echo "如果你是宝塔用户，请关闭宝塔的跨站防护功能，如果你是lnmp或者centos用户，请禁用open_basedir。如果坚持使用，请将/home/jduge/data目录加进去。";
       }
+	    
 
       if (!file_exists("../upload"))
 				mkdir("../upload");
