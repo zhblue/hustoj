@@ -60,3 +60,64 @@ docker start hustojcontainer
 ```
 
 # 最后，强烈建议用物理机或者云服务器直接部署，不要用docker部署。无论哪种情况，请做好数据备份。
+
+
+
+另一种方法
+----
+
+### 基于 Docker 安装
+
+基于 Docker 安装，可用于快速体验 HUSTOJ 的全部功能，**可能存在未知的魔法问题，请慎重考虑用于生产环境！！！**
+
+使用构建好的 Docker 镜像（GitLab CI/CD系统自动构建）
+
+```shell
+docker run -d           \
+    --name hustoj       \
+    -p 8080:80          \
+    -v ~/volume:/volume \
+    registry.gitlab.com/mgdream/hustoj
+```
+
+由于 Web端/数据库/判题机 全部被打包在同一个镜像，无法扩展，不推荐使用此镜像做分布式判题，另外请不要在 Docker 中使用 SHM 文件系统，会由于内存空间不足无法挂载沙箱环境而导致莫名其妙的运行错误
+
+部署后使用浏览器访问 <http://localhost:8080>
+
+### 基于Docker安装（分布式）
+
+Docker分布式改造基本完成，目前支持web/mysql/judge基础镜像，支持使用环境变量进行配置。
+目前judge镜像仍处于不稳定状态，有能力的用户对`docker/judge`进行完善。
+
+在本地执行前需要先创建Docker网络`docker network create hustoj`，使用下面的命令来运行对应的服务。
+
+- MySQL服务
+
+```shell script
+docker run -d \
+    --network hustoj \
+    --name hustoj.mysql \
+    -e MYSQL_USER=<mysql_username> \
+    -e MYSQL_PASSWORD=<mysql_password> \
+    -v mysql:/var/lib/mysql \
+    registry.gitlab.com/mgdream/hustoj:mysql
+```
+
+基础镜像为mysql:5.7，所有的环境变量都继承自[mysql:5.7](https://hub.docker.com/_/mysql)官方镜像，默认提供数据库为`jol`。
+
+- Web服务
+
+```shell script
+docker run -d \
+    --network hustoj
+    --name hustoj.web \
+    -e DB_HOST=<mysql_server> \
+    -e DB_NAME=<mysql_database> \
+    -e DB_USER=<mysql_username> \
+    -e DB_PASS=<mysql_password> \
+    -v data:/home/judge/data \
+    -p 80:80 \
+    registry.gitlab.com/mgdream/hustoj:web
+```
+
+基础镜像为ubuntu:18.04，使用php版本为php7.2，所有的环境变量都继承自db_info.inc.php文件，后续会完善php与nginx的环境变量配置。
