@@ -441,7 +441,8 @@ REDHAT / CentOS 用户请浏览
 
 <https://github.com/zhblue/hustoj/blob/master/wiki/CentOS.md>
 
-
+### 关于Docker 请移步
+[Docker方式的安装](https://github.com/zhblue/hustoj/blob/master/wiki/Docker.md)
 
 ### 基于其他发行版安装
 
