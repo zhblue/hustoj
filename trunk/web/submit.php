@@ -354,7 +354,7 @@ if (~$OJ_LANGMASK&(1<<$language)) {
   }
   
   ////poison robot account,give system resources to the REAL people
-  if(isset($OJ_POISON_BOT_COUNT) && $OJ_POISON_BOT_COUNT >0 &&
+  if(isset($OJ_POISON_BOT_COUNT) && $OJ_POISON_BOT_COUNT >0 && $id>0 &&
           !(isset($_SESSION[$OJ_NAME."_administrator"])||
             isset($_SESSION[$OJ_NAME."_source_browser"])||
             isset($_SESSION[$OJ_NAME."_contest_creator"])||
