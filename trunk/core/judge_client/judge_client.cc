@@ -165,6 +165,7 @@ static char java_xmx[BUFFER_SIZE/10];
 static int sim_enable = 0;
 static int oi_mode = 0;
 static int full_diff = 0;
+static int raw_text_diff = 1;
 static int use_max_time = 0;
 static int time_limit_to_total= 1;
 static int total_time= 0;
@@ -555,6 +556,7 @@ void init_judge_conf()   //读取判题主目录etc中的配置文件judge.conf
 			read_int(buf, "OJ_HTTP_DOWNLOAD", &http_download);
 			read_int(buf, "OJ_OI_MODE", &oi_mode);
 			read_int(buf, "OJ_FULL_DIFF", &full_diff);
+			read_int(buf, "OJ_RAW_TEXT_DIFF", &raw_text_diff);
 			read_int(buf, "OJ_SHM_RUN", &shm_run);
 			read_int(buf, "OJ_USE_MAX_TIME", &use_max_time);
 			read_int(buf, "OJ_TIME_LIMIT_TO_TOTAL", &time_limit_to_total);
@@ -2662,7 +2664,7 @@ float raw_text_judge( char *infile, char *outfile, char *userfile, int *total_ma
                         if(strcasecmp(ans[num],user_answer)==0 || strcasecmp(ans[num],"*")==0){
                                 mark+=m[num];
                         }else{
-                                fprintf(df,"%d:%s[%s] -%.1f\n",i,ans[i],user_answer,m[i]);
+                              if(raw_text_diff) fprintf(df,"%d:%s[%s] -%.1f\n",i,ans[i],user_answer,m[i]);
                         }
                         m[num]=0;
                 }
