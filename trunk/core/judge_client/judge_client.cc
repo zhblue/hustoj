@@ -576,7 +576,10 @@ void init_judge_conf()   //读取判题主目录etc中的配置文件judge.conf
 		fclose(fp);
 	}
 //	fclose(fp);
-	if(use_docker)shm_run=0;
+	if(use_docker){
+		shm_run=0;
+		compile_chroot=0;
+	}
  	if(strcmp(http_username,"IP")==0){
                   FILE * fjobs = fopen("/etc/hostname","r");
                   if(1!=fscanf(fjobs, "%s", http_username)) printf("IP/HOSTNAME read fail...\n");
