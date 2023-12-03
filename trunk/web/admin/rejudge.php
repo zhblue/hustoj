@@ -109,7 +109,7 @@ if (!(isset($_SESSION[$OJ_NAME.'_'.'administrator']))){
 			<?php
 				$i=1;
 				echo "<option value='$i'>".$jresult[$i]."</option>\n";
-				for($i=4;$i<14;$i++){
+				for($i=4;$i<18;$i++){
 					echo "<option value='$i' ".($i==6?"selected":"").">".$jresult[$i]."</option>\n";
 				}
 	
