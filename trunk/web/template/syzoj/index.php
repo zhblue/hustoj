@@ -30,6 +30,34 @@
                     </tbody>
                 </table>
             </div>
+<?php
+/* 本月之星  */
+$month_id=mysql_query_cache("select solution_id from solution where  in_date<date_add(curdate(),interval -day(curdate())+1 DAY) order by solution_id desc limit 1;");
+if(is_array( $month_id)) $month_id=$month_id[0][0];else $month_id=0;
+$view_month_rank=mysql_query_cache("select user_id,nick,count(distinct(problem_id)) ac from solution where solution_id >$month_id group by user_id,nick order by ac desc limit 10");
+            if ( is_array($view_month_rank) ) {
+        ?>
+            <h4 class="ui top attached block header"><i class="ui star icon"></i><?php echo "本月之星"?></h4>
+            <div class="ui bottom attached segment">
+                <table class="ui very basic left aligned table" style="table-layout: fixed; ">
+                    <tbody>
+        <?php
+                            foreach ( $view_month_rank as $row ) {
+                                    echo "<tr>".
+                                            "<td><a target='_blank' href='userinfo.php?user=".htmlentities($row[0],ENT_QUOTES,"UTF-8")."'>".htmlentities($row[0],ENT_QUOTES,"UTF-8")."</a></td>".
+                                            "<td>".($row[1])."</td>".
+                                            "<td>".($row[2])."</td>".
+                                            "</tr>";
+                            }
+        ?>
+                    </tbody>
+                </table>
+            </div>
+        <?php
+            }
+/* 本月之星  */
+?>
+
             <h4 class="ui top attached block header"><i class="ui star icon"></i><?php echo $OJ_INDEX_NEWS_TITLE;?></h4>
             <div class="ui bottom attached segment">
                 <table class="ui very basic left aligned table" style="table-layout: fixed; ">
