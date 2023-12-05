@@ -31,6 +31,8 @@ else
         fi
 
         "./$INSTALL"
+        echo "不要重复运行这个脚本，如果不能访问，检查80端口是否打开，ip地址是否正确。"
+        echo "公网地址可能是：http://"`curl http://hustoj.com/ip.php`
         sleep 60;
 fi
 
