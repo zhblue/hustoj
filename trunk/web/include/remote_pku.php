@@ -72,16 +72,18 @@ function do_submit_one($remote_site,$username,$sid){
 		'encoded' => '0'
 	);
 	//var_dump($form);
-	$data=curl_post_urlencoded($remote_site."/submit",$form);
-	if(str_contains($data,"Error Occurred")) {
-		$sid=0;
-	}else{
-		$data=curl_get($remote_site."/status?user_id=".$username);
-		//echo ($data);
-	       	$sid=getPartByMark($data,"Submit Time</td></tr>\n<tr align=center><td>","</td><td><a href=userstatus");
-	}
-		echo intval($sid);	
-	return $sid;
+	$data=curl_get($remote_site."/status?user_id=".$username);
+        $vid=intval(getPartByMark($data,"Submit Time</td></tr>\n<tr align=center><td>","</td><td><a href=userstatus"));
+        $data=curl_post_urlencoded($remote_site."/submit",$form);
+        if(str_contains($data,"Error Occurred")) {
+                $sid=0;
+        }else{
+                $data=curl_get($remote_site."/status?user_id=".$username);
+                $sid=intval(getPartByMark($data,"Submit Time</td></tr>\n<tr align=center><td>","</td><td><a href=userstatus"));
+                if($vid==$sid) $sid=0;
+        }
+        echo intval($sid);
+        return $sid;
 }
 function do_submit($remote_site,$remote_user){ 
 	global $remote_oj;
