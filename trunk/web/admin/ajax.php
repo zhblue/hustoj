@@ -21,7 +21,7 @@ if($_SERVER['REQUEST_METHOD']=="POST"){
 	if($m=="problem_get_title"){
 		$pid=intval($_POST['pid']); 
 		$sql= "select title from problem where problem_id=?";		
-		echo pdo_query($sql,$pid)[0][0];
+		echo mysql_query_cache($sql,$pid)[0][0];
 	}
         if($m=="user_update_nick"){
                 $user_id=$_POST['user_id'];
