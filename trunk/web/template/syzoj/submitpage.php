@@ -354,6 +354,7 @@ function loadFromBlockly(){
         enableSnippets: true,
         enableLiveAutocompletion: true,  //改为true,打开自动补齐功能，改为false关闭
         // fontFamily: "Consolas",  // MacOS missing align
+	// theme: "ace/theme/ambiance",   // Black theme
         fontSize: "18px"
     });
    reloadtemplate($("#language").val()); 
