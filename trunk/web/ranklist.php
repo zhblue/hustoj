@@ -76,6 +76,7 @@
                         }
 			$last_id=mysql_query_cache("select solution_id from solution where  in_date<str_to_date('$s','%Y-%m-%d') order by solution_id desc limit 1;");
 			if(is_array( $last_id)) $last_id=$last_id[0][0];else $last_id=0;
+			$view_total=mysql_query_cache("select count(distinct(user_id)) from solution where solution_id>$last_id")[0][0];
                         $sql="SELECT users.`user_id`,`nick`,s.`solved`,t.`submit` FROM `users`
                                         inner join
                                         (select count(distinct (problem_id)) solved ,user_id from solution
