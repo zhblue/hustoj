@@ -58,7 +58,7 @@
 
                 $sql = "SELECT `user_id`,`nick`,`solved`,`submit` FROM `users` $where ORDER BY `solved` DESC,submit,reg_time  LIMIT  " . strval ( $rank ) . ",$page_size";
 
-                if($scope && $view_total < 1000 ){
+                if($scope){
                         $s="";
                         switch ($scope){
                                 case 'd':
@@ -74,19 +74,20 @@
                                 default :
                                         $s=date('Y').'-01-01';
                         }
-                        //echo $s."<-------------------------";
+			$last_id=mysql_query_cache("select solution_id from solution where  in_date<str_to_date('$s','%Y-%m-%d') order by solution_id desc limit 1;");
+			if(is_array( $last_id)) $last_id=$last_id[0][0];else $last_id=0;
                         $sql="SELECT users.`user_id`,`nick`,s.`solved`,t.`submit` FROM `users`
                                         inner join
-                                        (select count(distinct problem_id) solved ,user_id from solution 
-						where user_id not in (".$OJ_RANK_HIDDEN.") and in_date>str_to_date('$s','%Y-%m-%d') and result=4 
-						group by user_id order by solved desc limit " . strval ( $rank ) . ",$page_size) s 
-					on users.user_id=s.user_id
+                                        (select count(distinct (problem_id)) solved ,user_id from solution
+                                                where solution_id>$last_id  user_id not in (".$OJ_RANK_HIDDEN.") and in_date>str_to_date('$s','%Y-%m-%d') and problem_id>0 and result=4
+                                                group by user_id order by solved desc limit " . strval ( $rank ) . ",$page_size) s
+                                        on users.user_id=s.user_id
                                         inner join
-                                        (select count( problem_id) submit ,user_id from solution 
-						where in_date>str_to_date('$s','%Y-%m-%d') 
-						group by user_id order by submit desc ) t 
-					on users.user_id=t.user_id
-					and users.user_id not in (".$OJ_RANK_HIDDEN.") and defunct='N'
+                                        (select count( problem_id) submit ,user_id from solution
+                                                where solution_id > $last_id
+                                                group by user_id order by submit desc ) t
+                                        on users.user_id=t.user_id
+                                        and users.user_id not in (".$OJ_RANK_HIDDEN.") and defunct='N'
                                 ORDER BY s.`solved` DESC,t.submit,reg_time  LIMIT  0,50
                          ";
 //                      echo $sql;
