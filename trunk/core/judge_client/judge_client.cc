@@ -2450,17 +2450,17 @@ void run_solution(int &lang, char *work_dir, double &time_lmt, int &usedtime,
 	//if(DEBUG) printf("LIM_CPU=%d",(int)(LIM.rlim_cur));
 	setrlimit(RLIMIT_CPU, &LIM);
 	alarm(0);
-	if ( num_of_test >0 ){
-		if(num_of_test * time_lmt / cpu_compensation>1)
-			alarm( num_of_test * time_lmt / cpu_compensation);
-		else
-			alarm(1);
-	}else{
+//	if ( num_of_test >0 ){
+//		if(num_of_test * time_lmt / cpu_compensation>1)
+//			alarm( num_of_test * time_lmt / cpu_compensation);
+//		else
+//			alarm(1);
+//	}else{
 		if(time_lmt / cpu_compensation>1)
 			alarm( time_lmt / cpu_compensation);
 		else
 			alarm(1);
-	}
+//	}
 	// file limit
 	LIM.rlim_max = STD_F_LIM + STD_MB;
 	LIM.rlim_cur = STD_F_LIM;
