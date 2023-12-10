@@ -22,6 +22,7 @@ if [ `whoami` = "root" ];then
 	fi
 	cp -a src/web/upload/* new/web/upload/
 	mv src "old.$DATE"
+ 	echo "Your old files are moved to old.$DATE , find them if you need ."
 	mv new src
 	chown $WWW:$WWW -R src
 else
