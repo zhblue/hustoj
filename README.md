@@ -569,15 +569,16 @@ sudo bash /home/judge/src/install/restore+.sh +%Y-%m-%d-%H-%M-%S.tar.gz
 
 ## 更新升级
 
-脚本安装的用户，可以使用 `install` 目录中的 `update-hustoj` 进行更新升级。
+脚本安装的用户，可以使用 `install` 目录中的 `fixing.sh` 进行更新升级。
 
 ```
-sudo bash /home/judge/src/install/update-hustoj
+sudo bash /home/judge/src/install/fixing.sh
 ```
 
 升级脚本执行后，可能需要登陆web端管理后台，执行一次更新数据库。
 	
 * hustoj开源版的所有历史版本，只要没有对数据库结构进行改动，都可以无损升级到最新版本，包括10年以上历史的早期版本。
+* 更新后，原来系统的目录会移动到 old.日期 目录里。
 * 如果老系统更新有疑问，随时加官方群咨询群主。
 
 ## 修复
