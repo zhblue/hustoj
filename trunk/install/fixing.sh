@@ -24,6 +24,7 @@ if [ `whoami` = "root" ];then
 	mv src "old.$DATE"
  	echo "Your old files are moved to old.$DATE , find them if you need ."
 	mv new src
+        chmod +x src/install/*.sh
 	chown $WWW:$WWW -R src
 else
 	echo "usage: sudo $0"
