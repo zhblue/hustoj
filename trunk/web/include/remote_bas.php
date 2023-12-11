@@ -23,6 +23,10 @@ function do_submit_one($remote_site,$username,$password,$sid){
 		if(count($data)>0){
 			$row=$data[0];
 			$problem_id=$row['remote_id'];
+			if ($problem_id<=0) {
+				echo "请修复题目的remote_id，否则无法评测。";
+				return -1;
+			}
 		}else{
 			return -1;
 		}
@@ -70,9 +74,9 @@ function do_submit($remote_site,$remote_user,$remote_pass){
 			$sql="update solution set remote_oj=?,remote_id=?,result=17 where solution_id=?";
 			pdo_query($sql,$remote_oj,$rid,$sid);
 		}else{
-			break;
+			continue;
 		}
-		usleep(150000);
+		usleep(500);
 	}
 }
 function getResult($short){
