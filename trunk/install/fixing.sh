@@ -25,6 +25,12 @@ if [ `whoami` = "root" ];then
  	echo "Your old files are moved to old.$DATE , find them if you need ."
 	mv new src
         chmod +x src/install/*.sh
+	sed -i "s/OJ_INTERNAL_CLIENT=1/OJ_INTERNAL_CLIENT=0/g" /home/judge/etc/judge.conf
+        pkill -9 judged
+	cd src/core
+        bash make.sh
+	judged
+        cd ../..
 	chown $WWW:$WWW -R src
 else
 	echo "usage: sudo $0"
