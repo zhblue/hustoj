@@ -12,7 +12,7 @@ static 	$DB_PASS="root";  //数据库密码
 
 static 	$OJ_NAME="HUSTOJ";  //左上角显示的系统名称, 尽量简洁，避免用中文和空格，如需中文、长字符串、图片，可以直接修改template/syzoj/header.php
 static 	$OJ_HOME="./";    //主页目录
-static 	$OJ_ADMIN="root@localhost";  //管理员email
+static 	$OJ_ADMIN="root@localhost";  //管理员email,若启用,建议对email.class.php进行配置，设好可以使用smtp账号密码。
 static 	$OJ_DATA="/home/judge/data";  //测试数据目录
 static 	$OJ_BBS=false; //设为"discuss3" 启用， "bbs" for phpBB3 bridge or "discuss" for mini-forum or false for close any 
 static  $OJ_ONLINE=false;  //是否记录在线情况
