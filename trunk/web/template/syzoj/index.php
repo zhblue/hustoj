@@ -39,7 +39,7 @@ $view_month_rank=mysql_query_cache("select user_id,nick,count(distinct(problem_i
         ?>
             <h4 class="ui top attached block header"><i class="ui star icon"></i><?php echo "本月之星"?></h4>
             <div class="ui bottom attached segment">
-                <table class="ui very basic left aligned table" style="table-layout: fixed; ">
+                <table class="ui very basic center aligned table" style="table-layout: fixed; ">
                     <tbody>
         <?php
                             foreach ( $view_month_rank as $row ) {
