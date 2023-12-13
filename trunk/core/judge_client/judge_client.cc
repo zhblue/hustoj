@@ -3463,7 +3463,7 @@ int main(int argc, char **argv)
 		get_test_file(work_dir, p_id);
 	// using rsync to get remote test data files, using id_rsa to login ,change src/install/rsync.sh if need
         if (p_id > 0 && http_download == 2 )
-		execute_cmd("%s/src/install/rsync.sh %d",oj_home,p_id);
+		execute_cmd("%s/rsync.sh %d",oj_home,p_id);
 	
 	struct dirent **namelist;
         int namelist_len;
