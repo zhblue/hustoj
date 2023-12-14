@@ -22,6 +22,11 @@ yum -y install mariadb mariadb-devel mariadb-server
 
 # install semanage to setup selinux
 yum -y install policycoreutils-python
+sudo yum install -y yum-utils   device-mapper-persistent-data   lvm2
+sudo yum-config-manager     --add-repo     https://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo
+sudo yum install docker-ce docker-ce-cli containerd.io docker-compose-plugin
+service docker start
+
 
 systemctl start mariadb.service 
 /usr/sbin/useradd -m -u 1536 judge
