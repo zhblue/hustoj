@@ -1,5 +1,9 @@
 #!/bin/bash
 #judge_client gives PID as 1st parameter
+if test -z $1 ;then
+    echo "Example: $0 <Problem_id>"
+    exit
+fi
 PID=$1
 #source data should be on webserver
 WEBSERVER=172.10.2.101
