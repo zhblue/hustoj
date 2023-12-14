@@ -31,15 +31,14 @@ service docker start
 systemctl start mariadb.service 
 /usr/sbin/useradd -m -u 1536 judge
 cd /home/judge/
-yum -y install subversion
 
 #using tgz src files
 wget -O hustoj.tar.gz http://dl.hustoj.com/hustoj.tar.gz
 tar xzf hustoj.tar.gz
-svn up src
 
 #svn co https://github.com/zhblue/hustoj/trunk/trunk/ src
 cd src/install
+docker build -t hustoj .
 mysql -h localhost -uroot < db.sql
 echo "insert into jol.privilege values('admin','administrator','true','N');"|mysql -h localhost -uroot
 # mysqladmin -u root password $DBPASS
