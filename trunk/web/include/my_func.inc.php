@@ -1,4 +1,5 @@
 <?php
+require_once(dirname(__FILE__)."/curl.php");
 function create_subdomain($user_id,$template="bs3",$friendly="0"){
         $user_id=strtolower($user_id);
         global $DB_NAME,$DB_USER,$DB_PASS,$DOMAIN;
@@ -297,6 +298,3 @@ function RemoveXSS($val) {
    }
    return $val;
 }
-
-
-?>
