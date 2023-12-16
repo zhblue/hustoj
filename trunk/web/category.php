@@ -15,7 +15,7 @@
 	$view_category="";
 	$sql=	"select distinct source "
 			."FROM `problem` where defunct='N'"
-			."LIMIT 500";
+			."LIMIT 5000";
 	$result=mysql_query_cache($sql);//mysql_escape_string($sql));
 	$category=array();
         foreach ($result as $row){
