@@ -124,11 +124,11 @@ if(isset($OJ_BG)&&$OJ_BG=="bing"){
    if(!file_exists($bg_file)) touch($bg_file);
    if(time()-fileatime($bg_file)>3600*24){
            require_once(dirname(__FILE__)."/curl.php");
-           $data=curl_get("https://cn.bing.com");
+           $data=curl_get("https://cn.bing.com/");
            $OJ_BG=getPartByMark($data,"<link rel=\"preload\" href=\"","\" as=\"image\" id=\"preloadBg\"");
 	   $OJ_BG="https://cn.bing.com/".$OJ_BG;
            if($OJ_BG)file_put_contents($bg_file,$OJ_BG);
-	   else touch($bg_file);
+	   else file_put_contents($bg_file,"/image/background.jpg");
    }else{
            $OJ_BG=file_get_contents($bg_file);
    }
