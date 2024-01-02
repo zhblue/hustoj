@@ -16,7 +16,9 @@ $delay=pdo_query($sql);
 <table class="table">
   <tbody>
     <tr>
-    <td ><center><a class='btn btn-info btn-sm' href='help.php'>System Status </a></center></td><td>
+     <td ><center><a class='btn btn-info btn-sm' 
+			  href='javascript:$("#watch").html(" <iframe src=\"watch.php?notext\" width=\"100%\" height=\"200\"></iframe>")'>System Status </a>
+          </center></td><td id="watch">
 		    Delay:<?php echo $delay[0][0] ?>s/judge &nbsp;&nbsp;  
 		    CPU:<?php echo sys_getloadavg()[0];?>tasks/1min  &nbsp;&nbsp; 
 	<?php if(function_exists('system')){  ?>
