@@ -126,7 +126,7 @@ if(isset($OJ_BG)&&$OJ_BG=="bing"){
            require_once(dirname(__FILE__)."/curl.php");
            $data=curl_get("https://cn.bing.com/");
            $OJ_BG=getPartByMark($data,"<link rel=\"preload\" href=\"","\" as=\"image\" id=\"preloadBg\"");
-	   $OJ_BG="https://cn.bing.com/".$OJ_BG;
+	   if(strpos($OJ_BG,"http")!=0) $OJ_BG="https://cn.bing.com/".$OJ_BG;
            if($OJ_BG)file_put_contents($bg_file,$OJ_BG);
 	   else file_put_contents($bg_file,"/image/background.jpg");
    }else{
