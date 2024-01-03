@@ -93,7 +93,7 @@ if(function_exists('system')){
         <script> //window.setTimeout("location.reload()",5000); </script>
         <script src="/include/jquery-latest.js" > </script>
         <script src="/include/jquery.flot.js" > </script>
-        <div id="panel" style="width:98%;height:180px" onclick='update()'>no data</div>
+        <div id="panel" style="width:98%;height:180px" onclick='update()'>loading data ... </div>
         <script type="text/javascript">
                 function update(){
                         $.getJSON("<?php echo basename(__FILE__)?>?json",function(result){
