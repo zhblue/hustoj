@@ -102,13 +102,13 @@ if(function_exists('system')){
                                 let swap=result[2];
                                 let tcp=result[3];
                                 $.plot( $( "#panel" ), [ {
-                                        label: "FREE",data: mem,lines: {show: true}
+                                        label: "FREE:"+(<?php echo $memory[0]?>*mem[mem.length-1][1]/100).toFixed(0),data: mem,lines: {show: true}
                                 }
-                                ,{      label: "CPU",data: cpu,bars: {show: true}
+                                ,{      label: "CPU:"+cpu[cpu.length-1][1]+"%",data: cpu,bars: {show: true}
                                 }
-                                ,{      label: "TCP-pairs",data: tcp,lines: {show: true}
+                                ,{      label: "TCP:"+tcp[tcp.length-1][1]*2,data: tcp,lines: {show: true}
                                 }
-                                ,{      label: "SWAP",data: swap,lines: {show: true}
+                                ,{      label: "SWAP:"+(<?php echo $memory[1]?>*swap[swap.length-1][1]/100).toFixed(0),data: swap,lines: {show: true}
                                 }
                                 ], {    grid: {
                                                 backgroundColor: {
