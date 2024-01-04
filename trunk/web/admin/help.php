@@ -13,19 +13,52 @@ $delay=pdo_query($sql);
 
 <body>
 
+
 <table class="table">
   <tbody>
     <tr>
-     <td ><center><a class='btn btn-info btn-sm' 
-			  href='javascript:$("#watch").html(" <iframe src=\"watch.php?notext\" width=\"100%\" height=\"200\"></iframe>")'>System Status </a>
-          </center></td><td id="watch">
-		    Delay:<?php echo $delay[0][0] ?>s/judge &nbsp;&nbsp;  
+<td>
+    <center>
+        <a class='btn btn-info btn-sm' href='#' onclick='toggleWatch()'>System Status</a>
+    </center>
+</td>
+<td id="watch" style="display:none;">
+    <iframe src="watch.php?notext" width="100%" height="200"></iframe>
+     Delay:<?php echo $delay[0][0] ?>s/judge &nbsp;&nbsp;  
 		    CPU:<?php echo sys_getloadavg()[0];?>tasks/1min  &nbsp;&nbsp; 
 	<?php if(function_exists('system')){  ?>
 		    FreeMem:<?php system(" free -h|grep Mem|awk '{print $7\"/\"$2 }'");?>&nbsp;&nbsp;  
 		    FreeDisk:<?php system("df -h|grep '/dev/'|grep -v 'shm'|awk '{print $4 \"/\" $2}'");?>&nbsp;&nbsp;  
 	<?php } ?>
-	</td>
+</td>
+<td>
+    <div id="serverInfo" style="display:block;">
+       Delay:<?php echo $delay[0][0] ?>s/judge &nbsp;&nbsp;  
+		    CPU:<?php echo sys_getloadavg()[0];?>tasks/1min  &nbsp;&nbsp; 
+	<?php if(function_exists('system')){  ?>
+		    FreeMem:<?php system(" free -h|grep Mem|awk '{print $7\"/\"$2 }'");?>&nbsp;&nbsp;  
+		    FreeDisk:<?php system("df -h|grep '/dev/'|grep -v 'shm'|awk '{print $4 \"/\" $2}'");?>&nbsp;&nbsp;  
+	<?php } ?>
+    </div>
+</td>
+<script>
+    function toggleWatch() {
+        var watch = document.getElementById("watch");
+        var serverInfo = document.getElementById("serverInfo");
+        if (watch.style.display === "none") {
+            watch.style.display = "block";
+            serverInfo.style.display = "none";
+        } else {
+            watch.style.display = "none";
+            serverInfo.style.display = "block";
+        }
+    }
+</script>
+
+        
+     
+          
+
 			
     </tr>
     <tr>
