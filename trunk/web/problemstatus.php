@@ -22,18 +22,16 @@ else
 ?>
 
 <?php
-$now = $now =  date('Y-m-d H:i', time());
-
-$sql = "SELECT 1 FROM `contest_problem` WHERE `problem_id` = ? AND `contest_id` IN (SELECT `contest_id` FROM `contest` WHERE `start_time`<? AND `end_time`>? AND `title` LIKE ?)";
-
-$rrs = pdo_query($sql, $id, $now, $now, "%$OJ_NOIP_KEYWORD%");
-
-$flag = count($rrs)>0 ;
-
-if ($flag) {
-  $view_errors = "<h2> $MSG_NOIP_WARNING </h2>";
-  require("template/".$OJ_TEMPLATE."/error.php");
-  exit(0);
+if(isset($OJ_NOIP_KEYWORD)&&$OJ_NOIP_KEYWORD){
+		$now =  date('Y-m-d H:i', time());
+    $sql="select count(contest_id) from contest where start_time<'$now' and end_time>'$now' and title like '%$OJ_NOIP_KEYWORD%'";
+		$row=pdo_query($sql);
+		$cols=$row[0];		
+		if($cols[0]>0) {			
+		      $view_errors =  "<h2> $MSG_NOIP_WARNING </h2>";
+		      require("template/".$OJ_TEMPLATE."/error.php");
+		      exit(0);
+		}
 }
 
 $view_problem = array();
