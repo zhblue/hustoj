@@ -63,24 +63,30 @@ function do_submit_one($remote_site,$username,$sid){
 		$source=$row['source'];
 	}
 	while(strlen($source)<50) $source.="\n          \n";     // hdu要求至少50
-	$form=array(
-		'problemid' => $problem_id, 
-		'language' => $language,
-		'usercode' => ($source),
-		'check' => '0'
-	);
-	//var_dump($form);
-	$data=curl_post_urlencoded($remote_site."/submit.php?action=submit",$form);
-	//echo ($data);
-	if(str_contains($data,"ERROR")) {
-		$sid=0;
-	}else{
-		$data=curl_get($remote_site."/status.php?first=&pid=&user=".$username."&lang=0&status=0");
-		//echo ($data);
-	       	$sid=getPartByMark($data,"<td height=22px>","</td>");
-	}
-	echo "rid:".intval($sid);	
-	return $sid;
+	 $form=array(
+                'problemid' => $problem_id,
+                'language' => $language,
+                'usercode' => ($source),
+                '_usercode' => base64_encode(rawurlencode($source)),
+                'check' => '0'
+        );
+        //var_dump($form);
+        $data=curl_get($remote_site."/status.php?first=&pid=&user=".$username."&lang=0&status=0");
+        echo (getPartByMark($data,"<td height=22px>","</td>"));
+        $vid=intval(getPartByMark($data,"<td height=22px>","</td>"));
+        echo "last id:".$vid;
+        $data=curl_post_urlencoded($remote_site."/submit.php?action=submit",$form);
+        echo ($data);
+        if(str_contains($data,"ERROR")) {
+                $sid=0;
+        }else{
+                $data=curl_get($remote_site."/status.php?first=&pid=&user=".$username."&lang=0&status=0");
+                $sid=intval(getPartByMark($data,"<td height=22px>","</td>"));
+                if($sid==$vid) $sid=-1;
+        }
+        echo "rid:".intval($sid);
+        return $sid;
+
 }
 function do_submit($remote_site,$remote_user){ 
 	global $remote_oj;
