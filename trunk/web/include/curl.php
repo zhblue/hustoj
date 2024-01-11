@@ -5,7 +5,17 @@ if (!function_exists('str_contains')) {
         return empty($needle) || strpos($haystack, $needle) !== false;
     }
 }
+
 function getPartByMark($html,$mark1,$mark2){
+   $i=strpos($html,$mark1);
+   $start=$i+strlen($mark1)+1;
+   if($i>=0&&$start<=strlen($html)) $j=strpos($html,$mark2,$start);
+   else return $html;
+   $descriptionHTML=substr($html,$i+ strlen($mark1),$j-($i+ strlen($mark1)));
+   return $descriptionHTML;
+}
+
+function getPartByMarkMB($html,$mark1,$mark2){
    $i=mb_strpos($html,$mark1);
    $start=$i+mb_strlen($mark1)+1;
    if($i>=0&&$start<=mb_strlen($html)) $j=mb_strpos($html,$mark2,$start);
