@@ -382,7 +382,7 @@ if(date('m')==4&&date('d')==1&&rand(0,100)<10){
 	$MSG_FUNCTION_GETS_REMOVIED ="std: gets بولسا C++11 دىن تاشلىۋېتىلىپ، C++14 دىن چىقىرىۋېتىلىدۇ. std::fgets نى ئىشلىتىشكە بولىدۇ. ياكى ماكرو ئېنىقلىما #define gets(S) fgets(S,sizeof(S),stdin)";
 	$MSG_PROBLEM_USED_IN ="سۇئال ئاللىقاچان شەخسىي مۇسابىقىدە ئىشلىتىلدى. ";
 	$MSG_MAIL_CAN_ONLY_BETWEEN_TEACHER_AND_STUDENT="Mails can only be sent between teachers and student, not between students.";
-
+	$MSG_COPY_USER_LIST_FROM_CONTEST="Copy user list from a history contest... ";
 	$MSG_REFRESH_PRIVILEGE="ئىمتىيازنى يېڭىلاش";
 
 	$MSG_SAVED_DATE="Saved Date";

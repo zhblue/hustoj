@@ -384,7 +384,7 @@
  $MSG_FUNCTION_GETS_REMOVIED =" std::gets 於C++11 被棄用，並於C++14 移除。可使用std::fgets 替代。或者增加宏定義#define gets(S) fgets(S,sizeof(S),stdin) ";
  $MSG_PROBLEM_USED_IN ="題目已經用於私有比賽";
  $MSG_MAIL_CAN_ONLY_BETWEEN_TEACHER_AND_STUDENT ="內郵僅限學生老師互相發送，不允許同學間發送！ ";
- 
+ $MSG_COPY_USER_LIST_FROM_CONTEST="選擇一個比賽復製學生名單...";
  $MSG_REFRESH_PRIVILEGE ="刷新權限";
  
  $MSG_SAVED_DATE ="保存時間";

@@ -372,7 +372,7 @@
 	$MSG_FUNCTION_GETS_REMOVIED="std::gets 함수는 C++14 에서 지원되지 않습니다. fgets나 #define gets(S) fgets(S,sizeof(S),stdin)를 사용하세요.";
 	$MSG_PROBLEM_USED_IN="비공개 대회에 등록되어 있습니다.";
 	$MSG_MAIL_CAN_ONLY_BETWEEN_TEACHER_AND_STUDENT="메일은 교사와 학생 사이에서만 주고 받을 수 있습니다. 학생들끼리는 불가능합니다.";
-	
+	$MSG_COPY_USER_LIST_FROM_CONTEST="Copy user list from a history contest... ";
 	$MSG_REFRESH_PRIVILEGE="권한 갱신";
 
 	$MSG_SAVED_DATE="저장 일시";

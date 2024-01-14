@@ -385,7 +385,7 @@
  $MSG_FUNCTION_GETS_REMOVIED = " std::gets устарел в C++11 и удален в C++14. Вместо этого используйте std::fgets. Или добавьте определение макроса #define gets(S) fgets(S,sizeof( S), стандартный ввод) ";
  $MSG_PROBLEM_USED_IN =" Задача уже используется для частного конкурса ";
  $MSG_MAIL_CAN_ONLY_BETWEEN_TEACHER_AND_STUDENT =" Внутренняя почта может отправляться только между учениками и учителями, но не между учениками! ";
- 
+ $MSG_COPY_USER_LIST_FROM_CONTEST="Copy user list from a history contest... ";
  $MSG_REFRESH_PRIVILEGE =" Обновить привилегии ";
  
  $MSG_SAVED_DATE =" сэкономить время ";

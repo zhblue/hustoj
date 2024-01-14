@@ -394,7 +394,7 @@
   $MSG_NON_ZERO_RETURN="Main函数不能返回非零的值，否则视同程序出错。";
   $MSG_PROBLEM_USED_IN="题目已经用于私有比赛";
   $MSG_MAIL_CAN_ONLY_BETWEEN_TEACHER_AND_STUDENT="内邮仅限学生老师互相发送，不允许同学间发送！";
-  
+  $MSG_COPY_USER_LIST_FROM_CONTEST="选择一个比赛复制学生名单...";
 
   $MSG_REFRESH_PRIVILEGE="刷新权限";
   

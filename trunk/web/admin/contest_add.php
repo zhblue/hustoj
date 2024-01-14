@@ -241,8 +241,29 @@ else{
             <p align=left>
               <?php echo $MSG_CONTEST."-".$MSG_USER?>
               <?php echo "( Add private contest's userIDs with newline &#92;n )"?>
+              <select id="copy_from" onchange="copy_user_from_contest($(this).val());" >
+              <option value=0 ><?php echo $MSG_COPY_USER_LIST_FROM_CONTEST ?></option>
+                        <?php
+                                $contests="0";
+                                foreach($_SESSION as $right=>$value){
+                                        if(strpos($right,$OJ_NAME.'_m')===0){
+                                        //      echo "<option>".substr($right,strlen($OJ_NAME."_m"))."[".strpos($right,$OJ_NAME.'_m')."]</option>";
+                                                $contests.=",".substr($right,strlen($OJ_NAME."_m"));
+                                        }
+                                }
+                                $contests=pdo_query("select contest_id,title from contest where contest_id in ($contests)");
+                                if(is_array($contests)){
+
+                                        foreach( $contests as $contest ){
+                                            echo "<option value='".$contest['contest_id']."'>".$contest['title']."</option>";
+                                        }
+
+                                }
+                        ?>
+                </select>
+
               <br>
-              <textarea name='ulist' rows='10' style='width:100%;' placeholder='user1<?php echo "\n"?>user2<?php echo "\n"?>user3<?php echo "\n"?>
+              <textarea id="ulist" name='ulist' rows='10' style='width:100%;' placeholder='user1<?php echo "\n"?>user2<?php echo "\n"?>user3<?php echo "\n"?>
               <?php echo $MSG_PRIVATE_USERS_ADD?><?php echo "\n"?>'><?php if(isset($ulist)){ echo $ulist;}?></textarea>
             </p>
           </td>
@@ -258,6 +279,10 @@ else{
 </div>
 
 <script>
+  function copy_user_from_contest(cid){
+      $("#ulist").val($.ajax({url:"ajax.php",method:"post",data:{"contest_id":cid,"m":"get_user_list_of_contest"},async:false}).responseText);
+  }
+
 	function showTitles(){
 		let ts=$("#ptitles");
 		let pids=$("#plist").val().split(",");
