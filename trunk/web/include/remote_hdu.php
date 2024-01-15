@@ -74,6 +74,7 @@ function do_submit_one($remote_site,$username,$sid){
         $data=curl_get($remote_site."/status.php?first=&pid=&user=".$username."&lang=0&status=0");
         echo (getPartByMark($data,"<td height=22px>","</td>"));
         $vid=intval(getPartByMark($data,"<td height=22px>","</td>"));
+	sleep(5);
         echo "last id:".$vid;
         $data=curl_post_urlencoded($remote_site."/submit.php?action=submit",$form);
         echo ($data);
