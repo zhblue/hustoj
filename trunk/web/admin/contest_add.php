@@ -251,7 +251,7 @@ else{
                                                 $contests.=",".substr($right,strlen($OJ_NAME."_m"));
                                         }
                                 }
-                                $contests=pdo_query("select contest_id,title from contest where contest_id in ($contests)");
+                                $contests=pdo_query("select contest_id,title from contest where contest_id in ($contests)  order by contest_id desc limit 20 ");
                                 if(is_array($contests)){
 
                                         foreach( $contests as $contest ){
