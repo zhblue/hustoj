@@ -74,6 +74,7 @@ function do_submit_one($remote_site,$username,$sid){
 	//var_dump($form);
 	$data=curl_get($remote_site."/status?user_id=".$username);
         $vid=intval(getPartByMark($data,"Submit Time</td></tr>\n<tr align=center><td>","</td><td><a href=userstatus"));
+	sleep(5);
         $data=curl_post_urlencoded($remote_site."/submit",$form);
         if(str_contains($data,"Error Occurred")) {
                 $sid=0;
