@@ -49,15 +49,12 @@ class TM{
 			}else{
 				$this->mark+=$mark_per_problem;
 			}
+			if($this->p_wa_num[$pid]=="") $this->p_wa_num[$pid]=0;
 			$punish=intval($this->p_wa_num[$pid]*$mark_per_punish);
 			if($punish<intval($mark_per_problem*.8))
 				$this->mark-=$punish;
 			else
 				$this->mark-=intval($mark_per_problem*.8);
-//			if($this->mark<$mark_base)
-//				$this->mark=$mark_base;
-//			echo "Time:".$this->time."<br>";
-//			echo "Solved:".$this->solved."<br>";
 		}
 	}
 }
