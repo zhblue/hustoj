@@ -8,6 +8,7 @@ if (!function_exists('str_contains')) {
 
 function getPartByMark($html,$mark1,$mark2){
    $i=strpos($html,$mark1);
+   if($i===false) return $html;	
    $start=$i+strlen($mark1)+1;
    if($i>=0&&$start<=strlen($html)) $j=strpos($html,$mark2,$start);
    else return $html;
