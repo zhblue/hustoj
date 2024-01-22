@@ -313,11 +313,20 @@ function selectMulti( num, answer){
   $(document).ready(function(){
     	$("#creator").load("problem-ajax.php?pid=<?php echo $id?>");
 	<?php if(isset($OJ_MARKDOWN)&&$OJ_MARKDOWN){ ?>
+		marked.use({
+                  // 开启异步渲染
+                  async: true,
+                  pedantic: false,
+                  gfm: true,
+                  mangle: false,
+                  headerIds: false
+                });
+
 		$("div.md").each(function(){
-			$(this).html(marked.parse($(this).text()));
+			$(this).html(marked.parse($(this).html()));
 		});
 	       
-    $(".md table tr td").css({
+        $(".md table tr td").css({
             "border": "1px solid grey",
             "text-align": "center",
             "width": "200px",
