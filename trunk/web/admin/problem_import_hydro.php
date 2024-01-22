@@ -139,7 +139,7 @@ else {
 			echo "<hr>".htmlentities($file_name." $title $source");
 		}else if(basename($file_name)=="problem_zh.md"||basename($file_name)=="problem.md"){
 			
-			if(strpos($file_content,"##")>=0) 
+			if(strpos($file_content,"##")) 
 				$description="<div class='md'>".$file_content."</div>";
                         else 
 				$description=$file_content;
