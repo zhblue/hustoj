@@ -3178,8 +3178,7 @@ int get_sim(int solution_id, int lang, int pid, int &sim_s_id)
         FILE *pf;
         pf = fopen("sim", "r");
         if (!sim){
-                if(pf){
-                        execute_cmd("/bin/mkdir ../data/%d/ac/ 2>/dev/null", pid);
+                execute_cmd("/bin/mkdir ../data/%d/ac/ 2>/dev/null", pid);
                 execute_cmd("/bin/cp %s ../data/%d/ac/%d.%s 2>/dev/null", src_pth, pid, solution_id,
                                         lang_ext[lang]);
                 //c cpp will
@@ -3191,7 +3190,6 @@ int get_sim(int solution_id, int lang, int pid, int &sim_s_id)
                         execute_cmd("/bin/ln ../data/%d/ac/%d.%s ../data/%d/ac/%d.%s 2>/dev/null", pid,
                                                 solution_id, lang_ext[lang], pid, solution_id,
                                                 lang_ext[lang - 1]);
-                }
         }else{
                 if (pf){
                         if(2==fscanf(pf, "%d%d", &sim, &sim_s_id));
