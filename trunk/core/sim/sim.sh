@@ -19,8 +19,8 @@ do
 done
 if [ -z "$FIRST" ] ;then
     echo "first answer"
-    echo "0 0" > sim
 else
-        echo $FIRST
+    echo $FIRST
 fi
+echo "0 0" > sim
 exit 0;
