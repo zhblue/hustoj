@@ -323,7 +323,7 @@ function selectMulti( num, answer){
                 });
 
 		$("div.md").each(function(){
-			$(this).html(marked.parse($(this).text()));
+			$(this).html(marked.parse($(this).html()));
 		});
 	       
         $(".md table tr td").css({
