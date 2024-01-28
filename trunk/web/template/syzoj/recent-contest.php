@@ -1,6 +1,9 @@
 <?php $show_title="近期比赛 - $OJ_NAME"; ?>
 <?php include("template/$OJ_TEMPLATE/header.php");?>
 
+
+    <div class="padding">
+
     <table class="ui very basic center aligned table">
       <thead>
         <tr>
@@ -11,21 +14,24 @@
         <th>Access</th>
         </tr>
       </thead>
-      <tbody>
-      <?php
-        $odd=true;
-        foreach($rows as $row) {
-        ?>
-          <tr>
-            <td><?php echo$row['oj']?></td>
-            <td><a href="<?php echo$row['link']?>" target="_blank"><?php echo$row['name']?></a></td>
-            <td><?php echo$row['start_time']?></td>
-            <td><?php echo$row['week']?></td>
-            <td><?php echo$row['access']?></td>
-          </tr>
-        <?php } ?>
-      </tbody>
+        <tbody id="contest-list">
+
+
+        </tbody>
     </table>
     <div>数据来源：<a href="http://contests.acmicpc.info/contests.json" target="_blank">http://contests.acmicpc.info/contests.json</a>&nbsp;&nbsp;&nbsp;&nbsp;作者：<a href="http://contests.acmicpc.info"  target="_blank" >doraemonok</a></div>
-
+    </div>
+        <script>
+                var contestList = $("#contest-list");
+                $.get("https://algcontest.rainng.com/contests.json",function(response){
+                        response.map(function(val){
+                                var item = "<tr><td class='column-1'>"+val.oj+"</td>"+
+                                        "<td class='column-2'><a target='_blank' href='"+val.link+"'>"+val.name+"</a></td>"+
+                                        "<td class='column-3'>"+val.start_time+"</td>"+
+                                        "<td class='column-4'>"+val.week+"</td>"+
+                                        "<td class='column-5'>"+val.access+"</td></tr>"
+                                contestList.append(item);
+                        });
+                });
+        </script>
 <?php include("template/$OJ_TEMPLATE/footer.php");?>
