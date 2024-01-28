@@ -1,4 +1,4 @@
-<?php $show_title="近期比赛 - $OJ_NAME"; ?>
+<?php $show_title="$MSG_RECENT_CONTEST - $OJ_NAME"; ?>
 <?php include("template/$OJ_TEMPLATE/header.php");?>
 
 
@@ -8,10 +8,10 @@
       <thead>
         <tr>
         <th>OJ</th>
-        <th>比赛名称</th>
-        <th>开始时间</th>
+        <th><?php echo $MSG_CONTEST_NAME ?></th>
+        <th><?php echo $MSG_START_TIME ?></th>
         <th>星期</th>
-        <th>Access</th>
+        <th><?php echo $MSG_CONTEST_OPEN ?></th>
         </tr>
       </thead>
         <tbody id="contest-list">
