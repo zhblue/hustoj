@@ -5,10 +5,10 @@
     <div style="font-content">
         <h2 class="ui header">评测</h2>
         <p>
-            <br> C++ 使用 <code>g++ 9.4.0</code> 编译，命令为
-            &nbsp;<code>g++ -fno-asm -Wall -lm --static -O2 -std=c++14 -DONLINE_JUDGE -o Main Main.cc</code>；
             <br> C 使用 <code>gcc 9.4.0</code> 编译，命令为
             &nbsp;<code>gcc Main.c -o Main -fno-asm -Wall -lm --static -O2 -std=c99 -DONLINE_JUDGE</code>
+            <br> C++ 使用 <code>g++ 9.4.0</code> 编译，命令为
+            &nbsp;<code>g++ -fno-asm -Wall -lm --static -O2 -std=c++17 -DONLINE_JUDGE -o Main Main.cc</code>；
             <br> 您可以使用 <code>#pragma GCC optimize ("O0")</code> 手工关闭 O2 优化；
             <br> Pascal 使用 <code>fpc 3.0.4</code> 编译，命令为
             &nbsp;<code>fpc Main.pas -oMain -O1 -Co -Cr -Ct -Ci</code>。
