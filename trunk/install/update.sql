@@ -19,6 +19,7 @@ alter table solution add column remote_id char(32) not null default '' after rem
 alter table news modify content mediumtext not null;
 alter table problem modify description mediumtext not null, modify input  mediumtext not null, modify output mediumtext not null;
 alter table users add column activecode varchar(16) not null default '' after school;
+alter table solution modify pass_rate decimal(4,3) not null default 0.000;
 #create fulltext index problem_title_source_index on problem(title,source);
 
                                                                                                          
