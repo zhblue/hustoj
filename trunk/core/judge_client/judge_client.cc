@@ -2626,7 +2626,7 @@ int fix_java_mis_judge(char *work_dir, int &ACflg, int &topmemory,
 	}
 	return comp_res;
 }
-float raw_text_judge( char *infile, char *outfile, char *userfile, int *total_mark){
+float raw_text_judge( char *infile, char *outfile, char *userfile, float *total_mark){
         float mark=0;
         int total=0;
         FILE *in=fopen(infile,"r");
@@ -3537,7 +3537,7 @@ int main(int argc, char **argv)
 	// read files and run
 	double pass_rate = 0.0;
 	float mark=0;
-	int total_mark=0,get_mark=0;
+	float total_mark=0,get_mark=0;
 	int finalACflg = ACflg;
 	if (p_id == 0)
 	{ //custom input running
@@ -3762,7 +3762,7 @@ int main(int argc, char **argv)
 			if(mark>=0 && mark<=total_mark) pass_rate=mark;
 			pass_rate/=100.0;
 			if(mark==total_mark) finalACflg=ACflg=OJ_AC;else finalACflg=ACflg=OJ_WA;
-			update_solution(solution_id, finalACflg,total_mark,mark,sim,sim_s_id, pass_rate);
+			update_solution(solution_id, finalACflg,total_mark,mark*10,sim,sim_s_id, pass_rate);
 
 	}
 	FILE *df=fopen("diff.out","a");
