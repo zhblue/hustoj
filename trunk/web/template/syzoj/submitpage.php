@@ -72,13 +72,13 @@ echo"<option value=$i ".( $lastlang==$i?"selected":"").">
 <span class="btn" id=result>状态</span>	
 </span>
 <?php if($spj <= 1): ?>
-    <button onclick="toggleTheme(event)" style="background-color: bisque; position: absolute; top: 5px; right: 170px;" v-if="false">
+    <button onclick="toggleTheme(event)" style="background-color: bisque; position: absolute; top: 5px; right:70px;" v-if="false">
         <i>🌗</i>
     </button>
-    <button onclick="increaseFontSize(event)" style="background-color: bisque; position: absolute; top: 5px; right:120px;" v-if="false">
+    <button onclick="increaseFontSize(event)" style="background-color: bisque; position: absolute; top: 5px; right:40px;" v-if="false">
         <i>➕</i>
     </button>
-    <button onclick="decreaseFontSize(event)" style="background-color: bisque; position: absolute; top: 5px; right: 80px;" v-if="false">
+    <button onclick="decreaseFontSize(event)" style="background-color: bisque; position: absolute; top: 5px; right:10px;" v-if="false">
         <i>➖</i>
     </button>
 <?php endif; ?>
