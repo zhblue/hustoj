@@ -34,7 +34,7 @@ class BBCode
 
     // oneliner to burst inner by spaces, then burst each of those by equals signs
     $params = array_map(
-      function(&$a) { return explode('=', $a, 2); },
+      function($a) { return explode('=', $a, 2); },
       explode(' ', $inner));
 
     // first "param" is special - it's the tag name and (optionally) the default arg
