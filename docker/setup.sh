@@ -114,4 +114,7 @@ w3m -dump http://hustoj.com/ip.php
 #cat /home/judge/run0/log/ce.txt
 #cat /home/judge/run0/log/Main.c
 
+cd /home/judge/src
+apt install build-essential dh-make devscripts dpkg-dev debhelper quilt lintian -y
+
   
