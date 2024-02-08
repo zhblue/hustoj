@@ -119,7 +119,9 @@ apt install build-essential dh-make devscripts dpkg-dev debhelper quilt lintian 
 wget -O deb.zip https://github.com/zhblue/hustoj-deb-ubuntu/archive/refs/heads/master.zip
 unzip deb.zip
 mv hustoj-deb-ubuntu-master/* ./
+
 VERSION=`date +"%y.%m.%d"`
+sed -i "s/0.0.1/$VERSION/g" debian/changelog
 
 dpkg-buildpackage
 cd ..
