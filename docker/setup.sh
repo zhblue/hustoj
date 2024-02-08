@@ -120,4 +120,5 @@ wget -O deb.zip https://github.com/zhblue/hustoj-deb-ubuntu/archive/refs/heads/m
 unzip deb.zip
 mv hustoj-deb-ubuntu-master/* ./
 dpkg-buildpackage
-  
+cd ..
+ls -lh *.deb
