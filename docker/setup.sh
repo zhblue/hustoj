@@ -116,5 +116,8 @@ w3m -dump http://hustoj.com/ip.php
 
 cd /home/judge/src
 apt install build-essential dh-make devscripts dpkg-dev debhelper quilt lintian -y
-
+wget -O deb.zip https://github.com/zhblue/hustoj-deb-ubuntu/archive/refs/heads/master.zip
+unzip deb.zip
+mv hustoj-deb-ubuntu-master/* ./
+dpkg-buildpackage
   
