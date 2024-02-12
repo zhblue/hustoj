@@ -6,4 +6,4 @@ TERM=xterm
 USER=www-data
 #echo $1
 cd $1
-/usr/bin/g++ -o Main Main.cc 2>&1
+/usr/bin/g++ -lm -o Main Main.cc 2>&1
