@@ -37,6 +37,12 @@ if($_SERVER['REQUEST_METHOD']=="POST"){
                 $sql= "update users set school=? where user_id=?";
                 echo pdo_query($sql,$school,$user_id);
         }
+	if($m=="user_update_group_name"){
+                $user_id=$_POST['user_id'];
+                $group_name=$_POST['group_name'];
+                $sql="update users set group_name=? where user_id=?";
+                echo pdo_query($sql,$group_name,$user_id);
+        }
 	if($m=="get_user_list_of_contest"){
 			$contest_id=$_POST['contest_id'];
 			$sql= "select distinct user_id from privilege where rightstr=? ";
