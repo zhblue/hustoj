@@ -43,10 +43,10 @@ $sql = "";
 if(isset($_GET['keyword']) && $_GET['keyword']!=""){
   $keyword = $_GET['keyword'];
   $keyword = "%$keyword%";
-  $sql = "SELECT `user_id`,`nick`,email,`accesstime`,`reg_time`,`ip`,`school`,`defunct` FROM `users` WHERE (user_id LIKE ?) OR (nick LIKE ?) OR (school LIKE ?) ORDER BY `user_id` DESC";
+  $sql = "SELECT `user_id`,`nick`,email,`accesstime`,`reg_time`,`ip`,`school`,`group_name`,`defunct` FROM `users` WHERE (user_id LIKE ?) OR (nick LIKE ?) OR (school LIKE ?) ORDER BY `user_id` DESC";
   $result = pdo_query($sql,$keyword,$keyword,$keyword);
 }else{
-  $sql = "SELECT `user_id`,`nick`,email,`accesstime`,`reg_time`,`ip`,`school`,`defunct` FROM `users` ORDER BY `accesstime` DESC LIMIT $sid, $idsperpage";
+  $sql = "SELECT `user_id`,`nick`,email,`accesstime`,`reg_time`,`ip`,`school`,`group_name`,`defunct` FROM `users` ORDER BY `accesstime` DESC LIMIT $sid, $idsperpage";
   $result = pdo_query($sql);
 }
 ?>
@@ -65,6 +65,7 @@ if(isset($_GET['keyword']) && $_GET['keyword']!=""){
       <td><?php echo $MSG_NICK?></td>
       <td><?php echo $MSG_EMAIL?></td>
       <td><?php echo $MSG_SCHOOL?></td>
+      <td><?php echo $MSG_GROUP_NAME?></td>
       <td><?php echo $MSG_LAST_LOGIN?></td>
       <td><?php echo $MSG_REGISTER?></td>
       <td><?php echo $MSG_STATUS?></td>
@@ -83,6 +84,8 @@ if(isset($_GET['keyword']) && $_GET['keyword']!=""){
         }
         if($row['school']=="") $row['school']="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
         echo "<td><span fd='school' user_id='".$row['user_id']."'>".$row['school']."</span></td>";
+        if($row['group_name']=="") $row['group_name']="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+        echo "<td><span fd='group_name' user_id='".$row['user_id']."'>".$row['group_name']."</span></td>";
         echo "<td>".$row['accesstime']."</td>";
         echo "<td>".$row['reg_time']."</td>";
       if(isset($_SESSION[$OJ_NAME.'_'.'administrator'])){
@@ -90,7 +93,7 @@ if(isset($_GET['keyword']) && $_GET['keyword']!=""){
                   ($row['defunct']=="N"?"<span class=green>$MSG_NORMAL</span>":"<span class=red>$MSG_DELETED</span>")."</a></td>";
       }
       else {
-        echo "<td>".($row['defunct']=="N"?"<span>$MSG_NORMAL</span>":"<span>$MSG_DELETED</span>")."</td>";        
+        echo "<td>".($row['defunct']=="N"?"<span>$MSG_NORMAL</span>":"<span>$MSG_DELETED</span>")."</td>";
       }
         echo "<td><a href=changepass.php?uid=".$row['user_id']."&getkey=".$_SESSION[$OJ_NAME.'_'.'getkey'].">"."Reset"."</a></td>";
         echo "<td><a href=privilege_add.php?uid=".$row['user_id']."&getkey=".$_SESSION[$OJ_NAME.'_'.'getkey'].">"."Add"."</a></td>";
@@ -121,6 +124,25 @@ if(!(isset($_GET['keyword']) && $_GET['keyword']!=""))
 </div>
 <script>
 function admin_mod(){
+        $("span[fd=group_name]").each(function(){
+                let sp=$(this);
+                let user_id=$(this).attr('user_id');
+                $(this).dblclick(function(){
+                        let group_name=sp.text();
+                        sp.html("<form onsubmit='return false;'><input type=hidden name='m' value='user_update_group_name'><input type='hidden' name='user_id' value='"+user_id+"'><input type='text' name='group_name' value='"+group_name+"' selected='true' class='input-large' size=20 ></form>");
+                        let ipt=sp.find("input[name=group_name]");
+                        ipt.focus();
+                        ipt[0].select();
+                        sp.find("input").change(function(){
+                                let newgroup_name=sp.find("input[name=group_name]").val();
+                                $.post("ajax.php",sp.find("form").serialize()).done(function(){
+                                        console.log("new group_name"+newgroup_name);
+                                        sp.html(newgroup_name);
+                                });
+
+                        });
+                });
+        });
         $("span[fd=school]").each(function(){
                 let sp=$(this);
                 let user_id=$(this).attr('user_id');
@@ -140,7 +162,7 @@ function admin_mod(){
                         });
                 });
         });
-        
+
         $("span[fd=nick]").each(function(){
                 let sp=$(this);
                 let user_id=$(this).attr('user_id');
