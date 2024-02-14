@@ -182,7 +182,8 @@ CREATE TABLE IF NOT EXISTS `users` (
   `reg_time` datetime DEFAULT NULL,
   `nick` varchar(20) NOT NULL DEFAULT '',
   `school` varchar(20) NOT NULL DEFAULT '',
-  activecode varchar(16) not null default '',
+  `group_name` varchar(16) not null default '',
+  `activecode` varchar(16) not null default '',
   PRIMARY KEY (`user_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4;
 

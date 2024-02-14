@@ -7,7 +7,7 @@
 	$MSG_STATUS="สถานะ";
 	$MSG_RANKLIST="จัดอันดับ";
 	$MSG_CONTEST="การแข่งขัน";
-  $MSG_RECENT_CONTEST="Recent";
+        $MSG_RECENT_CONTEST="Recent";
 	$MSG_LOGOUT="ออกจากระบบ";
 	$MSG_LOGIN="เข้าสู่ระบบ";
 	$MSG_LOST_PASSWORD="Lost Password";
@@ -108,6 +108,7 @@
 	$MSG_PASSWORD="รหัสผ่าน";
 	$MSG_REPEAT_PASSWORD="รหัสผ่าน (ซ้ำ)";
 	$MSG_SCHOOL="สถาบัน";
+        $MSG_GROUP_NAME="Group";
 	$MSG_EMAIL="อีเมล์";
 	$MSG_REG_INFO="ข้อมูล";
 	$MSG_VCODE="Verify Code";

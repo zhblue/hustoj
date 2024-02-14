@@ -126,6 +126,7 @@
 	$MSG_PASSWORD="密码";
 	$MSG_REPEAT_PASSWORD="重复密码";
 	$MSG_SCHOOL="学校";
+        $MSG_GROUP_NAME="班级/小组";
 	$MSG_EMAIL="电子邮件";
 	$MSG_REG_INFO="设置注册信息";
 	$MSG_VCODE="验证码";
