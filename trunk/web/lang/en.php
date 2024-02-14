@@ -112,6 +112,7 @@
 	$MSG_PASSWORD="Password";
 	$MSG_REPEAT_PASSWORD="Repeat Password";
 	$MSG_SCHOOL="School";
+        $MSG_GROUP_NAME="Group";
 	$MSG_EMAIL="Email";
 	$MSG_REG_INFO="Register Information";
 	$MSG_VCODE="Verify Code";
