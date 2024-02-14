@@ -119,6 +119,7 @@
  $MSG_PASSWORD ="密碼";
  $MSG_REPEAT_PASSWORD ="重複密碼";
  $MSG_SCHOOL ="學校";
+ $MSG_GROUP_NAME="班級/小組";
  $MSG_EMAIL ="電子郵件";
  $MSG_REG_INFO ="設置註冊信息";
  $MSG_VCODE ="驗證碼";
