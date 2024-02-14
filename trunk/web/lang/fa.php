@@ -106,6 +106,7 @@
 	$MSG_PASSWORD="رمز عبور";
 	$MSG_REPEAT_PASSWORD="تکرار رمز عبور";
 	$MSG_SCHOOL="مدرسه";
+        $MSG_GROUP_NAME="Group";
 	$MSG_EMAIL="ایمیل";
 	$MSG_REG_INFO="اطلاعات عضویت";
 	$MSG_VCODE="کد امنیتی";
