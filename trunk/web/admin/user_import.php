@@ -37,13 +37,18 @@ function import_user($filename) {
                     echo $data[0] . "<br>\n";
                     $user_id = mb_trim($data[0]);
                     $nick = $data[1];
-                    if($gb2312) $nick=iconv("gb2312","utf-8",$nick);
                     $password = pwGen(trim($data[2]));
                     $school = "";
                     $email = "";
+                    $group_name="";
                     if (isset($data[3])) $school = $data[3];
                     if (isset($data[4])) $email = $data[4];
-                    if($gb2312) $school=iconv("gb2312","utf-8",$school);
+                    if (isset($data[5])) $group_name = $data[5];
+                    if($gb2312) {
+                            $nick=iconv("gb2312","utf-8",$nick);
+                            $school=iconv("gb2312","utf-8",$school);
+                            $group_name=iconv("gb2312","utf-8",$group_name);
+                    }
                     if (mb_strlen($nick, 'utf-8') > 20) {
                         $new_len = mb_strlen($nick, 'utf-8');
                         if ($new_len > $max_length) {
@@ -54,8 +59,9 @@ function import_user($filename) {
                     }
 
                     $ip = "127.0.0.1";
-                    $sql = "INSERT INTO `users`(" . "`user_id`,`email`,`ip`,`accesstime`,`password`,`reg_time`,`nick`,`school`)" . "VALUES(?,?,?,NOW(),?,NOW(),?,?)on DUPLICATE KEY UPDATE `email`=?,`ip`=?,`accesstime`=NOW(),`password`=?,`reg_time`=now(),nick=?,`school`=?";
-                    pdo_query($sql, $user_id, $email, $ip, $password, $nick, $school, $email, $ip, $password, $nick, $school);
+                    $sql = "INSERT INTO `users`(" . "`user_id`,`email`,`ip`,`accesstime`,`password`,`reg_time`,`nick`,`school`,`group_name`)" . "VALUES(?,?,?,NOW(),?,NOW(),?,?,?)on DUPLICATE KEY UPDATE `email`=?,`ip`=?,`accesstime`=NOW(),`password`=?,`reg_time`=now(),nick=?,`school`=?,`group_name`=?";
+                    pdo_query($sql, $user_id, $email, $ip, $password, $nick, $school,$group_name, $email, $ip, $password, $nick, $school,$group_name);
+
             }else{
                 echo "<h1>请用下载的模板填写，保存为UTF-8编码。</h1>";
                 break;
