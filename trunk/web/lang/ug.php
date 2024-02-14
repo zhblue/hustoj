@@ -121,6 +121,7 @@ if(date('m')==4&&date('d')==1&&rand(0,100)<10){
 	$MSG_PASSWORD="مەخپى نۇمۇر";
 	$MSG_REPEAT_PASSWORD="مەخپى نۇمۇرنى قايتىلاش";
 	$MSG_SCHOOL="مەكتەپ";
+        $MSG_GROUP_NAME="Group";
 	$MSG_EMAIL="ئېلخەت";
 	$MSG_REG_INFO="رويىخەت ئۇچۇرى";
 	$MSG_VCODE="دەلىللەش كودى ";
