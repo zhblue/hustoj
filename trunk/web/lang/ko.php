@@ -111,6 +111,7 @@
 	$MSG_PASSWORD="비밀번호";
 	$MSG_REPEAT_PASSWORD="비밀번호 확인";
 	$MSG_SCHOOL="소속/학교";
+        $MSG_GROUP_NAME="Group";
 	$MSG_EMAIL="E-mail";
 	$MSG_REG_INFO="등록정보";
 	$MSG_VCODE="확인코드";
