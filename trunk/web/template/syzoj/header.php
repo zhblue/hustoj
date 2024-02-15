@@ -182,7 +182,11 @@ background-size: 100%">
                 <a href="<?php echo $path_fix?>/userinfo.php?user=<?php echo $_SESSION[$OJ_NAME.'_'.'user_id']?>"
                     style="color: inherit; ">
                     <div class="ui simple dropdown item">
-                        <?php echo $_SESSION[$OJ_NAME.'_'.'user_id']; ?>
+                        <?php echo $_SESSION[$OJ_NAME.'_'.'user_id']; 
+                              if(!empty($_SESSION[$OJ_NAME.'_nick'])) echo "(".$_SESSION[$OJ_NAME.'_nick'].")";
+                              if(!empty($_SESSION[$OJ_NAME.'_group_name'])) echo "[".$_SESSION[$OJ_NAME.'_group_name']."]";
+                                      
+                        ?>
                         <i class="dropdown icon"></i>
                         <div class="menu">
                             <a class="item" href="<?php echo $path_fix?>modifypage.php"><i
