@@ -54,9 +54,11 @@ if(!$use_cookie){
 if($login){
 	//提取组名
   	$group_name="";
-        $group_row=pdo_query("select group_name from users where user_id=?",$login);
+        $group_row=pdo_query("select group_name,nick from users where user_id=?",$login);
         if(is_array($group_row)&&count($group_row)==1){
                 $group_name=$group_row[0][0];
+		$_SESSION[ $OJ_NAME . '_nick']=$group_row[0][1];
+		$_SESSION[ $OJ_NAME . '_group_name']=$group_name;
         }
         if($group_name==""){
                 $sql = "SELECT * FROM `privilege` WHERE `user_id`=?";
