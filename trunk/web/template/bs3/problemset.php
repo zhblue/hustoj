@@ -44,7 +44,7 @@ if(!isset($_GET['ajax'])){
 						$start = $page > $section ? $page - $section : 1;
 						$end = $page + $section > $view_total_page ? $view_total_page : $page + $section;
 						for ( $i = $start; $i <= $end; $i++ ) {
-							echo "<li class='" . ( $page == $i ? "active " : "" ) . "page-item'> <a href='problemset.php?page=" . $i . "'>" . $i . "</a></li>";
+							echo "<li class='" . ( $page == $i ? "active " : "" ) . "page-item'> <a href='problemset.php?page=" . $i .htmlentities($postfix,ENT_QUOTES,'UTF-8'). "'>" . $i . "</a></li>";
 						}
 						?>
 						<li class="page-item"><a href="problemset.php?page=<?php echo $view_total_page?>">&gt;&gt;</a>
