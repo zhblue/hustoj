@@ -73,9 +73,8 @@
 		
           <?php if (isset($OJ_TEST_RUN)&&$OJ_TEST_RUN){?>
             <input id="TestRun" class="btn btn-warning btn-sm" type=button value="<?php echo $MSG_TR?>" onclick=do_test_run();>
-            <span class="btn" id=result>状态</span>
           <?php }?>
-
+          <span class="btn" id=result>状态</span>
 	  <?php if($OJ_ACE_EDITOR){
 			if (isset($OJ_TEST_RUN)&&$OJ_TEST_RUN) $height="400px";else $height="550px";
 		?>
