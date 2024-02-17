@@ -392,7 +392,7 @@
         let problem=main.html();   
         
         if (window.screen.width < 500){
-        	main.parent().append("<div id='submitPage' class='container' style='opacity:0.8;z-index:1000;top:49px;'></div>");
+        	main.parent().append("<div id='submitPage' class='container' style='opacity:0.8;z-index:88;top:49px;'></div>");
                 $("#submitPage").html("<iframe id='ansFrame' src='"+submitURL+"&spa' width='100%' height='"+window.screen.height+"px' ></iframe>");
                 window.setTimeout('$("#ansFrame")[0].scrollIntoView()',1000);
 	}else{
