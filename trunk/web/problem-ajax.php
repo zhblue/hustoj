@@ -22,7 +22,6 @@ if (isset($_GET['pid'])){
 }
 	if($OJ_MEMCACHE){
 		$sql="select user_id from privilege where rightstr='p$pid'  LIMIT 1";
-		require("./include/memcache.php");
 		$result = mysql_query_cache($sql);
 		
 	}else{
