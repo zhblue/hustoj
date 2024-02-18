@@ -59,7 +59,7 @@ else if (isset($_GET['cid']) && isset($_GET['pid'])) {
 
 	$result = pdo_query($sql,$cid);
 	$rows_cnt = count($result);
-	if ($rows_cnt==0 && !$OJ_FREE_PRACTICE) {
+	if ($rows_cnt==0 && !$OJ_FREE_PRACTICE && !isset($_SESSION[$OJ_NAME.'_administrator']) && !isset($_SESSION[$OJ_NAME."_c".$cid]) ) {
 		$view_errors = "<title>$MSG_CONTEST</title><h2>No such Contest!</h2>";
 		require("template/".$OJ_TEMPLATE."/error.php");
 		exit(0);
@@ -80,7 +80,7 @@ else if (isset($_GET['cid']) && isset($_GET['pid'])) {
 	$ok_cnt = $rows_cnt==1;              
 	$langmask = $row[0];
 
-	if ($ok_cnt!=1) {
+	if ( !$contest_ok ) {
 		//not started
 		$view_errors = "No such Contest!";
 		require("template/".$OJ_TEMPLATE."/error.php");
