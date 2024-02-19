@@ -57,3 +57,4 @@
 `static $OJ_RANK_LOCK_PERCENT=0;`     |  比赛封榜时间的比率，如 5 小时比赛设为 `0.2` 则最后 1 小时封榜。
 `static $OJ_SHOW_DIFF=false;`         |  显示 `WrongAnswer` 时的对比
 
+![image](https://github.com/zhblue/hustoj/assets/3926566/93f61c7a-8b38-4012-b7e5-3d2ba2e54896)
