@@ -104,7 +104,7 @@ judge_client 1 0 /home/judge/ | grep "final result:4"
 cd /home/judge/src/web
 chmod 755 /home/judge
 
-for page in `w3m -dump http://dl.hustoj.com/test.lst` 
+for page in `cat test.lst` 
 do 
 	if w3m -dump http://127.0.0.1/$page |grep HUSTOJ > /dev/null ; then 
  		echo "OK        $page "  
