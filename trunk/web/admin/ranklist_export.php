@@ -1,11 +1,11 @@
 <?php
         $OJ_CACHE_SHARE=false;
         $cache_time=30;
-        require_once('./include/cache_start.php');
-    	require_once('./include/db_info.inc.php');
-	require_once("./include/my_func.inc.php");
-        require_once('./include/setlang.php');
-        require_once('./include/memcache.php');
+        require_once('../include/cache_start.php');
+    	require_once('../include/db_info.inc.php');
+	require_once("../include/my_func.inc.php");
+        require_once('../include/setlang.php');
+        require_once('../include/memcache.php');
         
         if(!isset($_SESSION[$OJ_NAME.'_'.'administrator'])){
   echo "<a href='../loginpage.php'>Please Login First!</a>";
