@@ -22,7 +22,7 @@
 		if($cols[0]>0) {
 			
 		      $view_errors =  "<h2> $MSG_NOIP_WARNING </h2>";
-		      require("template/".$OJ_TEMPLATE."/error.php");
+		      require("../template/".$OJ_TEMPLATE."/error.php");
 		      exit(0);
 
 		}
@@ -48,7 +48,7 @@
                 $rank = intval ( $_GET ['start'] );
 
                 if(isset($OJ_LANG)){
-                        require_once("./lang/$OJ_LANG.php");
+                        require_once("../lang/$OJ_LANG.php");
                 }
                 $page_size=5000;
                 //$rank = intval ( $_GET ['start'] );
@@ -99,7 +99,7 @@
 				$result = pdo_query($sql,$_GET['prefix']."%");
 			}else{
 				 $view_errors =  "<h2>invalid user name prefix</h2>";
-			         require("template/".$OJ_TEMPLATE."/error.php");
+			         require("../template/".$OJ_TEMPLATE."/error.php");
       				 exit(0);
 			}
 		}else{
@@ -142,7 +142,7 @@
 			  $excel-> exportToExcel($file_name,$exl_title,$exl_value);
                 $sql = "SELECT count(1) as `mycount` FROM `users`";
         //        $result = mysql_query ( $sql );
-          // require("./include/memcache.php");
+          // require("../include/memcache.php");
                 $result = mysql_query_cache($sql);
                  $row=$result[0];
                 $view_total=$row['mycount'];
