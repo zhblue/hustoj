@@ -154,9 +154,11 @@ if(!isset($_GET['spa']))
         if(!isset($OJ_ON_SITE_CONTEST_ID))
         {
         ?>
+        <?php if(isset($OJ_BBS)&&$OJ_BBS) {?>
         <li <?php if($url=="discuss.php") echo " $ACTIVE";?>>
           <a href="<?php echo $path_fix?>bbs.php"><span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span><?php echo $MSG_BBS?></a>
         </li>
+        <?php }?>        
         <li <?php if ($url=="problemset.php") echo " $ACTIVE";?>>
           <a href="<?php echo $path_fix?>problemset.php" ><span class="glyphicon glyphicon-book" aria-hidden="true"></span> <?php echo $MSG_PROBLEMS?></a>
         </li>
