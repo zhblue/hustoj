@@ -302,6 +302,27 @@
  $MSG_LOSTPASSWORD_WILLBENEW = " Если вы заполните его правильно, пройдите следующую проверку, этот код подтверждения автоматически станет вашим новым паролем! ";
  
  
+  //discuss.php
+  $MSG_LAST_REPLY="Last";
+  $MSG_REPLY_COUNTS="Counts";
+  $MSG_REPLY_NUMBER="Number"; 
+  $MSG_QUESTION="Question";
+  $MSG_NO_QUESTIONS="No questions";
+  $MSG_REGISTER_QUESTION="Register";  
+  $MSG_WRITE_QUESTION="Question"; 
+  $MSG_REGISTERED="Registered";
+  $MSG_BLOCKED="Blocked";
+  $MSG_REPLY="Reply"; 
+  $MSG_REGISTER_REPLY="Reply";
+  $MSG_DISABLE="Disable";   
+  $MSG_LOCK="Lock";
+  $MSG_RESUME="Resume";
+  $MSG_DISCUSS_DELETE="Delete"; 
+  $MSG_DISCUSS_NOTICE="Notice";   
+  $MSG_DISCUSS_NOTE="Note"; 
+  $MSG_DISCUSS_NORMAL="Normal";
+
+
  // шаблон/../reinfo.php
  $MSG_A_NOT_ALLOWED_SYSTEM_CALL = " Используйте вызов операционной системы, запрещенный системой, чтобы узнать, есть ли у вас несанкционированный доступ к ресурсам, таким как файлы или процессы. Если вы являетесь системным администратором и подтверждаете, что отправленный ответ правильный и тестовые данные верны, вы можете отправить 'RE' Перейти к онлайн-судье общедоступной учетной записи WeChat, чтобы просмотреть решение. ";
  $MSG_SEGMETATION_FAULT =" Ошибка сегментации, проверка на выход за границы массива, исключение указателя, доступ к области памяти, к которой нельзя обращаться ";

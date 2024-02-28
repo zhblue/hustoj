@@ -1,110 +1,292 @@
+<!-- /web/thread.php -->
+
 <?php
-    	require_once("discuss_func.inc.php");
-	echo "<title>HUST Online Judge WebBoard</title>";
-	$tid=intval($_REQUEST['tid']);
-        if(isset($_GET['cid']))$cid=intval($_GET['cid']);	
-	$sql="SELECT t.`title`, `cid`, `pid`, `status`, `top_level` FROM `topic` t left join contest_problem cp on cp.problem_id=t.pid   WHERE `tid` = ? AND `status` <= 1";
-//	echo $sql;
-	//exit();
-	$result=pdo_query($sql,$tid) ;
-	$rows_cnt = count($result) ;
-	$row= $result[0];
-	if($row['cid']>0) $cid=$row['cid'];
-	if($row['pid']>0 && $row['cid'] >0 ) {
-		$pid=pdo_query("select num from contest_problem where problem_id=? and contest_id=?",$row['pid'],$row['cid'])[0][0];
-		$pid=$PID[$pid];
-	}else{
-		$pid=$row['pid'];
-	}
-	$isadmin = isset($_SESSION[$OJ_NAME.'_'.'administrator']);
+require_once("discuss_func.inc.php");
+
+echo "<title>HUST Online Judge WebBoard</title>";
+
+$tid = intval($_REQUEST['tid']);
+
+if(isset($_GET['cid']))
+  $cid = intval($_GET['cid']);	
+
+$sql = "SELECT t.`title`, `cid`, `pid`, `status`, `top_level` FROM `topic` t LEFT JOIN contest_problem cp on cp.problem_id=t.pid   WHERE `tid`=? AND `status`<=1";
+
+//echo $sql;
+//exit();
+
+$result = pdo_query($sql,$tid) ;
+$rows_cnt = count($result) ;
+$row = $result[0];
+
+if($row['cid']>0)
+  $cid = $row['cid'];
+
+if($row['pid']>0 && $row['cid']>0)
+{
+  $pid = pdo_query("SELECT num FROM contest_problem WHERE problem_id=? AND contest_id=?",$row['pid'],$row['cid'])[0][0];
+  $pid = $PID[$pid];
+}
+else
+{
+  $pid = $row['pid'];
+}
+
+$problemid = $row['pid'];
+$titles = $row['title'];
+$toplevels = $row['top_level'];
+
+$isadmin = isset($_SESSION[$OJ_NAME.'_'.'administrator']);
 ?>
 
 <center>
-<div style="width:90%; margin:0 auto; text-align:left;"> 
-<div style="text-align:left;font-size:80%;float:left;">[ <a href="newpost.php<?php if ($cid) echo "?cid=$cid&pid=".$row['pid']; ?>">New Thread</a> ]</div>
-<?php if ($isadmin){
-	?><div style="font-size:80%; float:right"> Change sticky level to<?php $adminurl = "threadadmin.php?target=thread&tid={$tid}&action=";
-	if ($row['top_level'] == 0) echo "[ <a href=\"{$adminurl}sticky&level=3\">Level Top</a> ] [ <a href=\"{$adminurl}sticky&level=2\">Level Mid</a> ] [ <a href=\"{$adminurl}sticky&level=1\">Level Low</a> ]"; else echo "[ <a href=\"{$adminurl}sticky&level=0\">Standard</a> ]";
-	?> | <?php if ($row['status'] != 1) echo (" [ <a  href=\"{$adminurl}lock\">Lock</a> ]"); else echo(" [ <a href=\"{$adminurl}resume\">Resume</a> ]");
-	?> | <?php echo (" [ <a href=\"{$adminurl}delete\">Delete</a> ]");
-	?></div><?php }
-?>
-<table style="width:100%; clear:both">
-<tr align=center class='ui top'>
-	<td style="text-align:left">
-	<a href="discuss.php<?php if ($row['pid']!=0 && $row['cid']!=null) echo "?pid=".$row['pid']."&cid=".$row['cid'];
-	else if ($row['pid']!=0) echo"?pid=".$row['pid']; else if ($row['cid']!=null) echo"?cid=".$row['cid'];?>">
-	<?php if ($row['pid']!=0) echo "Problem $pid"; else echo "MainBoard";?></a> >> <?php echo nl2br(htmlentities($row['title'],ENT_QUOTES,"UTF-8"));?></td>
-</tr>
+<table style='width:80%;' table class='table table-hover'>
+  <thead>
+    <tr class='toprow' align='center'>
+      <td width='5%' class='center'>
+        <?php echo "$MSG_REPLY_NUMBER"?>
+      </td>
+      <td width='15%' class='center'>
+        <?php echo "$MSG_USER"?>
+      </td>          
+      <td width='65%' class='center'>
+        <?php echo "$MSG_QUESTION"?>
+      </td>
+      <td width='15%' class='center'>
+        <?php echo "$MSG_REGISTERED"?>
+      </td>
+    </tr>
+  </thead>
 
-<?php
-	$sql="SELECT `rid`, `author_id`, `time`, `content`, `status` FROM `reply` WHERE `topic_id` = ? AND `status` <=1 ORDER BY `rid` LIMIT 30";
-	$result=pdo_query($sql,$tid) ;
-	$rows_cnt = count($result);
-	$cnt=0;
-$i=0;
-	foreach ($result as $row){
-		$url = "threadadmin.php?target=reply&rid=".$row['rid']."&tid={$tid}&action=";
-		if(isset($_SESSION[$OJ_NAME.'_'.'user_id'])) $isuser = strtolower($row['author_id'])==strtolower($_SESSION[$OJ_NAME.'_'.'user_id']);
-		else $isuser=false;
-?>
-<tr align=center class='<?php echo ($cnt=!$cnt)?'even':'odd';?>row'>
-	<td>
-		
-     <div style="display:inline;text-align:left; float:left; margin:0 10px"><a href="../userinfo.php?user=<?php echo $row['author_id']?>"><?php echo $row['author_id']; ?> </a> @ <?php echo $row['time']; ?></div>
-		<div class="mon" style="display:inline;text-align:right; float:right">
-			<?php if (isset($_SESSION[$OJ_NAME.'_'.'administrator'])) {?>  
-			<span>[ <a href="
-				<?php if ($row['status']==0) echo $url."disable\">Disable";
-				else echo $url."resume\">Resume";
-				?> </a> ]</span>
-			<span>[ <a onclick="reply(<?php echo $row['rid'];?>);">Reply</a> ]</span> 
-			<?php } ?>
-			<span>[ <a href="#">Quote</a> ]</span>
-			<span>[ <a href="#">Edit</a> ]</span>
-			<span>[ <a 
-			<?php if ($isuser || $isadmin) echo "href=".$url."delete";
-			?>
-			>Delete</a> ]</span>
-			<span style="width:5em;text-align:right;display:inline-block;font-weight:bold;margin:0 10px">
-			<?php echo $i+1;?>#</span>
-		</div>
-		<div id="post<?php echo $row['rid'];?>" class=content style="text-align:left; clear:both; margin:10px 30px">
-			<?php	if ($row['status'] == 0) echo nl2br(htmlentities($row['content'],ENT_QUOTES,"UTF-8"));
-					else {
-						if (!$isuser || $isadmin)echo "<div style=\"border-left:10px solid gray\"><font color=red><i>Notice : <br>This reply is blocked by administrator.</i></font></div>";
-						if ($isuser || $isadmin) echo nl2br(htmlentities($row['content'],ENT_QUOTES,"UTF-8"));
-					}
-			?>
-		</div>
-		<div style="text-align:left; clear:both; margin:10px 30px; font-weight:bold; color:red"></div>
-	</td>
-</tr>
-<?php
-$i++;
-	}
-?>
+  <tbody>
+    <?php
+    $sql = "SELECT `rid`, `author_id`, `time`, `content`, `status` FROM `reply` WHERE `topic_id`=? AND `status`<=1 ORDER BY `rid` LIMIT 30";
+
+    $result = pdo_query($sql,$tid);
+    $rows_cnt = count($result);
+
+    $cnt = 0;
+    $i = 0;
+
+    foreach($result as $row)
+    {
+      $url = "threadadmin.php?target=reply&rid=".$row['rid']."&tid={$tid}&action=";
+      
+      if(isset($_SESSION[$OJ_NAME.'_'.'user_id']))
+        $isuser = strtolower($row['author_id'])==strtolower($_SESSION[$OJ_NAME.'_'.'user_id']);
+      else
+        $isuser = false;
+    ?>
+
+    <tr <?php if($i==0) echo "class='bg-success'";?>>
+      <td width='5%'>
+  	     <span style="width:5em;text-align:center;display:inline-block;margin:0 10px">#<?php echo $i+1;?></span>
+      </td>
+      <td width='15%' class='center'>
+        <?php
+        if($row['author_id']=="admin")
+        {
+    	    echo "admin";
+        }
+        else
+        {
+    	    echo "<a href='../userinfo.php?user={$row['author_id']}'>{$row['author_id']}</a>";
+        }
+        ?>
+      </td>
+      <td>
+  	     <?php if($i==0) echo "$MSG_PROBLEM_ID : ".(($problemid==0)?"----":("<a href=\"problem.php?id=$problemid\">"."$problemid</a>"))."<br>";?>
+  	     <?php if($i==0) echo "$MSG_QUESTION : ".$titles."<br><br>";?>
+
+        <div id="post<?php echo $row['rid'];?>" class=content style="text-align:left; clear:both;">
+          <?php
+          if($row['status']==0)
+          {
+            echo nl2br(htmlentities($row['content'],ENT_QUOTES,"UTF-8"));
+          }
+          else
+          {
+            if(!$isuser || $isadmin)
+            {
+              echo "<div style=\"border-left:10px solid gray\"><font color=gray><i>".$MSG_BLOCKED."</i></font></div>";
+            }
+            if($isuser || $isadmin)
+            {
+              echo nl2br(htmlentities($row['content'],ENT_QUOTES,"UTF-8"));
+            }
+          }
+          ?>
+        </div>
+
+        <div class="mon" style="display:inline;text-align:right;float:left;font-size:80%;">
+          <?php
+          if(isset($_SESSION[$OJ_NAME.'_'.'user_id']))
+          {
+            //echo "<span>[ <a href=\"#\">Like</a> ]</span>";
+            echo "<span>[ <a onclick=\"reply(".$row['rid'].")\">".$MSG_REPLY."</a> ]</span>";
+          }
+
+          if($isuser || $isadmin)
+          {
+            //echo "<span>[ <a href=\"#\">Edit</a> ]</span>";
+          }
+
+          if(isset($_SESSION[$OJ_NAME.'_'.'administrator']) && $i!=0)
+          {
+            if($row['status']==0)
+            {
+              echo "<span>[ <a href=\"".$url."disable\">".$MSG_DISABLE."</a> ]</span>";
+            }
+            else
+            {
+              echo "<span>[ <a href=\"".$url."resume\">".$MSG_RESUME."</a> ]</span>";
+            }
+          }
+
+          if(($isuser || $isadmin) && $i!=0)
+          {
+            echo "<span>[ <a href=\"".$url."delete\">".$MSG_DISCUSS_DELETE."</a> ]</span> ";
+          }
+          ?>
+        </div>
+      </td>
+
+      <td style='text-align:center;'>
+      <?php
+      $timestamp = strtotime($row['time']);
+      $oldstamp = strtotime("-1 days");
+    
+      if($oldstamp >= $timestamp)
+      {
+        $dateouts = $row['time'];
+        echo "<div>{$dateouts}</div>";
+      }
+      else
+      {
+        $dateouts = "new!!";
+        echo "<div style='color:red;'>{$dateouts}</div>";
+      }
+
+      echo "<div style='font-size:80%;'>";
+      if($i==0)
+      {
+        $adminurl = "threadadmin.php?target=thread&tid={$tid}&action=";
+
+        if($isadmin)
+        {
+           if($toplevels==0 || $toplevels==1)
+           {
+             echo "[ <a href=\"{$adminurl}sticky&level=3\">".$MSG_DISCUSS_NOTICE."</a> ]";
+             echo "[ <a href=\"{$adminurl}sticky&level=2\">".$MSG_DISCUSS_NOTE."</a> ]";
+             echo "[ ".$MSG_DISCUSS_NORMAL." ]";
+           }
+           else if($toplevels==2)
+           {
+             echo "[ <a href=\"{$adminurl}sticky&level=3\">".$MSG_DISCUSS_NOTICE."</a> ]";
+             echo "[ ".$MSG_DISCUSS_NOTE." ]";
+             echo "[ <a href=\"{$adminurl}sticky&level=1\">".$MSG_DISCUSS_NORMAL."</a> ]";
+           }
+           else if($toplevels==3)
+           {
+             echo "[ ".$MSG_DISCUSS_NOTICE." ]";
+             echo "[ <a href=\"{$adminurl}sticky&level=2\">".$MSG_DISCUSS_NOTE."</a> ]";
+             echo "[ <a href=\"{$adminurl}sticky&level=1\">".$MSG_DISCUSS_NORMAL."</a> ]";            	
+           }
+           echo "[ <a href=\"{$adminurl}delete\">".$MSG_DISCUSS_DELETE."</a> ]";		      
+        
+  	        //if($row['status']!=1)
+          //  echo " [ <a  href=\"{$adminurl}lock\">".$MSG_LOCK."</a> ]";
+          //else
+          //  echo " [ <a href=\"{$adminurl}resume\">".$MSG_RESUME."</a> ]";
+        }
+        else if($isuser)
+        {
+          echo " [ <a href=\"{$adminurl}delete\">".$MSG_DISCUSS_DELETE."</a> ]";
+        }
+      }
+      echo "</div>";
+      ?>
+      </td>
+    </tr>
+    
+  <?php
+    $i++;
+  }
+  ?>
+
+    <?php if(isset($_SESSION[$OJ_NAME.'_'.'user_id'])) {?>
+    <tr>
+      <td width='5%' class='center'>
+        #?
+      </td>
+      <td width='15%' class='center'>
+      <?php
+        echo "<a href='../userinfo.php?user={$_SESSION[$OJ_NAME.'_'.'user_id']}'>{$_SESSION[$OJ_NAME.'_'.'user_id']}</a>";
+      ?>
+      </td>
+
+      <td colspan=2>    
+      <!--
+        <div style="font-size:80%;">
+        <div style="margin:0 10px">댓글 쓰기:</div>
+        </div>
+      -->    
+        <form action="post.php?action=reply" method="post">
+        	<table width='80%'>
+        	  <tr>
+        	    <td>
+          	   <input type="hidden" name="tid" value="<?php echo $tid;?>">
+               <textarea id="replyContent" name=content style="border:1px dashed #8080FF; width:100%; height:200px; font-size:100%;"></textarea>
+               <div style="float:right;font-size:80%">
+                 <?php if($OJ_VCODE){?>
+                   <?php echo $MSG_VCODE?>:<input name="vcode" size=4 type="text">
+                   <img id="vcode-img" alt="click to change" onclick="this.src='vcode.php?'+Math.random()">*
+                 <?php }?>
+                 <input type="submit" style="margin:5px 10px" value="<?php echo $MSG_REGISTER_REPLY?>"></input>
+               </div>
+        	    </td>
+        	  </tr>
+        	</table>
+        </form>
+      </td>
+    </tr>
+    <?php }?>
+  </tbody>
 </table>
-<div style="font-size:90%; width:100%; text-align:center">[<a href="#">Top</a>]  [<a href="#">Previous Page</a>]  [<a href="#">Next Page</a>] </div>
-<?php if (isset($_SESSION[$OJ_NAME.'_'.'user_id'])){?>
-<div style="font-size:80%;"><div style="margin:0 10px">New Reply:</div></div>
-<form action="post.php?action=reply" method="post">
-<input type="hidden" name="tid" value="<?php echo $tid;?>" >
-<div><textarea id="replyContent" name=content style="border:1px dashed #8080FF; width:700px; height:200px; font-size:75%;margin:0 10px; padding:10px"></textarea></div>
-<div><input type="submit" style="margin:5px 10px" value="Submit"></input></div>
-</form>
-<?php }
-?>
-
+<hr>
+<table width='80%'>
+  <tr align='right'>
+    <td>
+      <form class=form-inline action=newpost.php<?php if ($pid!=0 && $cid!=null) echo "?pid=".$pid."&cid=".$cid; else if ($pid!=0) echo "?pid=".$pid; else if ($cid!=0) echo "?cid=".$cid;?>>
+        <button class="form-control" type='submit'><?php echo "$MSG_REGISTER_QUESTION";?></button>
+      </form>
+    </td>
+  </tr>
+</table>
 </center>
-</div>
+
+
+<script src="<?php echo $OJ_CDN_URL.$path_fix."include/"?>jquery-latest.js"></script>
+
 <script>
-function reply(rid){
-   var origin=$("#post"+rid).text();
-   console.log(origin);
-   origin="Reply to :"+origin+"\n----------------------\n";
-   $("#replyContent").text(origin);
-   $("#replyContent").focus();
+<?php if ($OJ_VCODE) { ?>
+  $(document).ready(function () {
+    $("#vcode-img").attr("src", "vcode.php?" + Math.random());
+  })
+<?php } ?>
+
+function trim() {
+    return this.replace(/^\s+|\s+$/g,"");
+}
+
+function reply(rid)
+{
+  var origin = $("#post"+rid).text();
+  //console.log(origin);
+  origin = origin.trim();
+  origin = origin+"\n----------------------\n";
+  $("#replyContent").text(origin);
+  $("#replyContent").focus();
 }
 </script>
 

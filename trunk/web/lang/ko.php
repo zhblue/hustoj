@@ -289,6 +289,27 @@
 	$MSG_LOSTPASSWORD_WILLBENEW=" 입력된 코드가 정확하면 입력된 코드가 새로운 비밀번호로 저장됩니다.";
 
 
+  //discuss.php
+	$MSG_LAST_REPLY="최근답변";
+	$MSG_REPLY_COUNTS="답변개수";
+	$MSG_REPLY_NUMBER="순번";	
+	$MSG_QUESTION="질문내용";
+	$MSG_NO_QUESTIONS="묻고 답하기 없음";
+	$MSG_REGISTER_QUESTION="질문등록";	
+	$MSG_WRITE_QUESTION="질문작성";	
+	$MSG_REGISTERED="등록시간";
+	$MSG_BLOCKED="차단됨";
+	$MSG_REPLY="답글쓰기";	
+	$MSG_REGISTER_REPLY="답글등록";
+	$MSG_DISABLE="숨김";		
+  $MSG_LOCK="숨김";
+	$MSG_RESUME="보여줌";
+	$MSG_DISCUSS_DELETE="삭제";	
+	$MSG_DISCUSS_NOTICE="공지";		
+	$MSG_DISCUSS_NOTE="참고";	
+	$MSG_DISCUSS_NORMAL="일반";
+
+
 	// template/../reinfo.php
 	$MSG_A_NOT_ALLOWED_SYSTEM_CALL="허용되지 않은 시스템 기능을 호출하였습니다. 권한이 없는 파일이나 프로세스에 접근하려고 했는지 확인해보세요. 제출한 채점 코드나 채점 데이터에 문제가 없는데도 이 메시지가 보이는 경우에는 HUSTOJ 사이트 관리자에게 확인을 받고, 이 메시지가 발생하지 않도록 수정할 수 있습니다.";
 	$MSG_SEGMETATION_FAULT="배열 크기를 벗어난 위치에 접근했거나, 포인터를 잘 못 사용하였거나, 접근이 제한된 메모리 영역에 접근했습니다.";

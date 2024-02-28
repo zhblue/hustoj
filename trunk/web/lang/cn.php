@@ -308,6 +308,27 @@
   $MSG_LOSTPASSWORD_WILLBENEW="如果填写正确，通过下一步验证，这个验证码就自动成为您的新密码！";
 
   
+  //discuss.php
+  $MSG_LAST_REPLY="Last";
+  $MSG_REPLY_COUNTS="Counts";
+  $MSG_REPLY_NUMBER="Number"; 
+  $MSG_QUESTION="Question";
+  $MSG_NO_QUESTIONS="No questions";
+  $MSG_REGISTER_QUESTION="Register";  
+  $MSG_WRITE_QUESTION="Question"; 
+  $MSG_REGISTERED="Registered";
+  $MSG_BLOCKED="Blocked";
+  $MSG_REPLY="Reply"; 
+  $MSG_REGISTER_REPLY="Reply";
+  $MSG_DISABLE="Disable";   
+  $MSG_LOCK="Lock";
+  $MSG_RESUME="Resume";
+  $MSG_DISCUSS_DELETE="Delete"; 
+  $MSG_DISCUSS_NOTICE="Notice";   
+  $MSG_DISCUSS_NOTE="Note"; 
+  $MSG_DISCUSS_NORMAL="Normal";
+
+
   // template/../reinfo.php
   $MSG_A_NOT_ALLOWED_SYSTEM_CALL="使用了系统禁止的操作系统调用，看看是否越权访问了文件或进程等资源,如果你是系统管理员，而且确认提交的答案没有问题，测试数据没有问题，可以发送'RE'到微信公众号onlinejudge，查看解决方案。";
   $MSG_SEGMETATION_FAULT="段错误，检查是否有数组越界，指针异常，访问到不应该访问的内存区域，或者全局数组申请过大空间(每个long long占用8字节)。";

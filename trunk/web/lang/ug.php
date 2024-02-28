@@ -299,6 +299,27 @@ if(date('m')==4&&date('d')==1&&rand(0,100)<10){
   $MSG_LOSTPASSWORD_WILLBENEW=" ئەگەر توغرا بولسا ،كىيىنكى قەدەمدە مۇقۇملاش ئارقىلىق دەلىللەش كودى سىزنىڭ يېڭى مەخپى شىفىرىڭىزگە ئايلىنىدۇ";
 
 
+  //discuss.php
+	$MSG_LAST_REPLY="Last";
+	$MSG_REPLY_COUNTS="Counts";
+	$MSG_REPLY_NUMBER="Number";	
+	$MSG_QUESTION="Question";
+	$MSG_NO_QUESTIONS="No questions";
+	$MSG_REGISTER_QUESTION="Register";	
+	$MSG_WRITE_QUESTION="Question";	
+	$MSG_REGISTERED="Registered";
+	$MSG_BLOCKED="Blocked";
+	$MSG_REPLY="Reply";	
+	$MSG_REGISTER_REPLY="Reply";
+	$MSG_DISABLE="Disable";		
+  $MSG_LOCK="Lock";
+	$MSG_RESUME="Resume";
+	$MSG_DISCUSS_DELETE="Delete";	
+	$MSG_DISCUSS_NOTICE="Notice";		
+	$MSG_DISCUSS_NOTE="Note";	
+	$MSG_DISCUSS_NORMAL="Normal";
+
+
   // template/../reinfo.php
   $MSG_A_NOT_ALLOWED_SYSTEM_CALL="سىستېما چەكلىگەن مەشغۇلات سىستېمىسىنى يۆتكەپ ئىشلىتىپ، ھوقۇق دائىرىسىدىن ھالقىپ ھۆججەت ياكى جەريان قاتارلىق بايلىقلارنى زىيارەت قىلغان-قىلمىغانلىقىغا قاراپ بېقىڭ، ئەگەر سىز سىستېما باشقۇرغۇچى بولسىڭىز ھەمدە تاپشۇرغان جاۋابتا مەسىلە يوق، سىناق سانلىق مەلۇماتىدا مەسىلە يوق دەپ جەزىملەشتۈرسىڭىز، RE نى ئۈندىدار كۆپچىلىك نومۇرى onlinejudge غا يوللاپ، ھەل قىلىش لايىھەسىنى كۆرۈپ باقسىڭىز بولىدۇ. ";
   $MSG_SEGMETATION_FAULT="بۆلەك خاتالىقى، سانلار گۇرۇپپىسى پاسىلىدىن ھالقىپ كەتكەن، ئىسترېلكىسى بىنورمال، زىيارەت قىلىشقا تېگىشلىك بولمىغان ئىچكى ساقلىغۇچ رايونىنى زىيارەت قىلغان-قىلمىغانلىقىنى تەكشۈرۈش ";
