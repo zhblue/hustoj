@@ -309,24 +309,24 @@
 
   
   //discuss.php
-  $MSG_LAST_REPLY="Last";
-  $MSG_REPLY_COUNTS="Counts";
-  $MSG_REPLY_NUMBER="Number"; 
-  $MSG_QUESTION="Question";
-  $MSG_NO_QUESTIONS="No questions";
-  $MSG_REGISTER_QUESTION="Register";  
-  $MSG_WRITE_QUESTION="Question"; 
-  $MSG_REGISTERED="Registered";
-  $MSG_BLOCKED="Blocked";
-  $MSG_REPLY="Reply"; 
-  $MSG_REGISTER_REPLY="Reply";
-  $MSG_DISABLE="Disable";   
-  $MSG_LOCK="Lock";
-  $MSG_RESUME="Resume";
-  $MSG_DISCUSS_DELETE="Delete"; 
-  $MSG_DISCUSS_NOTICE="Notice";   
-  $MSG_DISCUSS_NOTE="Note"; 
-  $MSG_DISCUSS_NORMAL="Normal";
+  $MSG_LAST_REPLY="最新回复";
+  $MSG_REPLY_COUNTS="回复总数";
+  $MSG_REPLY_NUMBER="回复计数"; 
+  $MSG_QUESTION="问题";
+  $MSG_NO_QUESTIONS="没有问题";
+  $MSG_REGISTER_QUESTION="注册问题";  
+  $MSG_WRITE_QUESTION="写问题"; 
+  $MSG_REGISTERED="注册完成";
+  $MSG_BLOCKED="已屏蔽";
+  $MSG_REPLY="回复"; 
+  $MSG_REGISTER_REPLY="注册回复";
+  $MSG_DISABLE="已禁用";   
+  $MSG_LOCK="锁定";
+  $MSG_RESUME="恢复";
+  $MSG_DISCUSS_DELETE="删除"; 
+  $MSG_DISCUSS_NOTICE="提示";   
+  $MSG_DISCUSS_NOTE="笔记"; 
+  $MSG_DISCUSS_NORMAL="普通";
 
 
   // template/../reinfo.php
