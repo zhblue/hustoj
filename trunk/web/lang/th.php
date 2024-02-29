@@ -280,6 +280,27 @@
   $MSG_LOSTPASSWORD_WILLBENEW="if it's correct, it will be the new password";
 
 
+  //discuss.php
+	$MSG_LAST_REPLY="Last";
+	$MSG_REPLY_COUNTS="Counts";
+	$MSG_REPLY_NUMBER="Number";	
+	$MSG_QUESTION="Question";
+	$MSG_NO_QUESTIONS="No questions";
+	$MSG_REGISTER_QUESTION="Register";	
+	$MSG_WRITE_QUESTION="Question";	
+	$MSG_REGISTERED="Registered";
+	$MSG_BLOCKED="Blocked";
+	$MSG_REPLY="Reply";	
+	$MSG_REGISTER_REPLY="Reply";
+	$MSG_DISABLE="Disable";		
+  $MSG_LOCK="Lock";
+	$MSG_RESUME="Resume";
+	$MSG_DISCUSS_DELETE="Delete";	
+	$MSG_DISCUSS_NOTICE="Notice";		
+	$MSG_DISCUSS_NOTE="Note";	
+	$MSG_DISCUSS_NORMAL="Normal";
+
+
   // template/../reinfo.php
   $MSG_A_NOT_ALLOWED_SYSTEM_CALL="Use the operating system calls prohibited by the system to see if you have unauthorized access to resources such as files or processes. If you are a system administrator and confirm that there is no problem with the submitted answer and the test data has no problem, you can send'RE' to the WeChat official account onlinejudge, view the solution.";
   $MSG_SEGMETATION_FAULT="Check whether the array is out of bounds, the pointer is abnormal, and the memory area that should not be accessed is accessed.";
