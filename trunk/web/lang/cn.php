@@ -307,26 +307,27 @@
   $MSG_LOSTPASSWORD_MAILBOX="请到您邮箱的垃圾邮件文件夹寻找验证码，并填写到这里";
   $MSG_LOSTPASSWORD_WILLBENEW="如果填写正确，通过下一步验证，这个验证码就自动成为您的新密码！";
 
-  
+
   //discuss.php
   $MSG_LAST_REPLY="最新回复";
   $MSG_REPLY_COUNTS="回复总数";
-  $MSG_REPLY_NUMBER="回复计数"; 
-  $MSG_QUESTION="问题";
-  $MSG_NO_QUESTIONS="没有问题";
-  $MSG_REGISTER_QUESTION="注册问题";  
-  $MSG_WRITE_QUESTION="写问题"; 
-  $MSG_REGISTERED="注册完成";
+  $MSG_REPLY_NUMBER="回复计数";
+  $MSG_QUESTION="帖子";
+  $MSG_NO_QUESTIONS="没有帖子";
+  $MSG_REGISTER_QUESTION="发布帖子";
+  $MSG_WRITE_QUESTION="发帖";
+  $MSG_REGISTERED="已发布";
   $MSG_BLOCKED="已屏蔽";
-  $MSG_REPLY="回复"; 
-  $MSG_REGISTER_REPLY="注册回复";
-  $MSG_DISABLE="已禁用";   
+  $MSG_REPLY="回复";
+  $MSG_REGISTER_REPLY="发布回复";
+  $MSG_DISABLE="禁用";
   $MSG_LOCK="锁定";
   $MSG_RESUME="恢复";
-  $MSG_DISCUSS_DELETE="删除"; 
-  $MSG_DISCUSS_NOTICE="提示";   
-  $MSG_DISCUSS_NOTE="笔记"; 
+  $MSG_DISCUSS_DELETE="删除";
+  $MSG_DISCUSS_NOTICE="提示";
+  $MSG_DISCUSS_NOTE="笔记";
   $MSG_DISCUSS_NORMAL="普通";
+
 
 
   // template/../reinfo.php
