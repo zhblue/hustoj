@@ -301,26 +301,26 @@
  $MSG_LOSTPASSWORD_WILLBENEW ="如果填寫正確，通過下一步驗證，這個驗證碼就自動成為您的新密碼！ ";
  
 
-//discuss.php
-$MSG_LAST_REPLY="Last";
-$MSG_REPLY_COUNTS="Counts";
-$MSG_REPLY_NUMBER="Number"; 
-$MSG_QUESTION="Question";
-$MSG_NO_QUESTIONS="No questions";
-$MSG_REGISTER_QUESTION="Register";  
-$MSG_WRITE_QUESTION="Question"; 
-$MSG_REGISTERED="Registered";
-$MSG_BLOCKED="Blocked";
-$MSG_REPLY="Reply"; 
-$MSG_REGISTER_REPLY="Reply";
-$MSG_DISABLE="Disable";   
-$MSG_LOCK="Lock";
-$MSG_RESUME="Resume";
-$MSG_DISCUSS_DELETE="Delete"; 
-$MSG_DISCUSS_NOTICE="Notice";   
-$MSG_DISCUSS_NOTE="Note"; 
-$MSG_DISCUSS_NORMAL="Normal";
-  
+  //discuss.php
+  $MSG_LAST_REPLY="最新回復";
+  $MSG_REPLY_COUNTS="回復總數";
+  $MSG_REPLY_NUMBER="回復計數";
+  $MSG_QUESTION="帖子";
+  $MSG_NO_QUESTIONS="沒有帖子";
+  $MSG_REGISTER_QUESTION="發布帖子";
+  $MSG_WRITE_QUESTION="發帖";
+  $MSG_REGISTERED="已發布";
+  $MSG_BLOCKED="已屏蔽";
+  $MSG_REPLY="回復";
+  $MSG_REGISTER_REPLY="發布回復";
+  $MSG_DISABLE="禁用";
+  $MSG_LOCK="鎖定";
+  $MSG_RESUME="恢復";
+  $MSG_DISCUSS_DELETE="刪除";
+  $MSG_DISCUSS_NOTICE="提示";
+  $MSG_DISCUSS_NOTE="筆記";
+  $MSG_DISCUSS_NORMAL="普通";
+
  
  // template/../reinfo.php
  $MSG_A_NOT_ALLOWED_SYSTEM_CALL ="使用了系統禁止的操作系統調用，看看是否越權訪問了档案或進程等資源,如果你是系統管理員，而且確認提交的答案沒有問題，測試數據沒有問題，可以發送'RE'到微信公眾號onlinejudge，查看解決方案。 ";
