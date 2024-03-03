@@ -114,7 +114,7 @@
  $MSG_WEEK =" Рейтинг недели ";
  $MSG_MONTH = " Рейтинг месяца ";
  $MSG_YEAR =" Рейтинг года ";
-
+ $MSG_ABSENT="Absent";
  //registerpage.php
  $MSG_USER_ID =" имя пользователя (идентификатор учащегося) ";
  $MSG_PASSWORD =" пароль ";
