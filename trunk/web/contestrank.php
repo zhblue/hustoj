@@ -244,6 +244,8 @@ for ($i=0; $i<$rows_cnt; $i++) {
 	$first_blood[$row['num']] = $row['user_id'];
 }
 
+$absent=pdo_query("select user_id from privilege where rightstr='c$cid' and user_id not in (select distinct user_id from solution where contest_id=?)",$cid);
+
 /////////////////////////Template
 require("template/".$OJ_TEMPLATE."/contestrank.php");
 /////////////////////////Common foot
