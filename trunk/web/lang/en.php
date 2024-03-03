@@ -106,7 +106,7 @@
 	$MSG_WEEK="Week-Rank";
 	$MSG_MONTH="Month-Rank";
 	$MSG_YEAR="Year-Rank";
-	
+	$MSG_ABSENT="Absent";
 	//registerpage.php
 	$MSG_USER_ID="User ID";
 	$MSG_PASSWORD="Password";
