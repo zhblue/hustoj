@@ -120,7 +120,7 @@
  	$MSG_WEEK="周排行";
 	$MSG_MONTH="月排行";
 	$MSG_YEAR="年排行";
-
+        $MSG_ABSENT="缺席";
 	//registerpage.php
 	$MSG_USER_ID="用户名（学号）";
 	$MSG_PASSWORD="密码";
