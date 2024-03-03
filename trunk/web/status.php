@@ -389,7 +389,11 @@ for ($i=0; $i<$rows_cnt; $i++) {
   }
   $AC_RATE = floatval($row['pass_rate']*100);
   if (isset($OJ_MARK) && $OJ_MARK!="mark") {
-    $mark = "";
+          if($OJ_MARK=="percent"&&$row['result']>4){
+                $mark = $AC_RATE."%";
+          }else{
+                $mark="";
+          }
   }
   else {
     if($AC_RATE > 99||$row['result']==4)      
