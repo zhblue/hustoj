@@ -104,7 +104,7 @@
 	$MSG_WEEK="주간-순위";
 	$MSG_MONTH="월간-순위";
 	$MSG_YEAR="연간-순위";
-
+        $MSG_ABSENT="Absent";
 
 	//registerpage.php
 	$MSG_USER_ID="사용자ID";
