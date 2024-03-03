@@ -102,7 +102,7 @@
 	$MSG_NICK="ชื่อ";
 	$MSG_SOVLED="แก้ได้";
 	$MSG_RATIO="อัตราส่วน";
-	
+	$MSG_ABSENT="Absent";
 	//registerpage.php
 	$MSG_USER_ID="ชื่อผู้ใช้";
 	$MSG_PASSWORD="รหัสผ่าน";
