@@ -100,6 +100,7 @@
 	$MSG_NICK="لقب";
 	$MSG_SOVLED="مسائل حل کرده";
 	$MSG_RATIO="سهم";
+        $MSG_ABSENT="Absent";
 
 	//registerpage.php
 	$MSG_USER_ID="شناسه کاربری";
