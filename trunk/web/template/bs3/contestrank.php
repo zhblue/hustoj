@@ -345,7 +345,24 @@
       </table>
 		</div>
 	</div>
+<?php
+      if(!empty($absent)){
+?>
 
+    <div style="background-color: #fff; height: 18px; margin-top: -18px; "></div>
+    <div class="ui  segment" style="margin-top: 0px; ">
+        <?php echo "$MSG_ABSENT"; ?>
+        <div class="ui list">
+                <?php
+                        foreach($absent as $a){
+                                $uid=htmlentities($a['user_id'],ENT_QUOTES,"UTF-8");
+                                echo "<a href='userinfo.php?user=".$uid."' >$uid</a> &nbsp;";
+                        }
+                ?>
+        </div>
+    </div>
+<?php } ?>
+	      
 	<!-- /container -->
 	<!-- Bootstrap core JavaScript
 	================================================== -->
