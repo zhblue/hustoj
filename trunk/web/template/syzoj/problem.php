@@ -325,6 +325,12 @@ function selectMulti( num, answer){
 		$("div.md").each(function(){
 			$(this).html(marked.parse($(this).html()));
 		});
+	  	// adding note for ```input1  ```output1 in description
+	        for(let i=1;i<10;i++){
+                        $(".language-input"+i).parent().before("<div><?php echo $MSG_Input?>"+i+":</div>");
+                        $(".language-output"+i).parent().before("<div><?php echo $MSG_Output?>"+i+":</div>");
+                }
+
 	       
         $(".md table tr td").css({
             "border": "1px solid grey",
