@@ -114,6 +114,7 @@
  $MSG_WEEK ="週排行";
  $MSG_MONTH ="月排行";
  $MSG_YEAR ="年排行";
+ $MSG_ABSENT="缺席";
  //registerpage.php
  $MSG_USER_ID ="用戶名（學號） ";
  $MSG_PASSWORD ="密碼";
