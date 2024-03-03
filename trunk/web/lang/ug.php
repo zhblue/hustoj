@@ -116,6 +116,7 @@ if(date('m')==4&&date('d')==1&&rand(0,100)<10){
  	$MSG_WEEK="ھەپتىلىك مەرتىۋە";
 	$MSG_MONTH="ئايلىق مەرتىۋە";
 	$MSG_YEAR="يىللىق مەرتىۋە";
+$MSG_ABSENT="Absent";
 	//registerpage.php
 	$MSG_USER_ID="ئابۇنىت نۇمۇرى";
 	$MSG_PASSWORD="مەخپى نۇمۇر";
