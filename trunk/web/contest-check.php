@@ -62,7 +62,7 @@
                 }
         }
 
-        if(str_contains($view_description,"限时")){
+        if(str_contains($view_description,"限时")&&isset($_SESSION[$OJ_NAME."_user_id"])){
                 echo "<!-- 个人限时赛  -->";
                 $contest_limit_minutes=intval(getPartByMark($view_description,"限时","分钟"));  //允许比赛描述中用 "限时xx分钟" 规定个人做题时间。
                 if($contest_limit_minutes==0) $contest_limit_minutes=120;
