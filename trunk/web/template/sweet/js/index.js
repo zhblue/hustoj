@@ -212,7 +212,7 @@ webpackJsonp([0], [function(t, e, n) {
 				h = t.getAttribute("var3"),
 				c = new Date,
 				d = c.getTime(),
-				p = "http://stat.download.xunlei.com:8099/?xlbtid=" + gOption.xlbtid + "&datatype=click&url=" + url_e + "&useragent=" + userAgent_e + "&userid=" + userid + "&cookieid=" + habo_web_uid + "&sessionid=" + habo_web_sessionid + "&appid=" + gOption.appid + "&clickurl=" + n + "&blockid=" + i + "&clickid=" + o + "&r=" + 1e5 * Math.random() + "&time=" + d + "&eventid=" + a + "&var1=" + s + "&var2=" + r + "&var3=" + h,
+				p = "/?xlbtid=" + gOption.xlbtid + "&datatype=click&url=" + url_e + "&useragent=" + userAgent_e + "&userid=" + userid + "&cookieid=" + habo_web_uid + "&sessionid=" + habo_web_sessionid + "&appid=" + gOption.appid + "&clickurl=" + n + "&blockid=" + i + "&clickid=" + o + "&r=" + 1e5 * Math.random() + "&time=" + d + "&eventid=" + a + "&var1=" + s + "&var2=" + r + "&var3=" + h,
 				u = new Image;
 			u.src = p, "_self" == target && setTimeout("jumpurl('" + e + "');", 100)
 		}
@@ -220,9 +220,9 @@ webpackJsonp([0], [function(t, e, n) {
 	var md5 = __webpack_require__(3),
 		hex_md5 = md5.hex_md5,
 		gOption = {
-			appid: "54",
-			domain: "xl9.xunlei.com",
-			xlbtid: "1"
+			appid: "",
+			domain: "",
+			xlbtid: ""
 		},
 		c_getCookie = function(t) {
 			var e = t + "=",
