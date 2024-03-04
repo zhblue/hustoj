@@ -76,6 +76,7 @@ static  $OJ_BENCHMARK_MODE=false; //此选项将影响代码提交，不再有�
 static  $OJ_CONTEST_RANK_FIX_HEADER=false; //比赛排名水平滚动时固定名单
 static  $OJ_NOIP_KEYWORD="noip";  // 标题包含此关键词，激活noip模式，赛中不显示结果，仅保留最后一次提交。
 static  $OJ_NOIP_TISHI=false;  //noip比赛中 设置为ture则在noip比赛中显示题目提示，false不显示提示
+static  $OJ_CONTEST_LIMIT_KEYWORD="限时"; //比赛中个人限时关键词。
 static  $OJ_BEIAN=false;  // 如果有备案号，填写备案号
 static  $OJ_RANK_HIDDEN="'admin','zhblue'";  // 管理员不显示在排名中
 static  $OJ_FRIENDLY_LEVEL=0; //系统友好级别，暂定0-9级，级别越高越傻瓜，系统易用度高的同时将降低安全性，仅供非专业用途，造成泄题、抄袭概不负责。
