@@ -132,57 +132,13 @@ if($OJ_ONLINE){
                 <a href=javascript:;></a>
                 <a href=javascript:;></a>
             </div>
-            <!-- 			<div class=footer>
-                            <div class=foot>
-                                <p>© XXXX-2016 XXXX 版权所有</div>
-                        </div> -->
+        
         </div>
     </div>
 
-<!--<div class="container">-->
-<!--    --><?php //include("template/$OJ_TEMPLATE/nav.php");?>
-<!--    <!-- Main component for a primary marketing message or call to action -->-->
-<!--    <div class="jumbotron">-->
-<!--        <p>-->
-<!--        <center> 最近提交记录 : --><?php //echo $speed?><!-- .-->
-<!--            <div id=submission style="width:80%;height:300px" ></div>-->
-<!--        </center>-->
-<!--        </p>-->
-<!--        --><?php //echo $view_news?>
-<!--    </div>-->
-<!---->
-<!--</div> <!-- /container -->-->
-
-<!--<script src="./js/vendors.js"></script>-->
-<!--<script src="./js/index.js"></script>-->
-
-<!-- Bootstrap core JavaScript
-================================================== -->
-<!-- Placed at the end of the document so the pages load faster -->
 <?php //include("template/$OJ_TEMPLATE/js.php");?>
-<!--<script language="javascript" type="text/javascript" src="--><?php //echo $OJ_CDN_URL?><!--include/jquery.flot.js"></script>-->
-<!--<script type="text/javascript">-->
-<!--    $(function () {-->
-<!--        var d1 = --><?php //echo json_encode($chart_data_all)?>//;
-<!--//        var d2 = --><?php ////echo json_encode($chart_data_ac)?><!--//;-->
-<!--//        $.plot($("#submission"), [-->
-<!--//            {label:"--><?php ////echo $MSG_SUBMIT?><!--//",data:d1,lines: { show: true }},-->
-<!--//            {label:"--><?php ////echo $MSG_AC?><!--//",data:d2,bars:{show:true}} ],{-->
-<!--//            grid: {-->
-<!--//                backgroundColor: { colors: ["#fff", "#eee"] }-->
-<!--//            },-->
-<!--//            xaxis: {-->
-<!--//                mode: "time"//,-->
-<!--////max:(new Date()).getTime(),-->
-<!--////min:(new Date()).getTime()-100*24*3600*1000-->
-<!--//            }-->
-<!--//        });-->
-<!--//    });-->
-<!--//    //alert((new Date()).getTime());-->
-<!--//</script>-->
 </body>
 </html>
 <script src="<?php echo $cur_path?>js/vendors.js"></script>
-
 <script src="<?php echo $cur_path?>js/index.js"></script>
 
