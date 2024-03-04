@@ -136,7 +136,7 @@ webpackJsonp([0], [function(t, e, n) {
 				return e && JSON.parse(e)
 			})
 		}
-		var n = "http://misc.xl9.xunlei.com/res/data/config.json";
+		var n = "{}";
 		t().then(function(t) {
 			// t && t.download_link && e("download_link", t.download_link).then(function(t) {
 			// 	t && t.xl9_download && a(".JS-btn-download").attr("href", 'javascript:;')
@@ -185,11 +185,13 @@ webpackJsonp([0], [function(t, e, n) {
 	}
 
 	function send_web_pv() {
+		/*
 		var t = new Date,
 			e = t.getTime(),
 			n = "http://stat.download.xunlei.com:8099/?xlbtid=" + gOption.xlbtid + "&datatype=pageshow&url=" + url_e + "&ref=" + ref_e + "&useragent=" + userAgent_e + "&userid=" + userid + "&cookieid=" + habo_web_uid + "&sessionid=" + habo_web_sessionid + "&appid=" + gOption.appid + "&r=" + 1e5 * Math.random() + "&time=" + e,
 			i = new Image;
 		i.src = n
+               */
 	}
 
 	function jumpurl(t) {
@@ -266,7 +268,7 @@ webpackJsonp([0], [function(t, e, n) {
 		};
 		kk_click_pv_rebind_capture()
 	} catch(e) {}
-	send_web_pv()
+	//send_web_pv()
 }, function(t, e) {
 	function n(t) {
 		return u(i(p(t), t.length * f))
