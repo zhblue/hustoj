@@ -143,7 +143,7 @@
 ?>
 
     <div style="background-color: #fff; height: 18px; margin-top: -18px; "></div>
-    <div class="ui  segment" style="margin-top: 0px; ">
+    <div class="ui  segment" style="margin: 50px; ">
         <?php echo "$MSG_ABSENT"; ?>
         <div class="ui list">
                 <?php
