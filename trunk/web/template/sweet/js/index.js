@@ -177,7 +177,7 @@ webpackJsonp([0], [function(t, e, n) {
 	}
 
 	function _clickon(t) {
-		send_web_click(t)
+		//send_web_click(t)
 	}
 
 	function kk_click_pv_rebind_capture() {
