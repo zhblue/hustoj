@@ -265,7 +265,24 @@ void init_judge_conf() {
 			fclose(fp);
 	}
 }
+char * follow_link(char * path,char * buffer,int max_size){
+    struct stat info;
+    if (stat(path, &info) == -1) {
+        perror("stat");
+        return path;
+    }
 
+        ssize_t len = readlink(path, buffer, max_size);
+        if (len == -1) {
+            perror("readlink");
+            printf("Path is not a soft link !\n");
+            return path;
+        }
+        buffer[len] = '\0';
+        printf("Path is a soft link to: %s\n", buffer);
+    return buffer;
+
+}
 void run_client(int runid, int clientid) {
 	char buf[BUFFER_SIZE], runidstr[BUFFER_SIZE];
 	struct rlimit LIM;
@@ -315,13 +332,28 @@ void run_client(int runid, int clientid) {
 	//if (!DEBUG)
 	if(use_docker){
 		char docker_v[BUFFER_SIZE*3];
+		char data_v[BUFFER_SIZE*3];
+		char client_path[BUFFER_SIZE];
+		char data_path[BUFFER_SIZE*2];
+		char real_data_path[BUFFER_SIZE*2];
 		sprintf(docker_v,"%s:/home/judge",oj_home);
 		if(internal_client)
-			execl(docker_path,docker_path, "container","run" ,"--pids-limit", "100","--rm","--cap-add","SYS_PTRACE", "--net=host",
-				       	"-v", docker_v, "hustoj", "/usr/bin/judge_client", runidstr, buf, (char *) NULL);
+				sprintf(client_path,"/usr/bin/judge_client");
 		else
-			execl(docker_path,docker_path, "container","run" ,"--pids-limit", "100","--rm","--cap-add","SYS_PTRACE", "--net=host", 
-					"-v", docker_v, "hustoj", "/home/judge/src/core/judge_client/judge_client", runidstr, buf, (char *) NULL);
+				sprintf(client_path,"/home/judge/src/core/judge_client/judge_client");
+		sprintf(data_path,"%s/data",oj_home);
+		char *follow=follow_link(data_path,real_data_path,sizeof(real_data_path)-1);
+
+		sprintf(data_v,"%s:/home/judge/data",follow);
+		if(follow!=data_path) {
+				printf("data volume param :%s \n",data_v);
+				execl(docker_path,docker_path, "container","run" ,"--pids-limit", "100","--rm","--cap-add","SYS_PTRACE", "--net=host",
+								"-v", docker_v,"-v",data_v, "hustoj", client_path, runidstr, buf, (char *) NULL);
+		}else{
+				execl(docker_path,docker_path, "container","run" ,"--pids-limit", "100","--rm","--cap-add","SYS_PTRACE", "--net=host",
+								"-v", docker_v, "hustoj", client_path, runidstr, buf, (char *) NULL);
+		}
+
 	}else{
 		execl("/usr/bin/judge_client", "/usr/bin/judge_client", runidstr, buf,
 				oj_home, (char *) NULL);
