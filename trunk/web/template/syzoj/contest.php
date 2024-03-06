@@ -156,7 +156,7 @@ clock();
     function count_down(){
         time_left--;
         if(time_left>0){
-                let notice="<?php echo $MSG_LeftTime ?>"+":"+(time_left/60).toFixed()+
+                let notice="<?php echo $MSG_LeftTime ?>"+":"+Math.floor(time_left/60))+
                             "<?php echo $MSG_MINUTES ?>"+(time_left % 60)+
                             "<?php echo $MSG_SECONDS ?>";
             $("#time_left").html(notice);
