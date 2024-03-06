@@ -17,14 +17,11 @@ $menu = $showInMenu == "on" ? 1 : 0;
 
 $user_id = $_SESSION[$OJ_NAME.'_'.'user_id'];
 
-if(false){
-  $title = stripslashes($title);
-  $content = stripslashes($content);
-}
+
 
 $content = str_replace("<p>", "", $content);
 $content = str_replace("</p>", "<br />", $content);
-$content = str_replace(",", "&#44;", $content);
+//$content = str_replace(",", "&#44;", $content);
 
 
 
