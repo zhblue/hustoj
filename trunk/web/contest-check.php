@@ -97,7 +97,7 @@
                         }else{
                                 $time_left=$contest_limit_minutes*60-($unixnow-$first_login_contest);
                                 if($time_left>0)
-                                $view_description.="<br>$MSG_LeftTime :". intval($time_left/60)." $MSG_MINUTES" .($time_left % 60). $MSG_SECONDS;
+                                 $view_description.="<br><span id='time_left'>$MSG_LeftTime :". intval($time_left/60)." $MSG_MINUTES" .($time_left % 60). $MSG_SECONDS."<span>";
                         }
 
                 }
