@@ -26,15 +26,10 @@ if(isset($_POST['news_id'])){
 
   $content = str_replace("<p>", "", $content);
   $content = str_replace("</p>", "<br />", $content);
-  $content = str_replace(",", "&#44;", $content);
+//  $content = str_replace(",", "&#44;", $content);
 
   $user_id = $_SESSION[$OJ_NAME.'_'.'user_id'];
   $news_id = intval($_POST['news_id']);
-
-  if(false){
-    $title = stripslashes($title);
-    $content = stripslashes($content);
-  }
 
   $sql = "UPDATE `news` SET `title`=?,`time`=now(),`content`=?,user_id=?,`menu`=? WHERE `news_id`=?";
   //echo $sql;
