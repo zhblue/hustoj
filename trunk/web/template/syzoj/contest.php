@@ -150,6 +150,21 @@ function clock() {
     setTimeout("clock()", 1000);
 }
 clock();
+    // show count down if $OJ_CONTEST_LIMIT_KEYWORD triggered 
+<?php if(isset($time_left)){    ?>
+    var time_left=<?php echo $time_left ;?> ;
+    function count_down(){
+        time_left--;
+        if(time_left>0){
+                let notice="<?php echo $MSG_LeftTime ?>"+":"+(time_left/60).toFixed()+
+                            "<?php echo $MSG_MINUTES ?>"+(time_left % 60)+
+                            "<?php echo $MSG_SECONDS ?>";
+            $("#time_left").html(notice);
+        }
+    }
+    setInterval("count_down()", 1000);
+<?php }?>
+
 </script>
 
 <?php include("template/$OJ_TEMPLATE/footer.php");?>
