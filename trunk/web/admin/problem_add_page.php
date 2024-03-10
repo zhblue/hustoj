@@ -72,7 +72,7 @@
           <?php echo "(".$MSG_HELP_SPJ.")"?><br>
 	  <input type=radio name=spj value='0' checked ><?php echo $MSG_NJ?><br> 
 	  <input type=radio name=spj value='1' ><?php echo $MSG_SPJ?><br>
-	  <input type=radio name=spj value='2' ><?php echo $MSG_RTJ?><br>
+	  <input type=radio name=spj value='2' ><?php echo $MSG_RTJ?>(用于选择判断填空题，用法见<a target='_blank' href='http://hustoj.com'>hustoj.com</a>)<br>
         </p>
         <p align=left>
           <?php echo "<h4>".$MSG_SOURCE."</h4>"?>
