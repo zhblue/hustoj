@@ -69,9 +69,8 @@
         </p>
         <p>
           <?php echo "<h4>".$MSG_SPJ."</h4>"?>
-          <?php echo "(".$MSG_HELP_SPJ.")"?><br>
-	  <input type=radio name=spj value='0' checked ><?php echo $MSG_NJ?><br> 
-	  <input type=radio name=spj value='1' ><?php echo $MSG_SPJ?><br>
+	  <input type=radio name=spj value='0' checked ><?php echo $MSG_NJ?> 更多测试数据，在题目添加后补充。<br> 
+	  <input type=radio name=spj value='1' ><?php echo $MSG_SPJ?> <?php echo "(".$MSG_HELP_SPJ.")"?><br>
 	  <input type=radio name=spj value='2' ><?php echo $MSG_RTJ?>(用于选择判断填空题，用法见<a target='_blank' href='http://hustoj.com'>hustoj.com</a>)<br>
         </p>
         <p align=left>
