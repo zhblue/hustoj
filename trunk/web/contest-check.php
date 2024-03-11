@@ -61,7 +61,7 @@
                         exit(0);
                 }
         }
-
+        if(!isset($OJ_CONTEST_LIMIT_KEYWORD)) $OJ_CONTEST_LIMIT_KEYWORD="限时";
         if(str_contains($view_description,$OJ_CONTEST_LIMIT_KEYWORD)&&isset($_SESSION[$OJ_NAME."_user_id"])){
                 echo "<!-- 个人限时赛  -->";
                 $contest_limit_minutes=intval(getPartByMark($view_description,$OJ_CONTEST_LIMIT_KEYWORD,"分钟"));  //允许比赛描述中用 "限时xx分钟" 规定个人做题时间。
