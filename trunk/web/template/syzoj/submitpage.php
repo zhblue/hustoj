@@ -240,7 +240,7 @@ function do_submit(){
         $("#TestRub").prop('disabled', true);
         count=<?php echo $OJ_SUBMIT_COOLDOWN_TIME?> * 2 ;
         handler_interval= window.setTimeout("resume();",1000);
-	$("#sk").attr("src","remote.php");
+	 <?php if(isset($OJ_REMOTE_JUDGE)&&$OJ_REMOTE_JUDGE) {?>$("#sk").attr("src","remote.php"); <?php } ?>
 <?php }else{?>
         document.getElementById("frmSolution").submit();
 <?php }?>
