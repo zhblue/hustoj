@@ -116,7 +116,7 @@ var i=0;
 var using_blockly=false;
 var judge_result=[<?php
 foreach($judge_result as $result){
-echo "'$result',";
+    echo "'$result',";
 }
 ?>''];
 function print_result(solution_id)
@@ -384,7 +384,7 @@ function loadFromBlockly(){
 	window.setInterval('autoSave();',5000);
 	$("body").dblclick(function(){
                  if (event.ctrlKey==1) formatCode();
-        });
+        }).attr("title","Ctrl+双击鼠标,自动整理缩进");
    });
 </script>
 <script>
@@ -423,6 +423,7 @@ function finishTabifier(code) {
 
 function cleanCStyle(code) {
     var i = 0;
+    code = code.replace(/\)\n[\s]*/g,')\n    '); //single line if while for
     function cleanAsync() {
         var iStart = i;
         for (; i < code.length && i < iStart + LOOP_SIZE; i++) {
