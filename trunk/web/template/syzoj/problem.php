@@ -83,7 +83,9 @@ div[class*=ace_br] {
             }else{
               echo "<a href=\"contest.php?cid=$cid\" class=\"ui orange button\">$MSG_RETURN_CONTEST</a>";
               echo "<a id='submit'  class=\"small ui primary button\" href=\"submitpage.php?cid=$cid&pid=$pid&langmask=$langmask\">$MSG_SUBMIT</a>";
-              echo "<a class=\"small ui positive button\" href=\"status.php?problem_id=$PID[$pid]&cid=$cid\">$MSG_SUBMIT_RECORD</a>";
+              echo "<a class=\"small ui positive button\" href=\"status.php?problem_id=$id\">$MSG_GLOBAL$MSG_SUBMIT_RECORD</a>";
+              echo "<a class=\"small ui orange button\" href=\"status.php?problem_id=$PID[$pid]&cid=$cid\">$MSG_THIS_CONTEST$MSG_SUBMIT_RECORD</a>";
+
             }
 	      echo "<a class='small ui primary button' href='#' onclick='transform()' role='button'>$MSG_SHOW_OFF</a>";
           ?>
