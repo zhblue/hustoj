@@ -172,7 +172,7 @@ class BBCode
         // OPENING TAG
 
         // Big if / elseif ladder to handle each tag
-        if ($name === 'b' || $name === 'u' || $name === 's' || $name === 'sup' || $name === 'sub' ||
+        if ($name === 'b' || $name === 'u' || $name === 'sup' || $name === 'sub' ||
             $name === 'blockquote' ||
             $name === 'ol' || $name === 'ul' ||
             $name === 'table') {
