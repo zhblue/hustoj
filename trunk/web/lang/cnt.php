@@ -425,7 +425,8 @@
  //bbcode.php
  $MSG_TOTAL ="共";
  $MSG_NUMBER_OF_PROBLEMS ="題";
- 
+   $MSG_GLOBAL="全局";
+   $MSG_THIS_CONTEST="本次比賽";
  $MSG_SUBMIT_RECORD ="提交記錄";
  $MSG_RETURN_CONTEST ="返回比賽";
  $MSG_COPY ="複製";
