@@ -412,7 +412,8 @@
 	//bbcode.php
 	$MSG_TOTAL="";
 	$MSG_NUMBER_OF_PROBLEMS="문제";
-
+  $MSG_GLOBAL="Global ";
+  $MSG_THIS_CONTEST="This Contest's ";
 	$MSG_SUBMIT_RECORD="채점기록";
 	$MSG_RETURN_CONTEST="대회로 돌아가기";
 	$MSG_COPY="복사";
