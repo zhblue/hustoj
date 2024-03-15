@@ -425,7 +425,8 @@
  //bbcode.php
  $MSG_TOTAL = " Всего ";
  $MSG_NUMBER_OF_PROBLEMS = " проблема ";
- 
+                                  $MSG_GLOBAL="Global ";
+                                  $MSG_THIS_CONTEST="This Contest's ";
  $MSG_SUBMIT_RECORD = " Отправить запись ";
  $MSG_RETURN_CONTEST = " Вернуться к конкурсу ";
  $MSG_COPY =" копировать ";
