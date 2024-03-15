@@ -402,7 +402,8 @@
 	//bbcode.php
 	$MSG_TOTAL="Total";
 	$MSG_NUMBER_OF_PROBLEMS="Problems";
-
+        $MSG_GLOBAL="Global ";
+        $MSG_THIS_CONTEST="This Contest's ";
 	$MSG_SUBMIT_RECORD="Submit Record";
 	$MSG_RETURN_CONTEST="Return to contest";
 	$MSG_COPY="Copy";
