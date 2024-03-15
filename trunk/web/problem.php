@@ -53,7 +53,7 @@ else if (isset($_GET['cid']) && isset($_GET['pid'])) {
 	$pid = intval($_GET['pid']);
 
 	if (isset($_SESSION[$OJ_NAME.'_'.'administrator']) || isset($_SESSION[$OJ_NAME.'_'.'contest_creator']) || isset($_SESSION[$OJ_NAME.'_'.'problem_editor']))
-		$sql = "SELECT langmask,private,defunct FROM `contest` WHERE `defunct`='N' AND `contest_id`=?";
+		$sql = "SELECT langmask,private,defunct FROM `contest` WHERE `contest_id`=?";
 	else
 		$sql = "SELECT langmask,private,defunct FROM `contest` WHERE `defunct`='N' AND `contest_id`=? AND (`start_time`<='$now' AND ('$now'<`end_time` or private='N') )";
 
