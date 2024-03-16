@@ -22,7 +22,7 @@ if($_SERVER['REQUEST_METHOD']=="POST"){
                 $pid=intval($_POST['pid']);
                 $sql= "select title,source from problem where problem_id=?";
                 $row=mysql_query_cache($sql,$pid)[0];
-                echo $row['title']."&nbsp;&nbsp;[".$row['source']."]";
+                echo $row['title']."&nbsp;&nbsp;<span class='label label-success'>".$row['source']."</span>";
 	}
         if($m=="user_update_nick"){
                 $user_id=$_POST['user_id'];
