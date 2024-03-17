@@ -277,9 +277,9 @@ function resume(){
 	var s=$("#Submit")[0];
 	var t=$("#TestRub")[0];
 	if(count<0){
-		 $("#Submit").attr("disabled","false");
+		 $("#Submit").attr("disabled",false);
 		 $("#Submit").text("<?php echo $MSG_SUBMIT?>");
-		if(t!=null) $("#TestRub").attr("disabled","false");
+		if(t!=null) $("#TestRub").attr("disabled",false);
 		if(t!=null) $("#TestRub").text("<?php echo $MSG_TR?>");
 		if( handler_interval) window.clearInterval( handler_interval);
 		if($("#vcode")!=null) $("#vcode").click();
