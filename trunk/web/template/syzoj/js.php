@@ -34,6 +34,10 @@ $(document).ready(function(){
   let left=window.innerWidth-parseInt($("#menu").css("width")) - 100;
   left/=2;
   $("#menu").attr("style","margin-left:auto;margin-right:auto;");
+  var screen_width = window.screen.width;
+  var screen_height = window.screen.height;
+  if(screen_width < 800) $("#main").attr("class","");
+  if(screen_width < 800) $("#MainBg-C").attr("class","");
 
 
 });
