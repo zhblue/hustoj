@@ -31,8 +31,14 @@ cin.tie(0);</pre>
 <h2 class="ui header">Q: gets函数没有了吗?</h2>
 <p>A: gets函数因为不能限制输入的长度，造成了历史上大量的缓冲区溢出漏洞，因此在最新版本中被彻底删除了，请使用fgets这个函数取代。 或者使用下面的宏定义来取代：
     <div class="ques-view">   #define gets(S) fgets(S,sizeof(S),stdin)  </div>
-    </p>
-        <h2 class="ui header">个人资料<br></h2>
+</p>
+<h2 class="ui header">Q: 为什么我的代码在本地正常，提交以后被判错? </h2>
+<p>A: 不要使用rewind来清空输入缓冲，OJ的输入本质是文件，与键盘输入逻辑不一样。 如果你发现别人可以正确完成问题，那么有可能是你的代码没有考虑到所有的情况。
+    并不是通过样例数据就代表一定是正确答案。如果你发现所有人都不能正确提交该题，那么有可能是测试数据有问题，请向管理员<?php echo $OJ_ADMIN ?>反馈。
+    
+</p>
+        
+<h2 class="ui header">个人资料<br></h2>
         <p>本站不提供头像存储服务，而是使用 QQ 头像显示。请使用QQ邮箱注册 ，系统自动取用您在QQ的头像。</p>
         <h2 class="ui header">返回结果说明<br></h2>
         <div class="ques-view">
