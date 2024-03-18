@@ -439,6 +439,85 @@ function selectMulti( num, answer){
 	  }
 
   </script>
+
+<style>
+   
+   /* 高亮文本的样式 */
+   .highlighted {
+     transition: background-color 0.5s; /* 添加过渡效果 */
+   }
+
+   /* 颜色选择框的样式 */
+   .color-picker {
+     position: absolute; /* 设置绝对定位 */
+     display: none; /* 设置默认不显示 */
+     border: 1px solid black; /* 设置边框 */
+     padding: 5px; /* 设置内边距 */
+     background-color: white; /* 设置背景颜色 */
+   }
+
+   /* 颜色选择框中的颜色按钮的样式 */
+   .color-picker button {
+     width: 20px; /* 设置宽度 */
+     height: 20px; /* 设置高度 */
+     border: none; /* 去掉边框 */
+     margin: 2px; /* 设置外边距 */
+     cursor: pointer; /* 设置鼠标样式为手指 */
+   }
+ </style>
+ 
+
+<script>
+      // 创建一个颜色选择框元素
+   var colorPicker = document.createElement('div');
+   colorPicker.className = 'color-picker'; // 设置类名
+   colorPicker.innerHTML = '<button style="background-color: yellow; border-radius: 50%;"></button><button style="background-color: rgb(255, 79, 79); border-radius: 50%;"></button><button style="background-color: rgb(71, 255, 111); border-radius: 50%;"></button><button style="background-color: rgb(255, 255, 255); border-radius: 50%; border: 1px solid black;"></button>';
+
+   document.body.appendChild(colorPicker); // 将颜色选择框添加到文档中
+
+   // 获取颜色选择框中的所有颜色按钮
+   var colorButtons = colorPicker.getElementsByTagName('button');
+
+  // 给每个颜色按钮添加点击事件
+for (var i = 0; i < colorButtons.length; i++) {
+ colorButtons[i].addEventListener('click', function () {
+   var color = this.style.backgroundColor; // 获取点击的颜色按钮的背景颜色
+   var selection = window.getSelection();
+   if (selection.rangeCount > 0) {
+     var range = selection.getRangeAt(0); // 获取选中的文本范围
+     var selectedText = range.extractContents(); // 提取选中的内容
+
+     // Create a new span element
+     var span = document.createElement('span');
+     span.className = 'highlighted';
+     span.style.backgroundColor = color; // 设置选中文本的背景颜色
+
+     // Wrap the extracted content in a new text node
+     var textNode = document.createTextNode(selectedText.textContent);
+     span.appendChild(textNode); // Append the text node to the span element
+
+     // Insert the modified content back into the range
+     range.insertNode(span);
+
+     window.getSelection().removeAllRanges(); // 清空选中文本
+     colorPicker.style.display = 'none'; // 隐藏颜色选择框
+   }
+ });
+}
+
+   // 给文档添加鼠标抬起事件
+   document.addEventListener('mouseup', function (event) {
+     var selection = window.getSelection().toString().trim();
+     if (selection !== '') {
+       colorPicker.style.display = 'block'; // 显示颜色选择框
+       colorPicker.style.left = event.pageX + 'px'; // 设置颜色选择框的水平位置
+       colorPicker.style.top = event.pageY -110 + 'px'; // 设置颜色选择框的垂直位置
+     } else {
+       colorPicker.style.display = 'none'; // 隐藏颜色选择框
+     }
+   });
+   
+</script>
 <?php if (isset($OJ_MATHJAX)&&$OJ_MATHJAX){?>
     <!--以下为了加载公式的使用而既加入-->
 <script>
