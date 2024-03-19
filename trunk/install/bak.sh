@@ -23,7 +23,7 @@ echo "这里有警告是正常现象，请勿担心，下面的打包压缩耗�
 echo "The warning here is normal, don't worry, the following packaging and compression takes a long time, please wait patiently for the backup to end and return to the command line prompt."
 mkdir /var/backups 
 mysqldump -h $SERVER -P $PORT $DATABASE -u$USER -p$PASSWORD | bzip2 >/var/backups/db_${DATE}.sql.bz2
-if tar cjf /var/backups/hustoj_${DATE}.tar.bz2 /home/judge/data /home/judge/src /home/judge/etc /var/backups/db_${DATE}.sql.bz2; then
+if tar cjf /var/backups/hustoj_${DATE}.tar.bz2 /home/judge/data /home/judge/src/web /home/judge/src/core /home/judge/etc /var/backups/db_${DATE}.sql.bz2; then
 	rm /var/backups/hustoj_${OLD3}.tar.bz2  2> /dev/null
 	rm /var/backups/db_${OLD}.sql.bz2  2> /dev/null
 	# 如果经常遇到磁盘空间不足，可以尝试启用下面的内容
