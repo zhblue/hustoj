@@ -1,0 +1,33 @@
+User-agent: Baiduspider
+Disallow: 
+User-agent: Bingbot
+Disallow: 
+User-agent: Sogou web spider
+Disallow: /
+User-agent: Sosospider
+Disallow: /
+User-agent: YodaoBot
+Disallow: /
+User-agent: 360Spider
+Disallow: /
+User-agent: YisouSpider
+Disallow: /
+User-agent: Googlebot
+Disallow: 
+User-agent: teoma
+Disallow: /
+User-agent: ia_archiver
+Disallow: 
+User-agent: twiceler
+Disallow: /
+User-agent: Robozilla
+Disallow: /
+User-agent: Gigabot
+Disallow: /
+Crawl-delay: 120
+Disallow:/admin
+Disallow:/moodle
+Disallow:/template
+Disallow:/upload
+User-agent: *
+Disallow: /
