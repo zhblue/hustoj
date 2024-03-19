@@ -250,7 +250,7 @@
   $MSG_DATE="日期";
   $MSG_TIME="时间";
   $MSG_SIGN="个性签名";
-  $MSG_RECENT_PROBLEM="最近更新";
+  $MSG_RECENT_PROBLEM="最近追题";
   $MSG_RECENT_CONTEST="近期比赛";
   $MSG_PASS_RATE="通过率";
   $MSG_SHOW_TAGS="显示分类标签";
