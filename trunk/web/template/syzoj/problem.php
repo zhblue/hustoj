@@ -346,7 +346,7 @@ function selectMulti( num, answer){
                   headerIds: false
                 });
 
-		$("div.md").each(function(){
+		$(".md").each(function(){
 			$(this).html(marked.parse($(this).html()));
 		});
 	  	// adding note for ```input1  ```output1 in description
