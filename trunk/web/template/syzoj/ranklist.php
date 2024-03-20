@@ -18,6 +18,7 @@
 	            <th style="width: 60px; "><?php echo $MSG_Number?></th>
 	            <th style="width: 180px; "><?php echo $MSG_USER?></th>
 	            <th><?php echo $MSG_NICK?></th>
+			<th><?php echo $MSG_GROUP_NAME?></th>
               <th style="width: 100px; "><?php echo $MSG_SOVLED?></th>
               <th style="width: 100px; "><?php echo $MSG_SUBMIT?></th>
               <th style="width: 100px; "><?php echo $MSG_RATIO?></th>
