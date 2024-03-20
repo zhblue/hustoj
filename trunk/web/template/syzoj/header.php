@@ -129,8 +129,10 @@ background-size: 100%">
         <div id="menu" class="ui stackable mobile ui container computer" style="margin-left:auto;margin-right:auto;">
             <a class="header item"  href="/"><span
                     style="font-family: 'Exo 2'; font-size: 1.5em; font-weight: 600; "><?php echo $domain==$DOMAIN?$OJ_NAME:ucwords($OJ_NAME)."'s OJ"?></span></a>
-            <a class="desktop-only item <?php if ($url=="") echo "active";?>" href="/"><i class="home icon"></i> <?php echo $MSG_HOME?></a>
+            
           <?php
+            if(isset($OJ_AI_HTML)&&$OJ_AI_HTML) echo $OJ_AI_HTML;
+            else echo '<a class="desktop-only item href="/"><i class="home icon"></i>'.$MSG_HOME.'</a>';
             if(file_exists("moodle"))  // 如果存在moodle目录，自动添加链接
             {
               echo '<a class="item" href="moodle"><i class="group icon"></i>Moodle</a>';
