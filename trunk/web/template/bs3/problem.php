@@ -262,7 +262,7 @@
 		$( document ).ready( function () {
 			$( "#creator" ).load( "problem-ajax.php?pid=<?php echo $id?>" );
 <?php if(isset($OJ_MARKDOWN)&&$OJ_MARKDOWN){ ?>
-                        $("div.md").each(function(){
+                        $(".md").each(function(){
                                 $(this).html(marked.parse($(this).html()));
                         });
 <?php } ?>
