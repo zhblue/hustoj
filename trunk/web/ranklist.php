@@ -56,7 +56,7 @@
                 if ($rank < 0)
                         $rank = 0;
 
-                $sql = "SELECT `user_id`,`nick`,`solved`,`submit` FROM `users` $where ORDER BY `solved` DESC,submit,reg_time  LIMIT  " . strval ( $rank ) . ",$page_size";
+                $sql = "SELECT `user_id`,`nick`,`solved`,`submit`,group_name FROM `users` $where ORDER BY `solved` DESC,submit,reg_time  LIMIT  " . strval ( $rank ) . ",$page_size";
 
                 if($scope){
                         $s="";
@@ -77,7 +77,7 @@
 			$last_id=mysql_query_cache("select solution_id from solution where  in_date<str_to_date('$s','%Y-%m-%d') order by solution_id desc limit 1;");
 			if(is_array( $last_id)) $last_id=$last_id[0][0];else $last_id=0;
 			$view_total=mysql_query_cache("select count(distinct(user_id)) from solution where solution_id>$last_id")[0][0];
-                        $sql="SELECT users.`user_id`,`nick`,s.`solved`,t.`submit` FROM `users`
+                        $sql="SELECT users.`user_id`,`nick`,s.`solved`,t.`submit`,group_name FROM `users`
                                         inner join
                                         (select count(distinct (problem_id)) solved ,user_id from solution
                                                where solution_id>$last_id and user_id not in (".$OJ_RANK_HIDDEN.") and problem_id>0 and result=4
@@ -121,8 +121,9 @@
                         $view_rank[$i][0]= $rank;
                         $view_rank[$i][1]=  "<div class=center><a href='userinfo.php?user=" .htmlentities ( $row['user_id'],ENT_QUOTES,"UTF-8") . "'>" . $row['user_id'] . "</a>"."</div>";
                         $view_rank[$i][2]=  "<div class=center>" . htmlentities ( $row['nick'] ,ENT_QUOTES,"UTF-8") ."</div>";
-                        $view_rank[$i][3]=  "<div class=center><a href='status.php?user_id=" .htmlentities ( $row['user_id'],ENT_QUOTES,"UTF-8") ."&jresult=4'>" . $row['solved']."</a>"."</div>";
-                        $view_rank[$i][4]=  "<div class=center><a href='status.php?user_id=" . htmlentities ($row['user_id'],ENT_QUOTES,"UTF-8") ."'>" . $row['submit'] . "</a>"."</div>";
+			$view_rank[$i][3]=  "<div class=center>" . htmlentities ( $row['group_name'] ,ENT_QUOTES,"UTF-8") ."</div>";
+                        $view_rank[$i][4]=  "<div class=center><a href='status.php?user_id=" .htmlentities ( $row['user_id'],ENT_QUOTES,"UTF-8") ."&jresult=4'>" . $row['solved']."</a>"."</div>";
+                        $view_rank[$i][5]=  "<div class=center><a href='status.php?user_id=" . htmlentities ($row['user_id'],ENT_QUOTES,"UTF-8") ."'>" . $row['submit'] . "</a>"."</div>";
 
                         if ($row['submit'] == 0)
                                 $view_rank[$i][5]= "0.00%";
