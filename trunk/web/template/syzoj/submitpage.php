@@ -93,7 +93,7 @@ echo"<option value=$i ".( $lastlang==$i?"selected":"").">
 	<textarea style="width:80%;height:600" cols=180 rows=25 id="source" name="source"><?php echo htmlentities($view_src,ENT_QUOTES,"UTF-8")?></textarea>
 <?php }?>
 
-<?php if (isset($OJ_TEST_RUN)&&$OJ_TEST_RUN){?>
+<?php if ( isset($OJ_TEST_RUN) && $OJ_TEST_RUN && $spj<=1 ){?>
 <?php echo $MSG_Input?>:<textarea style="width:30%" cols=40 rows=5 id="input_text" name="input_text" ><?php echo $view_sample_input?></textarea>
 <?php echo $MSG_Output?>:
 <textarea style="width:30%" cols=10 rows=5 id="out" name="out" disabled="true" >SHOULD BE:
