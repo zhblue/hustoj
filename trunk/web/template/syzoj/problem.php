@@ -422,7 +422,7 @@ function selectMulti( num, answer){
                 });
                 selectMulti(num,answer);
         });
-	<?php if ($row['spj']>1){ ?>
+        <?php if ($row['spj']>1 || $MSG_SHOW_ON){ ?>
 	    transform();
 	<?php }?>
 

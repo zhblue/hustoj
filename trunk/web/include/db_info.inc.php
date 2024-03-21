@@ -56,7 +56,7 @@ static  $OJ_EMAIL_CONFIRM=false; //允许邮件激活账号
 static  $OJ_NEED_LOGIN=false; //需要登录才能访问
 static  $OJ_LONG_LOGIN=false; //启用长时间登录信息保留
 static  $OJ_KEEP_TIME="30";  //登录Cookie有效时间(单位:天(day),仅在上一行为true时生效)
-
+static  $MSG_SHOW_ON = false;//打开题目默认开启编辑器
 static  $OJ_RANK_LOCK_PERCENT=0; //比赛封榜时间比例，例如设0.2，则5小时的比赛，最后一小时为封榜时间。
 static  $OJ_RANK_LOCK_DELAY=3600; //赛后封榜持续时间，单位秒。根据实际情况调整，在闭幕式颁奖结束后设为0即可立即解封。
 static  $OJ_SHOW_METAL=true; //榜单上是否按比例显示奖牌
