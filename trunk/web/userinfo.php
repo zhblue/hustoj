@@ -42,7 +42,10 @@ if($flag&&!isset($_SESSION[$OJ_NAME.'_'.'administrator'])) // administrator need
 }
 
 $view_title=$user ."@".$OJ_NAME;
-$sql="SELECT `school`,`email`,`nick` FROM `users` WHERE `user_id`=? and user_id not in ($OJ_RANK_HIDDEN) ";
+if(isset($_SESSION[$OJ_NAME.'_'.'administrator']))
+    $sql="SELECT `school`,`email`,`nick` FROM `users` WHERE `user_id`=? ";
+else 
+    $sql="SELECT `school`,`email`,`nick` FROM `users` WHERE `user_id`=? and user_id not in ($OJ_RANK_HIDDEN) ";
 $result=pdo_query($sql,$user);
 $row_cnt=count($result);
 if ($row_cnt==0){ 
