@@ -2688,8 +2688,8 @@ int special_judge(char *oj_home, int problem_id, char *infile, char *outfile,
 	char tpjpath[BUFFER_SIZE/2];
 	if (DEBUG) printf("pid=%d\n", problem_id);
 	// prevent privileges settings caused spj fail in [issues686]
-	execute_cmd("chown www-data:judge %s/data/%d/spj %s %s %s", oj_home, problem_id,infile, outfile, userfile);
-	execute_cmd("chmod 750 %s/data/%d/spj %s %s %s", oj_home, problem_id,infile, outfile, userfile);
+	execute_cmd("chgrp judge %s/data/%d/spj %s %s %s", oj_home, problem_id,infile, outfile, userfile);
+	execute_cmd("chmod 751 %s/data/%d/spj %s %s %s", oj_home, problem_id,infile, outfile, userfile);
 	
 	pid = fork();
 	int ret = 0;
