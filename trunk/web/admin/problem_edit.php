@@ -1,10 +1,3 @@
-<html>
-<head>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-  <title>Edit Problem</title>
-</head>
-<hr>
-
 <?php
 require_once("../include/db_info.inc.php");
 require_once("admin-header.php");
@@ -18,6 +11,12 @@ if (!(isset($_SESSION[$OJ_NAME.'_'.'administrator']) || isset($_SESSION[$OJ_NAME
 echo "<center><h3>"."Edit-".$MSG_PROBLEM."</h3></center>";
 include_once("kindeditor.php") ;
 ?>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <title>Edit Problem</title>
+</head>
+<hr>
 
 <body leftmargin="30" >
   <div class="container">
