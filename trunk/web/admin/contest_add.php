@@ -1,22 +1,11 @@
 <?php
-   header("Cache-control:private"); 
-?>
-<html>
-<head>
-  <meta http-equiv="Pragma" content="no-cache">
-  <meta http-equiv="Cache-Control" content="no-cache">
-  <meta http-equiv="Content-Language" content="zh-cn">
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-  <title>Contest Add</title>
-</head>
-<hr>
-
-<?php 
+  
   require_once("../include/db_info.inc.php");
   require_once("../lang/$OJ_LANG.php");
   require_once("../include/const.inc.php");
   require_once("admin-header.php");
-  if(!(isset($_SESSION[$OJ_NAME.'_'.'administrator'])||isset($_SESSION[$OJ_NAME.'_'.'contest_creator']))){
+   header("Cache-control:private"); 
+if(!(isset($_SESSION[$OJ_NAME.'_'.'administrator'])||isset($_SESSION[$OJ_NAME.'_'.'contest_creator']))){
     echo "<a href='../loginpage.php'>Please Login First!</a>";
     exit(1);
   }
@@ -169,6 +158,18 @@ else{
     }
   }
 
+?>
+<html>
+<head>
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Cache-Control" content="no-cache">
+  <meta http-equiv="Content-Language" content="zh-cn">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <title>Contest Add</title>
+</head>
+<hr>
+
+<?php 
   include_once("kindeditor.php") ;
 ?>
 
