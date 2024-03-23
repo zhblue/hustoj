@@ -1,12 +1,3 @@
-<html>
-<head>
-  <meta http-equiv="Pragma" content="no-cache">
-  <meta http-equiv="Cache-Control" content="no-cache">
-  <meta http-equiv="Content-Language" content="zh-cn">
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-  <title>Problem Add</title>
-</head>
-<hr>
 <?php 
   require_once("../include/db_info.inc.php");
   require_once("admin-header.php");
@@ -19,6 +10,15 @@
   $source=pdo_query("select source from problem order by problem_id desc limit 1"); //默认续用最后一次的分类标签
   if(is_array($source)&&isset($source[0]))$source=$source[0][0];else $source="";
 ?>
+<html>
+<head>
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Cache-Control" content="no-cache">
+  <meta http-equiv="Content-Language" content="zh-cn">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <title>Problem Add</title>
+</head>
+<hr>
 <body leftmargin="30" >
   <div class="container">
     <form method=POST action=problem_add.php>
