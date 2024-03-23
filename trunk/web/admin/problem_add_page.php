@@ -5,11 +5,8 @@
     echo "<a href='../loginpage.php'>Please Login First!</a>";
     exit(1);
   }
-  echo "<center><h3>".$MSG_PROBLEM."-".$MSG_ADD."</h3></center>";
-  include_once("kindeditor.php") ;
-  $source=pdo_query("select source from problem order by problem_id desc limit 1"); //默认续用最后一次的分类标签
-  if(is_array($source)&&isset($source[0]))$source=$source[0][0];else $source="";
 ?>
+	  
 <html>
 <head>
   <meta http-equiv="Pragma" content="no-cache">
@@ -17,7 +14,14 @@
   <meta http-equiv="Content-Language" content="zh-cn">
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
   <title>Problem Add</title>
-</head>
+</head>	  
+	  <?php
+  echo "<center><h3>".$MSG_PROBLEM."-".$MSG_ADD."</h3></center>";
+  include_once("kindeditor.php") ;
+  $source=pdo_query("select source from problem order by problem_id desc limit 1"); //默认续用最后一次的分类标签
+  if(is_array($source)&&isset($source[0]))$source=$source[0][0];else $source="";
+?>
+
 <hr>
 <body leftmargin="30" >
   <div class="container">
