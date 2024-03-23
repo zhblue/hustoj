@@ -7,16 +7,19 @@ if (!(isset($_SESSION[$OJ_NAME.'_'.'administrator']) || isset($_SESSION[$OJ_NAME
   echo "<a href='../loginpage.php'>Please Login First!</a>";
   exit(1);
 }
-
-echo "<center><h3>"."Edit-".$MSG_PROBLEM."</h3></center>";
-include_once("kindeditor.php") ;
 ?>
-<html>
+  <html>
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
   <title>Edit Problem</title>
 </head>
 <hr>
+  
+  <?php
+echo "<center><h3>"."Edit-".$MSG_PROBLEM."</h3></center>";
+include_once("kindeditor.php") ;
+?>
+
 
 <body leftmargin="30" >
   <div class="container">
