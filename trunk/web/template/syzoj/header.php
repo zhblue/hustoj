@@ -132,7 +132,7 @@ background-size: 100%">
             
           <?php
             if(isset($OJ_AI_HTML)&&$OJ_AI_HTML) echo $OJ_AI_HTML;
-            else echo '<a class="desktop-only item href="/"><i class="home icon"></i>'.$MSG_HOME.'</a>';
+            else echo '<a class="desktop-only item" href="/"><i class="home icon"></i>'.$MSG_HOME.'</a>';
             if(file_exists("moodle"))  // 如果存在moodle目录，自动添加链接
             {
               echo '<a class="item" href="moodle"><i class="group icon"></i>Moodle</a>';
