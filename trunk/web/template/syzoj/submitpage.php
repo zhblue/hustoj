@@ -290,7 +290,7 @@ function resume(){
 	}
 }
 function switchLang(lang){
-   var langnames=new Array("c_cpp","c_cpp","pascal","java","ruby","sh","python","php","perl","csharp","objectivec","vbscript","scheme","c_cpp","c_cpp","lua","javascript","golang");
+   var langnames=new Array("c_cpp","c_cpp","pascal","java","ruby","sh","python","php","perl","csharp","objectivec","vbscript","scheme","c_cpp","c_cpp","lua","javascript","golang","sql","fortran","matlab","r");
    editor.getSession().setMode("ace/mode/"+langnames[lang]);
 
 }
