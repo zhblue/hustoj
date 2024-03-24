@@ -1887,7 +1887,7 @@ void prepare_files(char *filename, int namelen, char *infile, int &p_id,
 		}
 		fclose(fpname);
 	}else{
-		if(copy_data) execute_cmd("/bin/cp '%s' %s/data.in", infile, work_dir);   // 如果开启了COPY_DATA则复制测试数据
+		if(copy_data||lang == LANG_R) execute_cmd("/bin/cp '%s' %s/data.in", infile, work_dir);   // 如果开启了COPY_DATA则复制测试数据
 	}
 	execute_cmd("/bin/cp %s/data/%d/*.dic %s/ 2>/dev/null", oj_home, p_id, work_dir);
  	execute_cmd("chown judge %s/*.dic ", work_dir);
