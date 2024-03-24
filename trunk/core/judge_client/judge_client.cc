@@ -2567,7 +2567,7 @@ void run_solution(int &lang, char *work_dir, double &time_lmt, int &usedtime,
 		execl("/usr/bin/octave-cli", "/usr/bin/octave-cli",  "-W", "-q", "-H", "Main.m", (char *)NULL); //"--no-init-file", "--no-init-path", "--no-line-editing", "--no-site-file"
 		break;
 	case LANG_R:
-		execle("/usr/bin/Rscript", "/usr/bin/Rscript", "Main.R",">","user.out", (char *)NULL,envp);
+		execle("/usr/bin/Rscript", "/usr/bin/Rscript", "Main.R", (char *)NULL,envp);
 
 	}
 	//sleep(1);
