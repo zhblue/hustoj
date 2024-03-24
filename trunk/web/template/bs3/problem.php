@@ -308,7 +308,7 @@
                 });
                 selectMulti(num,answer);
         });
-<?php if ($row['spj']>1){ ?>
+<?php if ($row['spj']>1 || isset($_GET['sid']) || (isset($OJ_AUTO_SHOW_OFF)&&$OJ_AUTO_SHOW_OFF)){ ?>
     transform();
 <?php }?>
 
@@ -387,6 +387,9 @@
 			let width=parseInt(document.body.clientWidth*0.6);
 			let width2=parseInt(document.body.clientWidth*0.4);
         let submitURL=$("#submit")[0].href;
+		<?php
+                 if(isset($_GET['sid'])) echo "submitURL+='&sid=".intval($_GET['sid'])."';";
+         ?>
         console.log(width);
         let main=$("#main");
         let problem=main.html();   

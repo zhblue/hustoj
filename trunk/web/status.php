@@ -472,7 +472,7 @@ for ($i=0; $i<$rows_cnt; $i++) {
       else
         $view_status[$i][6] = $language_name[$row['language']];
        
-      if($OJ_TEMPLATE=="syzoj") {
+      if($OJ_TEMPLATE=="syzoj" || $OJ_TEMPLATE=="bs3" ) {
             $edit_link="problem.php";
       }else {
             $edit_link="submitpage.php";
