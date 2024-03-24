@@ -471,16 +471,21 @@ for ($i=0; $i<$rows_cnt; $i++) {
         $view_status[$i][6] = "<a target=_self href=showsource.php?id=".$row['solution_id'].">".$language_name[$row['language']]."</a>";
       else
         $view_status[$i][6] = $language_name[$row['language']];
-
+       
+      if($OJ_TEMPLATE=="syzoj") {
+            $edit_link="problem.php";
+      }else {
+            $edit_link="submitpage.php";
+      }
       if ($row["problem_id"]>0) {
         if ($row['contest_id']>0) {
          if (isset($end_time)&&time()<$end_time || isset($_SESSION[$OJ_NAME.'_'.'source_browser']))
-            $view_status[$i][6] .= "/<a target=_self href=\"submitpage.php?cid=".$row['contest_id']."&pid=".$row['num']."&sid=".$row['solution_id']."\">Edit</a>";
+            $view_status[$i][6] .= "/<a target=_self href=\"$edit_link?cid=".$row['contest_id']."&pid=".$row['num']."&sid=".$row['solution_id']."\">Edit</a>";
           else
             $view_status[$i][6] .= "";
         }
         else {
-          $view_status[$i][6] .= "/<a target=_self href=\"submitpage.php?id=".$row['problem_id']."&sid=".$row['solution_id']."\">Edit</a>";
+          $view_status[$i][6] .= "/<a target=_self href=\"$edit_link?id=".$row['problem_id']."&sid=".$row['solution_id']."\">Edit</a>";
         }
       }
     }
