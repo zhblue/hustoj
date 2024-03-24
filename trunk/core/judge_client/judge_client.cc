@@ -1863,7 +1863,7 @@ char *escape(char s[], char t[])
 }
 
 void prepare_files(char *filename, int namelen, char *infile, int &p_id,
-				   char *work_dir, char *outfile, char *userfile, int runner_id)
+				   char *work_dir, char *outfile, char *userfile, int runner_id,int lang )
 {
 	//              printf("ACflg=%d %d check a file!\n",ACflg,solution_id);
 
@@ -3612,7 +3612,7 @@ int main(int argc, char **argv)
 			continue;
 
 		prepare_files(dirp->d_name, namelen, infile, p_id, work_dir, outfile,
-					  userfile, runner_id);
+					  userfile, runner_id, lang );
 		if (access(outfile, R_OK ) == -1)
 		{
 			//out file does not exist
