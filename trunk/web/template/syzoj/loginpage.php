@@ -41,8 +41,11 @@
       </form>
 
       <div class="ui message">
+<?php if ($OJ_REGISTER){ ?>
         <a href="registerpage.php"><?php echo $MSG_REGISTER ?></a>
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<?php } ?>
+
         <a href="lostpassword.php"><?php echo $MSG_LOST_PASSWORD ?></a>
       </div>
     </div>
