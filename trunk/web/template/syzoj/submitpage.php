@@ -90,7 +90,7 @@ echo"<option value=$i ".( $lastlang==$i?"selected":"").">
 	<input type=hidden id="hide_source" name="source" value=""/>
 
 <?php }else{ ?>
-	<textarea style="width:80%;height:600" cols=180 rows=25 id="source" name="source"><?php echo htmlentities($view_src,ENT_QUOTES,"UTF-8")?></textarea>
+	<textarea style="width:80%;height:600" cols=180 rows=30 id="source" name="source"><?php echo htmlentities($view_src,ENT_QUOTES,"UTF-8")?></textarea>
 <?php }?>
 
 <?php if ( isset($OJ_TEST_RUN) && $OJ_TEST_RUN && $spj<=1 ){?>
