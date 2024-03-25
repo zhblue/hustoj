@@ -41,7 +41,7 @@ RUN     cd /home/judge/src/core/ && bash make.sh
 #RUN     DEBIAN_FRONTEND=noninteractive apt-get -y install --no-install-recommends sqlite3
 #RUN     DEBIAN_FRONTEND=noninteractive apt-get -y install --no-install-recommends gfortran
 #RUN     DEBIAN_FRONTEND=noninteractive apt-get -y install --no-install-recommends octave
-#RUN     DEBIAN_FRONTEND=noninteractive apt-get -y install --no-install-recommends gnucobole
+#RUN     DEBIAN_FRONTEND=noninteractive apt-get -y install --no-install-recommends gnucobol
 #RUN     DEBIAN_FRONTEND=noninteractive apt-get -y install --no-install-recommends r-base
 
 # install debian package of similarity-tester
