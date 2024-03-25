@@ -68,7 +68,7 @@ if (isset($_GET['search']) && trim($_GET['search'])!="") {
 $sub_arr = Array(); 
 $acc_arr = Array(); 
 if (isset($_SESSION[$OJ_NAME.'_'.'user_id'])){
-	$sql = "SELECT problem_id, MIN(result) AS result FROM solution WHERE user_id=? GROUP BY problem_id ";
+	$sql = "SELECT problem_id, MIN(result) AS result FROM solution WHERE user_id=? and result>=4 GROUP BY problem_id ";
 	$result = pdo_query($sql,$_SESSION[$OJ_NAME.'_'.'user_id']);
 	foreach ($result as $row){
 		$sub_arr[$row['problem_id']] = true;
