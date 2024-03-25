@@ -1354,7 +1354,7 @@ int compile(int lang, char *work_dir)
 		LIM.rlim_cur = 500 * STD_MB;
 		setrlimit(RLIMIT_FSIZE, &LIM);
 
-		if (lang == 2 || lang == LANG_JAVA || lang == 17 || lang == LANG_R )
+		if (lang == LANG_PASCAL  || lang == LANG_JAVA || lang == LANG_GO  || lang == LANG_R )
 		{
 #ifdef __mips__
 			LIM.rlim_max = STD_MB << 12;
