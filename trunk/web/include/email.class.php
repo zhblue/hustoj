@@ -221,6 +221,7 @@ class smtp {
 function email($address,$mailtitle,$mailcontent){
 
         //******************** 配置信息 ********************************
+        return false;   //确认下面的账户信息配置正确后，注释本行，否则mail相关功能不会生效。
         $smtpserver = "smtp.qiye.aliyun.com";           //SMTP服务器，通常在邮箱的smtp/pop3设置中可以查询到，推荐用企业邮箱发信，避免被识别为垃圾邮件
         $smtpserverport =25;                           //SMTP服务器端口，通常是25，有点服务器支持80、465以适应不同的网络防火墙配置
         $smtpusermail = "mailer@yourdomain.com";      //SMTP服务器的用户邮箱
