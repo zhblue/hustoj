@@ -75,7 +75,7 @@
   <table id="result-tab" class="ui very basic center aligned table" style="white-space: nowrap; " id="table">
     <thead>
       <tr>
-                <th><?php echo $MSG_RUNID?></th>
+                <th class='desktop-only item'><?php echo $MSG_RUNID?></th>
                 <th><?php echo $MSG_USER?></th>
                                                 <th>
                                                         <?php echo $MSG_NICK?>
@@ -84,11 +84,11 @@
         <th><?php echo $MSG_RESULT?></th>
         <th><?php echo $MSG_MEMORY?></th>
         <th><?php echo $MSG_TIME?></th>
-        <th><?php echo $MSG_LANG?></th>
-        <th><?php echo $MSG_CODE_LENGTH?></th>
-        <th><?php echo $MSG_SUBMIT_TIME?></th>
+        <th ><?php echo $MSG_LANG?></th>
+        <th  class='desktop-only item'><?php echo $MSG_CODE_LENGTH?></th>
+        <th ><?php echo $MSG_SUBMIT_TIME?></th>
        <?php    if (isset($_SESSION[$OJ_NAME.'_'.'administrator'])) {
-                                                        echo "<th class='text-left'>";
+                                                        echo "<th class='desktop-only item'>";
                                                                 echo $MSG_JUDGER;
                                                         echo "</th>";
                                                 } ?>
@@ -104,8 +104,8 @@
     foreach($row as $table_cell){
       if ($i==4)
         echo "<td class='td_result'><b>";
-      else if($i>3&&$i!=8)
-        echo "<td class='hidden-xs'><b>";
+      else if($i==0 || $i>7 && $i!=9)
+        echo "<td class='desktop-only item '><b>";
       else
         echo "<td><b>";
       echo $table_cell;
@@ -118,6 +118,7 @@
 
     </tbody>
   </table>
+
   <div style="margin-bottom: 30px; ">
 
   <div style="text-align: center; ">
