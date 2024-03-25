@@ -206,8 +206,8 @@ static int py2=1; // caution: py2=1 means default using py3
 MYSQL *conn;
 #endif
 static char jresult[15][4]={"PD","PR","CI","RJ","AC","PE","WA","TLE","MLE","OLE","RE","CE","CO","TR","MC"};
-static char lang_ext[22][8] = {"c", "cc", "pas", "java", "rb", "sh", "py",
-			       "php", "pl", "cs", "m", "bas", "scm", "c", "cc", "lua", "js", "go","sql","f95","m","cob"};
+static char lang_ext[23][8] = {"c", "cc", "pas", "java", "rb", "sh", "py",
+			       "php", "pl", "cs", "m", "bas", "scm", "c", "cc", "lua", "js", "go","sql","f95","m","cob","R"};
 //static char buf[BUFFER_SIZE];
 
 int lockfile(int fd) {
@@ -434,14 +434,17 @@ void init_syscalls_limits(int lang)      //白名单初始化
 	{ //cobol
 		for (i = 0; i == 0 || LANG_CBV[i]; i++)
 			call_counter[LANG_CBV[i]] = HOJ_MAX_LIMIT;
-	}
+	}else if(lang == LANG_R )
+		for (i = 0; i == 0 || LANG_RLV[i]; i++)
+			call_counter[LANG_RLV[i]] = HOJ_MAX_LIMIT;
 #ifdef __aarch64__
 	if (lang==3)call_counter[220]= 100;
 	else call_counter[220]= 1;
 #else
 	call_counter[SYS_execve %  call_array_size ]= 1;
+	if(lang == LANG_R ) call_counter[SYS_execve %  call_array_size ]= 8;
 #endif
-	printf("SYS_execve:%d\n",SYS_execve  % call_array_size );
+	printf("SYS_execve:%d [%d] \n",SYS_execve  % call_array_size , call_counter[SYS_execve %  call_array_size ]);
 }
 
 int after_equal(char *c)
@@ -1351,7 +1354,7 @@ int compile(int lang, char *work_dir)
 		LIM.rlim_cur = 500 * STD_MB;
 		setrlimit(RLIMIT_FSIZE, &LIM);
 
-		if (lang == 2 || lang == 3 || lang == 17)
+		if (lang == 2 || lang == LANG_JAVA || lang == 17 || lang == LANG_R )
 		{
 #ifdef __mips__
 			LIM.rlim_max = STD_MB << 12;
@@ -1389,7 +1392,7 @@ int compile(int lang, char *work_dir)
 		execute_cmd("/bin/chown judge %s ", work_dir);
 		execute_cmd("/bin/chmod 750 %s ", work_dir);
 
-		if (compile_chroot && lang != 3 && lang != 9 && lang != 6 && lang != 11 && lang != 5 )
+		if (compile_chroot && lang != 3 && lang != 9 && lang != 6 && lang != 11 && lang != 5 && lang != LANG_R )
 		{
 			 if (access("usr", F_OK ) == -1){
 				execute_cmd("mkdir -p root/.cache/go-build usr etc/alternatives proc tmp dev");
@@ -1860,7 +1863,7 @@ char *escape(char s[], char t[])
 }
 
 void prepare_files(char *filename, int namelen, char *infile, int &p_id,
-				   char *work_dir, char *outfile, char *userfile, int runner_id)
+				   char *work_dir, char *outfile, char *userfile, int runner_id,int lang )
 {
 	//              printf("ACflg=%d %d check a file!\n",ACflg,solution_id);
 
@@ -1884,7 +1887,7 @@ void prepare_files(char *filename, int namelen, char *infile, int &p_id,
 		}
 		fclose(fpname);
 	}else{
-		if(copy_data) execute_cmd("/bin/cp '%s' %s/data.in", infile, work_dir);   // 如果开启了COPY_DATA则复制测试数据
+		if(copy_data||lang == LANG_R) execute_cmd("/bin/cp '%s' %s/data.in", infile, work_dir);   // 如果开启了COPY_DATA则复制测试数据
 	}
 	execute_cmd("/bin/cp %s/data/%d/*.dic %s/ 2>/dev/null", oj_home, p_id, work_dir);
  	execute_cmd("chown judge %s/*.dic ", work_dir);
@@ -2423,6 +2426,7 @@ void run_solution(int &lang, char *work_dir, double &time_lmt, int &usedtime,
 			&& lang != LANG_COBOL 
 			&& lang != LANG_MATLAB 
 			&& lang != LANG_CSHARP
+			&& lang != LANG_R
 			&& !(lang == LANG_PYTHON && python_free )
 	   ){
 		
@@ -2471,6 +2475,7 @@ void run_solution(int &lang, char *work_dir, double &time_lmt, int &usedtime,
 	case LANG_GO:
 	case LANG_CSHARP: //C#
 	case LANG_JAVA: //java
+	case LANG_R:
 		LIM.rlim_cur = LIM.rlim_max = 880;
 		break;
 	case LANG_RUBY: //ruby
@@ -2561,6 +2566,9 @@ void run_solution(int &lang, char *work_dir, double &time_lmt, int &usedtime,
 	case LANG_MATLAB: //octave
 		execl("/usr/bin/octave-cli", "/usr/bin/octave-cli",  "-W", "-q", "-H", "Main.m", (char *)NULL); //"--no-init-file", "--no-init-path", "--no-line-editing", "--no-site-file"
 		break;
+	case LANG_R:
+		execle("/usr/bin/Rscript", "/usr/bin/Rscript", "Main.R", (char *)NULL,envp);
+
 	}
 	//sleep(1);
 	printf("Execution error, USE_DOCKER:%d !\nYou need to install compiler VM or runtime for your language.",use_docker);
@@ -3604,7 +3612,7 @@ int main(int argc, char **argv)
 			continue;
 
 		prepare_files(dirp->d_name, namelen, infile, p_id, work_dir, outfile,
-					  userfile, runner_id);
+					  userfile, runner_id, lang );
 		if (access(outfile, R_OK ) == -1)
 		{
 			//out file does not exist

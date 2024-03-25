@@ -41,6 +41,7 @@
 #define LANG_FORTRAN 19
 #define LANG_MATLAB 20
 #define LANG_COBOL 21
+#define LANG_R 22
 
 #ifdef __i386
    #include "okcalls32.h"

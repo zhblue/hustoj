@@ -29,6 +29,7 @@ if ($brush=='clang++') $brush='c++';
 if ($brush=='obj-c') $brush='c';
 if ($brush=='python3') $brush='python';
 if ($brush=='swift') $brush='csharp';
+if ($brush=='r') $brush='delphi';
 echo "<pre class=\"brush:".$brush.";\">";
 ob_start();
 echo "/**************************************************************\n";

@@ -203,6 +203,7 @@ if(isset($_POST['startdate'])){
               else $lastlang = 0;
 
               for($i=0; $i<$lang_count; $i++){
+		       if( (1<<$i) & $OJ_LANGMASK ) continue;
                 echo "<option value=$i ".( $lang&(1<<$i)?"selected":"").">".$language_name[$i]."</option>";
               }
               ?>

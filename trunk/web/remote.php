@@ -2,7 +2,7 @@
      require_once "include/db_info.inc.php";
      require_once "include/init.php";
         $remote_ojs=array(
-                "pku","hdu"                                       //使用一本通启蒙设为："bas"  
+                 "bas"       // "pku","hdu"     //使用一本通启蒙设为："bas"  
         );
 	$sites=array(
 		"pku" => "http://poj.org/",
