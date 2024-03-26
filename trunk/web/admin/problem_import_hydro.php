@@ -42,6 +42,10 @@ function strip($Node, $TagName) {
 
   return mb_substr($Node,$i+$len+2,$j-($i+$len+2));
 }
+function get_extension($file) {
+  $info = pathinfo($file);
+  return $info['extension'];
+}
 
 function getAttribute($Node, $TagName,$attribute) {
   return $Node->children()->$TagName->attributes()->$attribute;
@@ -71,10 +75,6 @@ function mkpta($pid,$prepends,$node) {
   }
 }
 
-function get_extension($file) {
-  $info = pathinfo($file);
-  return $info['extension'];
-}
 
 function import_dir($json) {
   global $OJ_DATA,$OJ_SAE,$OJ_REDIS,$OJ_REDISSERVER,$OJ_REDISPORT,$OJ_REDISQNAME,$domain,$DOMAIN;
@@ -122,9 +122,10 @@ else {
   if (get_extension( $_FILES ["fps"] ["name"])=="zip") {
     echo "&nbsp;&nbsp;- zip file, only HydroOJ exported file is supported<hr>\n";
     $resource = zip_open($tempfile);
-
+    $save_path="";
     $i = 1;
     $pid=$title=$description=$input=$output=$sample_input=$sample_output=$hint=$source=$spj="";
+    $type="normal";
     while ($dir_resource = zip_read($resource)) {
       if (zip_entry_open($resource,$dir_resource)) {
         $file_name = $path.zip_entry_name($dir_resource);
@@ -138,13 +139,22 @@ else {
 			$source=implode(" ",$hydrop['tag']);	
 			echo "<hr>".htmlentities($file_name." $title $source");
 		}else if(basename($file_name)=="problem_zh.md"||basename($file_name)=="problem.md"){
-			
 			$regex = '/<(?!div)/';
-                        $file_content = preg_replace($regex, '&lt;', $file_content);
-                        if(strpos($file_content,"##")===false)
-                                $description=$file_content;
-                        else
-                                $description="<span class='md'>".$file_content."</span>";
+                        $file_content = preg_replace($regex, '＜',$file_content);
+                        $regex = '/(?<!div)>\s?/';
+                        $file_content = preg_replace($regex, '＞', $file_content);
+                        $file_content = str_replace("&", '＆', $file_content);
+			
+//			if(strpos($file_content,"##")===false) 
+//				$description=$file_content;
+  //                      else 
+			$description="<span class='md auto_select'>".$file_content."</span>";
+			$description=preg_replace('/{{ select\(\d+\) }}/', "", $description); 
+			if($save_path){
+				$description=str_replace("file://",$save_path."/",$description);
+			
+		//		echo htmlentities($description);
+			}
 
 			//echo htmlentities("$description");
 			if(!hasProblem($title)){
@@ -157,23 +167,47 @@ else {
 			echo "PID:$pid";
 		}else if(basename($file_name)=="config.yaml"){
 			$hydrop=yaml_parse($file_content);	
-			if(endsWith($hydrop['time'],"ms")){
-				$hydrop['time']=substr($hydrop['time'],0,-2);
-				$hydrop['time']=floatval($hydrop['time'])/1000;
-			}else if(endsWith($hydrop['time'],"s")){
-				$hydrop['time']=substr($hydrop['time'],0,-1);
-				$hydrop['time']=floatval($hydrop['time']);
-			}
-			$time=floatval($hydrop['time']);
-			$memory=floatval($hydrop['memory']);
-			$iofile=$hydrop['filename'];
-			if($pid!=""&&$iofile!=""){
-				file_put_contents($OJ_DATA."/$pid/input.name",$iofile.".in\n");
-				file_put_contents($OJ_DATA."/$pid/output.name",$iofile.".out\n");
+			if($hydrop['type']=="objective"){
+				$type="objective";	
+				echo $type.":dump answers";
+				$ansi=1;
+				$out="";
+				while($hydrop['answers'][$ansi]!=""){
+					$out.= $ansi." [".$hydrop['answers'][$ansi][1]."] ";
+					$out.= $hydrop['answers'][$ansi][0]."\n";
+					$ansi++;
+				}
+				//echo htmlentities($out);
+				if($pid>0){
+					file_put_contents($OJ_DATA."/$pid/data.out",$out);
+					file_put_contents($OJ_DATA."/$pid/data.in",($ansi-1)."\n");
+				}
+				$template="";
+				for($i=1;$i<$ansi;$i++){
+					$template.=$i."\n";
+				}
+				file_put_contents($OJ_DATA."/$pid/template.c",$template);
+				pdo_query("update problem set spj=2 where problem_id=?",$pid);
+			
+			}else{
+				if(endsWith($hydrop['time'],"ms")){
+					$hydrop['time']=substr($hydrop['time'],0,-2);
+					$hydrop['time']=floatval($hydrop['time'])/1000;
+				}else if(endsWith($hydrop['time'],"s")){
+					$hydrop['time']=substr($hydrop['time'],0,-1);
+					$hydrop['time']=floatval($hydrop['time']);
+				}
+				$time=floatval($hydrop['time']);
+				$memory=floatval($hydrop['memory']);
+				$iofile=$hydrop['filename'];
+				if($pid!=""&&$iofile!=""){
+					file_put_contents($OJ_DATA."/$pid/input.name",$iofile.".in\n");
+					file_put_contents($OJ_DATA."/$pid/output.name",$iofile.".out\n");
 
+				}
+				if($time>0) pdo_query("update problem set time_limit=?,memory_limit=? where problem_id=?",$time,$memory,$pid);
 			}
 			//echo $time."s-".${memory}."m";
-			pdo_query("update problem set time_limit=?,memory_limit=? where problem_id=?",$time,$memory,$pid);
 		}else if($pid!="" && strpos($file_path,"testdata") !== false && basename($file_name) != "testdata" ){
 	  		echo ".";
 			$dataname=basename($file_name);
@@ -188,10 +222,37 @@ else {
 				$dataname=substr($dataname,0,-3)."out";	
 			}
 		        file_put_contents($OJ_DATA."/$pid/".$dataname,$file_content);
+		}else if(strpos($file_path,"additional_file") !== false && basename($file_name) != "additional_file" ){
+		                        	
+		//	  echo $file_name."[$pid]<br>";
+			  $ext = strtolower(get_extension($file_name));
+
+			  if (!stristr(",jpeg,jpg,svg,png,gif,bmp",$ext)) {
+			    $ext = "bad";
+			    continue;
+			  }else{
+			  
+				$ymd ="/upload/".$domain."/". date("Ymd");
+				$save_path = $ymd ;
+				//新文件名
+				$new_file_name = basename($file_name);
+				$newpath = $save_path."/".$new_file_name;
+				 if ($OJ_SAE)
+				    $newpath = "saestor://web".$newpath;
+				 else
+				    $newpath="..".$newpath;
+				}
+				if(!file_exists(dirname($newpath))){
+					mkdir(dirname($newpath),0750,true);
+				}
+				file_put_contents($newpath,$file_content);
+		//		echo ($newpath)."<br>";
+			  
+			  }
+		
 		}
 	}else{
-	  echo $file_name;
-	}
+
 	
        zip_entry_close($dir_resource);
       }

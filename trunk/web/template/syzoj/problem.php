@@ -34,6 +34,7 @@ div[class*=ace_br] {
 </style>
 <script src="<?php echo $OJ_CDN_URL.$path_fix."template/$OJ_TEMPLATE/"?>clipboard.min.js"></script>
 <script src="<?php echo $OJ_CDN_URL.$path_fix."template/bs3/"?>marked.min.js"></script>
+<script src="<?php echo $OJ_CDN_URL.$path_fix."template/syzoj/js/"?>markdown-it.min.js"></script>
 
 
 <script src="<?php echo $OJ_CDN_URL.$path_fix."template/syzoj/js/"?>katex.min.js"></script>
@@ -131,7 +132,8 @@ div[class*=ace_br] {
   <div class="row">
     <div class="column">
       <h4 class="ui top attached block header"><?php echo $MSG_Description?></h4>
-      <div class="ui bottom attached segment font-content"><?php echo bbcode_to_html($row['description']); ?></div>
+      <div class="ui bottom attached segment font-content">
+		<?php if (str_contains($row['description'],"md auto_select"))echo $row['description']; else echo  bbcode_to_html($row['description']); ?></div>
     </div>
   </div>
   <?php if($row['input']){ ?>
@@ -261,9 +263,9 @@ div[class*=ace_br] {
 			let width2=parseInt(document.body.clientWidth*0.4);
 <?php } ?>
         let submitURL=$("#submit")[0].href;
-        <?php
-                 if(isset($_GET['sid'])) echo "submitURL+='&sid=".intval($_GET['sid'])."';";
-         ?>
+	<?php 
+		if(isset($_GET['sid'])) echo "submitURL+='&sid=".intval($_GET['sid'])."';";
+	?>
         console.log(width);
         let main=$("#main");
         let problem=main.html();
@@ -348,9 +350,13 @@ function selectMulti( num, answer){
                   mangle: false,
                   headerIds: false
                 });
-
+		const md = window.markdownit();
 		$(".md").each(function(){
+<?php if ($OJ_MARKDOWN==true||$OJ_MARKDOWN=="marked.js") {?>
 			$(this).html(marked.parse($(this).html()));
+<?php }else{?>
+			$(this).html(md.render($(this).text()));
+<?php } ?>
 		});
 	  	// adding note for ```input1  ```output1 in description
 	        for(let i=1;i<10;i++){
@@ -382,6 +388,7 @@ function selectMulti( num, answer){
                 let next=0;
                 let raw=$(this).html();
                 let options=['A','B','C','D'];
+		console.log("scanning...");
                 while(start>=0){
                         start=raw.indexOf("\n"+i+".",start);
                         if(start<0) break;
@@ -391,6 +398,7 @@ function selectMulti( num, answer){
                                 let option=options[j];
                                 end=raw.indexOf(option+".",start);
                                 next=raw.indexOf("\n"+(i+1)+".",start);
+				console.log("["+raw.substring(start,end)+"]");
                                 if ( end<0 || ( end > next && next > 0 )) {
                                         console.log("i:"+i+" j:"+option+" end:"+end+" next:"+next);
                                         end=start;
@@ -410,6 +418,23 @@ function selectMulti( num, answer){
         });
 
 
+        $('span[class="md auto_select"]').each(function(){
+		let i=1;
+                let options=['A','B','C','D'];
+		$(this).find("ul").each(function(){
+                	let type="radio"
+                        if($(this).html().indexOf("多选")>0) type="checkbox";
+			let j=0;
+			$(this).find("li").each(function(){
+                                let option=options[j];
+				let disp="<input type=\""+type+"\" name=\""+i+"\" value=\""+option+"\" />"+option+".";
+				$(this).prepend(disp);
+				console.log(options[j]);
+				j++;
+			});
+			i++;
+		});
+	});
 
 
         $('input[type="radio"]').click(function(){
@@ -425,7 +450,7 @@ function selectMulti( num, answer){
                 });
                 selectMulti(num,answer);
         });
-        <?php if ($row['spj']>1 || isset($_GET['sid']) || (isset($OJ_AUTO_SHOW_OFF)&&$OJ_AUTO_SHOW_OFF)){ ?>
+	<?php if ($row['spj']>1 || isset($_GET['sid']) || (isset($OJ_AUTO_SHOW_OFF)&&$OJ_AUTO_SHOW_OFF)){?>
 	    transform();
 	<?php }?>
 
