@@ -141,7 +141,10 @@ else {
 		}else if(basename($file_name)=="problem_zh.md"||basename($file_name)=="problem.md"){
 			
 			$regex = '/<(?!div)/';
-//`			$file_content = preg_replace($regex, '&lt;', $file_content);
+			$file_content = preg_replace($regex, '〈', $file_content);
+			$regex = '/>/';
+			$file_content = preg_replace($regex, '〉', $file_content);
+			$file_content = str_replace("&", '＆', $file_content);
 //			if(strpos($file_content,"##")===false) 
 //				$description=$file_content;
   //                      else 
