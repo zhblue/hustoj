@@ -16,8 +16,8 @@ if (!(isset($_SESSION[$OJ_NAME.'_'.'administrator']))) {
 if (isset($_POST['do'])) {
 	require_once("../include/check_post_key.php");
 
-	$user_id = $_POST['user_id'];
-	$rightstr = $_POST['rightstr'];
+	$user_id = trim($_POST['user_id']);
+	$rightstr = trim($_POST['rightstr']);
 	$valuestr = "true";
 	if(isset($_POST['valuestr']))
 		$valuestr = $_POST['valuestr'];
