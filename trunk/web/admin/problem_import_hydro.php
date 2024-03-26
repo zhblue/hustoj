@@ -139,12 +139,12 @@ else {
 			$source=implode(" ",$hydrop['tag']);	
 			echo "<hr>".htmlentities($file_name." $title $source");
 		}else if(basename($file_name)=="problem_zh.md"||basename($file_name)=="problem.md"){
-			
 			$regex = '/<(?!div)/';
-			$file_content = preg_replace($regex, '＜', $file_content);
-			$regex = '/>/';
-			$file_content = preg_replace($regex, '＞', $file_content);
-			$file_content = str_replace("&", '＆', $file_content);
+                        $file_content = preg_replace($regex, '＜',$file_content);
+                        $regex = '/(?<!div)>\s?/';
+                        $file_content = preg_replace($regex, '＞', $file_content);
+                        $file_content = str_replace("&", '＆', $file_content);
+			
 //			if(strpos($file_content,"##")===false) 
 //				$description=$file_content;
   //                      else 
