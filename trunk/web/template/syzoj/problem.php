@@ -450,7 +450,7 @@ function selectMulti( num, answer){
                 });
                 selectMulti(num,answer);
         });
-	<?php if ($row['spj']>1||isset($_GET['sid'])){ ?>
+	<?php if ($row['spj']>1 || isset($_GET['sid']) || (isset($OJ_AUTO_SHOW_OFF)&&$OJ_AUTO_SHOW_OFF)){?>
 	    transform();
 	<?php }?>
 
