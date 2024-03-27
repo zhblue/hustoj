@@ -352,7 +352,7 @@ function selectMulti( num, answer){
                 });
 		const md = window.markdownit();
 		$(".md").each(function(){
-<?php if ($OJ_MARKDOWN==true||$OJ_MARKDOWN=="marked.js") {?>
+<?php if ($OJ_MARKDOWN===true||$OJ_MARKDOWN=="marked.js") {?>
 			$(this).html(marked.parse($(this).html()));
 <?php }else{?>
 			$(this).html(md.render($(this).text()));
