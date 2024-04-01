@@ -54,8 +54,8 @@
 
 #define STD_MB 1048576LL
 #define STD_T_LIM 2
-#define STD_F_LIM (STD_MB << 7) //default file size limit 128m ,2^7=128
-#define STD_M_LIM (STD_MB << 7) //default memory limit 128m ,2^7=128
+#define STD_F_LIM (STD_MB << 9) //default file size limit 512m ,2^9=512
+#define STD_M_LIM (STD_MB << 8) //default memory limit 256m ,2^8=256
 #define BUFFER_SIZE 4096		//default size of char buffer 5120 bytes
 #define LOCKMODE (S_IRUSR|S_IWUSR|S_IRGRP|S_IROTH)
 
