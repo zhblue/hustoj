@@ -131,6 +131,8 @@ else {
         $file_name = $path.zip_entry_name($dir_resource);
         $file_path = substr($file_name,0,strrpos($file_name, "/"));
         if (!is_dir($file_name)) {
+		$ymd ="/upload/".$domain."/". date("Ymd");
+		$save_path = $ymd ;
 		$file_size = zip_entry_filesize($dir_resource);
 		$file_content = zip_entry_read($dir_resource,$file_size);
 		if(basename($file_name)=="problem.yaml"){
@@ -139,16 +141,17 @@ else {
 			$source=implode(" ",$hydrop['tag']);	
 			echo "<hr>".htmlentities($file_name." $title $source");
 		}else if(basename($file_name)=="problem_zh.md"||basename($file_name)=="problem.md"){
-			$regex = '/<(?!div)/';
-                        $file_content = preg_replace($regex, '＜',$file_content);
-                        $regex = '/(?<!div)>\s?/';
-                        $file_content = preg_replace($regex, '＞', $file_content);
-                        $file_content = str_replace("&", '＆', $file_content);
 			
+			$regex = '/<(?!div)/';
+			$file_content = preg_replace($regex, '＜',$file_content);
+			$regex = '/(?<!div)>\s?/';
+			$file_content = preg_replace($regex, '＞', $file_content);
+			//$file_content = str_replace("&", '＆', $file_content);
 //			if(strpos($file_content,"##")===false) 
 //				$description=$file_content;
   //                      else 
-			$description="<span class='md auto_select'>".$file_content."</span>";
+			if($type=="normal")$description="<span class='md'>".$file_content."</span>";
+			else $description="<span class='md auto_select'>".$file_content."</span>";
 			$description=preg_replace('/{{ select\(\d+\) }}/', "", $description); 
 			if($save_path){
 				$description=str_replace("file://",$save_path."/",$description);
@@ -227,13 +230,11 @@ else {
 		//	  echo $file_name."[$pid]<br>";
 			  $ext = strtolower(get_extension($file_name));
 
-			  if (!stristr(",jpeg,jpg,svg,png,gif,bmp",$ext)) {
+			  if (!stristr(",jpeg,jpg,svg,png,gif,bmp,xlsx,xls,doc,docx",$ext)) {
 			    $ext = "bad";
 			    continue;
 			  }else{
 			  
-				$ymd ="/upload/".$domain."/". date("Ymd");
-				$save_path = $ymd ;
 				//新文件名
 				$new_file_name = basename($file_name);
 				$newpath = $save_path."/".$new_file_name;
