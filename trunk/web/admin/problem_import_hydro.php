@@ -150,8 +150,8 @@ else {
 //			if(strpos($file_content,"##")===false) 
 //				$description=$file_content;
   //                      else 
-			if($type=="normal")$description="<span class='md'>".$file_content."</span>";
-			else $description="<span class='md auto_select'>".$file_content."</span>";
+			if($type=="normal")$description="<span class=\"md\">".$file_content."</span>";
+			else $description="<span class=\"md auto_select\">".$file_content."</span>";
 			$description=preg_replace('/{{ select\(\d+\) }}/', "", $description); 
 			if($save_path){
 				$description=str_replace("file://",$save_path."/",$description);
@@ -190,7 +190,7 @@ else {
 					$template.=$i."\n";
 				}
 				file_put_contents($OJ_DATA."/$pid/template.c",$template);
-				pdo_query("update problem set spj=2 where problem_id=?",$pid);
+				pdo_query("update problem set spj=2 ,description=replace(description,'<span class=\"md\">','<span class=\"md auto_select\">') where problem_id=?",$pid);
 			
 			}else{
 				if(endsWith($hydrop['time'],"ms")){
