@@ -61,11 +61,7 @@ echo"<option value=$i ".( $lastlang==$i?"selected":"").">
 <input class="btn btn-success" title="WAF gives you reset ? try this." type=button value="Encoded <?php echo $MSG_SUBMIT?>"  onclick="encoded_submit();">
 <input type=hidden id="encoded_submit_mark" name="reverse2" value="reverse"/>
 <?php }?>
-<?php if (isset($OJ_TEST_RUN)&&$OJ_TEST_RUN){?>
-<input id="TestRun" class="btn btn-info" type=button value="<?php echo $MSG_TR?>" onclick=do_test_run();>
 
-<?php }?>
-<span class="btn" id=result>状态</span>	
 </span>
 <?php if($spj <= 1): ?>
     <button onclick="toggleTheme(event)" style="background-color: bisque; position: absolute; top: 5px; right:70px;" v-if="false">
@@ -93,15 +89,68 @@ echo"<option value=$i ".( $lastlang==$i?"selected":"").">
 	<textarea style="width:80%;height:600" cols=180 rows=30 id="source" name="source"><?php echo htmlentities($view_src,ENT_QUOTES,"UTF-8")?></textarea>
 <?php }?>
 
+        <style>
+            .button, input, optgroup, select, textarea {
+    font-family: sans-serif;
+    font-size: 150%;
+    line-height: 1.15;
+    margin: 0;
+    background: border-box;
+}
+        </style>
+         <div class="row">
+            <div class="column" style="display: flex;">
 <?php if ( isset($OJ_TEST_RUN) && $OJ_TEST_RUN && $spj<=1 ){?>
-<?php echo $MSG_Input?>:<textarea style="width:30%" cols=40 rows=5 id="input_text" name="input_text" ><?php echo $view_sample_input?></textarea>
-<?php echo $MSG_Output?>:
-<textarea style="width:30%" cols=10 rows=5 id="out" name="out" disabled="true" >SHOULD BE:
-<?php echo $view_sample_output?>
-</textarea>
+<div style="
+   
+     margin-left: 60px;
+    width: 40%;
+     padding: 14px;
+    flex-direction: column;">
+        <div style="  
+        display: flex;
+   
+    border-radius: 8px;
+    
+    background-color: rgb(255,255,255,0.4);" id="language_span">输入</div>
+         <textarea style="width:100%" cols=40 rows=5 id="input_text" name="input_text" ><?php echo $view_sample_input?></textarea>
+    </div>
+    <div style="
+   
+    width: 40%;
+    flex-direction: column;
+    ">
+         <div style="    display: flex;
+   
+    border-radius: 8px;
+    background-color: rgb(255,255,255,0.4);justify-content: space-between;" id="language_span">输出
+    
+   <span class="btn" id=result>状态</span>	
+    
+    </div>
+
+
+          <textarea style="
+          width:100%;background-color: white;
+          " cols=10 rows=5 id="out" name="out" disabled="true" >SHOULD BE:</textarea>    
+     </div>
 <?php } ?>
-
-
+<?php if (isset($OJ_TEST_RUN)&&$OJ_TEST_RUN){?>
+        <!--运行按钮-->
+            <input style="
+            margin-top: 30px;
+            margin-left: 10px;
+            
+            width: 7%;background-color: #22ba46a3;border-color: #00fff470;height: 130px;
+            " id="TestRun" class="btn btn-info" type=button value="<?php echo $MSG_TR?>" onclick=do_test_run();>
+            
+            <?php }?>
+            
+        </div>
+ </div>
+        </div>
+         <input type="hidden" value="0" id="problem_id" name="problem_id"/>
+    </form>
 <?php if (isset($OJ_BLOCKLY)&&$OJ_BLOCKLY){?>
 	<input id="blockly_loader" type=button class="btn" onclick="openBlockly()" value="<?php echo $MSG_BLOCKLY_OPEN?>" style="color:white;background-color:rgb(169,91,128)">
 	<input id="transrun" type=button  class="btn" onclick="loadFromBlockly() " value="<?php echo $MSG_BLOCKLY_TEST?>" style="display:none;color:white;background-color:rgb(90,164,139)">
@@ -531,4 +580,4 @@ function formatCode() {
 
   </body>
 </html>
-<?php include("template/$OJ_TEMPLATE/footer.php");?>
+<?php //include("template/$OJ_TEMPLATE/footer.php");?>
