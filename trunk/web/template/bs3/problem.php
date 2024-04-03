@@ -396,13 +396,13 @@
         
         if (window.screen.width < 500){
         	main.parent().append("<div id='submitPage' class='container' style='opacity:0.8;z-index:88;top:49px;'></div>");
-                $("#submitPage").html("<iframe id='ansFrame' src='"+submitURL+"&spa' width='100%' height='"+window.screen.height+"px' ></iframe>");
+                $("#submitPage").html("<iframe id='ansFrame' src='"+submitURL+"&spa' width='100%' height='"+window.innerHeight+"px' ></iframe>");
                 window.setTimeout('$("#ansFrame")[0].scrollIntoView()',1000);
 	}else{
 		main.css("width",width2);
-		main.css("margin-left","10px");
+		main.css("margin-left","0px");
        	 	main.parent().append("<div id='submitPage' class='container' style='opacity:0.8;position:fixed;z-index:1000;top:49px;right:-"+width2+"px'></div>");
-		$("#submitPage").html("<iframe src='"+submitURL+"&spa' width='"+width+"px' height='"+height+"px' ></iframe>");
+		$("#submitPage").html("<iframe src='"+submitURL+"&spa' width='"+width*0.96+"px' height='"+window.innerHeight*0.9+"px' ></iframe>");
 	}
 	$("#submit").remove();      
         <?php if ($row['spj']>1){ ?>
