@@ -284,6 +284,15 @@ div[class*=ace_br] {
 	<?php if ($row['spj']>1){ ?>
             window.setTimeout('$("iframe")[0].contentWindow.$("#TestRun").remove();',1000);
         <?php }?>
+	// double click to move the border
+        $("body").dblclick(function(){
+                problemWidth=event.clientX;
+                         let main=$("#main");
+                         main.css("width",problemWidth);
+                         $("#submitPage").css("right","-"+(problemWidth)+"px");
+                         $("#submitPage").find("iframe").attr("width",(document.body.clientWidth-problemWidth)+"px");
+                        console.log("move end:"+event.clientX);
+        });
   }
 
   function submit_code() {
