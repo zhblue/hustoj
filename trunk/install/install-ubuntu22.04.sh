@@ -156,6 +156,11 @@ fi
 /etc/init.d/nginx restart
 sed -i "s/post_max_size = 8M/post_max_size = 180M/g" /etc/php/$PHP_VER/fpm/php.ini
 sed -i "s/upload_max_filesize = 2M/upload_max_filesize = 180M/g" /etc/php/$PHP_VER/fpm/php.ini
+if grep "opcache.jit_buffer_size" /etc/php/$PHP_VER/fpm/php.ini ; then
+    echo "opcache for jit is already enabled ... "
+else
+    sed -i "s|opcache.lockfile_path=/tmp|opcache.lockfile_path=/tmp\nopcache.jit_buffer_size=16M|g" /etc/php/$PHP_VER/fpm/php.ini
+fi
 WWW_CONF=$(find /etc/php -name www.conf)
 sed -i 's/;request_terminate_timeout = 0/request_terminate_timeout = 128/g' "$WWW_CONF"
 sed -i 's/pm.max_children = 5/pm.max_children = 600/g' "$WWW_CONF"
