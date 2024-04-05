@@ -1392,7 +1392,7 @@ int compile(int lang, char *work_dir)
 		execute_cmd("/bin/chown judge %s ", work_dir);
 		execute_cmd("/bin/chmod 750 %s ", work_dir);
 
-		if (compile_chroot && lang != 3 && lang != 9 && lang != 6 && lang != 11 && lang != 5 && lang != LANG_R )
+		if (compile_chroot && lang != LANG_JAVA && lang != LANG_CSHARP && lang != LANG_PYTHON && lang != LANG_FREEBASIC && lang != LANG_BASH && lang != LANG_R )
 		{
 			 if (access("usr", F_OK ) == -1){
 				execute_cmd("mkdir -p root/.cache/go-build usr etc/alternatives proc tmp dev");
