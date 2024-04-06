@@ -61,7 +61,10 @@ echo"<option value=$i ".( $lastlang==$i?"selected":"").">
 <input class="btn btn-success" title="WAF gives you reset ? try this." type=button value="Encoded <?php echo $MSG_SUBMIT?>"  onclick="encoded_submit();">
 <input type=hidden id="encoded_submit_mark" name="reverse2" value="reverse"/>
 <?php }?>
-
+<!--选择题状态-->
+<?php if ($spj>1 ){?>
+<span class="btn" id=result>状态</span>	
+<?php }?>
 </span>
 <?php if($spj <= 1): ?>
     <button onclick="toggleTheme(event)" style="background-color: bisque; position: absolute; top: 5px; right:70px;" v-if="false">
