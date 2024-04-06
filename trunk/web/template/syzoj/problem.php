@@ -250,6 +250,7 @@ div[class*=ace_br] {
           
       </div>
 </div>
+
 <style>
     #dragButton {
   width: 10px;
@@ -261,6 +262,7 @@ div[class*=ace_br] {
   cursor: col-resize; /* 显示可调整宽度的光标 */
 }
 </style>
+
   <script type="text/javascript">
   
   function transform(){
@@ -294,13 +296,30 @@ div[class*=ace_br] {
 	<?php if ($row['spj']>1){ ?>
             window.setTimeout('$("iframe")[0].contentWindow.$("#TestRun").remove();',1000);
         <?php }?>
-      
+        
 // Add code to place drag button on the left side of the iframe
+
 $("#submitPage").prepend("<div id='dragButton'></div>");
 $(document).ready(function() {
     let isDragging = false;
     let startX = 0;
     let initialWidth = 0;
+    
+
+    function setIframeReadonly (readonly) {
+        const iframe = $("#submitPage").find('iframe')
+        if (readonly) {
+            iframe.css({
+                position: 'relative',
+                'z-index': -999
+            })
+        } else {
+            iframe.css({
+                position: 'static',
+                'z-index': 'unset'
+            })
+        }
+    }
 
     // 鼠标按下时开始拖拽，颜色变为绿色
     $("#dragButton").mousedown(function(event) {
@@ -309,12 +328,15 @@ $(document).ready(function() {
             startX = event.pageX;
             initialWidth = parseInt($("#main").css("width"));
             $(this).css("background-color", "#a5ff00");
+            
+            setIframeReadonly(true)
         }
     });
 
     // 拖拽过程中更新宽度
     $(document).mousemove(function(event) {
         if (isDragging) {
+            console.log(event.pageX - startX)
             let diffX = event.pageX - startX;
             let newWidth = initialWidth + diffX;
             $("#main").css("width", newWidth);
@@ -329,6 +351,7 @@ $(document).ready(function() {
             $("#dragButton").css("background-color", "gray");
         }
         isDragging = false;
+        setIframeReadonly(false)
     });
     
     // 鼠标移开页面或失焦时停止拖拽，恢复原始颜色
@@ -337,6 +360,7 @@ $(document).ready(function() {
             $("#dragButton").css("background-color", "gray");
         }
         isDragging = false;
+        setIframeReadonly(false)
     });
     
     $(window).blur(function() {
@@ -344,8 +368,10 @@ $(document).ready(function() {
             $("#dragButton").css("background-color", "gray");
         }
         isDragging = false;
+        setIframeReadonly(false)
     });
 });
+
 
   }
 
@@ -401,7 +427,9 @@ function selectMulti( num, answer){
   let rep=old.replace(new RegExp(key),num+" "+answer);
   editor.text(rep);
 }
-
+	$(".md").each(function(){
+			$(this).html(marked.parse($(this).text()));
+		});
   $(document).ready(function(){
     	$("#creator").load("problem-ajax.php?pid=<?php echo $id?>");
 	<?php if(isset($OJ_MARKDOWN)&&$OJ_MARKDOWN){ ?>
@@ -413,14 +441,7 @@ function selectMulti( num, answer){
                   mangle: false,
                   headerIds: false
                 });
-		const md = window.markdownit();
-		$(".md").each(function(){
-<?php if ($OJ_MARKDOWN===true||$OJ_MARKDOWN=="marked.js") {?>
-			$(this).html(marked.parse($(this).text()));
-<?php }else{?>
-			$(this).html(md.render($(this).text()));
-<?php } ?>
-		});
+
 	  	// adding note for ```input1  ```output1 in description
 	        for(let i=1;i<10;i++){
                         $(".language-input"+i).parent().before("<div><?php echo $MSG_Input?>"+i+":</div>");
