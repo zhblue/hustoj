@@ -135,6 +135,8 @@ Star us, please!
 	
 日期  | 类型 |  更新内容
 ------- | :--: | :-------
+04-06 | 更新 | 测试数据管理界面增加了生成input.name/output.name文件的功能。
+04-05 | 更新 | [@Tiang-88](https://github.com/Tiang-88) 增加了露一手功能中，左右屏幕占比调整的功能。
 03-26 | 更新 | 增加对来自hydro的主观题格式题目导入，支持图片附件的导入。允许更换markdown-it作为markdown解析器。
 03-24 | 更新 | 增加R语言支持，仅限x64环境。
 03-16 | 更新 | [@Tiang-88](https://github.com/Tiang-88) 改善MathJax渲染，补充了字体并修订了部分显示效果。
