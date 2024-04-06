@@ -302,6 +302,23 @@ $(document).ready(function() {
     let startX = 0;
     let initialWidth = 0;
 
+
+    function setIframeReadonly (readonly) {
+        const iframe = $("#submitPage").find('iframe')
+        if (readonly) {
+            iframe.css({
+                position: 'relative',
+                'z-index': -999
+            })
+        } else {
+            iframe.css({
+                position: 'static',
+                'z-index': 'unset'
+            })
+        }
+    }
+
+
     // 鼠标按下时开始拖拽，颜色变为绿色
     $("#dragButton").mousedown(function(event) {
         if (event.target === this) { // Only allow dragging if the mouse button is clicked on the drag button itself
@@ -309,6 +326,9 @@ $(document).ready(function() {
             startX = event.pageX;
             initialWidth = parseInt($("#main").css("width"));
             $(this).css("background-color", "#a5ff00");
+
+            setIframeReadonly(true)
+
         }
     });
 
@@ -329,6 +349,9 @@ $(document).ready(function() {
             $("#dragButton").css("background-color", "gray");
         }
         isDragging = false;
+
+        setIframeReadonly(false)
+
     });
     
     // 鼠标移开页面或失焦时停止拖拽，恢复原始颜色
@@ -337,6 +360,9 @@ $(document).ready(function() {
             $("#dragButton").css("background-color", "gray");
         }
         isDragging = false;
+
+        setIframeReadonly(false)
+
     });
     
     $(window).blur(function() {
@@ -344,6 +370,8 @@ $(document).ready(function() {
             $("#dragButton").css("background-color", "gray");
         }
         isDragging = false;
+        setIframeReadonly(false)
+
     });
 });
 
