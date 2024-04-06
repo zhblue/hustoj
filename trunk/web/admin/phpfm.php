@@ -353,6 +353,7 @@ function et($tag){
     $en['Random-data'] = 'Random-data generator';
     $en['GenerateOut'] = 'Generate Out files';
     $en['Ans2out'] = '*.ans -> *.out';
+    $cn['IOFilename'] = 'Generate input.name/output.name ';
     
     // chinese
 	$cn['Version'] = '版本';
@@ -464,6 +465,7 @@ function et($tag){
     $cn['Random-data'] = '随机测试数据生成器';
     $cn['GenerateOut'] = '用标程Main.c/Main.cc覆盖生成Out文件';
     $cn['Ans2out'] = '.ans改名.out';
+    $cn['IOFilename'] = '指定输入输出文件名';
 
     // Portuguese by - Fabricio Seger Kolling
     $pt['Version'] = 'Versão';
@@ -3371,6 +3373,8 @@ function dir_list_form() {
                 document.form_action.cmd_arg.value = prompt('".et('TypeDir').".');
             } else if (arg == 2){
                 document.form_action.cmd_arg.value = prompt('".et('TypeArq').".');
+            } else if (arg == 21){
+                document.form_action.cmd_arg.value = prompt('".et('IOFilename').".');
             } else if (arg == 71){
                 if (!is_anything_selected()) erro = '".et('NoSel').".';
                 else document.form_action.cmd_arg.value = prompt('".et('TypeArqComp')."');
@@ -3461,6 +3465,7 @@ function dir_list_form() {
 	    <input type=button onclick=\"upload()\" value=\"".et('Upload')."\">";
 	if(!$OJ_SaaS_ENABLE)$out.="<input type=button onclick=\"generate()\" value=\"".et('GenerateOut')."\">";
 	$out.="<input type=button onclick=\"ans2out()\" value=\"".et('Ans2out')."\">";
+	$out.="<input type=button onclick=\"test_prompt(21)\" value=\"".et('IOFilename')."\">";
 	if(isset($_GET['pid'])){
                 $pid=intval($_GET['pid']);
                 $_SESSION[$OJ_NAME."_PID"]=$pid;
@@ -4465,6 +4470,22 @@ function frame3(){
                     }
                     @chmod($cmd_arg,0644);
                 } else alert(et('FileDirExists').".");
+            }
+            break;
+            case 21: // create IOFilename
+            if (strlen($cmd_arg)){
+                $filename = $current_dir."input.name";
+		if ($fh = @fopen($filename, "w")){
+		        fprintf($fh,"%s.in\n",$cmd_arg);	
+                        @fclose($fh);
+                }
+                @chmod($filename,0644);
+                $filename = $current_dir."output.name";
+		if ($fh = @fopen($filename, "w")){
+		        fprintf($fh,"%s.out\n",$cmd_arg);	
+                        @fclose($fh);
+                }
+                @chmod($filename,0644);
             }
             break;
             case 3: // rename arq ou dir
