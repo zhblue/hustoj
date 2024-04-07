@@ -533,6 +533,8 @@ function selectMulti( num, answer){
                         //console.log("searching..."+i);
                         html=html.replace("{{ input("+i+") }}","<input type='text' size=8 name='"+i+"' placeholder='第"+i+"题' ><br>");
                 }
+		html=html.replaceAll("＜","&lt;");
+                html=html.replaceAll("＞","&gt;");
                 $(this).html(html);
         });
         $(".auto_select").find('input[type="text"]').change(function(){
