@@ -197,7 +197,7 @@ static int auto_result = OJ_AC ;
 
 int num_of_test = 0;
 //static int sleep_tmp;
-
+size_t prelen=16;
 static int py2=1; // caution: py2=1 means default using py3
 
 #define ZOJ_COM
@@ -2930,7 +2930,7 @@ void watch_solution(pid_t pidApp, char *infile, int &ACflg, int spj,
                         if(exitcode){
 				ACflg=OJ_RE;
                         	sprintf(error, "\t    non-zero return = %d \n", exitcode);
-                        	print_runtimeerror(infile+strlen(oj_home)+5,error);
+                        	print_runtimeerror(infile+prelen,error);
 			}
                         break;
                 }
@@ -2989,7 +2989,7 @@ void watch_solution(pid_t pidApp, char *infile, int &ACflg, int spj,
 				default:
 					ACflg = OJ_RE;
 				}
-				print_runtimeerror(infile+strlen(oj_home)+5,strsignal(exitcode));
+				print_runtimeerror(infile+prelen,strsignal(exitcode));
 				sprintf(buf,"adding: ' white_code[%d]=1; ' after judge_client:2836 for ",exitcode);
                                 print_runtimeerror(buf,strsignal(exitcode));
 
@@ -3032,7 +3032,7 @@ void watch_solution(pid_t pidApp, char *infile, int &ACflg, int spj,
 				default:
 					ACflg = OJ_RE;
 				}
-				print_runtimeerror(infile+strlen(oj_home)+5,strsignal(sig));
+				print_runtimeerror(infile+prelen,strsignal(sig));
 			}
 			break;
 		}
@@ -3102,7 +3102,7 @@ void watch_solution(pid_t pidApp, char *infile, int &ACflg, int spj,
 						solution_id, call_id,(unsigned int)reg.REG_SYSCALL);
 
 				write_log(error);
-				print_runtimeerror(infile+strlen(oj_home)+5,error);
+				print_runtimeerror(infile+prelen,error);
 				//ptrace(PTRACE_SYSCALL, pidApp, NULL, NULL);
 				//continue;
 				ptrace(PTRACE_KILL, pidApp, NULL, NULL);
@@ -3599,6 +3599,11 @@ int main(int argc, char **argv)
 	}
 	char last_name[BUFFER_SIZE];
 	int minus_mark=0;
+	char path_buf[BUFFER_SIZE];
+	sprintf(path_buf,"%s/data/%d/",oj_home,p_id);
+	prelen=strlen(path_buf);
+	if (prelen<strlen(oj_home)+6) prelen=strlen(oj_home)+6;
+
 	for (int i=0 ; (oi_mode || ACflg == OJ_AC || ACflg == OJ_PE) && i < namelist_len ;i++)
 	{
 		dirp=namelist[i];
@@ -3618,7 +3623,7 @@ int main(int argc, char **argv)
 			//out file does not exist
 			char error[BUFFER_SIZE];
 			sprintf(error, "missing out file %s, report to system administrator!\n", basename(outfile));
-			print_runtimeerror(infile+strlen(oj_home)+5,error);
+			print_runtimeerror(infile+prelen,error);
 			ACflg = OJ_RE;
 		}
 
@@ -3643,7 +3648,7 @@ int main(int argc, char **argv)
 						   solution_id, lang, topmemory, mem_lmt, usedtime, time_lmt,
 						   p_id, PEflg, work_dir);
 			kill(pidApp,9);
-			printf("%s: mem=%d time=%d\n",infile+strlen(oj_home)+5,topmemory,usedtime);	
+			printf("%s: mem=%d time=%d\n",infile+prelen,topmemory,usedtime);	
 			total_time+=usedtime;
 			printf("time:%d/%d\n",usedtime,total_time);
 			//判断用户程序输出是否正确，给出结果
@@ -3655,7 +3660,8 @@ int main(int argc, char **argv)
 					usedtime = time_lmt * 1000;
 			}
 			*/
-			time_space_index+=sprintf(time_space_table+time_space_index,"%s:%s mem=%dk time=%dms\n",infile+strlen(oj_home)+5,jresult[ACflg],topmemory/1024,usedtime);
+			
+			time_space_index+=sprintf(time_space_table+time_space_index,"%s %ld bytes :%s mem=%dk time=%dms\n",infile+prelen,get_file_size(infile),jresult[ACflg],topmemory/1024,usedtime);
 			/*   // full diff code backup
 			 if( ACflg != OJ_AC ){
                                 FILE *DF=fopen("diff.out","a");
