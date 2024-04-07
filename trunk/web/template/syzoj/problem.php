@@ -508,24 +508,36 @@ function selectMulti( num, answer){
                 $(this).html(raw);
         });
 
-
+// subjective problems from hydroOJ markdown and embeded marks
         $('span[class="md auto_select"]').each(function(){
-		let i=1;
-                let options=['A','B','C','D'];
-		$(this).find("ul").each(function(){
-                	let type="radio"
-                        if($(this).html().indexOf("多选")>0) type="checkbox";
-			let j=0;
-			$(this).find("li").each(function(){
+                let i=1;
+                let options=['A','B','C','D','E','F','G'];
+                $(this).find("ul").each(function(){
+                        let type="radio"
+                        let ol=$(this).prev("ol").attr("start");
+                        if(ol!=undefined) i=ol;
+                        //console.log("id["+i+"]");
+                        if($(this).html().indexOf("多选")>0||$(this).prev("ol").html().indexOf("multiselect")>0) type="checkbox";
+                        let j=0;
+                        $(this).find("li").each(function(){
                                 let option=options[j];
-				let disp="<input type=\""+type+"\" name=\""+i+"\" value=\""+option+"\" />"+option+".";
-				$(this).prepend(disp);
-				console.log(options[j]);
-				j++;
-			});
-			i++;
-		});
-	});
+                                let disp="<input type=\""+type+"\" name=\""+i+"\" value=\""+option+"\" />"+option+".";
+                                $(this).prepend(disp);
+                                //console.log(options[j]);
+                                j++;
+                        });
+                        i++;
+                });
+                let html=$(this).html();
+                for(;i>0;i--){
+                        //console.log("searching..."+i);
+                        html=html.replace("{{ input("+i+") }}","<input type='text' size=8 name='"+i+"' placeholder='第"+i+"题' ><br>");
+                }
+                $(this).html(html);
+        });
+        $(".auto_select").find('input[type="text"]').change(function(){
+                selectOne($(this).attr("name"),$(this).val());
+        });
 
 
         $('input[type="radio"]').click(function(){
