@@ -62,7 +62,7 @@ echo"<option value=$i ".( $lastlang==$i?"selected":"").">
 <input type=hidden id="encoded_submit_mark" name="reverse2" value="reverse"/>
 <?php }?>
 <!--选择题状态-->
-<?php if ($spj>1 ){?>
+<?php if ($spj>1 || !$OJ_TEST_RUN ){?>
 <span class="btn" id=result>状态</span>	
 <?php }?>
 </span>
