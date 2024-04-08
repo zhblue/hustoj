@@ -509,15 +509,15 @@ function selectMulti( num, answer){
         });
 
 // subjective problems from hydroOJ markdown and embeded marks
-        $('span[class="md auto_select"]').each(function(){
+               $('span[class="md auto_select"]').each(function(){
                 let i=1;
                 let options=['A','B','C','D','E','F','G'];
                 $(this).find("ul").each(function(){
-                        let type="radio"
-                        let ol=$(this).prev("ol").attr("start");
-                        if(ol!=undefined) i=ol;
-                        //console.log("id["+i+"]");
-                        if($(this).html().indexOf("多选")>0||$(this).prev("ol").html().indexOf("multiselect")>0) type="checkbox";
+                        let type="radio";
+                        let ol=$(this).prev("ol");
+                        if(ol!=undefined||ol.attr("start")!=undefined) i=ol.attr("start");
+                        console.log("id["+i+"]");
+                        if($(this).html().indexOf("多选")>0|| (ol!=undefined && ol.html()!=undefined && ol.html().indexOf("multiselect")>0)) type="checkbox";
                         let j=0;
                         $(this).find("li").each(function(){
                                 let option=options[j];
@@ -530,13 +530,15 @@ function selectMulti( num, answer){
                 });
                 let html=$(this).html();
                 for(;i>0;i--){
-                        //console.log("searching..."+i);
-                        html=html.replace("{{ input("+i+") }}","<input type='text' size=8 name='"+i+"' placeholder='第"+i+"题' ><br>");
+                        console.log("searching..."+i);
+                        html=html.replace("{{ input("+i+") }}","<input type='text' size=5 name='"+i+"' placeholder='第"+i+"题' ><br>");
                 }
-		html=html.replaceAll("＜","&lt;");
+                html=html.replaceAll("＜","&lt;");
                 html=html.replaceAll("＞","&gt;");
                 $(this).html(html);
         });
+
+
         $(".auto_select").find('input[type="text"]').change(function(){
                 selectOne($(this).attr("name"),$(this).val());
         });
