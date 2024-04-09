@@ -167,7 +167,7 @@ else {
 				echo "skiped $title";
 				$pid=0;
 			}
-			echo "PID:$pid";
+			 echo "PID:<a href='../problem.php?id=$pid' >".htmlentities($title,ENT_QUOTES,"UTF-8")."</a>";
 		}else if(basename($file_name)=="config.yaml"){
 			$hydrop=yaml_parse($file_content);	
 			if($hydrop['type']=="objective"){
