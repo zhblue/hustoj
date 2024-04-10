@@ -233,7 +233,8 @@ function email($address,$mailtitle,$mailcontent){
         //************************ 配置信息 ****************************
         $smtp = new smtp($smtpserver,$smtpserverport,true,$smtpuser,$smtppass);//这里面的一个true是表示使用身份验证,否则不使用身份验证.
         $smtp->debug =false;                 //是否显示发送的调试信息，发信界面卡住，发信失败，可打开进行调试
-        $state = $smtp->sendmail($smtpemailto, $smtpusermail, $mailtitle, $mailcontent, $mailtype);
+        //未经配置的系统，跳过发信步骤。
+        if( $smtpusermail != "mailer@yourdomain.com") $state = $smtp->sendmail($smtpemailto, $smtpusermail, $mailtitle, $mailcontent, $mailtype);
 }
 
 ?>
