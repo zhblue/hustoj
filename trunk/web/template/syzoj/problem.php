@@ -443,9 +443,9 @@ function selectMulti( num, answer){
                 });
 		const md = window.markdownit();
 		$(".md").each(function(){
-<?php if ($OJ_MARKDOWN===true||$OJ_MARKDOWN=="marked.js") {?>
+<?php if ($OJ_MARKDOWN  && $OJ_MARKDOWN=="marked.js") {?>
 			$(this).html(marked.parse($(this).text()));
-<?php }else{?>
+<?php }else if ($OJ_MARKDOWN  && $OJ_MARKDOWN=="markdown-it") {?>
 			$(this).html(md.render($(this).text()));
 <?php } ?>
 		});
