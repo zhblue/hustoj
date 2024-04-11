@@ -120,6 +120,8 @@ HUSTOJ 是采用 GPL 的自由软件。(仅限原创部分代码，其中使用�
 简单总结，二次开发时页脚的标注可以删除，Web目录下的[GPLv2](https://github.com/zhblue/hustoj/blob/master/trunk/web/gpl-2.0.txt)，在分发时必须保留。
 
 如果您是完全重新开发一套Web界面，只在数据库和API层面与本品耦合，[GPLv2](https://github.com/zhblue/hustoj/blob/master/trunk/web/gpl-2.0.txt)不会对您所开发的Web部分代码构成感染。
+
+如果您在淘宝购买了本系统的二次开发产品，请注意索取未加密的源代码，如商家拒绝提供，可以找店小二投诉，要求退款。
  
 
 有关安装、使用问题请先查阅 **[FAQ常见问答](http://hustoj.com)** 和 **[文档](https://zhblue.github.io/hustoj)** 或使用搜索引擎。 
