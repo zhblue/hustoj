@@ -75,17 +75,13 @@ if($_REQUEST['target']=='thread')
   else
     $sql = "UPDATE topic SET status = $stat WHERE `tid` = '$tid'";
 
-  if(pdo_query($sql)>0)
-  {
-    if($stat!=2)
+  pdo_query($sql);
+   if($stat!=2){
       header('Location: thread.php?tid='.$tid."&cid=$cid");
-    else
-      header('Location: discuss.php'."?cid=$cid");
-  }
-  else
-  {
-    errmsg("The thread does not exist.");
-    exit(0);
-  }
+   }else{
+        pdo_query("update reply set status=2 where topic_id=?",$tid);
+        header('Location: discuss.php'."?cid=$cid");
+   }
+
 }
 ?>
