@@ -115,7 +115,7 @@ HUSTOJ 是采用 GPL 的自由软件。(仅限原创部分代码，其中使用�
 
 ## 上面这是建议，不是强制要求。
 
-[GPLv2](https://github.com/zhblue/hustoj/blob/master/trunk/web/gpl-2.0.txt) 唯一实质性要求的是，当你基于本项目进行二次开发，请在分发时提供源代码，这里的分发，指您将二次开发的产品安装在您“客户”的服务器上使用，这时需要一并提供您修改过的源码，给您的“客户”（不是我，不是公开在网上）并在其中包含[GPLv2](https://github.com/zhblue/hustoj/blob/master/trunk/web/gpl-2.0.txt)的协议，并明示[GPLv2](https://github.com/zhblue/hustoj/blob/master/trunk/web/gpl-2.0.txt)的授权。这里的“客户”可以是收费的，也可以是免费的。仅提供SaaS模式的服务，让您其他人在您自己的服务器上使用本软件的衍生品，并不构成这里的分发。因此，您可以部署本系统的二次开发品作为SaaS服务出租，而无需公开源码，也无需在前端页面标注，甚至可以去除原先页脚的版权信息而不破坏授权，只要您不将本系统的衍生物安装到客户的服务器上，或提供给他们二进制编译后或加密后的可运行程序使用，就不算分发。
+[GPLv2](https://github.com/zhblue/hustoj/blob/master/trunk/web/gpl-2.0.txt) 唯一实质性要求的是，当你基于本项目进行二次开发，请在分发时提供源代码，这里的分发，指您将二次开发的产品安装在您“客户”的服务器上使用，这时需要一并提供您修改过的源码，给您的“客户”（不是我，不是公开在网上）并在其中包含[GPLv2](https://github.com/zhblue/hustoj/blob/master/trunk/web/gpl-2.0.txt)的协议，并明示[GPLv2](https://github.com/zhblue/hustoj/blob/master/trunk/web/gpl-2.0.txt)的授权。这里的“客户”可以是收费的，也可以是免费的。仅提供SaaS模式的服务，让其他人在您自己的服务器上使用本软件的衍生品，并不构成这里的分发。因此，您可以部署本系统的二次开发品作为SaaS服务出租，而无需公开源码，也无需在前端页面标注，甚至可以去除原先页脚的版权信息而不破坏授权，只要您不将本系统的衍生物安装到客户的服务器上，或提供给他们二进制编译后或加密后的可运行程序使用，就不算分发。
 
 简单总结，二次开发时页脚的标注可以删除，Web目录下的[GPLv2](https://github.com/zhblue/hustoj/blob/master/trunk/web/gpl-2.0.txt)，在分发时必须保留。
 
