@@ -132,7 +132,7 @@
                         raw=raw.replaceAll("\n","|\n|");
                         raw=raw.replaceAll("&gt;","|");
                         raw=raw.replaceAll("&lt;","|");
-                        raw=raw.replace( /\[\\\/]/g  ,"|");
+                        raw=raw.replace( /[\\\/]/g  ,"|");
                         raw=raw.replaceAll("      |","|");
                         raw=raw.replaceAll("|==============================|","\n");
                         raw=raw.replaceAll("\n||\n","\n");
