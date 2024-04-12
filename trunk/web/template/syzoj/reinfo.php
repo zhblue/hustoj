@@ -116,8 +116,57 @@
     }
   }
 ?>
-    <?php //if(isset($OJ_DOWNLOAD)&&$OJ_DOWNLOAD) echo  "showDownload();" ?>
 </script>
+
+        <?php if(isset($OJ_MARKDOWN)&&$OJ_MARKDOWN){ ?>
+<script src="<?php echo $OJ_CDN_URL.$path_fix."template/bs3/"?>marked.min.js"></script>
+<script>
+                marked.use({
+                  // 开启异步渲染
+                  async: true,
+                  pedantic: false,
+                  gfm: true,
+                  mangle: false,
+                  headerIds: false}
+                );
+                $("#errtxt").each(function(){
+                        let raw=$(this).html();
+                //      raw=raw.replaceAll("Expected","```\nExpected");
+                        raw=raw.replaceAll("\n","|\n|");
+                        raw=raw.replaceAll("|==============================|","\n");
+                        raw=raw.replaceAll("\n||\n","\n");
+                        raw=raw.replaceAll("Expected","期望输出");
+                        raw=raw.replaceAll("Yours|","你的输出|\n|:----|:----|");
+                        raw=raw.replaceAll("time_space_table:","文件|大小|结果|内存|耗时|\n|----|----|----|----|----");
+                        raw=raw.replaceAll(".in","|");
+                        raw=raw.replaceAll("bytes :","|");
+                        raw=raw.replaceAll("mem=","|");
+                        raw=raw.replaceAll("time=","|");
+                        $(this).html((raw));
+                        $(this).html(marked.parse(raw));
+                });
+        $("#errtxt table tr td").css({
+            "border": "1px solid grey",
+            "text-align": "left",
+            "width": "200px",
+            "height": "30px"
+        });
+
+        $("#errtxt table th").css({
+            "border": "1px solid grey",
+            "width": "200px",
+            "height": "30px",
+            "background-color": "#9e9e9ea1",
+            "text-align": "center"
+        });
+        $("#errtxt p").css({
+                "margin": "1em 0em -1em 0em"
+        });
+</script>
+
+    <?php } ?>
+
+
 <?php include("template/$OJ_TEMPLATE/footer.php");?>
 
  
