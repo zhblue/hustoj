@@ -94,7 +94,7 @@ if(  ($ok && $OJ_FRIENDLY_LEVEL>2) ||
     $result = pdo_query($sql,$id);
     if(count($result)>0) $mark=$result[0][0];
     if($isAC) $mark=100;
-    $view_reinfo .="<br>$MSG_MARK : $mark";
+    $view_reinfo .="<br>$MSG_MARK:$mark";
 
   }
   else{
