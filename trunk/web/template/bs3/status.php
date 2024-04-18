@@ -229,6 +229,7 @@
 		echo "'$result',";
 	} ?>
 	''];
+	 <?php echo " var oj_mark='$OJ_MARK'; "?>
 </script>
 
 <script src="<?php echo $OJ_CDN_URL?>template/<?php echo $OJ_TEMPLATE?>/auto_refresh.js?v=0.41"></script>
