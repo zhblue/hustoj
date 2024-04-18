@@ -83,7 +83,7 @@ function fresh_result(solution_id) {
                                   case 8:
                                   case 9:
                                   case 10:
-                                                row.cells[4].innerHTML = "<a href=reinfo.php?sid="+solution_id+" class='"+judge_color[ra[0]]+"'>"+judge_result[ra[0]]+" AC:"+ra[4].trim()+"%</a>";
+                                                row.cells[4].innerHTML = "<a href=reinfo.php?sid="+solution_id+" class='"+judge_color[ra[0]]+"'>"+judge_result[ra[0]]+" :"+(oj_mark=='percent'?100-ra[4].trim():ra[4].trim())+"%</a>";
                                                 break;
                                         case 11:
                                                 row.cells[4].innerHTML = "<a href=ceinfo.php?sid="+solution_id+" class='"+judge_color[ra[0]]+"'>"+judge_result[ra[0]]+"</a>";
