@@ -38,7 +38,7 @@ add-apt-repository -y restricted
 
 apt-get update && apt-get -y upgrade
 
-apt-get install -y subversion
+#apt-get install -y subversion
 /usr/sbin/useradd -m -u 1536 judge
 
 cd /home/judge/ || exit
@@ -46,7 +46,7 @@ cd /home/judge/ || exit
 #using tgz src files
 wget -O hustoj.tar.gz http://dl.hustoj.com/hustoj.tar.gz
 tar xzf hustoj.tar.gz
-svn up src
+#svn up src
 #svn co https://github.com/zhblue/hustoj/trunk/trunk/  src
 
 #手工解决阿里云软件源的包依赖问题 apt install libssl1.1=1.1.1f-1ubuntu2.8 -y --allow-downgrades
@@ -71,6 +71,7 @@ service mariadb start
 service nginx start
 
 chgrp www-data  /home/judge
+chmod +x /home/judge/src/install/*
 
 USER="hustoj"
 PASSWORD=`tr -cd '[:alnum:]' < /dev/urandom | fold -w30 | head -n1`
