@@ -12,7 +12,7 @@ if(isset($OJ_LANG)){
 	require_once("./lang/$OJ_LANG.php");
 }
 
-$now =  date('Y-m-d H:i', time());
+$now = date("Y-m-d H:i",time());
 
 if (isset($_GET['cid']))
 	$ucid = "&cid=".intval($_GET['cid']);
