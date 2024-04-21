@@ -21,7 +21,8 @@
 <center>
 
 <script src="<?php echo $OJ_CDN_URL?>include/checksource.js"></script>
-<form id=frmSolution action="submit.php<?php if (isset($_GET['spa'])) echo "?spa" ?>" method="post" onsubmit='do_submit()'>
+<form id=frmSolution action="submit.php<?php if (isset($_GET['spa'])) echo "?spa" ?>" method="post" onsubmit='do_submit()' enctype="multipart/form-data" >
+<input type='file' name='answer' >
 <?php if (isset($id)){?>
 <span style="color:#0000ff">Problem <b><?php echo $id?></b></span>
 <input id=problem_id type='hidden' value='<?php echo $id?>' name="id" >
