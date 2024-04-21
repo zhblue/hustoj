@@ -17,7 +17,7 @@ if (!isset($_SESSION[$OJ_NAME . '_' . 'user_id'])) {
 require_once "include/memcache.php";
 require_once "include/const.inc.php";
 
-$now =  date('Y-m-d H:i:s', time());
+$now = strftime("%Y-%m-%d %H:%M", time());
 $user_id = $_SESSION[$OJ_NAME.'_'.'user_id'];
 $language = intval($_POST['language']);
 
@@ -55,12 +55,10 @@ $test_run = false;
 if (isset($_POST['cid'])) {
   $pid = intval($_POST['pid']);
   $cid = intval($_POST['cid']);
+  $_GET['cid']=$cid;
+  require_once("contest-check.php");
   $test_run = $cid<0;
   if($test_run) $cid =-$cid ;
-
-  $_GET['cid']=$cid;
-  require_once("contest-check.php");   // 复核比赛权限。
- 
   $sql = "SELECT `problem_id`,'N' FROM `contest_problem` WHERE `num`='$pid' AND contest_id=$cid";
 }
 else {
@@ -201,6 +199,7 @@ if (isset($_POST['encoded_submit'])) {
 
   $source = decode64($source);
 }
+
 $input_text = preg_replace("(\r\n)", "\n", $input_text);
 $source = $source;
 $input_text = $input_text;
@@ -211,17 +210,17 @@ if ($test_run) {
 
 $tempfile = $_FILES ["answer"] ["tmp_name"];
 if($tempfile!=""){
-        if($language<23){
+	if($language!=23){
 
-                $source=file_get_contents($tempfile);
-                $len = strlen($source);
-        }else{
-                echo "=".$language;
-        }
+		$source=file_get_contents($tempfile);
+		$len = strlen($source);
+		unlink($tempfile);
+	}else{
+		$source="Main.sb3";
+	}
 }
 
 $source_user = $source;
-
 
 //use append Main code
 $prepend_file = "$OJ_DATA/$id/prepend.".$language_ext[$language];
@@ -263,8 +262,9 @@ if (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
   $ip = htmlentities($tmp_ip[0], ENT_QUOTES, "UTF-8");
 }
 
+
 if ($len < 2) {
-  $view_errors = $MSG_TOO_SHORT."<br>";
+  $view_errors = $MSG_TOO_SHORT.$tempfile."<br>";
   require "template/".$OJ_TEMPLATE."/error.php";
   exit(0);
 }
@@ -278,7 +278,7 @@ if ($len > 65536) {
 if (!$OJ_BENCHMARK_MODE) {
   // last submit
   if(!isset($OJ_SUBMIT_COOLDOWN_TIME))  $OJ_SUBMIT_COOLDOWN_TIME = 5;
-  $now =  date('Y-m-d H:i:s', time()-$OJ_SUBMIT_COOLDOWN_TIME);
+  $now = strftime("%Y-%m-%d %X", time()-$OJ_SUBMIT_COOLDOWN_TIME);
   $sql = "SELECT `in_date`,solution_id FROM `solution` WHERE `user_id`=? AND in_date>? ORDER BY `in_date` DESC LIMIT 1";
   $res = pdo_query($sql, $user_id, $now);
 
@@ -334,7 +334,10 @@ if (~$OJ_LANGMASK&(1<<$language)) {
 
     $insert_id = pdo_query($sql, $id, $user_id, $nick, $language, $ip, $len, $cid, $pid);
   }
-
+  if($language==23){
+  	mkdir($OJ_DATA."/$id/sb3");
+	copy($tempfile,$OJ_DATA."/$id/sb3/$insert_id.sb3");
+  }
   $sql = "INSERT INTO `source_code_user`(`solution_id`,`source`) VALUES(?,?)";
   pdo_query($sql, $insert_id, $source_user);
 
@@ -370,7 +373,7 @@ if (~$OJ_LANGMASK&(1<<$language)) {
   }
   
   ////poison robot account,give system resources to the REAL people
-  if(isset($OJ_POISON_BOT_COUNT) && $OJ_POISON_BOT_COUNT >0 && (!$test_run) &&
+  if(isset($OJ_POISON_BOT_COUNT) && $OJ_POISON_BOT_COUNT >0 &&
           !(isset($_SESSION[$OJ_NAME."_administrator"])||
             isset($_SESSION[$OJ_NAME."_source_browser"])||
             isset($_SESSION[$OJ_NAME."_contest_creator"])||
@@ -391,7 +394,7 @@ if (~$OJ_LANGMASK&(1<<$language)) {
                 }
         }
         /*   //prepare system ready for even worse robots
-        $now =  date('Y-m-d H:i', time()-$OJ_SUBMIT_COOLDOWN_TIME * 6 );
+        $now = strftime("%Y-%m-%d %X", time()-$OJ_SUBMIT_COOLDOWN_TIME * 6 );
         $sql="select count(1) from solution where user_id=? and in_date > ?";
         $count=pdo_query($sql,$user_id,$now);
         if($count>=$OJ_POISON_BOT_COUNT){
