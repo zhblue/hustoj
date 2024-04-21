@@ -249,7 +249,7 @@ if ($test_run) {
   $id = 0;
 }
 
-$len = strlen($source);
+if($language!=23) $len = strlen($source);else $len = $_FILES['answer']['size'];
 //echo $source;
 
 setcookie('lastlang', $language, time()+360000);
