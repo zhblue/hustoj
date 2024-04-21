@@ -201,15 +201,27 @@ if (isset($_POST['encoded_submit'])) {
 
   $source = decode64($source);
 }
-
 $input_text = preg_replace("(\r\n)", "\n", $input_text);
 $source = $source;
 $input_text = $input_text;
-$source_user = $source;
 
 if ($test_run) {
   $id = -$id;
 }
+
+$tempfile = $_FILES ["answer"] ["tmp_name"];
+if($tempfile!=""){
+        if($language<23){
+
+                $source=file_get_contents($tempfile);
+                $len = strlen($source);
+        }else{
+                echo "=".$language;
+        }
+}
+
+$source_user = $source;
+
 
 //use append Main code
 $prepend_file = "$OJ_DATA/$id/prepend.".$language_ext[$language];
