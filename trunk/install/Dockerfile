@@ -44,6 +44,14 @@ RUN     cd /home/judge/src/core/ && bash make.sh
 #RUN     DEBIAN_FRONTEND=noninteractive apt-get -y install --no-install-recommends gnucobol
 #RUN     DEBIAN_FRONTEND=noninteractive apt-get -y install --no-install-recommends r-base
 
+#  Scratch3 judge need these lines
+#RUN wget -c http://dl.hustoj.com/scratch-run_0.1.5_linux_amd64.zip
+#RUN apt-get install unzip
+#RUN unzip scratch-run_0.1.5_linux_amd64.zip
+#RUN mv scratch-run /usr/bin
+#RUN chmod +x /usr/bin/scratch-run
+#RUN apt-get update
+
 # install debian package of similarity-tester
 RUN DEBIAN_FRONTEND=noninteractive apt-get -y install --no-install-recommends similarity-tester
 RUN cp /usr/bin/sim_c++ /usr/bin/sim_cc
