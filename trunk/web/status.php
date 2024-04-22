@@ -506,7 +506,7 @@ for ($i=0; $i<$rows_cnt; $i++) {
     $total_count++;
   }
   if (isset($_SESSION[$OJ_NAME.'_'.'administrator'])) {
-    $view_status[$i][8] = substr($row['in_date'],10)."[".$used."]";
+    $view_status[$i][8] = substr($row['in_date'],5)."[".$used."]";
     $view_status[$i][9] = $row['judger'];
   }
   else
