@@ -444,7 +444,7 @@ function selectMulti( num, answer){
 		const md = window.markdownit();
 		$(".md").each(function(){
 <?php if ($OJ_MARKDOWN  && $OJ_MARKDOWN=="marked.js") {?>
-			$(this).html(marked.parse($(this).text()));
+			$(this).html(marked.parse($(this).html()));
 <?php }else if ($OJ_MARKDOWN  && $OJ_MARKDOWN=="markdown-it") {?>
 			$(this).html(md.render($(this).text()));
 <?php } ?>
@@ -515,7 +515,7 @@ function selectMulti( num, answer){
                 $(this).find("ul").each(function(){
                         let type="radio";
                         let ol=$(this).prev("ol");
-                        if(ol!=undefined||ol.attr("start")!=undefined) i=ol.attr("start");
+                        if(ol!=undefined && ol.attr("start")!=undefined) i=ol.attr("start");
                         console.log("id["+i+"]");
                         if($(this).html().indexOf("多选")>0|| (ol!=undefined && ol.html()!=undefined && ol.html().indexOf("multiselect")>0)) type="checkbox";
                         let j=0;
