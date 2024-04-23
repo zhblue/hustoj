@@ -100,10 +100,11 @@ HUSTOJ 是采用 GPL 的自由软件。(仅限原创部分代码，其中使用�
 
 ## 感谢下述及其他被使用到的开源代码项目贡献者，来自这些项目的代码及衍生代码遵循其原有开源协议，不受本项目的GPL授权影响。
 
-* masteroj uoj loj syzoj zoj qduoj openJudger
+* masteroj uoj loj syzoj zoj qduoj openJudger [scratch-run](https://github.com/VNOI-Admin/scratch-run)
 * linux apache nginx php mysql mariadb memcached
 * bootstrap kindeditor ACEeditor blockly codemirror katex phpfilemanager mdui
-* sim gcc clang openjdk freepascal mono docker SyntaxHighlighter 
+* sim gcc clang openjdk freepascal mono docker SyntaxHighlighter
+  
 
 排名不分先后本列表欢迎补充
 
@@ -144,6 +145,8 @@ Star us, please!
 	
 日期  | 类型 |  更新内容
 ------- | :--: | :-------
+04-23 | 补丁 | 修补03-26引入的mathjax解析错误。
+04-22 | 更新 | 增加scratch3上传文件模式。
 04-06 | 更新 | 测试数据管理界面增加了生成input.name/output.name文件的功能。
 04-05 | 更新 | [@Tiang-88](https://github.com/Tiang-88) 增加了露一手功能中，左右屏幕占比调整的功能。
 03-26 | 更新 | 增加对来自hydro的主观题格式题目导入，支持图片附件的导入。允许更换markdown-it作为markdown解析器。
