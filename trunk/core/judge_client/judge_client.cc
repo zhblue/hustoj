@@ -206,8 +206,8 @@ static int py2=1; // caution: py2=1 means default using py3
 MYSQL *conn;
 #endif
 static char jresult[15][4]={"PD","PR","CI","RJ","AC","PE","WA","TLE","MLE","OLE","RE","CE","CO","TR","MC"};
-static char lang_ext[23][8] = {"c", "cc", "pas", "java", "rb", "sh", "py",
-			       "php", "pl", "cs", "m", "bas", "scm", "c", "cc", "lua", "js", "go","sql","f95","m","cob","R"};
+static char lang_ext[24][8] = {"c", "cc", "pas", "java", "rb", "sh", "py",
+			       "php", "pl", "cs", "m", "bas", "scm", "c", "cc", "lua", "js", "go","sql","f95","m","cob","R","sb3"};
 //static char buf[BUFFER_SIZE];
 
 int lockfile(int fd) {
@@ -434,9 +434,13 @@ void init_syscalls_limits(int lang)      //白名单初始化
 	{ //cobol
 		for (i = 0; i == 0 || LANG_CBV[i]; i++)
 			call_counter[LANG_CBV[i]] = HOJ_MAX_LIMIT;
-	}else if(lang == LANG_R )
+	}else if(lang == LANG_R ){
 		for (i = 0; i == 0 || LANG_RLV[i]; i++)
 			call_counter[LANG_RLV[i]] = HOJ_MAX_LIMIT;
+	}else if(lang == LANG_SB3 ){
+		for (i = 0; i == 0 || LANG_SB3V[i]; i++)
+			call_counter[LANG_SB3V[i]] = HOJ_MAX_LIMIT;
+	}
 #ifdef __aarch64__
 	if (lang==3)call_counter[220]= 100;
 	else call_counter[220]= 1;
@@ -1317,6 +1321,7 @@ int compile(int lang, char *work_dir)
 	const char *CP_GO[] = {"go", "build", "-o", "Main", "Main.go", NULL};
 	const char *CP_FORTRAN[] = {"f95", "-static", "-o", "Main", "Main.f95", NULL};
 	const char *CP_COBOL[] = {"cobc","-x", "-static", "-o", "Main", "Main.cob", NULL};
+	const char *CP_SB3[] = {"scratch-run","--check", "Main.sb3", NULL};
 
 	char * const envp[]={(char * const )"PYTHONIOENCODING=utf-8",
 			     (char * const )"USER=judge",
@@ -1354,7 +1359,7 @@ int compile(int lang, char *work_dir)
 		LIM.rlim_cur = 500 * STD_MB;
 		setrlimit(RLIMIT_FSIZE, &LIM);
 
-		if (lang == LANG_PASCAL  || lang == LANG_JAVA || lang == LANG_GO  || lang == LANG_R )
+		if (lang == LANG_PASCAL  || lang == LANG_JAVA || lang == LANG_GO  || lang == LANG_R || lang == LANG_SB3 )
 		{
 #ifdef __mips__
 			LIM.rlim_max = STD_MB << 12;
@@ -1484,6 +1489,9 @@ int compile(int lang, char *work_dir)
 			break;
 		case LANG_COBOL:
 			execvp(CP_COBOL[0], (char *const *)CP_COBOL);
+			break;
+		case LANG_SB3:
+			execvp(CP_SB3[0], (char *const *)CP_SB3);
 			break;
 		default:
 			printf("nothing to do!\n");
@@ -1634,7 +1642,7 @@ void _get_solution_http(int solution_id, char *work_dir, int lang)
 
 	pclose(pout);
 }
-void get_solution(int solution_id, char *work_dir, int lang)
+void get_solution(int solution_id, char *work_dir, int lang,int p_id)
 {
 	char src_pth[BUFFER_SIZE];
 	sprintf(src_pth, "Main.%s", lang_ext[lang]);
@@ -1652,6 +1660,9 @@ void get_solution(int solution_id, char *work_dir, int lang)
 	if(lang == LANG_PYTHON ){    // 从源码中搜索python2字样，失败的结果非零默认python3,成功的结果为0是python2
 		py2 = execute_cmd("/bin/grep 'python2' %s/Main.py > /dev/null", work_dir);
                 execute_cmd("sed -i 's/import.*os//g' %s/%s", work_dir, src_pth);
+	}
+	if(lang == LANG_SB3 ){
+                execute_cmd("cp %s/../data/%d/sb3/%d.sb3 %s", work_dir,p_id,solution_id, src_pth);
 	}
 	execute_cmd("chown judge %s/%s", work_dir, src_pth);
 }
@@ -2476,6 +2487,7 @@ void run_solution(int &lang, char *work_dir, double &time_lmt, int &usedtime,
 	case LANG_CSHARP: //C#
 	case LANG_JAVA: //java
 	case LANG_R:
+	case LANG_SB3:
 		LIM.rlim_cur = LIM.rlim_max = 880;
 		break;
 	case LANG_RUBY: //ruby
@@ -2568,6 +2580,10 @@ void run_solution(int &lang, char *work_dir, double &time_lmt, int &usedtime,
 		break;
 	case LANG_R:
 		execle("/usr/bin/Rscript", "/usr/bin/Rscript", "Main.R", (char *)NULL,envp);
+		break;
+	case LANG_SB3:
+		execle("/usr/bin/scratch-run", "/usr/bin/scratch-run", "Main.sb3", (char *)NULL,envp);
+		break;
 
 	}
 	//sleep(1);
@@ -2902,7 +2918,8 @@ void watch_solution(pid_t pidApp, char *infile, int &ACflg, int spj,
 		    lang == LANG_JS || 
 		    lang == LANG_GO || 
 		    lang == LANG_MATLAB||
-		    lang == LANG_COBOL
+		    lang == LANG_COBOL||
+		    lang == LANG_SB3
 		    )
 		{
 			tempmemory = get_page_fault_mem(ruse, pidApp);
@@ -3056,8 +3073,6 @@ void watch_solution(pid_t pidApp, char *infile, int &ACflg, int spj,
 			ptrace(PTRACE_SYSCALL, pidApp, NULL, NULL);
 			continue;
 		}else{
-			call_id = call_id % call_array_size;
-			//printf("call_id:%x\n",call_id);
 #endif
 #ifdef __arm__
 		call_id=ptrace(PTRACE_GETREGS, pidApp, NULL, &reg);
@@ -3078,6 +3093,9 @@ void watch_solution(pid_t pidApp, char *infile, int &ACflg, int spj,
 		call_id=ptrace(PTRACE_GETREGS, pidApp, NULL, &reg);
 			call_id = ((unsigned int)reg.REG_SYSCALL) % call_array_size;
 #endif 
+//			printf("call_id:%x %d\n",call_id,call_counter[call_id]);
+			call_id = call_id % call_array_size;
+//			printf("call_id:%d %d\n",call_id,call_counter[call_id]);
 			
 
 			if (record_call)
@@ -3400,7 +3418,7 @@ int main(int argc, char **argv)
 	}
 	//copy source file
 
-	get_solution(solution_id, work_dir, lang);
+	get_solution(solution_id, work_dir, lang,p_id);
 
 	//java and other VM language are lucky to have the global bonus in judge.conf
 	if (lang >= LANG_JAVA && lang != LANG_OBJC && lang != LANG_CLANG && lang != LANG_CLANGPP  && lang != LANG_GO )
