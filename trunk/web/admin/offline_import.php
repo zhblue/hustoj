@@ -139,7 +139,8 @@ source
      |
      ......
 </pre>
-上传后，会自动增加题目和比赛，如有特殊情况，可以修订题目后重判比赛。
+上传后，会自动增加题目和比赛，如有特殊情况，可以修订题目后重判比赛。<br>
+(可以利用本功能加题，一次性上传多个题目的测试数据，然后慢慢补充修订题面。)
 	<form method="post" action="offline_import.php" enctype="multipart/form-data">
 		<input type=file name="offline" >
 		<input type=submit >
