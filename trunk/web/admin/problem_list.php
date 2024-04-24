@@ -83,7 +83,10 @@ echo "</select>";
 <input type="hidden" name=hlist value="" >
     <tr>
       <td width=60px><?php echo $MSG_PROBLEM_ID?><input type=checkbox style='vertical-align:2px;' onchange='$("input[type=checkbox]").prop("checked", this.checked)'></td>
-      <td><?php echo $MSG_TITLE?></td>
+      <td><?php echo $MSG_TITLE?>
+
+
+	</td>
       <td><?php echo $MSG_AC?></td>
       <td><?php echo $MSG_SAVED_DATE?></td>
       <?php
@@ -104,11 +107,30 @@ echo "</select>";
       </td>
     </tr>
     <?php
+    $color=array("blue","teal","orange","pink","olive","red","violet","yellow","green","purple");
+    $tcolor=0;
     foreach($result as $row){
       echo "<tr>";
         echo "<td>".$row['problem_id']." <input type=checkbox style='vertical-align:2px;' name='pid[]' value='".$row['problem_id']."'></td>";
         echo "<td><a href='../problem.php?id=".$row['problem_id']."'>".$row['title']."</a>";
                if(!empty($row['remote_oj']))echo "&nbsp;<a href='".$row['source']."' target=_blank>  ".$row['remote_oj'].$row['remote_id']."</a>";
+    
+    	$cats=explode(" ",$row['source']);
+    	foreach($cats as $cat){
+            if(trim($cat)=="") continue;
+            $label_theme=$color[$tcolor%count($color)];
+            $tcolor++;
+            ?>
+            <a href="<?php
+                if(mb_ereg("^http",$cat))    // remote oj pop links
+                        echo htmlentities($cat,ENT_QUOTES,'utf-8').'" target="_blank' ;
+                else
+                        echo "problem_list.php?keyword=".urlencode(htmlentities($cat,ENT_QUOTES,'utf-8')) ;
+            ?>" class="ui medium <?php echo $label_theme; ?> label">
+              <?php echo htmlentities($cat,ENT_QUOTES,'utf-8'); ?>
+            </a>
+    		<?php 
+    	}
         echo "</td>";
         echo "<td>".$row['accepted']."</td>";
         echo "<td>".$row['in_date']."</td>";
