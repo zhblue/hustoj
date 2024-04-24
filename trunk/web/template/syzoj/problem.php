@@ -219,7 +219,7 @@ div[class*=ace_br] {
                 if(mb_ereg("^http",$cat))    // remote oj pop links
                         echo htmlentities($cat,ENT_QUOTES,'utf-8').'" target="_blank' ;
                 else
-                        echo "problemset.php?search=".htmlentities($cat,ENT_QUOTES,'utf-8') ;
+                        echo "problemset.php?search=".".urlencode(htmlentities($cat,ENT_QUOTES,'utf-8')) ;
             ?>" class="ui medium <?php echo $label_theme; ?> label">
               <?php echo htmlentities($cat,ENT_QUOTES,'utf-8'); ?>
             </a>
