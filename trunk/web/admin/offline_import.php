@@ -139,6 +139,7 @@ source
      |
      ......
 </pre>
+上传后，会自动增加题目和比赛，如有特殊情况，可以修订题目后重判比赛。
 	<form method="post" action="offline_import.php" enctype="multipart/form-data">
 		<input type=file name="offline" >
 		<input type=submit >
