@@ -215,7 +215,10 @@ else {
 			
 			}else if(endsWith($answer,".cpp")){
 				$student=dirname($file_name);
-				if(dirname($student)!="source") $student=dirname($student);
+				$pdname=basename($student);
+				if(dirname($student)!="source") {
+					$student=dirname($student);
+				}
 				$student=basename($student);
 				$problem=basename($answer,".cpp");
 				if( endsWith($problem,".cpp")) $problem=basename($problem,".cpp");
@@ -231,6 +234,9 @@ else {
 				if(isset($nums[$problem])&&isset($problems[$problem])){
 					$num=$nums[$problem];
 					$pid=$problems[$problem];
+					if($pdname!=$student&&$pdname!=$problem){
+						$file_content.="\nThe dirname of this file do NOT quanlified. Will be rated as 0 point!";
+					}
 					$len=strlen($file_content);
 					$sql = "INSERT INTO solution(problem_id,user_id,contest_id,num,nick,in_date,language,ip,code_length,result)
 							VALUES(?,?,?,?,?,NOW(),?,'127.0.0.1',?,14)";
