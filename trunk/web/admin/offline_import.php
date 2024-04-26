@@ -130,12 +130,11 @@ if (!isset($_FILES ["offline"])||$_FILES ["offline"] ["error"] > 0) {
 	|   ......
 	+ source   
 	     + student1
+		 |    problem1
 	     |       + problem1.cpp
-	     |       + problem2.cpp
-	     |
 	     |
 	     + student2
-	     |       + problem1.cpp
+		 |    problem2
 	     |       + problem2.cpp
 	     |
 	     ......
