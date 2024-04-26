@@ -235,7 +235,7 @@ else {
 					$num=$nums[$problem];
 					$pid=$problems[$problem];
 					if($pdname!=$student&&$pdname!=$problem){
-						$file_content.="\nThe dirname of this file do NOT quanlified. Will be rated as 0 point!";
+						$file_content.="\nThe dirname of this file is NOT quanlified. Will be rated as 0 point!";
 					}
 					$len=strlen($file_content);
 					$sql = "INSERT INTO solution(problem_id,user_id,contest_id,num,nick,in_date,language,ip,code_length,result)
