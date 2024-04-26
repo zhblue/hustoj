@@ -23,7 +23,6 @@ require_once ("../include/problem.php");
 <hr>
 &nbsp;&nbsp;- Import Offline ... <br>
 <b><?php echo $MSG_CONTEST."-".$MSG_IMPORT ?></b>
-导入zip文件，遵循下面的目录结构:
 <?php
 function startsWith( $haystack, $needle ) {
      $length = strlen( $needle );
@@ -54,12 +53,12 @@ function getAttribute($Node, $TagName,$attribute) {
 
 function hasProblem($title) {
   //return false;	
-  $md5 = md5($title);
-  $sql = "SELECT 1 FROM problem WHERE md5(title)=?";  
-  $result = pdo_query($sql, $md5);
-  $rows_cnt = count($result);		
+  $sql = "SELECT problem_id  FROM problem WHERE title=?";  
+  $result = pdo_query($sql, $title);
+  $ret=0;
+  if (isset($result[0])&&isset($result[0][0]))  $ret=$result[0][0];		
   //echo "row->$rows_cnt";			
-  return ($rows_cnt>0);
+  return $ret;
 }
 
 function mkpta($pid,$prepends,$node) {
@@ -116,31 +115,31 @@ function import_dir($json) {
 if (!isset($_FILES ["offline"])||$_FILES ["offline"] ["error"] > 0) {
   echo "&nbsp;&nbsp;- Error: File size is too big, change in PHP.ini<br />";
 ?>
+导入zip文件，遵循下面的目录结构:
 <pre>
-data
-   +problem1
-   |      + 1.in
-   |      + 1.out
-   |      + 2.in
-   |      + 2.out
-   |
-   +problem2
-   |
-   ......
-source   
-     +student1
-     |       + problem1.cpp
-     |       + problem2.cpp
-     |
-     |
-     +student2
-     |       + problem1.cpp
-     |       + problem2.cpp
-     |
-     ......
+离线练习赛<?php date("Ymd")?>.zip
+	+ data
+	|   + problem1
+	|   |      + 1.in
+	|   |      + 1.out
+	|   |      + 2.in
+	|   |      + 2.out
+	|   |
+	|   + problem2
+	|   |
+	|   ......
+	+ source   
+	     + student1
+	     |       + problem1.cpp
+	     |       + problem2.cpp
+	     |
+	     |
+	     + student2
+	     |       + problem1.cpp
+	     |       + problem2.cpp
+	     |
+	     ......
 </pre>
-上传后，会自动增加题目和比赛，如有特殊情况，可以修订题目后重判比赛。<br>
-(可以利用本功能加题，一次性上传多个题目的测试数据，然后慢慢补充修订题面。)
 	<form method="post" action="offline_import.php" enctype="multipart/form-data">
 		<input type=file name="offline" >
 		<input type=submit >
@@ -157,6 +156,7 @@ else {
   $problems=array();
   $nums=array();
   $cid=0;
+  $nextNum=0;
   if (get_extension( $_FILES ["offline"] ["name"])=="zip") {
 	    $resource = zip_open($tempfile);
 	    $save_path="";
@@ -170,7 +170,7 @@ else {
 		$file_size = zip_entry_filesize($dir_resource);
 		$file_content = zip_entry_read($dir_resource,$file_size);
 		if(startsWith($file_name,"data")){
-			if(endsWith($file_name,"/")){ 
+			if(dirname($file_name)=="data"){ 
 				$title=basename($file_name);
 				if($title!="data"){
 					$pid = addproblem($title,1,128, $description, $input, $output, $sample_input, $sample_output, $hint, $source, $spj, $OJ_DATA);
@@ -181,9 +181,7 @@ else {
 				}
 			}else{
 				
-				if(endsWith($file_name,".in")){ 
-					file_put_contents($OJ_DATA."/$pid/".basename($file_name),$file_content );			
-				}else if(endsWith($file_name,".out")){
+				if(endsWith($file_name,".in")||endsWith($file_name,".out")||endsWith($file_name,".name")){ 
 					file_put_contents($OJ_DATA."/$pid/".basename($file_name),$file_content );			
 				}else if(endsWith($file_name,".ans")){
 					file_put_contents($OJ_DATA."/$pid/".basename($file_name,".ans").".out",$file_content );			
@@ -201,23 +199,35 @@ else {
 				  $endtime=date("Y-m-d H:i",time()+3600);
 				  $description = "Offline contest imported by ".$user_id;
 				  $cid = pdo_query($sql,$title,$starttime,$endtime,0,0,$description,"",$user_id) ;
-				  echo "导入离线竞赛$title:".$cid;
+				  echo "导入离线竞赛$title:".$cid."<br>";
 				  $plist="";
-				 						
+				    $i=0;				
 				    $sql_1 = "INSERT INTO `contest_problem`(`contest_id`,`problem_id`,`num`) VALUES (?,?,?)";
-				    for($i=0; $i<count($problems); $i++){
+				    for(; $i<count($problems); $i++){
 					 if($plist) $plist.=",";
 					 $plist.=intval($problems[$titles[$i]]);
 					 pdo_query($sql_1,$cid,$problems[$titles[$i]],$i);
 				    }
+				    $nextNum=$i;
 				    //echo $sql_1;
 				    $sql = "UPDATE `problem` SET defunct='N' WHERE `problem_id` IN ($plist)";
 				    pdo_query($sql) ;
 			
 			}else if(endsWith($answer,".cpp")){
-				$student=basename(dirname( $file_name ));
+				$student=dirname($file_name);
+				if(dirname($student)!="source") $student=dirname($student);
+				$student=basename($student);
 				$problem=basename($answer,".cpp");
 				if( endsWith($problem,".cpp")) $problem=basename($problem,".cpp");
+				if(!isset($problems[$problem])){
+					$pid=hasProblem($problem);
+					if($pid>0){ 
+						$problems[$problem]=$pid;
+				    		$sql_1 = "INSERT INTO `contest_problem`(`contest_id`,`problem_id`,`num`) VALUES (?,?,?)";
+					 	pdo_query($sql_1,$cid,$pid,$nextNum);
+						$nextNum++;
+					}
+				}
 				if(isset($nums[$problem])&&isset($problems[$problem])){
 					$num=$nums[$problem];
 					$pid=$problems[$problem];
