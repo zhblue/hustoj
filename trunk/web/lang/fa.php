@@ -162,6 +162,7 @@
 	$MSG_PRIVILEGE_TYPE="Privilege Type";
 	$MSG_NEWS_MENU="Show in menu";
         $MSG_LAST_LOGIN="Last Login";
+        $MSG_OFFLINE_ZIP_IMPORT="Import a offline contest ZIP file, which using the following structure: ";
   //contest.php
   $MSG_PRIVATE_WARNING="Contest has not started or you don't have privilege of it.";
 	$MSG_PRIVATE_USERS_ADD="*Enter userIDs with newline, or you can copy and paste from a spreadsheet.";
