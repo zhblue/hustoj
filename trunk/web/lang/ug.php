@@ -177,6 +177,7 @@ $MSG_ABSENT="Absent";
 	$MSG_PRIVILEGE_TYPE="ھوقۇق تۈرى";
 	$MSG_NEWS_MENU="Show in menu";
         $MSG_LAST_LOGIN="Last Login";
+        $MSG_OFFLINE_ZIP_IMPORT="Import a offline contest ZIP file, which using the following structure: ";
   //contest.php
   $MSG_PRIVATE_WARNING="مۇسابىقە باشلانمىدى ياكى سوئال شەخىسكە تەۋە";
   $MSG_PRIVATE_USERS_ADD="ئوقۇغۇچىلار ئوقۇش نومۇرىنى Excel دىن تەرتىپ بويىچە كۆچۈرۈپ كېلىپ، ئۇلاردىن ئوقۇش نومۇرى ئارقىلىق UID قىلىپ تىزىمغا ئالدۇرۇلغىلى بولىدۇ، Private نىڭ مۇسابىقىسىگە كىرىپ مەشغۇلات ۋە سىناق قىلغىلى بولىدۇ. ";
