@@ -119,7 +119,7 @@ if (!isset($_FILES ["offline"])||$_FILES ["offline"] ["error"] > 0) {
 ?>
 
 <pre>
-离线练习赛<?php date("Ymd")?>.zip
+<?php echo "$MSG_OFFLINE $MSG_CONTEST". date("Ymd")?>.zip
 	+ data
 	|   + problem1
 	|   |      + 1.in
@@ -204,7 +204,7 @@ else {
 				  $endtime=date("Y-m-d H:i",time()+3600);
 				  $description = "Offline contest imported by ".$user_id;
 				  $cid = pdo_query($sql,$title,$starttime,$endtime,0,0,$description,"",$user_id) ;
-				  echo "导入离线竞赛$title:".$cid."<br>";
+				  echo " $MSG_OFFLINE $MSG_CONTEST - $MSG_IMPORT $title:".$cid."<br>";
 				  $plist="";
 				    $i=0;				
 				    $sql_1 = "INSERT INTO `contest_problem`(`contest_id`,`problem_id`,`num`) VALUES (?,?,?)";
