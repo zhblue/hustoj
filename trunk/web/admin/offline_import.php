@@ -114,8 +114,10 @@ function import_dir($json) {
 
 if (!isset($_FILES ["offline"])||$_FILES ["offline"] ["error"] > 0) {
   echo "&nbsp;&nbsp;- Error: File size is too big, change in PHP.ini<br />";
+
+  echo $MSG_OFFLINE_ZIP_IMPORT;	
 ?>
-导入zip文件，遵循下面的目录结构:
+
 <pre>
 离线练习赛<?php date("Ymd")?>.zip
 	+ data
