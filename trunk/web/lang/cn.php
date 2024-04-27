@@ -183,6 +183,7 @@
 	$MSG_NEWS_MENU="是否展示到菜单";
         $MSG_LAST_LOGIN="最后登录";
 	$MSG_OFFLINE_ZIP_IMPORT="导入zip文件，遵循下面的目录结构:";
+	$MSG_OFFLINE="离线";
 
   //contest.php
   $MSG_PRIVATE_WARNING="比赛尚未开始或私有，不能查看题目。";
