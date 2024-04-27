@@ -239,7 +239,7 @@ else {
 				if(isset($nums[$problem])&&isset($problems[$problem])){
 					$num=$nums[$problem];
 					$pid=$problems[$problem];
-					if($pdname!=$student&&$pdname!=$problem){
+					if( $OJ_OFFLINE_ZIP_CCF_DIRNAME && $pdname!=$student && $pdname!=$problem){
 						$file_content.="\nThe dirname of this file is NOT qualified. Will be rated as 0 point!";
 					}
 					$len=strlen($file_content);
