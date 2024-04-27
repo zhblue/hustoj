@@ -176,7 +176,7 @@
  $MSG_NEWS_MENU ="是否展示到菜單";
  $MSG_LAST_LOGIN="最後登錄";
  $MSG_OFFLINE_ZIP_IMPORT="導入zip文件，遵循下面的目錄結構:";
-
+ $MSG_OFFLINE="離線";
 
  //contest.php
  $MSG_PRIVATE_WARNING ="比賽尚未開始或私有，不能查看題目。 ";
