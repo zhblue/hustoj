@@ -1,6 +1,7 @@
 <?php
 require("admin-header.php");
 require_once("../include/set_get_key.php");
+require_once('../include/const.inc.php');
 
 if(!(isset($_SESSION[$OJ_NAME.'_'.'administrator'])
         || isset($_SESSION[$OJ_NAME.'_'.'problem_editor'])
@@ -47,10 +48,10 @@ $sql = "";
 if(isset($_GET['keyword']) && $_GET['keyword']!=""){
   $keyword = $_GET['keyword'];
   $keyword = "%$keyword%";
-  $sql = "SELECT `problem_id`,`title`,`accepted`,`in_date`,`defunct`,source,remote_oj,remote_id  FROM `problem` WHERE (problem_id LIKE ?) OR (title LIKE ?) OR (description LIKE ?) OR (source LIKE ?)";
-  $result = pdo_query($sql,$keyword,$keyword,$keyword,$keyword);
+  $sql = "SELECT `problem_id`,`title`,`accepted`,`in_date`,`defunct`,`source`,`remote_oj`,`remote_id`  FROM `problem` WHERE (problem_id LIKE ?) OR (title LIKE ?) OR (description LIKE ?) OR (source LIKE ?) OR (hint LIKE ?) ORDER BY `problem_id` ASC";
+  $result = pdo_query($sql,$keyword,$keyword,$keyword,$keyword,$keyword);
 }else{
-  $sql = "SELECT `problem_id`,`title`,`accepted`,`in_date`,`defunct`,source,remote_oj,remote_id  FROM `problem` ORDER BY `problem_id` DESC LIMIT $sid, $idsperpage";
+  $sql = "SELECT `problem_id`,`title`,`accepted`,`in_date`,`defunct`,`source`,`remote_oj`,`remote_id`  FROM `problem` ORDER BY `problem_id` DESC LIMIT $sid, $idsperpage";
   $result = pdo_query($sql);
 }
 ?>
@@ -83,12 +84,10 @@ echo "</select>";
 <input type="hidden" name=hlist value="" >
     <tr>
       <td width=60px><?php echo $MSG_PROBLEM_ID?><input type=checkbox style='vertical-align:2px;' onchange='$("input[type=checkbox]").prop("checked", this.checked)'></td>
-      <td><?php echo $MSG_TITLE?>
-
-
-	</td>
-      <td><?php echo $MSG_AC?></td>
+      <td><?php echo $MSG_TITLE?></td>
+      <td><?php echo $MSG_AC?></td>	 
       <td><?php echo $MSG_SAVED_DATE?></td>
+	   <td><?php echo $MSG_SOURCE ?></td><!--分类-->
       <?php
       if(isset($_SESSION[$OJ_NAME.'_'.'administrator']) ||isset($_SESSION[$OJ_NAME.'_'.'problem_editor'])){
         if(isset($_SESSION[$OJ_NAME.'_'.'administrator']) ||isset($_SESSION[$OJ_NAME.'_'.'problem_editor']))
@@ -106,34 +105,42 @@ echo "</select>";
       <input type=submit name='plist' value='<?php echo $MSG_NEW_PROBLEM_LIST?>' onclick='$("form").attr("action","news_add_page.php")'>
       </td>
     </tr>
-    <?php
-    $color=array("blue","teal","orange","pink","olive","red","violet","yellow","green","purple");
-    $tcolor=0;
+    <?php    
+	
     foreach($result as $row){
-      echo "<tr>";
+		$view = "";
+        echo "<tr>";
         echo "<td>".$row['problem_id']." <input type=checkbox style='vertical-align:2px;' name='pid[]' value='".$row['problem_id']."'></td>";
         echo "<td><a href='../problem.php?id=".$row['problem_id']."'>".$row['title']."</a>";
-               if(!empty($row['remote_oj']))echo "&nbsp;<a href='".$row['source']."' target=_blank>  ".$row['remote_oj'].$row['remote_id']."</a>";
-    
-    	$cats=explode(" ",$row['source']);
-    	foreach($cats as $cat){
-            if(trim($cat)=="") continue;
-            $label_theme=$color[$tcolor%count($color)];
-            $tcolor++;
-            ?>
-            <a href="<?php
-                if(mb_ereg("^http",$cat))    // remote oj pop links
-                        echo htmlentities($cat,ENT_QUOTES,'utf-8').'" target="_blank' ;
-                else
-                        echo "problem_list.php?keyword=".urlencode(htmlentities($cat,ENT_QUOTES,'utf-8')) ;
-            ?>" class="ui medium <?php echo $label_theme; ?> label">
-              <?php echo htmlentities($cat,ENT_QUOTES,'utf-8'); ?>
-            </a>
-    		<?php 
-    	}
+               if(!empty($row['remote_oj']))echo "&nbsp;<a href='".$row['source']."' target=_blank>  ".$row['remote_oj'].$row['remote_id']."</a>";   	
         echo "</td>";
         echo "<td>".$row['accepted']."</td>";
         echo "<td>".$row['in_date']."</td>";
+		echo "<td>";//分类
+		
+		$category = array();
+	    $cate = explode(" ",$row['source']);
+	    foreach($cate as $cat){
+                        $cat=trim($cat);
+                        if(mb_ereg("^http",$cat)){
+                               echo htmlentities($cat,ENT_QUOTES,'utf-8').'" target="_blank' ;
+                        }
+                        array_push($category,trim($cat));
+        }
+		foreach ($category as $cat) {
+			if(trim($cat)==""||trim($cat)=="&nbsp")
+				continue;
+
+			$hash_num = hexdec(substr(md5($cat),0,7));
+			$label_theme = $color_theme[$hash_num%count($color_theme)];
+
+			if ($label_theme=="") $label_theme = "default";
+			$view .= "<a title='".htmlentities($cat,ENT_QUOTES,'UTF-8')."' class='label label-$label_theme' style='display: inline-block;' href='problem_list.php?keyword=".htmlentities(urlencode($cat),ENT_QUOTES,'UTF-8')."'>".mb_substr($cat,0,10,'utf8')."</a>&nbsp;";
+		}
+		echo "<div class=\"show_tag_controled\" style=\"float: right; \">";		
+    	echo $view;		
+		echo "</div></td>";
+		
         if(isset($_SESSION[$OJ_NAME.'_'.'administrator'])||isset($_SESSION[$OJ_NAME.'_'.'problem_editor'])){
           if(isset($_SESSION[$OJ_NAME.'_'.'administrator']) || isset($_SESSION[$OJ_NAME.'_'.'problem_editor'])){
             echo "<td><a href=problem_df_change.php?id=".$row['problem_id']."&getkey=".$_SESSION[$OJ_NAME.'_'.'getkey'].">".($row['defunct']=="N"?"<span titlc='click to reserve it' class=green>$MSG_AVAILABLE</span>":"<span class=red title='click to be available'>$MSG_RESERVED</span>")."</a><td>";
