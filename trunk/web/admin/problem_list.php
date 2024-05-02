@@ -145,12 +145,14 @@ echo "</select>";
           if(isset($_SESSION[$OJ_NAME.'_'.'administrator']) || isset($_SESSION[$OJ_NAME.'_'.'problem_editor'])){
             echo "<td><a href=problem_df_change.php?id=".$row['problem_id']."&getkey=".$_SESSION[$OJ_NAME.'_'.'getkey'].">".($row['defunct']=="N"?"<span titlc='click to reserve it' class=green>$MSG_AVAILABLE</span>":"<span class=red title='click to be available'>$MSG_RESERVED</span>")."</a><td>";
             if($OJ_SAE||function_exists("system")){
-    ?>
-             <a href=# onclick='javascript:if(confirm("<?php echo $MSG_DELETE."[".htmlentities($row['title'],ENT_QUOTES,"UTF-8")?>] ?    ")) 
-		     location.href="problem_del.php?id=<?php echo $row['problem_id']?>&getkey=<?php echo $_SESSION[$OJ_NAME.'_'.'getkey']?>"'>
-<?php echo $MSG_DELETE ?>
-              </a>
-        <?php
+		    if(isset($_SESSION[$OJ_NAME.'_'.'administrator']) || isset($_SESSION[$OJ_NAME.'_'."p".$row['problem_id']]) ){
+			    ?>
+			             <a href=# onclick='javascript:if(confirm("<?php echo $MSG_DELETE."[".htmlentities($row['title'],ENT_QUOTES,"UTF-8")?>] ?    ")) 
+					     location.href="problem_del.php?id=<?php echo $row['problem_id']?>&getkey=<?php echo $_SESSION[$OJ_NAME.'_'.'getkey']?>"'>
+						<?php echo $MSG_DELETE ?>
+			              </a>
+			        <?php
+		    }
         }
       }
       if(isset($_SESSION[$OJ_NAME.'_'.'administrator']) || isset($_SESSION[$OJ_NAME.'_'."p".$row['problem_id']]) ){
