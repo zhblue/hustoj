@@ -112,7 +112,7 @@ switch($OJ_FRIENDLY_LEVEL) {
 	   date_default_timezone_set("PRC");
 	   pdo_query("SET time_zone ='+8:00'");
 }
-
+if(!isset($OJ_SUBMIT_COOLDOWN_TIME)) $OJ_SUBMIT_COOLDOWN_TIME=3;
 // if using EXAM or ON site auto turn off free practice
 if(isset($OJ_ON_SITE_CONTEST_ID) || isset($OJ_EXAM_CONTEST_ID)) $OJ_FREE_PRACTICE=false;
 
