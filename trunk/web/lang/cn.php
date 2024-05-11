@@ -335,7 +335,7 @@
 
   // template/../reinfo.php
   $MSG_A_NOT_ALLOWED_SYSTEM_CALL="使用了系统禁止的操作系统调用，看看是否越权访问了文件或进程等资源,如果你是系统管理员，而且确认提交的答案没有问题，测试数据没有问题，可以发送'RE'到微信公众号onlinejudge，查看解决方案。";
-  $MSG_SEGMETATION_FAULT="段错误，检查是否有数组越界，指针异常，访问到不应该访问的内存区域，或者全局数组申请过大空间(每个long long占用8字节)。<br>如果您是管理员，正在使用标准答案测试系统，那么本报错可视同MLE内存超限。<br>请增加题目限制的内存空间，或增加judge.conf中的OJ_JAVA_MEMORY_BONUS";
+  $MSG_SEGMETATION_FAULT="段错误（a.k.a 数组开小了，亲！）<br> 检查是否有数组越界，指针异常，访问到不应该访问的内存区域，或者全局数组申请过大空间(每个long long占用8字节)。<br>如果您是管理员，正在使用标准答案测试系统，那么本报错可视同MLE内存超限。<br>请增加题目限制的内存空间，或增加judge.conf中的OJ_JAVA_MEMORY_BONUS";
   $MSG_FLOATING_POINT_EXCEPTION="浮点错误，检查是否有除以零的情况";
   $MSG_WRONG_OUTPUT_TYPE_EXCEPTION="二进制输出错误，检查是否误将数值类型作为字符输出，或者输出了不打印字符的情况。";
   $MSG_BUFFER_OVERFLOW_DETECTED="缓冲区溢出，检查是否有字符串长度超出数组的情况";
