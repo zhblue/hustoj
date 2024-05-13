@@ -139,7 +139,7 @@ echo"<option value=$i ".( $lastlang==$i?"selected":"").">
 
           <textarea style="
           width:100%;background-color: white;
-          " cols=10 rows=5 id="out" name="out" disabled="true" >SHOULD BE:</textarea>    
+          " cols=10 rows=5 id="out" name="out" disabled="true" >SHOULD BE:<?php echo $view_sample_output?></textarea>    
      </div>
 <?php } ?>
 <?php if (isset($OJ_TEST_RUN)&&$OJ_TEST_RUN){?>
