@@ -42,9 +42,9 @@ Problem <span class=blue><b><?php echo chr($pid+ord('A'))?></b></span> of Contes
 <?php
 $lang_count=count($language_ext);
 if(isset($_GET['langmask']))
-$langmask=$_GET['langmask'];
-else
-$langmask=$OJ_LANGMASK;
+	$langmask=$_GET['langmask'];
+$langmask|=$OJ_LANGMASK;
+
 $lang=(~((int)$langmask))&((1<<($lang_count))-1);
 //$lastlang=$_COOKIE['lastlang'];
 //if($lastlang=="undefined") $lastlang=1;
