@@ -139,15 +139,14 @@ echo"<option value=$i ".( $lastlang==$i?"selected":"").">
 
           <textarea style="
           width:100%;background-color: white;
-          " cols=10 rows=5 id="out" name="out" disabled="true" >SHOULD BE:<?php echo $view_sample_output?></textarea>    
+          " cols=10 rows=5 id="out" name="out" disabled="true" placeholder='<?php echo htmlentities($view_sample_output,ENT_QUOTES,'UTF8')?>' ></textarea>    
      </div>
 <?php } ?>
 <?php if (isset($OJ_TEST_RUN)&&$OJ_TEST_RUN){?>
         <!--运行按钮-->
             <input style="
-            margin-top: 30px;
-            margin-left: 10px;
-            
+             margin-top: 30px;
+            margin-left: 0 auto;
             width: 7%;background-color: #22ba46a3;border-color: #00fff470;height: 130px;
             " id="TestRun" class="btn btn-info" type=button value="<?php echo $MSG_TR?>" onclick=do_test_run();>
             
