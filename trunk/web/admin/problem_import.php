@@ -64,7 +64,7 @@
     ?>
 
     <?php if ($show_form) { ?>
-    - Import Problem <b>FPS/XML</b> <br><br>
+    - Import Problem <b>FPS(.xml)/ZIP(.xml inside) 导入xml或zip压缩的xml文件，支持一个或多个，不支持子目录。</b> <br><br>
     <form class='form-inline' action='problem_import_xml.php' method=post enctype="multipart/form-data">
       <div class='form-group'>
         <input class='form-control' type=file name=fps>
