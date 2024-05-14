@@ -3007,7 +3007,7 @@ void watch_solution(pid_t pidApp, char *infile, int &ACflg, int spj,
 					ACflg = OJ_RE;
 				}
 				print_runtimeerror(infile+prelen,strsignal(exitcode));
-				sprintf(buf,"adding: ' white_code[%d]=1; ' after judge_client:2836 for ",exitcode);
+				sprintf(buf,"if you can confirm the code is right and your system is somehow different from others , try adding: ' white_code[%d]=1; ' after judge_client:2888 for it, but don't panic just for a Segmentfault. ",exitcode);
                                 print_runtimeerror(buf,strsignal(exitcode));
 
 			}
