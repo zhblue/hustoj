@@ -4,6 +4,8 @@
 		require_once("./lang/$OJ_LANG.php");
 	}
 }
+//新华社：新闻媒体和网站应当禁用的38个不文明用语
+$bad_words=Array("装逼","草泥马","特么的","撕逼","玛拉戈壁","爆菊","JB","呆逼","本屌","齐B短裙","法克鱿","丢你老母","达菲鸡","装13","逼格","蛋疼","傻逼","绿茶婊","你妈的","表砸","屌爆了","买了个婊","已撸","吉跋猫","妈蛋","逗比","我靠","碧莲","碧池","然并卵","日了狗","屁民","吃翔","XX狗","淫家","你妹","浮尸国","滚粗");
 $judge_result=Array($MSG_Pending,$MSG_Pending_Rejudging,$MSG_Compiling,$MSG_Running_Judging,$MSG_Accepted,$MSG_Presentation_Error,$MSG_Wrong_Answer,$MSG_Time_Limit_Exceed,$MSG_Memory_Limit_Exceed,$MSG_Output_Limit_Exceed,$MSG_Runtime_Error,$MSG_Compile_Error,$MSG_Compile_OK,$MSG_TEST_RUN,$MSG_MANUAL_CONFIRMATION,$MSG_SUBMITTING,$MSG_REMOTE_PENDING,$MSG_REMOTE_JUDGING);
 $jresult=Array($MSG_PD,$MSG_PR,$MSG_CI,$MSG_RJ,$MSG_AC,$MSG_PE,$MSG_WA,$MSG_TLE,$MSG_MLE,$MSG_OLE,$MSG_RE,$MSG_CE,$MSG_CO,$MSG_TR,$MSG_MC,$MSG_SUBMITTING,$MSG_RP,$MSG_RJ);
 $judge_color = Array("label gray","label label-info","label label-warning","label label-warning","label label-success","label label-danger","label label-danger","label label-warning","label label-warning","label label-warning","label label-warning","label label-warning","label label-warning","label label-info","label label-success","label lable-gray","label label-info","label label-warning");

@@ -1,5 +1,18 @@
 <?php
 require_once(dirname(__FILE__)."/curl.php");
+require_once(dirname(__FILE__)."/const.inc.php");
+function has_bad_words($words){
+        global $bad_words;
+        foreach($bad_words as $bad){
+                if(stristr($words,$bad) === FALSE){
+                        continue;
+                }else{
+                       // echo $bad;
+                        return true;
+                }
+        }
+        return false;
+}
 function create_subdomain($user_id,$template="bs3",$friendly="0"){
         $user_id=strtolower($user_id);
         global $DB_NAME,$DB_USER,$DB_PASS,$DOMAIN;

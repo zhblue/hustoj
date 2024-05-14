@@ -56,6 +56,19 @@ if ($len>100){
 	$err_str=$err_str."Email Too Long!";
 	$err_cnt++;
 }
+
+if(has_bad_words($user_id)){
+        $err_str=$err_str.$MSG_USER_ID." Too Bad!\\n";
+        $err_cnt++;
+}
+if(has_bad_words($school)){
+        $err_str=$err_str.$MSG_SCHOOL." Too Bad!\\n";
+        $err_cnt++;
+}
+if(has_bad_words($nick)){
+        $err_str=$err_str.$MSG_NICK." Too Bad!\\n";
+        $err_cnt++;
+}
 if ($err_cnt>0){
 	print "<script language='javascript'>\n";
 	echo "alert('";
