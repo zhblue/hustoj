@@ -124,6 +124,7 @@
   <br><center><a class="btn btn-sm" target='main' href="http://hustoj.com"><?php echo $MSG_ADMIN." ".$MSG_FAQ?></a></center>
   <br><a class='btn btn-block btn-sm' href="https://github.com/zhblue/freeproblemset/" target="_blank"><b>FreeProblemSet</b></a>
   <br><a class='btn btn-block btn-sm' href="http://tk.hustoj.com" target="_blank"><b>自助题库</b></a>
+  <br><a class='btn btn-block btn-sm' href="https://mp.weixin.qq.com/s?__biz=MzI1MTAwMTI2NA==&mid=2656403287&idx=1&sn=2b1b9a5cd0b271aa4a050c349981e715" target="_blank"><b>二次开发教程</b></a>
   <br><a class='btn btn-block btn-sm' href="http://shang.qq.com/wpa/qunwpa?idkey=d52c3b12ddaffb43420d308d39118fafe5313e271769277a5ac49a6fae63cf7a" target="_blank">手机QQ加官方<br>群23361372</a>
 <?php }?>
 
