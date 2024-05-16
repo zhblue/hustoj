@@ -16,7 +16,7 @@ if (!isset($_SESSION[$OJ_NAME.'_'.'user_id'])){
 		exit(0);
 	}
 }
-
+$langmask=$OJ_LANGMASK;
 $problem_id = 1000;
 if (isset($_GET['id'])) {
 	$id = intval($_GET['id']);
@@ -135,8 +135,10 @@ if (isset($_GET['sid'])) {
                         $result = pdo_query($sql,$cid);
                         $row = $result[0];
 
-                        if ($row)
+                        if (count($row)>0){
                                 $_GET['langmask'] = $row['langmask'];
+				$langmask= $row['langmask'];
+			}
                 }
                 $sql="select language from solution where solution_id=?";
                 $result=pdo_query($sql,$sid);
