@@ -18,7 +18,7 @@ if(strlen($_POST['content'])>5000)
 {
   require_once("oj-header.php");
   echo "Your contents is too long!";
-  require_once("../oj-footer.php");
+//  require_once("../oj-footer.php");
   exit(0);
 }
 
@@ -26,14 +26,14 @@ if(has_bad_words($_POST['content']))
 {
   require_once("oj-header.php");
   echo "Your contents is too Bad!";
-  require_once("../oj-footer.php");
+//  require_once("../oj-footer.php");
   exit(0);
 }
 if(has_bad_words($_POST['title']))
 {
   require_once("oj-header.php");
   echo "Your title is too Bad!";
-  require_once("../oj-footer.php");
+//  require_once("../oj-footer.php");
   exit(0);
 }
 
@@ -41,7 +41,7 @@ if(strlen($_POST['title'])>60)
 {
   require_once("oj-header.php");
   echo "Your title is too long!";
-  require_once("../oj-footer.php");
+ // require_once("../oj-footer.php");
   exit(0);
 }
 
