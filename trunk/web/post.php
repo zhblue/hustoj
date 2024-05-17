@@ -10,7 +10,7 @@ if(!isset($_SESSION[$OJ_NAME.'_'.'user_id']))
 
   echo "<a href=loginpage.php>Please Login First</a>";
   
-  require_once("../oj-footer.php");
+ // require_once("../oj-footer.php");
   exit(0);
 }
 
