@@ -6,6 +6,4 @@
 
 ### 升级方式
 
-利用 `Github` 的 SVN 服务，用 SVN 客户端分别升级 `core` 和 `web` ,再编译 `core` ，并通过 `web` 提供可能的数据库升级。
-
-`LiveCD` 中的升级脚本为 `update-hustoj` ，可以用 `which` 命令查找其实际位置。
+统一用[/home/judge/src/install/fixing.sh](http://dl.hustoj.com/fixing.sh) 脚本，既能修复也能升级。
