@@ -44,7 +44,9 @@ function pdo_query($sql){
 //	    echo "<span class=red>".$e->getMessage()."</span>";    // open this line to debug SQL fail problems 
 //	$view_errors="SQL:".$sql."\n".$e->getMessage();
 //	echo htmlentities($view_errors."\n\n");
-	echo "数据库结构与预期不符，请尝试<a href='/admin/update_db.php'>更新库结构</a>。";
+	GLOBAL $MSG_UPDATE_DATABASE,$MSG_HELP_UPDATE_DATABASE;
+        echo "$MSG_HELP_UPDATE_DATABASE <a href='/admin/update_db.php'>$MSG_UPDATE_DATABASE</a>。";
+
 	if(stripos($sql,"create") === 0||stripos($sql,"drop") === 0) echo "continue\n";
 	//else exit(0);
 	return -1;
