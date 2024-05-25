@@ -281,7 +281,7 @@
   $MSG_HELP_GIVESOURCE="将导入系统的标程赠与指定帐号，用于训练后辅助未通过的人学习参考。";
   $MSG_HELP_EXPORT_PROBLEM="将系统中的题目以fps.xml文件的形式导出。";
   $MSG_HELP_IMPORT_PROBLEM="导入从官方群共享或tk.hustoj.com下载到的fps.xml文件。";
-  $MSG_HELP_UPDATE_DATABASE="更新数据库结构，在每次升级（sudo update-hustoj）之后或者导入老系统数据库备份，应至少操作一次。";
+  $MSG_HELP_UPDATE_DATABASE="更新数据库结构，在每次升级（sudo bash fixing.sh）之后或者导入老系统数据库备份，应至少操作一次。";
   $MSG_HELP_ONLINE="查看在线用户";
   $MSG_HELP_AC="答案正确，请再接再厉。"; 
   $MSG_HELP_PE="答案基本正确，但是格式不对。"; 
