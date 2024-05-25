@@ -266,7 +266,7 @@
 	$MSG_HELP_GIVESOURCE=" transfers the label of the import system to the designated account number, which is used to assist the person who has not passed the training after the training. ";
 	$MSG_HELP_EXPORT_PROBLEM= "export the problems of the system in the form of fps.xml file. ";
 	$MSG_HELP_IMPORT_PROBLEM=" import fps.xml files downloaded from internet or tk.hustoj.com. ";
-	$MSG_HELP_UPDATE_DATABASE= "update the database structure, after each upgrade (sudo update-hustoj), run it once. ";
+	$MSG_HELP_UPDATE_DATABASE= "update the database structure, after each upgrade (sudo bash fixing.sh), run it once. ";
 	$MSG_HELP_ONLINE= "view online users";
   $MSG_HELP_AC="Congratulations!"; 
   $MSG_HELP_PE="Your output format is not exactly the same as the judge's output, although your answer to the problem is correct. Check your output for spaces, blank lines,etc against the problem output specification"; 
