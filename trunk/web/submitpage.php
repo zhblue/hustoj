@@ -24,6 +24,7 @@ if (isset($_GET['id'])) {
 else if (isset($_GET['cid']) && isset($_GET['pid'])) {
 	$cid = intval($_GET['cid']);
 	$pid = intval($_GET['pid']);
+	require_once("contest-check.php");
 	$psql = "SELECT problem_id FROM contest_problem WHERE contest_id=? AND num=?";
 	$data = pdo_query($psql,$cid,$pid);
 	$row = $data[0];
