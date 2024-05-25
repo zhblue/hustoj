@@ -51,7 +51,7 @@ else if (isset($_GET['cid']) && isset($_GET['pid'])) {
 	//contest
 	$cid = intval($_GET['cid']);
 	$pid = intval($_GET['pid']);
-
+require_once("contest-check.php");
 	if (isset($_SESSION[$OJ_NAME.'_'.'administrator']) || isset($_SESSION[$OJ_NAME.'_'.'contest_creator']) || isset($_SESSION[$OJ_NAME.'_'.'problem_editor']))
 		$sql = "SELECT langmask,private,defunct FROM `contest` WHERE `contest_id`=?";
 	else
