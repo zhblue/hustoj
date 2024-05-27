@@ -39,6 +39,10 @@ $delay=pdo_query($sql);
 		    FreeMem:<?php system(" free -h|grep Mem|awk '{print $7\"/\"$2 }'");?>&nbsp;&nbsp;  
 		    FreeDisk:<?php system("df -h|grep '/dev/'|grep -v 'shm'|awk '{print $4 \"/\" $2}'");?>&nbsp;&nbsp;  
 	<?php } ?>
+	            <?php echo $MSG_PROBLEM. pdo_query("select count(*) from problem ")[0][0];?>&nbsp;&nbsp;
+                    <?php echo $MSG_USER. pdo_query("select count(*) from users ")[0][0];?>&nbsp;&nbsp;
+                    <?php echo $MSG_SUBMIT. pdo_query("select count(*) from solution ")[0][0];?>&nbsp;&nbsp;
+ 
     </div>
 </td>
 <script>
