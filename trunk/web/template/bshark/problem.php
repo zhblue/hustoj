@@ -97,7 +97,7 @@
 								<?php echo $MSG_Description; ?>
 							</h4>
 							<?php
-							echo bbcode_to_html($row['description']);
+							echo "<span id='description'>".bbcode_to_html($row['description'])."</span>";
 						}
 						?>
 						<?php
@@ -107,7 +107,7 @@
 								<?php echo $MSG_Input; ?>
 							</h4>
 							<?php
-							echo bbcode_to_html($row['input']);
+							echo "<span id='input'>".bbcode_to_html($row['input'])."</span>";
 						}
 						?>
 						<?php
@@ -117,7 +117,7 @@
 								<?php echo $MSG_Output; ?>
 							</h4>
 							<?php
-							echo bbcode_to_html($row['output']);
+							echo "<span id='output'>".bbcode_to_html($row['output'])."</span>";
 						}
 						$sinput = str_replace("<", "&lt;", $row['sample_input']);
 						$sinput = str_replace(">", "&gt;", $sinput);
@@ -133,7 +133,7 @@
 										<h4><?php echo $MSG_Sample_Input; ?><a class="ui mini blue button"
 												href="javascript:void(0)" id="qwqa1">复制</a></h4>
 										<blockquote id="sampleInput">
-											<pre><?php
+											<pre id='sinput'><?php
 											echo $sinput . "</pre></blockquote>";
 									}
 									?>
@@ -144,8 +144,8 @@
 									<?php
 									if (strlen($soutput)) {
 										?><h4><?php echo $MSG_Sample_Output; ?><a class="ui mini blue button"
-																						href="javascript:void(0)" id="qwqa2">复制</a></h4><blockquote id="sampleOutput"><pre><?php
-																						echo $soutput . '</pre></blockquote>';
+											href="javascript:void(0)" id="qwqa2">复制</a></h4><blockquote id="sampleOutput"><pre id=soutput ><?php
+											echo $soutput . '</pre></blockquote>';
 									}
 									?>
 								</div>
@@ -154,7 +154,7 @@
 						<?php
 						if ($row['hint']) {
 							?><h4><?php echo $MSG_HINT; ?></h4><?php
-							   echo bbcode_to_html($row['hint']);
+							   echo "<span id=hint >".bbcode_to_html($row['hint'])."</span>";
 						}
 						?>
 						<?php
