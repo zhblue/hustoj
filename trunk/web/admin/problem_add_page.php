@@ -24,30 +24,33 @@
 
 <hr>
 <body leftmargin="30" >
-  <div class="container">
+  <div id="main" class="container">
     <form method=POST action=problem_add.php>
       <input type=hidden name=problem_id value="New Problem">
         <p align=left>
           <?php echo "<h3>".$MSG_TITLE."</h3>"?>
-          <input class="input input-xxlarge" style="width:100%;" type=text name='title' > <input type=submit value='<?php echo $MSG_SAVE?>' name=submit> 
+          <input class="input input-large" style="width:100%;" type=text name='title' > <input type=submit value='<?php echo $MSG_SAVE?>' name=submit> 
 	</p>
         <p align=left>
-          <?php echo $MSG_Time_Limit?><br>
-          <input class="input input-mini" type=number min="0.001" max="300" step="0.001" name=time_limit size=20 value=1> sec<br><br>
-          <?php echo $MSG_Memory_Limit?><br>
+          <?php echo $MSG_Time_Limit?>
+          <input class="input input-mini" type=number min="0.001" max="300" step="0.001" name=time_limit size=20 value=1> sec
+          <?php echo $MSG_Memory_Limit?>
           <input class="input input-mini" type=number min="1" max="2048" step="1" name=memory_limit size=20 value=128> MiB<br><br>
         </p>
         <p align=left>
           <?php echo "<h4>".$MSG_Description."(<64kB)</h4>"?>
-          <textarea class="kindeditor" rows=13 name=description cols=80></textarea><br>
+	  <textarea class="kindeditor" rows=13 name=description cols=80><span class='md'>
+</span></textarea><br>
         </p>
         <p align=left>
           <?php echo "<h4>".$MSG_Input."(<64kB)</h4>"?>
-          <textarea class="kindeditor" rows=13 name=input cols=80></textarea><br>
+          <textarea class="kindeditor" rows=13 name=input cols=80><span class='md'>
+</span></textarea><br></textarea><br>
         </p>
         <p align=left>
           <?php echo "<h4>".$MSG_Output."(<64kB)</h4>"?>
-          <textarea  class="kindeditor" rows=13 name=output cols=80></textarea><br>
+          <textarea  class="kindeditor" rows=13 name=output cols=80><span class='md'>
+</span></textarea><br></textarea><br>
         </p>
         <p align=left>
           <?php echo "<h4>".$MSG_Sample_Input."(<64kB)</h4>"?>
@@ -69,7 +72,8 @@
         </p>
         <p align=left>
           <?php echo "<h4>".$MSG_HINT."(<64kB)</h4>"?>
-          <textarea class="kindeditor" rows=13 name=hint cols=80></textarea><br>
+          <textarea class="kindeditor" rows=13 name=hint cols=80><span class='md'>
+</span></textarea><br></textarea><br>
         </p>
         <p>
           <?php echo "<h4>".$MSG_SPJ."</h4>"?>
@@ -104,5 +108,80 @@
      
     </form>
   </div>
+<script src="<?php echo $OJ_CDN_URL."/template/bs3/"?>marked.min.js"></script>
+<script>
+  function transform(){
+        let height=document.body.clientHeight;
+        let width=parseInt(document.body.clientWidth*0.6);
+        let width2=parseInt(document.body.clientWidth*0.4);
+	if(width<500) width2=300;
+        let submitURL="../problem.php?id=1000";
+        console.log(width);
+        let main=$("#main");
+        let problem=main.html();
+                main.removeClass("container");
+                main.css("width",width2);
+                main.css("margin-left","10px");
+                main.parent().append("<div id='preview' class='container' style='opacity:0.95;position:fixed;z-index:1000;top:49px;right:-"+width2+"px'></div>");
+                $("#preview").html("<iframe id='previewFrame' src='"+submitURL+"&spa' width='"+width+"px' height='"+height+"px' ></iframe>");
+        $("#submit").remove();
+        setTimeout('hide()',1500);	
+	$("input").keyup(sync);
+	$("textarea").keyup(sync);
+  }
+  function hide(){
+	let preview=$("#previewFrame").contents();
+	preview.find(".ui.buttons").hide();
+	preview.find("span.ui.label").eq(2).hide();
+	preview.find("span.ui.label").eq(3).hide();
+	preview.find("span.ui.label").eq(4).hide();
+	preview.find("span.ui.label").eq(5).hide();
+	preview.find("#show_tag_div").parent().hide();
+	sync();
+//	preview.find("h1:first").parent().parent().hide();
+  }
+  function sync(){
+	let preview=$("#previewFrame").contents();
+	let title=$("input[name=title]").val();
+	preview.find("h1:first").html(title);
+	let time=$("input[name=time_limit]").val();
+	preview.find("span.ui.label").eq(0).html("<?php echo $MSG_Time_Limit ?>："+time);
+	let memory=$("input[name=memory_limit]").val();
+	preview.find("span.ui.label").eq(1).html("<?php echo $MSG_Memory_Limit ?>："+memory);
+	
+	let description=$("textarea").eq(0).val();
+	preview.find("#description").html(description);
+	preview.find("#description .md").each(function(){
+		$(this).html(marked.parse($(this).html()));
+	});
+  
+	let input=$("textarea").eq(2).val();
+	preview.find("#input").html(input);
+	preview.find("#input .md").each(function(){
+		$(this).html(marked.parse($(this).html()));
+	});
+	let output=$("textarea").eq(4).val();
+	preview.find("#output").html(output);
+	preview.find("#output .md").each(function(){
+		$(this).html(marked.parse($(this).html()));
+	});
+
+	let sinput=$("textarea").eq(6).val();
+	preview.find("#sinput").html(sinput);
+	let soutput=$("textarea").eq(7).val();
+	preview.find("#soutput").html(soutput);
+	let hint=$("textarea").eq(10).val();
+	preview.find("#hint").html(hint);
+	preview.find("#hint .md").each(function(){
+		$(this).html(marked.parse($(this).html()));
+	});
+	$("#previewFrame")[0].contentWindow.MathJax.typeset();
+  }
+  $(document).ready(function(){
+  	transform();
+  
+  }); 
+
+</script>
 </body>
 </html>

@@ -132,23 +132,23 @@ div[class*=ace_br] {
   <div class="row">
     <div class="column">
       <h4 class="ui top attached block header"><?php echo $MSG_Description?></h4>
-      <div class="ui bottom attached segment font-content">
+      <div id="description" class="ui bottom attached segment font-content">
 		<?php if (str_contains($row['description'],"md auto_select"))echo $row['description']; else echo  bbcode_to_html($row['description']); ?></div>
     </div>
   </div>
-  <?php if($row['input']){ ?>
+  <?php if($row['input']||isset($_GET['spa'])){ ?>
     <div class="row">
       <div class="column">
           <h4 class="ui top attached block header"><?php echo $MSG_Input?></h4>
-          <div class="ui bottom attached segment font-content"><?php echo bbcode_to_html($row['input']); ?></div>
+          <div id='input' class="ui bottom attached segment font-content"><?php echo bbcode_to_html($row['input']); ?></div>
       </div>
     </div>
   <?php }?>
-  <?php if($row['output']){ ?>
+  <?php if($row['output']||isset($_GET['spa'])){ ?>
     <div class="row">
         <div class="column">
           <h4 class="ui top attached block header"><?php echo $MSG_Output?></h4>
-          <div class="ui bottom attached segment font-content"><?php echo bbcode_to_html($row['output']); ?></div>
+          <div id='output' class="ui bottom attached segment font-content"><?php echo bbcode_to_html($row['output']); ?></div>
         </div>
     </div>
   <?php }?>
@@ -159,7 +159,7 @@ div[class*=ace_br] {
     $soutput=str_replace("<","&lt;",$row['sample_output']);
     $soutput=str_replace(">","&gt;",$soutput);
   ?>
-  <?php if(strlen($sinput)>0 && $sinput!="\n"){ ?>
+  <?php if(strlen($sinput)>0 && $sinput!="\n"||isset($_GET['spa'])){ ?>
     <div class="row">
         <div class="column">
           <h4 class="ui top attached block header"><?php echo $MSG_Sample_Input?> 
@@ -168,12 +168,12 @@ div[class*=ace_br] {
           <!-- <span class=copy id=\"copyin\" data-clipboard-text=\"".($sinput)."\"><?php echo $MSG_COPY; ?></span> -->
           <div class="ui bottom attached segment font-content">
             <!-- <pre><?php echo ($sinput); ?></pre> -->
-            <pre style="margin-top: 0; margin-bottom: 0; "><code class="lang-plain"><?php echo ($sinput); ?></code></pre>
+            <pre style="margin-top: 0; margin-bottom: 0; "><code id='sinput' class="lang-plain"><?php echo ($sinput); ?></code></pre>
           </div>
         </div>
     </div>
   <?php }?>
-  <?php if(strlen($soutput)>0 && $soutput!="\n"){ ?>
+  <?php if(strlen($soutput)>0 && $soutput!="\n"||isset($_GET['spa'])){ ?>
     <div class="row">
         <div class="column">
           <h4 class="ui top attached block header"><?php echo $MSG_Sample_Output?>
@@ -182,17 +182,17 @@ div[class*=ace_br] {
           <!-- <span class=copy id=\"copyout\" data-clipboard-text=\"".($soutput)."\"><?php echo $MSG_COPY; ?></span> -->
           <div class="ui bottom attached segment font-content">
             <!-- <div class="ui existing segment"> -->
-              <pre style="margin-top: 0; margin-bottom: 0; "><code class="lang-plain"><?php echo ($soutput); ?></code></pre>
+              <pre style="margin-top: 0; margin-bottom: 0; "><code id='soutput' class="lang-plain"><?php echo ($soutput); ?></code></pre>
             <!-- </div> -->
           </div>
         </div>
     </div>
   <?php }?>
-  <?php if($row['hint']){ ?>
+  <?php if($row['hint']||isset($_GET['spa'])){ ?>
     <div class="row">
         <div class="column">
           <h4 class="ui top attached block header"><?php echo $MSG_HINT?></h4>
-          <div class="ui bottom attached segment font-content hint"><?php echo bbcode_to_html($row['hint']); ?></div>
+          <div id='hint' class="ui bottom attached segment font-content hint"><?php echo bbcode_to_html($row['hint']); ?></div>
         </div>
     </div>
   <?php }?>
