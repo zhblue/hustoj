@@ -141,6 +141,7 @@
 //	preview.find("h1:first").parent().parent().hide();
   }
   function sync(){
+	console.log("sync...");
 	let preview=$("#previewFrame").contents();
 	let title=$("input[name=title]").val();
 	preview.find("h1:first").html(title);
@@ -149,18 +150,18 @@
 	let memory=$("input[name=memory_limit]").val();
 	preview.find("span.ui.label").eq(1).html("<?php echo $MSG_Memory_Limit ?>："+memory);
 	
-	let description=$("textarea").eq(0).val();
+	let description=$("textarea").eq(1).val();
 	preview.find("#description").html(description);
 	preview.find("#description .md").each(function(){
 		$(this).html(marked.parse($(this).html()));
 	});
   
-	let input=$("textarea").eq(2).val();
+	let input=$("textarea").eq(3).val();
 	preview.find("#input").html(input);
 	preview.find("#input .md").each(function(){
 		$(this).html(marked.parse($(this).html()));
 	});
-	let output=$("textarea").eq(4).val();
+	let output=$("textarea").eq(5).val();
 	preview.find("#output").html(output);
 	preview.find("#output .md").each(function(){
 		$(this).html(marked.parse($(this).html()));
@@ -170,7 +171,7 @@
 	preview.find("#sinput").html(sinput);
 	let soutput=$("textarea").eq(7).val();
 	preview.find("#soutput").html(soutput);
-	let hint=$("textarea").eq(10).val();
+	let hint=$("textarea").eq(11).val();
 	preview.find("#hint").html(hint);
 	preview.find("#hint .md").each(function(){
 		$(this).html(marked.parse($(this).html()));

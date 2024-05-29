@@ -21,13 +21,30 @@
 				afterCreate : function() {
 					var self = this;
 					K.ctrl(document, 13, function() {
+						self.clickToolbar("source");
 						self.sync();
-						K('form[name=example]')[0].submit();
+						sync();
+						self.clickToolbar("source");
 					});
 					K.ctrl(self.edit.doc, 13, function() {
+						self.clickToolbar("source");
 						self.sync();
-						K('form[name=example]')[0].submit();
+						sync();
+						self.clickToolbar("source");
 					});
+				}
+				,
+					afterBlur: function() {
+						var self = this;
+						self.sync();
+						sync();
+					}
+				,
+
+				afterChange: function() {
+					var self = this;
+						self.sync();
+						sync();
 				}
 			});
 			prettyPrint();
