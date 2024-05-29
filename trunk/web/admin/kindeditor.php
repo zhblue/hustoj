@@ -5,6 +5,7 @@
 	<script charset="utf-8" src="../kindeditor/lang/zh_CN.js"></script>
 	<script charset="utf-8" src="../kindeditor/plugins/code/prettify.js"></script>
 	<script>
+	$(document).ready(function (){
 		KindEditor.ready(function(K) {
 			var editor1 = K.create('textarea[class="kindeditor"]', {
 				width : '100%',				
@@ -21,26 +22,19 @@
 				afterCreate : function() {
 					var self = this;
 					K.ctrl(document, 13, function() {
-						self.clickToolbar("source");
 						self.sync();
-						sync();
-						self.clickToolbar("source");
 					});
 					K.ctrl(self.edit.doc, 13, function() {
-						self.clickToolbar("source");
 						self.sync();
-						sync();
-						self.clickToolbar("source");
 					});
 				}
 				,
 					afterBlur: function() {
 						var self = this;
 						self.sync();
-						sync();
 					}
-				,
 
+				,
 				afterChange: function() {
 					var self = this;
 						self.sync();
@@ -49,5 +43,6 @@
 			});
 			prettyPrint();
 		});
+	});
 	</script>
 
