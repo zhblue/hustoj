@@ -28,6 +28,10 @@
     <form method=POST action=problem_add.php>
       <input type=hidden name=problem_id value="New Problem">
         <p align=left>
+  <div class="ui toggle checkbox">
+        <input type="checkbox" id="preview-toggle" checked>
+        <label for="preview-toggle">题目预览</label>
+    </div>
           <?php echo "<h3>".$MSG_TITLE."</h3>"?>
           <input class="input input-large" style="width:100%;" type=text name='title' > <input type=submit value='<?php echo $MSG_SAVE?>' name=submit> 
 	</p>
@@ -178,10 +182,37 @@
 	});
 	$("#previewFrame")[0].contentWindow.MathJax.typeset();
   }
-  $(document).ready(function(){
-  	transform();
+ 
+   $(document).ready(function(){
+            // 默认开启预览功能
+            transform();
+            
+            // 监听checkbox的点击事件
+            $('#preview-toggle').change(function() {
+                if(this.checked) {
+                    transform();
+                } else {
+                    // 假设这里是关闭预览的函数
+                    untransform();
+                }
+            });
+        });
+function untransform() {
+    console.log("预览关闭");
+    // 恢复原始的 #main 元素样式
+    let main = $("#main");
+    main.addClass("container");
+    main.css("width", "");
+    main.css("margin-left", "");
+
+    // 移除预览的 iframe
+    $("#preview").remove();
+
   
-  }); 
+    // 移除同步事件
+    $("input").off('keyup', sync);
+    $("textarea").off('keyup', sync);
+}
 
 </script>
 </body>
