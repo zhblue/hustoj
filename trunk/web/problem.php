@@ -140,9 +140,10 @@ if (count($result)!=1) {
 		$view_title = "<title>$MSG_NO_SUCH_PROBLEM!</title>";
 		$view_errors .= "<h2>$MSG_NO_SUCH_PROBLEM!</h2>";
 	}
-
-	require("template/".$OJ_TEMPLATE."/error.php");
-	exit(0);
+	if(!(isset($_SESSION[$OJ_NAME.'_administrator'])||isset($_SESSION[$OJ_NAME.'_problem_editor']))){
+		require("template/".$OJ_TEMPLATE."/error.php");
+		exit(0);
+	}
 }
 else {
 	$row = $result[0];
