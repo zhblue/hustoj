@@ -36,6 +36,11 @@
 			<tbody>
 				<?php
 				$rank = 1;
+				if(isset($_GET['down']))
+                                                $tag="b";
+                                else
+                                                $tag="div";
+				  
 				for ($i = 0; $i < $user_cnt; $i++) {
 					$uuid = $U[$i]->user_id;
 					$nick = $U[$i]->nick;
@@ -79,10 +84,7 @@
 					echo "<td class='ui small header'>";
 					echo "<a href=status.php?user_id=$uuid&cid=$cid>" . ($U[$i]->total) . "</a>";
 					echo "</td>";
-					if(isset($_GET['down']))
-                                                $tag="b";
-                                        else
-                                                $tag="div";
+
 
 					for ($j = 0; $j < $pid_cnt; $j++) {
 						if (isset($U[$i])) {
