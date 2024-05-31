@@ -79,13 +79,17 @@
 					echo "<td class='ui small header'>";
 					echo "<a href=status.php?user_id=$uuid&cid=$cid>" . ($U[$i]->total) . "</a>";
 					echo "</td>";
+					if(isset($_GET['down']))
+                                                $tag="b";
+                                        else
+                                                $tag="div";
 
 					for ($j = 0; $j < $pid_cnt; $j++) {
 						if (isset($U[$i])) {
 							if (isset($U[$i]->p_ac_sec[$j]) && $U[$i]->p_ac_sec[$j] > 0) {
 								if ($uuid == $first_blood[$j]) {
 									echo "<td style=\"background: rgb(" . (150 + 12 * $U[$i]->p_wa_num[$j]) . ", 255, " . min(230, 150 + 8 * $U[$i]->p_wa_num[$j]) . "); position:relative;\">";
-									echo "<div style=\"position:absolute;width:30%;margin-top: 5%;margin-right: 5%;height:30%;right:0px;top:0px;\"> <font color='red'>※1st</font></div>";
+									echo "<$tag style=\"position:absolute;width:30%;margin-top: 5%;margin-right: 5%;height:30%;right:0px;top:0px;\"> <font color='red'>※1st</font></$tag>";
 								} else {
 									echo "<td style=\"background: rgb(" . (150 + 12 * $U[$i]->p_wa_num[$j]) . ", 255, " . min(230, 150 + 8 * $U[$i]->p_wa_num[$j]) . "); \">";
 								}
@@ -98,10 +102,6 @@
 									echo $U[$i]->p_pass_rate[$j]*100;
 									echo "</span>";
 								}
-								if(isset($_GET['down']))
-                                                                        $tag="span";
-                                                                else
-                                                                        $tag="div";
                                                                 echo " <$tag class=\"submit_time\">";
                                                                 echo sec2str($U[$i]->p_ac_sec[$j]);
                                                                 echo "</$tag>";
