@@ -34,6 +34,11 @@
         <tbody>
             <?php
               $rank=1;
+		if(isset($_GET['down']))
+			$tag="b";
+		else
+			$tag="div";
+				
               for ($i=0;$i<$user_cnt;$i++){
                 $uuid=$U[$i]->user_id;
                 $nick=$U[$i]->nick;
@@ -83,7 +88,7 @@
                     if (isset($U[$i]->p_ac_sec[$j])&&$U[$i]->p_ac_sec[$j]>0){
 		   	if($uuid==$first_blood[$j]){
                       		echo "<td style=\"background: rgb(".(150+12*$U[$i]->p_wa_num[$j]).", 255, ".(150+8*$U[$i]->p_wa_num[$j])."); position:relative;\">";
-				echo "<div style=\"position:absolute;width:30%;margin-top: 5%;margin-right: 5%;height:30%;right:0px;top:0px;\">※1st</div>";
+				echo "<$tag style=\"position:absolute;width:30%;margin-top: 5%;margin-right: 5%;height:30%;right:0px;top:0px;\">※1st</$tag>";
 			}
 			else{
                       echo "<td style=\"background: rgb(".(150+12*$U[$i]->p_wa_num[$j]).", 255, ".(150+8*$U[$i]->p_wa_num[$j])."); \">";
@@ -98,9 +103,9 @@
                         echo "+";
                         echo "</span>";
 		      }
-                      echo "<div class=\"submit_time\">";
+                      echo "<$tag class=\"submit_time\">";
                         echo sec2str($U[$i]->p_ac_sec[$j]);
-                      echo "</div>";
+                      echo "</$tag>";
                     }
                     else if (isset($U[$i]->p_wa_num[$j])&&$U[$i]->p_wa_num[$j]>0){
                       echo "<td style=\"background: rgb(255, ".(240-9*$U[$i]->p_wa_num[$j]).", ".(240-9*$U[$i]->p_wa_num[$j])."); \">";
