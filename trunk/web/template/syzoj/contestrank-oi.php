@@ -98,9 +98,14 @@
 									echo $U[$i]->p_pass_rate[$j]*100;
 									echo "</span>";
 								}
-								echo "<div class=\"submit_time\">";
-								echo sec2str($U[$i]->p_ac_sec[$j]);
-								echo "</div>";
+								if(isset($_GET['down']))
+                                                                        $tag="span";
+                                                                else
+                                                                        $tag="div";
+                                                                echo " <$tag class=\"submit_time\">";
+                                                                echo sec2str($U[$i]->p_ac_sec[$j]);
+                                                                echo "</$tag>";
+
 							} else if (isset($U[$i]->p_wa_num[$j]) && $U[$i]->p_wa_num[$j] > 0) {
 								echo "<td style=\"background: rgb(255, " . max(130, 240 - 9 * $U[$i]->p_wa_num[$j]) . ", " . max(130, 240 - 9 * $U[$i]->p_wa_num[$j]) . "); \">";
 								echo "<span class=\"score score_0\">";
