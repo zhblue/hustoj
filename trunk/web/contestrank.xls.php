@@ -1,9 +1,7 @@
 <?php
 ini_set("display_errors","Off");
-		header ( "content-type:   application/excel" );
-		
-?>
-<?php require_once("./include/db_info.inc.php");
+header ( "content-type:   application/excel" );
+require_once("./include/db_info.inc.php");
 global $mark_base,$mark_per_problem,$mark_per_punish;
  $mark_start=60;
  $mark_end=100;
