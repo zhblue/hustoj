@@ -37,8 +37,8 @@
 				,
 				afterChange: function() {
 					var self = this;
-						self.sync();
-						sync();
+					self.sync();
+					if( typeof sync === "function") 	sync();
 				}
 			});
 			prettyPrint();
