@@ -111,7 +111,7 @@ if ($rows_cnt>0){
 	$view_title = $title;
         if(isset($_GET['down'])){
                 header ( "Content-type:   application/excel" );
-                $ftitle=rawurlencode(preg_replace('/\.|\\\|\\/|\:|\*|\?|\"|\<|\>|\|/','',$title));
+                $ftitle=rawurlencode(preg_replace('/\.|\\\|\\/|\:|\*|\?|\"|\<|\>|\|/| ','',$title));
                 header ( "content-disposition:   attachment;   filename=contest".$cid."_".$ftitle.".xls" );
         }
 
