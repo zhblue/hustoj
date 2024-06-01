@@ -133,7 +133,7 @@ if ($rows_cnt>0){
 	$title=$row[1];
 	$end_time=strtotime($row[2]);
 	
-	$ftitle=rawurlencode(preg_replace('/\.|\\\|\\/|\:|\*|\?|\"|\<|\>|\|/| ','',$title));
+	$ftitle=rawurlencode(preg_replace('/\.|\\\|\\/|\:|\*|\?|\"|\<|\>|\|/','',str_replace(' ','',$title)));
 	header ( "content-disposition:   attachment;   filename=contest".$cid."_".$ftitle.".xls" );
 }
 
