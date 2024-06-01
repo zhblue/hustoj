@@ -132,9 +132,10 @@ if ($rows_cnt>0){
 	$start_time=strtotime($row[0]);
 	$title=$row[1];
 	$end_time=strtotime($row[2]);
-	
-	$ftitle=rawurlencode(preg_replace('/\.|\\\|\\/|\:|\*|\?|\"|\<|\>|\|/','',str_replace(' ','',$title)));
-	header ( "content-disposition:   attachment;   filename=contest".$cid."_".$ftitle.".xls" );
+        $ftitle=mb_substr($title,0,32);
+        $ftitle=rawurlencode(preg_replace('/\.|\\\|\\/|\:|\*|\?|\"|\<|\>|\|/','',str_replace(' ','',"C$cid-".$ftitle)).".xls");
+        header ( "Content-Disposition: attachment; filename*=utf-8''".$ftitle );
+
 }
 
 if ($start_time==0){
