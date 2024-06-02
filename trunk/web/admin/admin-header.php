@@ -1,4 +1,5 @@
 <?php 
+ini_set("memory_limit", "1024M");  //set this bigger to import big files.
 require_once("../include/db_info.inc.php");
 require_once ("../include/my_func.inc.php");
 ?>
