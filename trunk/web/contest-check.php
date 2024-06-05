@@ -69,7 +69,7 @@
                 echo "<!-- $contest_limit_minutes mins -->";
                 $user_id=$_SESSION[$OJ_NAME."_user_id"];
                 $first_login_contest=pdo_query("select time from loginlog where user_id=? and password=?",$user_id,"c".$cid);
-                if(is_array($first_login_contest)&&count($first_login_contest)==0){
+                if(empty($first_login_contest)){
                         echo "<!-- 首次访问  -->";
                                 $ip = ($_SERVER['REMOTE_ADDR']);
                                 if( isset($_SERVER['HTTP_X_FORWARDED_FOR'] )&&!empty( trim( $_SERVER['HTTP_X_FORWARDED_FOR'] ) ) ){

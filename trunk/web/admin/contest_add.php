@@ -254,7 +254,7 @@ else{
                                         }
                                 }
                                 $contests=pdo_query("select contest_id,title from contest where contest_id in ($contests)  order by contest_id desc limit 20 ");
-                                if(is_array($contests)){
+                                if(!empty($contests)){
 
                                         foreach( $contests as $contest ){
                                             echo "<option value='".$contest['contest_id']."'>".$contest['title']."</option>";

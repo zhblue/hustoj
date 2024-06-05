@@ -15,7 +15,7 @@ if($_SERVER['REQUEST_METHOD']=="POST"){
 
 <?php
 $plist = "";
-if(isset($_POST['pid'])&&is_array($_POST['pid'])) {
+if(isset($_POST['pid'])&&!empty($_POST['pid'])) {
         sort($_POST['pid']);
         foreach($_POST['pid'] as $i){
           if($plist)

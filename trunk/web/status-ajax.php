@@ -34,7 +34,7 @@ if (count($result)>0) {
 		}
 		else {
 			$spj=pdo_query("select spj from problem where problem_id=?",$row['problem_id']);
-			if(is_array($spj)&&$spj[0][0]==2 && $OJ_HIDE_RIGHT_ANSWER ){
+			if(!empty($spj)&&$spj[0][0]==2 && $OJ_HIDE_RIGHT_ANSWER ){
 					echo $MSG_WARNING_ACCESS_DENIED;
 					exit();
 			}

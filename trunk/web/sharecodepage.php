@@ -206,7 +206,7 @@ if(isset($_POST['code'])) {
 }
 
 // 请求未带参数，直接进入代码提交页面
-if (!is_array($_GET)||count($_GET)==0) {
+if (empty($_GET)) {
     if (!isset($_SESSION[$OJ_NAME.'_'.'user_id'])){
         $view_errors= "<a href=loginpage.php>$MSG_Login</a>";
         require("template/".$OJ_TEMPLATE."/error.php");

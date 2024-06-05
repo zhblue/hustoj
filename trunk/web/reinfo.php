@@ -58,7 +58,7 @@ if((isset($_SESSION[$OJ_NAME.'_'.'user_id']) && $row && ($row['user_id']==$_SESS
   $ok = true;
 }
 $spj=pdo_query("select spj from problem where problem_id=?",$row['problem_id']);
-if(is_array($spj)&&$spj[0][0]==2 && $OJ_HIDE_RIGHT_ANSWER && !isset($_SESSION[$OJ_NAME.'_'.'source_browser']) ){
+if(!empty($spj)&&$spj[0][0]==2 && $OJ_HIDE_RIGHT_ANSWER && !isset($_SESSION[$OJ_NAME.'_'.'source_browser']) ){
     echo $MSG_WARNING_ACCESS_DENIED;
     $ok = false;
 }

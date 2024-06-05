@@ -29,7 +29,7 @@
 
 		<?php 
 		foreach($users as $u){
-			 if(is_array($u)){
+			 if(!empty($u)){
 		?>
 		<tr>
 			<td><?php $l = $ip->getlocation($u['ip']);
