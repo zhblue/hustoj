@@ -22,11 +22,14 @@ bash add_dns_to_docker.sh
 
 systemctl restart docker
 
-while ! docker build -t hustoj .
-do
-
-		echo "Network fail, retry... you might want to make sure https://hub.docker.com/ is available"
-done
+if ! docker build -t hustoj .
+then
+    	echo "Network fail, retry... you might want to make sure https://hub.docker.com/ is available"
+	echo "Docker image failed, try download from temporary site ... "
+	wget -O hustoj.docker.tar.bz2  http://dl3.hustoj.com/docker/hustoj.docker.tar.bz2
+	bzip2 -d hustoj.docker.tar.bz2
+	docker load < hustoj.docker.tar
+fi
  
 sed -i "s/OJ_USE_DOCKER=0/OJ_USE_DOCKER=1/g" /home/judge/etc/judge.conf
 sed -i "s/OJ_PYTHON_FREE=0/OJ_PYTHON_FREE=1/g" /home/judge/etc/judge.conf
