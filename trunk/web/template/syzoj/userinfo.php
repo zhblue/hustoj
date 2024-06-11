@@ -1,4 +1,4 @@
-<?php $show_title="用户信息 - $OJ_NAME"; ?>
+<?php $show_title="$MSG_USERINFO - $OJ_NAME"; ?>
 <?php include("template/$OJ_TEMPLATE/header.php");?>
 <style>
 #avatar_container:before {
