@@ -1,4 +1,4 @@
-<?php $show_title=$id." - 源代码查看 - $OJ_NAME"; ?>
+<?php $show_title=$id." - $MSG_SOURCE_CODE - $OJ_NAME"; ?>
 <?php include("template/$OJ_TEMPLATE/header.php");?>
 <div class="padding">
 <link href='<?php echo $OJ_CDN_URL?>highlight/styles/shCore.css' rel='stylesheet' type='text/css'/>
