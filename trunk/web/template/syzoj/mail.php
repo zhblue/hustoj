@@ -52,7 +52,7 @@ echo "<center>
     </div> <!-- /container -->
 
 
-      <a href="javascript:history.go(-1)"><?php echo $MSG_BACK?></a>
+      <a href="#" onclick="history.go(-1);"><?php echo $MSG_BACK?></a>
     </p>
   </div>
 </div>
