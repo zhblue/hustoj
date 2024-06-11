@@ -219,7 +219,10 @@
  $MSG_Ended ="已結束";
  $MSG_Login ="請登錄後繼續操作";
  $MSG_JUDGER ="判題機";
- 
+ $MSG_DOWNLOAD="下載";
+ $MSG_SHOW="顯示";
+ $MSG_HIDE="隱藏";
+
  $MSG_SOURCE_NOT_ALLOWED_FOR_EXAM ="考試期間，不能查閱以前提交的代碼。 ";
  $MSG_BBS_NOT_ALLOWED_FOR_EXAM ="考試期間,討論版禁用。 ";
  $MSG_MODIFY_NOT_ALLOWED_FOR_EXAM ="考試期間,禁止修改帳號信息。 ";
