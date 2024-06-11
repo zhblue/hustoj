@@ -9,12 +9,12 @@
 
     <input type="hidden" name="cid" value="<?php echo $cid; ?>" />
     <div class="inline fields" style="margin-bottom: 25px; white-space: nowrap; ">
-      <label style="font-size: 1.2em; margin-right: 1px; ">题目：</label>
+      <label style="font-size: 1.2em; margin-right: 1px; "><?php echo $MSG_PROBLEM ?>：</label>
       <div class="field"><input name="problem_id" style="width: 100px; " type="text" value="<?php echo  htmlspecialchars($problem_id, ENT_QUOTES) ?>"></div>
-        <label style="font-size: 1.2em; margin-right: 1px; ">提交者：</label>
+        <label style="font-size: 1.2em; margin-right: 1px; "><?php echo $MSG_USER ?>：</label>
         <div class="field"><input name="user_id" style="width: 100px; " type="text" value="<?php echo  htmlspecialchars($user_id, ENT_QUOTES) ?>"></div>
 
-        <label style="font-size: 1.2em; margin-right: 1px; ">语言：</label>
+        <label style="font-size: 1.2em; margin-right: 1px; "><?php echo $MSG_LANG ?>：</label>
         <select class="form-control" size="1" name="language" style="width: 110px;font-size: 1em ">
           <option value="-1">All</option>
           <?php
@@ -68,7 +68,7 @@
           ?>
       <button class="ui labeled icon mini button" type="submit" style="margin-left: 20px;">
         <i class="search icon"></i>
-        查询
+        <?php echo $MSG_SEARCH ?>
       </button>
     </div>
   </form>
@@ -77,17 +77,17 @@
   <table id="result-tab" class="very basic center aligned table" style="white-space: nowrap; " id="table">
     <thead>
       <tr>
-                <th>编号</th>
-                <th>用户</th>
+                <th><?php echo $MSG_SUBMIT_NUM?></th>
+                <th><?php echo $MSG_USER?></th>
                 <th><?php echo $MSG_NICK?></th>
-        <th>题目</th>
-        <th>结果</th>
-        <th class='hidden-xs'>内存</th>
-        <th class='hidden-xs'>时间</th>
-        <th>代码</th>
-        <th class='hidden-xs'>代码长度</th>
-        <th class='hidden-xs'>提交时间</th>
-        <th class='hidden-xs'>判题机</th>
+        <th><?php echo $MSG_PROBLEM_ID?></th>
+        <th><?php echo $MSG_RESULT?></th>
+        <th class='hidden-xs'><?php echo $MSG_MEMORY?></th>
+        <th class='hidden-xs'><?php echo $MSG_TIME?></th>
+        <th><?php echo $MSG_SOURCE_CODE?></th>
+        <th class='hidden-xs'><?php echo $MSG_CODE_LENGTH?></th>
+        <th class='hidden-xs'><?php echo $MSG_SUBMIT_TIME?></th>
+        <th class='hidden-xs'><?php echo $MSG_JUDGER?></th>
       </tr>
     </thead>
     <tbody>
@@ -117,7 +117,7 @@
   <div style="text-align: center; ">
         <div class="ui pagination menu" style="box-shadow: none; ">
           <a class="icon item" href="<?php echo "status.php?".$str2;?>" id="page_prev">
-    首页
+    <?php echo $MSG_HOME?>
           </a>
           <?php
       if (isset($_GET['prevtop']))
