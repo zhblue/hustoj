@@ -21,11 +21,11 @@
                 <div class="two fields">
                     <div class="field">
                     <label class="ui header"><?php echo $MSG_PASSWORD?></label>
-                      <input name="npassword" placeholder="无需修改密码，请勿填写此项" type="password">
+                      <input name="npassword" placeholder="<?php echo $MSG_HELP_LEFT_EMPTY ?>" type="password">
                     </div>
                     <div class="field">
                       <label class="ui header"><?php echo $MSG_REPEAT_PASSWORD?></label>
-                      <input name="rptpassword" placeholder="无需修改密码，请勿填写此项" type="password">
+                      <input name="rptpassword" placeholder="<?php echo $MSG_HELP_LEFT_EMPTY ?>" type="password">
                     </div>
                 </div>
                 <div class="field">
