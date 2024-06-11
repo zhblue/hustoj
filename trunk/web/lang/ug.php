@@ -452,6 +452,8 @@ $MSG_ABSENT="Absent";
 	// sourcecompare.php
 	$MSG_Source_Compare="Source Code Comparation";
 	$MSG_BACK="Return to Last Page";
+	$MSG_NEXT_PAGE="Next Page";
+	$MSG_PREV_PAGE="Prev Page";
  	//email
 	$MSG_SYS_WARN="System Warning!";
 	$MSG_IS_ROBOT="could be a robot , verify and disable it !";
