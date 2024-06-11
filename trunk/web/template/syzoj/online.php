@@ -22,7 +22,7 @@
 			<th>uri</th>
 			<th>refer</th>
 			<th>stay time</th>
-			<th>user agent</th>
+			<th>UA</th>
 	        </tr>
 	        </thead>
 	        <tbody>
@@ -58,7 +58,7 @@
 	    <table class="ui very basic center aligned table" style="table-layout: fixed; ">
 	        <thead>
 	        <tr>
-         		<th>UserID</th>
+         		<th><?php echo $MSG_USER ?></th>
 			<th>Password</th>
 			<th>IP</th>
 			<th>Time</th>
