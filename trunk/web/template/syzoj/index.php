@@ -1,4 +1,4 @@
-<?php $show_title="首页 - $OJ_NAME"; ?>
+<?php $show_title="$OJ_HOME - $OJ_NAME"; ?>
 <?php include("template/$OJ_TEMPLATE/header.php");?>
 <div class="padding">
     <div class="ui three column grid">
