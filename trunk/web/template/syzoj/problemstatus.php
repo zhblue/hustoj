@@ -16,7 +16,7 @@
             <div class="ui card" style="width: 100%; " id="user_card">
                 <div class="">
                 <div class="column">
-                      <h4 class="ui top attached block header">统计</h4>
+                      <h4 class="ui top attached block header"><?php echo $MSG_STATISTICS ?></h4>
                       <div class="ui bottom attached segment">
                         <div id="pie_chart_legend"></div>
                         <div style="width: 260px; height: 260px; margin-left: 15.5px; "><canvas style="width: 260px; height: 260px; " id="pie_chart"></canvas></div>
