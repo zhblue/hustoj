@@ -7,16 +7,16 @@
           <form action="modify.php" method="post" role="form" class="ui form">
                 <div class="field">
                     <label for="username"><?php echo $MSG_USER_ID?></label>
-                    <input class="form-control" placeholder="请输入<?php echo $MSG_USER_ID?>"  disabled="disabled" type="text" value="<?php echo $_SESSION[$OJ_NAME.'_'.'user_id']?>">
+                    <input class="form-control" placeholder="<?php echo $MSG_Input.$MSG_USER_ID?>"  disabled="disabled" type="text" value="<?php echo $_SESSION[$OJ_NAME.'_'.'user_id']?>">
                 </div>
                 <?php require_once('./include/set_post_key.php');?>
                 <div class="field">
                     <label for="username"><?php echo $MSG_NICK?>*</label>
-                    <input name="nick" placeholder="请输入<?php echo $MSG_NICK?>" type="text" value="<?php echo htmlentities($row['nick'],ENT_QUOTES,"UTF-8")?>">
+                    <input name="nick" placeholder="<?php echo $MSG_Input.$MSG_NICK?>" type="text" value="<?php echo htmlentities($row['nick'],ENT_QUOTES,"UTF-8")?>">
                 </div>
                 <div class="field">
                     <label class="ui header"><?php echo $MSG_PASSWORD?>*</label>
-                      <input name="opassword" placeholder="请输入<?php echo $MSG_PASSWORD?>" type="password">
+                      <input name="opassword" placeholder="<?php echo $MSG_Input.$MSG_PASSWORD?>" type="password">
                     </div>
                 <div class="two fields">
                     <div class="field">
