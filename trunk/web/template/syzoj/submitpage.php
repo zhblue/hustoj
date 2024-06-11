@@ -1,4 +1,4 @@
-<?php $show_title="提交 - $OJ_NAME"; ?>
+<?php $show_title="$MSG_SUBMIT - $OJ_NAME"; ?>
 <?php include("template/$OJ_TEMPLATE/header.php");?>
 
   <style>
@@ -67,7 +67,7 @@ echo"<option value=$i ".( $lastlang==$i?"selected":"").">
 <?php }?>
 <!--选择题状态-->
 <?php if ($spj>1 || !$OJ_TEST_RUN ){?>
-<span class="btn" id=result>状态</span>	
+<span class="btn" id=result><?php echo $MSG_STATUS?></span>	
 <?php }?>
 </span>
 <?php if($spj <= 1): ?>
@@ -119,7 +119,7 @@ echo"<option value=$i ".( $lastlang==$i?"selected":"").">
    
     border-radius: 8px;
     
-    background-color: rgb(255,255,255,0.4);" id="language_span">输入</div>
+    background-color: rgb(255,255,255,0.4);" id="language_span"><?php echo $MSG_Input?></div>
          <textarea style="width:100%" cols=40 rows=5 id="input_text" name="input_text" ><?php echo $view_sample_input?></textarea>
     </div>
     <div style="
@@ -130,9 +130,9 @@ echo"<option value=$i ".( $lastlang==$i?"selected":"").">
          <div style="    display: flex;
    
     border-radius: 8px;
-    background-color: rgb(255,255,255,0.4);justify-content: space-between;" id="language_span">输出
+    background-color: rgb(255,255,255,0.4);justify-content: space-between;" id="language_span"><?php echo $MSG_Output ?>
     
-   <span class="btn" id=result>状态</span>	
+   <span class="btn" id=result><?php echo $MSG_STATUS?></span>	
     
     </div>
 
