@@ -454,6 +454,8 @@
  //sourcecompare.php
  $MSG_Source_Compare = " сравнение исходного кода ";
  $MSG_BACK = " Вернуться на предыдущую страницу ";
+	$MSG_NEXT_PAGE="Next Page";
+	$MSG_PREV_PAGE="Prev Page";
  	//email
 	$MSG_SYS_WARN="System Warning!";
 	$MSG_IS_ROBOT="could be a robot , verify and disable it !";
