@@ -212,7 +212,10 @@
 	$MSG_Ended="대회종료";
 	$MSG_Login="로그인하세요.";
 	$MSG_JUDGER="채점서버";
-
+$MSG_DOWNLOAD="Download";
+$MSG_SHOW="Show";
+$MSG_HIDE="Hide";
+  
 	$MSG_SOURCE_NOT_ALLOWED_FOR_EXAM="대회중에는 이전에 제출했던 코드를 볼 수 없습니다.";
 	$MSG_BBS_NOT_ALLOWED_FOR_EXAM="대회중에는 게시판을 사용할 수 없습니다.";
 	$MSG_MODIFY_NOT_ALLOWED_FOR_EXAM="대회중에는 비밀번호를 변경할 수 없습니다.";
