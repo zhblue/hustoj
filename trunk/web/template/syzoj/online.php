@@ -1,4 +1,4 @@
-<?php $show_title="在线信息 - $OJ_NAME"; ?>
+<?php $show_title="$MSG_HELP_ONLINE - $OJ_NAME"; ?>
 <?php include("template/$OJ_TEMPLATE/header.php");?>
 
 <div class="padding">
