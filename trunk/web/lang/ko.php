@@ -441,6 +441,8 @@ $MSG_HIDE="Hide";
 	// sourcecompare.php
 	$MSG_Source_Compare="소스 코드 비교";
 	$MSG_BACK="이전 페이지로 돌아가기";
+	$MSG_NEXT_PAGE="Next Page";
+	$MSG_PREV_PAGE="Prev Page";
 	//email
 	$MSG_SYS_WARN="시스템 경고!";
 	$MSG_IS_ROBOT="봇으로 추정됩니다. 확인 후 비활성화하시기 바랍니다.";
