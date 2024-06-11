@@ -220,7 +220,10 @@
  $MSG_Ended = " Завершено ";
  $MSG_Login =" Пожалуйста, войдите, чтобы продолжить ";
  $MSG_JUDGER = " Судебная машина ";
- 
+	$MSG_DOWNLOAD="Download";
+	$MSG_SHOW="Show";
+	$MSG_HIDE="Hide";
+
  $MSG_SOURCE_NOT_ALLOWED_FOR_EXAM =" Во время экзамена вы не можете просматривать ранее отправленные коды. ";
  $MSG_BBS_NOT_ALLOWED_FOR_EXAM =" Во время экзамена дискуссионная доска отключена. ";
  $MSG_MODIFY_NOT_ALLOWED_FOR_EXAM =" Во время экзамена запрещено изменять данные учетной записи. ";
