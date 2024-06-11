@@ -227,7 +227,10 @@
   $MSG_Ended="已结束";
   $MSG_Login="请登录后继续操作";
   $MSG_JUDGER="判题机";
-
+  $MSG_DOWNLOAD="下载";
+  $MSG_SHOW="显示";
+  $MSG_HIDE="隐藏";
+  
   $MSG_SOURCE_NOT_ALLOWED_FOR_EXAM="考试期间，不能查阅以前提交的代码。";
   $MSG_BBS_NOT_ALLOWED_FOR_EXAM="考试期间,讨论版禁用。";
   $MSG_MODIFY_NOT_ALLOWED_FOR_EXAM="考试期间,禁止修改帐号信息。";
