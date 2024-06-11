@@ -1,4 +1,4 @@
-<?php $show_title="公告 - $OJ_NAME"; ?>
+<?php $show_title="$MSG_NEWS - $OJ_NAME"; ?>
 <?php include("template/$OJ_TEMPLATE/header.php");?>
 <div class="padding">
     <h1><?php echo $news_title ?></h1>
