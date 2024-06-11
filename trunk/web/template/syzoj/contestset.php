@@ -7,7 +7,7 @@
           <form method=post action=contest.php >
             <div class="ui search" style="width: 280px; height: 28px; margin-top: -5.3px; ">
               <div class="ui left icon input" style="width: 100%; ">
-                <input class="prompt" style="width: 100%; " type="text" value="" placeholder=" 比赛名 …" name="keyword">
+                <input class="prompt" style="width: 100%; " type="text" value="" placeholder=" <?php echo $MSG_CONTEST_NAME ?> …" name="keyword">
                 <i class="search icon"></i>
                 <a  class="ui button"  href="contest.php" ><?php echo $MSG_VIEW_ALL_CONTESTS ?></a>
               </div>
