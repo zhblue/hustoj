@@ -286,6 +286,7 @@
   $MSG_HELP_SPJ="<a href='https://cn.bing.com/search?q=hustoj+special+judge' target='_blank'>search hustoj special judge</a>for more details"; 
   $MSG_HELP_BALLOON_SCHOOL="School Field of the Printer/Balloon privileged Accout, will be used as filter in task list.";
   $MSG_HRLP_BACKUP_DATABASE="Backup Database , TestData and Pictures to the 0 problem testdata directory";
+  $MSG_HELP_LEFT_EMPTY="If you don't want to modify, please left this empty.";
 
   
   $MSG_WARNING_LOGIN_FROM_DIFF_IP="Login from a diffrent ip ";
