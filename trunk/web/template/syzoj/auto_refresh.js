@@ -109,8 +109,8 @@ for (var i=0; i<10; i++) {
 
 hj_ss += "</select>";
 hj_ss += "<input name='manual' type='hidden'>";
-hj_ss += "<input class='http_judge form-control' size=5 title='输入判定原因与提示' name='explain' type='text'>";
-hj_ss += "<input type='button' class='http_judge' name='manual' value='确定' onclick='http_judge(this)' >";
+hj_ss += "<input class='http_judge form-control' size=5 title='<?php echo $MSG_Explain ?>' name='explain' type='text'>";
+hj_ss += "<input type='button' class='http_judge' name='manual' value='<?php echo $MSG_OK ?>' onclick='http_judge(this)' >";
 
 $(".http_judge_form").append(hj_ss);
 
