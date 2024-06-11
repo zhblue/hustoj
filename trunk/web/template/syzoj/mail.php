@@ -52,7 +52,7 @@ echo "<center>
     </div> <!-- /container -->
 
 
-      <a href="/">返回上一页</a>
+      <a href="javascript:history.go(-1)"><?php echo $MSG_BACK?></a>
     </p>
   </div>
 </div>
