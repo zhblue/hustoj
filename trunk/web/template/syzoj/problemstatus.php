@@ -1,4 +1,4 @@
-<?php $show_title="题目统计信息 - $OJ_NAME"; ?>
+<?php $show_title="$MSG_PROBLEMS $MSG_STATISTICS - $OJ_NAME"; ?>
 <?php include("template/$OJ_TEMPLATE/header.php");?>
 <style>
 #avatar_container:before {
@@ -31,19 +31,19 @@
             <div class="ui grid">
                 <div class="row">
                     <div class="column">
-                        <h4 class="ui top attached block header">排序</h4>
+                        <h4 class="ui top attached block header"><?php echo $MSG_RANKLIST ?></h4>
                         <div class="ui bottom attached segment">
                             <table class="ui very basic table">
                               <thead>
                                 <tr>
-                                  <th>名次</th>
-                                  <th>RunID</th>
-                                  <th>用户名</th>
-                                  <th>内存</th>
-                                  <th>时间</th>
-                                  <th>语言</th>
-                                  <th>代码长度</th>
-                                  <th>提交时间</th>
+                                  <th><?php echo $MSG_RANKLIST ?></th>
+                                  <th><?php echo $MSG_RUNID ?></th>
+                                  <th><?php echo $MSG_USER ?></th>
+                                  <th><?php echo $MSG_MEMORY ?></th>
+                                  <th><?php echo $MSG_TIME ?></th>
+                                  <th><?php echo $MSG_LANG ?></th>
+                                  <th><?php echo $MSG_CODE_LENGTH ?></th>
+                                  <th><?php echo $MSG_SUBMIT_TIME ?></th>
                                 </tr>
                               </thead>
                             <tbody>
@@ -58,49 +58,26 @@
                             echo "</tr>";
                             }
                             ?>
-                            <!-- <tr>
-                            <td colspan="8">
-                              <?php
-                              echo "<a href='problemstatus.php?id=$id'>[首页]</a>";
-                              echo "<a href='status.php?problem_id=$id'>[评测列表]</a>";
-                              if ($page>$pagemin){
-                              $page--;
-                              echo "<a href='problemstatus.php?id=$id&page=$page'>[上一页]</a>";
-                              $page++;
-                              }
-                              if ($page<$pagemax){
-                              $page++;
-                              echo "<a href='problemstatus.php?id=$id&page=$page'>[下一页]</a>";
-                              $page--;
-                              }
-                              ?>
-                              
-                            </td>
-                            </tr> -->
+                            
                             </table>
                             <div style="margin-bottom: 10px; ">
   
                                 <div style="text-align: center; ">
                                 <div class="ui pagination menu" style="box-shadow: none; ">
                                   <?php
-                                    // <a class="icon item" href="status.php?" id="page_prev">  
-                                    // 首页
-                                    // </a>
-                                    echo "<a class=\"item\" href='problemstatus.php?id=$id'>首页</a>";
+
+                                    echo "<a class=\"item\" href='problemstatus.php?id=$id'><?php echo $MSG_HOME ?></a>";
                                     if ($page>$pagemin){
                                       $page--;
-                                      echo "<a class=\"item\" href='problemstatus.php?id=$id&page=$page'>上一页</a>";
+                                      echo "<a class=\"item\" href='problemstatus.php?id=$id&page=$page'> $MSG_PREV_PAGE </a>";
                                       $page++;
                                     }
                                     if ($page<$pagemax){
                                       $page++;
-                                      echo "<a class=\"item\" href='problemstatus.php?id=$id&page=$page'>下一页</a>";
+                                      echo "<a class=\"item\" href='problemstatus.php?id=$id&page=$page'> $MSG_NEXT_PAGE </a>";
                                       $page--;
                                       }
-                                    // <a class="item" href="status.php?&amp;top=65577">上一页</a>      
-                                    // <a class="icon item" href="status.php?&amp;top=65538&amp;prevtop=65557" id="page_next">
-                                    //   下一页
-                                    // </a>
+
                                   ?>
                                 </div>
                                 </div>
@@ -164,13 +141,13 @@ $(function () {
   			var text = [];
         text.push('<ul style="list-style: none; padding-left: 20px; margin-top: 0; " class="' + chart.id + '-legend">');
             text.push('<li style="font-size: 12px; width: 50%; display: inline-block; color: #666; "><span style="width: 10px; height: 10px; display: inline-block; border-radius: 50%; margin-right: 5px; background-color: #32CD32 ; "></span>');
-                text.push('<?php echo "总提交: ".$view_problem[0][1]; ?>');
+                text.push('<?php echo "$MSG_SUBMIT_RECORD: ".$view_problem[0][1]; ?>');
             text.push('</li>');
             text.push('<li style="font-size: 12px; width: 50%; display: inline-block; color: #666; "><span style="width: 10px; height: 10px; display: inline-block; border-radius: 50%; margin-right: 5px; background-color: #32CD32 ; "></span>');
-                text.push('<?php echo "用户(提交): ".$view_problem[1][1]; ?>');
+                text.push('<?php echo "$MSG_USER ($MSG_SUBMIT): ".$view_problem[1][1]; ?>');
             text.push('</li>');
             text.push('<li style="font-size: 12px; width: 50%; display: inline-block; color: #666; "><span style="width: 10px; height: 10px; display: inline-block; border-radius: 50%; margin-right: 5px; background-color: #32CD32 ; "></span>');
-                text.push('<?php echo "用户(解决): ".$view_problem[2][1]; ?>');
+                text.push('<?php echo "$MSG_USER ($MSG_SOVLED): ".$view_problem[2][1]; ?>');
             text.push('</li>');
         text.push('</ul>');
 
