@@ -8,7 +8,7 @@
   <form class="ui mini form" role="form" style="margin-bottom: 25px; text-align: right; ">
     <div class="ui action left icon input inline" style="width: 180px; margin-right: 77px; ">
       <i class="search icon"></i><input name="search" placeholder="IP" type="text">
-      <button class="ui mini button" type="submit">查找</button>
+      <button class="ui mini button" type="submit"><?php echo $MSG_SEARCH ?></button>
     </div>
   </form>
 	<?php
