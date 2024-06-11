@@ -207,6 +207,9 @@
   $MSG_Ended="Finished";
   $MSG_Login="Please Login";
   $MSG_JUDGER="Judger";
+  $MSG_DOWNLOAD="Download";
+  $MSG_SHOW="Show";
+  $MSG_HIDE="Hide";
   
   $MSG_SOURCE_NOT_ALLOWED_FOR_EXAM="You can't browse early code during examing .";
   $MSG_BBS_NOT_ALLOWED_FOR_EXAM="You can't use bbs during examing.";
