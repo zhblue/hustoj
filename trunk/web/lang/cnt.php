@@ -453,6 +453,8 @@
  // sourcecompare.php
  $MSG_Source_Compare ="源代碼對比";
  $MSG_BACK ="返回上一頁";
+  $MSG_NEXT_PAGE="下一頁";
+  $MSG_PREV_PAGE="上一頁";
  //email
   $MSG_SYS_WARN="系統警告！";
   $MSG_IS_ROBOT="疑似機器人，註意封禁！";
