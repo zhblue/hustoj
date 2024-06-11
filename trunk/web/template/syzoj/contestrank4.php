@@ -9,9 +9,9 @@
 </style>
 <div style="margin-bottom:40px; ">
     <h1 style="text-align: left;">Contest<?php echo $cid?> - <?php echo $title?> - <?php echo $MSG_REVIEW_CONTESTRANK ?>  
-    <button  class='ui small yellow button' onclick='$("tr[class!=active]").toggle();'>Show/Hide</button>	    
+    <button  class='ui small yellow button' onclick='$("tr[class!=active]").toggle();'><?php echo $MSG_SHOW ?>/<?php echo $MSG_HIDE ?></button>	    
 	    
-     <a class='ui small blue button' href="contestrank.php?cid=<?php echo $cid?>" >Back</a> 
+     <a class='ui small blue button' href="contestrank.php?cid=<?php echo $cid?>" ><?php echo $MSG_BACK ?></a> 
 </h1>
 </div>
 <div id="rankdiv" class="padding" onclick="$(this).css('margin-left',(548-window.innerWidth/2)+'px').css('margin-right',(548-window.innerWidth/2)+'px')" style="margin-left:-200px;margin-right:-200px;overflow:auto" >
