@@ -466,6 +466,8 @@
   // sourcecompare.php
   $MSG_Source_Compare="源代码对比";
   $MSG_BACK="返回上一页";
+  $MSG_NEXT_PAGE="下一页";
+  $MSG_PREV_PAGE="上一页";
   
   //email
   $MSG_SYS_WARN="系统警告！";
