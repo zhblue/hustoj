@@ -223,6 +223,10 @@ $MSG_ABSENT="Absent";
   $MSG_Login=" ئالدى بىلەن تىزىملاڭ ";
   $MSG_JUDGER=" تەكشۈرگۈچ ";
 
+  $MSG_DOWNLOAD="Download";
+  $MSG_SHOW="Show";
+  $MSG_HIDE="Hide";
+
   $MSG_SOURCE_NOT_ALLOWED_FOR_EXAM="سىناق مەزگىلىدە ئىلگىرىكى كودلارنى كۆرەلمەيسىز";
   $MSG_BBS_NOT_ALLOWED_FOR_EXAM="ئىمتاھان مەزگىلىدە مۇنازىرىلىشىشكە بولمايدۇ";
   $MSG_MODIFY_NOT_ALLOWED_FOR_EXAM="ئىمتاھان مەزگىلىدە ئابۇنىت ئۇچۇرىنى ئۆزگەرتىشكە بولمايدۇ";
