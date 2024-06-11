@@ -294,7 +294,7 @@ $MSG_ABSENT="Absent";
 	$MSG_HELP_HUSTOJ="<sub><a target='_blank' href='https://github.com/zhblue/hustoj'><span class='glyphicon glyphicon-heart' aria-hidden='true'></span> Please give us a <span class='glyphicon glyphicon-star' aria-hidden='true'></span>Star @HUSTOJ Github!</a></sub>";
   $MSG_HELP_SPJ="<a href='https://cn.bing.com/search?q=hustoj+special+judge' target='_blank'>ئىزدەڭ hustoj special judge</a>تېخىمۇ كۆپ تەپسىلات ";
   $MSG_HELP_BALLOON_SCHOOL="پىرىنتېر ۋە شار ئۈچۈن مەكتەپ نامى سۈزۈۋىتىلىدۇ";
-
+  $MSG_HELP_LEFT_EMPTY="If you don't want to modify, please left this empty.";
   $MSG_WARNING_LOGIN_FROM_DIFF_IP="ئادىرىستىن تىزىملاپ كىرىشip ئوخشىمىغان";
   $MSG_WARNING_DURING_EXAM_NOT_ALLOWED=" ئىمتاھان ۋاقتىدا رۇخسەت يوق  ";
   $MSG_WARNING_ACCESS_DENIED="كەچۈرۈڭ، سىز بۇ خەۋەرنى تەكشۈرۈشكە ئامالسىز. چۈنكى ئۇ سىزگە تەۋە ئەمەس، ياكى باشقۇرغۇچى سېستىما ھالىتىنى بەلگىلەپ بۇ تۈردىكى ئۇچۇرلارنى كۆرسەتمەيدۇ.";
