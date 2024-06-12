@@ -209,7 +209,7 @@ if (isset($_GET['user_id'])) {
       $sql = $sql."AND `user_id`=? ";
       if ($str2!="")
       		$str2 = $str2."&";
-      $str2 = $str2."user_id=".urlencode($user_id);
+      $str2 = $str2."&user_id=".urlencode($user_id);
   }
   else{
 	  $user_id = "";
