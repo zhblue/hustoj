@@ -92,6 +92,7 @@ static  $OJ_LIMIT_TO_1_IP=false;  // 限制用户同一时刻只能在一个IP�
 static  $OJ_REMOTE_JUDGE=false; //是否启用Remote Judge ，启用哪些模块请在remote.php中设置
 static  $OJ_NO_CONTEST_WATCHER=false ; //是否禁止无权限用户观战私有比赛
 static  $OJ_CONTEST_TOTAL_100=false; //是否让比赛按100分计分
+static  $OJ_OLD_FASHINED=false; //是否在状态页的编辑按钮、管理页的预览模式等方面保留原始版本的习惯。
 static  $OJ_AI_HTML=false; // 若想开启AI链接，可设为 '<a class="desktop-only item active" target="_blank" href="http://ai.hustoj.com"><i class="help icon"></i> 问问狗蛋</a>';
 //static  $OJ_EXAM_CONTEST_ID=1000; // 启用考试状态，填写考试比赛ID
 //static  $OJ_ON_SITE_CONTEST_ID=1000; //启用现场赛状态，填写现场赛比赛ID

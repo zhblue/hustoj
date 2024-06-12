@@ -180,7 +180,7 @@ include_once("kindeditor.php") ;
 	$("#previewFrame")[0].contentWindow.MathJax.typeset();
   }
   $(document).ready(function(){
-  	transform();
+  	 <?php if (!(isset($OJ_OLD_FASHINED) && $OJ_OLD_FASHINED ) echo " transform();" ?>
   
   }); 
 </script>
