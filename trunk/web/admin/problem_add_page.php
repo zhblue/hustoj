@@ -185,7 +185,7 @@
  
    $(document).ready(function(){
             // 默认开启预览功能
-           <?php if (!(isset($OJ_OLD_FASHINED) && $OJ_OLD_FASHINED ) echo " transform();" ?>
+           <?php if (!(isset($OJ_OLD_FASHINED) && $OJ_OLD_FASHINED )) echo " transform();" ?>
             
             // 监听checkbox的点击事件
             $('#preview-toggle').change(function() {
