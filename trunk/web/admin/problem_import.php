@@ -113,6 +113,15 @@
       </div>
       <?php require_once("../include/set_post_key.php");?>
     </form>
+   - Markdown - zip<br>zip压缩的.md文件，首行为标题<br>
+    <form class='form-inline' action='problem_import_md.php' method=post enctype="multipart/form-data">
+      <div class='form-group'>
+        <input class='form-control' type=file name=fps>
+        <button class='btn btn-primary btn-sm' type=submit>Upload to HUSTOJ</button>
+      </div>
+      <?php require_once("../include/set_post_key.php");?>
+    </form>
+
     <?php } ?>
 
     <br><br>
