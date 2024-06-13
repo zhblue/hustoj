@@ -472,3 +472,18 @@
   //email
   $MSG_SYS_WARN="系统警告！";
   $MSG_IS_ROBOT="疑似机器人，注意封禁！";
+
+  //SaaS friendly
+  $MSG_TEMPLATE="模板";
+  $MSG_FRIENDLY_LEVEL="友善级别";
+  $MSG_FRIENDLY_L0="不友善";
+  $MSG_FRIENDLY_L1="中国时区";
+  $MSG_FRIENDLY_L2="强制中文";
+  $MSG_FRIENDLY_L3="显示对比,关闭验证码";
+  $MSG_FRIENDLY_L4="开启内邮,代码自动分享";
+  $MSG_FRIENDLY_L5="开启测试运行";
+  $MSG_FRIENDLY_L6="保持登陆状态";
+  $MSG_FRIENDLY_L7="开启讨论版";
+  $MSG_FRIENDLY_L8="可以下载测试数据";
+  $MSG_FRIENDLY_L9="允许访客提交";
+
