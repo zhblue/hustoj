@@ -458,3 +458,16 @@
  //email
   $MSG_SYS_WARN="系統警告！";
   $MSG_IS_ROBOT="疑似機器人，註意封禁！";
+  //SaaS friendly
+  $MSG_TEMPLATE="模板";
+  $MSG_FRIENDLY_LEVEL="友善級別";
+  $MSG_FRIENDLY_L0="不友善";
+  $MSG_FRIENDLY_L1="中國時區";
+  $MSG_FRIENDLY_L2="強制中文";
+  $MSG_FRIENDLY_L3="顯示對比,關閉驗證碼";
+  $MSG_FRIENDLY_L4="開啓內郵,代碼自動分享";
+  $MSG_FRIENDLY_L5="開啓測試運行";
+  $MSG_FRIENDLY_L6="保持登陸狀態";
+  $MSG_FRIENDLY_L7="開啓討論版";
+  $MSG_FRIENDLY_L8="可以下載測試數據";
+  $MSG_FRIENDLY_L9="允許訪客提交";
