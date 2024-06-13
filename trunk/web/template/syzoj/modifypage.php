@@ -1,6 +1,6 @@
 <?php include("template/$OJ_TEMPLATE/header.php");?>
 <div class="padding">
-  <h1>修改用户信息</h1>
+  <h1><?php echo $MSG_USERINFO ?></h1>
   <div class="ui error message" id="error" data-am-alert hidden>
     <p id="error_info"></p>
   </div>
