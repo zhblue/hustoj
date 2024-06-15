@@ -364,7 +364,7 @@ Star us, please!
 
 ### 视频教程
 
-Ubuntu 18.04 安装 (https://www.bilibili.com/video/BV1Mp4y1C7Xx)
+[Ubuntu 安装](https://www.bilibili.com/video/BV1Mp4y1C7Xx) 视频中以18.04安装，不代表推荐使用18.04，推荐用最新Ubuntu LTS版本，如24.04 22.04 。
 
 ### 注意事项
 
