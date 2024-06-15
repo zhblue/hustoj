@@ -215,13 +215,13 @@ Runtime Error:[ERROR] A Not allowed system call: runid:10735 CALLID:20 如何解
 通过.tar.gz源码安装的应该怎么升级？
 --
 
-到安装文件目录找到hustoj-read-only目录
-sudo svn up hustoj-read-only
-cd hustoj-read-only/core
-sudo ./make.sh
-sudo svn up /var/www/JudgeOnline
+```
+sudo su
+cd /home/judge/src/install
+bash fixing.sh
+```
 
-遇到问题，回答mc
+
    
 为何页面总是需要刷新才能显示？
 --
@@ -275,11 +275,12 @@ chmod g+rw -R /home/judge/data
     
 如何更新到最新版本？
 --
-
-    svn up /var/www/JudgeOnline
-    或重新运行install.sh
-    升级并编译内核make.sh
-    然后用管理员登陆，后台执行update_database(更新数据库)。
+运行下面的命令，如果fixing.sh文件不存在，可以从http://dl.hustoj.com/fixing.sh 下载
+```
+sudo su
+cd /home/judge/src/install
+bash fixing.sh
+```
     
 如何从POJ的免费版迁移？
 --
