@@ -393,7 +393,7 @@ wget http://dl.hustoj.com/install.sh
 sudo bash install.sh
 ```
 
-### 基于 Ubuntu 20.04 安装	
+### 基于 Ubuntu 24.04 安装	
 	
 **仅支持原生Ubuntu系统，不支持WSL和docker中的Ubuntu系统**
 	
@@ -410,13 +410,6 @@ sudo bash install.sh
 可能的解决方案1:安装docker(运行judge_client目录下的docker.sh)并启用OJ_USE_DOCKER=1
 或2:[卸载阿里云盾](#卸载阿里云盾)。**
 
-	
-### 基于 Ubuntu 18.04 安装   即将脱离维护期，不推荐
-
-```bash
-wget http://dl.hustoj.com/install.sh
-sudo bash install.sh
-```
 	
 ### 校园网安装
 
