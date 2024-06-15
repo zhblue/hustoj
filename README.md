@@ -642,8 +642,8 @@ sudo bash /home/judge/src/install/fixing.sh
 
 ## 系统演示
 
-[前台演示](http://hustoj.com/oj/)
-[龙芯部署](http://loongson.hustoj.com/)
+[前台演示](http://demo.hustoj.com/)
+[龙芯部署](http://my.hustoj.com/)
 
 ## 后台功能
 
