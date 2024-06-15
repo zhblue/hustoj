@@ -647,7 +647,8 @@ sudo bash /home/judge/src/install/fixing.sh
 
 ## 后台功能
 
-<img src="https://raw.githubusercontent.com/zhblue/hustoj/master/wiki/menu.png" />
+![image](https://github.com/zhblue/hustoj/assets/3926566/01746a51-02e4-4252-83c1-653b787b1214)
+
 
 ## 硬件需求
 
