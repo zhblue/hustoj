@@ -10,12 +10,11 @@ done
 cat > /etc/docker/daemon.json <<EOF
 {
 	"registry-mirrors": [
-			    "http://hub-mirror.c.163.com",
-			    "https://docker.mirrors.ustc.edu.cn",
-			    "https://dockerhub.azk8s.cn",
-			    "https://mirror.ccs.tencentyun.com",
-			    "https://registry.cn-hangzhou.aliyuncs.com",
-			    "https://docker.mirrors.ustc.edu.cn"
+				"https://docker.m.daocloud.io",
+				"https://huecker.io",
+				"https://dockerhub.timeweb.cloud",
+				"https://noohub.ru",
+			        "https://registry.cn-hangzhou.aliyuncs.com"
     	],
 	"live-restore": true,
 	"log-opts": {
