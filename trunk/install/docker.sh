@@ -13,7 +13,6 @@ cat > /etc/docker/daemon.json <<EOF
 				"https://docker.m.daocloud.io",
 				"https://huecker.io",
 				"https://dockerhub.timeweb.cloud",
-				"https://noohub.ru",
 			        "https://registry.cn-hangzhou.aliyuncs.com"
     	],
 	"live-restore": true,
