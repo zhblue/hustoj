@@ -388,18 +388,17 @@ Star us, please!
 	
 **仅支持原生Ubuntu系统，不支持WSL和docker中的Ubuntu系统**
 
-**建议服务器配置双核2G内存以上**
-	
-```bash
-wget http://dl.hustoj.com/install.sh
-sudo bash install.sh
-```
+**建议服务器配置双核2G内存以上**	
 
 ### 基于 Ubuntu 24.04 安装	
 	
 **仅支持原生Ubuntu系统，不支持WSL和docker中的Ubuntu系统**
 	
 **建议服务器配置单核2G内存以上**
+
+### 基于 Debian12  安装	
+
+### 以上三种环境都用下面的脚本
 
 ```bash
 wget http://dl.hustoj.com/install.sh
