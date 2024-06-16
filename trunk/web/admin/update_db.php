@@ -209,7 +209,8 @@ $tsql[46]="alter table $DB_NAME.users add column activecode varchar(16) not null
 $csql[46]="";
 $tsql[47]="alter table $DB_NAME.users add column group_name varchar(16) not null default '' after school;";
 $csql[47]="";
-
+// 删除6个月以前的非正确源码，优化数据库空间。
+// delete from source_code  where solution_id in (select solution_id from solution where result>4 and  in_date<date_sub(now(),interval 6 month) ); //
 if(isset($_POST['do'])){
 	require_once("../include/check_post_key.php");
 	echo "Executing...<br>";
