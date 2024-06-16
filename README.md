@@ -387,16 +387,14 @@ Star us, please!
 **各类公有云首选, 最容易，成功率最高，近期部署数量最多，开发者原型机**
 	
 **仅支持原生Ubuntu系统，不支持WSL和docker中的Ubuntu系统**
-
-**建议服务器配置双核2G内存以上**	
-
+	
 ### 基于 Ubuntu 24.04 安装	
 	
-**仅支持原生Ubuntu系统，不支持WSL和docker中的Ubuntu系统**
-	
-**建议服务器配置单核2G内存以上**
+**仅支持原生Ubuntu系统，不支持WSL和docker中的Ubuntu系统**	
 
 ### 基于 Debian12  安装	
+
+**支持各类虚拟机、云服务、物理机**
 
 ### 以上三种环境都用下面的脚本
 
@@ -404,6 +402,8 @@ Star us, please!
 wget http://dl.hustoj.com/install.sh
 sudo bash install.sh
 ```
+
+**建议服务器配置双核2G内存以上**
 	
 脚本运行完成直接浏览器输入ip地址即可访问，如不能打开请检查**访问策略**、**防火墙**设置是否打开80端口。
 	
