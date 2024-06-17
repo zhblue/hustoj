@@ -19,7 +19,7 @@
 
         </tbody>
     </table>
-    <div>数据来源：<a href="http://contests.acmicpc.info/contests.json" target="_blank">http://contests.acmicpc.info/contests.json</a>&nbsp;&nbsp;&nbsp;&nbsp;作者：<a href="http://contests.acmicpc.info"  target="_blank" >doraemonok</a></div>
+    <div>数据来源：<a href="https://algcontest.rainng.com/contests.json" target="_blank">https://algcontest.rainng.com/contests.json</a>&nbsp;&nbsp;&nbsp;&nbsp;作者：<a href="https://www.rainng.com/"  target="_blank" >雨凝</a></div>
     </div>
         <script>
                 var contestList = $("#contest-list");
