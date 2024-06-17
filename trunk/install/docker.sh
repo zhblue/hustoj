@@ -10,6 +10,7 @@ done
 cat > /etc/docker/daemon.json <<EOF
 {
 	"registry-mirrors": [
+ 				"https://yczv4b52.mirror.aliyuncs.com",
 				"https://docker.m.daocloud.io",
 				"https://huecker.io",
 				"https://dockerhub.timeweb.cloud",
