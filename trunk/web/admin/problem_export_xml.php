@@ -319,7 +319,7 @@ else {
 ?>
 
 <?php
-  if ($row['spj'] != 0) {
+  if ($row['spj'] == 1) {
     $filec = "$OJ_DATA/".$row['problem_id']."/spj.c";
     $filecc = "$OJ_DATA/".$row['problem_id']."/spj.cc";
 
@@ -346,6 +346,8 @@ else {
       echo fixcdata(file_get_contents ($filecc ));
       echo "]]></tpj>";
     }
+  }else if ($row['spj'] == 2){
+     echo "<spj language=\"Text\">text judge</spj>";
   }
 ?>
 </item>
