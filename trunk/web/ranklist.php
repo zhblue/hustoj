@@ -30,12 +30,18 @@
         if($scope!=""&&$scope!='d'&&$scope!='w'&&$scope!='m')
                 $scope='y';
 	$where="";
-
+	$param=array();
 	if(isset($_GET['prefix'])){
 		$prefix=$_GET['prefix'];
 		$where="where user_id like ? and user_id not in (".$OJ_RANK_HIDDEN.") and defunct='N' ";
+		array_push($param,$prefix."%");
 	}else{	
 		$where="where user_id not in (".$OJ_RANK_HIDDEN.") and defunct='N' ";
+	}
+	if(isset($_GET['group_name']) && !empty($_GET['group_name'])){
+    		$group_name = $_GET['group_name'];
+    		$where .= "and group_name like ? ";
+		array_push($param,$group_name.'%');
 	}
         $rank = 0;
 
@@ -75,7 +81,7 @@
                                         $s=date('Y').'-01-01';
                         }
 			$last_id=mysql_query_cache("select solution_id from solution where  in_date<str_to_date('$s','%Y-%m-%d') order by solution_id desc limit 1;");
-			if(!empty( $last_id)) $last_id=$last_id[0][0];else $last_id=0;
+			if(is_array( $last_id)) $last_id=$last_id[0][0];else $last_id=0;
 			$view_total=mysql_query_cache("select count(distinct(user_id)) from solution where solution_id>$last_id")[0][0];
                         $sql="SELECT users.`user_id`,`nick`,s.`solved`,t.`submit`,group_name FROM `users`
                                         inner join
@@ -97,14 +103,8 @@
 
       
 		
-		if(isset($_GET['prefix'])){
-			if(is_valid_user_name($_GET['prefix'])){
-				$result = pdo_query($sql,$_GET['prefix']."%");
-			}else{
-				 $view_errors =  "<h2>invalid user name prefix</h2>";
-			         require("template/".$OJ_TEMPLATE."/error.php");
-      				 exit(0);
-			}
+		if(isset($_GET['prefix'])||isset($_GET['group_name'])){
+			$result = pdo_query($sql,$param);
 		}else{
                 	$result = mysql_query_cache($sql) ;
 		}

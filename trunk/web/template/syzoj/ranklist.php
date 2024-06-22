@@ -11,6 +11,10 @@
       <i class="search icon"></i><input name="prefix" placeholder="<?php echo $MSG_USER?>" type="text" value="<?php echo htmlentities(isset($_GET['prefix'])?$_GET['prefix']:"",ENT_QUOTES,"utf-8") ?>">
       <button class="ui mini button" type="submit"><?php echo $MSG_SEARCH?></button>
     </div>
+     <div class="ui action left icon input inline" style="width: 180px; margin-right: 77px; ">
+      <i class="search icon"></i><input name="group_name" placeholder="<?php echo $MSG_GROUP_NAME ?>" type="text" value="<?php echo htmlentities(isset($_GET['group_name']) ? $_GET['group_name'] : "", ENT_QUOTES, "utf-8") ?>">
+      <button class="ui mini button" type="submit"><?php echo $MSG_SEARCH ?></button>
+    </div>
   </form>
 	    <table class="ui very basic center aligned table" style="table-layout: fixed; ">
 	        <thead>
