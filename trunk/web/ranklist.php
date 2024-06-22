@@ -103,7 +103,7 @@
 
       
 		
-		if(isset($_GET['prefix'])||isset($_GET['group_name'])){
+		if(!empty($param)){
 			$result = pdo_query($sql,$param);
 		}else{
                 	$result = mysql_query_cache($sql) ;
