@@ -282,7 +282,7 @@ function import_fps($tempfile) {
       }
 
       if (!isset($OJ_SAE) || !$OJ_SAE) {
-        if ($spj) {
+        if ($spj==1) {
 		if($spjcode){
 		  if($spjlang=="C++"){
 			  $basedir = "$OJ_DATA/$pid";
