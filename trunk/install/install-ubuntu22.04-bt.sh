@@ -136,7 +136,7 @@ if test -f  /.dockerenv ;then
 else
                 sed -i 's/ubuntu:20/ubuntu:22/g' Dockerfile 
 	sed -i 's|/usr/include/c++/9|/usr/include/c++/11|g' Dockerfile 
-	bash podman.sh
+	bash docker.sh
          sed -i "s/OJ_USE_DOCKER=0/OJ_USE_DOCKER=1/g" /home/judge/etc/judge.conf
          sed -i "s/OJ_PYTHON_FREE=0/OJ_PYTHON_FREE=1/g" /home/judge/etc/judge.conf
          sed -i "s/OJ_INTERNAL_CLIENT=1/OJ_INTERNAL_CLIENT=0/g" /home/judge/etc/judge.conf
