@@ -160,7 +160,7 @@ else {
 			  $sql="WHERE (contest_id=0 or contest_id is null)  ";      // 如果希望所有人能在练习状态直接查看自己的比赛提交，这里改成 where problem_id>0 
 	    }
     }else{
-        $sql="WHERE user_id not in ($OJ_RANK_HIDDEN) and  problem_id>0 and (contest_id=0 or contest_id is null) "; // 如果希望所有人能在练习状态直接查看别人的比赛提交，这里改成 where problem_id>0 
+        $sql="WHERE solution.user_id not in ($OJ_RANK_HIDDEN) and  problem_id>0 and (contest_id=0 or contest_id is null) "; // 如果希望所有人能在练习状态直接查看别人的比赛提交，这里改成 where problem_id>0 
     }
 }
 
@@ -195,7 +195,7 @@ if (isset($_GET['problem_id']) && $_GET['problem_id']!="") {
   }
 }
 
-
+$param=array();
 
 // check the user_id arg
 $user_id = "";
@@ -205,48 +205,68 @@ if (isset($OJ_ON_SITE_CONTEST_ID)&&$OJ_ON_SITE_CONTEST_ID>0&&!isset($_SESSION[$O
 
 if (isset($_GET['user_id'])) {
   $user_id = trim($_GET['user_id']);
-  if ( $user_id!="" && is_valid_user_name($user_id)) {
-      $sql = $sql."AND `user_id`=? ";
+  if ( $user_id!="" ) {
+      $sql = $sql."AND solution.user_id=? ";
       if ($str2!="")
       		$str2 = $str2."&";
-      $str2 = $str2."&user_id=".urlencode($user_id);
+      $str2 = $str2."&user_id=".htmlentities(urlencode($user_id),ENT_QUOTES,'utf8');
+      array_push($param,$user_id);
   }
   else{
 	  $user_id = "";
   }
 }
 
-if (isset($_GET['language']))
-  $language = intval($_GET['language']);
-else
-  $language = -1;
-
-if ($language>count($language_ext) || $language<0)
-  $language = -1;
-
-if ($language!=-1) {
-  $sql = $sql."AND `language`='".($language)."' ";
-  $str2 = $str2."&language=".$language;
+if (isset($_GET['language'])){
+	  $language = intval($_GET['language']);
+	  if ($language>count($language_ext) || $language<0)
+		  $language = -1;
+	if ($language!=-1) {
+	  $sql = $sql."AND solution.`language`=?  ";
+	  $str2 = $str2."&language=".$language;
+      	  array_push($param,$language);
+	}
+}else{
+	$language = -1;
 }
 
-if (isset($_GET['jresult']))
+
+
+if (isset($_GET['jresult'])){
   $result = intval($_GET['jresult']);
-else
+	if ($result!=-1 && !$lock) {
+	  $sql = $sql."AND `result`=? ";
+	  $str2 = $str2."&jresult=".$result;
+      	  array_push($param,$result);
+	}
+}else{
   $result = -1;
+}
+if(isset($_GET['school'])&&trim($_GET['school'])!="" || isset($_GET['school'])&&trim($_GET['school'])!=""    ){
 
-if ($result>12 || $result<0)
-  $result = -1;
-
-if ($result!=-1 && !$lock) {
-  $sql = $sql."AND `result`='".($result)."' ";
-  $str2 = $str2."&jresult=".$result;
+	 $sql0="select * from solution solution inner join users users on solution.user_id=users.user_id";
+	 if(isset($_GET['school'])&&trim($_GET['school'])!=""){
+	    $school=trim($_GET['school']);
+	    $sql.=" and users.school=? "; 
+      	    array_push($param,trim($_GET['school']));
+	    $str2 = $str2."&school=".htmlentities(trim($_GET['school']),ENT_QUOTES,'utf8');
+	 }
+	 if(isset($_GET['group_name'])&&trim($_GET['group_name'])!=""){
+	    $group_name=trim($_GET['group_name']);
+	    $sql.=" and users.group_name=? "; 
+      	    array_push($param,trim($_GET['group_name']));
+	    $str2 = $str2."&group_name=".htmlentities(trim($_GET['group_name']),ENT_QUOTES,'utf8');
+	 }
+}else{
+	$sql0="select * from solution ";
 }
 
-if ($OJ_SIM) {
+$showsim = intval($_GET['showsim']);
+
+if ($OJ_SIM&$showsim>0) {
   //$old=$sql;
-  $sql = "select * from solution solution left join `sim` sim on solution.solution_id=sim.s_id ".$sql;
-  if (isset($_GET['showsim']) && intval($_GET['showsim'])>0) {
-    $showsim = intval($_GET['showsim']);
+  $sql = $sql0." left join `sim` sim on solution.solution_id=sim.s_id ".$sql;
+  if ($showsim>0) {
     $sql .= " and sim.sim>=$showsim";
     $str2 .= "&showsim=$showsim";
   }
@@ -254,22 +274,22 @@ if ($OJ_SIM) {
   //$sql=$sql.$order_str." LIMIT 20";
 }
 else {
-  $sql = "select * from `solution` ".$sql;
+  $sql = $sql0." ".$sql;
 }
 
 //echo $sql;
-
+//exit();
 $sql = $sql.$order_str." LIMIT 50";
 //echo $sql;
 
 
-if (isset($_GET['user_id'])&&$user_id!="") {
-  $result = pdo_query($sql,$user_id);
+if (!empty($param)) {
+  $result = pdo_query($sql,$param);
 }else{
   $result = pdo_query($sql);
 }
   
-if ($result)
+if (!empty($result))
   $rows_cnt = count($result);
 else
   $rows_cnt = 0;
