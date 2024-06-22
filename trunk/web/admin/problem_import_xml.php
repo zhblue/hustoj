@@ -174,6 +174,7 @@ function import_fps($tempfile) {
     $tpjcode = getValue ($searchNode,'tpj');
     if($tpjcode) $tpjlang=getAttribute($searchNode,'tpj','language');
     $spj = trim($spjcode.$tpjcode)?1:0;
+    if($spjlang=="Text") $spj=2;
     if(hasRemoteProblem($remote_oj,$remote_id)){
    	$sql="update problem set title=?,time_limit=?,memory_limit=?,description=?,input=?,output=?,sample_input=?,sample_output=?,hint=?,source=?,spj=? where remote_oj=? and remote_id=?";
         pdo_query($sql,$title, $time_limit, $memory_limit, $description, $input, $output, $sample_input, $sample_output, $hint, $source, $spj,$remote_oj,$remote_id);	
