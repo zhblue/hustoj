@@ -2,7 +2,20 @@
 require_once(dirname(__FILE__)."/pdo.php");
 require_once(dirname(__FILE__)."/memcache.php");
 
+//自动切换夜间模式
 //if(date('H')<5||date('H')>21||isset($_GET['dark'])) $OJ_CSS="dark.css";
+
+//允许用参数tp临时切换皮肤
+/*
+if(in_array($_GET['tp'],$OJ_TP)){
+    $OJ_TEMPLATE=$_GET['tp'];
+    setcookie("tp", $_GET['tp'], time()+3600);
+}else if (in_array($_COOKIE['tp'],$OJ_TP)){
+    $OJ_TEMPLATE=$_COOKIE['tp'];
+}
+*/
+
+//自动识别语言
 if (isset($_SESSION[$OJ_NAME . '_' . 'OJ_LANG'])) {
 	$OJ_LANG=$_SESSION[$OJ_NAME . '_' . 'OJ_LANG'];
 } else if (isset($_COOKIE['lang']) && in_array($_COOKIE['lang'], array("cn", "ug", "en", 'fa', 'ko', 'th'))) {
