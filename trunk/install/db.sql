@@ -33,13 +33,16 @@ CREATE TABLE IF NOT EXISTS `contest_problem` (
   KEY `Index_contest_id` (`contest_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4;
 
-CREATE TABLE IF NOT EXISTS `loginlog` (
+ CREATE TABLE `loginlog` (
+  `log_id` int NOT NULL AUTO_INCREMENT,
   `user_id` varchar(48) NOT NULL DEFAULT '',
   `password` varchar(40) DEFAULT NULL,
   `ip` varchar(46) DEFAULT NULL,
   `time` datetime DEFAULT NULL,
-  KEY `user_log_index` (`user_id`,`time`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4;
+  PRIMARY KEY (`log_id`),
+  KEY `user_log_index` (`user_id`,`time`),
+  KEY `user_time_index` (`user_id`,`time`)
+) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 
 
 CREATE TABLE IF NOT EXISTS `mail` (
   `mail_id` int(11) NOT NULL AUTO_INCREMENT,
@@ -53,7 +56,7 @@ CREATE TABLE IF NOT EXISTS `mail` (
   `defunct` char(1) NOT NULL DEFAULT 'N',
   PRIMARY KEY (`mail_id`),
   KEY `uid` (`to_user`)
-) ENGINE=MyISAM AUTO_INCREMENT=1013 DEFAULT CHARSET=utf8mb4;
+) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE IF NOT EXISTS `news` (
   `news_id` int(11) NOT NULL AUTO_INCREMENT,
