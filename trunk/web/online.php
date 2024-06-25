@@ -13,11 +13,6 @@ $OJ_CACHE_SHARE=false;
 	$ip = new IpLocation();
 	$users = $on->getAll();
 	
-?>
-
-
-
-<?php 
 $view_online=Array();
 		
 if (isset($_SESSION[$OJ_NAME.'_'.'administrator'])){
@@ -36,7 +31,7 @@ if (isset($_SESSION[$OJ_NAME.'_'.'administrator'])){
 			$result=pdo_query($sql,$search) ;
 			$i=0;
 }else{
-	$sql="SELECT * FROM `loginlog` order by time desc limit 50";
+	$sql="SELECT * FROM `loginlog` order by time desc limit 20";
 	$result=pdo_query($sql) ;
 }
 
