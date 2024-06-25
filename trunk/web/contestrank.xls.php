@@ -201,6 +201,14 @@ $U=array();
 }
 
 usort($U,"s_cmp");
+$absentList=pdo_query("select user_id,nick from users where user_id in (select user_id from privilege where rightstr='c$cid' and user_id not in (select distinct user_id from solution where contest_id=?))",$cid);
+foreach ($absentList as $row){
+         $U[$user_cnt]=new TM();
+         $U[$user_cnt]->user_id=$row['user_id'];
+         $U[$user_cnt]->nick=$row['nick'];
+         $user_cnt++;
+}
+
 $rank=1;
 //echo "<style> td{font-size:14} </style>";
 //echo "<title>Contest RankList -- $title</title>";
