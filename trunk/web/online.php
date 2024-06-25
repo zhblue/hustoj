@@ -36,7 +36,7 @@ if (isset($_SESSION[$OJ_NAME.'_'.'administrator'])){
 			$result=pdo_query($sql,$search) ;
 			$i=0;
 }else{
-	$sql="SELECT * FROM `loginlog`";
+	$sql="SELECT * FROM `loginlog` order by time desc limit 50";
 	$result=pdo_query($sql) ;
 }
 
