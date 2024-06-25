@@ -225,6 +225,13 @@ if($OJ_MEMCACHE){
 foreach ($fb as $row){
          $first_blood[$row['num']]=$row['user_id'];
 }
+$absentList=pdo_query("select user_id,nick from users where user_id in (select user_id from privilege where rightstr='c$cid' and user_id not in (select distinct user_id from solution where contest_id=?))",$cid);
+foreach ($absentList as $row){
+         $U[$user_cnt]=new TM();
+         $U[$user_cnt]->user_id=$row['user_id'];
+         $U[$user_cnt]->nick=$row['nick'];
+         $user_cnt++;
+}
 
 
 
