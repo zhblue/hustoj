@@ -26,12 +26,12 @@ if (isset($_SESSION[$OJ_NAME.'_'.'administrator'])){
 				$sql=$sql." where user_id<>? ";
 				$search=$_SESSION[$OJ_NAME.'_'.'user_id'];
 			}
-			$sql=$sql."  order by `time` desc LIMIT 0,50";
+			$sql=$sql."  order by `log_id` desc LIMIT 0,50";
 
 			$result=pdo_query($sql,$search) ;
 			$i=0;
 }else{
-	$sql="SELECT * FROM `loginlog` order by time desc limit 20";
+	$sql="SELECT * FROM `loginlog` order by log_id desc limit 20";
 	$result=pdo_query($sql) ;
 }
 
