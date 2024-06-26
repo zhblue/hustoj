@@ -210,7 +210,7 @@ $csql[46]="";
 $tsql[47]="alter table $DB_NAME.users add column group_name varchar(16) not null default '' after school;";
 $csql[47]="";
 $tsql[48]="alter table $DB_NAME.loginlog add column log_id int not null auto_increment primary key first;";
-$csql[48]="";
+$csql[48]="delete from $DB_NAME.loginlog where time<curdate()-interval 6 month;";
  
 
 // 删除6个月以前的非正确源码，优化数据库空间。
