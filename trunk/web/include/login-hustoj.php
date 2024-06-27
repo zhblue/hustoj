@@ -38,7 +38,7 @@
 						return false;
 					}//如遇机器故障，可经管理员后台指定新的ip来允许登陆。
 				}
-				$sql="INSERT INTO `loginlog` VALUES(?,'login ok',?,NOW())";
+				$sql="INSERT INTO `loginlog`(user_id,password,ip,time) VALUES(?,'login ok',?,NOW())";
 				pdo_query($sql,$user_id,$ip);
 				$sql="UPDATE users set accesstime=now() where user_id=?";
 				pdo_query($sql,$user_id);
