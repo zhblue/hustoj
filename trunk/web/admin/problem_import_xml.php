@@ -134,7 +134,7 @@ function get_extension($file) {
 }
 
 function import_fps($tempfile) {
-  global $OJ_DATA,$OJ_SAE,$OJ_REDIS,$OJ_REDISSERVER,$OJ_REDISPORT,$OJ_REDISQNAME,$domain,$DOMAIN;
+  global $OJ_DATA,$OJ_SAE,$OJ_REDIS,$OJ_REDISSERVER,$OJ_REDISPORT,$OJ_REDISQNAME,$domain,$DOMAIN,$OJ_NAME;
   $xmlDoc = simplexml_load_file($tempfile, 'SimpleXMLElement', LIBXML_PARSEHUGE);
   $searchNodes = $xmlDoc->xpath("/fps/item");
   $spid = 0;
