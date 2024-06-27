@@ -194,6 +194,9 @@ function import_fps($tempfile) {
       }
       if ($spid==0)
       	$spid = $pid;
+      $sql = "INSERT INTO `privilege` (`user_id`,`rightstr`) VALUES(?,?)";
+      pdo_query($sql, $_SESSION[$OJ_NAME.'_'.'user_id'], "p$pid");
+      $_SESSION[$OJ_NAME.'_'."p$pid"] = true;
 
       $basedir = "$OJ_DATA/$pid";
       mkdir($basedir);
