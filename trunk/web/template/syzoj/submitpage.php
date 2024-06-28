@@ -426,6 +426,7 @@ function loadFromBlockly(){
    }
    $(document).ready(function(){
    	$("#source").css("height",window.innerHeight-180);  
+	if($("#vcode")!=undefined) $("#vcode").click();
 	if(!!localStorage){
 		let key="<?php echo $_SESSION[$OJ_NAME.'_user_id']?>source:"+location.href;
 		let saved=localStorage.getItem(key);
