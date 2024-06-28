@@ -7,7 +7,7 @@
 	$sites=array(
 		"pku" => "http://poj.org/",
 		"hdu" => "http://acm.hdu.edu.cn/",
-		"bas" => "http://bas.ssoier.cn:8086/about.php"
+		"bas" => "http://www.ssoier.cn:18087/pubtest/"
 	);
 $i=0;
 foreach($remote_ojs as $remote_oj){
