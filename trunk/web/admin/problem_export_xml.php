@@ -144,7 +144,7 @@ function fixurl($img_url) {
 
 function image_base64_encode($img_url) {
   $img_url = fixurl($img_url);
-
+echo $img_url;
   if (substr($img_url,0,4)!="http")
     return false;
   $context = stream_context_create(array('http' => array('timeout' => 5)));    // prevent stuck on export image failed
@@ -161,17 +161,21 @@ function image_base64_encode($img_url) {
 
 function getImages($content) {
   preg_match_all("<[iI][mM][gG][^<>]+[sS][rR][cC]=\"?([^ \"\>]+)/?>",$content,$images);
-  return $images;
+  
+  $pattern = '/!\[img\]\(([^\)]+)\)/i';
+  preg_match_all($pattern, $content, $mdImages);
+
+  return array_merge($images[1],$mdImages[1]);
 }
 
 function fixImageURL(&$html,&$did) {
   $images = getImages($html);
-  $imgs = array_unique($images[1]);
+  $imgs = array_unique($images);
 
   foreach ($imgs as $img) {
     if(substr($img,0,4)=="data") continue;                      // skip image from paste clips
     $html = str_replace($img,fixurl($img),$html); 
-    //print_r($did);
+  //  print_r($did);
 
     if (!in_array($img,$did)) {
       $base64 = image_base64_encode($img);
