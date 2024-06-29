@@ -42,7 +42,7 @@ CREATE TABLE IF NOT EXISTS `contest_problem` (
   PRIMARY KEY (`log_id`),
   KEY `user_log_index` (`user_id`,`time`),
   KEY `user_time_index` (`user_id`,`time`)
-) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 
+) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 ;
 
 CREATE TABLE IF NOT EXISTS `mail` (
   `mail_id` int(11) NOT NULL AUTO_INCREMENT,

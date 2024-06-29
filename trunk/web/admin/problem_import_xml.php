@@ -134,7 +134,7 @@ function get_extension($file) {
 }
 
 function import_fps($tempfile) {
-  global $OJ_DATA,$OJ_SAE,$OJ_REDIS,$OJ_REDISSERVER,$OJ_REDISPORT,$OJ_REDISQNAME,$domain,$DOMAIN;
+  global $OJ_DATA,$OJ_SAE,$OJ_REDIS,$OJ_REDISSERVER,$OJ_REDISPORT,$OJ_REDISQNAME,$domain,$DOMAIN,$OJ_NAME;
   $xmlDoc = simplexml_load_file($tempfile, 'SimpleXMLElement', LIBXML_PARSEHUGE);
   $searchNodes = $xmlDoc->xpath("/fps/item");
   $spid = 0;
@@ -194,6 +194,9 @@ function import_fps($tempfile) {
       }
       if ($spid==0)
       	$spid = $pid;
+      $sql = "INSERT INTO `privilege` (`user_id`,`rightstr`) VALUES(?,?)";
+      pdo_query($sql, $_SESSION[$OJ_NAME.'_'.'user_id'], "p$pid");
+      $_SESSION[$OJ_NAME.'_'."p$pid"] = true;
 
       $basedir = "$OJ_DATA/$pid";
       mkdir($basedir);

@@ -17,7 +17,7 @@ $view_online=Array();
 		
 if (isset($_SESSION[$OJ_NAME.'_'.'administrator'])){
 
-			$sql="SELECT * FROM `loginlog`";
+			$sql="SELECT user_id,password,ip,time FROM `loginlog`";
 			$search=$_GET['search'];
 			if ($search!=''){
 				$sql=$sql." WHERE ip like ? ";
@@ -31,7 +31,7 @@ if (isset($_SESSION[$OJ_NAME.'_'.'administrator'])){
 			$result=pdo_query($sql,$search) ;
 			$i=0;
 }else{
-	$sql="SELECT * FROM `loginlog` order by log_id desc limit 20";
+	$sql="SELECT user_id,password,ip,time FROM `loginlog` order by log_id desc limit 20";
 	$result=pdo_query($sql) ;
 }
 

@@ -39,7 +39,7 @@ if (!$OJ_BENCHMARK_MODE) {
 
   if ($OJ_VCODE && ($_SESSION[$OJ_NAME.'_'."vcode"]==null || $vcode!=$_SESSION[$OJ_NAME.'_'."vcode"] || $vcode=="" || $vcode==null)) {
     $_SESSION[$OJ_NAME.'_'."vcode"] = null;
-    $err_str = $err_str.$MSG_VCODE_WRONG."\\n";
+    $err_str = $err_str.$MSG_VCODE_WRONG."\n";
     $err_cnt++;
     $view_errors = $err_str;
     $_SESSION[ $OJ_NAME . '_' . "vfail" ]=true;
