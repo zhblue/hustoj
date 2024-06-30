@@ -89,7 +89,7 @@ CREATE TABLE IF NOT EXISTS `problem` (
   `sample_input` text,
   `sample_output` text,
   `spj` char(1) NOT NULL DEFAULT '0',
-  `hint` text,
+  `hint` mediumtext,
   `source` varchar(100) DEFAULT NULL,
   `in_date` datetime DEFAULT NULL,
   `time_limit` DECIMAL(10,3) NOT NULL DEFAULT 0,
