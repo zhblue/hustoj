@@ -103,7 +103,7 @@ if(  ($ok && $OJ_FRIENDLY_LEVEL>2) ||
   }
 }
 else{
-  $view_errors .= $MSG_WARNING_ACCESS_DENIED;
+  if($spj[0][0]!=2) $view_errors .= $MSG_WARNING_ACCESS_DENIED;
   require("template/".$OJ_TEMPLATE."/error.php");
   exit(0);
 }
