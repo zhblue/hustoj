@@ -7,7 +7,7 @@ if [ $# != 1 ] ; then
   exit 1;
 fi
 
-DATE=`date +%Y%m%d`
+DATE=`date +%Y%m%d%H%M%S`
 BAKDATE=`echo $1 |awk -F\. '{print $1}'|awk -F_ '{print $2}'`
 config="/home/judge/etc/judge.conf"
 SERVER=`cat $config|grep 'OJ_HOST_NAME' |awk -F= '{print $2}'`
