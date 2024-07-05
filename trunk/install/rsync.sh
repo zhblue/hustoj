@@ -1,5 +1,6 @@
 #!/bin/bash
 #judge_client gives PID as 1st parameter
+#this file will be executed when OJ_HTTP_DOWNLOAD=2
 if test -z $1 ;then
     echo "Example: $0 <Problem_id>"
     exit
