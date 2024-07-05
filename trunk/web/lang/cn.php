@@ -451,7 +451,7 @@
   $MSG_COPY="复制";
   $MSG_SUCCESS="成功";
   $MSG_FAIL="失败";
-  $MSG_TEXT_COMPARE="文本比较";
+  $MSG_TEXT_COMPARE="文本比较(选择填空题)";
   $MSG_JUDGE_STYLE="评测方式";
   // reinfo.php 
   $MSG_ERROR_INFO="错误信息";
