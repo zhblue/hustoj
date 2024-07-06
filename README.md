@@ -520,7 +520,7 @@ Linux新手请看[鸟哥的私房菜](http://cn.linux.vbird.org/linux_basic/linu
 ## 装后须知
 
 [Python重度用户注意查阅](https://github.com/zhblue/hustoj/blob/master/wiki/FAQ.md#python%E5%88%A4%E9%A2%98%E5%A5%BD%E6%85%A2%E5%A5%BD%E6%85%A2%E5%A6%82%E4%BD%95%E5%8A%A0%E9%80%9F)
---
+
 
 常见问题自动应答微信公众号: `hustoj`
 <img src="http://hustoj.com/wx.jpg" height="180">
@@ -557,6 +557,16 @@ Linux新手请看[鸟哥的私房菜](http://cn.linux.vbird.org/linux_basic/linu
         fastcgi_buffers 32 32k;
 ```
 保存后，重启 `nginx`
+
+## 性能测试
+
+可以导入这个[FPS文件](https://github.com/zhblue/freeproblemset/blob/master/fps-examples/PerformanceTest.xml)
+等待判题完成。
+
+![fdb2ade0dbba910e77ef31543aff7946](https://github.com/zhblue/hustoj/assets/3926566/109d4068-879b-49b2-adfd-e24b9d30a6fa)
+
+最后全部判完，这个AWT越小，说明判题速度越快，大致估算一下用7200去除这个值，就是服务器能承载的比赛人数。
+
 
 ## 备份
 
