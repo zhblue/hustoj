@@ -5,6 +5,7 @@ NEW=$2
 
 if test -z $2 ; then
    echo "Usage: $0  OLD_PATH/db_info.inc.php  NEW_PATH/db_info.inc.php "
+   exit
 fi
 
 
