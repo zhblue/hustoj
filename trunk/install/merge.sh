@@ -2,14 +2,11 @@
 
 OLD=$1
 NEW=$2
-MERGE=$3
+
 if test -z $2 ; then
    echo "Usage: $0  OLD_PATH/db_info.inc.php  NEW_PATH/db_info.inc.php "
 fi
-if test -z $MERGE ; then
-        MERGE="db_info.inc.php"
-        echo "merge into default db_info.inc.php"
-fi
+
 
 VARLIST=`grep static $OLD | awk -F\; '{print $1}' |grep =`
 rm  merge.sed
@@ -25,5 +22,5 @@ do
                 echo -e 's|\'$KEY'=.*;|\'$KEY'='$VALUE';|' >> merge.sed
         fi
 done
-sed -f merge.sed $NEW > $MERGE
+sed -i -f merge.sed $NEW 
 
