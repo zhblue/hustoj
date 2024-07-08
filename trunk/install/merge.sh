@@ -3,9 +3,21 @@
 OLD=$1
 NEW=$2
 
+if test ! -f "$OLD" ; then
+    echo "$OLD does not exist."
+    echo "Usage: $0  OLD_PATH/db_info.inc.php  NEW_PATH/db_info.inc.php "
+    exit
+fi
+
 if test -z $2 ; then
    echo "Usage: $0  OLD_PATH/db_info.inc.php  NEW_PATH/db_info.inc.php "
    exit
+fi
+
+if test ! -f "$NEW" ; then
+    echo "$NEW does not exist."
+    echo "Usage: $0  OLD_PATH/db_info.inc.php  NEW_PATH/db_info.inc.php "
+    exit
 fi
 
 
