@@ -24,4 +24,4 @@ do
         fi
 done
 sed -i -f merge.sed $NEW 
-
+rm merge.sed
