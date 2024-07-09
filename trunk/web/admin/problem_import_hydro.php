@@ -126,6 +126,7 @@ else {
     $i = 1;
     $pid=$title=$description=$input=$output=$sample_input=$sample_output=$hint=$source=$spj="";
     $type="normal";
+    $inserted=array();
     while ($dir_resource = zip_read($resource)) {
       if (zip_entry_open($resource,$dir_resource)) {
         $file_name = $path.zip_entry_name($dir_resource);
@@ -140,6 +141,11 @@ else {
 			$title=$hydrop['title'];	
 			$source=implode(" ",$hydrop['tag']);	
 			echo "<hr>".htmlentities($file_name." $title $source");
+			if(!in_array($title,$inserted)){
+				$pid = addproblem($title,1,128, $description, $input, $output, $sample_input, $sample_output, $hint, $source, $spj, $OJ_DATA);
+                                mkdir($OJ_DATA."/$pid/");	
+				array_push($inserted,$title);
+			}
 		}else if(basename($file_name)=="problem_zh.md"||basename($file_name)=="problem.md"){
 			
 			$regex = '/<(?!div)/';
@@ -160,9 +166,10 @@ else {
 			}
 
 			//echo htmlentities("$description");
-			if(!hasProblem($title)){
+			if($title!="" && (!in_array($title,$inserted)) && !hasProblem($title)){
     				$pid = addproblem($title,1,128, $description, $input, $output, $sample_input, $sample_output, $hint, $source, $spj, $OJ_DATA);
 				mkdir($OJ_DATA."/$pid/");
+				array_push($inserted,$title);
 			}else{
 				echo "skiped $title";
 				$pid=0;
