@@ -12,9 +12,10 @@ if [ `whoami` = "root" ];then
 	tar xzf hustoj.tar.gz
 	mv src/* ./
 	cd ..
+ 	chmod +x new/install/*.sh
 	if test -e /home/judge/src/web/include/db_info.inc.php ;then
 		    echo 'db_info.inc.php exists !';
-		    cp src/web/include/db_info.inc.php new/web/include/
+		    new/install/merge.sh src/web/include/db_info.inc.php new/web/include/db_info.inc.php
 		else
 		   echo 'db_info.inc.php not found';
 		   sed -i "s/DB_USER[[:space:]]*=[[:space:]]*\"root\"/DB_USER=\"$USER\"/g" new/web/include/db_info.inc.php

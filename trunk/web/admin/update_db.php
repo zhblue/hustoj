@@ -127,7 +127,7 @@ $csql[20]="";
 $tsql[21]="CREATE TABLE $DB_NAME.`source_code_user` like source_code";
 $csql[21]="";
 
-$tsql[22]="insert into source_code_user select * from $DB_NAME.source_code where solution_id not in (select solution_id from $DB_NAME.source_code_user)  ";
+$tsql[22]="insert into $DB_NAME.source_code_user select * from $DB_NAME.source_code where solution_id not in (select solution_id from $DB_NAME.source_code_user)  ";
 $csql[22]="";
 
 $tsql[23]="select judger from $DB_NAME.solution limit 1 ";
@@ -170,15 +170,15 @@ $tsql[28]="CREATE TABLE $DB_NAME.`share_code` (
   PRIMARY KEY (`share_id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=1000 DEFAULT CHARSET=utf8;";
 $tsql[29]="alter TABLE $DB_NAME.`contest` ADD `user_id` CHAR( 48 ) NOT NULL DEFAULT 'admin' AFTER `password` ";
-$csql[29]="update contest c inner JOIN (SELECT * FROM privilege WHERE rightstr LIKE 'm%') p ON concat('m',contest_id)=rightstr set c.user_id=p.user_id";
+$csql[29]="update $DB_NAME.contest c inner JOIN (SELECT * FROM privilege WHERE rightstr LIKE 'm%') p ON concat('m',contest_id)=rightstr set c.user_id=p.user_id";
 $tsql[30]="alter TABLE $DB_NAME. `contest_problem` ADD  `c_accepted` INT NOT NULL DEFAULT  '0' AFTER  `num` ,ADD  `c_submit` INT NOT NULL DEFAULT  '0' AFTER  `c_accepted`";
 $csql[30]="";
-$tsql[31]="update contest_problem cp inner join (select count(1) submit,contest_id cid,num from $DB_NAME.solution where contest_id>0 group by contest_id,num) sb on cp.contest_id=sb.cid and cp.num=sb.num set cp.c_submit=sb.submit";
-$csql[31]="update contest_problem cp inner join (select count(1) ac,contest_id cid,num from $DB_NAME.solution where contest_id>0 and result=4 group by contest_id,num) sb on cp.contest_id=sb.cid and cp.num=sb.num set cp.c_accepted=sb.ac";
+$tsql[31]="update $DB_NAME.contest_problem cp inner join (select count(1) submit,contest_id cid,num from $DB_NAME.solution where contest_id>0 group by contest_id,num) sb on cp.contest_id=sb.cid and cp.num=sb.num set cp.c_submit=sb.submit";
+$csql[31]="update $DB_NAME.contest_problem cp inner join (select count(1) ac,contest_id cid,num from $DB_NAME.solution where contest_id>0 and result=4 group by contest_id,num) sb on cp.contest_id=sb.cid and cp.num=sb.num set cp.c_accepted=sb.ac";
 $tsql[32]="alter table $DB_NAME.solution add column nick char(20) not null default '' after user_id ";
-$csql[32]="update solution s inner join users u on s.user_id=u.user_id set s.nick=u.nick";
-$tsql[33]="update problem p inner join (select problem_id pid ,count(1) submit from $DB_NAME.solution group by problem_id) s on p.problem_id=s.pid set p.submit=s.submit;";
-$csql[33]="";
+$csql[32]="update $DB_NAME.solution s inner join users u on s.user_id=u.user_id set s.nick=u.nick";
+$tsql[33]="update $DB_NAME.problem p inner join (select problem_id pid ,count(1) submit from $DB_NAME.solution group by problem_id) s on p.problem_id=s.pid set p.submit=s.submit;";
+$csql[33]="update $DB_NAME.problem p inner JOIN ( SELECT count(1) as c,problem_id from solution where result=4 group by problem_id) s on p.problem_id=s.problem_id set p.accepted=s.c;";
 $tsql[34]="alter table $DB_NAME.privilege add index user_id_index(user_id);";
 $csql[34]="";
 $tsql[35]="ALTER TABLE $DB_NAME.`problem` CHANGE `time_limit` `time_limit` DECIMAL(10,3) NOT NULL DEFAULT '0';";

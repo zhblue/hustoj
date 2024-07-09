@@ -14,6 +14,8 @@ if (!(isset($_SESSION[$OJ_NAME.'_'.'administrator']))){
                 }
                 $sql="UPDATE `solution` SET `result`=1 WHERE `problem_id`=? and problem_id>0";
                 pdo_query($sql,$rjpid) ;
+                $sql="UPDATE `problem` SET `accepted`=0 WHERE `problem_id`=? and problem_id>0";
+                pdo_query($sql,$rjpid) ;
                 $sql="delete from `sim` WHERE `s_id` in (select solution_id from solution where `problem_id`=?)";
                 pdo_query($sql,$rjpid) ;
                 $url="../status.php?problem_id=".$rjpid;
