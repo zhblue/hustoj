@@ -547,7 +547,7 @@ function selectMulti( num, answer){
         $('input[type="radio"]').click(function(){
                 if ($(this).is(':checked'))
                    selectOne($(this).attr("name"),$(this).val());
-        });
+        }).css("width","24px").css("height","21px");
 	$('input[type="checkbox"]').click(function(){
                 let num=$(this).attr("name");
                 let answer="";
@@ -556,7 +556,7 @@ function selectMulti( num, answer){
                                 answer+=$(this).val();
                 });
                 selectMulti(num,answer);
-        });
+        }).css("width","24px").css("height","21px");
 	<?php if ($row['spj']>1 || isset($_GET['sid']) || (isset($OJ_AUTO_SHOW_OFF)&&$OJ_AUTO_SHOW_OFF)){?>
 	    transform();
 	<?php }?>
