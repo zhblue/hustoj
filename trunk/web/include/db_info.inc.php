@@ -16,7 +16,7 @@ static 	$OJ_ADMIN="root@localhost";  //管理员email,若启用,建议对email.c
 static 	$OJ_DATA="/home/judge/data";  //测试数据目录
 static 	$OJ_BBS=false; //设为"discuss3" 启用， "bbs" for phpBB3 bridge or "discuss" for mini-forum or false for close any 
 static  $OJ_ONLINE=false;  //是否记录在线情况
-static  $OJ_LANG="en";  //默认语言
+static  $OJ_LANG="en";  //默认语言, 中文修改为"cn"
 static  $OJ_SIM=false;  //显示相似度，注意只是显示，启动检测的开关在judge.conf，且自己抄自己不计为抄袭
 static  $OJ_DICT=false; //显示在线翻译
 static  $OJ_LANGMASK=8388532; //掩码计算器:https://pigeon-developer.github.io/hustoj-langmask/
@@ -93,7 +93,7 @@ static  $OJ_REMOTE_JUDGE=false; //是否启用Remote Judge ，启用哪些模块
 static  $OJ_NO_CONTEST_WATCHER=false ; //是否禁止无权限用户观战私有比赛
 static  $OJ_CONTEST_TOTAL_100=false; //是否让比赛按100分计分
 static  $OJ_OLD_FASHINED=false; //是否在状态页的编辑按钮、管理页的预览模式等方面保留原始版本的习惯。
-static  $OJ_AI_HTML=false; // 若想开启AI链接，可设为 '<a class="desktop-only item active" target="_blank" href="http://ai.hustoj.com"><i class="help icon"></i> 问问狗蛋</a>';
+static  $OJ_AI_HTML=false; // 若想开启AI链接，可设为 '<a class="desktop-only item active" target="_blank" href="http://ai.hustoj.com"><i class="help icon"></i> 问问狗蛋</a>'
 //static  $OJ_EXAM_CONTEST_ID=1000; // 启用考试状态，填写考试比赛ID
 //static  $OJ_ON_SITE_CONTEST_ID=1000; //启用现场赛状态，填写现场赛比赛ID
 
@@ -102,7 +102,7 @@ static  $OJ_AI_HTML=false; // 若想开启AI链接，可设为 '<a class="deskto
 /* share code */
 static  $OJ_SHARE_CODE=false; // 代码分享功能
 /* recent contest */
-static  $OJ_RECENT_CONTEST=false; // "http://algcontest.rainng.com/contests.json" ; // 名校联赛
+static  $OJ_RECENT_CONTEST=false; // "http://algcontest.rainng.com/contests.json"   // 名校联赛
 
 
 static $OJ_ON_SITE_TEAM_TOTAL=0;  //用于根据比例的计算奖牌的队伍总数，0表示根据榜单上的出现的队伍总数计算，不计打星队伍
