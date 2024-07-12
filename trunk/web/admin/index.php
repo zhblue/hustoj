@@ -4,7 +4,7 @@
 <head>
 <title><?php echo $OJ_NAME.$MSG_ADMIN?></title>
 </head>
-<frameset cols="12%,*">
+<frameset cols="14%,*">
   <frame name="menu" src="menu2.php">
   <frame name="main" src="help.php">
   <noframes>
