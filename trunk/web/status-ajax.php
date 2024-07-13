@@ -22,7 +22,7 @@ if (isset($_GET['solution_id'])) {
 $sql = "select * from solution where solution_id=? LIMIT 1";
 $result = pdo_query($sql,$solution_id);
 		
-if (count($result)>0) {
+if (!empty($result)) {
 	$row = $result[0];
 	  if (isset($_GET['tr'])&&($row['problem_id']==0||($row['problem_id']>0&&$OJ_SHOW_DIFF)) && 
 	      (isset($_SESSION[$OJ_NAME.'_'.'user_id'])&& $_SESSION[$OJ_NAME.'_'.'user_id']== $row['user_id'] ) ) {
