@@ -31,6 +31,6 @@ contest_problem
 reinfo
 ceinfo
 ```
-在solution表中插入新的记录，设置result=0，将源码插入source_code，然后judged将轮询得到任务，调用judge_client去执行，执行时从source_code取出源码，执行完成后会更新ceinfo、solution、reinfo、problem、users、contest_problem等表。
+在solution表中插入新的记录，设置result=14获得自动编号solution_id，将源码关联solution_id插入source_code，再更新solution表中的result为0表示任务就绪，发送UDP消息给judged(默认UDP1536端口)，然后judged将轮询得到任务，调用judge_client去执行，执行时从source_code取出源码，执行完成后会更新ceinfo、solution、reinfo、problem、users、contest_problem等表。
 
 了解以上流程后，您可以根据自己的需要自行编写新的Web或Client/App端。
