@@ -94,6 +94,7 @@ static  $OJ_NO_CONTEST_WATCHER=false ; //是否禁止无权限用户观战私有
 static  $OJ_CONTEST_TOTAL_100=false; //是否让比赛按100分计分
 static  $OJ_OLD_FASHINED=false; //是否在状态页的编辑按钮、管理页的预览模式等方面保留原始版本的习惯。
 static  $OJ_AI_HTML=false; // 若想开启AI链接，可设为 '<a class="desktop-only item active" target="_blank" href="http://ai.hustoj.com"><i class="help icon"></i> 问问狗蛋</a>'
+static  $OJ_PUBLIC_STATUS=true; //是否公开所有人的判题结果,设为false则除source_browser外，其他人只能看到自己提交的记录。
 //static  $OJ_EXAM_CONTEST_ID=1000; // 启用考试状态，填写考试比赛ID
 //static  $OJ_ON_SITE_CONTEST_ID=1000; //启用现场赛状态，填写现场赛比赛ID
 
