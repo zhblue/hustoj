@@ -211,10 +211,14 @@ if(isset($_SESSION[$OJ_NAME.'_'.'balloon'])){
                                     if($mail) echo "<a class='item mail' href=".$path_fix."mail.php><i class='mail icon'></i>$MSG_MAIL$mail</a>";
                               }
 
-
-
-
-                            ?>
+                        if(isset($OJ_PRINTER) && $OJ_PRINTER){
+                        ?>
+                          <a  class="item"  href="printer.php">
+                            <i class="print icon"></i> <?php echo $MSG_PRINTER?>
+                          </a>
+                        <?php
+                        } 
+                        ?>
                             <a class="item" href="logout.php"><i class="power icon"></i><?php echo $MSG_LOGOUT;?></a>
                         </div>
                     </div>
