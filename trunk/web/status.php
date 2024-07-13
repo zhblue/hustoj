@@ -199,9 +199,15 @@ $param=array();
 
 // check the user_id arg
 $user_id = "";
-if (isset($OJ_ON_SITE_CONTEST_ID)&&$OJ_ON_SITE_CONTEST_ID>0&&!isset($_SESSION[$OJ_NAME.'_'.'administrator'])) {
-  $_GET['user_id'] = $_SESSION[$OJ_NAME.'_'.'user_id'];   
+if ((isset($OJ_ON_SITE_CONTEST_ID)&&$OJ_ON_SITE_CONTEST_ID>0&&!isset($_SESSION[$OJ_NAME.'_'.'administrator']))
+        || ( isset($OJ_PUBLIC_STATUS) && !$OJ_PUBLIC_STATUS )
+        ) {
+  if(!isset($_SESSION[$OJ_NAME.'_'.'user_id']))
+          $_GET['user_id']='Guest';
+  else if (!isset($_SESSION[$OJ_NAME.'_'.'source_browser']))
+          $_GET['user_id'] = $_SESSION[$OJ_NAME.'_'.'user_id'];
 }
+
 
 if (isset($_GET['user_id'])) {
   $user_id = trim($_GET['user_id']);
