@@ -59,7 +59,7 @@ if (!empty($result)) {
 		if (isset($_GET['q']) && "user_id"==$_GET['q']) {
 			echo $row['user_id']."[".$row['nick']."]";      // ajax onmouseover show who was copycated or shared the code to him
 		}
-		else {
+		else if(( isset($OJ_PUBLIC_STATUS) && !$OJ_PUBLIC_STATUS ) || $_SESSION[$OJ_NAME.'_'.'user_id']== $row['user_id'] || isset($_SESSION[$OJ_NAME.'_'.'source_browser'])  ) {
 			$contest_id = $row['contest_id'];
 			
 			if ($contest_id>0) {
