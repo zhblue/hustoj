@@ -8,9 +8,11 @@ service mysql start
 mysql < /trunk/install/db.sql
 mysql -e "insert into jol.privilege ( user_id, rightstr ) values('admin','administrator');"
 mysql -e "insert into jol.problem(problem_id,title,time_limit,memory_limit) values(1,1,1,5);"
-mysql -e "insert into jol.source_code values(1,'#include<stdio.h>\nint main(){\nint a,b;\nscanf(\"%d%d\",&a,&b);\nprintf(\"%d\\\\n\",a+b);\n}\n');"
-mysql -e "insert into jol.solution (solution_id,user_id,problem_id,ip,in_date) values(1,'1',1,'127.0.0.1',now());"
-
+for ((i=1; i<=1000; i++))
+do
+	mysql -e "insert into jol.source_code values($i,'#include<stdio.h>\nint main(){\nint a,b;\nscanf(\"%d%d\",&a,&b);\nprintf(\"%d\\\\n\",a+b);\n}\n');"
+	mysql -e "insert into jol.solution (solution_id,user_id,problem_id,ip,in_date) values($i,'1',1,'127.0.0.1',now());"
+done
 # Hustoj basic file system
 useradd -m -u 1536 judge
 mkdir -p /home/judge/etc
