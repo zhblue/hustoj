@@ -208,7 +208,7 @@ function import_fps($tempfile,$tempData) {
 	$input=$testNode['InputFile'];
 	$score=intval($testNode['Score']);
 	if($score<=0) $score=20;
-	echo "$input-$output<br>";
+	//echo "$input-$output<br>";
 	rename($tempData."/$input",$basedir."/".$testno."[".$score."].in");
 	rename($tempData."/$output",$basedir."/".$testno."[".$score."].out");
 	$testno++;
@@ -376,7 +376,7 @@ else {
 	  	import_fps($tempfile,$tempData);
 	  }else{
           	file_put_contents($tempData."/".basename($file_name),$file_content);
-	  	echo basename($file_name)."<br>";
+	  	//echo basename($file_name)."<br>";
 	  }
         }
        zip_entry_close($dir_resource);
