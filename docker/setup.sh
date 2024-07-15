@@ -8,7 +8,7 @@ service mysql start
 mysql < /trunk/install/db.sql
 mysql -e "insert into jol.privilege ( user_id, rightstr ) values('admin','administrator');"
 mysql -e "insert into jol.problem(problem_id,title,time_limit,memory_limit) values(1,1,1,5);"
-mysql -e "alter table jol.solution engine = innodb;;"
+#mysql -e "alter table jol.solution engine = innodb;;"
 
 for ((i=1; i<=1000; i++))
 do
