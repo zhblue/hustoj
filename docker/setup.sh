@@ -8,6 +8,8 @@ service mysql start
 mysql < /trunk/install/db.sql
 mysql -e "insert into jol.privilege ( user_id, rightstr ) values('admin','administrator');"
 mysql -e "insert into jol.problem(problem_id,title,time_limit,memory_limit) values(1,1,1,5);"
+mysql -e "alter table solution engine = innodb;;"
+
 for ((i=1; i<=1000; i++))
 do
 	mysql -e "insert into jol.source_code values($i,'#include<stdio.h>\nint main(){\nint a,b;\nscanf(\"%d%d\",&a,&b);\nprintf(\"%d\\\\n\",a+b);\n}\n');"
