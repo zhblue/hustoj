@@ -155,16 +155,15 @@ if( isset($OJ_NOIP_KEYWORD) && $OJ_NOIP_KEYWORD ){
 	$sql = "select 1 from `contest_problem` where (`problem_id`= ? ) and `contest_id` IN (select `contest_id` from `contest` where `start_time` < ? and `end_time` > ? and `title` like ?)";
 	$rrs = pdo_query($sql, $id ,$now , $now , "%$OJ_NOIP_KEYWORD%");
 	$flag = count($rrs) > 0 ;
-	if($flag)
-	{	
+	if($flag){	
 		$row[ 'accepted' ] = '<font color="red"> ? </font>';
 		
-        // 使用$OJ_NOIP_TISHI 条件语句确定是否显示提示信息
-        if (isset($OJ_NOIP_TISHI) && $OJ_NOIP_TISHI) {
-            //$row['hint'] = $MSG_NOIP_NOHINT;
-        } else {
-            $row['hint'] = $MSG_NOIP_NOHINT;
-        }
+	        // 使用$OJ_NOIP_TISHI 条件语句确定是否显示提示信息
+	        if (isset($OJ_NOIP_HINT) && $OJ_NOIP_HINT) {
+	            //$row['hint'] = $MSG_NOIP_NOHINT;
+	        } else {
+	            $row['hint'] = $MSG_NOIP_NOHINT;
+	        }
 	}
 }
 /////////////////////////Template
