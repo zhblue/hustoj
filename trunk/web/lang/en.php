@@ -18,6 +18,7 @@
 	$MSG_STATISTICS="Statistics";
 	$MSG_USERINFO="User Information";
 	$MSG_MAIL="Mail";
+	$MSG_TODO="ToDo";
 
 	//status.php
 	$MSG_Pending="Pending";

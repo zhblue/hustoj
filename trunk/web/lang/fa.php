@@ -18,7 +18,7 @@
 	$MSG_STATISTICS="آمار";
 	$MSG_USERINFO="اصلاح اطلاعات";
 	$MSG_MAIL="پست الکترونیکی";
-
+        $MSG_TODO="ToDo";
 	//status.php
 	$MSG_Pending="در انتظار";
 	$MSG_Pending_Rejudging="انتظار برای بررسی مجدد";

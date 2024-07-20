@@ -18,7 +18,7 @@
  $MSG_STATISTICS ="統計";
  $MSG_USERINFO ="用戶信息";
  $MSG_MAIL ="短消息";
- 
+ $MSG_TODO="待完成的任務";
  //status.php
  $MSG_Pending ="等待";
  $MSG_Pending_Rejudging ="等待重判";
