@@ -190,8 +190,8 @@ background-size: 100%">
                         ?>
                         <i class="dropdown icon"></i>
                         <div class="menu">
-                            <a class="item" href="<?php echo $path_fix?>modifypage.php"><i
-                                    class="edit icon"></i><?php echo $MSG_REG_INFO;?></a>
+                                <a class="item" href="modifypage.php"><i class="edit icon"></i><?php echo $MSG_REG_INFO;?></a>
+                                <a class="item" href="portal.php"><i class="tasks icon"></i><?php echo $MSG_TODO;?></a>
                                 <?php if ($OJ_SaaS_ENABLE){ ?>
                                 <?php if($_SERVER['HTTP_HOST']==$DOMAIN)
                                         echo  "<a class='item' href='http://".  $_SESSION[$OJ_NAME.'_'.'user_id'].".$DOMAIN'><i class='globe icon' ></i>MyOJ</a>";?>
