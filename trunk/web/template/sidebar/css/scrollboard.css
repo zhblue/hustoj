@@ -1,0 +1,100 @@
+body{
+    font-family:"Helvetica Neue",Helvetica,Arial,"Microsoft YaHei", 微软雅黑, sans-serif;
+}
+
+
+.ranktable-head {
+    width: 100%;
+    position: fixed;
+    z-index: 9999;
+    background: #fafafa;
+    box-shadow: 0px 0 8px rgba(66, 139, 202, 0.6);
+    -moz-box-shadow: 0px 0 8px rgba(66, 139, 202, 0.6);
+    -webkit-box-shadow: 0px 0 8px rgba(66, 139, 202, 0.6);
+}
+
+.ranktable-head table {
+    margin: 0;
+}
+
+.ranktable-head th {
+    text-align: center;
+    height: 27px;
+    line-height: 27px!important;
+}
+
+.team-item {
+    width: 100%;
+    position: absolute;
+    top: 44px;
+
+    text-align: center;
+    height: 67px;
+    line-height: 67px !important;
+    margin: 0;
+
+    background: #fff;
+    -webkit-transition: background 2s ease ,box-shadow .5s ease;
+    -moz-transform: background 2s ease ,box-shadow .5s ease;
+    -ms-transform: background 2s ease ,box-shadow .5s ease;
+    -o-transform: background 2s ease ,box-shadow .5s ease;
+    transform: background 2s ease ,box-shadow .5s ease;
+}
+
+.team-item table {
+    text-align: center;
+    height: 67px;
+    font-size: 20px;
+    margin: 0;
+}
+
+.team-item th,td {
+    text-align: center;
+    height: 67px;
+    vertical-align: middle!important;
+}
+
+th.rank{
+    font-weight: normal;
+    font-size: 30px;
+}
+
+.problem-status span {
+    display: block;
+    width: 100%;
+    font-size: 100%;
+    font-weight: normal;
+    padding: 7px 0;
+
+    -moz-box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.22) inset;
+    -webkit-box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.22) inset;
+    box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.22) inset;
+}
+
+.team-item.hold {
+    z-index: 1000;
+    box-shadow: inset 0 0 3px #03A9F4, 0px 0 30px #00BCD4;
+    -moz-box-shadow: 0 0 3px #03A9F4, 0px 0 30px #00BCD4;
+    -webkit-box-shadow: 0 0 3px #03A9F4, 0px 0 30px #00BCD4;
+}
+
+.team-item.gold{
+    background: #fff9c0;
+}
+
+.team-item.silver{
+    background: #f6f6f6;
+}
+
+.team-item.bronze{
+    background: #eddccf;
+}
+
+#timer{
+    margin: 0;
+    height: 0!important;
+}
+
+::-webkit-scrollbar {
+    width: 0px;
+}

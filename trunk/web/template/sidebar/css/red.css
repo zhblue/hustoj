@@ -1,0 +1,57 @@
+.toprow{
+   background-color:#79a3d5;
+   white-space:nowrap;
+}
+.toprow,.navbar .navbar-nav li a,.navbar-header .navbar-brand{
+  color:#ffffff;
+}
+.dropdown-menu,.navbar-default{
+   background-color:rgba(249,74,20,0.874);
+   background-image: linear-gradient(to bottom,  rgba(249,74,20,0.874) 0px,  rgba(249,74,20,0.874) 100%);
+   background-repeat: repeat-x;
+   border-radius: 4px;
+   box-shadow: 0px 1px 0px rgba(249,74,20,0.874) inset, 0px 1px 5px rgba(249,74,20,0.874);
+}
+.http_judge_form{
+   white-space:nowrap;
+}
+.center{
+   text-align: center
+}
+.sampledata {
+    background: none repeat scroll 0 0 #ccccFF;
+    font-family: Monospace;
+    font-size: 18px;
+    line-height:2px;
+    white-space: pre;
+}
+
+.navbar{
+    position: fixed;
+    width: 100%;
+    padding: 0 auto;
+    top: 0;
+    left: 0;
+    -moz-opacity: 0.9;
+    -khtml-opacity: 0.9;
+    opacity: 0.9;
+    z-index: 9999;
+}
+/* funny color*/
+
+.btn-warning{
+    background-color:#ff8000;
+}
+.btn-success{
+    background-color:#33cc99;
+}
+.jumbotron{
+    background-color:#efefef;
+}
+.btn-danger{
+    background-color:#d3406d;
+}
+.toprow{
+   background-color:rgba(249,74,20,0.874);
+   white-space:nowrap;
+}

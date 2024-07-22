@@ -1,0 +1,183 @@
+body{
+   background-color:#121212;
+   background-image:none;
+   color:#a2a39c;
+}
+img{
+	filter:brightness(0.85);
+}
+.ui.menu {
+	background:#212121;
+}
+.ui.menu .item{
+	color:#a2a39c;
+}
+.ui.menu .active.item{
+	background:#d4d4d414;
+	color:white;
+}
+.ui.menu .active.item:hover{
+	background:#d4d4d414;
+	color:white;
+}
+.ui.menu .item:hover{
+	background:white;
+	color:white;
+}
+.ui.link.menu .item:hover, .ui.menu .dropdown.item:hover, .ui.menu .link.item:hover, .ui.menu a.item:hover {
+    cursor: pointer;
+    background: rgb(212 212 212 / 8%);
+    color: rgb(242 235 235 / 95%);
+}
+.ui .header{
+	color:#a2a39c;
+}
+
+.ui.menu .dropdown.item .menu {
+	background:#212121;
+	color:#a2a39c;
+}
+.ui.menu .ui.dropdown .menu>.item {
+    color: rgb(242 236 236 / 87%)!important;
+}
+.ui.menu .ui.dropdown .menu>.item:hover {
+    color: rgb(242 236 236 / 87%)!important;
+    background:rgb(212 212 212 / 20%);
+}
+.padding{
+        background: #121212;
+	border:0px;
+	box-shadow:none;
+}
+.ui.attached.segment {
+	border: 1px solid #000000;
+}
+.ui .menu .active{
+	background:#ffffff0d;
+	color:white;
+}
+.ui.attached.block.header {
+    background: #212121;
+	border: 1px solid #000000;
+}
+.ui.segment {
+    background: #212121;
+	color:#a2a39c;
+}
+.progress {
+    background-color: #6c6c6c;
+}
+.ui.input>input {
+	    background: #6c6c6c;
+}
+.ui .table tr {
+	color:#a2a39c;
+}
+.ui .table th {
+	color:#a2a39c;
+}
+.ui .table thead th {
+	color:#a2a39c;
+}
+.ui.basic.label{
+	background:#bbb4b4;
+}
+.ui.basic.table tbody tr{
+	border-bottom:1px solid white;
+}
+a{color:#73b2e4;}
+a:hover{color:#f1ec49;}
+.ui.form input:not([type]), .ui.form input[type=date], .ui.form input[type=datetime-local], .ui.form input[type=email], .ui.form input[type=file], .ui.form input[type=number], .ui.form input[type=password], .ui.form input[type=search], .ui.form input[type=tel], .ui.form input[type=text], .ui.form input[type=time], .ui.form input[type=url] {
+	background: #6c6c6c;
+}
+.ui.form select {
+    background: #6c6c6c;
+}
+.ui.form .inline.field>label, .ui.form .inline.field>p, .ui.form .inline.fields .field>label, .ui.form .inline.fields .field>p, .ui.form .inline.fields>label {
+    color: #a2a39c;
+}
+.ui.basic.button, .ui.basic.buttons .button {
+    color: rgb(232 222 222 / 60%)!important;
+}
+.ui.items>.item>.content>.description {
+    color: rgb(230 223 223 / 87%);
+}
+.ui.vertical.menu {
+    background: #212121; 
+}
+.panel-default>.panel-heading {
+    color: #c8c2c2;
+    background-color: #212121;
+    border: 0;
+}
+.panel {
+    background-color: #212121;
+    border: 1px solid transparent;
+}
+.breadcrumb{
+	background-color:#212121;
+}
+
+.ui.items>.item .meta {color: rgba(255,255,255,.6);}
+.mp-editor-toolbar[data-v-6d5597b1] ｛
+    background-color: #494949;
+}
+.mp-editor-menu>li>a[data-v-6d5597b1] { color: #e1d0d0;border: 0；}
+.mp-editor-container[data-v-6d5597b1] {border:0;}
+.CodeMirror { background: #a7a7a7;}
+.mp-preview-area[data-v-6d5597b1] { background-color: #cbc7c7;}
+.CodeMirror-gutters { border-right: 0; background-color: #919191;}
+.ui.card, .ui.cards>.card { background: #505050;box-shadow:none;}
+.ui.card .meta>a:not(.ui), .ui.cards>.card .meta>a:not(.ui) {
+    color: rgb(255 255 255 / 40%);
+}
+.ui.card>.extra, .ui.cards>.card>.extra {color: white;}
+.table>thead>tr>th, .table>tbody>tr>th, .table>tfoot>tr>th, .table>thead>tr>td, .table>tbody>tr>td, .table>tfoot>tr>td {
+    border-top: 1px solid #1a1a1a;
+}
+
+.ui.card>.extra, .ui.cards>.card>.extra {
+    color: rgb(255 255 255 / 40%);
+}
+.ui.card>.extra a:not(.ui), .ui.cards>.card>.extra a:not(.ui) {
+     color: rgb(255 255 255 / 40%);
+}
+
+.ui.cards.extra a {
+    color: rgb(255 255 255 / 40%);
+}
+.hljs {
+    background: #d5d5d5 !important;
+}
+.content .description {
+   
+    color: rgb(255 255 255 / 68%);
+}
+.ace_content {
+    background-color: #c5c5c5;
+}
+.ui .card .raised {
+    box-shadow: none;
+}
+.ui.card>.content>.description, .ui.cards>.card>.content>.description {
+    clear: both;
+    color: rgb(255 255 255 / 68%);
+}
+.ui.table {
+    border: 0;
+    background: #737373;
+    color: rgb(255 255 255 / 87%);
+}
+.ui.table thead th {
+    background: #737373;
+}
+.table-striped>tbody>tr:nth-child(odd) {
+    background-color: #413f3f;
+}
+
+.ui.pagination.menu .active.item {
+	color:white;
+}
+.ui.menu .item.disabled, .ui.menu .item.disabled:hover {
+	color: rgb(255 255 255 / 50%)!important;
+}
