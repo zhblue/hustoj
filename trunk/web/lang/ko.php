@@ -18,7 +18,7 @@
 	$MSG_STATISTICS="통계";
 	$MSG_USERINFO="회원정보";
 	$MSG_MAIL="E-mail";
-
+        $MSG_TODO="ToDo";
 	//status.php
 	$MSG_Pending="채점 대기중";
 	$MSG_Pending_Rejudging="재채점 대기중";

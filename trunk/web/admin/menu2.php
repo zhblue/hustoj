@@ -19,7 +19,7 @@
 
 </head>
 
-<body>
+<body style="text-align:center;min-width:100px" >
 <hr>
 <a class='btn btn-sm' href="help.php" target="main" title="<?php echo $MSG_ADMIN?>"><b><?php echo $MSG_ADMIN?></b></a>
 <hr>

@@ -18,7 +18,7 @@
  $MSG_STATISTICS = " статистика ";
  $MSG_USERINFO = " Информация о пользователе ";
  $MSG_MAIL = " Короткое сообщение ";
- 
+ $MSG_TODO="ToDo";
  //status.php
  $MSG_Pending = " ожидание ";
  $MSG_Pending_Rejudging =" Ожидание повторного рассмотрения ";

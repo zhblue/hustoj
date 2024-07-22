@@ -47,6 +47,9 @@
 
                 if (isset($_SESSION[$OJ_NAME.'_'.'administrator']) || isset($_SESSION[$OJ_NAME.'_'.'contest_creator']))
                         $contest_ok = true;
+          
+                if ($unixnow>$end_time) $contest_is_over=true;    // 已经结束的比赛，按练习方式提交
+                else $contest_is_over=false;
 
                 if (!isset($_SESSION[$OJ_NAME.'_'.'administrator']) && $unixnow<$start_time) {
                         $view_errors = "<center>";

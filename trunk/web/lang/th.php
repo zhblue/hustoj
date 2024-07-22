@@ -18,7 +18,7 @@
 	$MSG_STATISTICS="สถิติ";
 	$MSG_USERINFO="โปรไฟล์";
 	$MSG_MAIL="จดหมายลับ";
-	
+	$MSG_TODO="ToDo";
 	//status.php
 	$MSG_Pending="รอตรวจ";
 	$MSG_Pending_Rejudging="รอตรวจใหม่";

@@ -18,7 +18,7 @@
 	$MSG_STATISTICS="سىتاتىستىكا";
 	$MSG_USERINFO="ئابونىت ئۇچۇرى";
 	$MSG_MAIL="ئېلخەت";
-
+        $MSG_TODO="ToDo";
 	//status.php
 	$MSG_Pending="كۈتۈۋاتىدۇ...";
 	$MSG_Pending_Rejudging="قايتا تەكشۈرۈشنى كۈتۈۋاتىدۇ...";

@@ -187,7 +187,14 @@ function fresh_result(solution_id)
 		if($("#vcode")!=null) $("#vcode").click();
 		return ;
 	}
-	sid=solution_id;
+	
+	sid=parseInt(solution_id);
+        if(sid<=0){
+                tb.innerHTML="<?php echo  str_replace("10",$OJ_SUBMIT_COOLDOWN_TIME,$MSG_BREAK_TIME) ?>";
+                if($("#vcode")!=null) $("#vcode").click();
+                return ;
+        }
+
 	var xmlhttp;
 	if (window.XMLHttpRequest)
 	{// code for IE7+, Firefox, Chrome, Opera, Safari
