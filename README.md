@@ -82,6 +82,8 @@
 
 [syzoj主题](http://demo.hustoj.com/)  added by[@renbaoshuo](https://github.com/renbaoshuo)
 
+[sidebar主题](http://demo.hustoj.com/?tp=sidebar)
+
 [bs3原版](http://demo.hustoj.com/?tp=bs3)
 
 [sweet主题](http://demo.hustoj.com/?tp=sweet)
