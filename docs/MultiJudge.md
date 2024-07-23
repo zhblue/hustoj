@@ -2,6 +2,8 @@
 
 HUSTOJ 支持一台数据库服务器，多台 `web` 服务器和多台判题服务器，以承担较高的访问负荷。
 
+[最新参考](https://mp.weixin.qq.com/s?__biz=MzI1MTAwMTI2NA==&mid=2656403413&idx=1&sn=9101091ce4c8eaeadaf5c26e09a896e6&chksm=f2587f0ac52ff61cd1fb86600e25f168973a7b4d75010a3bfd38d95c8c11d2f89eef085915bb&token=1679186159&lang=zh_CN#rd)
+
 ### 创建用于从远程连接数据库的帐号
 
 ```sql
