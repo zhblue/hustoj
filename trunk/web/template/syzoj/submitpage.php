@@ -22,7 +22,7 @@
 
 <script src="<?php echo $OJ_CDN_URL?>include/checksource.js"></script>
 <form id=frmSolution action="submit.php<?php if (isset($_GET['spa'])) echo "?spa" ?>" method="post" onsubmit='do_submit()' enctype="multipart/form-data" >
-<?php if (!isset($_GET['spa'])) {?>
+<?php if (!isset($_GET['spa']) || $solution_name ) {?>
         <input type='file' name='answer' placeholder='Upload answer file' >
 <?php } ?>
 
@@ -82,9 +82,26 @@ echo"<option value=$i ".( $lastlang==$i?"selected":"").">
     </button>
 <?php endif; ?>
 
-<?php if($OJ_ACE_EDITOR){ 
+<?php 
+        if(!$solution_name){
+                if($OJ_ACE_EDITOR){
+                        if (isset($OJ_TEST_RUN)&&$OJ_TEST_RUN)
+                                $height="400px";
+                        else
+                                $height="500px";
+                ?>
+                <pre style="width:90%;height:<?php echo $height?>" cols=180 rows=16 id="source"><?php echo htmlentities($view_src,ENT_QUOTES,"UTF-8")?></pre>
+                <input type=hidden id="hide_source" name="source" value=""/>
 
-			if (isset($OJ_TEST_RUN)&&$OJ_TEST_RUN) $height="400px";else $height="500px";
+        <?php }else{ ?>
+                <textarea style="width:80%;height:600" cols=180 rows=30 id="source" name="source"><?php echo htmlentities($view_src,ENT_QUOTES,"UTF-8")?></textarea>
+        <?php }
+
+        }else{
+                echo "<br><h2>指定上传文件：$solution_name</h2>";
+
+        }
+
 	?>
 		        	
 
