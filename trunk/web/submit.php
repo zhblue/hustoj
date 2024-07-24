@@ -201,8 +201,6 @@ if (isset($_POST['encoded_submit'])) {
 }
 
 $input_text = preg_replace("(\r\n)", "\n", $input_text);
-$source = $source;
-$input_text = $input_text;
 
 if ($test_run) {
   $id = -$id;
@@ -218,6 +216,14 @@ if($tempfile!=""){
 	}else{
 		$source="Main.sb3";
 	}
+}
+
+$solution_file = "$OJ_DATA/$id/solution.name";
+if(file_exists($solution_file)){
+        $solution_name=file_get_contents($solution_file);
+        if($origin_name!=$solution_name){
+                $source="file name not: $solution_name ";
+        }
 }
 
 $source_user = $source;
