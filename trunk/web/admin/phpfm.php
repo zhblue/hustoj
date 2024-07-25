@@ -2853,7 +2853,7 @@ function tree($dir_before,$dir_current,$indice){
                 }
                 for ($x=0;$x<count($mat_dir);$x++){
                     if (($dir_before == $dir_current)||(strstr($expanded_dir_list,":$dir_current/$dir_name"))){
-                        tree($dir_current."/",$dir_current."/".$mat_dir[$x],$indice);
+                       // tree($dir_current."/",$dir_current."/".$mat_dir[$x],$indice);
                     } else flush();
                 }
             } else {
