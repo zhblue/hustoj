@@ -217,10 +217,10 @@ if($tempfile!=""){
 		$source="Main.sb3";
 	}
 }
-$origin_name=$tempfile = $_FILES ["answer"]['name'];
+$origin_name=trim($_FILES ["answer"]['name']);
 $solution_file = "$OJ_DATA/$id/solution.name";
 if(file_exists($solution_file)){
-        $solution_name=file_get_contents($solution_file);
+        $solution_name=trim(file_get_contents($solution_file));
         if($origin_name!=$solution_name){
                 $source="file name not: $solution_name ";
         }
