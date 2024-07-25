@@ -24,6 +24,7 @@ alter table loginlog add column log_id int not null auto_increment primary key f
 alter table problem add index key_p_def(defunct);
 alter table contest add index key_c_def(defunct);
 alter table contest add index key_c_end(end_time);
+alter table contest add index key_c_dend(defunct,end_time);
 #create fulltext index problem_title_source_index on problem(title,source);
 
                                                                                                          
