@@ -215,7 +215,7 @@ $csql[48]="delete from $DB_NAME.loginlog where time<curdate()-interval 6 month;"
 $tsql[49]="alter table $DB_NAME.problem add index key_p_def(defunct);";
 $csql[49]="alter table $DB_NAME.contest add index key_c_def(defunct);";
 $tsql[50]="alter table $DB_NAME.contest add index key_c_end(end_time);";
-$csql[50]="";
+$csql[50]="alter table $DB_NAME.contest add index key_c_dend(defunct,end_time);";
 /
 / 删除6个月以前的非正确源码，优化数据库空间。
 // delete from source_code  where solution_id in (select solution_id from solution where result>4 and  in_date<date_sub(now(),interval 6 month) ); //
