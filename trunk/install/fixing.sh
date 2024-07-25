@@ -31,6 +31,8 @@ if [ `whoami` = "root" ];then
 	cd src/core
         bash make.sh
 	judged
+        cd ../install
+	bash mysql.sh  <  update.sql
         cd ../..
 	chown $WWW:$WWW -R src
 else
