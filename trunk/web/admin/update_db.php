@@ -211,9 +211,13 @@ $tsql[47]="alter table $DB_NAME.users add column group_name varchar(16) not null
 $csql[47]="";
 $tsql[48]="alter table $DB_NAME.loginlog add column log_id int not null auto_increment primary key first;";
 $csql[48]="delete from $DB_NAME.loginlog where time<curdate()-interval 6 month;";
- 
 
-// 删除6个月以前的非正确源码，优化数据库空间。
+$tsql[49]="alter table $DB_NAME.problem add index key_p_def(defunct);";
+$csql[49]="alter table $DB_NAME.contest add index key_c_def(defunct);";
+$tsql[50]="alter table $DB_NAME.contest add index key_c_end(end_time);";
+$csql[50]="";
+/
+/ 删除6个月以前的非正确源码，优化数据库空间。
 // delete from source_code  where solution_id in (select solution_id from solution where result>4 and  in_date<date_sub(now(),interval 6 month) ); //
 if(isset($_POST['do'])){
 	require_once("../include/check_post_key.php");
