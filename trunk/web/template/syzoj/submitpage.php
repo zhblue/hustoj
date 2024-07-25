@@ -103,17 +103,7 @@ echo"<option value=$i ".( $lastlang==$i?"selected":"").">
         }
 
 	?>
-		        	
-
-   
-	<pre style="width:90%;height:<?php echo $height?>" cols=180 rows=16 id="source"><?php echo htmlentities($view_src,ENT_QUOTES,"UTF-8")?></pre>
-	<input type=hidden id="hide_source" name="source" value=""/>
-
-<?php }else{ ?>
-	<textarea style="width:80%;height:600" cols=180 rows=30 id="source" name="source"><?php echo htmlentities($view_src,ENT_QUOTES,"UTF-8")?></textarea>
-<?php }?>
-
-        <style>
+<style>
             .button, input, optgroup, select, textarea {
     font-family: sans-serif;
     font-size: 150%;
@@ -124,7 +114,7 @@ echo"<option value=$i ".( $lastlang==$i?"selected":"").">
         </style>
          <div class="row">
             <div class="column" style="display: flex;">
-<?php if ( isset($OJ_TEST_RUN) && $OJ_TEST_RUN && $spj<=1 ){?>
+<?php if ( isset($OJ_TEST_RUN) && $OJ_TEST_RUN && $spj<=1 && !$solution_name  ){?>
 <div style="
    
      margin-left: 60px;
@@ -159,7 +149,7 @@ echo"<option value=$i ".( $lastlang==$i?"selected":"").">
           " cols=10 rows=5 id="out" name="out" disabled="true" placeholder='<?php echo htmlentities($view_sample_output,ENT_QUOTES,'UTF-8')?>' ></textarea>    
      </div>
 <?php } ?>
-<?php if (isset($OJ_TEST_RUN)&&$OJ_TEST_RUN){?>
+<?php if (isset($OJ_TEST_RUN)&&$OJ_TEST_RUN && $spj<=1 && !$solution_name  ){?>
         <!--运行按钮-->
             <input style="
              margin-top: 30px;
