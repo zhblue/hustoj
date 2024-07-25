@@ -7,17 +7,17 @@ chmod -R 755         /var/run/mysqld
 service mysql start
 mysql < /trunk/install/db.sql
 mysql -e "insert into jol.privilege ( user_id, rightstr ) values('admin','administrator');"
-mysql -e "insert into jol.problem(problem_id,title,time_limit,memory_limit) values(1,1,1,5);"
+mysql -e "insert into jol.problem(problem_id,title,time_limit,memory_limit,defunct) values(1000,1,1,5,'N');"
 mysql -e "insert into jol.source_code values(1,'#include<stdio.h>\nint main(){\nint a,b;\nscanf(\"%d%d\",&a,&b);\nprintf(\"%d\\\\n\",a+b);\n}\n');"
-mysql -e "insert into jol.solution (solution_id,user_id,problem_id,ip,in_date) values(1,'1',1,'127.0.0.1',now());"
+mysql -e "insert into jol.solution (solution_id,user_id,problem_id,ip,in_date) values(1,'1',1000,'127.0.0.1',now());"
 
 # Hustoj basic file system
 useradd -m -u 1536 judge
 mkdir -p /home/judge/etc
 mkdir -p /home/judge/run0
-mkdir -p /home/judge/data/1
-echo "1 2" >  /home/judge/data/1/1.in
-echo "3" >  /home/judge/data/1/1.out
+mkdir -p /home/judge/data/1000
+echo "1 2" >  /home/judge/data/1000/1.in
+echo "3" >  /home/judge/data/1000/1.out
 mkdir -p /home/judge/log
 mkdir -p /home/judge/backup
 mkdir -p /var/log/hustoj
