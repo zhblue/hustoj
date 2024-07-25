@@ -217,7 +217,7 @@ if($tempfile!=""){
 		$source="Main.sb3";
 	}
 }
-
+$origin_name=$tempfile = $_FILES ["answer"]['name'];
 $solution_file = "$OJ_DATA/$id/solution.name";
 if(file_exists($solution_file)){
         $solution_name=file_get_contents($solution_file);
