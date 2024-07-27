@@ -13,6 +13,20 @@ if (isset($OJ_LANG)) {
 
 require_once ("../include/const.inc.php");
 require_once ("../include/problem.php");
+function replaceLT($string) {
+    // 正则表达式匹配两个美元符号包裹的内容
+    $pattern = '/(\$.*?)(<)(.*?\$)/';
+    // 替换小于号为\lt
+    $replacement = '$1 \\lt $3';
+
+    // 使用preg_replace进行替换
+    $ret= preg_replace($pattern, $replacement, $string);
+    if (strlen($string)==strlen($ret))
+    	return $ret;
+    else
+    	return preg_replace($pattern, $replacement, $ret);    //递归到不再发生变化
+}
+
 ?>
 
 <?php
@@ -152,10 +166,8 @@ else {
 		//	$file_content = preg_replace($regex, '＜',$file_content);
 			$regex = '/(?<!div)>\s?/';
 		//	$file_content = preg_replace($regex, '＞', $file_content);
-			//$file_content = str_replace("&", '＆', $file_content);
-//			if(strpos($file_content,"##")===false) 
-//				$description=$file_content;
-  //                      else 
+			$file_content = replaceLT( $file_content);
+			
 			if($type=="normal")$description="<span class=\"md\">".$file_content."</span>";
 			else $description="<span class=\"md auto_select\">".$file_content."</span>";
 			$description=preg_replace('/{{ select\(\d+\) }}/', "", $description); 
