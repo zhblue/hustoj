@@ -150,7 +150,7 @@ if (isset($OJ_EMAIL_CONFIRM) && $OJ_EMAIL_CONFIRM ) {
         require("template/".$OJ_TEMPLATE."/error.php");
 	exit(0);
 }
-$sql="INSERT INTO `loginlog` VALUES(?,?,?,NOW())";
+$sql="INSERT INTO `loginlog`(user_id,password,ip,time) VALUES(?,?,?,NOW())";
 pdo_query($sql,$user_id,"no save",$ip);
 
 if(!isset($OJ_REG_NEED_CONFIRM)||!$OJ_REG_NEED_CONFIRM){
