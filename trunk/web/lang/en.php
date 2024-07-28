@@ -288,7 +288,7 @@
   $MSG_HELP_BALLOON_SCHOOL="School Field of the Printer/Balloon privileged Accout, will be used as filter in task list.";
   $MSG_HRLP_BACKUP_DATABASE="Backup Database , TestData and Pictures to the 0 problem testdata directory";
   $MSG_HELP_LEFT_EMPTY="If you don't want to modify, please left this empty.";
-
+  $MSG_HELP_LOCAL_EMPTY="Left empty for local problem.";
   
   $MSG_WARNING_LOGIN_FROM_DIFF_IP="Login from a diffrent ip ";
   $MSG_WARNING_DURING_EXAM_NOT_ALLOWED=" during exam is not allowed ";
