@@ -295,7 +295,8 @@
  $MSG_HELP_BALLOON_SCHOOL = " Печать, поле School учетной записи балуна используется для фильтрации списка задач. Например, заполните zjicm, чтобы отобразить только задачи, номер учетной записи которых начинается с zjicm ";
  $MSG_HRLP_BACKUP_DATABASE =" Резервное копирование базы данных, тестовых данных и изображений в каталог с 0 вопросами ";
  $MSG_HELP_LEFT_EMPTY="If you don't want to modify, please left this empty.";
-
+ $MSG_HELP_LOCAL_EMPTY="Left empty for local problem.";
+ 
  $MSG_WARNING_LOGIN_FROM_DIFF_IP =" войти с другого IP-адреса ";
  $MSG_WARNING_DURING_EXAM_NOT_ALLOWED =" Запрещено во время экзамена ";
  $MSG_WARNING_ACCESS_DENIED =" Извините, вы не можете просмотреть это сообщение! Поскольку оно не принадлежит вам или администратор установил состояние системы, чтобы это сообщение не отображалось. ";
