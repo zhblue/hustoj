@@ -51,7 +51,7 @@ if(isset($_POST['do'])){
           echo $id_pw[0]." is added!<br>";
 
           $ip = ($_SERVER['REMOTE_ADDR']);
-          $sql="INSERT INTO `loginlog` VALUES(?,?,?,NOW())";
+          $sql="INSERT INTO `loginlog`(user_id,password,ip,time) VALUES(?,?,?,NOW())";
           pdo_query($sql, $id_pw[0], "user added", $ip);
         }
       }
