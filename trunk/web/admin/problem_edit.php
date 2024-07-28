@@ -97,8 +97,8 @@ include_once("kindeditor.php") ;
         <textarea name=source style="width:100%;" rows=1><?php echo htmlentities($row['source'],ENT_QUOTES,"UTF-8")?></textarea><br>
 
         <?php echo "<h4>".$MSG_REMOTE_OJ."</h4>"?>
-        <input name=remote_oj value='<?php echo htmlentities($row['remote_oj'],ENT_QUOTES,"UTF-8")?>' placeholder='本地题请留空' >
-        <input name=remote_id value='<?php echo htmlentities($row['remote_id'],ENT_QUOTES,"UTF-8")?>' placeholder='本地题请留空' ><br>
+        <input name=remote_oj value='<?php echo htmlentities($row['remote_oj'],ENT_QUOTES,"UTF-8")?>' placeholder='<?php echo $MSG_HELP_LOCAL_EMPTY ?>' >
+        <input name=remote_id value='<?php echo htmlentities($row['remote_id'],ENT_QUOTES,"UTF-8")?>' placeholder='<?php echo $MSG_HELP_LOCAL_EMPTY ?>' ><br>
       </p>
 
       <div align=center>
