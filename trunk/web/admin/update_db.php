@@ -18,7 +18,7 @@ CREATE TABLE $DB_NAME.`topic` (
   `author_id` varchar(20) NOT NULL,
   PRIMARY KEY  (`tid`),
   KEY `cid` (`cid`,`pid`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8mb4 AUTO_INCREMENT=1 ;
 ";
 $tsql[1]="select 1 from $DB_NAME.reply limit 1";
 $csql[1]="
@@ -32,7 +32,7 @@ CREATE TABLE $DB_NAME.`reply` (
  `ip` varchar(30) NOT NULL,
  PRIMARY KEY  (`rid`),
  KEY `author_id` (`author_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8mb4 AUTO_INCREMENT=1 ;
 ";
 $tsql[2]="
 ALTER TABLE $DB_NAME.`problem` DROP COLUMN `sample_Program`,
@@ -50,7 +50,7 @@ CREATE TABLE $DB_NAME.`sim` (
   `sim_s_id` int(11) NULL,
   `sim` int(11) NULL,
   PRIMARY KEY  (`s_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;";
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4;";
 
 $tsql[4]="select 1 from $DB_NAME.mail limit 1";
 $csql[4]="
@@ -67,9 +67,9 @@ CREATE TABLE $DB_NAME.`mail` (
   `defunct` char(1) NOT NULL default 'N',
   PRIMARY KEY  (`mail_id`),
   KEY `uid` (`to_user`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1000 ;";   
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8mb4 AUTO_INCREMENT=1000 ;";   
  
-$tsql[5]="ALTER TABLE $DB_NAME.`solution` MODIFY COLUMN `pass_rate` DECIMAL(4,3) UNSIGNED NOT NULL DEFAULT 0,MODIFY COLUMN in_date datetime not null default '2009-06-13 19:00:00', MODIFY COLUMN `user_id` CHAR(48)  CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,MODIFY COLUMN `ip` CHAR(15)  CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL;";
+$tsql[5]="ALTER TABLE $DB_NAME.`solution` MODIFY COLUMN `pass_rate` DECIMAL(4,3) UNSIGNED NOT NULL DEFAULT 0,MODIFY COLUMN in_date datetime not null default '2009-06-13 19:00:00', MODIFY COLUMN `user_id` CHAR(48)  CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,MODIFY COLUMN `ip` CHAR(15)  CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL;";
 $csql[5]="";
 
 $tsql[6]="select langmask from $DB_NAME.contest limit 1;";
@@ -85,7 +85,7 @@ $csql[9]="CREATE TABLE $DB_NAME. `runtimeinfo` (
   `solution_id` int(11) NOT NULL DEFAULT '0',
   `error` text,
   PRIMARY KEY (`solution_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4;
 ";
 $tsql[10]="select pass_rate from $DB_NAME.solution limit 1";
 $csql[10]="ALTER TABLE $DB_NAME.`solution` ADD COLUMN `pass_rate` DECIMAL(4,3) UNSIGNED NOT NULL DEFAULT 0 AFTER `judgetime`;";
@@ -118,7 +118,7 @@ $tsql[18]="ALTER TABLE $DB_NAME.`contest_problem` ADD INDEX `Index_problem_id`(`
 $csql[18]="";
 
 $tsql[18]="select 1 from $DB_NAME.custominput limit 1;";
-$csql[18]="CREATE TABLE $DB_NAME. `custominput` (  `solution_id` int(11) NOT NULL DEFAULT '0',  `input_text` text,  PRIMARY KEY (`solution_id`)) ENGINE=MyISAM DEFAULT CHARSET=utf8;";
+$csql[18]="CREATE TABLE $DB_NAME. `custominput` (  `solution_id` int(11) NOT NULL DEFAULT '0',  `input_text` text,  PRIMARY KEY (`solution_id`)) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4;";
 
 $tsql[19]="ALTER TABLE $DB_NAME.`loginlog` ADD INDEX `user_time_index`(`user_id`, `time`);";
 $csql[19]="";
@@ -137,7 +137,7 @@ $tsql[24]="alter table $DB_NAME.solution modify column pass_rate decimal(4,3) NO
 $csql[24]="";
 
 $csql[25]="";
-$tsql[25]="ALTER TABLE $DB_NAME. `solution` CHANGE  `ip`  `ip` CHAR( 46 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT  '';";
+$tsql[25]="ALTER TABLE $DB_NAME. `solution` CHANGE  `ip`  `ip` CHAR( 46 ) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT  '';";
 $csql[26]="select 1 from $DB_NAME.printer limit 1";
 $tsql[26]="CREATE TABLE $DB_NAME. `printer` (
   `printer_id` int(11) NOT NULL AUTO_INCREMENT,
@@ -148,7 +148,7 @@ $tsql[26]="CREATE TABLE $DB_NAME. `printer` (
   `printer` CHAR(16) NOT NULL DEFAULT 'LOCAL',
   `content` text NOT NULL ,
   PRIMARY KEY (`printer_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;";
+) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4;";
 $csql[27]="select 1 from $DB_NAME.balloon limit 1";
 $tsql[27]="CREATE TABLE $DB_NAME. `balloon` (
   `balloon_id` int(11) NOT NULL AUTO_INCREMENT,
@@ -158,17 +158,17 @@ $tsql[27]="CREATE TABLE $DB_NAME. `balloon` (
   `pid` int(11) NOT NULL ,
   `status` smallint(6) NOT NULL DEFAULT '0',
   PRIMARY KEY (`balloon_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;";
+) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4;";
 $csql[28]="select 1 from $DB_NAME.share_code limit 1";
 $tsql[28]="CREATE TABLE $DB_NAME.`share_code` (
   `share_id` int(11) NOT NULL AUTO_INCREMENT,
-  `user_id` varchar(48) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `title` varchar(32) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `share_code` text COLLATE utf8_unicode_ci,
-  `language` varchar(32) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `user_id` varchar(48) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `title` varchar(32) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `share_code` text COLLATE utf8mb4_unicode_ci,
+  `language` varchar(32) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `share_time` datetime DEFAULT NULL,
   PRIMARY KEY (`share_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=1000 DEFAULT CHARSET=utf8;";
+) ENGINE=MyISAM AUTO_INCREMENT=1000 DEFAULT CHARSET=utf8mb4;";
 $tsql[29]="alter TABLE $DB_NAME.`contest` ADD `user_id` CHAR( 48 ) NOT NULL DEFAULT 'admin' AFTER `password` ";
 $csql[29]="update $DB_NAME.contest c inner JOIN (SELECT * FROM privilege WHERE rightstr LIKE 'm%') p ON concat('m',contest_id)=rightstr set c.user_id=p.user_id";
 $tsql[30]="alter TABLE $DB_NAME. `contest_problem` ADD  `c_accepted` INT NOT NULL DEFAULT  '0' AFTER  `num` ,ADD  `c_submit` INT NOT NULL DEFAULT  '0' AFTER  `c_accepted`";
