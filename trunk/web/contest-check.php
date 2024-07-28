@@ -84,7 +84,7 @@
                                     $tmp_ip=explode(',',$REMOTE_ADDR);
                                     $ip =(htmlentities($tmp_ip[0],ENT_QUOTES,"UTF-8"));
                                 }
-                                $sql="INSERT INTO `loginlog` VALUES(?,?,?,NOW())";
+                                $sql="INSERT INTO `loginlog`(user_id,password,ip,time) VALUES(?,?,?,NOW())";
                                 pdo_query($sql,$user_id,"c".$cid,$ip);
                          $first_login_contest=time();
                 }else{
