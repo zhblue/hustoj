@@ -284,7 +284,8 @@ $MSG_HIDE="Hide";
 	$MSG_HELP_SPJ="자세한 내용은 <a href='https://cn.bing.com/search?q=hustoj+special+judge' target='_blank'>search hustoj special judge</a>"; 
 	$MSG_HELP_BALLOON_SCHOOL="인쇄, 풍선 계정의 학교 필드는 작업 목록을 필터링하는 데 사용됩니다. 예를 들어 [동부 캠퍼스]를 채우면 계정이 [동부 캠퍼스]로 시작하는 작업만 표시됩니다.";	
         $MSG_HELP_LEFT_EMPTY="If you don't want to modify, please left this empty.";
-
+        $MSG_HELP_LOCAL_EMPTY="Left empty for local problem.";
+ 
 	$MSG_WARNING_LOGIN_FROM_DIFF_IP="다른 컴퓨터/IP로 로그인했습니다.";
 	$MSG_WARNING_DURING_EXAM_NOT_ALLOWED="시험중에는 허용되지 않습니다.";
 	$MSG_WARNING_ACCESS_DENIED="볼 수 없습니다! 권한이 없거나 제한되어 있습니다.";
