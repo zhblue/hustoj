@@ -255,15 +255,15 @@
   $MSG_HELP_SETMESSAGE="Set scroll notification content";
   $MSG_HELP_SETPASSWORD="Reset the password for the specified user, for administrator account need to downgrade to ordinary users to modify.";
   $MSG_HELP_REJUDGE="To review a specified subject, submission, or contest.";
-	$MSG_HELP_ADD_PRIVILEGE=" adds permissions to designated users, including administrators, subjects, players, organizers, participants, code viewer, manual judge questions, remote questions and other permissions. ";
-	$MSG_HELP_ADD_CONTEST_USER="Add User to private contest.";
-	$MSG_HELP_ADD_SOLUTION_VIEW="Add Problem Solution View for User.";
-	$MSG_HELP_PRIVILEGE_LIST= "looks at the existing list of special permissions and deletes them. ";
-	$MSG_HELP_GIVESOURCE=" transfers the label of the import system to the designated account number, which is used to assist the person who has not passed the training after the training. ";
-	$MSG_HELP_EXPORT_PROBLEM= "export the problems of the system in the form of fps.xml file. ";
-	$MSG_HELP_IMPORT_PROBLEM=" import fps.xml files downloaded from internet or tk.hustoj.com. ";
-	$MSG_HELP_UPDATE_DATABASE= "update the database structure, after each upgrade (sudo update-hustoj), run it once. ";
-	$MSG_HELP_ONLINE= "view online users";
+  $MSG_HELP_ADD_PRIVILEGE=" adds permissions to designated users, including administrators, subjects, players, organizers, participants, code viewer, manual judge questions, remote questions and other permissions. ";
+  $MSG_HELP_ADD_CONTEST_USER="Add User to private contest.";
+  $MSG_HELP_ADD_SOLUTION_VIEW="Add Problem Solution View for User.";
+  $MSG_HELP_PRIVILEGE_LIST= "looks at the existing list of special permissions and deletes them. ";
+  $MSG_HELP_GIVESOURCE=" transfers the label of the import system to the designated account number, which is used to assist the person who has not passed the training after the training. ";
+  $MSG_HELP_EXPORT_PROBLEM= "export the problems of the system in the form of fps.xml file. ";
+  $MSG_HELP_IMPORT_PROBLEM=" import fps.xml files downloaded from internet or tk.hustoj.com. ";
+  $MSG_HELP_UPDATE_DATABASE= "update the database structure, after each upgrade (sudo update-hustoj), run it once. ";
+  $MSG_HELP_ONLINE= "view online users";
   $MSG_HELP_AC="Congratulations!"; 
   $MSG_HELP_PE="Your output format is not exactly the same as the judge's output, although your answer to the problem is correct. Check your output for spaces, blank lines,etc against the problem output specification"; 
   $MSG_HELP_WA=" Correct solution not reached for the inputs. The inputs and outputs that we use to test the programs are not public (it is recomendable to get accustomed to a true contest dynamic ;-)"; 
@@ -279,6 +279,8 @@
   $MSG_HELP_SPJ="<a href='https://cn.bing.com/search?q=hustoj+special+judge' target='_blank'>search hustoj special judge</a>for more details"; 
   $MSG_HELP_BALLOON_SCHOOL="School Field of the Printer/Balloon privileged Accout, will be used as filter in task list.";
   $MSG_HELP_LEFT_EMPTY="If you don't want to modify, please left this empty.";
+  $MSG_HELP_LOCAL_EMPTY="Left empty for local problem.";
+
   $MSG_WARNING_LOGIN_FROM_DIFF_IP="Login from a diffrent ip ";
   $MSG_WARNING_DURING_EXAM_NOT_ALLOWED=" during exam is not allowed ";
   $MSG_WARNING_ACCESS_DENIED="I am sorry, You could not view this message! Because it's not belong to you, or Administrator won't show you.";
