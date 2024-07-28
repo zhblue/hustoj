@@ -294,7 +294,7 @@
  $MSG_HELP_BALLOON_SCHOOL ="打印，氣球帳號的School字段用於過濾任務列表，例如填zjicm則只顯示帳號為zjicm開頭的任務";
  $MSG_HRLP_BACKUP_DATABASE ="備份數據庫,測試數據和圖片到0題目錄";
  $MSG_HELP_LEFT_EMPTY="無需修改密碼，請勿填寫此項";
-
+ $MSG_HELP_LOCAL_EMPTY="本地题请留空";
  $MSG_WARNING_LOGIN_FROM_DIFF_IP ="從不同的ip地址登錄";
  $MSG_WARNING_DURING_EXAM_NOT_ALLOWED ="在考試期間不被允許";
  $MSG_WARNING_ACCESS_DENIED ="抱歉，您無法查看此消息！因為它不屬於您，或者管理員設定係統狀態為不顯示此類信息。 ";
