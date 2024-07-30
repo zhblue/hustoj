@@ -137,7 +137,7 @@ $tsql[24]="alter table $DB_NAME.solution modify column pass_rate decimal(4,3) NO
 $csql[24]="";
 
 $csql[25]="";
-$tsql[25]="ALTER TABLE $DB_NAME. `solution` CHANGE  `ip`  `ip` CHAR( 46 ) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT  '';";
+$tsql[25]="ALTER TABLE $DB_NAME. `solution` CHANGE  `ip`  `ip` CHAR( 46 ) CHARACTER SET utf8mb4 NOT NULL DEFAULT  '';";
 $csql[26]="select 1 from $DB_NAME.printer limit 1";
 $tsql[26]="CREATE TABLE $DB_NAME. `printer` (
   `printer_id` int(11) NOT NULL AUTO_INCREMENT,
@@ -162,10 +162,10 @@ $tsql[27]="CREATE TABLE $DB_NAME. `balloon` (
 $csql[28]="select 1 from $DB_NAME.share_code limit 1";
 $tsql[28]="CREATE TABLE $DB_NAME.`share_code` (
   `share_id` int(11) NOT NULL AUTO_INCREMENT,
-  `user_id` varchar(48) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `title` varchar(32) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `share_code` text COLLATE utf8mb4_unicode_ci,
-  `language` varchar(32) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `user_id` varchar(48) DEFAULT NULL,
+  `title` varchar(32) DEFAULT NULL,
+  `share_code` text ,
+  `language` varchar(32) DEFAULT NULL,
   `share_time` datetime DEFAULT NULL,
   PRIMARY KEY (`share_id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=1000 DEFAULT CHARSET=utf8mb4;";
