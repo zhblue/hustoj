@@ -5,11 +5,15 @@ require_once( './include/setlang.php' );
 // 当前user_id
 $user_id = $_SESSION[ $OJ_NAME . '_' . 'user_id' ];
 
-if($user_id){
+if(!empty($user_id)){
 	// 已登录的
-	$sql = "SELECT * FROM `privilege` WHERE `user_id`=? or `user_id`=?";
-	$result = pdo_query( $sql, $user_id, $_SESSION[ $OJ_NAME . '_group_name']);
-	
+	if(!empty($_SESSION[ $OJ_NAME . '_group_name'])){
+		$sql = "SELECT * FROM `privilege` WHERE `user_id`=? or (user_id=? and rightstr like 'c%' )";
+		$result = pdo_query( $sql, $user_id, $_SESSION[ $OJ_NAME . '_group_name']);
+	}else{
+		$sql = "SELECT * FROM `privilege` WHERE `user_id`=? ";
+		$result = pdo_query( $sql, $user_id );
+	}
 	// 刷新各种权限
 	foreach ( $result as $row ){
 		if(isset($row[ 'valuestr' ])){
@@ -18,7 +22,7 @@ if($user_id){
 			$_SESSION[ $OJ_NAME . '_' . $row[ 'rightstr' ] ] = true;
 		}   
 	}
-    if(isset($_SESSION[ $OJ_NAME . '_vip' ])) {  // VIP mark can access all [VIP] marked contest
+        if(isset($_SESSION[ $OJ_NAME . '_vip' ])) {  // VIP mark can access all [VIP] marked contest
 		$sql="select contest_id from contest where title like '%[VIP]%'";
 		$result=pdo_query($sql);
 		foreach ($result as $row){
