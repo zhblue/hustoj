@@ -32,7 +32,7 @@ if (isset($_POST['do'])) {
 	$link= 'http://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['REQUEST_URI']);
         $msg = $_SESSION[$OJ_NAME.'_user_id']." $MSG_ADD $rightstr [$valuestr] $MSG_PRIVILEGE -> $user_id @  ".date('Y-m-d h:i:s a', time());
         $msg .="\n\nmessage from site: $link";
-        $rows = pdo_query($sql,$user_id,$rightstr,$valuestr);
+        if(!empty($user_id)) $rows = pdo_query($sql,$user_id,$rightstr,$valuestr);
         if ($OJ_ADMIN=="root@localhost"){
                 $sql="select email from users where user_id=? ";
                 $OJ_ADMIN=pdo_query($sql,$_SESSION[$OJ_NAME.'_user_id'])[0][0];
