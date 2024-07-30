@@ -69,7 +69,7 @@ CREATE TABLE $DB_NAME.`mail` (
   KEY `uid` (`to_user`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8mb4 AUTO_INCREMENT=1000 ;";   
  
-$tsql[5]="ALTER TABLE $DB_NAME.`solution` MODIFY COLUMN `pass_rate` DECIMAL(4,3) UNSIGNED NOT NULL DEFAULT 0,MODIFY COLUMN in_date datetime not null default '2009-06-13 19:00:00', MODIFY COLUMN `user_id` CHAR(48)  CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,MODIFY COLUMN `ip` CHAR(15)  CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL;";
+$tsql[5]="ALTER TABLE $DB_NAME.`solution` MODIFY COLUMN `pass_rate` DECIMAL(4,3) UNSIGNED NOT NULL DEFAULT 0,MODIFY COLUMN in_date datetime not null default '2009-06-13 19:00:00', MODIFY COLUMN `user_id` CHAR(48)  CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,MODIFY COLUMN `ip` CHAR(15)  CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL;";
 $csql[5]="";
 
 $tsql[6]="select langmask from $DB_NAME.contest limit 1;";
