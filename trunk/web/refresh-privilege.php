@@ -7,8 +7,8 @@ $user_id = $_SESSION[ $OJ_NAME . '_' . 'user_id' ];
 
 if($user_id){
 	// 已登录的
-	$sql = "SELECT * FROM `privilege` WHERE `user_id`=?";
-	$result = pdo_query( $sql, $user_id );
+	$sql = "SELECT * FROM `privilege` WHERE `user_id`=? or `user_id`=?";
+	$result = pdo_query( $sql, $user_id, $_SESSION[ $OJ_NAME . '_group_name']);
 	
 	// 刷新各种权限
 	foreach ( $result as $row ){
