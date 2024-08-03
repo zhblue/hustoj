@@ -267,7 +267,7 @@ if(isset($_GET['school'])&&trim($_GET['school'])!="" || isset($_GET['school'])&&
 	$sql0="select * from solution ";
 }
 
-$showsim = intval($_GET['showsim']);
+$showsim = isset($_GET['showsim']) ? intval($_GET['showsim']) : 0;
 
 if ($OJ_SIM&$showsim>0) {
   //$old=$sql;
