@@ -215,7 +215,7 @@ if (isset($_GET['user_id'])) {
       $sql = $sql."AND solution.user_id=? ";
       if ($str2!="")
       		$str2 = $str2."&";
-      $str2 = $str2."&user_id=".htmlentities(urlencode($user_id),ENT_QUOTES,'utf8');
+      $str2 = $str2."&user_id=".htmlentities(urlencode($user_id),ENT_QUOTES);
       array_push($param,$user_id);
   }
   else{
@@ -255,13 +255,13 @@ if(isset($_GET['school'])&&trim($_GET['school'])!="" || isset($_GET['school'])&&
 	    $school=trim($_GET['school']);
 	    $sql.=" and users.school=? "; 
       	    array_push($param,trim($_GET['school']));
-	    $str2 = $str2."&school=".htmlentities(trim($_GET['school']),ENT_QUOTES,'utf8');
+	    $str2 = $str2."&school=".htmlentities(trim($_GET['school']),ENT_QUOTES);
 	 }
 	 if(isset($_GET['group_name'])&&trim($_GET['group_name'])!=""){
 	    $group_name=trim($_GET['group_name']);
 	    $sql.=" and users.group_name=? "; 
       	    array_push($param,trim($_GET['group_name']));
-	    $str2 = $str2."&group_name=".htmlentities(trim($_GET['group_name']),ENT_QUOTES,'utf8');
+	    $str2 = $str2."&group_name=".htmlentities(trim($_GET['group_name']),ENT_QUOTES);
 	 }
 }else{
 	$sql0="select * from solution ";
