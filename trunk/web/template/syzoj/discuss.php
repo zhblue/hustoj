@@ -8,7 +8,7 @@
 <?php include("template/$OJ_TEMPLATE/header.php");?>
 <?php include("include/bbcode.php");?>
 <div class="padding">
-    <h1><?php echo $news_title ?></h1>
+    <h1><?php if(isset($news_title)) echo $news_title ?></h1>
     <div class="ui existing segment">
 	<?php echo $view_discuss?>
     </div>
