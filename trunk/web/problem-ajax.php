@@ -5,15 +5,12 @@ header("Expires: Sat, 26 Jul 1997 05:00:00 GMT"); // Date in the past
 ////////////////////////////Common head
         $cache_time=2;
         $OJ_CACHE_SHARE=false;
-    require_once('./include/db_info.inc.php');
-        require_once('./include/setlang.php');
-        $view_title= "$MSG_STATUS";
-
-
+require_once('./include/db_info.inc.php');
+require_once('./include/setlang.php');
 require_once("./include/const.inc.php");
+require_once("./include/memcache.php");
 
-
-
+$view_title= "$MSG_STATUS";
 $pid=0;
 // check the top arg
 
