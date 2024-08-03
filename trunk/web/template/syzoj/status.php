@@ -7,14 +7,14 @@
   <form id=simform class="ui mini form" action="status.php" method="get">
     <div class="inline fields" style="margin-bottom: 25px; white-space: nowrap; ">
       <label style="font-size: 1.2em; margin-right: 1px; "><?php echo $MSG_PROBLEM_ID?>：</label>
-      <div class="field"><input name="problem_id" style="width: 50px; " type="text" value="<?php echo  htmlspecialchars($problem_id, ENT_QUOTES) ?>"></div>
+      <div class="field"><input name="problem_id" style="width: 50px; " type="text" value="<?php echo isset($problem_id)?htmlspecialchars($problem_id, ENT_QUOTES):"" ?>"></div>
         <label style="font-size: 1.2em; margin-right: 1px; "><?php echo $MSG_USER?>：</label>
-        <div class="field"><input name="user_id" style="width: 50px; " type="text" value="<?php echo  htmlspecialchars($user_id, ENT_QUOTES) ?>"></div>
+        <div class="field"><input name="user_id" style="width: 50px; " type="text" value="<?php echo  isset($user_id)?htmlspecialchars($user_id, ENT_QUOTES):"" ?>"></div>
 
         <label style="font-size: 1.2em; margin-right: 1px; "><?php echo $MSG_SCHOOL?>：</label>
         <div class="field"><input name="school" style="width: 50px; " type="text" value="<?php echo isset($school)?htmlspecialchars($school, ENT_QUOTES):"" ?>"></div>
         <label style="font-size: 1.2em; margin-right: 1px; "><?php echo $MSG_GROUP_NAME?>：</label>
-        <div class="field"><input name="group_name" style="width: 50px; " type="text" value="<?php echo  htmlspecialchars($group_name, ENT_QUOTES) ?>"></div>
+        <div class="field"><input name="group_name" style="width: 50px; " type="text" value="<?php echo isset($group_name)?htmlspecialchars($group_name, ENT_QUOTES):"" ?>"></div>
         <label style="font-size: 1.2em; margin-right: 1px; "><?php echo $MSG_LANG?>：</label>
         <select class="form-control" size="1" name="language" style="width: 110px;font-size: 1em ">
           <option value="-1">All</option>
