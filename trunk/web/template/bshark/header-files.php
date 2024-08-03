@@ -11,8 +11,8 @@ require_once("./template/bshark/theme.conf.php");?>
 <script src="<?php echo $OJ_CDN_URL?>template/bshark/iconfont.js"></script>
 
 <!-- MathJax -->
-<link rel="stylesheet" href="<?php echo $OJ_CDN_URL.$path_fix."template/$OJ_TEMPLATE/"?>katex.min.css">
-<link rel="stylesheet" href="<?php echo $OJ_CDN_URL.$path_fix."template/$OJ_TEMPLATE/"?>mathjax.css">
+<link rel="stylesheet" href="<?php echo $OJ_CDN_URL."template/$OJ_TEMPLATE/"?>katex.min.css">
+<link rel="stylesheet" href="<?php echo $OJ_CDN_URL."template/$OJ_TEMPLATE/"?>mathjax.css">
 
 <!-- Highlightjs 核心文件 -->
 <link href="<?php echo $OJ_CDN_URL?>template/bshark/highlight/styles/tomorrow.css" rel="stylesheet">
