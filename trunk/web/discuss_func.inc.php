@@ -1,5 +1,6 @@
 <?php
 require_once("include/db_info.inc.php");
+require_once("include/const.inc.php");
 require_once("include/memcache.php");
 if(isset($OJ_BBS)&&!$OJ_BBS){
 	 $view_errors= "$MSG_BBS_NOT_ALLOWED_FOR_EXAM  || $MSG_BBS is not available.";
