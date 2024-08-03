@@ -11,7 +11,7 @@ if (!isset($_GET['cid'])) die("No Such Contest!");
 $cid=intval($_GET['cid']);
 if(isset($OJ_NO_CONTEST_WATCHER)&&$OJ_NO_CONTEST_WATCHER) require_once("contest-check.php");
 
-$sql="SELECT title,end_time FROM `contest` WHERE `contest_id`=? AND `start_time`<NOW()";
+$sql="SELECT title,end_time,start_time FROM `contest` WHERE `contest_id`=? AND `start_time`<NOW()";
 $result=pdo_query($sql,$cid);
 $num=count($result);
 if ($num==0){
@@ -22,6 +22,7 @@ if ($num==0){
 $row=$result[0];
 $title=$row[0];
 $end_time=strtotime($row[1]);
+$start_time=strtotime($row[2]);
 	$noip = (time()<$end_time) && (stripos($title,$OJ_NOIP_KEYWORD)!==false);
 	if(isset($_SESSION[$OJ_NAME.'_'."administrator"])||
 		isset($_SESSION[$OJ_NAME.'_'."m$cid"])||
