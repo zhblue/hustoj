@@ -12,7 +12,7 @@
         <div class="field"><input name="user_id" style="width: 50px; " type="text" value="<?php echo  htmlspecialchars($user_id, ENT_QUOTES) ?>"></div>
 
         <label style="font-size: 1.2em; margin-right: 1px; "><?php echo $MSG_SCHOOL?>：</label>
-        <div class="field"><input name="school" style="width: 50px; " type="text" value="<?php echo  htmlspecialchars($school, ENT_QUOTES) ?>"></div>
+        <div class="field"><input name="school" style="width: 50px; " type="text" value="<?php echo isset($school)?htmlspecialchars($school, ENT_QUOTES):"" ?>"></div>
         <label style="font-size: 1.2em; margin-right: 1px; "><?php echo $MSG_GROUP_NAME?>：</label>
         <div class="field"><input name="group_name" style="width: 50px; " type="text" value="<?php echo  htmlspecialchars($group_name, ENT_QUOTES) ?>"></div>
         <label style="font-size: 1.2em; margin-right: 1px; "><?php echo $MSG_LANG?>：</label>
