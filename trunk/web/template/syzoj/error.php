@@ -1,7 +1,7 @@
 <?php
   $show_title="$MSG_ERROR_INFO - $OJ_NAME";
   if(isset($OJ_MEMCACHE)) include(dirname(__FILE__)."/header.php");
-  if($mark==100) {
+  if(isset($mark)&&$mark==100) {
         $ui_class="positive";
         $ui_icon="check";
   }else{
