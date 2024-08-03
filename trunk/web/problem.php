@@ -59,7 +59,7 @@ require_once("contest-check.php");
 
 	$result = pdo_query($sql,$cid);
 	$rows_cnt = count($result);
-	if ($rows_cnt==0 && !$OJ_FREE_PRACTICE && !isset($_SESSION[$OJ_NAME.'_administrator']) && !isset($_SESSION[$OJ_NAME."_c".$cid]) ) {
+	if (empty($result) && !$OJ_FREE_PRACTICE && !isset($_SESSION[$OJ_NAME.'_administrator']) && !isset($_SESSION[$OJ_NAME."_c".$cid]) ) {
 		$view_errors = "<title>$MSG_CONTEST</title><h2>No such Contest!</h2>";
 		require("template/".$OJ_TEMPLATE."/error.php");
 		exit(0);
