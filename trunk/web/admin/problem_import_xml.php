@@ -141,7 +141,7 @@ function import_fps($tempfile) {
   
   foreach ($searchNodes as $searchNode) {
     //echo $searchNode->title,"\n";
-    set_time_limit(60);
+    //set_time_limit(60);
     $title = $searchNode->title;
 
     $time_limit = $searchNode->time_limit;
