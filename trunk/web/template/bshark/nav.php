@@ -272,7 +272,7 @@ if (
                     </div>
                 </div>
                 <?php
-                if ($_SESSION[$OJ_NAME . '_' . 'user_id']) {
+                if (isset($_SESSION[$OJ_NAME . '_' . 'user_id'])) {
                     ?>
                     <div class="item">
                         <i class="angle left icon"></i>
