@@ -203,7 +203,7 @@ for line in sys.stdin:
     <tr>
       <td align=right width=65%>
       <a href = "index.php"><font color=red><?php echo $OJ_NAME?></font></a> 
-      <a href = "https://github.com/zhblue/hustoj"><font color=red>2023.9.4</font></a></td>
+      <a href = "https://github.com/zhblue/hustoj"><font color=red>2024.8.4</font></a></td>
     </tr>
   </table>
 </center>
