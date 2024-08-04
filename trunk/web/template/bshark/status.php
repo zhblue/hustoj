@@ -129,7 +129,7 @@
 		</div>
 		<div class="card">
 			<div class="card-body">
-				<?php if ($cid) { ?>
+				<?php if (isset($cid) && $cid>0) { ?>
 					<ul class="pagination">
 						<li class="page-item"><a class="page-link" href='contest.php?cid=<?php echo $view_cid ?>'>
 								<?php echo $MSG_CONTEST; ?>C<?php echo $cid; ?>
