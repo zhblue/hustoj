@@ -154,7 +154,7 @@ if( isset($OJ_NOIP_KEYWORD) && $OJ_NOIP_KEYWORD ){
 //$now =  date('Y-m-d H:i', time());
 	$sql = "select 1 from `contest_problem` where (`problem_id`= ? ) and `contest_id` IN (select `contest_id` from `contest` where `start_time` < ? and `end_time` > ? and `title` like ?)";
 	$rrs = pdo_query($sql, $id ,$now , $now , "%$OJ_NOIP_KEYWORD%");
-	$flag = count($rrs) > 0 ;
+	$flag = !empty($rrs) ;
 	if($flag){	
 		$row[ 'accepted' ] = '<font color="red"> ? </font>';
 		
