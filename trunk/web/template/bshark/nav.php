@@ -126,7 +126,7 @@ if (
                 </div>
             </div>
             <?php
-            if ($_SESSION[$OJ_NAME . '_' . 'user_id']) {
+            if (isset($_SESSION[$OJ_NAME . '_user_id'])) {
                 ?>
                 <div class="ui dropdown item">
                     <?php $if_new_mail = count(pdo_query('select * from `mail` where `to_user`=? and `new_mail`=1', $_SESSION[$OJ_NAME . '_' . 'user_id'])) > 0 ? 1 : 0; ?>
