@@ -2688,7 +2688,7 @@ float raw_text_judge( char *infile, char *outfile, char *userfile, float *total_
                         user_answer[j]='\0';
                 }
                 if(num>0&&num<=total){
-                        if(strcasecmp(ans[num],user_answer)==0 || strcasecmp(ans[num],"*")==0){
+                        if(strcasecmp(ans[num],user_answer)==0 || strcasecmp(ans[num],"*")==0 || strcasecmp(ans[num]," *")==0){
                                 mark+=m[num];
                         }else{
                               if(raw_text_diff) fprintf(df,"%d:%s[%s] -%.1f\n",i,ans[i],user_answer,m[i]);
