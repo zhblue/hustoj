@@ -66,8 +66,7 @@ if(isset($_POST['news_id'])){
       </label>
     </p>
     <p align=left>
-      <textarea class=kindeditor name=content rows=41 >
-        <?php echo htmlentities($content,ENT_QUOTES,"UTF-8")?>
+      <textarea class=kindeditor name=content rows=41 ><?php echo htmlentities($content,ENT_QUOTES,"UTF-8")?>
       </textarea>
     </p>
     <?php require_once("../include/set_post_key.php");?>
