@@ -125,7 +125,7 @@ echo "</select>";
                         if(mb_ereg("^http",$cat)){
                                 echo "<a class='label' style='display: inline-block;' href=\"".htmlentities($cat,ENT_QUOTES,'utf-8').'" target="_blank">Remote</a>' ;
                         }
-                        array_push($category,trim($cat));
+		        else array_push($category,trim($cat));
         }
 		foreach ($category as $cat) {
 			if(trim($cat)==""||trim($cat)=="&nbsp")
