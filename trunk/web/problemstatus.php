@@ -6,7 +6,7 @@ require_once('./include/cache_start.php');
 require_once('./include/db_info.inc.php');
 require_once('./include/setlang.php');
 
-$view_title = "Welcome To Online Judge";
+$view_title = "$OJ_NAME";
 
 require_once("./include/const.inc.php");
 
@@ -42,6 +42,8 @@ $result = pdo_query($sql, $id);
 $row = $result[0];
 $view_problem[0][0] = $MSG_SUBMIT;
 $view_problem[0][1] = $row[0];
+// update problem set submit=? where problem_id=? 
+
 $total = intval($row[0]);
 
 // total users
