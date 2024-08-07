@@ -42,7 +42,8 @@ $result = pdo_query($sql, $id);
 $row = $result[0];
 $view_problem[0][0] = $MSG_SUBMIT;
 $view_problem[0][1] = $row[0];
-// update problem set submit=? where problem_id=? 
+$sql="update problem set submit=? where problem_id=?";
+pdo_query($sql,$row[0],$id);
 
 $total = intval($row[0]);
 
@@ -72,7 +73,10 @@ foreach ($result as $row) {
   
   $view_problem_title[$i] = $jresult[$row[0]]; 
   $view_problem_number[$i] = $row[1];
-   
+  if($row[0]==4){
+	  $sql="update problem set accepted=? where problem_id=?";
+	  pdo_query($sql,$row[1],$id);
+  }
   $i++;
 }
 //}
