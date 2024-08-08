@@ -7,12 +7,12 @@ if [ -d /mnt/c ]; then
 fi
 MEM=`free -m|grep Mem|awk '{print $2}'`
 
-if [ "$MEM" -lt "1000" ] ; then
-        echo "Memory size less than 1GB."
+if [ "$MEM" -lt "2000" ] ; then
+        echo "Memory size less than 2GB."
         if grep 'swap' /etc/fstab ; then
                 echo "already has swap"
         else
-                dd if=/dev/zero of=/swap bs=1M count=1024
+                dd if=/dev/zero of=/swap bs=2M count=1024
                 chmod 600 /swap
                 mkswap /swap
                 swapon /swap
