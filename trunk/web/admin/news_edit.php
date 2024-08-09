@@ -34,7 +34,8 @@ if(isset($_POST['news_id'])){
   $sql = "UPDATE `news` SET `title`=?,`time`=now(),`content`=?,user_id=?,`menu`=? WHERE `news_id`=?";
   //echo $sql;
   pdo_query($sql,$title,$content,$user_id,$menu,$news_id);
-
+  $sessionDataKey = $OJ_NAME.'_'."_MENU_NEWS_CACHE";
+  unset($_SESSION[$sessionDataKey]);
   header("location:news_list.php");
   exit();
 }else{
