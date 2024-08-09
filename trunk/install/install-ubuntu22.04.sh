@@ -28,6 +28,7 @@ sed -i 's/tencentyun/aliyun/g' /etc/apt/sources.list
 sed -i 's/cn.archive.ubuntu/mirrors.aliyun/g' /etc/apt/sources.list
 sed -i "s|#\$nrconf{restart} = 'i'|\$nrconf{restart} = 'a'|g" /etc/needrestart/needrestart.conf
 
+apt autoremove -y --purge needrestart
 
 apt-get update && apt-get -y upgrade
 
