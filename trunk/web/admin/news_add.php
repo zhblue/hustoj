@@ -27,6 +27,8 @@ $content = str_replace("</p>", "<br />", $content);
 
 $sql = "INSERT INTO news(`user_id`,`title`,`content`,`time`,`menu`) VALUES(?,?,?,now(),?)";
 pdo_query($sql,$user_id,$title,$content,$menu);
+$sessionDataKey = $OJ_NAME.'_'."_MENU_NEWS_CACHE";
+unset($_SESSION[$sessionDataKey]);
 
 echo "<script>window.location.href=\"news_list.php\";</script>";
 ?>
