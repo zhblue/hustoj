@@ -410,6 +410,10 @@ function loadFromBlockly(){
 }
 </script>
 <script language="Javascript" type="text/javascript" src="<?php echo $OJ_CDN_URL?>include/base64.js"></script>
+<?php if (!empty($remote_oj)){
+                echo "<iframe src=remote.php height=0px width=0px ></iframe>";
+      }
+?>
 <?php if($OJ_ACE_EDITOR){ ?>
 <script src="<?php echo $OJ_CDN_URL?>ace/ace.js"></script>
 <script src="<?php echo $OJ_CDN_URL?>ace/ext-language_tools.js"></script>
