@@ -158,7 +158,8 @@ if (isset($id))
 $view_sample_input = "1 2";
 $view_sample_output = "3";
 $spj=0;
-$sample_sql = "SELECT sample_input,sample_output,problem_id,spj FROM problem WHERE problem_id = ?";
+$sample_sql = "SELECT sample_input,sample_output,problem_id,spj,remote_oj FROM problem WHERE problem_id = ?";
+$remote_oj = "";
 if (isset($sample_sql)) {
 	//echo $sample_sql;
 	if (isset($_GET['id'])) {
@@ -178,6 +179,7 @@ if (isset($sample_sql)) {
 	$view_sample_output = $row['sample_output'];
 	$problem_id = $row['problem_id'];
 	$spj=$row['spj'];
+	$remote_oj= $row['remote_oj'];
 	if($spj>1) $OJ_ACE_EDITOR=false;
 }
 
