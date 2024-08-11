@@ -74,7 +74,9 @@
 
 **[求助 报错](https://github.com/zhblue/hustoj/issues/new/choose)**
 
-**如果您喜欢在线聊天，希望问题获得及时反馈，不介意付费获得服务，请加官方QQ群 `23361372` ：[点我加群](https://shang.qq.com/wpa/qunwpa?idkey=d52c3b12ddaffb43420d308d39118fafe5313e271769277a5ac49a6fae63cf7a)**
+**如果您喜欢在线聊天，希望问题获得及时反馈，请加官方QQ群 `23361372` **
+
+**如果需要付费服务，如：远程协助、服务器抢救、相关技术咨询，可加微信号:hustoj **
 
 **如有远程协助需求，请提前安装[向日葵](https://sunlogin.oray.com/)，或准备好公网可连接的SSH账号。**
 
