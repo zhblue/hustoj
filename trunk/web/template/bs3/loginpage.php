@@ -34,7 +34,7 @@
 <?php if($OJ_VCODE){?>
 
 	<div class="form-group">
-	<label class="col-sm-4 control-label"><?php echo $MSG_VCODE?></label><div class="col-sm-3"><input name="vcode" class="form-control" type="text"></div><div class="col-sm-4"><img id="vcode-img" alt="click to change" onclick="this.src='vcode.php?'+Math.random()" height="30px">*</div>						</div>
+	<label class="col-sm-4 control-label"><?php echo $MSG_VCODE?></label><div class="col-sm-3"><input name="vcode" class="form-control" type="text" autocomplete=off ></div><div class="col-sm-4"><img id="vcode-img" alt="click to change" onclick="this.src='vcode.php?'+Math.random()" height="30px">*</div>						</div>
 <?php }?>
 	<div class="form-group">
 	<div class="col-sm-offset-4 col-sm-2">
