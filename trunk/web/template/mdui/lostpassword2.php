@@ -48,7 +48,7 @@
                             </a>
                             <div class="mdui-textfield mdui-textfield-floating-label mdui-col-xs-4" style="display: inline-block; margin-left: 45px;">
                                 <label class="mdui-textfield-label">验证码</label>
-                                <input class="mdui-textfield-input" name="vcode" type="text" autocomplete="off" required/>
+                                <input class="mdui-textfield-input" name="vcode" type="text" autocomplete="off" autocomplete=off  required/>
                                 <div class="mdui-textfield-error">请输入图片中显示的验证码</div>
                             </div>
                             <div class="mdui-col-xs-2" style="display: inline-block; position: absolute; top: 40px;">

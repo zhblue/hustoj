@@ -128,7 +128,7 @@ require("./include/set_get_key.php");
                 <?php if ($OJ_VCODE) { ?>
                     <div class="input-o" style="position: relative;">
                         <i class="iconfont icon-ecurityCode"></i>
-                        <input name="vcode" placeholder="<?php echo $MSG_VCODE; ?>" type="text">
+                        <input name="vcode" placeholder="<?php echo $MSG_VCODE; ?>" type="text" autocomplete=off >
                         <img id="vcode-img" src="vcode.php" onclick="this.src='vcode.php?'+Math.random()" height="26px"
                             style="position: absolute; right: 10px; ">
                     </div>

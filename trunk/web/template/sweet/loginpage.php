@@ -65,7 +65,7 @@ $cur_path = "template/$OJ_TEMPLATE/"
                         <input type="password" placeholder="<?php echo $MSG_PASSWORD?>" name="password" />
                         <input type="password" placeholder="<?php echo $MSG_REPEAT_PASSWORD?>" name="rptpassword" />
                         <?php  if ($OJ_VCODE){ ?>
-                            <input type="text" placeholder="<?php echo $MSG_VCODE?>" name="vcode"/>
+                            <input type="text" placeholder="<?php echo $MSG_VCODE?>" name="vcode"  autocomplete=off  />
                             <img id="vcode-img" src="vcode.php?v=0.1" alt="click to change" onclick="this.src='vcode.php?'+Math.random()"/>
                         <?php } ?>
 			<?php require("csrf.php")?>

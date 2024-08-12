@@ -113,7 +113,7 @@
 							<?php if ($OJ_VCODE) { ?>
 								<div class="field">
 									<label><?php echo $MSG_VCODE ?></label>
-									<input name="vcode" size=4 type=text><img id="vcode" alt="click to change"
+									<input name="vcode" size=4 type=text  autocomplete=off ><img id="vcode" alt="click to change"
 										onclick="this.src='vcode.php?'+Math.random()">
 								</div>
 							<?php } ?>

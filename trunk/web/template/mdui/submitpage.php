@@ -82,7 +82,7 @@
                             <div>
                                 <div class="mdui-textfield mdui-textfield-floating-label" style="max-width: 200px; text-align: left; display: inline-block;">
                                     <label class="mdui-textfield-label">验证码</label>
-                                    <input id="vcode-input" class="mdui-textfield-input" name="vcode" type="text" required>
+                                    <input id="vcode-input" class="mdui-textfield-input" name="vcode" type="text" autocomplete=off  required>
                                     <div class="mdui-textfield-error">请输入验证码</div>
                                 </div>
                                 <img id="vcode" alt="click to change" class="mdui-m-b-4 mdui-m-x-3" onclick="this.src='vcode.php?'+Math.random()">

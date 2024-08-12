@@ -83,7 +83,7 @@
                                     <span style="color:#db2828">*</span>
                                     <?php echo $MSG_VCODE; ?>
                                 </label>
-                                <input name="vcode" class="form-control"
+                                <input  autocomplete=off  name="vcode" class="form-control"
                                     placeholder="请<?php echo $MSG_Input; ?><?php echo $MSG_VCODE; ?>" type="text">
                                 <img alt="click to change" src="vcode.php" onclick="this.src='vcode.php?'+Math.random()"
                                     height="30px">
