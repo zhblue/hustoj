@@ -31,7 +31,7 @@
 <tr><td width=200><?php echo $MSG_USER_ID?>:<td width=200><input name="user_id" type="text" size=20></tr>
 <tr><td><?php echo $MSG_EMAIL?>:<td><input name="email" type="text" size=20></tr>
 <tr><td><?php echo $MSG_VCODE?>:</td>
-<td><input name="vcode" size=4 type=text><img alt="click to change" src=vcode.php onclick="this.src='vcode.php?'+Math.random()">*</td>
+<td><input name="vcode" size=4 type=text autocomplete=off ><img alt="click to change" src=vcode.php onclick="this.src='vcode.php?'+Math.random()">*</td>
 </tr>
 <tr><td><td><input name="submit" type="submit" size=10 value="Submit">
 </tr>
