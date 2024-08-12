@@ -28,7 +28,7 @@
             <div class="field">
               <div class="ui left icon input">
                 <i class="lock icon"></i>
-                <input name="vcode" placeholder="<?php echo $MSG_VCODE ?>" type="text">
+                <input name="vcode" placeholder="<?php echo $MSG_VCODE ?>" type="text" autocomplete=off >
                 <img id="vcode-img" onclick="this.src='vcode.php?'+Math.random()" height="30px">
               </div>
             </div>
