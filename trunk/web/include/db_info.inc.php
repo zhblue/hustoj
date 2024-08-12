@@ -73,7 +73,7 @@ static  $OJ_ENCODE_SUBMIT=false; //是否启用base64编码提交的功能，用
 static  $OJ_OI_1_SOLUTION_ONLY=false; //比赛是否采用noip中的仅保留最后一次提交的规则。true则在新提交发生时，将本场比赛该题老的提交删除。
 static  $OJ_OI_MODE=false; //是否开启OI比赛模式，禁用排名、状态、统计、用户信息、内邮、论坛等。
 
-static  $OJ_BENCHMARK_MODE=false; //此选项将影响代码提交，不再有提交间隔限制，提交后会返回solution id
+static  $OJ_BENCHMARK_MODE=false; //此选项仅供测试用，不是正常功能，将影响代码提交，不确定请不要使用，修改提交间隔限制去设后面的OJ_SUBMIT_COOLDOWN_TIME
 static  $OJ_CONTEST_RANK_FIX_HEADER=false; //比赛排名水平滚动时固定名单
 static  $OJ_NOIP_KEYWORD="noip";  // 标题包含此关键词，激活noip模式，赛中不显示结果，仅保留最后一次提交。
 static  $OJ_NOIP_HINT=false;  //noip比赛中 设置为true则在noip比赛中显示题目提示，false不显示提示
