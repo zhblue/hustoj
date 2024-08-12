@@ -226,7 +226,9 @@ else {
 				}
 				$student=basename($student);
 				$problem=basename($answer,".cpp");
-				if( endsWith($problem,".cpp")) $problem=basename($problem,".cpp");
+				if( !$OJ_OFFLINE_ZIP_CCF_DIRNAME ) {
+					if( endsWith($problem,".cpp")) $problem=basename($problem,".cpp");
+				}
 				if(!isset($problems[$problem])){
 					$pid=hasProblem($problem);
 					if($pid>0){ 
