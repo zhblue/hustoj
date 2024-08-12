@@ -35,7 +35,7 @@
                 <?php if($OJ_VCODE){?>
                   <div class="field">
                     <label for="email"><?php echo $MSG_VCODE?>*</label>
-                    <input name="vcode" class="form-control" placeholder="" type="text">
+                    <input name="vcode" class="form-control" placeholder="" type="text" autocomplete=off >
                     <img alt="click to change" src="vcode.php" onclick="this.src='vcode.php?'+Math.random()" height="30px">
                   </div>
                 <?php }?>
