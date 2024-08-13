@@ -58,7 +58,7 @@
                                 <option>syzoj</option>
                                 <option>sweet</option>
                                 <option>bshark</option>
-                                <option>mario</option>
+                                <option>sidebar</option>
                     </select>
                 </div>
 
