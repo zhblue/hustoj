@@ -19,7 +19,7 @@ function create_subdomain($user_id,$template="bs3",$friendly="0"){
         $NEW_USER="hustoj_".$user_id;
         $NEW_PASS=substr(pwGen($user_id),10);
         $FARMBASE="/home/saas";
-        $templates=array("bs3","mdui","bshark","sweet","syzoj","mario");
+        $templates=array("bs3","mdui","bshark","sweet","syzoj","sidebar");
         if(!in_array($template,$templates)) $template="bs3";
         pdo_query("create database `jol_$user_id`;\n");
         pdo_query("drop USER '$NEW_USER'@'localhost';");
