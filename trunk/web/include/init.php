@@ -165,4 +165,6 @@ if(isset($OJ_BG)&&$OJ_BG=="bing"){
    }
 
 }
-
+if (!empty($OJ_CDN_URL)) {
+        header('Access-Control-Allow-Origin',$OJ_CDN_URL);
+}
