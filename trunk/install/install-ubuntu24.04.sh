@@ -158,6 +158,11 @@ fi
 /etc/init.d/nginx restart
 sed -i "s/post_max_size = 8M/post_max_size = 500M/g" /etc/php/$PHP_VER/fpm/php.ini
 sed -i "s/upload_max_filesize = 2M/upload_max_filesize = 500M/g" /etc/php/$PHP_VER/fpm/php.ini
+if grep 'date.timezone = PRC' /etc/php/$PHP_VER/fpm/php.ini ; then
+    echo "date.timezone = PRC is already set ... "
+else
+    sed -i 's/;date.timezone =/date.timezone = PRC/' /etc/php/$PHP_VER/fpm/php.ini 
+fi
 if grep "opcache.jit_buffer_size" /etc/php/$PHP_VER/fpm/php.ini ; then
     echo "opcache for jit is already enabled ... "
 else
