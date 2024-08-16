@@ -18,8 +18,8 @@ if [ "$MEM" -lt "1000" ] ; then
                 swapon /swap
                 echo "/swap none swap defaults 0 0 " >> /etc/fstab 
                 /etc/init.d/multipath-tools stop
-                screen -d -m watch pkill -9 snapd
-                screen -d -m watch pkill -9 ds-identify
+                pkill -9 snapd
+                pkill -9 ds-identify
          fi
 else
         echo "Memory size : $MEM MB"
