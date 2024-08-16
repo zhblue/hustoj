@@ -77,3 +77,7 @@ h3.pagenav div.active{
 .blue{
   color:blue;
 }
+.content {
+    font-size: 18px;
+    line-height: 150%;
+}
