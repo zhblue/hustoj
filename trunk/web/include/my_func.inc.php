@@ -39,6 +39,7 @@ function create_subdomain($user_id,$template="bs3",$friendly="0"){
         $CONF_STR.="\$OJ_JUDGE_HUB_PATH='$user_id';\n";  //:OJ在farmpath中的子目录名
         $CONF_STR.="\$OJ_LANGMASK=2097084;\n";  //:语言类型
         $CONF_STR.="\$OJ_TEMPLATE='$template';\n";  //:模板名
+        $CONF_STR.="\$OJ_REG_NEED_CONFIRM=false;\n";  //:允许注册
         $CONF_STR.="\$OJ_FRIENDLY_LEVEL=$friendly;\n";  //友善级别
 
         $CONF_FILE=realpath(dirname(__FILE__)."/../")."/SaaS/$user_id.".$DOMAIN.".php";
