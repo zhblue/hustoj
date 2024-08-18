@@ -43,8 +43,8 @@ $sql = "";
 if(isset($_GET['keyword']) && $_GET['keyword']!=""){
   $keyword = $_GET['keyword'];
   $keyword = "%$keyword%";
-  $sql = "SELECT `user_id`,`nick`,email,`accesstime`,`reg_time`,`ip`,`school`,`group_name`,`defunct` FROM `users` WHERE (user_id LIKE ?) OR (nick LIKE ?) OR (school LIKE ?) ORDER BY `user_id` DESC";
-  $result = pdo_query($sql,$keyword,$keyword,$keyword);
+  $sql = "SELECT `user_id`,`nick`,email,`accesstime`,`reg_time`,`ip`,`school`,`group_name`,`defunct` FROM `users` WHERE (user_id LIKE ?) OR (nick LIKE ?) OR (school LIKE ?) or (ip like ?) ORDER BY `user_id` DESC";
+  $result = pdo_query($sql,$keyword,$keyword,$keyword,$keyword);
 }else{
   $sql = "SELECT `user_id`,`nick`,email,`accesstime`,`reg_time`,`ip`,`school`,`group_name`,`defunct` FROM `users` ORDER BY `accesstime` DESC LIMIT $sid, $idsperpage";
   $result = pdo_query($sql);
@@ -76,7 +76,7 @@ if(isset($_GET['keyword']) && $_GET['keyword']!=""){
     foreach($result as $row){
       echo "<tr>";
         echo "<td><a href='../userinfo.php?user=".$row['user_id']."'>".$row['user_id']."</a></td>";
-        echo "<td><span fd='nick' user_id='".$row['user_id']."'>".$row['nick']."</span></td>";
+        echo "<td><span fd='nick' user_id='".$row['user_id']."'>".$row['nick']."[".$row['ip']."]</span></td>";
         if($OJ_SaaS_ENABLE && $domain == $DOMAIN){
                 echo "<td><a href='http://".$row['user_id'].".$DOMAIN' target=_blank >".$row['email']."&nbsp;</a></td>";
         }else{
