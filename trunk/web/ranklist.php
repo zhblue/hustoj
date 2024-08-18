@@ -45,7 +45,7 @@
 	}
         $rank = 0;
 
-                $sql = "SELECT count(1) as `mycount` FROM `users`";
+                $sql = "SELECT count(1) as `mycount` FROM `users` where defunct='N' ";
                 $result = mysql_query_cache($sql);
                 $row=$result[0];
                 $view_total=$row['mycount'];
