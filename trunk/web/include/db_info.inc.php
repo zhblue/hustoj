@@ -26,7 +26,7 @@ static  $OJ_AUTO_SHARE=false; //true: 设为true则通过的题目可在统计�
 static  $OJ_CSS="white.css";  // bing.css | kawai.css | black.css | blue.css | green.css | hznu.css
 static  $OJ_SAE=false; //使用新浪引擎
 static  $OJ_VCODE=false;  //验证码
-static 	$OJ_REG_SPEED=0 ; //限制每小时同ip注册个数，0不限制
+static 	$OJ_REG_SPEED=60 ; //限制每小时同ip注册个数，0不限制
 static  $OJ_APPENDCODE=true;  // 代码预定模板
 if (!$OJ_APPENDCODE) 	ini_set("session.cookie_httponly", 1);   // APPENDCODE模式需要允许javascript操作cookie保存当前语言。
 @session_start();
