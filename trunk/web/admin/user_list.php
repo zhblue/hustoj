@@ -41,8 +41,8 @@ $sid = ($page-1)*$idsperpage;
 
 $sql = "";
 if(isset($_GET['keyword']) && $_GET['keyword']!=""){
-  $keyword = $_GET['keyword'];
-  $keyword = "%$keyword%";
+  $gkeyword = $_GET['keyword'];
+  $keyword = "%$gkeyword%";
   $sql = "SELECT `user_id`,`nick`,email,`accesstime`,`reg_time`,`ip`,`school`,`group_name`,`defunct` FROM `users` WHERE (user_id LIKE ?) OR (nick LIKE ?) OR (school LIKE ?) or (ip like ?) ORDER BY `user_id` DESC";
   $result = pdo_query($sql,$keyword,$keyword,$keyword,$keyword);
 }else{
@@ -53,7 +53,7 @@ if(isset($_GET['keyword']) && $_GET['keyword']!=""){
 
 <center>
 <form action=user_list.php class="form-search form-inline">
-  <input type="text" name=keyword class="form-control search-query" placeholder="<?php echo $MSG_USER_ID.', '.$MSG_NICK.', '.$MSG_SCHOOL?>">
+  <input type="text" name="keyword"  value="<?php echo htmlentities($gkeyword,ENT_QUOTES) ?>"  class="form-control search-query" placeholder="<?php echo $MSG_USER_ID.', '.$MSG_NICK.', '.$MSG_SCHOOL?>">
   <button type="submit" class="form-control"><?php echo $MSG_SEARCH?></button>
 </form>
 </center>
