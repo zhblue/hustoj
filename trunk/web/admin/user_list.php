@@ -1,45 +1,37 @@
 <?php
 require("admin-header.php");
 require_once("../include/set_get_key.php");
-
 if(!(isset($_SESSION[$OJ_NAME.'_'.'administrator'])||isset($_SESSION[$OJ_NAME.'_'.'password_setter']))){
   echo "<a href='../loginpage.php'>Please Login First!</a>";
   exit(1);
 }
-
 if(isset($OJ_LANG)){
   require_once("../lang/$OJ_LANG.php");
 }
 ?>
-
 <title>User List</title>
 <hr>
 <center><h3><?php echo $MSG_USER."-".$MSG_LIST?></h3></center>
-
 <div class='container'>
-
 <?php
 $sql = "SELECT COUNT('user_id') AS ids FROM `users`";
 $result = pdo_query($sql);
 $row = $result[0];
-
 $ids = intval($row['ids']);
-
 $idsperpage = 25;
 $pages = intval(ceil($ids/$idsperpage));
-
-if(isset($_GET['page'])){ $page = intval($_GET['page']);}
-else{ $page = 1;}
-
+if(isset($_GET['page'])){ 
+  $page = intval($_GET['page']);
+}else{ 
+  $page = 1;
+}
 $pagesperframe = 5;
 $frame = intval(ceil($page/$pagesperframe));
-
 $spage = ($frame-1)*$pagesperframe+1;
 $epage = min($spage+$pagesperframe-1, $pages);
-
 $sid = ($page-1)*$idsperpage;
-
 $sql = "";
+$gkeyword="";
 if(isset($_GET['keyword']) && $_GET['keyword']!=""){
   $gkeyword = $_GET['keyword'];
   $keyword = "%$gkeyword%";
