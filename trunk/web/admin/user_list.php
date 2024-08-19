@@ -55,6 +55,7 @@ if(isset($_GET['keyword']) && $_GET['keyword']!=""){
     <tr>
     <td><?php echo $MSG_USER_ID?></td>
       <td><?php echo $MSG_NICK?></td>
+      <td>IP</td>
       <td><?php echo $MSG_EMAIL?></td>
       <td><?php echo $MSG_SCHOOL?></td>
       <td><?php echo $MSG_GROUP_NAME?></td>
@@ -68,7 +69,8 @@ if(isset($_GET['keyword']) && $_GET['keyword']!=""){
     foreach($result as $row){
       echo "<tr>";
         echo "<td><a href='../userinfo.php?user=".$row['user_id']."'>".$row['user_id']."</a></td>";
-        echo "<td><span fd='nick' user_id='".$row['user_id']."'>".$row['nick']."[".$row['ip']."]</span></td>";
+        echo "<td><span fd='nick' user_id='".$row['user_id']."'>".$row['nick']."</span></td>";
+        echo "<td><a href='user_list.php?keyword=".htmlentities($row['ip'])."' >".$row['ip']."</td>";
         if($OJ_SaaS_ENABLE && $domain == $DOMAIN){
                 echo "<td><a href='http://".$row['user_id'].".$DOMAIN' target=_blank >".$row['email']."&nbsp;</a></td>";
         }else{
