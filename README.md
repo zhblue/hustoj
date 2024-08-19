@@ -152,6 +152,7 @@ Star us, please!
 	
 日期  | 类型 |  更新内容
 ------- | :--: | :-------
+08-19 | 更新 | 用户管理页增加IP地址列。
 07-25 | 更新 | 增加problem表、contest表索引。
 07-24 | 更新 | syzoj强制提交文件名，solution.name。
 07-22 | 更新 | 基于syzoj修改增加侧边栏皮肤sidebar。
