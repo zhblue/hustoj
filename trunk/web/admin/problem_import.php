@@ -2,7 +2,7 @@
   require_once("../include/db_info.inc.php");
   require_once("admin-header.php");
 
-  if (!(isset($_SESSION[$OJ_NAME.'_'.'administrator']) || isset($_SESSION[$OJ_NAME.'_'.'contest_creator']) || isset($_SESSION[$OJ_NAME.'_'.'problem_editor']))) {
+  if (!(isset($_SESSION[$OJ_NAME.'_'.'administrator']) || isset($_SESSION[$OJ_NAME.'_'.'contest_creator']) || isset($_SESSION[$OJ_NAME.'_problem_importer']))) {
     echo "<a href='../loginpage.php'>Please Login First!</a>";
     exit(1);
   }
