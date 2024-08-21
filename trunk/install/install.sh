@@ -12,7 +12,7 @@ if [ "$IN_SCREEN" == "no" ] ;then
         screen bash $0 $*
 else
         echo "in screen";
-        OSID=`lsb_release -is|tr 'UDC' 'udc'`
+        OSID=`lsb_release -is|tr 'UDCK' 'udck'`
         OSRS=`lsb_release -rs`
         INSTALL="install-$OSID$OSRS.sh"
         URL="http://dl.hustoj.com/$INSTALL"
