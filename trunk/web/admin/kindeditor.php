@@ -14,7 +14,7 @@
                                 fileManagerJson : '../kindeditor/php/file_manager_json.php',
                                 allowFileManager : false,
                                 filterMode:false,
-                                cssData: 'body { font-family:"Consolas";font-size: 20px}  ',
+                                cssData: 'body { font-family:"Consolas";font-size: 18px;line-height:150% }  ',
 <?php if(isset($OJ_MARKDOWN)&&$OJ_MARKDOWN)
                                 echo "designMode:false,";
 ?>
