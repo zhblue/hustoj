@@ -2,6 +2,7 @@
   require_once("include/curl.php");
   $unixnow = time();
   $cid = intval($_GET['cid']);
+  if ($cid<0) $cid=-$cid;
         $view_cid = $cid;
         //print $cid;
         //check contest valid
