@@ -42,7 +42,7 @@ if($flag&&!isset($_SESSION[$OJ_NAME.'_'.'administrator'])) // administrator need
 }
 
 $view_title=$user ."@".$OJ_NAME;
-if(isset($_SESSION[$OJ_NAME.'_'.'administrator']))
+if(isset($_SESSION[$OJ_NAME.'_'.'administrator']) || (isset($_SESSION[$OJ_NAME.'_'.'user_id']) && $_SESSION[$OJ_NAME.'_'.'user_id']==$user) )
     $sql="SELECT `school`,`email`,`nick` FROM `users` WHERE `user_id`=? ";
 else 
     $sql="SELECT `school`,`email`,`nick` FROM `users` WHERE `user_id`=? and user_id not in ($OJ_RANK_HIDDEN) ";
