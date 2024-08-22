@@ -146,6 +146,8 @@ if grep "added by hustoj" /etc/nginx/sites-enabled/default ; then
         echo "default site modified!"
 else
         echo "modify the default site"
+        
+        sed -i "s#listen 80 default_server;#listen 80 default_server backlog=4096;#g" /etc/nginx/sites-enabled/default
         sed -i "s#root /var/www/html;#root /home/judge/src/web;#g" /etc/nginx/sites-enabled/default
         sed -i "s:index index.html:index index.php:g" /etc/nginx/sites-enabled/default
         sed -i "s:#location ~ \\\.php\\$:location ~ \\\.php\\$:g" /etc/nginx/sites-enabled/default
