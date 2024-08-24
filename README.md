@@ -607,15 +607,17 @@ sudo bash /home/judge/src/install/backup+.sh  #备份后的归档在 `/home/judg
 将你需要迁移的归档复制到目标系统的/home/judge/src/install目录下，执行下面的脚本进行恢复（ 脚本的第一个参数为恢复的目标归档，20221026 指你实际复制过来的文件名中的日期数字）。
 
 ```shell
+sudo su
 cd /home/judge/src/install/
-sudo bash restore.sh hustoj_20221026.tar.bz2
+bash restore.sh hustoj_20221026.tar.bz2
 ```
 脚本的第一个参数为恢复的目标归档，如果没有参数则默认为按名字排序后字典序最大的归档
 
 *如果是backup+.sh备份的.tar.gz文件，用restore+.sh还原。
 ```shell
+sudo su
 cd /home/judge/src/install/
-sudo bash restore+.sh 备份文件的文件名
+bash restore+.sh 备份文件的文件名
 ```
 
 ## 更新升级
