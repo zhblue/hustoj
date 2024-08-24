@@ -147,7 +147,8 @@
                 echo "'$result',";
         } ?>
         ''];
+        var oj_mark= <?php echo "'$OJ_MARK'";?>;
 </script>
-        <script src="template/bs3/auto_refresh.js?v=0.43" ></script>
+        <script src="template/sidebar/auto_refresh.js?v=0.43" ></script>
 
 <?php include("template/$OJ_TEMPLATE/footer.php");?>

@@ -315,6 +315,7 @@
     foreach ($judge_color as $result) {
         echo "'$result',";
     } ?> ''];
+    var oj_mark= <?php echo "'$OJ_MARK'";?>;
     </script>
 
     <script src="template/<?php echo $OJ_TEMPLATE?>/auto_refresh.js"></script>
