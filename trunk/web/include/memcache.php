@@ -31,7 +31,7 @@
     function mysql_query_cache($sql){ 
 	global $OJ_NAME,$OJ_MEMCACHE;	
     $linkIdentifier = false;
-    $timeout = 4;
+    $timeout = 60;
 //首先调用上面的getCache函数，如果返回值不为false的话，就说明是从memcached服务器获取的数据
 //如果返回false，此时就需要直接从数据库中获取数据了。
 //需要注意的是这里使用操作的命令加上sql语句的md5码作为一个特定的key，可能大家觉得使用数据项的
