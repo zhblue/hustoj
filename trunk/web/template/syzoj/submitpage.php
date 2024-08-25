@@ -458,6 +458,7 @@ function loadFromBlockly(){
                 }
 
 	}
+	if(typeof(editor) != "undefined") editor.resize();
 	window.setInterval('autoSave();',5000);
 	$("body").dblclick(function(){
                  if (event.ctrlKey==1) formatCode();
