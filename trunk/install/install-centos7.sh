@@ -29,7 +29,7 @@ service docker start
 
 
 systemctl start mariadb.service 
-/usr/sbin/useradd -m -u 1536 judge
+/usr/sbin/useradd -m -u 1536 -s /sbin/nologin judge
 cd /home/judge/
 
 #using tgz src files
