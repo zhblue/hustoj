@@ -19,7 +19,7 @@ yum -y install mariadb mariadb-devel mariadb-server
 yum -y install policycoreutils-python
 
 systemctl start mariadb.service 
-/usr/sbin/useradd -m -u 1536 judge
+/usr/sbin/useradd -m -u 1536 -s /sbin/nologin judge
 cd /home/judge/
 yum -y install subversion
 svn co https://github.com/zhblue/hustoj/trunk/trunk/ src
