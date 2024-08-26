@@ -1,7 +1,7 @@
 #!/bin/bash
 apt-get update
 apt-get install -y subversion
-/usr/sbin/useradd -m -u 1536 judge
+/usr/sbin/useradd -m -u 1536 -s /sbin/nologin judge
 cd /home/judge/
 chgrp www-data /home/judge/
 #using tgz src files
