@@ -6,6 +6,7 @@ WWW=`grep www /etc/passwd|awk -F: '{print $1}'`
 
 if [ `whoami` = "root" ];then
 	cd /home/judge/
+        chsh judge -s /sbin/nologin
         mkdir new
         cd new
 	wget -O hustoj.tar.gz http://dl.hustoj.com/hustoj.tar.gz
