@@ -40,7 +40,7 @@ add-apt-repository -y restricted
 apt-get update && apt-get -y upgrade
 
 #apt-get install -y subversion
-/usr/sbin/useradd -m -u 1536 judge
+/usr/sbin/useradd -m -u 1536 -s /sbin/nologin judge
 
 cd /home/judge/ || exit
 
