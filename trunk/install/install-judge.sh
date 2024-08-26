@@ -16,7 +16,7 @@ PASSWORD=$3
 TARGET=$4
 apt-get update
 apt-get install -y subversion
-/usr/sbin/useradd -m -u 1536 judge
+/usr/sbin/useradd -m -u 1536 -s /sbin/nologin judge
 mkdir -p $TARGET
 cd $TARGET/
 mkdir src
