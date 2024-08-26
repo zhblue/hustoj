@@ -3,19 +3,7 @@
 
 Download:
 22.04 LTS 版本（zhblue密码freeproblemset）
-链接: https://pan.baidu.com/s/1C9UhVuxkxQdmIgTcfcY2hQ?pwd=hust 提取码: hust 复制这段内容后打开百度网盘手机App，操作更方便哦
-
-16.04 LTS 版本(ubuntu密码freeproblemset,OJ自行注册admin用户，自动成为管理员，不含vjudge) https://proxy.us.storage.wooden.fish/aria2/hustoj20180331-16.04.iso 
-
-14.04 LTS 版本(ubuntu密码freeproblemset,OJ自行注册admin用户，自动成为管理员,含vjudge)
-* https://pan.baidu.com/s/1sl8wD4L
-* 关注微信公众号onlinejudge获得最新版本LiveCD下载链接
-* https://proxy.us.storage.wooden.fish/aria2/hustoj20180331-14.04.iso 
-
-
-12.04 LTS 版本
-* http://pan.baidu.com/share/link?shareid=23135&uk=2838456172
-* http://pan.baidu.com/netdisk/singlepublic?fid=241719_3088787629
+链接: http://cdn.m.hustoj.com:8090/HUSTOJ24.08.iso 
 
 
 = Introduction =
@@ -31,17 +19,13 @@ In order to help people trying HUSTOJ, here is annoucing a LiveCD
 [http://v.youku.com/v_show/id_XMTk5NTAyOTgw.html]
 
 = Details =
-* 本光盘是一张LiveCD，即无需安装、无需硬盘，只需要有光驱、内存大于256的x86-32bit系统即可以光盘启动方式运行。*启动时看到“键盘=人形”提示，按下人任意键进入菜单选
+* 本光盘是一张LiveCD，即无需安装、无需硬盘，只需要有光驱、内存大于2G的x86-64bit系统即可以光盘启动方式运行。*启动时看到“键盘=人形”提示，按下人任意键进入菜单选
 
-* 虚拟机选第一项-试用，直接进入图形登录界面，以ubuntu用户登录，密码freeproblemset，需要root可以用sudo su切换root。
+* 虚拟机选第一项-试用，直接进入图形登录界面，以ubuntu/zhblue用户登录，密码freeproblemset，需要root可以用sudo su切换root。
 
 * 物理机选第二项-安装,按照提示输入Alt+F1进入命令行，startx进入图形界面。
 
-* 进入系统后OJ自动启动，运行Firefox即可看到入口
-
-* 2016版OJ管理员帐号admin密码hustoj
-
-* 2017版直接注册admin账号获得管理员权限。
+* 直接注册admin账号获得管理员权限。
 
 * 启动后系统包含1道题目，可在官方群共享下载fps文件导入。
 
