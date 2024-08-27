@@ -1,6 +1,6 @@
 #!/bin/bash
 apt-get update
-/usr/sbin/useradd -m -u 1536 -s /sbin/nologin judge
+/usr/sbin/useradd -m -u 1536 -s /bin/false judge
 cd /home/judge/
 
 #using tgz src files
