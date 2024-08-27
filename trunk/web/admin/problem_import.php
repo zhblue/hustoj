@@ -12,8 +12,10 @@
     $fp = fopen($path."/testifwritable.tst","w");
     $ret = !($fp===false);
 
-    fclose($fp);
-    unlink($path."/testifwritable.tst");
+    if($fp!=false) {
+	    fclose($fp);
+    	    unlink($path."/testifwritable.tst");
+    }
     return $ret;
   }
 
