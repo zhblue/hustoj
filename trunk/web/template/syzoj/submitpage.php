@@ -304,6 +304,7 @@ function do_submit(){
 	document.getElementById("frmSolution").target="_self";
 	
 <?php if(isset($_GET['spa'])){?>
+	<?php if($solution_name) { ?>document.getElementById("frmSolution").submit(); <?php } ?>  //如果是指定文件名，则强制用文件post方式提交。
         $.post("submit.php?ajax",$("#frmSolution").serialize(),function(data){fresh_result(data);});
         $("#Submit").prop('disabled', true);
         $("#TestRub").prop('disabled', true);
