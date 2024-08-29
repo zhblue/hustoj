@@ -222,7 +222,7 @@ $solution_file = "$OJ_DATA/$id/solution.name";
 if(file_exists($solution_file)){
         $solution_name=trim(file_get_contents($solution_file));
         if($origin_name!=$solution_name){
-                $source="file name not: $solution_name ";
+                $source="uploaded file name [$origin_name] is not [$solution_name] ";
         }
 }
 
