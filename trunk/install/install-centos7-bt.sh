@@ -50,7 +50,7 @@ chmod +x src/install/ans2out
 
 if grep "OJ_SHM_RUN=0" etc/judge.conf ; then
 	mkdir run0 run1 run2 run3
-	chown apache run0 run1 run2 run3
+	chown www run0 run1 run2 run3
 fi
 
 # sed -i "s/OJ_USER_NAME=root/OJ_USER_NAME=$USER/g" etc/judge.conf
@@ -67,7 +67,7 @@ chmod 700 etc/judge.conf
 sed -i "s+//date_default_timezone_set(\"PRC\");+date_default_timezone_set(\"PRC\");+g" src/web/include/db_info.inc.php
 sed -i "s+//pdo_query(\"SET time_zone ='\+8:00'\");+pdo_query(\"SET time_zone ='\+8:00'\");+g" src/web/include/db_info.inc.php
 
-chmod 775 -R /home/judge/data && chgrp -R apache /home/judge/data
+chmod 775 -R /home/judge/data && chgrp -R www /home/judge/data
 chmod 700 src/web/include/db_info.inc.php
 
 chown www src/web/include/db_info.inc.php
@@ -94,10 +94,8 @@ systemctl restart nginx.service
 systemctl restart php-fpm.service
 
 chmod 755 /home/judge
-chown apache -R /home/judge/src/web/
+chown www -R /home/judge/src/web/
 
-mkdir /var/lib/php/session
-chown apache /var/lib/php/session
 
 cd /home/judge/src/core
 chmod +x make.sh
@@ -125,7 +123,7 @@ cd /home/judge/src/install
 bash docker.sh
 
 mkdir /var/log/hustoj/
-chown apache -R /var/log/hustoj/
+chown www -R /var/log/hustoj/
 
 reset
 echo "Remember your database account for HUST Online Judge:"
