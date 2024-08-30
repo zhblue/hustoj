@@ -103,6 +103,9 @@ if (!(isset($_SESSION[$OJ_NAME.'_'.'administrator']))){
 				for($i=0;$i<4;$i++){
 					echo "<option value='$i' ".($i==3?"selected":"").">".$jresult[$i]."</option>\n";
 				}
+				for($i=16;$i<17;$i++){
+					echo "<option value='$i' >".$jresult[$i]."</option>\n";
+				}
 	
 			?>
 		</select>
