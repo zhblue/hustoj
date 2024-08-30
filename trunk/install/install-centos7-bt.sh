@@ -120,7 +120,12 @@ sed -i "s/OJ_PASSWORD=root/OJ_PASSWORD=$DBPASS/g" etc/judge.conf
 sed -i "s/DB_PASS[[:space:]]*=[[:space:]]*\"root\"/DB_PASS=\"$DBPASS\"/g" src/web/include/db_info.inc.php
 
 cd /home/judge/src/install
-bash docker.sh
+if docker build -t hustoj . ;then
+	sed -i "s/OJ_USE_DOCKER=0/OJ_USE_DOCKER=1/g" /home/judge/etc/judge.conf
+	sed -i "s/OJ_PYTHON_FREE=0/OJ_PYTHON_FREE=1/g" /home/judge/etc/judge.conf
+	pkill -9 judged
+	/usr/bin/judged
+fi
 
 mkdir /var/log/hustoj/
 chown www -R /var/log/hustoj/
