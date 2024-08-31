@@ -32,7 +32,9 @@ if [ `whoami` = "root" ];then
 	cd src/core
         bash make.sh
 	judged
-        cd ../install
+        cd /home/judge
+	#不要合并，必须重新进入，否则执行的update.sql是老版本，没有更新
+	cd src/install
 	bash mysql.sh  <  update.sql
         cd ../..
 	chown $WWW:$WWW -R src
