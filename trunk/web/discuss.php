@@ -92,7 +92,12 @@ echo "<title>$MSG_BBS</title>";
       $level = " - (`top_level`=1)";
     }
 
-    $sql .= " GROUP BY t.tid ORDER BY `top_level`$level DESC, MAX(`r`.`time`) DESC";
+    if(isset($_REQUEST['cid'])){
+        $sql .= " GROUP BY t.tid,cp.num ORDER BY `top_level`$level DESC, MAX(`r`.`time`) DESC";
+    }else{
+        $sql .= " GROUP BY t.tid ORDER BY `top_level`$level DESC, MAX(`r`.`time`) DESC";
+    }
+
     //$sql .= " LIMIT 30";
     //echo $sql;
 
