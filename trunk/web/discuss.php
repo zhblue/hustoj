@@ -224,9 +224,12 @@ echo "<title>$MSG_BBS</title>";
     <table width='90%'>
       <tr align='right'>
         <td>
-          <form class=form-inline action=newpost.php<?php if ($pid!=0 && $cid!=null) echo "?pid=".$pid."&cid=".$cid; else if ($pid!=0) echo "?pid=".$pid; else if ($cid!=0) echo "?cid=".$cid;?>>
+         <form class="form-inline" action="newpost.php" >
+                <?php if (!empty($pid))  echo "<input type='hidden' name='pid' value='$pid' >"  ?>
+                <?php if (!empty($cid))  echo "<input type='hidden' name='cid' value='$cid' >"  ?>
             <button class="form-control" type='submit'><?php echo "$MSG_WRITE_QUESTION";?></button>
          </form>
+ 
         </td>
       </tr>
     </table>
