@@ -177,14 +177,17 @@ else {
 		//		echo htmlentities($description);
 			}
 
-			//echo htmlentities("$description");
+			$spj=0;
 			if($title!="" && (!in_array($title,$inserted)) && !hasProblem($title)){
     				$pid = addproblem($title,1,128, $description, $input, $output, $sample_input, $sample_output, $hint, $source, $spj, $OJ_DATA);
+				echo htmlentities("$description");
 				mkdir($OJ_DATA."/$pid/");
 				array_push($inserted,$title);
 			}else{
+				$sql="update problem set description=? where problem_id=?";
+				pdo_query($sql,$description,$pid);
 				echo "skiped $title";
-				$pid=0;
+				//$pid=0;
 			}
 			 echo "PID:<a href='../problem.php?id=$pid' >".htmlentities($title,ENT_QUOTES,"UTF-8")."</a>";
 		}else if(basename($file_name)=="config.yaml"){
@@ -241,6 +244,10 @@ else {
 			}else if(endsWith($dataname,"put")){
 				$dataname=substr($dataname,0,-3);	
 			}else if(endsWith($dataname,".ans")){
+				$dataname=substr($dataname,0,-3)."out";	
+			}else if(endsWith($dataname,".in")){
+				$dataname=substr($dataname,0,-3)."in";	
+			}else if(endsWith($dataname,".out")){
 				$dataname=substr($dataname,0,-3)."out";	
 			}
 		        file_put_contents($OJ_DATA."/$pid/".$dataname,$file_content);
