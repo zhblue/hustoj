@@ -8,7 +8,7 @@ echo "<title>HUST Online Judge WebBoard</title>";
 $tid = intval($_REQUEST['tid']);
 
 if(isset($_GET['cid']))
-  $cid = intval($_GET['cid']);	
+  $cid = intval($_GET['cid']);
 
 $sql = "SELECT t.`title`, `cid`, `pid`, `status`, `top_level` FROM `topic` t LEFT JOIN contest_problem cp on cp.problem_id=t.pid   WHERE `tid`=? AND `status`<=1";
 
@@ -48,7 +48,7 @@ $isadmin = isset($_SESSION[$OJ_NAME.'_'.'administrator']);
       </td>
       <td width='15%' class='center'>
         <?php echo "$MSG_USER"?>
-      </td>          
+      </td>
       <td width='65%' class='center'>
         <?php echo "$MSG_QUESTION"?>
       </td>
@@ -71,7 +71,7 @@ $isadmin = isset($_SESSION[$OJ_NAME.'_'.'administrator']);
     foreach($result as $row)
     {
       $url = "threadadmin.php?target=reply&rid=".$row['rid']."&tid={$tid}&action=";
-      
+
       if(isset($_SESSION[$OJ_NAME.'_'.'user_id']))
         $isuser = strtolower($row['author_id'])==strtolower($_SESSION[$OJ_NAME.'_'.'user_id']);
       else
@@ -80,29 +80,29 @@ $isadmin = isset($_SESSION[$OJ_NAME.'_'.'administrator']);
 
     <tr <?php if($i==0) echo "class='bg-success'";?>>
       <td width='5%'>
-  	     <span style="width:5em;text-align:center;display:inline-block;margin:0 10px">#<?php echo $i+1;?></span>
+             <span style="width:5em;text-align:center;display:inline-block;margin:0 10px">#<?php echo $i+1;?></span>
       </td>
       <td width='15%' class='center'>
         <?php
         if($row['author_id']=="admin")
         {
-    	    echo "admin";
+            echo "admin";
         }
         else
         {
-    	    echo "<a href='../userinfo.php?user={$row['author_id']}'>{$row['author_id']}</a>";
+            echo "<a href='../userinfo.php?user={$row['author_id']}'>{$row['author_id']}</a>";
         }
         ?>
       </td>
       <td>
-  	     <?php if($i==0) echo "$MSG_PROBLEM_ID : ".(($problemid==0)?"----":("<a href=\"problem.php?id=$problemid\">"."$problemid</a>"))."<br>";?>
-  	     <?php if($i==0) echo "$MSG_QUESTION : ".$titles."<br><br>";?>
+             <?php if($i==0) echo "$MSG_PROBLEM_ID : ".(($problemid==0)?"----":("<a href=\"problem.php?id=$problemid\">"."$problemid</a>"))."<br>";?>
+             <?php if($i==0) echo "$MSG_QUESTION : ".$titles."<br><br>";?>
 
-        <div id="post<?php echo $row['rid'];?>" class=content style="text-align:left; clear:both;">
+        <div id="post<?php echo $row['rid'];?>" class="md" style="text-align:left; clear:both;">
           <?php
           if($row['status']==0)
           {
-            echo nl2br(htmlentities($row['content'],ENT_QUOTES,"UTF-8"));
+            echo htmlentities($row['content'],ENT_QUOTES,"UTF-8");
           }
           else
           {
@@ -155,7 +155,7 @@ $isadmin = isset($_SESSION[$OJ_NAME.'_'.'administrator']);
       <?php
       $timestamp = strtotime($row['time']);
       $oldstamp = strtotime("-1 days");
-    
+
       if($oldstamp >= $timestamp)
       {
         $dateouts = $row['time'];
@@ -190,11 +190,11 @@ $isadmin = isset($_SESSION[$OJ_NAME.'_'.'administrator']);
            {
              echo "[ ".$MSG_DISCUSS_NOTICE." ]";
              echo "[ <a href=\"{$adminurl}sticky&level=2\">".$MSG_DISCUSS_NOTE."</a> ]";
-             echo "[ <a href=\"{$adminurl}sticky&level=1\">".$MSG_DISCUSS_NORMAL."</a> ]";            	
+             echo "[ <a href=\"{$adminurl}sticky&level=1\">".$MSG_DISCUSS_NORMAL."</a> ]";
            }
-           echo "[ <a href=\"{$adminurl}delete\">".$MSG_DISCUSS_DELETE."</a> ]";		      
-        
-  	        //if($row['status']!=1)
+           echo "[ <a href=\"{$adminurl}delete\">".$MSG_DISCUSS_DELETE."</a> ]";
+
+                //if($row['status']!=1)
           //  echo " [ <a  href=\"{$adminurl}lock\">".$MSG_LOCK."</a> ]";
           //else
           //  echo " [ <a href=\"{$adminurl}resume\">".$MSG_RESUME."</a> ]";
@@ -208,7 +208,7 @@ $isadmin = isset($_SESSION[$OJ_NAME.'_'.'administrator']);
       ?>
       </td>
     </tr>
-    
+
   <?php
     $i++;
   }
@@ -225,17 +225,17 @@ $isadmin = isset($_SESSION[$OJ_NAME.'_'.'administrator']);
       ?>
       </td>
 
-      <td colspan=2>    
+      <td colspan=2>
       <!--
         <div style="font-size:80%;">
         <div style="margin:0 10px">댓글 쓰기:</div>
         </div>
-      -->    
+      -->
         <form action="post.php?action=reply" method="post">
-        	<table width='80%'>
-        	  <tr>
-        	    <td>
-          	   <input type="hidden" name="tid" value="<?php echo $tid;?>">
+                <table width='80%'>
+                  <tr>
+                    <td>
+                   <input type="hidden" name="tid" value="<?php echo $tid;?>">
                <textarea id="replyContent" name=content style="border:1px dashed #8080FF; width:100%; height:200px; font-size:100%;"></textarea>
                <div style="float:right;font-size:80%">
                  <?php if($OJ_VCODE){?>
@@ -244,9 +244,9 @@ $isadmin = isset($_SESSION[$OJ_NAME.'_'.'administrator']);
                  <?php }?>
                  <input type="submit" style="margin:5px 10px" value="<?php echo $MSG_REGISTER_REPLY?>"></input>
                </div>
-        	    </td>
-        	  </tr>
-        	</table>
+                    </td>
+                  </tr>
+                </table>
         </form>
       </td>
     </tr>
@@ -290,4 +290,3 @@ function reply(rid)
 }
 </script>
 
-<?php require_once("template/$OJ_TEMPLATE/discuss.php")?>
