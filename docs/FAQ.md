@@ -1,5 +1,13 @@
 # HUSTOJ FAQ
 
+如何修改默认字体大小
+--
+修改 [/home/judge/src/web/template/syzoj/css/white.css末尾](https://github.com/zhblue/hustoj/blob/master/trunk/web/template/syzoj/css/white.css#L76)
+设置页面内容字体大小。
+
+修改[/home/judge/src/web/template/syzoj/submitpage.php 432行](https://github.com/zhblue/hustoj/blob/master/trunk/web/template/syzoj/submitpage.php#L432)
+设置代码输入框的字体大小。
+
 如何给测试数据设定分数
 --
 测试数据如果命名中包含用英文中括号`[ ]`包裹的数字，则认定为建议分数，如没有建议分数则默认10分。
