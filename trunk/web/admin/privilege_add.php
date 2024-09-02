@@ -63,7 +63,7 @@ if (isset($_POST['do'])) {
 		<label class="col-sm-offset-3 col-sm-3 control-label"><?php echo $MSG_PRIVILEGE_TYPE?></label>
 		<select class="col-sm-3" name="rightstr" onchange="show_value_input(this.value)" >
 		<?php
-			$rightarray = array("administrator","problem_editor","problem_importer","source_browser","contest_creator","user_adder","http_judge","password_setter","printer","balloon","vip",'problem_start','problem_end');
+			$rightarray = array("administrator","problem_editor","problem_importer","problem_verifiter","source_browser","contest_creator","user_adder","http_judge","password_setter","printer","balloon","vip",'problem_start','problem_end');
 			while ($val=current($rightarray)) {
                                 $key=key($rightarray);
                                 if (isset($rightstr) && ($rightstr == $val)) {
