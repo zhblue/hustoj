@@ -17,14 +17,11 @@ $row = $result[0];
 if($row['cid']>0)
   $cid = $row['cid'];
 
-if($row['pid']>0 && $row['cid']>0)
-{
-  $pid = pdo_query("SELECT num FROM contest_problem WHERE problem_id=? AND contest_id=?",$row['pid'],$row['cid'])[0][0];
-  $pid = $PID[$pid];
-}
-else
-{
-  $pid = $row['pid'];
+if($row['pid']>0 && $row['cid']>0){
+      $pid = pdo_query("SELECT num FROM contest_problem WHERE problem_id=? AND contest_id=?",$row['pid'],$row['cid'])[0][0];
+      $pid = $PID[$pid];
+}else{
+      $pid = $row['pid'];
 }
 
 $problemid = $row['pid'];
@@ -33,7 +30,6 @@ $toplevels = $row['top_level'];
 
 $isadmin = isset($_SESSION[$OJ_NAME.'_'.'administrator']);
 ?>
-
 <center>
 <table style='width:80%;' table class='table table-hover'>
   <thead>
@@ -52,161 +48,120 @@ $isadmin = isset($_SESSION[$OJ_NAME.'_'.'administrator']);
       </td>
     </tr>
   </thead>
-
   <tbody>
     <?php
     $sql = "SELECT `rid`, `author_id`, `time`, `content`, `status` FROM `reply` WHERE `topic_id`=? AND `status`<=1 ORDER BY `rid` LIMIT 30";
-
     $result = pdo_query($sql,$tid);
     $rows_cnt = count($result);
-
     $cnt = 0;
     $i = 0;
-
-    foreach($result as $row)
-    {
-      $url = "threadadmin.php?target=reply&rid=".$row['rid']."&tid={$tid}&action=";
-
-      if(isset($_SESSION[$OJ_NAME.'_'.'user_id']))
-        $isuser = strtolower($row['author_id'])==strtolower($_SESSION[$OJ_NAME.'_'.'user_id']);
-      else
-        $isuser = false;
-    ?>
-
-    <tr <?php if($i==0) echo "class='bg-success'";?>>
-      <td width='5%'>
-             <span style="width:5em;text-align:center;display:inline-block;margin:0 10px">#<?php echo $i+1;?></span>
-      </td>
-      <td width='15%' class='center'>
-        <?php
-        if($row['author_id']=="admin")
-        {
-            echo "admin";
-        }
-        else
-        {
-            echo "<a href='../userinfo.php?user={$row['author_id']}'>{$row['author_id']}</a>";
-        }
-        ?>
-      </td>
-      <td>
-             <?php if($i==0) echo "$MSG_PROBLEM_ID : ".(($problemid==0)?"----":("<a href=\"problem.php?id=$problemid\">"."$problemid</a>"))."<br>";?>
-             <?php if($i==0) echo "$MSG_QUESTION : ".$titles."<br><br>";?>
-
-        <div id="post<?php echo $row['rid'];?>" class="md" style="text-align:left; clear:both;">
-          <?php
-          if($row['status']==0)
-          {
-            echo htmlentities($row['content'],ENT_QUOTES,"UTF-8");
-          }
-          else
-          {
-            if(!$isuser || $isadmin)
-            {
-              echo "<div style=\"border-left:10px solid gray\"><font color=gray><i>".$MSG_BLOCKED."</i></font></div>";
-            }
-            if($isuser || $isadmin)
-            {
-              echo nl2br(htmlentities($row['content'],ENT_QUOTES,"UTF-8"));
-            }
-          }
-          ?>
-        </div>
-
-        <div class="mon" style="display:inline;text-align:right;float:left;font-size:80%;">
-          <?php
-          if(isset($_SESSION[$OJ_NAME.'_'.'user_id']))
-          {
-            //echo "<span>[ <a href=\"#\">Like</a> ]</span>";
-            echo "<span>[ <a onclick=\"reply(".$row['rid'].")\">".$MSG_REPLY."</a> ]</span>";
-          }
-
-          if($isuser || $isadmin)
-          {
-            //echo "<span>[ <a href=\"#\">Edit</a> ]</span>";
-          }
-
-          if(isset($_SESSION[$OJ_NAME.'_'.'administrator']) && $i!=0)
-          {
-            if($row['status']==0)
-            {
-              echo "<span>[ <a href=\"".$url."disable\">".$MSG_DISABLE."</a> ]</span>";
-            }
-            else
-            {
-              echo "<span>[ <a href=\"".$url."resume\">".$MSG_RESUME."</a> ]</span>";
-            }
-          }
-
-          if(($isuser || $isadmin) && $i!=0)
-          {
-            echo "<span>[ <a href=\"".$url."delete\">".$MSG_DISCUSS_DELETE."</a> ]</span> ";
-          }
-          ?>
-        </div>
-      </td>
-
-      <td style='text-align:center;'>
-      <?php
-      $timestamp = strtotime($row['time']);
-      $oldstamp = strtotime("-1 days");
-
-      if($oldstamp >= $timestamp)
-      {
-        $dateouts = $row['time'];
-        echo "<div>{$dateouts}</div>";
-      }
-      else
-      {
-        $dateouts = "new!!";
-        echo "<div style='color:red;'>{$dateouts}</div>";
-      }
-
-      echo "<div style='font-size:80%;'>";
-      if($i==0)
-      {
-        $adminurl = "threadadmin.php?target=thread&tid={$tid}&action=";
-
-        if($isadmin)
-        {
-           if($toplevels==0 || $toplevels==1)
-           {
-             echo "[ <a href=\"{$adminurl}sticky&level=3\">".$MSG_DISCUSS_NOTICE."</a> ]";
-             echo "[ <a href=\"{$adminurl}sticky&level=2\">".$MSG_DISCUSS_NOTE."</a> ]";
-             echo "[ ".$MSG_DISCUSS_NORMAL." ]";
-           }
-           else if($toplevels==2)
-           {
-             echo "[ <a href=\"{$adminurl}sticky&level=3\">".$MSG_DISCUSS_NOTICE."</a> ]";
-             echo "[ ".$MSG_DISCUSS_NOTE." ]";
-             echo "[ <a href=\"{$adminurl}sticky&level=1\">".$MSG_DISCUSS_NORMAL."</a> ]";
-           }
-           else if($toplevels==3)
-           {
-             echo "[ ".$MSG_DISCUSS_NOTICE." ]";
-             echo "[ <a href=\"{$adminurl}sticky&level=2\">".$MSG_DISCUSS_NOTE."</a> ]";
-             echo "[ <a href=\"{$adminurl}sticky&level=1\">".$MSG_DISCUSS_NORMAL."</a> ]";
-           }
-           echo "[ <a href=\"{$adminurl}delete\">".$MSG_DISCUSS_DELETE."</a> ]";
-
-                //if($row['status']!=1)
-          //  echo " [ <a  href=\"{$adminurl}lock\">".$MSG_LOCK."</a> ]";
-          //else
-          //  echo " [ <a href=\"{$adminurl}resume\">".$MSG_RESUME."</a> ]";
-        }
-        else if($isuser)
-        {
-          echo " [ <a href=\"{$adminurl}delete\">".$MSG_DISCUSS_DELETE."</a> ]";
-        }
-      }
-      echo "</div>";
-      ?>
-      </td>
-    </tr>
-
-  <?php
-    $i++;
-  }
+    foreach($result as $row){
+                  $url = "threadadmin.php?target=reply&rid=".$row['rid']."&tid={$tid}&action=";
+                  if(isset($_SESSION[$OJ_NAME.'_'.'user_id']))
+                      $isuser = strtolower($row['author_id'])==strtolower($_SESSION[$OJ_NAME.'_'.'user_id']);
+                  else
+                      $isuser = false;
+                ?>
+                <tr <?php if($i==0) echo "class='bg-success'";?>>
+                  <td width='5%'>
+                         <span style="width:5em;text-align:center;display:inline-block;margin:0 10px">#<?php echo $i+1;?></span>
+                  </td>
+                  <td width='15%' class='center'>
+                    <?php
+                    if($row['author_id']=="admin")
+                    {
+                        echo "admin";
+                    }
+                    else
+                    {
+                        echo "<a href='../userinfo.php?user={$row['author_id']}'>{$row['author_id']}</a>";
+                    }
+                    ?>
+                  </td>
+                  <td>
+                         <?php if($i==0) echo "$MSG_PROBLEM_ID : ".(($problemid==0)?"----":("<a href=\"problem.php?id=$problemid\">"."$problemid</a>"))."<br>";?>
+                         <?php if($i==0) echo "$MSG_QUESTION : ".$titles."<br><br>";?>
+            
+                    <div id="post<?php echo $row['rid'];?>" class="md" style="text-align:left; clear:both;">
+                      <?php
+                      if($row['status']==0){
+                          echo htmlentities($row['content'],ENT_QUOTES,"UTF-8");
+                      }else{
+                          if(!$isuser || $isadmin){
+                              echo "<div style=\"border-left:10px solid gray\"><font color=gray><i>".$MSG_BLOCKED."</i></font></div>";
+                          }
+                          if($isuser || $isadmin){
+                              echo nl2br(htmlentities($row['content'],ENT_QUOTES,"UTF-8"));
+                          }
+                      }
+                      ?>
+                    </div>
+            
+                    <div class="mon" style="display:inline;text-align:right;float:left;font-size:80%;">
+                      <?php
+                      if(isset($_SESSION[$OJ_NAME.'_'.'user_id'])){
+                          echo "<span>[ <a onclick=\"reply(".$row['rid'].")\">".$MSG_REPLY."</a> ]</span>";
+                      }
+                      if($isuser || $isadmin){
+                            //echo "<span>[ <a href=\"#\">Edit</a> ]</span>";
+                      }
+                      if(isset($_SESSION[$OJ_NAME.'_'.'administrator']) && $i!=0){
+                        if($row['status']==0){
+                            echo "<span>[ <a href=\"".$url."disable\">".$MSG_DISABLE."</a> ]</span>";
+                        }else{
+                            echo "<span>[ <a href=\"".$url."resume\">".$MSG_RESUME."</a> ]</span>";
+                        }
+                      }
+                      if(($isuser || $isadmin) && $i!=0){
+                            echo "<span>[ <a href=\"".$url."delete\">".$MSG_DISCUSS_DELETE."</a> ]</span> ";
+                      }
+                      ?>
+                    </div>
+                  </td>
+                  <td style='text-align:center;'>
+                  <?php
+                  $timestamp = strtotime($row['time']);
+                  $oldstamp = strtotime("-1 days");
+            
+                  if($oldstamp >= $timestamp){
+                      $dateouts = $row['time'];
+                      echo "<div>{$dateouts}</div>";
+                  }else{
+                      $dateouts = "new!!";
+                      echo "<div style='color:red;'>{$dateouts}</div>";
+                  }
+            
+                  echo "<div style='font-size:80%;'>";
+                  if($i==0){
+                      $adminurl = "threadadmin.php?target=thread&tid={$tid}&action=";
+              
+                      if($isadmin){
+                           if($toplevels==0 || $toplevels==1){
+                               echo "[ <a href=\"{$adminurl}sticky&level=3\">".$MSG_DISCUSS_NOTICE."</a> ]";
+                               echo "[ <a href=\"{$adminurl}sticky&level=2\">".$MSG_DISCUSS_NOTE."</a> ]";
+                               echo "[ ".$MSG_DISCUSS_NORMAL." ]";
+                           }else if($toplevels==2){
+                               echo "[ <a href=\"{$adminurl}sticky&level=3\">".$MSG_DISCUSS_NOTICE."</a> ]";
+                               echo "[ ".$MSG_DISCUSS_NOTE." ]";
+                               echo "[ <a href=\"{$adminurl}sticky&level=1\">".$MSG_DISCUSS_NORMAL."</a> ]";
+                           }else if($toplevels==3){
+                               echo "[ ".$MSG_DISCUSS_NOTICE." ]";
+                               echo "[ <a href=\"{$adminurl}sticky&level=2\">".$MSG_DISCUSS_NOTE."</a> ]";
+                               echo "[ <a href=\"{$adminurl}sticky&level=1\">".$MSG_DISCUSS_NORMAL."</a> ]";
+                           }
+                           echo "[ <a href=\"{$adminurl}delete\">".$MSG_DISCUSS_DELETE."</a> ]";
+                      }else if($isuser){
+                          echo " [ <a href=\"{$adminurl}delete\">".$MSG_DISCUSS_DELETE."</a> ]";
+                      }
+                  }
+                  echo "</div>";
+                  ?>
+                  </td>
+                </tr>
+            
+              <?php
+                $i++;
+    }
   ?>
 
     <?php if(isset($_SESSION[$OJ_NAME.'_'.'user_id'])) {?>
