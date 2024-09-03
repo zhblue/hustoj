@@ -1,12 +1,7 @@
-<!-- /web/thread.php -->
-
 <?php
 require_once("discuss_func.inc.php");
 
-echo "<title>HUST Online Judge WebBoard</title>";
-
 $tid = intval($_REQUEST['tid']);
-
 if(isset($_GET['cid']))
   $cid = intval($_GET['cid']);
 
