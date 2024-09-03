@@ -2,29 +2,8 @@
 
 <?php
 require_once("discuss_func.inc.php");
-$parm = "";
-if(isset($_GET['pid']))
-{
-  $pid = intval($_GET['pid']);
-  $parm = "pid=".$pid;
-}
-else
-{
-  $pid = 0;
-}
 
-if(isset($_GET['cid']))
-{
-  $cid = intval($_GET['cid']);
-}
-else
-{
-  $cid = 0;
-}
-
-$parm .= "&cid=".$cid;
 $prob_exist = problem_exist($pid, $cid);
-
 echo "<title>$MSG_BBS</title>";
 ?>
 
