@@ -1,49 +1,33 @@
-<!-- /web/post.php -->
-
 <?php
 require_once("discuss_func.inc.php");
 require_once("include/db_info.inc.php");
 require_once("include/my_func.inc.php");
 
-if(!isset($_SESSION[$OJ_NAME.'_'.'user_id']))
-{
-  require_once("oj-header.php");
-
-  echo "<a href=loginpage.php>Please Login First</a>";
-  
- // require_once("../oj-footer.php");
+if(!isset($_SESSION[$OJ_NAME.'_'.'user_id'])){
+  $view_errors="<a href=loginpage.php>Please Login First</a>";
+  require("template/".$OJ_TEMPLATE."/error.php");
   exit(0);
 }
-
-if(strlen($_POST['content'])>5000)
-{
-  require_once("oj-header.php");
-  echo "Your contents is too long!";
-//  require_once("../oj-footer.php");
+if(strlen($_POST['content'])>5000){
+  $view_errors="Your contents is too long!";
+  require("template/".$OJ_TEMPLATE."/error.php");
   exit(0);
 }
-
-if(has_bad_words($_POST['content']))
-{
-  require_once("oj-header.php");
-  echo "Your contents is too Bad!";
-//  require_once("../oj-footer.php");
-  exit(0);
-}
-if(has_bad_words($_POST['title']))
-{
-  require_once("oj-header.php");
-  echo "Your title is too Bad!";
-//  require_once("../oj-footer.php");
-  exit(0);
-}
-
-if(strlen($_POST['title'])>60)
-{
+if(strlen($_POST['title'])>60){
   require_once("oj-header.php");
   echo "Your title is too long!";
  // require_once("../oj-footer.php");
   exit(0);
+}
+if(has_bad_words($_POST['content'])){
+    $view_errors="请文明上网！";
+    require("template/".$OJ_TEMPLATE."/error.php");
+    exit(0);
+}
+if(has_bad_words($_POST['title'])){
+    $view_errors="请文明上网！";
+    require("template/".$OJ_TEMPLATE."/error.php");
+    exit(0);
 }
 
 $tid = null;
