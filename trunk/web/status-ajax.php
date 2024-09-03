@@ -77,9 +77,9 @@ if (!empty($result)) {
 			}
 			else {
 				if(isset($_SESSION[$OJ_NAME.'_'.'administrator']))
-					echo $row['result'].",".$row['memory']." KB,".$row['time']." ms,".$row['judger'].",".($row['pass_rate']*100);
+					echo $row['result'].",".$row['memory']." KB,".$row['time']." ms,".$row['judger'].",".($row['pass_rate']*100).",".$row['user_id'];
 				else
-					echo $row['result'].",".$row['memory']." KB,".$row['time']." ms,"."none,".($row['pass_rate']*100);
+					echo $row['result'].",".$row['memory']." KB,".$row['time']." ms,"."none,".($row['pass_rate']*100).",".$row['user_id'];
 			}
 		}
 	}
