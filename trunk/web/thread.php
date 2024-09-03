@@ -1,21 +1,15 @@
 <?php
 require_once("discuss_func.inc.php");
-
 $tid = intval($_REQUEST['tid']);
 if(isset($_GET['cid']))
   $cid = intval($_GET['cid']);
-
 $sql = "SELECT t.`title`, `cid`, `pid`, `status`, `top_level` FROM `topic` t LEFT JOIN contest_problem cp on cp.problem_id=t.pid   WHERE `tid`=? AND `status`<=1";
-
-//echo $sql;
-//exit();
-
 $result = pdo_query($sql,$tid) ;
 $rows_cnt = count($result) ;
 $row = $result[0];
 
 if($row['cid']>0)
-  $cid = $row['cid'];
+      $cid = $row['cid'];
 
 if($row['pid']>0 && $row['cid']>0){
       $pid = pdo_query("SELECT num FROM contest_problem WHERE problem_id=? AND contest_id=?",$row['pid'],$row['cid'])[0][0];
@@ -34,18 +28,10 @@ $isadmin = isset($_SESSION[$OJ_NAME.'_'.'administrator']);
 <table style='width:80%;' table class='table table-hover'>
   <thead>
     <tr class='toprow' align='center'>
-      <td width='5%' class='center'>
-        <?php echo "$MSG_REPLY_NUMBER"?>
-      </td>
-      <td width='15%' class='center'>
-        <?php echo "$MSG_USER"?>
-      </td>
-      <td width='65%' class='center'>
-        <?php echo "$MSG_QUESTION"?>
-      </td>
-      <td width='15%' class='center'>
-        <?php echo "$MSG_REGISTERED"?>
-      </td>
+      <td width='5%' class='center'><?php echo "$MSG_REPLY_NUMBER"?></td>
+      <td width='15%' class='center'><?php echo "$MSG_USER"?></td>
+      <td width='65%' class='center'><?php echo "$MSG_QUESTION"?></td>
+      <td width='15%' class='center'><?php echo "$MSG_REGISTERED"?></td>
     </tr>
   </thead>
   <tbody>
@@ -174,28 +160,22 @@ $isadmin = isset($_SESSION[$OJ_NAME.'_'.'administrator']);
         echo "<a href='../userinfo.php?user={$_SESSION[$OJ_NAME.'_'.'user_id']}'>{$_SESSION[$OJ_NAME.'_'.'user_id']}</a>";
       ?>
       </td>
-
       <td colspan=2>
-      <!--
-        <div style="font-size:80%;">
-        <div style="margin:0 10px">댓글 쓰기:</div>
-        </div>
-      -->
         <form action="post.php?action=reply" method="post">
                 <table width='80%'>
                   <tr>
                     <td>
-                   <input type="hidden" name="tid" value="<?php echo $tid;?>">
-               <textarea id="replyContent" name=content style="border:1px dashed #8080FF; width:100%; height:200px; font-size:100%;"></textarea>
-               <div style="float:right;font-size:80%">
-                 <?php if($OJ_VCODE){?>
-                   <?php echo $MSG_VCODE?>:<input name="vcode" size=4 type="text">
-                   <img id="vcode-img" alt="click to change" onclick="this.src='vcode.php?'+Math.random()">*
-                 <?php }?>
-                 <input type="submit" style="margin:5px 10px" value="<?php echo $MSG_REGISTER_REPLY?>"></input>
-               </div>
-                    </td>
-                  </tr>
+                           <input type="hidden" name="tid" value="<?php echo $tid;?>">
+                           <textarea id="replyContent" name=content style="border:1px dashed #8080FF; width:100%; height:200px; font-size:100%;"></textarea>
+                           <div style="float:right;font-size:80%">
+                                 <?php if($OJ_VCODE){?>
+                                   <?php echo $MSG_VCODE?>:<input name="vcode" size=4 type="text">
+                                   <img id="vcode-img" alt="click to change" onclick="this.src='vcode.php?'+Math.random()">*
+                                 <?php }?>
+                                 <input type="submit" style="margin:5px 10px" value="<?php echo $MSG_REGISTER_REPLY?>"></input>
+                           </div>
+                        </td>
+                      </tr>
                 </table>
         </form>
       </td>
@@ -207,8 +187,8 @@ $isadmin = isset($_SESSION[$OJ_NAME.'_'.'administrator']);
 <table width='80%'>
   <tr align='right'>
     <td>
-      <form class=form-inline action=newpost.php<?php if ($pid!=0 && $cid!=null) echo "?pid=".$pid."&cid=".$cid; else if ($pid!=0) echo "?pid=".$pid; else if ($cid!=0) echo "?cid=".$cid;?>>
-        <button class="form-control" type='submit'><?php echo "$MSG_REGISTER_QUESTION";?></button>
+      <form class=form-inline action="newpost.php<?php echo "?".$parm ?>" >
+        <button class="form-control" type='submit'><?php echo $MSG_WRITE_QUESTION; ?></button>
       </form>
     </td>
   </tr>
@@ -217,7 +197,6 @@ $isadmin = isset($_SESSION[$OJ_NAME.'_'.'administrator']);
 
 
 <script src="<?php echo $OJ_CDN_URL.$path_fix."include/"?>jquery-latest.js"></script>
-
 <script>
 <?php if ($OJ_VCODE) { ?>
   $(document).ready(function () {
