@@ -218,4 +218,4 @@ function reply(rid)
   $("#replyContent").focus();
 }
 </script>
-
+<?php require_once("template/$OJ_TEMPLATE/discuss.php")?>
