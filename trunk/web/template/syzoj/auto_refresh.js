@@ -34,7 +34,12 @@ function findRow(solution_id) {
                         return rows[i];
         }
 }
-
+function fancy(td){
+        console.log(user_id+":fancy");
+        $(td).html("<div id='bannerFancy'></div>");
+        window.setTimeout("$(\"#bannerFancy\").html(\"<iframe src='fancy.php'></iframe>\");",500);
+        window.setTimeout("window.location.reload();",5000);
+}
 function fresh_result(solution_id) {
         var xmlhttp;
         if (window.XMLHttpRequest) {// code for IE7+, Firefox, Chrome, Opera, Safari
@@ -74,6 +79,8 @@ function fresh_result(solution_id) {
                                 //console.log(ra[0]);
                                 switch (ra[0]) {
                                         case  4:
+                                                if(user_id==ra[5]) fancy(row.cells[4]);
+                                                break;
                                         case 14:
                                                 row.cells[4].innerHTML = "<a href=reinfo.php?sid="+solution_id+" class='"+judge_color[ra[0]]+"'>"+judge_result[ra[0]]+"</a>";
                                                 break;
