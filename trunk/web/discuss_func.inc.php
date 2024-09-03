@@ -33,4 +33,17 @@ function err_msg($msg){
         require("template/".$OJ_TEMPLATE."/error.php");
         exit(0);
 }
-?>
+
+$parm = "";
+if(isset($_GET['pid'])){
+  $pid = intval($_GET['pid']);
+  $parm = "pid=".$pid;
+}else{
+  $pid = 0;
+}
+if(isset($_GET['cid'])){
+    $cid = intval($_GET['cid']);
+}else{
+    $cid = 0;
+}
+$parm .= "&cid=".$cid;
