@@ -80,7 +80,7 @@ function fresh_result(solution_id) {
                                 switch (ra[0]) {
                                         case  4:
                                                 if(user_id==ra[5]) fancy(row.cells[4]);
-                                                break;
+                                                //break;
                                         case 14:
                                                 row.cells[4].innerHTML = "<a href=reinfo.php?sid="+solution_id+" class='"+judge_color[ra[0]]+"'>"+judge_result[ra[0]]+"</a>";
                                                 break;
