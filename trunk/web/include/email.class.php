@@ -7,7 +7,7 @@ require dirname(__FILE__).'/Exception.php';
 require dirname(__FILE__).'/PHPMailer.php';
 require dirname(__FILE__).'/SMTP.php';
 
-function email($address,$mailtitle,$mailcontent){
+function email($address,$mailtitle,$mailcontent,$html=""){
         //******************** 配置信息 ********************************
         global $OJ_NAME;
         $smtpserver = "smtp.qq.com";           //SMTP服务器，通常在邮箱的smtp/pop3设置中可以查询到，推荐用企业邮箱发信，避免被识别为垃圾邮件
@@ -45,11 +45,14 @@ function email($address,$mailtitle,$mailcontent){
 		    //$mail->addAttachment('/var/tmp/file.tar.gz');         //Add attachments
 		    //$mail->addAttachment('/tmp/image.jpg', 'new.jpg');    //Optional name
 		    //Content
-		    $mail->isHTML(false);                                  //Set email format to HTML
-		    $mail->Subject = $mailtitle;
-		    $mail->Body    = $mailcontent;
-		    $mail->AltBody = $mailcontent;
-
+                    if($html!=""){
+			    $mail->Body= $html;
+			    $mail->isHTML(true);    //Set email format to HTML
+		    }else{
+			    $mail->Body= $mailcontent;
+			    $mail->isHTML(false);
+		    }
+                    $mail->AltBody = $mailcontent;
 		    $mail->send();
 		    echo 'Message has been sent';
 		} catch (Exception $e) {
