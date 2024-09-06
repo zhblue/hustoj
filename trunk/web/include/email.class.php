@@ -31,7 +31,7 @@ function email($address,$mailtitle,$mailcontent){
 		    $mail->Username   = $smtpuser;                     //SMTP username
 		    $mail->Password   = 'secret';                               //SMTP password
 		    $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;            //Enable implicit TLS encryption
-		    $mail->Port       = 465;                                    //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
+		    $mail->Port       = $smtpserverport;                                    //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
 
 		    //Recipients
 		    $mail->setFrom($smtpuser, 'Mailer');
