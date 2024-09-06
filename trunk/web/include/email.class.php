@@ -12,7 +12,7 @@ function email($address,$mailtitle,$mailcontent,$html=""){
         global $OJ_NAME;
         $smtpserver = "smtp.qq.com";           //SMTP服务器，通常在邮箱的smtp/pop3设置中可以查询到，推荐用企业邮箱发信，避免被识别为垃圾邮件
         $smtpserverport =587;                           //SMTP服务器端口，通常是25，有的服务器支持80（阿里云）、465(网易)、587（QQ）以适应不同的网络防火墙配置
-        $smtpusermail = "mailer@qq.com";      //SMTP服务器的用户名（通常就是发件人的邮箱地址）
+        $smtpusermail = "mailer@qq.com";      //SMTP服务器的用户名（通常就是发件人的邮箱地址）, 这里修改后视为邮件配置生效，若配置不当可能导致部分页面超时。
         $smtppass = "your_smpt_auth_password";       //由邮箱系统生成的口令 (SMTP服务器的密码)
         //通常只需修改上面的4个设置。
         $smtpuser = "$smtpusermail";           //SMTP服务器的用户帐号,通常就是邮箱，个别情况服务器支持一个账号多个邮箱地址的可能不同。
