@@ -9,7 +9,7 @@ require dirname(__FILE__).'/SMTP.php';
 
 function email($address,$mailtitle,$mailcontent){
         //******************** 配置信息 ********************************
-        return false;   //确认下面的账户信息配置正确后，注释本行，否则mail相关功能不会生效。
+        global $OJ_NAME;
         $smtpserver = "smtp.qq.com";           //SMTP服务器，通常在邮箱的smtp/pop3设置中可以查询到，推荐用企业邮箱发信，避免被识别为垃圾邮件
         $smtpserverport =587;                           //SMTP服务器端口，通常是25，有的服务器支持80（阿里云）、465(网易)、587（QQ）以适应不同的网络防火墙配置
         $smtpusermail = "mailer@qq.com";      //SMTP服务器的用户名（通常就是发件人的邮箱地址）
@@ -35,8 +35,8 @@ function email($address,$mailtitle,$mailcontent){
 		    $mail->Port       = $smtpserverport;                                    //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
 
 		    //Recipients
-		    $mail->setFrom($smtpuser, 'Mailer');
-		    $mail->addAddress($address, 'OJ User');     //Add a recipient
+		    $mail->setFrom($smtpuser, $OJ_NAME );
+		    $mail->addAddress($address, $OJ_NAME.' User');     //Add a recipient
 		   // $mail->addAddress('ellen@example.com');               //Name is optional
 		   // $mail->addReplyTo('info@example.com', 'Information');
 		   // $mail->addCC('cc@example.com');
