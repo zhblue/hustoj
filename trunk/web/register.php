@@ -122,7 +122,7 @@ if (isset($OJ_REG_SPEED) && $OJ_REG_SPEED > 0 ) {
     if ($count > $OJ_REG_SPEED ) {
         // 如果数量大于$OJ_REG_SPEED ，则表示该IP地址在最近1小时内已经注册过$OJ_REG_SPEED个账户
 	$warning="$ip 正在快速注册大量新账号，请确认是否存在攻击行为。若能确认是攻击行为，可以用sudo iptables -A INPUT -s  $ip  -j DROP 命令 封禁IP。";
-        email($OJ_ADMIN,"系统警告,疑似攻击!",$warning);
+        if($OJ_ADMIN!="root@localhost") email($OJ_ADMIN,"系统警告,疑似攻击!",$warning);   //只有设置好的才发送邮件
         print "<script language='javascript'>\n";
         print "alert('您的IP地址或Email已经注册过".$OJ_REG_SPEED."个账户，请稍后再试。\\n');\n";
         print "history.go(-1);\n</script>";
