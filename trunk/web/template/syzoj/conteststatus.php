@@ -75,38 +75,44 @@
 
 
   <table id="result-tab" class="very basic center aligned table" style="white-space: nowrap; " id="table">
-    <thead>
+     <thead>
       <tr>
-                <th><?php echo $MSG_SUBMIT_NUM?></th>
-                <th><?php echo $MSG_USER?></th>
-                <th><?php echo $MSG_NICK?></th>
+        <th class='desktop-only item'><?php echo $MSG_RUNID?></th>
+        <th><?php echo $MSG_USER?></th>
+        <th><?php echo $MSG_NICK?></th>
         <th><?php echo $MSG_PROBLEM_ID?></th>
         <th><?php echo $MSG_RESULT?></th>
-        <th class='hidden-xs'><?php echo $MSG_MEMORY?></th>
-        <th class='hidden-xs'><?php echo $MSG_TIME?></th>
-        <th><?php echo $MSG_SOURCE_CODE?></th>
-        <th class='hidden-xs'><?php echo $MSG_CODE_LENGTH?></th>
-        <th class='hidden-xs'><?php echo $MSG_SUBMIT_TIME?></th>
-        <th class='hidden-xs'><?php echo $MSG_JUDGER?></th>
+        <th><?php echo $MSG_MEMORY?></th>
+        <th><?php echo $MSG_TIME?></th>
+        <th ><?php echo $MSG_LANG?></th>
+        <th  class='desktop-only item'><?php echo $MSG_CODE_LENGTH?></th>
+        <th ><?php echo $MSG_SUBMIT_TIME?></th>
+       <?php    if (isset($_SESSION[$OJ_NAME.'_'.'administrator'])) {
+                                                        echo "<th class='desktop-only item'>";
+                                                                echo $MSG_JUDGER;
+                                                        echo "</th>";
+                                                } ?>
       </tr>
     </thead>
-    <tbody>
+    <tbody style='font-weight:700' >
       <!-- <tr v-for="item in items" :config="displayConfig" :show-rejudge="false" :data="item" is='submission-item'>
           </tr> -->
     <?php
     foreach($view_status as $row){
-    $i=0;
-    echo "<tr>";
-    foreach($row as $table_cell){
-      if($i>3&&$i!=7)
-        echo "<td class='hidden-xs'><b>";
-      else
-        echo "<td><b>";
-      echo $table_cell;
-      echo "</b></td>";
-      $i++;
-    }
-    echo "</tr>\n";
+        $i=0;
+        echo "<tr>";
+        foreach($row as $table_cell){
+              if ($i==4)
+                echo "<td class='td_result'>";
+              else if($i==0 || $i>7 && $i!=9)
+                echo "<td class='desktop-only item '>";
+              else
+                echo "<td>";
+              echo $table_cell;
+              echo "</td>";
+              $i++;
+        }
+        echo "</tr>\n";
     }
     ?>
 
