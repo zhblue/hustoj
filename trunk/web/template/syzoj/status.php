@@ -79,11 +79,9 @@
   <table id="result-tab" class="ui very basic center aligned table" style="white-space: nowrap; " id="table">
     <thead>
       <tr>
-                <th class='desktop-only item'><?php echo $MSG_RUNID?></th>
-                <th><?php echo $MSG_USER?></th>
-                                                <th>
-                                                        <?php echo $MSG_NICK?>
-                                                </th>
+        <th class='desktop-only item'><?php echo $MSG_RUNID?></th>
+        <th><?php echo $MSG_USER?></th>
+        <th><?php echo $MSG_NICK?></th>
         <th><?php echo $MSG_PROBLEM_ID?></th>
         <th><?php echo $MSG_RESULT?></th>
         <th><?php echo $MSG_MEMORY?></th>
