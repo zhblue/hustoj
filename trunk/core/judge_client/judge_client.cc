@@ -715,7 +715,7 @@ void make_diff_out_simple(FILE *f1, FILE *f2, int c1, int c2, const char *path,c
 {
 	execute_cmd("echo '%s\n--\n'>>diff.out", getFileNameFromPath(path));
 	execute_cmd("echo 'Expected|Yours\n--|--'>>diff.out");
-	execute_cmd("diff '%s' %s -y|head -100>>diff.out", path,userfile);
+	execute_cmd("diff '%s' %s -y|head -100|tr '>/\\' ' ||' >>diff.out", path,userfile);
 	execute_cmd("echo '\n\n'>>diff.out");
 }
 
