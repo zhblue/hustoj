@@ -75,13 +75,14 @@
             "border": "1px solid grey",
             "text-align": "center",
             "width": "200px",
+	    "background-color": "#2185d022",
             "height": "30px"
 	});
         $("#errtxt table th").css({
             "border": "1px solid grey",
             "width": "200px",
             "height": "30px",
-            "background-color": "#2185d022",
+            "background-color": "#2185d088",
             "text-align": "center"
 	});
 
