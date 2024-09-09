@@ -713,10 +713,10 @@ void make_diff_out_full(FILE *f1, FILE *f2, int c1, int c2, const char *path,con
 }
 void make_diff_out_simple(FILE *f1, FILE *f2, int c1, int c2, const char *path,const char * userfile )
 {
-	execute_cmd("echo '========[%s]========='>>diff.out", getFileNameFromPath(path));
-	execute_cmd("echo 'Expected						      |	Yours'>>diff.out");
+	execute_cmd("echo '%s\n--\n'>>diff.out", getFileNameFromPath(path));
+	execute_cmd("echo 'Expected|Yours\n--|--'>>diff.out");
 	execute_cmd("diff '%s' %s -y|head -100>>diff.out", path,userfile);
-	execute_cmd("echo '\n=============================='>>diff.out");
+	execute_cmd("echo '\n\n'>>diff.out");
 }
 
 /*
@@ -3681,7 +3681,7 @@ int main(int argc, char **argv)
 			}
 			*/
 			
-			time_space_index+=sprintf(time_space_table+time_space_index,"%s %ld bytes :%s mem=%dk time=%dms\n",infile+prelen,get_file_size(infile),jresult[ACflg],topmemory/1024,usedtime);
+			time_space_index+=sprintf(time_space_table+time_space_index,"%s|%ld|%s|%dk|%dms\n",infile+prelen,get_file_size(infile),jresult[ACflg],topmemory/1024,usedtime);
 			/*   // full diff code backup
 			 if( ACflg != OJ_AC ){
                                 FILE *DF=fopen("diff.out","a");
@@ -3752,7 +3752,7 @@ int main(int argc, char **argv)
 		if (DEBUG)
 			printf("add RE info of %d..... \n", solution_id);
 		FILE *df=fopen("error.out","a");
-                fprintf(df,"----time_space_table:----\n%s\n",time_space_table);
+                fprintf(df,"filename|size|result|memory|time\n--|--|--|--|--\n%s\n",time_space_table);
                 fclose(df);
 		addreinfo(solution_id);
 	}
@@ -3800,7 +3800,7 @@ int main(int argc, char **argv)
 
 	}
 	FILE *df=fopen("diff.out","a");
-	fprintf(df,"time_space_table:\n%s\n",time_space_table);
+	fprintf(df,"filename|size|result|memory|time\n--|--|--|--|--\n%s\n",time_space_table);
 	fclose(df);
 	if(DEBUG) printf("ACflg:%d\n",ACflg);
 	printf("final result:%d\n",finalACflg);
