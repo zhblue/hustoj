@@ -725,23 +725,28 @@ void make_diff_out_simple(FILE *f1, FILE *f2,char * prefix, int c1, int c2, cons
         fprintf(diff,"%s\n--\n", getFileNameFromPath(path));
         fprintf(diff,"|Expected|Yours\n|--|--\n");
         int row=0;
+        int need=1;
         while(!(feof(f1)&&feof(f2))){
+                row++;
                 fprintf(diff,"|");
-                if(row==0){
+                if(row==1){
                         fprintf(diff,"%s",prefix);
-                        if(c1!='\n')fprintf(diff,"%c",c1);
+                        if(feof(f2)){
+                                fprintf(diff,"|%s\n|",prefix);
+                                need=0;
+                        }
+                        if(isprint(c1))fprintf(diff,"%c",c1);
                 }
                 if(!feof(f1)&&fgets(buf,BUFFER_SIZE-1,f1)){
                         if(buf[strlen(buf)-1]=='\n') buf[strlen(buf)-1]='\0';
                         fprintf(diff,"%s",buf);
                 }
                 fprintf(diff,"|");
-                if(row==0){
-                        fprintf(diff,"%s",prefix);
-                        fprintf(diff,"%c",c2);
-                        if(c2=='\n') {
-                                row++;
-                                continue;
+                if(row==1){
+                        if(need)fprintf(diff,"%s",prefix);
+                        if(isprint(c2))fprintf(diff,"%c",c2);
+                        if(c2=='\n'){
+                                fprintf(diff,"\n||");
                         }
                 }
                 if(!feof(f2)&&fgets(buf,BUFFER_SIZE-1,f2)){
@@ -749,12 +754,12 @@ void make_diff_out_simple(FILE *f1, FILE *f2,char * prefix, int c1, int c2, cons
                         fprintf(diff,"%s",buf);
                 }
                 fprintf(diff,"\n");
-                row++;
                 if(row>=100) break;
         }
         fprintf(diff,"\n\n");
         fclose(diff);
 }
+
 
 /*
  * translated from ZOJ judger r367
