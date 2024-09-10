@@ -718,35 +718,43 @@ void make_diff_out(FILE *f1, FILE *f2, int c1, int c2, const char *path,const ch
         execute_cmd("diff '%s' %s -y|head -100|tr '>/\\' ' ||' >>diff.out", path,userfile);
         execute_cmd("echo '\n\n'>>diff.out");
 }
-void make_diff_out_simple(FILE *f1, FILE *f2, int c1, int c2, const char *path,const char * userfile )
+void make_diff_out_simple(FILE *f1, FILE *f2,char * prefix, int c1, int c2, const char *path,const char * userfile )
 {
         char buf[BUFFER_SIZE];
         FILE *diff=fopen("diff.out","a+");
         fprintf(diff,"%s\n--\n", getFileNameFromPath(path));
         fprintf(diff,"|Expected|Yours\n|--|--\n");
         int row=0;
-        while(!(feof(f1)||feof(f2))){
+        while(!(feof(f1)&&feof(f2))){
                 fprintf(diff,"|");
                 if(row==0){
-                        fprintf(diff,"%c",c1);
+                        fprintf(diff,"%s",prefix);
+                        if(c1!='\n')fprintf(diff,"%c",c1);
                 }
-                if(fgets(buf,BUFFER_SIZE-1,f1)){
+                if(!feof(f1)&&fgets(buf,BUFFER_SIZE-1,f1)){
                         if(buf[strlen(buf)-1]=='\n') buf[strlen(buf)-1]='\0';
                         fprintf(diff,"%s",buf);
                 }
                 fprintf(diff,"|");
                 if(row==0){
+                        fprintf(diff,"%s",prefix);
                         fprintf(diff,"%c",c2);
+                        if(c2=='\n') {
+                                row++;
+                                continue;
+                        }
                 }
-                if(fgets(buf,BUFFER_SIZE-1,f2))
+                if(!feof(f2)&&fgets(buf,BUFFER_SIZE-1,f2)){
+                        if(buf[strlen(buf)-1]=='\n') buf[strlen(buf)-1]='\0';
                         fprintf(diff,"%s",buf);
+                }
+                fprintf(diff,"\n");
                 row++;
                 if(row>=100) break;
         }
         fprintf(diff,"\n\n");
         fclose(diff);
 }
-
 
 /*
  * translated from ZOJ judger r367
@@ -755,42 +763,51 @@ void make_diff_out_simple(FILE *f1, FILE *f2, int c1, int c2, const char *path,c
  */
 int compare_zoj(const char *file1, const char *file2,const char * infile,const char * userfile)
 {
-	int ret = OJ_AC;
-	int c1, c2;
-	FILE *f1, *f2;
-	f1 = fopen(file1, "re");
-	f2 = fopen(file2, "re");
-	if (!f1 || !f2)
-	{
-		ret = OJ_RE;
-	}
-	else
-		for (;;)
-		{
-			// Find the first non-space character at the beginning of line.
-			// Blank lines are skipped.
-			c1 = fgetc(f1);
-			c2 = fgetc(f2);
-			find_next_nonspace(c1, c2, f1, f2, ret);
-			// Compare the current line.
-			for (;;)
-			{
-				// Read until 2 files return a space or 0 together.
-				while ((!isspace(c1) && c1) || (!isspace(c2) && c2))
-				{
-					if (c1 == EOF && c2 == EOF)
-					{
-						goto end;
-					}
-					if (c1 == EOF || c2 == EOF)
-					{
-						break;
-					}
-					if (c1 != c2) {
-						// Consecutive non-space characters should be all exactly the ifconfig|grep 'inet'|awk -F: '{printf $2}'|awk  '{printf $1}'same
-						ret = OJ_WA;
-						goto end;
-					}
+        int ret = OJ_AC;
+        int c1, c2;
+        char prefix[BUFFER_SIZE];
+        int preK=0;
+        FILE *f1, *f2;
+        f1 = fopen(file1, "re");
+        f2 = fopen(file2, "re");
+        if (!f1 || !f2)
+        {
+                ret = OJ_RE;
+        }
+        else
+                for (;;)
+                {
+                        // Find the first non-space character at the beginning of line.
+                        // Blank lines are skipped.
+                        c1 = fgetc(f1);
+                        c2 = fgetc(f2);
+                        find_next_nonspace(c1, c2, f1, f2, ret);
+                        // Compare the current line.
+                        for (;;)
+                        {
+                                // Read until 2 files return a space or 0 together.
+                                while ((!isspace(c1) && c1) || (!isspace(c2) && c2))
+                                {
+                                        if (c1 == EOF && c2 == EOF)
+                                        {
+                                                goto end;
+                                        }
+                                        if (c1 == EOF || c2 == EOF)
+                                        {
+                                                break;
+                                        }
+                                        if (c1 != c2) {
+                                                // Consecutive non-space characters should be all exactly the ifconfig|grep 'inet'|awk -F: '{printf $2}'|awk  '{printf $1}'same
+                                                ret = OJ_WA;
+                                                goto end;
+                                        }else if(preK<BUFFER_SIZE-1){
+                                                if(c1=='\n'){
+                                                        preK=0;
+                                                }else{
+                                                        prefix[preK++]=c1;
+                                                        prefix[preK]='\0';
+                                                }
+                                        }
 					c1 = fgetc(f1);
 					c2 = fgetc(f2);
 				}
