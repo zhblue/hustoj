@@ -711,13 +711,42 @@ void make_diff_out_full(FILE *f1, FILE *f2, int c1, int c2, const char *path,con
 	execute_cmd("diff '%s' %s -y|grep \\||head -200>>diff.out", path,userfile);
 	execute_cmd("echo  '\\n=============================='>>diff.out");
 }
+void make_diff_out(FILE *f1, FILE *f2, int c1, int c2, const char *path,const char * userfile )
+{
+        execute_cmd("echo '%s\n--\n'>>diff.out", getFileNameFromPath(path));
+        execute_cmd("echo 'Expected|Yours\n--|--'>>diff.out");
+        execute_cmd("diff '%s' %s -y|head -100|tr '>/\\' ' ||' >>diff.out", path,userfile);
+        execute_cmd("echo '\n\n'>>diff.out");
+}
 void make_diff_out_simple(FILE *f1, FILE *f2, int c1, int c2, const char *path,const char * userfile )
 {
-	execute_cmd("echo '%s\n--\n'>>diff.out", getFileNameFromPath(path));
-	execute_cmd("echo 'Expected|Yours\n--|--'>>diff.out");
-	execute_cmd("diff '%s' %s -y|head -100|tr '>/\\' ' ||' >>diff.out", path,userfile);
-	execute_cmd("echo '\n\n'>>diff.out");
+        char buf[BUFFER_SIZE];
+        FILE *diff=fopen("diff.out","a+");
+        fprintf(diff,"%s\n--\n", getFileNameFromPath(path));
+        fprintf(diff,"|Expected|Yours\n|--|--\n");
+        int row=0;
+        while(!(feof(f1)||feof(f2))){
+                fprintf(diff,"|");
+                if(row==0){
+                        fprintf(diff,"%c",c1);
+                }
+                if(fgets(buf,BUFFER_SIZE-1,f1)){
+                        if(buf[strlen(buf)-1]=='\n') buf[strlen(buf)-1]='\0';
+                        fprintf(diff,"%s",buf);
+                }
+                fprintf(diff,"|");
+                if(row==0){
+                        fprintf(diff,"%c",c2);
+                }
+                if(fgets(buf,BUFFER_SIZE-1,f2))
+                        fprintf(diff,"%s",buf);
+                row++;
+                if(row>=100) break;
+        }
+        fprintf(diff,"\n\n");
+        fclose(diff);
 }
+
 
 /*
  * translated from ZOJ judger r367
