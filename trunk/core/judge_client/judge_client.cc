@@ -807,7 +807,9 @@ int compare_zoj(const char *file1, const char *file2,const char * infile,const c
                                                         prefix[preK++]=c1;
                                                         prefix[preK]='\0';
                                                 }
-                                        }
+                                        }else{
+						preK=0;
+					}
 					c1 = fgetc(f1);
 					c2 = fgetc(f2);
 				}
