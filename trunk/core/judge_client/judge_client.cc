@@ -761,6 +761,7 @@ void make_diff_out_simple(FILE *f1, FILE *f2,char * prefix, int c1, int c2, cons
 }
 
 
+
 /*
  * translated from ZOJ judger r367
  * http://code.google.com/p/zoj/source/browse/trunk/judge_client/client/text_checker.cc#25
@@ -808,17 +809,23 @@ int compare_zoj(const char *file1, const char *file2,const char * infile,const c
                                         }else if(preK<BUFFER_SIZE-1){
                                                 if(c1=='\n'){
                                                         preK=0;
+							                                          prefix[preK]='\0';
                                                 }else{
                                                         prefix[preK++]=c1;
                                                         prefix[preK]='\0';
                                                 }
                                         }else{
 						preK=0;
+						prefix[preK]='\0';
 					}
 					c1 = fgetc(f1);
 					c2 = fgetc(f2);
 				}
 				find_next_nonspace(c1, c2, f1, f2, ret);
+				if(preK<BUFFER_SIZE-1){
+					 prefix[preK++]=' ';
+	                                 prefix[preK]='\0';
+				}
 				if (c1 == EOF && c2 == EOF)
 				{
 					goto end;
@@ -841,7 +848,7 @@ end:
 		if (full_diff)
 			make_diff_out_full(f1, f2, c1, c2, file1,infile,userfile);
 		else
-			make_diff_out_simple(f1, f2, c1, c2, file1,userfile);
+			make_diff_out_simple(f1, f2, prefix, c1, c2, file1,userfile);
 	}
 	if (f1)
 		fclose(f1);
