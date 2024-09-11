@@ -718,6 +718,20 @@ void make_diff_out(FILE *f1, FILE *f2, int c1, int c2, const char *path,const ch
         execute_cmd("diff '%s' %s -y|head -100|tr '>/\\' ' ||' >>diff.out", path,userfile);
         execute_cmd("echo '\n\n'>>diff.out");
 }
+char * str_replace(char * old, const char * search, const char * replace){
+	int p,r;
+	char *s;
+	char buf[BUFFER_SIZE];
+	r=strlen(replace);
+	p=strlen(search);
+	while (NULL!=(s=strstr(old,search))){
+		strcpy(buf,s+p);
+		if(strlen(old)-strlen(s)+strlen(buf)>BUFFER_SIZE) break;
+		strcpy(s,replace);
+		strcpy(s+r-p+1,buf);
+	}
+	return old;
+}
 void make_diff_out_simple(FILE *f1, FILE *f2,char * prefix, int c1, int c2, const char *path,const char * userfile )
 {
         char buf[BUFFER_SIZE];
@@ -744,12 +758,22 @@ void make_diff_out_simple(FILE *f1, FILE *f2,char * prefix, int c1, int c2, cons
                 fprintf(diff,"|");
                 if(row==1){
                         if(need)fprintf(diff,"%s",prefix);
-                        if(isprint(c2))fprintf(diff,"%c",c2);
-                        if(c2=='\n'){
+			if(c2=='|') fprintf(diff,"丨");
+			else if(c2=='[') fprintf(diff,"［");
+			else if(c2==']') fprintf(diff,"］");
+			else if(c2=='(') fprintf(diff,"（");
+			else if(c2==')') fprintf(diff,"）");
+			else if(isprint(c2))fprintf(diff,"%c",c2);
+			else if(c2=='\n'){
                                 fprintf(diff,"\n||");
                         }
                 }
                 if(!feof(f2)&&fgets(buf,BUFFER_SIZE-1,f2)){
+			str_replace(buf,"|","丨");
+			str_replace(buf,"[","［");
+			str_replace(buf,"]","］");
+			str_replace(buf,"(","（");
+			str_replace(buf,")","）");
                         if(buf[strlen(buf)-1]=='\n') buf[strlen(buf)-1]='\0';
                         fprintf(diff,"%s",buf);
                 }
@@ -759,7 +783,6 @@ void make_diff_out_simple(FILE *f1, FILE *f2,char * prefix, int c1, int c2, cons
         fprintf(diff,"\n\n");
         fclose(diff);
 }
-
 
 
 /*
@@ -809,7 +832,7 @@ int compare_zoj(const char *file1, const char *file2,const char * infile,const c
                                         }else if(preK<BUFFER_SIZE-1){
                                                 if(c1=='\n'){
                                                         preK=0;
-							                                          prefix[preK]='\0';
+							prefix[preK]='\0';
                                                 }else{
                                                         prefix[preK++]=c1;
                                                         prefix[preK]='\0';
