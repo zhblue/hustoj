@@ -761,6 +761,7 @@ void make_diff_out_simple(FILE *f1, FILE *f2,char * prefix, int c1, int c2, cons
 }
 
 
+
 /*
  * translated from ZOJ judger r367
  * http://code.google.com/p/zoj/source/browse/trunk/judge_client/client/text_checker.cc#25
@@ -808,7 +809,7 @@ int compare_zoj(const char *file1, const char *file2,const char * infile,const c
                                         }else if(preK<BUFFER_SIZE-1){
                                                 if(c1=='\n'){
                                                         preK=0;
-							prefix[preK]='\0';
+							                                          prefix[preK]='\0';
                                                 }else{
                                                         prefix[preK++]=c1;
                                                         prefix[preK]='\0';
