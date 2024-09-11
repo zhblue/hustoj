@@ -758,22 +758,22 @@ void make_diff_out_simple(FILE *f1, FILE *f2,char * prefix, int c1, int c2, cons
                 fprintf(diff,"|");
                 if(row==1){
                         if(need)fprintf(diff,"%s",prefix);
-			if(c2=='|') fprintf(diff,"丨");
-			else if(c2=='[') fprintf(diff,"［");
-			else if(c2==']') fprintf(diff,"］");
-			else if(c2=='(') fprintf(diff,"（");
-			else if(c2==')') fprintf(diff,"）");
-			else if(isprint(c2))fprintf(diff,"%c",c2);
-			else if(c2=='\n'){
-                                fprintf(diff,"\n||");
+                        if(c2=='|') fprintf(diff,"丨");
+                        else if(c2=='[') fprintf(diff,"［");
+                        else if(c2==']') fprintf(diff,"］");
+                        else if(c2=='(') fprintf(diff,"（");
+                        else if(c2==')') fprintf(diff,"）");
+                        else if(isprint(c2))fprintf(diff,"%c",c2);
+                        else if(c2=='\n'){
+                                  fprintf(diff,"\n||");
                         }
                 }
                 if(!feof(f2)&&fgets(buf,BUFFER_SIZE-1,f2)){
-			str_replace(buf,"|","丨");
-			str_replace(buf,"[","［");
-			str_replace(buf,"]","］");
-			str_replace(buf,"(","（");
-			str_replace(buf,")","）");
+                        str_replace(buf,"|","丨");
+                        str_replace(buf,"[","［");
+                        str_replace(buf,"]","］");
+                        str_replace(buf,"(","（");
+                        str_replace(buf,")","）");
                         if(buf[strlen(buf)-1]=='\n') buf[strlen(buf)-1]='\0';
                         fprintf(diff,"%s",buf);
                 }
@@ -783,7 +783,6 @@ void make_diff_out_simple(FILE *f1, FILE *f2,char * prefix, int c1, int c2, cons
         fprintf(diff,"\n\n");
         fclose(diff);
 }
-
 
 /*
  * translated from ZOJ judger r367
