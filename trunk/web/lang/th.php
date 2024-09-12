@@ -322,6 +322,11 @@
   $MSG_STRING_INDEX_OUT_OF_BOUNDS_EXCEPTION="The character subscript of the string is out of range, check the parameters of subString, charAt and other methods.";
   $MSG_WRONG_OUTPUT_TYPE_EXCEPTION="Are you using an number as a char? Did you print out any Non-printable characters?";
   $MSG_NON_ZERO_RETURN="Do NOT return non-zero value in your main() function , or system will regard it as an error. ";
+  $MSG_EXPECTED="Expected Output";
+  $MSG_YOURS="Your Output";
+  $MSG_FILENAME="Filename";
+  $MSG_SIZE="Size";
+
 	// template/../ceinfo.php
 	$MSG_ERROR_EXPLAIN="Expain";
 	$MSG_SYSTEM_OUT_PRINT="The usage of System.out.print in Java is different from that of C language printf, please try System.out.format";
