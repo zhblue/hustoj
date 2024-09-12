@@ -343,6 +343,10 @@ $MSG_ABSENT="Absent";
   $MSG_STRING_INDEX_OUT_OF_BOUNDS_EXCEPTION="ھەرپ-بەلگە تىزىقى ئاستىدىكى بەلگە چېگرادىن ئۆتۈپ، subString, charAt قاتارلىق ئۇسۇللارنىڭ پارامېتىرلىرىنى تەكشۈرۈڭ.";
   $MSG_WRONG_OUTPUT_TYPE_EXCEPTION="Are you using an number as a char? Did you print out any Non-printable characters?";
   $MSG_NON_ZERO_RETURN="Do NOT return non-zero value in your main() function , or system will regard it as an error. ";
+  $MSG_EXPECTED="Expected Output";
+  $MSG_YOURS="Your Output";
+  $MSG_FILENAME="Filename";
+  $MSG_SIZE="Size";
 
 	// template/../ceinfo.php
 	$MSG_ERROR_EXPLAIN="چۈشەنچە";
