@@ -162,29 +162,6 @@
         mangle: false,
         headerIds: false
     });
-    $("#errtxt").each(function(){
-                        raw=raw.replaceAll("\n","|\n|");
-                        raw=raw.replaceAll("&gt;","|");
-                        raw=raw.replaceAll("&lt;","|");
-                        raw=raw.replace( /[\\\/]/g  ,"|");
-                        raw=raw.replaceAll("      |","|");
-                        raw=raw.replaceAll("|==============================|","\n");
-                        raw=raw.replaceAll("\n||\n","\n");
-                        raw=raw.replaceAll("Expected","期望输出");
-                        raw=raw.replaceAll("Yours|","你的输出|\n|:----|:----|");
-                        raw=raw.replaceAll("time_space_table:","文件|大小|结果|内存|耗时|\n|----|----|----|----|----");
-                        raw=raw.replaceAll(".in ","|");
-                        raw=raw.replaceAll(" bytes :","|");
-                        raw=raw.replaceAll(" mem=","|");
-                        raw=raw.replaceAll(" time=","|");
-
-                        <?php if ($jresult==5 ) {?>
-                                raw=raw.replaceAll(" ","<span class=blue>▯</span>");
-                        <?php } ?>
-                        $(this).html((raw));
-                        $(this).html(marked.parse(raw));
-
-    });
     $("#errtxt table tr td").css({
         "border": "1px solid grey",
         "text-align": "left",
