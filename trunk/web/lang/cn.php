@@ -353,7 +353,7 @@
   $MSG_NON_ZERO_RETURN="Main函数不能返回非零的值，否则视同程序出错。";
   $MSG_EXPECTED="期望值";
   $MSG_YOURS="你的程序输出";
-  $MSG_FILNENAME="文件名";
+  $MSG_FILENAME="文件名";
   $MSG_SIZE="大小";
   
 
