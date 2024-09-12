@@ -2,7 +2,6 @@
 </div>
 <script src="<?php echo $OJ_CDN_URL.$path_fix."template/$OJ_TEMPLATE"?>/css/semantic.min.js"></script>
 <script src="<?php echo $path_fix."template/$OJ_TEMPLATE"?>/css/Chart.min.js"></script>
-<footer>
     <style>
     .footer {
         line-height: 1.4285em;
@@ -38,8 +37,6 @@
         </div>
     </div>
     </div>
-
-</footer>
 <?php if (isset($_SESSION[$OJ_NAME.'_user_id'])){ ?>
         <iframe id="sk" src="session.php" height=0px width=0px ></iframe>
 <?php } ?>
