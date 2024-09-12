@@ -156,6 +156,19 @@
             }
           }
         ?>
+        $("th").each(function(){
+                let html=$(this).html();
+                html=html.replace("Expected","<?php echo $MSG_EXPECTED ?>");
+                html=html.replace("Yours","<?php echo $MSG_YOURS ?>");
+                html=html.replace("filename","<?php echo $MSG_FILENAME ?>");
+                html=html.replace("size","<?php echo $MSG_SIZE ?>");
+                html=html.replace("result","<?php echo $MSG_RESULT ?>");
+                html=html.replace("memory","<?php echo $MSG_MEMORY?>");
+                html=html.replace("time","<?php echo $MSG_TIME ?>");
+                $(this).html(html);
+
+        });
+
     });
 
 </script>
