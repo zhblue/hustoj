@@ -50,65 +50,6 @@
         </div>
     </div>
 <script>
-
-  $(document).ready(function(){
-		marked.use({
-                  // 开启异步渲染
-                  async: true,
-                  pedantic: false,
-                  gfm: true,
-                  mangle: false,
-                  headerIds: false
-                });
-		$("#errtxt").each(function(){
-			$(this).html(marked.parse($(this).html()));
-		});
-	  	// adding note for ```input1  ```output1 in description
-	        for(let i=1;i<10;i++){
-                        $(".language-input"+i).parent().before("<div><?php echo $MSG_Input?>"+i+":</div>");
-                        $(".language-output"+i).parent().before("<div><?php echo $MSG_Output?>"+i+":</div>");
-                }
-
-	       
-	$("#errtxt table").addClass("ui mini-table striped");
-        $("#errtxt table tr td").css({
-            "border": "1px solid grey",
-            "text-align": "center",
-            "width": "200px",
-	    "background-color": "#2185d022",
-            "height": "30px"
-	});
-        $("#errtxt table th").css({
-            "border": "1px solid grey",
-            "width": "200px",
-            "height": "30px",
-            "background-color": "#2185d088",
-            "text-align": "center"
-	});
-        <?php
-          if(isset($OJ_DOWNLOAD)&&$OJ_DOWNLOAD){
-            if(isset($OJ_DL_1ST_WA_ONLY) && $OJ_DL_1ST_WA_ONLY){
-	        ?>
-	           let down=$($("#errtxt").find("h2")[0]);
-	           let filename=down.text();
-	           down.html("<a href='download.php?sid=<?php echo $id?>&name=" + filename+ "'>" + filename+ "</a>");
-		<?php
-	     }else{
-		?>
-	           $("#errtxt").find("h2").each(function(){
-	                   let down=$(this);
-	                   let filename=down.text();
-	                   console.log(filename);
-	                   down.html("<a href='download.php?sid=<?php echo $id?>&name=" + filename+ "'>" + filename+ "</a>");
-	           });
-	        <?php
-            }
-          }
-        ?>
-
-  });
-</script>
-<script>
     var pats=new Array();
     var exps=new Array();
     pats[0]=/A Not allowed system call/;
@@ -133,7 +74,7 @@
     exps[9]="<?php echo $MSG_WRONG_OUTPUT_TYPE_EXCEPTION ?>";
     pats[10]=/non-zero return/;
     exps[10]="<?php echo $MSG_NON_ZERO_RETURN ?>";
- 
+
     function explain(){
       var errmsg = $("#errtxt").text();
       var expmsg = "";
@@ -147,44 +88,79 @@
       }
       document.getElementById("errexp").innerHTML=expmsg;
     }
-	
     explain();
-   
 </script>
 
         <?php if(isset($OJ_MARKDOWN)&&$OJ_MARKDOWN){ ?>
           <script src="<?php echo $OJ_CDN_URL.$path_fix."template/bs3/"?>marked.min.js"></script>
 <script>
-    marked.use({
-        async: true,
-        pedantic: false,
-        gfm: true,
-        mangle: false,
-        headerIds: false
-    });
-    $("#errtxt table tr td").css({
-        "border": "1px solid grey",
-        "text-align": "left",
-        "width": "200px",
-        "height": "30px"
+    $(document).ready(function(){
+                marked.use({
+                  // 开启异步渲染
+                  async: true,
+                  pedantic: false,
+                  gfm: true,
+                  mangle: false,
+                  headerIds: false
+                });
+                $("#errtxt").each(function(){
+                        $(this).html(marked.parse($(this).html()));
+                });
+                // adding note for ```input1  ```output1 in description
+                for(let i=1;i<10;i++){
+                        $(".language-input"+i).parent().before("<div><?php echo $MSG_Input?>"+i+":</div>");
+                        $(".language-output"+i).parent().before("<div><?php echo $MSG_Output?>"+i+":</div>");
+                }
+
+
+        $("#errtxt table").addClass("ui mini-table cell striped");
+        $("#errtxt table tr:odd td").css({
+            "border": "1px solid grey",
+            "text-align": "center",
+            "width": "200px",
+            "background-color": "#8521d022",
+            "height": "30px"
+        });
+        $("#errtxt table tr:even td").css({
+            "border": "1px solid grey",
+            "text-align": "center",
+            "width": "200px",
+            "background-color": "#2185d022",
+            "height": "30px"
+        });
+        $("#errtxt table th").css({
+            "border": "1px solid grey",
+            "width": "200px",
+            "height": "30px",
+            "background-color": "#2185d088",
+            "text-align": "center"
+        });
+        <?php
+          if(isset($OJ_DOWNLOAD)&&$OJ_DOWNLOAD){
+            if(isset($OJ_DL_1ST_WA_ONLY) && $OJ_DL_1ST_WA_ONLY){
+        ?>
+           let down=$($("#errtxt").find("h2")[0]);
+           let filename=down.text();
+           down.html("<a href='download.php?sid=<?php echo $id?>&name=" + filename+ "'>" + filename+ "</a>");
+        <?php
+            }else{
+        ?>
+           $("#errtxt").find("h2").each(function(){
+                   let down=$(this);
+                   let filename=down.text();
+                   console.log(filename);
+                   down.html("<a href='download.php?sid=<?php echo $id?>&name=" + filename+ "'>" + filename+ "</a>");
+           });
+
+        <?php
+            }
+          }
+        ?>
     });
 
-    $("#errtxt table th").css({
-        "border": "1px solid grey",
-        "width": "200px",
-        "height": "30px",
-        "background-color": "#9e9e9ea1",
-        "text-align": "center"
-    });
-    $("#errtxt p").css({
-        "margin": "1em 0em -1em 0em"
-    });
 </script>
 
     <?php } ?>
 
 
 <?php include("template/$OJ_TEMPLATE/footer.php");?>
-
- 
-
