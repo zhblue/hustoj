@@ -829,13 +829,8 @@ int compare_zoj(const char *file1, const char *file2,const char * infile,const c
                                                 ret = OJ_WA;
                                                 goto end;
                                         }else if(preK<BUFFER_SIZE-1){
-                                                if(c1=='\n'){
-                                                        preK=0;
-							prefix[preK]='\0';
-                                                }else{
-                                                        prefix[preK++]=c1;
-                                                        prefix[preK]='\0';
-                                                }
+						prefix[preK++]=c1;
+						prefix[preK]='\0';
                                         }else{
 						preK=0;
 						prefix[preK]='\0';
@@ -844,10 +839,8 @@ int compare_zoj(const char *file1, const char *file2,const char * infile,const c
 					c2 = fgetc(f2);
 				}
 				find_next_nonspace(c1, c2, f1, f2, ret);
-				if(preK<BUFFER_SIZE-1){
-					 prefix[preK++]=' ';
-	                                 prefix[preK]='\0';
-				}
+				preK=0;
+	                        prefix[preK]='\0';
 				if (c1 == EOF && c2 == EOF)
 				{
 					goto end;
