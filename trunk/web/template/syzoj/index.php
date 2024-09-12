@@ -109,7 +109,7 @@ if($NOIP_flag[0]==0)$view_month_rank=mysql_query_cache("select user_id,nick,coun
                                 echo "<tr>"."<td>"
                                     ."<a href=\"problem.php?id=".$row["problem_id"]."\">"
                                     .$row["title"]."</a></td>"
-                                    ."<td>".substr($row["max_in_date"],0,10)."</td>"."</tr>";
+                                    ."<td>".substr($row["max_in_date"],5,5)."</td>"."</tr>";
                             }
                         }
 
@@ -148,7 +148,7 @@ if($NOIP_flag[0]==0)$view_month_rank=mysql_query_cache("select user_id,nick,coun
                                 echo "<tr>"."<td>"
                                     ."<a href=\"contest.php?cid=".$row["contest_id"]."\">"
                                     .$row["title"]."</a></td>"
-                                    ."<td>".$row["start_time"]."</td>"."</tr>";
+                                    ."<td>".substr($row["start_time"],5,5)."</td>"."</tr>";
                             }
                         }
                     ?>
