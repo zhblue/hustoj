@@ -351,7 +351,11 @@
   $MSG_STRING_INDEX_OUT_OF_BOUNDS_EXCEPTION="字符串的字符下标越界，检查subString,charAt等方法的参数";
   $MSG_WRONG_OUTPUT_TYPE_EXCEPTION="二进制输出错误，检查是否误将数值类型作为字符输出，或者输出了不打印字符的情况。";
   $MSG_NON_ZERO_RETURN="Main函数不能返回非零的值，否则视同程序出错。";
-
+  $MSG_EXPECTED="期望值";
+  $MSG_YOURS="你的程序输出";
+  $MSG_FILNENAME="文件名";
+  $MSG_SIZE="大小";
+  
 
   // template/../ceinfo.php
   $MSG_ERROR_EXPLAIN="辅助解释";
