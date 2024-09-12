@@ -341,7 +341,11 @@
  $MSG_STRING_INDEX_OUT_OF_BOUNDS_EXCEPTION ="字符串的字符下標越界，檢查subString,charAt等方法的參數";
  $MSG_WRONG_OUTPUT_TYPE_EXCEPTION="二進製輸出錯誤，檢查是否誤將數值類型作為字符輸出，或者輸出了不打印字符的情況。";
  $MSG_NON_ZERO_RETURN="Main函數不能返回非零的值，否則視同程式出錯。";
-	
+  $MSG_EXPECTED="期望值";
+  $MSG_YOURS="你的程式輸出";
+  $MSG_FILENAME="文件名";
+  $MSG_SIZE="大小";
+
  // template/../ceinfo.php
  $MSG_ERROR_EXPLAIN ="輔助解釋";
  $MSG_SYSTEM_OUT_PRINT =" Java中System.out.print用法跟C語言printf不同，請試用System.out.format ";
