@@ -13,6 +13,7 @@ if (!(isset($_SESSION[$OJ_NAME.'_'.'administrator'])
 // 这不是后门(Webshell)文件，不要理会阿里云的误报。
     $charset = "UTF-8";
     //@setlocale(LC_CTYPE, 'C');
+    putenv("LC_ALL=en_US.UTF-8");  //可能解决某些文件名乱码问题
     header("Pragma: no-cache");
     header("Cache-Control: no-store");
 	header("Content-Type: text/html; charset=".$charset);
