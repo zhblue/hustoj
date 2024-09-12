@@ -330,6 +330,10 @@ $MSG_HIDE="Hide";
 	$MSG_STRING_INDEX_OUT_OF_BOUNDS_EXCEPTION="문자열에 대한 참조번호가 크기를 벗어났습니다. subString, charAt 등에 사용된 매개 변수를 확인해주세요.";
 	$MSG_WRONG_OUTPUT_TYPE_EXCEPTION="숫자를 문자로 출력했는지, 출력할 수 없는 문자를 출력했는지 확인해주세요.";
 	$MSG_NON_ZERO_RETURN="main() 함수에서 0이 아닌 값을 반환하면 오류로 간주합니다. 반환 값을 확인해주세요.";
+  $MSG_EXPECTED="Expected Output";
+  $MSG_YOURS="Your Output";
+  $MSG_FILENAME="Filename";
+  $MSG_SIZE="Size";
 
 	// template/../ceinfo.php
 	$MSG_ERROR_EXPLAIN="설명";
