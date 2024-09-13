@@ -176,7 +176,7 @@ else {
     }
     zip_close($resource);
     unlink ( $_FILES ["fps"] ["tmp_name"] );
-    system ("rmdir $tempdir");
+    rmdir ($tempdir);
     }
   else {
   		echo ($tempfile);
