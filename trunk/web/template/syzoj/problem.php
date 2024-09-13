@@ -36,8 +36,6 @@ div[class*=ace_br] {
 <script src="<?php echo $OJ_CDN_URL.$path_fix."template/bs3/"?>marked.min.js"></script>
 <script src="<?php echo $OJ_CDN_URL.$path_fix."template/syzoj/js/"?>markdown-it.min.js"></script>
 
-<script defer src="<?php echo $OJ_CDN_URL.$path_fix."template/$OJ_TEMPLATE"?>/js/auto-render.min.js" ></script>
-
 <div class="padding ">
 <div class="ui center aligned grid">
     <div class="row">
