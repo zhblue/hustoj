@@ -152,6 +152,7 @@ Star us, please!
 	
 日期  | 类型 |  更新内容
 ------- | :--: | :-------
+09-14 | 更新 | 修订semantic ui对1200以上的屏幕宽度适应，修订MathJax的渲染过程。
 09-13 | 更新 | 更加友善的错误答案对比输出。
 09-08 | 更新 | 提交答案异步刷新为正确时，触发js网页特效。
 09-03 | 更新 | 用[PHPMailer](https://github.com/zhblue/hustoj/tree/PHPMailer)替换原邮件组件。
