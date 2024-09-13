@@ -152,6 +152,7 @@ Star us, please!
 	
 日期  | 类型 |  更新内容
 ------- | :--: | :-------
+09-13 | 更新 | 更加友善的错误答案对比输出。
 09-08 | 更新 | 提交答案异步刷新为正确时，触发js网页特效。
 09-03 | 更新 | 用[PHPMailer](https://github.com/zhblue/hustoj/tree/PHPMailer)替换原邮件组件。
 08-27 | 更新 | 打包更新[LiveCD](http://cdn.m.hustoj.com:8090/)，更新其中的QQ、向日葵、小熊猫C++，增加非snap独立运行的Chromium。
