@@ -778,7 +778,7 @@ void make_diff_out_simple(FILE *f1, FILE *f2,char * prefix, int c1, int c2, cons
                         fprintf(diff,"%s",buf);
                 }
                 fprintf(diff,"\n");
-                if(row>=100) break;
+                if(row>=5) break;
         }
         fprintf(diff,"\n\n");
         fclose(diff);
