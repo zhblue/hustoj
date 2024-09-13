@@ -745,7 +745,7 @@ void make_diff_out_simple(FILE *f1, FILE *f2,char * prefix, int c1, int c2, cons
                 fprintf(diff,"|");
                 if(row==1){
                         fprintf(diff,"%s",prefix);
-                        if(feof(f2)){
+                        if(feof(f2)&&strlen(prefix)>0){
                                 fprintf(diff,"|%s\n|",prefix);
                                 need=0;
                         }
