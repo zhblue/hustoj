@@ -55,7 +55,7 @@ div[class*=ace_br] {
     };
 </script>
 
-<script defer src="<?php echo $OJ_CDN_URL.$path_fix."template/$OJ_TEMPLATE"?>/js/auto-render.min.js" onload="renderMathInElement(document.body, katex_config)"></script>
+<script defer src="<?php echo $OJ_CDN_URL.$path_fix."template/$OJ_TEMPLATE"?>/js/auto-render.min.js" ></script>
 
 <div class="padding ">
 <div class="ui center aligned grid">
@@ -379,6 +379,7 @@ $(document).ready(function() {
         setIframeReadonly(false)
 
     });
+  renderMathInElement(document.body, katex_config)
 });
 
   }
