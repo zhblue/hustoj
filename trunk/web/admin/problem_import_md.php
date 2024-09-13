@@ -160,13 +160,16 @@ else {
 				}
 
 				//echo htmlentities("$description");
-				if(!hasProblem($title)){
-					$pid = addproblem($title,1,128, $description, $input, $output, $sample_input, $sample_output, $hint, $source, $spj, $OJ_DATA);
-					mkdir($OJ_DATA."/$pid/");
-				}else{
-					echo "skiped $title";
-					$pid=0;
+				$tail=0;
+				$ptitle = $title;
+				while (hasProblem($ptitle)) {
+					 $tail++;
+					 $ptitle = $title."_".$tail;
 				}
+				$title=$ptitle;
+				$pid = addproblem($title,1,128, $description, $input, $output, $sample_input, $sample_output, $hint, $source, $spj, $OJ_DATA);
+				mkdir($OJ_DATA."/$pid/");
+				
 				echo "PID:<a href='../problem.php?id=$pid' >".htmlentities($title,ENT_QUOTES,"UTF-8")."</a>";
 			}
 		}
