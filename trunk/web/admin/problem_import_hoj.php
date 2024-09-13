@@ -177,7 +177,7 @@ else {
     	system($cmd);
     
     }
-    system ("rmdir $tempdir");
+    rmdir ($tempdir);
   }
   else {
   echo ($tempfile);
