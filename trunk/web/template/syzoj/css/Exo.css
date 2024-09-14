@@ -1,3 +1,4 @@
+@charset "UTF-8";
 @font-face {
   font-family: 'Exo 2';
   font-style: normal;
@@ -8,7 +9,6 @@ body {
     background: linear-gradient(45deg, #f48fb1, #a5d6a7, #64b5f6); /* 增加饱和度的渐变背景 */
     background-size: 400% 400%; /* 增加背景的大小，使动画效果更加流畅 */
     animation: backgroundAnimation 20s ease infinite; /* 调整动画持续时间和曲线 */
-    font-family: Arial, sans-serif;
 }
   /* 背景颜色变化动画 */
 @keyframes backgroundAnimation {
