@@ -4,3 +4,17 @@
   font-weight: 600;
   src: url(7cH1v4okm5zmbvwkAx_sfcEuiD8jYPWsOdC6.ttf) format('truetype');
 }
+body {
+    background: linear-gradient(45deg, #f48fb1, #a5d6a7, #64b5f6); /* 增加饱和度的渐变背景 */
+    background-size: 400% 400%; /* 增加背景的大小，使动画效果更加流畅 */
+    animation: backgroundAnimation 20s ease infinite; /* 调整动画持续时间和曲线 */
+    font-family: Arial, sans-serif;
+}
+  /* 背景颜色变化动画 */
+@keyframes backgroundAnimation {
+    0% { background-position: 0% 0%; }
+    25% { background-position: 100% 0%; }
+    50% { background-position: 100% 100%; }
+    75% { background-position: 0% 100%; }
+    100% { background-position: 0% 0%; }
+}
