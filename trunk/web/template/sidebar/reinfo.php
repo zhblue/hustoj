@@ -48,54 +48,89 @@
         </div>
         </div>
     </div>
-<script src="<?php echo "template/bs3/"?>marked.min.js"></script>
-<script>
-
-  $(document).ready(function(){
-                marked.use({
-                  // 开启异步渲染
-                  async: true,
-                  pedantic: false,
-                  gfm: true,
-                  mangle: false,
-                  headerIds: false
+<?php if(isset($OJ_MARKDOWN)&&$OJ_MARKDOWN){ ?>
+          <script src="<?php echo $OJ_CDN_URL.$path_fix."template/bs3/"?>marked.min.js"></script>
+        <script>
+            $(document).ready(function(){
+                        marked.use({
+                          // 开启异步渲染
+                          async: true,
+                          pedantic: false,
+                          gfm: true,
+                          mangle: false,
+                          headerIds: false
+                        });
+                        $("#errtxt").each(function(){
+                                $(this).html(marked.parse($(this).html()));
+                        });
+                        // adding note for ```input1  ```output1 in description
+                        for(let i=1;i<10;i++){
+                                $(".language-input"+i).parent().before("<div><?php echo $MSG_Input?>"+i+":</div>");
+                                $(".language-output"+i).parent().before("<div><?php echo $MSG_Output?>"+i+":</div>");
+                        }
+        
+        
+                $("#errtxt table").addClass("ui mini-table cell striped");
+                $("#errtxt table tr:odd td").css({
+                    "border": "1px solid grey",
+                    "text-align": "center",
+                    "width": "200px",
+                    "background-color": "#8521d022",
+                    "height": "30px"
                 });
-                $("#errtxt").each(function(){
-                        $(this).html(marked.parse($(this).html()));
+                $("#errtxt table tr:even td").css({
+                    "border": "1px solid grey",
+                    "text-align": "center",
+                    "width": "200px",
+                    "background-color": "#2185d022",
+                    "height": "30px"
                 });
-                // adding note for ```input1  ```output1 in description
-                for(let i=1;i<10;i++){
-                        $(".language-input"+i).parent().before("<div><?php echo $MSG_Input?>"+i+":</div>");
-                        $(".language-output"+i).parent().before("<div><?php echo $MSG_Output?>"+i+":</div>");
-                }
+                $("#errtxt table th").css({
+                    "border": "1px solid grey",
+                    "width": "200px",
+                    "height": "30px",
+                    "background-color": "#2185d088",
+                    "text-align": "center"
+                });
+                <?php
+                  if(isset($OJ_DOWNLOAD)&&$OJ_DOWNLOAD){
+                    if(isset($OJ_DL_1ST_WA_ONLY) && $OJ_DL_1ST_WA_ONLY){
+                ?>
+                   let down=$($("#errtxt").find("h2")[0]);
+                   let filename=down.text();
+                   down.html("<a href='download.php?sid=<?php echo $id?>&name=" + filename+ "'>" + filename+ "</a>");
+                <?php
+                    }else{
+                ?>
+                   $("#errtxt").find("h2").each(function(){
+                           let down=$(this);
+                           let filename=down.text();
+                           console.log(filename);
+                           down.html("<a href='download.php?sid=<?php echo $id?>&name=" + filename+ "'>" + filename+ "</a>");
+                   });
+        
+                <?php
+                    }
+                  }
+                ?>
+                $("th").each(function(){
+                        let html=$(this).html();
+                        html=html.replace("Expected","<?php echo $MSG_EXPECTED ?>");
+                        html=html.replace("Yours","<?php echo $MSG_YOURS ?>");
+                        html=html.replace("filename","<?php echo $MSG_FILENAME ?>");
+                        html=html.replace("size","<?php echo $MSG_SIZE ?>");
+                        html=html.replace("result","<?php echo $MSG_RESULT ?>");
+                        html=html.replace("memory","<?php echo $MSG_MEMORY?>");
+                        html=html.replace("time","<?php echo $MSG_TIME ?>");
+                        $(this).html(html);
+        
+                });
+        
+            });
+        
+        </script>
 
-
-        $("#errtxt table").addClass("ui mini-table cell striped");
-        $("#errtxt table tr:odd td").css({
-            "border": "1px solid grey",
-            "text-align": "center",
-            "width": "200px",
-            "background-color": "#8521d022",
-            "height": "30px"
-        });
-        $("#errtxt table tr:even td").css({
-            "border": "1px solid grey",
-            "text-align": "center",
-            "width": "200px",
-            "background-color": "#2185d022",
-            "height": "30px"
-        });
-        $("#errtxt table th").css({
-            "border": "1px solid grey",
-            "width": "200px",
-            "height": "30px",
-            "background-color": "#2185d088",
-            "text-align": "center"
-        });
-
-  });
-</script>
-
+<?php } ?>
 <script>
     var pats=new Array();
     var exps=new Array();
@@ -136,92 +171,5 @@
       document.getElementById("errexp").innerHTML=expmsg;
     }
 
-
-
- function showDownload2(){
-      var errmsg = $("#errtxt").html();
-
-      // 从错误信息文本框中提取出第一组数据名称，并将其作为参数添加到下载链接中
-      var first_data_name = /========\[(.*?)\]=========/.exec(errmsg)[1];
-      errmsg=errmsg.replace(/========\[(.*)\]=========/, "<a href='download.php?sid=<?php echo $id?>&name=" + first_data_name + "'>" + first_data_name + "</a>");
-
-      $("#errtxt").html(errmsg);
- }
- function showDownload(){
-      var errmsg = $("#errtxt").html();
-      errmsg=errmsg.replace(/========\[(.*)\]=========/g,"<a href='download.php?sid=<?php echo $id?>&name=$1'>$1</a>");
-      $("#errtxt").html(errmsg);
- }
-
-
-    explain();
-    <?php
-  if(isset($OJ_DOWNLOAD)&&$OJ_DOWNLOAD){
-    if(isset($OJ_DL_1ST_WA_ONLY) && $OJ_DL_1ST_WA_ONLY){
-     echo  "showDownload2()";
-    }else{
-     echo  "showDownload();";
-    }
-  }
-?>
 </script>
-
-        <?php if(isset($OJ_MARKDOWN)&&$OJ_MARKDOWN){ ?>
-          <script src="<?php echo $OJ_CDN_URL.$path_fix."template/bs3/"?>marked.min.js"></script>
-<script>
-    marked.use({
-        async: true,
-        pedantic: false,
-        gfm: true,
-        mangle: false,
-        headerIds: false
-    });
-    $("#errtxt").each(function(){
-                        raw=raw.replaceAll("\n","|\n|");
-                        raw=raw.replaceAll("&gt;","|");
-                        raw=raw.replaceAll("&lt;","|");
-                        raw=raw.replace( /[\\\/]/g  ,"|");
-                        raw=raw.replaceAll("      |","|");
-                        raw=raw.replaceAll("|==============================|","\n");
-                        raw=raw.replaceAll("\n||\n","\n");
-                        raw=raw.replaceAll("Expected","期望输出");
-                        raw=raw.replaceAll("Yours|","你的输出|\n|:----|:----|");
-                        raw=raw.replaceAll("time_space_table:","文件|大小|结果|内存|耗时|\n|----|----|----|----|----");
-                        raw=raw.replaceAll(".in ","|");
-                        raw=raw.replaceAll(" bytes :","|");
-                        raw=raw.replaceAll(" mem=","|");
-                        raw=raw.replaceAll(" time=","|");
-
-                        <?php if ($jresult==5 ) {?>
-                                raw=raw.replaceAll(" ","<span class=blue>▯</span>");
-                        <?php } ?>
-                        $(this).html((raw));
-                        $(this).html(marked.parse(raw));
-
-    });
-    $("#errtxt table tr td").css({
-        "border": "1px solid grey",
-        "text-align": "left",
-        "width": "200px",
-        "height": "30px"
-    });
-
-    $("#errtxt table th").css({
-        "border": "1px solid grey",
-        "width": "200px",
-        "height": "30px",
-        "background-color": "#9e9e9ea1",
-        "text-align": "center"
-    });
-    $("#errtxt p").css({
-        "margin": "1em 0em -1em 0em"
-    });
-</script>
-
-    <?php } ?>
-
-
 <?php include("template/$OJ_TEMPLATE/footer.php");?>
-
- 
-
