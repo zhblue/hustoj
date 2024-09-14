@@ -102,26 +102,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="column">
-                            <h4 class="ui top attached block header">未通过的题目</h4>
-                            <div class="ui bottom attached segment">
-                                <script language='javascript'>
-                                    function p(id, c) {
-                                        document.write("<a href=problem.php?id=" + id + " class=\"ui basic label\" id=\"show-problem-id\">" + id +
-                                            " </a>");
-                                    }
-                                    <?php
-                                    $sql = "SELECT `sol`.`problem_id`, count(1) from solution sol where `sol`.`user_id`=? and `sol`.`result`!=4 and sol.problem_id != 0 and not exists (select * from solution s where s.user_id=sol.user_id and s.problem_id = sol.problem_id and s.result = 4) group by `sol`.`problem_id` ORDER BY `sol`.`problem_id` ASC";
-                                    if ($result = pdo_query($sql, $user)) {
-                                        foreach ($result as $row)
-                                            echo "p($row[0],$row[1]);";
-                                    }
-                                    ?>
-                                </script>
-                            </div>
-                        </div>
-                    </div>
+                  
                     <div class="row">
                         <div class="column">
                             <h4 class="ui top attached block header">
@@ -131,14 +112,14 @@
                             <div class="ui bottom attached segment">
                                 <script language='javascript'>
                                     function p(id, c) {
-                                        if(c>0)document.write("<a title='Passed' href=problem.php?id=" + id + " class=\"ui green basic label\" id=\"show-problem-id\">" + id + " </a>");
+                                        if(c>0)document.write("<a title=\"U've Passed!\" href=problem.php?id=" + id + " class=\"ui green basic label\" id=\"show-problem-id\">" + id + " </a>");
                                         else document.write("<a title=\"U've Not Passed Yet!\" href=problem.php?id=" + id + " class=\"ui red basic label\" id=\"show-problem-id\">" + id + " </a>");
                                     }
-
                                     function ptot(len) {
                                         document.write("<div style='text-align:right;margin-bottom:10px'><div class='ui green small horizontal statistic'><div class='value'>" + len + "</div><div class='label'>AC</div></div></div>")
                                     }
                                     <?php
+				    $ac=array();
                                     $sql = "SELECT `problem_id`,count(1) from solution where `user_id`=? and result=4 and problem_id != 0 group by `problem_id` ORDER BY `problem_id` ASC";
                                     if ($ret = pdo_query($sql, $user)) {
                                         $len = count($ret);
@@ -148,6 +129,7 @@
                                                 echo "p($row[0],$row[1]);";
                                             else
                                                 echo "p($row[0],0);";
+					    array_push($ac,$row[0]);
                                         }
                                     }
                                     ?>
@@ -156,6 +138,27 @@
 
                         </div>
                     </div>
+		    <div class="row">
+                        <div class="column">
+                            <h4 class="ui top attached block header">未通过的题目</h4>
+                            <div class="ui bottom attached segment">
+                                <script language='javascript'>
+                                    function p(id, c) {
+                                        document.write("<a href=problem.php?id=" + id + " class=\"ui basic label\" id=\"show-problem-id\">" + id +
+                                            " </a>");
+                                    }
+                                    <?php
+                                    $sql = "SELECT `sol`.`problem_id`, count(1) from solution sol where `sol`.`user_id`=? and `sol`.`result`!=4 and sol.problem_id != 0 group by `sol`.`problem_id` ORDER BY `sol`.`problem_id` ASC";
+                                    if ($result = pdo_query($sql, $user)) {
+                                        foreach ($result as $row)
+                                            if(!in_array($row[0],$ac))echo "p($row[0],$row[1]);";
+                                    }
+                                    ?>
+                                </script>
+                            </div>
+                        </div>
+                    </div>
+    
 
                                         <div class="row">
                         <div class="column">

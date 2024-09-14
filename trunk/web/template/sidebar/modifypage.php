@@ -1,6 +1,6 @@
 <?php include("template/$OJ_TEMPLATE/header.php");?>
 <div class="padding">
-  <h1>修改用户信息</h1>
+  <h1><?php echo $MSG_USERINFO ?></h1>
   <div class="ui error message" id="error" data-am-alert hidden>
     <p id="error_info"></p>
   </div>
@@ -39,7 +39,7 @@
                 <?php if($OJ_VCODE){?>
                   <div class="field">
                     <label for="email"><?php echo $MSG_VCODE?>*</label>
-                    <input name="vcode" class="form-control" placeholder="<?php echo $MSG_VCODE?>" type="text">
+                    <input name="vcode" class="form-control" placeholder="<?php echo $MSG_VCODE?>" type="text" autocomplete=off >
                     <img alt="click to change" src="vcode.php" onclick="this.src='vcode.php?'+Math.random()" height="30px">
                   </div>
                 <?php }?>
@@ -51,30 +51,30 @@
   <div class="center"> <a name='MyOJ'>&nbsp;</a> <label >My OJ:</label>
           <form action="saasinit.php" method="post" role="form" class="ui form">
                 <div class="field">
-                    <label for="template">模板</label>
+                    <label for="template"><?php echo $MSG_TEMPLATE ?></label>
                     <select name="template" class="form-control" >
                                 <option>bs3</option>
                                 <option>mdui</option>
                                 <option>syzoj</option>
                                 <option>sweet</option>
                                 <option>bshark</option>
-                                <option>mario</option>
+                                <option>sidebar</option>
                     </select>
                 </div>
 
                 <div class="field">
-                    <label for="friendly">友善级别</label>
+                    <label for="friendly"><?php echo $MSG_FRIENDLY_LEVEL ?></label>
                     <select name="friendly" class="form-control" >
-                                <option value=0>0=不友善</option>
-                                <option value=1>1=0+中国时区</option>
-                                <option value=2>2=1+强制中文</option>
-                                <option value=3>3=2+显示对比,关闭验证码</option>
-                                <option value=4>4=3+开启内邮,代码自动分享</option>
-                                <option value=5>5=4+开启测试运行</option>
-                                <option value=6>6=5+保持登陆状态</option>
-                                <option value=7>7=6+开启讨论版</option>
-                                <option value=8>8=7+可以下载测试数据</option>
-                                <option value=9>9=8+允许访客提交</option>
+                                <option value=0>0=<?php echo   $MSG_FRIENDLY_L0 ?></option>
+                                <option value=1>1=0+<?php echo   $MSG_FRIENDLY_L1 ?></option>
+                                <option value=2>2=1+<?php echo   $MSG_FRIENDLY_L2 ?></option>
+                                <option value=3>3=2+<?php echo   $MSG_FRIENDLY_L3 ?></option>
+                                <option value=4>4=3+<?php echo   $MSG_FRIENDLY_L4 ?></option>
+                                <option value=5>5=4+<?php echo   $MSG_FRIENDLY_L5 ?></option>
+                                <option value=6>6=5+<?php echo   $MSG_FRIENDLY_L6 ?></option>
+                                <option value=7>7=6+<?php echo   $MSG_FRIENDLY_L7 ?></option>
+                                <option value=8>8=7+<?php echo   $MSG_FRIENDLY_L8 ?></option>
+                                <option value=9>9=8+<?php echo   $MSG_FRIENDLY_L9 ?></option>
                     </select>
                 </div>
                 <button name="submit" type="submit" class="ui button">重新初始化</button>

@@ -36,27 +36,6 @@ div[class*=ace_br] {
 <script src="<?php echo $OJ_CDN_URL.$path_fix."template/bs3/"?>marked.min.js"></script>
 <script src="<?php echo $OJ_CDN_URL.$path_fix."template/syzoj/js/"?>markdown-it.min.js"></script>
 
-
-<script src="<?php echo $OJ_CDN_URL.$path_fix."template/syzoj/js/"?>katex.min.js"></script>
-
-<script>
-    var katex_config = {
-        delimiters: [{
-                left: "$$",
-                right: "$$",
-                display: true
-            },
-            {
-                left: "$",
-                right: "$",
-                display: false
-            }
-        ]
-    };
-</script>
-
-<script defer src="<?php echo $OJ_CDN_URL.$path_fix."template/$OJ_TEMPLATE"?>/js/auto-render.min.js" onload="renderMathInElement(document.body, katex_config)"></script>
-
 <div class="padding ">
 <div class="ui center aligned grid">
     <div class="row">
@@ -84,7 +63,7 @@ div[class*=ace_br] {
       </div>
       <div class="row" style="margin-top: -23px">
         <!--   <span class="ui label">题目类型：传统</span> -->
-          <span class="ui label"><?php echo $MSG_JUDGE_STYLE ?>：<?php if($row['spj']) echo "$MSG_SPJ"; else echo "$MSG_TEXT_COMPARE" ; ?></span>
+          <span class="ui label"><?php echo $MSG_JUDGE_STYLE ?>：<?php echo array($MSG_NJ,$MSG_SPJ,$MSG_RTJ)[$row['spj']] ; ?> </span>
           <span class="ui label"><?php echo $MSG_Creator ?>：<span id='creator'></span></span>
       </div>
       <div class="row" style="margin-top: -23px">
@@ -105,15 +84,15 @@ div[class*=ace_br] {
 	      if($OJ_BBS)echo "<a class=\"small ui red button\" href=\"discuss.php?pid=$id\">$MSG_BBS</a>";
             }else{
               echo "<a href=\"contest.php?cid=$cid\" class=\"ui orange button\">$MSG_RETURN_CONTEST</a>";
-	      if($contest_is_over)
-              		echo "<a id='submit'  class=\"small ui primary button\" href=\"submitpage.php?id=$id\">$MSG_SUBMIT</a>";
-	      else
-	      		echo "<a id='submit'  class=\"small ui primary button\" href=\"submitpage.php?cid=$cid&pid=$pid&langmask=$langmask\">$MSG_SUBMIT</a>";
-              echo "<a class=\"small ui positive button\" href=\"status.php?problem_id=$id\">$MSG_GLOBAL$MSG_SUBMIT_RECORD</a>";
+              if($contest_is_over)
+                        echo "<a id='submit'  class=\"small ui primary button\" href=\"submitpage.php?id=$id\">$MSG_SUBMIT</a>";
+              else
+                        echo "<a id='submit'  class=\"small ui primary button\" href=\"submitpage.php?cid=$cid&pid=$pid&langmask=$langmask\">$MSG_SUBMIT</a>";
+ 	      echo "<a class=\"small ui positive button\" href=\"status.php?problem_id=$id\">$MSG_GLOBAL$MSG_SUBMIT_RECORD</a>";
               echo "<a class=\"small ui orange button\" href=\"status.php?problem_id=$PID[$pid]&cid=$cid\">$MSG_THIS_CONTEST$MSG_SUBMIT_RECORD</a>";
 
             }
-	      echo "<a class='small ui primary button' href='#' onclick='transform()' role='button'>$MSG_SHOW_OFF</a>";
+	      if(!file_exists($OJ_DATA."/".$id."/solution.name")) echo "<a class='small ui primary button' href='#' onclick='transform()' role='button'>$MSG_SHOW_OFF</a>";
           ?>
           
       </div>
@@ -244,11 +223,14 @@ div[class*=ace_br] {
               echo "<a class=\"small ui orange button\" href=\"problemstatus.php?id=$id\">$MSG_STATISTICS</a>";
 	      if($OJ_BBS)echo "<a class=\"small ui red button\" href=\"discuss.php?pid=$id\">$MSG_BBS</a>";
             }else{
-              echo "<a href=\"contest.php?cid=$cid\" class=\"ui orange button\">$MSG_RETURN_CONTEST</a>";
-              echo "<a id='submit'  class=\"small ui primary button\" href=\"submitpage.php?cid=$cid&pid=$pid&langmask=$langmask\">$MSG_SUBMIT</a>";
+              echo "<a href=\"contest.php?cid=$cid\" class=\"ui orange button\">$MSG_RETURN_CONTEST</a>"; 
+              if($contest_is_over)
+                        echo "<a id='submit'  class=\"small ui primary button\" href=\"submitpage.php?id=$id\">$MSG_SUBMIT</a>";
+              else
+                        echo "<a id='submit'  class=\"small ui primary button\" href=\"submitpage.php?cid=$cid&pid=$pid&langmask=$langmask\">$MSG_SUBMIT</a>";
               echo "<a class=\"small ui positive button\" href=\"status.php?problem_id=$PID[$pid]&cid=$cid\">$MSG_SUBMIT_RECORD</a>";
             }
-	      echo "<a class='small ui primary button' href='#' onclick='transform()' role='button'>$MSG_SHOW_OFF</a>";
+	    if(!file_exists($OJ_DATA."/".$id."/solution.name"))   echo "<a class='small ui primary button' href='#' onclick='transform()' role='button'>$MSG_SHOW_OFF</a>";
           ?>
           
       </div>
@@ -266,7 +248,6 @@ div[class*=ace_br] {
 </style>
   <script type="text/javascript">
   
-  var mainWidth=parseInt($("#main").css("width"));
   function transform(){
         let height=document.body.clientHeight;
 <?php if ( $row[ 'spj' ]==2 ) {?>
@@ -289,7 +270,7 @@ div[class*=ace_br] {
                 window.setTimeout('$("#ansFrame")[0].scrollIntoView()',1000);
 	}else{
         	main.removeClass("container");
-		main.css("width",width2-168);
+		main.css("width",width2);
 		main.css("margin-left","10px");
        	 	main.parent().append("<div id='submitPage' class='container' style='opacity:0.95;position:fixed;z-index:1000;top:49px;right:-"+width2+"px'></div>");
 		$("#submitPage").html("<iframe src='"+submitURL+"&spa' width='"+width+"px' height='"+height+"px' ></iframe>");
@@ -327,7 +308,7 @@ $(document).ready(function() {
     $("#dragButton").mousedown(function(event) {
         if (event.target === this) { // Only allow dragging if the mouse button is clicked on the drag button itself
             isDragging = true;
-            startX = event.pageX-168;
+            startX = event.pageX;
             initialWidth = parseInt($("#main").css("width"));
             $(this).css("background-color", "#a5ff00");
 
@@ -338,11 +319,10 @@ $(document).ready(function() {
 
     // 拖拽过程中更新宽度
     $(document).mousemove(function(event) {
-	    let mainW=mainWidth;
         if (isDragging) {
             let diffX = event.pageX - startX;
             let newWidth = initialWidth + diffX;
-            $("#main").css("width", newWidth-168);
+            $("#main").css("width", newWidth);
             $("#submitPage").css("right", "-" + newWidth + "px");
             $("#submitPage").find("iframe").attr("width", document.body.clientWidth - newWidth + "px");
         }
@@ -378,6 +358,7 @@ $(document).ready(function() {
         setIframeReadonly(false)
 
     });
+
 });
 
   }

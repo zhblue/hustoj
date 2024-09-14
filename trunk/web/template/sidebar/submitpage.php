@@ -22,7 +22,7 @@
 
 <script src="<?php echo $OJ_CDN_URL?>include/checksource.js"></script>
 <form id=frmSolution action="submit.php<?php if (isset($_GET['spa'])) echo "?spa" ?>" method="post" onsubmit='do_submit()' enctype="multipart/form-data" >
-<?php if (!isset($_GET['spa'])) {?>
+<?php if (!isset($_GET['spa']) || $solution_name ) {?>
         <input type='file' name='answer' placeholder='Upload answer file' >
 <?php } ?>
 
@@ -70,7 +70,7 @@ echo"<option value=$i ".( $lastlang==$i?"selected":"").">
 <span class="btn" id=result><?php echo $MSG_STATUS?></span>	
 <?php }?>
 </span>
-<?php if($spj <= 1): ?>
+<?php if($spj <= 1 &&  !$solution_name){ ?>
     <button onclick="toggleTheme(event)" style="background-color: bisque; position: absolute; top: 5px; right:70px;" v-if="false">
         <i>🌗</i>
     </button>
@@ -80,23 +80,30 @@ echo"<option value=$i ".( $lastlang==$i?"selected":"").">
     <button onclick="decreaseFontSize(event)" style="background-color: bisque; position: absolute; top: 5px; right:10px;" v-if="false">
         <i>➖</i>
     </button>
-<?php endif; ?>
+<?php } ?>
 
-<?php if($OJ_ACE_EDITOR){ 
+<?php 
+        if(!$solution_name){
+                if($OJ_ACE_EDITOR){
+                        if (isset($OJ_TEST_RUN)&&$OJ_TEST_RUN)
+                                $height="400px";
+                        else
+                                $height="500px";
+                ?>
+                <pre style="width:90%;height:<?php echo $height?>" cols=180 rows=16 id="source"><?php echo htmlentities($view_src,ENT_QUOTES,"UTF-8")?></pre>
+                <input type=hidden id="hide_source" name="source" value=""/>
 
-			if (isset($OJ_TEST_RUN)&&$OJ_TEST_RUN) $height="400px";else $height="500px";
+        <?php }else{ ?>
+                <textarea style="width:80%;height:600" cols=180 rows=30 id="source" name="source"><?php echo htmlentities($view_src,ENT_QUOTES,"UTF-8")?></textarea>
+        <?php }
+
+        }else{
+                echo "<br><h2>指定上传文件：$solution_name</h2>";
+
+        }
+
 	?>
-		        	
-
-   
-	<pre style="width:90%;height:<?php echo $height?>" cols=180 rows=16 id="source"><?php echo htmlentities($view_src,ENT_QUOTES,"UTF-8")?></pre>
-	<input type=hidden id="hide_source" name="source" value=""/>
-
-<?php }else{ ?>
-	<textarea style="width:80%;height:600" cols=180 rows=30 id="source" name="source"><?php echo htmlentities($view_src,ENT_QUOTES,"UTF-8")?></textarea>
-<?php }?>
-
-        <style>
+<style>
             .button, input, optgroup, select, textarea {
     font-family: sans-serif;
     font-size: 150%;
@@ -107,7 +114,7 @@ echo"<option value=$i ".( $lastlang==$i?"selected":"").">
         </style>
          <div class="row">
             <div class="column" style="display: flex;">
-<?php if ( isset($OJ_TEST_RUN) && $OJ_TEST_RUN && $spj<=1 ){?>
+<?php if ( isset($OJ_TEST_RUN) && $OJ_TEST_RUN && $spj<=1 && !$solution_name  ){?>
 <div style="
    
      margin-left: 60px;
@@ -139,10 +146,10 @@ echo"<option value=$i ".( $lastlang==$i?"selected":"").">
 
           <textarea style="
           width:100%;background-color: white;
-          " cols=10 rows=5 id="out" name="out" disabled="true" placeholder='<?php echo htmlentities($view_sample_output,ENT_QUOTES,'UTF8')?>' ></textarea>    
+          " cols=10 rows=5 id="out" name="out" disabled="true" placeholder='<?php echo htmlentities($view_sample_output,ENT_QUOTES,'UTF-8')?>' ></textarea>    
      </div>
 <?php } ?>
-<?php if (isset($OJ_TEST_RUN)&&$OJ_TEST_RUN){?>
+<?php if (isset($OJ_TEST_RUN)&&$OJ_TEST_RUN && $spj<=1 && !$solution_name  ){?>
         <!--运行按钮-->
             <input style="
              margin-top: 30px;
@@ -174,10 +181,14 @@ foreach($judge_result as $result){
     echo "'$result',";
 }
 ?>''];
-function print_result(solution_id)
-{
-sid=solution_id;
-$("#out").load("status-ajax.php?tr=1&solution_id="+solution_id);
+function print_result(solution_id){
+	sid=solution_id;
+	$("#out").load("status-ajax.php?tr=1&solution_id="+solution_id);
+}
+function fancy(td){
+        $(td).append("<div id='bannerFancy' style='position:absolute;top:0px;left:0px;width:100%' class='ui main container'></div><audio autoplay=\"autoplay\" preload=\"auto\" src=\"http://cdn.m.hustoj.com:8090/bg/ac.mp3\"> </audio>");
+        window.setTimeout("$(\"#bannerFancy\").html(\"<iframe border=0 src='fancy.php' width='100%' height='800px'></iframe>\");",500);
+        window.setTimeout("$(\"#bannerFancy\").remove();",10000);
 }
 function fresh_result(solution_id)
 {
@@ -187,12 +198,14 @@ function fresh_result(solution_id)
 		if($("#vcode")!=null) $("#vcode").click();
 		return ;
 	}
+	
 	sid=parseInt(solution_id);
-	if(sid<=0){
-		tb.innerHTML="<?php echo  str_replace("10",$OJ_SUBMIT_COOLDOWN_TIME,$MSG_BREAK_TIME) ?>";		
-		if($("#vcode")!=null) $("#vcode").click();
-		return ;
-	}
+        if(sid<=0){
+                tb.innerHTML="<?php echo  str_replace("10",$OJ_SUBMIT_COOLDOWN_TIME,$MSG_BREAK_TIME) ?>";
+                if($("#vcode")!=null) $("#vcode").click();
+                return ;
+        }
+
 	var xmlhttp;
 	if (window.XMLHttpRequest)
 	{// code for IE7+, Firefox, Chrome, Opera, Safari
@@ -230,6 +243,9 @@ function fresh_result(solution_id)
 				window.setTimeout("print_result("+solution_id+")",2000);
 				count=1;
 			}
+			<?php if ( $OJ_FANCY_RESULT ) {?>
+				if(ra[0]==4) fancy(tb);
+			<?php } ?>
 		}
 	}
 	xmlhttp.open("GET","status-ajax.php?solution_id="+solution_id,true);
@@ -295,6 +311,7 @@ function do_submit(){
 	document.getElementById("frmSolution").target="_self";
 	
 <?php if(isset($_GET['spa'])){?>
+	<?php if($solution_name) { ?>document.getElementById("frmSolution").submit(); <?php } ?>  //如果是指定文件名，则强制用文件post方式提交。
         $.post("submit.php?ajax",$("#frmSolution").serialize(),function(data){fresh_result(data);});
         $("#Submit").prop('disabled', true);
         $("#TestRub").prop('disabled', true);
@@ -401,6 +418,10 @@ function loadFromBlockly(){
 }
 </script>
 <script language="Javascript" type="text/javascript" src="<?php echo $OJ_CDN_URL?>include/base64.js"></script>
+<?php if (!empty($remote_oj)){
+                echo "<iframe src=remote.php height=0px width=0px ></iframe>";
+      }
+?>
 <?php if($OJ_ACE_EDITOR){ ?>
 <script src="<?php echo $OJ_CDN_URL?>ace/ace.js"></script>
 <script src="<?php echo $OJ_CDN_URL?>ace/ext-language_tools.js"></script>
@@ -430,9 +451,8 @@ function loadFromBlockly(){
 	}
    }
    $(document).ready(function(){
-
-	if($("#vcode")!=undefined) $("#vcode").click();
    	$("#source").css("height",window.innerHeight-180);  
+	if($("#vcode")!=undefined) $("#vcode").click();
 	if(!!localStorage){
 		let key="<?php echo $_SESSION[$OJ_NAME.'_user_id']?>source:"+location.href;
 		let saved=localStorage.getItem(key);

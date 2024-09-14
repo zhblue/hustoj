@@ -7,14 +7,14 @@
   <form id=simform class="ui mini form" action="status.php" method="get">
     <div class="inline fields" style="margin-bottom: 25px; white-space: nowrap; ">
       <label style="font-size: 1.2em; margin-right: 1px; "><?php echo $MSG_PROBLEM_ID?>：</label>
-      <div class="field"><input name="problem_id" style="width: 50px; " type="text" value="<?php echo  htmlspecialchars($problem_id, ENT_QUOTES) ?>"></div>
+      <div class="field"><input name="problem_id" style="width: 50px; " type="text" value="<?php echo isset($problem_id)?htmlspecialchars($problem_id, ENT_QUOTES):"" ?>"></div>
         <label style="font-size: 1.2em; margin-right: 1px; "><?php echo $MSG_USER?>：</label>
-        <div class="field"><input name="user_id" style="width: 50px; " type="text" value="<?php echo  htmlspecialchars($user_id, ENT_QUOTES) ?>"></div>
+        <div class="field"><input name="user_id" style="width: 50px; " type="text" value="<?php echo  isset($user_id)?htmlspecialchars($user_id, ENT_QUOTES):"" ?>"></div>
 
         <label style="font-size: 1.2em; margin-right: 1px; "><?php echo $MSG_SCHOOL?>：</label>
-        <div class="field"><input name="school" style="width: 50px; " type="text" value="<?php echo  htmlspecialchars($school, ENT_QUOTES) ?>"></div>
+        <div class="field"><input name="school" style="width: 50px; " type="text" value="<?php echo isset($school)?htmlspecialchars($school, ENT_QUOTES):"" ?>"></div>
         <label style="font-size: 1.2em; margin-right: 1px; "><?php echo $MSG_GROUP_NAME?>：</label>
-        <div class="field"><input name="group_name" style="width: 50px; " type="text" value="<?php echo  htmlspecialchars($group_name, ENT_QUOTES) ?>"></div>
+        <div class="field"><input name="group_name" style="width: 50px; " type="text" value="<?php echo isset($group_name)?htmlspecialchars($group_name, ENT_QUOTES):"" ?>"></div>
         <label style="font-size: 1.2em; margin-right: 1px; "><?php echo $MSG_LANG?>：</label>
         <select class="form-control" size="1" name="language" style="width: 110px;font-size: 1em ">
           <option value="-1">All</option>
@@ -79,11 +79,9 @@
   <table id="result-tab" class="ui very basic center aligned table" style="white-space: nowrap; " id="table">
     <thead>
       <tr>
-                <th class='desktop-only item'><?php echo $MSG_RUNID?></th>
-                <th><?php echo $MSG_USER?></th>
-                                                <th>
-                                                        <?php echo $MSG_NICK?>
-                                                </th>
+        <th class='desktop-only item'><?php echo $MSG_RUNID?></th>
+        <th><?php echo $MSG_USER?></th>
+        <th><?php echo $MSG_NICK?></th>
         <th><?php echo $MSG_PROBLEM_ID?></th>
         <th><?php echo $MSG_RESULT?></th>
         <th><?php echo $MSG_MEMORY?></th>
@@ -98,7 +96,7 @@
                                                 } ?>
       </tr>
     </thead>
-    <tbody>
+    <tbody  style='font-weight:700' >
       <!-- <tr v-for="item in items" :config="displayConfig" :show-rejudge="false" :data="item" is='submission-item'>
           </tr> -->
     <?php
@@ -107,13 +105,13 @@
     echo "<tr>";
     foreach($row as $table_cell){
       if ($i==4)
-        echo "<td class='td_result'><b>";
+        echo "<td class='td_result'>";
       else if($i==0 || $i>7 && $i!=9)
-        echo "<td class='desktop-only item '><b>";
+        echo "<td class='desktop-only item '>";
       else
-        echo "<td><b>";
+        echo "<td>";
       echo $table_cell;
-      echo "</b></td>";
+      echo "</td>";
       $i++;
     }
     echo "</tr>\n";
@@ -158,8 +156,9 @@
                 echo "'$result',";
         } ?>
         ''];
-   <?php echo " var oj_mark='$OJ_MARK'; "?>
+   var oj_mark='<?php echo $OJ_MARK ?>'; 
+   var user_id="<?php if (isset($_SESSION[$OJ_NAME."_user_id"]) && $OJ_FANCY_RESULT ) echo $_SESSION[$OJ_NAME."_user_id"]; ?>";
 </script>
-        <script src="template/syzoj/auto_refresh.js?v=0.52" ></script>
+        <script src="template/syzoj/auto_refresh.js?v=0.520" ></script>
 
 <?php include("template/$OJ_TEMPLATE/footer.php");

@@ -34,7 +34,12 @@ function findRow(solution_id) {
                         return rows[i];
         }
 }
-
+function fancy(td){
+        console.log(user_id+":fancy");
+        $(td).html("<div id='bannerFancy' style='position:absolute;top:0px;left:0px;width:100%' class='ui main container'></div><audio autoplay=\"autoplay\" preload=\"auto\" src=\"http://cdn.m.hustoj.com:8090/bg/ac.mp3\"></audio>");
+        window.setTimeout("$(\"#bannerFancy\").html(\"<iframe border=0 src='fancy.php' width='100%' height='800px'></iframe>\");",500);
+        window.setTimeout("$(\"#bannerFancy\").remove();",5000);
+}
 function fresh_result(solution_id) {
         var xmlhttp;
         if (window.XMLHttpRequest) {// code for IE7+, Firefox, Chrome, Opera, Safari
@@ -74,8 +79,10 @@ function fresh_result(solution_id) {
                                 //console.log(ra[0]);
                                 switch (ra[0]) {
                                         case  4:
+                                                if(user_id==ra[5]) fancy(row.cells[4]);
+                                                //break;
                                         case 14:
-                                                row.cells[4].innerHTML = "<a href=reinfo.php?sid="+solution_id+" class='"+judge_color[ra[0]]+"'>"+judge_result[ra[0]]+"</a>";
+                                                row.cells[4].innerHTML += "<a href=reinfo.php?sid="+solution_id+" class='"+judge_color[ra[0]]+"'>"+judge_result[ra[0]]+"</a>";
                                                 break;
                                         case 5:
                                         case 6:
