@@ -243,7 +243,9 @@ function fresh_result(solution_id)
 				window.setTimeout("print_result("+solution_id+")",2000);
 				count=1;
 			}
-			if(ra[0]==4) fancy(tb);
+			<?php if ( $OJ_FANCY_RESULT ) {?>
+				if(ra[0]==4) fancy(tb);
+			<?php } ?>
 		}
 	}
 	xmlhttp.open("GET","status-ajax.php?solution_id="+solution_id,true);
