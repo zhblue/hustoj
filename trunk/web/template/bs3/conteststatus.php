@@ -347,7 +347,9 @@
 		echo "'$result',";
 	} ?>
   ''];
-  var oj_mark= <?php echo "'$OJ_MARK'";?>;
+   var oj_mark='<?php echo $OJ_MARK ?>'; 
+   var user_id="<?php if (isset($_SESSION[$OJ_NAME."_user_id"]) && $OJ_FANCY_RESULT ) echo $_SESSION[$OJ_NAME."_user_id"]; ?>";
+
 </script>
 
 <script src="<?php echo $OJ_CDN_URL?>template/<?php echo $OJ_TEMPLATE?>/auto_refresh.js" ></script>
