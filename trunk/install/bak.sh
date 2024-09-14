@@ -13,6 +13,7 @@ echo "delete from source_code where solution_id in (select solution_id from solu
 echo "delete from source_code_user where solution_id in (select solution_id from solution where problem_id=0 and result>4);"|mysql -h $SERVER -P $PORT -u$USER -p$PASSWORD $DATABASE 
 echo "delete from runtimeinfo where solution_id in (select solution_id from solution where problem_id=0 and result>4);"|mysql -h $SERVER -P $PORT -u$USER -p$PASSWORD $DATABASE 
 echo "delete from compileinfo where solution_id in (select solution_id from solution where problem_id=0 and result>4);"|mysql -h $SERVER -P $PORT -u$USER -p$PASSWORD $DATABASE 
+echo "update solution set result=5 where result<4 and in_date<curdate()-interval 3 day ;"|mysql -h $SERVER -P $PORT -u$USER -p$PASSWORD $DATABASE 
 echo "delete from loginlog where time<curdate()-interval 6 month;"|mysql -h $SERVER -P $PORT -u$USER -p$PASSWORD $DATABASE 
 echo "delete from solution where problem_id=0 and result>4 "|mysql -h $SERVER -P $PORT -u$USER -p$PASSWORD $DATABASE 
 
