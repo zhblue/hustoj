@@ -501,7 +501,7 @@ for ($i=0; $i<$rows_cnt; $i++) {
       else
         $view_status[$i][6] = $language_name[$row['language']];
         
-      if( (!(isset($OJ_OLD_FASHINED) && $OJ_OLD_FASHINED )) && ($OJ_TEMPLATE=="syzoj" || $OJ_TEMPLATE=="bs3" ) ) {
+      if( (!(isset($OJ_OLD_FASHINED) && $OJ_OLD_FASHINED )) && ($OJ_TEMPLATE=="syzoj" || $OJ_TEMPLATE=="bs3" ) && $OJ_AUTO_SHOW_OFF ) {
             $edit_link="problem.php";
       }else {
             $edit_link="submitpage.php";
