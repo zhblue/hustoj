@@ -25,6 +25,7 @@ alter table problem add index key_p_def(defunct);
 alter table contest add index key_c_def(defunct);
 alter table contest add index key_c_end(end_time);
 alter table contest add index key_c_dend(defunct,end_time);
+alter table users add column starred int default 0 after activecode ;
 #create fulltext index problem_title_source_index on problem(title,source);
 
                                                                                                          
