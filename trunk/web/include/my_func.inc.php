@@ -1,4 +1,5 @@
 <?php
+require_once(dirname(__FILE__)."/db_info.inc.php");
 require_once(dirname(__FILE__)."/curl.php");
 require_once(dirname(__FILE__)."/const.inc.php");
 function has_bad_words($words){
@@ -12,6 +13,17 @@ function has_bad_words($words){
                 }
         }
         return false;
+}
+function starred($user_id){
+   $stars=pdo_query("select starred from users where user_id=?",$user_id);
+   if(!empty($stars)&& $stars[0][0]>0 ) return true;
+   $stars=json_decode(curl_get("https://api.github.com/users/$user_id/starred?per_page=100"));
+   foreach( $stars as $star){
+           if($star->full_name=="zhblue/hustoj"){
+                return true;
+           }
+   }
+   return false;
 }
 function create_subdomain($user_id,$template="bs3",$friendly="0"){
         $user_id=strtolower($user_id);
