@@ -2762,8 +2762,8 @@ float raw_text_judge( char *infile, char *outfile, char *userfile, float *total_
                 int j=0;
                 for(j=user_length-1;'\n'==user_answer[j]||'\r'==user_answer[j];j--){
                         user_answer[j]='\0';
-                        trim(user_answer);
                 }
+                trim(user_answer);
                 if(num>0&&num<=total){
                         if(strcasecmp(ans[num],user_answer)==0 || strcasecmp(ans[num],"*")==0 || strcasecmp(ans[num]," *")==0){
                                 mark+=m[num];
@@ -2771,6 +2771,8 @@ float raw_text_judge( char *infile, char *outfile, char *userfile, float *total_
                               if(raw_text_diff) fprintf(df,"%d Answer:%s[You:%s] -%.1f\n",i,ans[i],user_answer,m[i]);
                         }
                         m[num]=0;
+                }else{
+                        break;
                 }
                 free(ans[i]);
         }
