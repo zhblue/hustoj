@@ -43,9 +43,9 @@ if($flag&&!isset($_SESSION[$OJ_NAME.'_'.'administrator'])) // administrator need
 
 $view_title=$user ."@".$OJ_NAME;
 if(isset($_SESSION[$OJ_NAME.'_'.'administrator']) || (isset($_SESSION[$OJ_NAME.'_'.'user_id']) && $_SESSION[$OJ_NAME.'_'.'user_id']==$user) )
-    $sql="SELECT `school`,`email`,`nick` FROM `users` WHERE `user_id`=? ";
+    $sql="SELECT * FROM `users` WHERE `user_id`=? ";
 else 
-    $sql="SELECT `school`,`email`,`nick` FROM `users` WHERE `user_id`=? and user_id not in ($OJ_RANK_HIDDEN) ";
+    $sql="SELECT * FROM `users` WHERE `user_id`=? and user_id not in ($OJ_RANK_HIDDEN) ";
 $result=mysql_query_cache($sql,$user);
 $row_cnt=count($result);
 if ($row_cnt==0){ 
@@ -54,16 +54,20 @@ if ($row_cnt==0){
 	exit(0);
 }
 
- $row=$result[0];
+$row=$result[0];
 $school=$row['school'];
 $email=$row['email'];
 $nick=$row['nick'];
+$starred=$row['starred'];
+//todo: check and update starred
+
 
 // count solved
 $sql="SELECT count(DISTINCT problem_id) as `ac` FROM `solution` WHERE `user_id`=? AND `result`=4";
 $result=mysql_query_cache($sql,$user) ;
  $row=$result[0];
 $AC=$row['ac'];
+
 
 // count submission
 $sql="SELECT count(solution_id) as `Submit` FROM `solution` WHERE `user_id`=? and  problem_id>0";
