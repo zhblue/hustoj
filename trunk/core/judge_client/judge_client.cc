@@ -2774,8 +2774,11 @@ float raw_text_judge( char *infile, char *outfile, char *userfile, float *total_
                 }else{
                         break;
                 }
+        }
+	for(int i=1;i<=total;i++){
                 free(ans[i]);
         }
+ 
         free(user_answer);
         fclose(user);
         fclose(df);
