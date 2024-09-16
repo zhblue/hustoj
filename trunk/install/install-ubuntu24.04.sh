@@ -6,13 +6,12 @@ if [ -d /mnt/c ]; then
 #    exit 1
 fi
 MEM=`free -m|grep Mem|awk '{print $2}'`
-
-if [ "$MEM" -lt "1000" ] ; then
-        echo "Memory size less than 1GB."
+if [ "$MEM" -lt "2000" ] ; then
+        echo "Memory size less than 2GB."
         if grep 'swap' /etc/fstab ; then
                 echo "already has swap"
         else
-                dd if=/dev/zero of=/swap bs=1M count=1024
+                dd if=/dev/zero of=/swap bs=2M count=1024
                 chmod 600 /swap
                 mkswap /swap
                 swapon /swap
@@ -24,6 +23,7 @@ if [ "$MEM" -lt "1000" ] ; then
 else
         echo "Memory size : $MEM MB"
 fi
+
 sed -i 's/tencentyun/aliyun/g' /etc/apt/sources.list
 sed -i 's/cn.archive.ubuntu/mirrors.aliyun/g' /etc/apt/sources.list
 sed -i "s|#\$nrconf{restart} = 'i'|\$nrconf{restart} = 'a'|g" /etc/needrestart/needrestart.conf
@@ -83,7 +83,7 @@ MEM=`free -m|grep Mem|awk '{print $2}'`
 
 if [ "$MEM" -lt "1000" ] ; then
         echo "Memory size less than 1GB."
-        if grep 'key_buffer_size        = 1M' /etc/fstab ; then
+        if grep 'key_buffer_size        = 1M' /etc/mysql/mariadb.conf.d/50-server.cnf ; then
                 echo "already trim config"
         else
                 sed -i 's/#key_buffer_size        = 128M/key_buffer_size        = 1M/' /etc/mysql/mariadb.conf.d/50-server.cnf
