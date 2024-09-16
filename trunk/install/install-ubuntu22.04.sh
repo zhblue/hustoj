@@ -84,7 +84,7 @@ MEM=`free -m|grep Mem|awk '{print $2}'`
 
 if [ "$MEM" -lt "1000" ] ; then
         echo "Memory size less than 1GB."
-        if grep 'key_buffer_size        = 1M' /etc/fstab ; then
+        if grep 'key_buffer_size        = 1M' /etc/mysql/mariadb.conf.d/50-server.cnf ; then
                 echo "already trim config"
         else
                 sed -i 's/#key_buffer_size        = 128M/key_buffer_size        = 1M/' /etc/mysql/mariadb.conf.d/50-server.cnf
