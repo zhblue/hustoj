@@ -59,7 +59,11 @@ $school=$row['school'];
 $email=$row['email'];
 $nick=$row['nick'];
 $starred=$row['starred'];
-//todo: check and update starred
+//check and update starred
+if($starred==0 && starred($user)){
+        pdo_query("update users set starred=1 where user_id=?",$user);
+        $starred=1;
+}
 
 
 // count solved
