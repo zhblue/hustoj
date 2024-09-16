@@ -187,6 +187,7 @@ CREATE TABLE IF NOT EXISTS `users` (
   `school` varchar(20) NOT NULL DEFAULT '',
   `group_name` varchar(16) not null default '',
   `activecode` varchar(16) not null default '',
+  `starred` int(11) not null default '0',
   PRIMARY KEY (`user_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4;
 
