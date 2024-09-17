@@ -40,7 +40,10 @@ $(document).ready(function(){
   if(screen_width < 800) $("#MainBg-C").attr("class","");
 
 <?php if(isset($OJ_BG)&&$OJ_BG!="") echo " $('body').css('background','url($OJ_BG)').css('background-repeat','no-repeat').css('background-size','100%'); " ?>
-	
+
+  $("tr").mouseover(function(){$(this).addClass("active")});
+  $("tr").mouseout(function(){$(this).removeClass("active")})
+
 });
 
 $(".hint pre").each(function(){
