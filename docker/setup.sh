@@ -86,8 +86,8 @@ sed -i "s#DB_PASS[[:space:]]*=[[:space:]]*\"root\"#DB_PASS=\"$PASSWORD\"#g"     
 	sed -i "s:php7.4:php$PHP_VER:g" /etc/nginx/sites-enabled/default
 	sed -i "s|# deny access to .htaccess files|}#added by hustoj\n\n\n\t# deny access to .htaccess files|g" /etc/nginx/sites-enabled/default
 
-sed -i "s/post_max_size = 8M/post_max_size = 500M/g" /etc/php/8.1/fpm/php.ini     
-sed -i "s/upload_max_filesize = 2M/upload_max_filesize = 500M/g" /etc/php/8.1/fpm/php.ini 
+sed -i "s/post_max_size = 8M/post_max_size = 500M/g" /etc/php/$PHP_VER/fpm/php.ini     
+sed -i "s/upload_max_filesize = 2M/upload_max_filesize = 500M/g" /etc/php/$PHP_VER/fpm/php.ini 
 
 if grep "client_max_body_size" /etc/nginx/nginx.conf ; then 
     echo "client_max_body_size already added" ;
