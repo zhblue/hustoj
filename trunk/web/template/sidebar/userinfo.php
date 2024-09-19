@@ -60,7 +60,7 @@
               </table>
                 <div class="extra content">
                     <a><i class="check icon"></i>通过 <?php echo $AC ?> 题</a>
-                    <a style="float: right; "><i class="star icon"></i>排名 <?php echo $Rank ?></a>
+                    <a style="float: right; "><i class="star icon <?php if($starred) echo "active"?>"></i>排名 <?php echo $Rank ?></a>
                     
                      <?php if ($email != "") { ?>
                             <div style="margin-top:10px;margin-bottom:10px">

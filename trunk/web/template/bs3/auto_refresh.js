@@ -79,16 +79,20 @@ function fresh_result(solution_id) {
                                 //console.log(ra[0]);
                                 switch (ra[0]) {
                                         case  4:
-                                        		 if(user_id==ra[5]) fancy(row.cells[4]);
                                         case 14:
-                                                row.cells[4].innerHTML += "<a href=reinfo.php?sid="+solution_id+" class='"+judge_color[ra[0]]+"'>"+judge_result[ra[0]]+"</a>";
+                                                if(user_id==ra[5]){
+                                                        fancy(row.cells[4]);
+                                                        row.cells[4].innerHTML += "<a href=reinfo.php?sid="+solution_id+" class='"+judge_color[ra[0]]+"'>"+judge_result[ra[0]]+"</a>";
+                                                }else{
+                                                        row.cells[4].innerHTML = "<a href=reinfo.php?sid="+solution_id+" class='"+judge_color[ra[0]]+"'>"+judge_result[ra[0]]+"</a>";
+                                                }
                                                 break;
-                                        case 5:
-                                        case 6:
-                                  case 7:
-                                  case 8:
-                                  case 9:
-                                  case 10:
+                                        	case 5:
+                                        	case 6:
+	                                  case 7:
+	                                  case 8:
+	                                  case 9:
+	                                  case 10:
                                                 row.cells[4].innerHTML = "<a href=reinfo.php?sid="+solution_id+" class='"+judge_color[ra[0]]+"'>"+judge_result[ra[0]]+" :"+(oj_mark=='percent'?100-ra[4].trim():ra[4].trim())+"%</a>";
                                                 break;
                                         case 11:
@@ -97,7 +101,7 @@ function fresh_result(solution_id) {
                                   default:
 //                                              row.cells[4].innerHTML = "<span class='"+judge_color[ra[0]]+"'>"+judge_result[ra[0]]+" AC:"+ra[4].trim()+"%</span>";
                                 }
-
+				     $(row.cells[4].children[0]).attr("result",ra[0]);
                                 auto_refresh();
                         }
                 }

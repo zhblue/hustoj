@@ -427,11 +427,12 @@ function selectMulti( num, answer){
                   mangle: false,
                   headerIds: false
                 });
-		const md = window.markdownit();
+		
 		$(".md").each(function(){
 <?php if ($OJ_MARKDOWN  && $OJ_MARKDOWN=="marked.js") {?>
 			$(this).html(marked.parse($(this).html()));
 <?php }else if ($OJ_MARKDOWN  && $OJ_MARKDOWN=="markdown-it") {?>
+			const md = window.markdownit();
 			$(this).html(md.render($(this).text()));
 <?php } ?>
 		});

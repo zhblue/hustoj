@@ -24,7 +24,7 @@ or
 <script src="<?php echo $OJ_CDN_URL.$path_fix."template/bs3/"?>bootstrap.min.js"></script>
 <script>
 $(document).ready(function(){
-  var msg="<marquee style='margin-top:10px;margin-bottom:10px' id=broadcast direction='left' scrollamount=3 scrolldelay=50 onMouseOver='this.stop()'"+
+  var msg="<marquee style='margin-top:-10px;margin-bottom:10px' id=broadcast direction='left' scrollamount=3 scrolldelay=50 onMouseOver='this.stop()'"+
       " onMouseOut='this.start()' class='padding' >"+<?php echo json_encode($view_marquee_msg); ?>+"</marquee>";
   <?php if ($view_marquee_msg!="") { ?>
 		$("#main").prepend(msg);
@@ -33,16 +33,17 @@ $(document).ready(function(){
   $("#csrf").load("<?php echo $path_fix?>csrf.php");
   let left=window.innerWidth-parseInt($("#menu").css("width")) - 100;
   left/=2;
-  /*
   $("#menu").attr("style","margin-left:auto;margin-right:auto;");
   var screen_width = window.screen.width;
   var screen_height = window.screen.height;
   if(screen_width < 800) $("#main").attr("class","");
   if(screen_width < 800) $("#MainBg-C").attr("class","");
-   */
-  $("#rankdiv").click();
+
 <?php if(isset($OJ_BG)&&$OJ_BG!="") echo " $('body').css('background','url($OJ_BG)').css('background-repeat','no-repeat').css('background-size','100%'); " ?>
-	
+
+  $("tr").mouseover(function(){$(this).addClass("active")});
+  $("tr").mouseout(function(){$(this).removeClass("active")})
+
 });
 
 $(".hint pre").each(function(){
