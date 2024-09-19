@@ -1,4 +1,4 @@
-name: docker build test
+name: docker build and w3m visit test
 
 on:
   push:
