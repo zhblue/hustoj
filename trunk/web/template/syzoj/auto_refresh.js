@@ -63,7 +63,7 @@ function fresh_result(solution_id) {
                         row.cells[5].innerHTML = ra[1];
                         row.cells[6].innerHTML = ra[2];
 
-                        if(ra[3]!="none")
+                         if(ra[3] != undefined && row.cells[10] != undefined)
                                 row.cells[10].innerHTML = ra[3];
 
                         if (ra[0]<4) {
