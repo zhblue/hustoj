@@ -6,3 +6,7 @@ set -ex \
 && git clone https://github.com/zhblue/hustoj-deb-ubuntu.git \
 && mv hustoj/trunk/* hustoj-deb-ubuntu \
 && cd hustoj-deb-ubuntu && dpkg-buildpackage 
+cd ..
+dpkg -i *.deb
+apt-get install -f
+exit 0
