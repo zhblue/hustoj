@@ -250,7 +250,7 @@ if (isset($_GET['jresult'])){
 }
 if(isset($_GET['school'])&&trim($_GET['school'])!="" || isset($_GET['school'])&&trim($_GET['school'])!=""    ){
 
-	 $sql0="select * from solution solution inner join users users on solution.user_id=users.user_id";
+	 $sql0="select solution.*,users.nick,users.group_name,users.starred from solution solution inner join users users on solution.user_id=users.user_id";
 	 if(isset($_GET['school'])&&trim($_GET['school'])!=""){
 	    $school=trim($_GET['school']);
 	    $sql.=" and users.school=? "; 
@@ -264,7 +264,7 @@ if(isset($_GET['school'])&&trim($_GET['school'])!="" || isset($_GET['school'])&&
 	    $str2 = $str2."&group_name=".htmlentities(trim($_GET['group_name']),ENT_QUOTES);
 	 }
 }else{
-	$sql0="select * from solution ";
+	$sql0="select solution.*,users.nick,users.group_name,users.starred from solution ";
 }
 
 $showsim = isset($_GET['showsim']) ? intval($_GET['showsim']) : 0;
