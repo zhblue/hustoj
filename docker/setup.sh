@@ -124,9 +124,9 @@ do
       	fi
 done
 sed -i 's/static  $OJ_TEMPLATE="bs3";/static  $OJ_TEMPLATE="syzoj";/' include/db_info.inc.php
-
-w3m -dump http://127.0.0.1/status.php | grep 'AWT'
-w3m -dump http://hustoj.com/ip.php
+exit 0
+#w3m -dump http://127.0.0.1/status.php | grep 'AWT'
+#w3m -dump http://hustoj.com/ip.php
 #ls -lh /home/judge/run0/log/
 #cat /home/judge/run0/log/ce.txt
 #cat /home/judge/run0/log/Main.c
