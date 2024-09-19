@@ -98,7 +98,7 @@ function fresh_result(solution_id) {
                                   default:
 //                                              row.cells[4].innerHTML = "<span class='"+judge_color[ra[0]]+"'>"+judge_result[ra[0]]+" AC:"+ra[4].trim()+"%</span>";
                                 }
-
+                                $(row.cells[4].children[0]).attr("result",ra[0]);
                                 auto_refresh();
                         }
                 }
