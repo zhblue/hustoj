@@ -7,5 +7,5 @@ set -ex \
 && mv hustoj/trunk/* hustoj-deb-ubuntu \
 && cd hustoj-deb-ubuntu && dpkg-buildpackage 
 cd ..
-sudo dpkg -i *.deb || sudo apt-get install -f -y
+#sudo dpkg -i *.deb || sudo apt-get install -f -y
 exit 0
