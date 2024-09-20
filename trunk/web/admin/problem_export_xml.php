@@ -62,6 +62,7 @@ function printTestCases($pid,$OJ_DATA) {
   }
   else {
     $ret = "";
+    if(!is_dir("$OJ_DATA/$pid/")) return "";
     //$pdir = opendir("$OJ_DATA/$pid/");
     $files = scandir("$OJ_DATA/$pid/"); //sorting file names by ascending order with default scandir function
 
