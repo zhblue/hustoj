@@ -481,7 +481,8 @@
   //SaaS friendly
   $MSG_TEMPLATE="模板";
   $MSG_FRIENDLY_LEVEL="友善级别";
-  $MSG_FRIENDLY_L0="不友善";
+  $MSG_FRIENDLY_B1="禁止注册，强制登录";
+  $MSG_FRIENDLY_L0="开放注册，允许浏览";
   $MSG_FRIENDLY_L1="中国时区";
   $MSG_FRIENDLY_L2="强制中文";
   $MSG_FRIENDLY_L3="显示对比,关闭验证码";
