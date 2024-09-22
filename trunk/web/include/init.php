@@ -123,6 +123,12 @@ switch($OJ_FRIENDLY_LEVEL) {
 	case 1:
 	   date_default_timezone_set("Asia/Shanghai");
 	   pdo_query("SET time_zone ='+8:00'");
+	case 0:
+	   break;
+	case -1:
+	   $OJ_NEED_LOGIN=true;
+	   $OJ_REGISTER=false;
+	   
 }
 if(!isset($OJ_SUBMIT_COOLDOWN_TIME)) $OJ_SUBMIT_COOLDOWN_TIME=3;
 // if using EXAM or ON site auto turn off free practice
