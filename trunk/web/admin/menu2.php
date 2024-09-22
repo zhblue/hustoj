@@ -121,6 +121,7 @@
 
 <?php if (isset($_SESSION[$OJ_NAME.'_'.'administrator'])){?>
   <br><a class='btn btn-sm' href="https://github.com/zhblue/hustoj/" target="_blank"><b>HUSTOJ</b></a>
+  <br><a class='btn btn-sm' href="https://yuanqi.tencent.com/agent/jADpOEWqLvTv" target="_blank"><b>小张老师(AI-help)</b></a>
   <br><div><a class="btn btn-sm" target='main' href="http://hustoj.com"><?php echo $MSG_ADMIN." ".$MSG_FAQ?></a></div>
   <br><a class='btn btn-sm' href="https://github.com/zhblue/freeproblemset/" target="_blank"><b>FreeProblemSet</b></a>
   <br><a class='btn btn-sm' href="http://tk.hustoj.com" target="_blank"><b>自助题库</b></a>
