@@ -49,7 +49,9 @@ if(isset($_POST['enable'])&&$plist){
 
   if($defunct=='Y') $sql = "UPDATE `problem` SET `defunct`='N' WHERE `problem_id`=?";
   else $sql = "UPDATE `problem` SET `defunct`='Y' WHERE `problem_id`=?";
-  pdo_query($sql,$id) ;
+   if(isset($_SESSION[$OJ_NAME.'_'.'administrator']) || isset($_SESSION[$OJ_NAME.'_'."p".$id]) ){
+        pdo_query($sql,$id) ;
+   }
 }
 ?>
 
