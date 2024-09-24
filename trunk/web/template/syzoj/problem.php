@@ -265,14 +265,14 @@ div[class*=ace_br] {
         let main=$("#main");
         let problem=main.html();
         if (window.screen.width < 500){
-        	main.parent().append("<div id='submitPage' class='container' style='opacity:0.95;z-index:1000;top:49px;'></div>");
+        	main.parent().append("<div id='submitPage' class='container' style='opacity:0.95;z-index:2;top:49px;'></div>");
                 $("#submitPage").html("<iframe id='ansFrame' src='"+submitURL+"&spa' width='100%' height='"+window.screen.height+"px' ></iframe>");
                 window.setTimeout('$("#ansFrame")[0].scrollIntoView()',1000);
 	}else{
         	main.removeClass("container");
 		main.css("width",width2);
 		main.css("margin-left","10px");
-       	 	main.parent().append("<div id='submitPage' class='container' style='opacity:0.95;position:fixed;z-index:1000;top:49px;right:-"+width2+"px'></div>");
+       	 	main.parent().append("<div id='submitPage' class='container' style='opacity:0.95;position:fixed;z-index:2;top:49px;right:-"+width2+"px'></div>");
 		$("#submitPage").html("<iframe src='"+submitURL+"&spa' width='"+width+"px' height='"+height+"px' ></iframe>");
 	}
 	$("#submit").remove();
