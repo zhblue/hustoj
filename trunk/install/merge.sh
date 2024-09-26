@@ -28,6 +28,7 @@ do
         if [[ $VAR =~ "\$" ]] ; then
                 IFS='=' read -r KEY VALUE<<< $VAR
                 if [[ $KEY =~ "AI" ]] ; then continue; fi
+                if [[ $KEY =~ "FANCY" ]] ; then continue; fi
                 if [[ $KEY =~ "BLOCKLY" ]] ; then continue; fi
                 if [[ $KEY =~ "LOG" ]] ; then continue; fi
                 VALUE=$( echo "$VALUE" | sed 's|"|\\"|g'  )
