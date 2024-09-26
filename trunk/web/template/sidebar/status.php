@@ -158,7 +158,9 @@
         ''];
    var oj_mark='<?php echo $OJ_MARK ?>'; 
    var user_id="<?php if (isset($_SESSION[$OJ_NAME."_user_id"]) && $OJ_FANCY_RESULT ) echo $_SESSION[$OJ_NAME."_user_id"]; ?>";
+   var fancy_mp3="<?php if (isset($_SESSION[$OJ_NAME."_user_id"]) && $OJ_FANCY_RESULT ) echo $OJ_FANCY_MP3; ?>";
+  
 </script>
-        <script src="template/<?php echo $OJ_TEMPLATE?>/auto_refresh.js?v=0.521" ></script>
+        <script src="template/<?php echo $OJ_TEMPLATE?>/auto_refresh.js?v=0.522" ></script>
 
 <?php include("template/$OJ_TEMPLATE/footer.php");

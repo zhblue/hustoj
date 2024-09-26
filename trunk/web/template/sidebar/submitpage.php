@@ -186,9 +186,9 @@ function print_result(solution_id){
 	$("#out").load("status-ajax.php?tr=1&solution_id="+solution_id);
 }
 function fancy(td){
-        $(td).append("<div id='bannerFancy' style='position:absolute;top:0px;left:0px;width:100%' class='ui main container'></div><audio autoplay=\"autoplay\" preload=\"auto\" src=\"http://cdn.m.hustoj.com:8090/bg/ac.mp3\"> </audio>");
-        window.setTimeout("$(\"#bannerFancy\").html(\"<iframe border=0 src='fancy.php' width='100%' height='800px'></iframe>\");",500);
-        window.setTimeout("$(\"#bannerFancy\").remove();",10000);
+        $("body",parent.document).append("<div id='bannerFancy' style='position:absolute;top:0px;left:0px;width:100%;z-index:3' class='ui main container'></div><audio autoplay=\"autoplay\" preload=\"auto\" src=\"<?php echo $OJ_FANCY_MP3 ?>\"> </audio>");
+        window.setTimeout("$(\"#bannerFancy\",parent.document).html(\"<iframe border=0 src='fancy.php' width='100%' height='800px'></iframe>\");",500);
+        window.setTimeout("$(\"#bannerFancy\",parent.document).remove();",10000);
 }
 function fresh_result(solution_id)
 {

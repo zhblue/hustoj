@@ -35,8 +35,8 @@ function findRow(solution_id) {
         }
 }
 function fancy(td){
-        console.log(user_id+":fancy");
-        $(td).html("<div id='bannerFancy' style='position:absolute;top:0px;left:0px;width:100%' class='ui main container'></div><audio autoplay=\"autoplay\" preload=\"auto\" src=\"http://cdn.m.hustoj.com:8090/bg/ac.mp3\"></audio>");
+        console.log(user_id+":"+fancy_mp3);
+        $(td).html("<div id='bannerFancy' style='position:absolute;top:0px;left:0px;width:100%' class='ui main container'></div><audio autoplay=\"autoplay\" preload=\"auto\" src='"+fancy_mp3+"'></audio>");
         window.setTimeout("$(\"#bannerFancy\").html(\"<iframe border=0 src='fancy.php' width='100%' height='800px'></iframe>\");",500);
         window.setTimeout("$(\"#bannerFancy\").remove();",5000);
 }
