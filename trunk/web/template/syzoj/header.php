@@ -137,27 +137,31 @@
             }
             if(!isset($_GET['cid'])||$cid==0){
           ?>
-
+            <!-- 问题 -->
             <a class="item <?php if ($url=="problemset.php") echo "active";?>"
                 href="<?php echo $path_fix?>problemset.php"><i class="list icon"></i><?php echo $MSG_PROBLEMS?> </a>
+            <!-- 来源/分类 -->
             <a class="item <?php if ($url=="category.php") echo "active";?>"
                 href="<?php echo $path_fix?>category.php"><i class="globe icon"></i><?php echo $MSG_SOURCE?></a>
+            <!-- 竞赛/作业 -->
             <a class="item <?php if ($url=="contest.php") echo "active";?>" href="<?php echo $path_fix?>contest.php<?php if(isset($_SESSION[$OJ_NAME."_user_id"])) echo "?my" ?>" ><i
                     class="trophy icon"></i> <?php echo $MSG_CONTEST?></a>
+            <!-- 状态 -->
             <a class="item <?php if ($url=="status.php") echo "active";?>" href="<?php echo $path_fix?>status.php"><i
                     class="tasks icon"></i><?php echo $MSG_STATUS?></a>
+            <!-- 排名 -->
             <a class="desktop-only item <?php if ($url=="ranklist.php") echo "active";?> "
                 href="<?php echo $path_fix?>ranklist.php"><i class="signal icon"></i> <?php echo $MSG_RANKLIST?></a>
             <!--<a class="item <?php //if ($url=="contest.php") echo "active";?>" href="/discussion/global"><i class="comments icon"></i> 讨论</a>-->
-                
+            <!-- 近期比赛 -->    
 <?php if(isset($OJ_RECENT_CONTEST)&&$OJ_RECENT_CONTEST){    ?>
             <a class="desktop-only item <?php if ($url=="recent-contest.php") echo "active";?> "
                 href="<?php echo $path_fix?>recent-contest.php"><i class="bullhorn icon"></i> <?php echo $MSG_RECENT_CONTEST?></a>
 <?php } ?>
-
+            <!-- 常见问答 -->
             <a class="desktop-only item <?php if ($url=="faqs.php") echo "active";?>" href="<?php echo $path_fix?>faqs.php"><i
                     class="help circle icon"></i> <?php echo $MSG_FAQ?></a>
-
+            <!-- 讨论板 -->
               <?php if (isset($OJ_BBS)&& $OJ_BBS){ ?>
                   <a class='item' href="discuss.php"><i class="clipboard icon"></i> <?php echo $MSG_BBS?></a>
               <?php }
