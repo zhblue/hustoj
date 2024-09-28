@@ -4510,7 +4510,7 @@ function frame3(){
             if (strlen($cmd_arg)){
                 $filename = $current_dir."solution.name";
 		if ($fh = @fopen($filename, "w")){
-		        fprintf($fh,"%s\n",$cmd_arg);	
+		        fprintf($fh,"%s\n",$cmd_arg);	// maybe   "%s.cpp\n" ?
                         @fclose($fh);
                 }
                 @chmod($filename,0644);
