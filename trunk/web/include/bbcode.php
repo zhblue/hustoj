@@ -422,12 +422,20 @@ class BBCode
   }
 }
 function filterDIV($input){
-  $value=mb_ereg_replace("<[dD][iI][vV][a-zA-Z -_=\"\']*>","",$input);
-  $value=mb_ereg_replace("</[dD][iI][vV]>","",$value);
-  $value=mb_ereg_replace("<([^>]+)<","&lt;\\1&lt;",$value); //fixing 0<m<7000
-  $value=mb_ereg_replace(">([^<]+)>","&gt;\\1&gt;",$value); //fixing  7000>m>7000
+  $count1=substr_count($input,"<div");
+  $count2=substr_count($input,"</div>");
+  //  echo $count1."-".$count2."=".($count1-$count2)."<br>";
+  if($count1!=$count2){
+          $value=mb_ereg_replace("<[dD][iI][vV][a-zA-Z -_=\"\']*>","",$input);
+          $value=mb_ereg_replace("</[dD][iI][vV]>","",$value);
+          $value=mb_ereg_replace("<([^>]+)<","&lt;\\1&lt;",$value); //fixing 0<m<7000
+          $value=mb_ereg_replace(">([^<]+)>","&gt;\\1&gt;",$value); //fixing  7000>m>7000
+  }else{
+         $value=$input;
+  }
   return $value;
 }
+
 // procedural
 function bbcode_to_html($input) : string
 {
