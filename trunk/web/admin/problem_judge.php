@@ -12,7 +12,10 @@ if(isset($_POST['manual'])){
         $sid=intval($_POST['sid']);
         $result=intval($_POST['result']);
         if($result>=0){
-          $sql="UPDATE solution SET result=? WHERE solution_id=? LIMIT 1";
+          if($result==4)
+                $sql="UPDATE solution SET result=?,pass_rate=1.0 WHERE solution_id=? LIMIT 1";
+          else
+                $sql="UPDATE solution SET result=?,pass_rate=0 WHERE solution_id=? LIMIT 1";
           pdo_query($sql,$result,$sid);
         }
         if(isset($_POST['explain'])){
