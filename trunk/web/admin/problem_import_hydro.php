@@ -246,7 +246,7 @@ else {
 			}else if(endsWith($dataname,".ans")){
 				$dataname=substr($dataname,0,-3)."out";	
 			}else if(endsWith($dataname,".in")){
-				$dataname=substr($dataname,0,-3)."in";	
+				$dataname=substr($dataname,0,-2)."in";	
 			}else if(endsWith($dataname,".out")){
 				$dataname=substr($dataname,0,-3)."out";	
 			}
