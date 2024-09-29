@@ -12,7 +12,7 @@ if (!(isset($_SESSION[$OJ_NAME.'_'.'administrator']))){
                     echo "Rejudge Problem ID should not equal to 0";
                     exit(1);
                 }
-                $sql="UPDATE `solution` SET `result`=1 WHERE `problem_id`=? and problem_id>0";
+                $sql="UPDATE `solution` SET `result`=1,pass_rate=0 WHERE `problem_id`=? and problem_id>0";
                 pdo_query($sql,$rjpid) ;
                 $sql="UPDATE `problem` SET `accepted`=0 WHERE `problem_id`=? and problem_id>0";
                 pdo_query($sql,$rjpid) ;
@@ -25,7 +25,7 @@ if (!(isset($_SESSION[$OJ_NAME.'_'.'administrator']))){
                 $rjsid=intval($_POST['rjsid']);
                 $sql="delete from `sim` WHERE `s_id`=?";
                 pdo_query($sql,$rjsid) ;
-                $sql="UPDATE `solution` SET `result`=1 WHERE `solution_id`=? and problem_id>0" ;
+                $sql="UPDATE `solution` SET `result`=1,pass_rate=0 WHERE `solution_id`=? and problem_id>0" ;
                 pdo_query($sql,$rjsid) ;
                 $sql="select contest_id from `solution` WHERE `solution_id`=? " ;
                 $data=pdo_query($sql,$rjsid);
@@ -40,7 +40,7 @@ if (!(isset($_SESSION[$OJ_NAME.'_'.'administrator']))){
         }else if (isset($_POST['result'])){
                 $result=intval($_POST['result']);
                 $to=intval($_POST['to']);
-                $sql="UPDATE `solution` SET `result`=$to WHERE `result`=? and problem_id>0" ;
+                $sql="UPDATE `solution` SET `result`=$to,pass_rate=0 WHERE `result`=? and problem_id>0" ;
                 pdo_query($sql,$result) ;
                 $url="../status.php?jresult=$to";
                 echo "<script>location.href='$url';</script>";
@@ -49,10 +49,10 @@ if (!(isset($_SESSION[$OJ_NAME.'_'.'administrator']))){
 		if( $rjcid>0 ){
 			if(isset($_POST['pid'])){
 				$pid=intval($_POST['pid']);
-				$sql="UPDATE `solution` SET `result`=1 WHERE `contest_id`=? and num=?";
+				$sql="UPDATE `solution` SET `result`=1,pass_rate=0 WHERE `contest_id`=? and num=?";
 				pdo_query($sql,$rjcid,$pid) ;
 			}else{
-				$sql="UPDATE `solution` SET `result`=1 WHERE `contest_id`=? and problem_id>0";
+				$sql="UPDATE `solution` SET `result`=1,pass_rate=0 WHERE `contest_id`=? and problem_id>0";
 				pdo_query($sql,$rjcid) ;
 			}
 			$url="../status.php?cid=".($rjcid);
@@ -68,7 +68,7 @@ if (!(isset($_SESSION[$OJ_NAME.'_'.'administrator']))){
            $redis = new Redis();
            $redis->connect($OJ_REDISSERVER, $OJ_REDISPORT);
            if(isset($OJ_REDISAUTH)) $redis->auth($OJ_REDISAUTH);
-                $sql="select solution_id from solution where result=1 and problem_id>0";
+                $sql="select solution_id from solution where result=1,pass_rate=0 and problem_id>0";
                  $result=pdo_query($sql);
                  foreach($result as $row){
                         echo $row['solution_id']."\n";
