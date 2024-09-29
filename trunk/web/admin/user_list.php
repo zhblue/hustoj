@@ -32,13 +32,18 @@ $epage = min($spage+$pagesperframe-1, $pages);
 $sid = ($page-1)*$idsperpage;
 $sql = "";
 $gkeyword="";
+$trash="";
 if(isset($_GET['keyword']) && $_GET['keyword']!=""){
   $gkeyword = $_GET['keyword'];
   $keyword = "%$gkeyword%";
   $sql = "SELECT `user_id`,`nick`,email,`accesstime`,`reg_time`,`ip`,`school`,`group_name`,`defunct` FROM `users` WHERE (user_id LIKE ?) OR (nick LIKE ?) OR (school LIKE ?) or (ip like ?) ORDER BY `user_id` DESC";
   $result = pdo_query($sql,$keyword,$keyword,$keyword,$keyword);
+}else if(isset($_GET['trash'])){
+  $trash="&trash";
+  $sql = "SELECT `user_id`,`nick`,email,`accesstime`,`reg_time`,`ip`,`school`,`group_name`,`defunct` FROM `users` where defunct='Y' ORDER BY `accesstime` DESC LIMIT $sid, $idsperpage";
+  $result = pdo_query($sql);
 }else{
-  $sql = "SELECT `user_id`,`nick`,email,`accesstime`,`reg_time`,`ip`,`school`,`group_name`,`defunct` FROM `users` ORDER BY `accesstime` DESC LIMIT $sid, $idsperpage";
+  $sql = "SELECT `user_id`,`nick`,email,`accesstime`,`reg_time`,`ip`,`school`,`group_name`,`defunct` FROM `users` where defunct='N' ORDER BY `accesstime` DESC LIMIT $sid, $idsperpage";
   $result = pdo_query($sql);
 }
 ?>
@@ -48,6 +53,7 @@ if(isset($_GET['keyword']) && $_GET['keyword']!=""){
   <input type="text" name="keyword"  value="<?php echo htmlentities($gkeyword,ENT_QUOTES) ?>"  class="form-control search-query" placeholder="<?php echo $MSG_USER_ID.', '.$MSG_NICK.', '.$MSG_SCHOOL?>">
   <button type="submit" class="form-control"><?php echo $MSG_SEARCH?></button>
 </form>
+  <a href="user_list.php?trash">垃圾箱</a>
 </center>
 
 <center>
@@ -102,13 +108,13 @@ if(!(isset($_GET['keyword']) && $_GET['keyword']!=""))
   echo "<div style='display:inline;'>";
   echo "<nav class='center'>";
   echo "<ul class='pagination pagination-sm'>";
-  echo "<li class='page-item'><a href='user_list.php?page=".(strval(1))."'>&lt;&lt;</a></li>";
-  echo "<li class='page-item'><a href='user_list.php?page=".($page==1?strval(1):strval($page-1))."'>&lt;</a></li>";
+  echo "<li class='page-item'><a href='user_list.php?page=".(strval(1))."$trash'>&lt;&lt;</a></li>";
+  echo "<li class='page-item'><a href='user_list.php?page=".($page==1?strval(1):strval($page-1))."$trash'>&lt;</a></li>";
   for($i=$spage; $i<=$epage; $i++){
-    echo "<li class='".($page==$i?"active ":"")."page-item'><a title='go to page' href='user_list.php?page=".$i."'>".$i."</a></li>";
+    echo "<li class='".($page==$i?"active ":"")."page-item'><a title='go to page' href='user_list.php?page=".$i."$trash'>".$i."</a></li>";
   }
-  echo "<li class='page-item'><a href='user_list.php?page=".($page==$pages?strval($page):strval($page+1))."'>&gt;</a></li>";
-  echo "<li class='page-item'><a href='user_list.php?page=".(strval($pages))."'>&gt;&gt;</a></li>";
+  echo "<li class='page-item'><a href='user_list.php?page=".($page==$pages?strval($page):strval($page+1))."$trash'>&gt;</a></li>";
+  echo "<li class='page-item'><a href='user_list.php?page=".(strval($pages))."$trash'>&gt;&gt;</a></li>";
   echo "</ul>";
   echo "</nav>";
   echo "</div>";
