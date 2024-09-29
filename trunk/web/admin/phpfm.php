@@ -522,7 +522,7 @@ function et($tag){
     $cn['ErrorReport'] = '错误报告';
     $cn['Random-data'] = '随机测试数据生成器';
     $cn['GenerateOut'] = '用标程Main.c/Main.cc覆盖生成Out文件';
-    $cn['Ans2out'] = '.ans改名.out';
+    $cn['Ans2out'] = '自动修订文件名';
     $cn['IOFilename'] = '指定输入输出文件名';
     $cn['SolutionFilename'] = '指定NOIP提交代码文件名';
 
