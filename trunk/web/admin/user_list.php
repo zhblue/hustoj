@@ -52,8 +52,8 @@ if(isset($_GET['keyword']) && $_GET['keyword']!=""){
 <form action=user_list.php class="form-search form-inline">
   <input type="text" name="keyword"  value="<?php echo htmlentities($gkeyword,ENT_QUOTES) ?>"  class="form-control search-query" placeholder="<?php echo $MSG_USER_ID.', '.$MSG_NICK.', '.$MSG_SCHOOL?>">
   <button type="submit" class="form-control"><?php echo $MSG_SEARCH?></button>
+   <a href="user_list.php?trash"><i class='icon large trash color grey' ></i></a>
 </form>
-  <a href="user_list.php?trash">垃圾箱</a>
 </center>
 
 <center>
