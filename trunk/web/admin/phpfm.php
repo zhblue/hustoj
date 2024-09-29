@@ -54,7 +54,6 @@ if (!(isset($_SESSION[$OJ_NAME.'_'.'administrator'])
     function reSortFiles($directory) {
 	// 列出目录中的所有文件
 	$files = scandir($directory);
-	
 	// 遍历所有文件
 	foreach ($files as $file) {
 	// 检查文件是否是.ans文件
@@ -75,12 +74,12 @@ if (!(isset($_SESSION[$OJ_NAME.'_'.'administrator'])
 		if (str_ends_with($file, '.in') === false ) {
 		    continue;
 		}
-		echo "$file:<br>";
+		//echo "$file:<br>";
 		$main=basename($file,".in");
 		// 检查文件名是否以单个数字结尾
 		if (preg_match('/^[^0-9]*([0-9])$/', $main)) {
 		    // 获取文件名中的数字
-		    echo "...";
+		  //  echo "...";
 		    $number = substr($main, -1);
 		    // 获取文件名中的非数字部分
 		    $nonNumberPart = preg_replace('/[0-9]$/', '', $main);
