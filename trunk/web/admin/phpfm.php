@@ -26,7 +26,17 @@ if (!(isset($_SESSION[$OJ_NAME.'_'.'administrator'])
         $_GET = array_map('stripslashes_deep', $_GET);
         $_COOKIE = array_map('stripslashes_deep', $_COOKIE);
     }
-	// Server Vars
+    //php ver < 8.0 has no endsWith function
+    if (!function_exists('str_ends_with')) {
+        function str_ends_with( $haystack, $needle ) {
+            $length = strlen( $needle );
+            if( !$length ) {
+                return true;
+            }
+            return substr( $haystack, -$length ) === $needle;
+        }
+    }
+    // Server Vars
     function get_client_ip() {
         $ipaddress = '';
         if (isset($_SERVER['HTTP_CLIENT_IP'])) $ipaddress = $_SERVER['HTTP_CLIENT_IP'];
