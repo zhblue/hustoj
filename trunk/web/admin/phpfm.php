@@ -51,9 +51,64 @@ if (!(isset($_SESSION[$OJ_NAME.'_'.'administrator'])
         if ($_SERVER["SERVER_PORT"] != "80") $url .= ":".$_SERVER["SERVER_PORT"];
         return $url;
     }
+    function reSortFiles($directory) {
+	// 列出目录中的所有文件
+	$files = scandir($directory);
+	
+	// 遍历所有文件
+	foreach ($files as $file) {
+	// 检查文件是否是.ans文件
+		if (str_ends_with($file, '.ans') === false ) {
+		    continue;
+		}
+		$main=basename($file,".ans");
+		$filePath = $directory . '/' . $main.".ans";
+		$newFilePath = $directory . '/' . $main.".out";
+		if (rename($filePath, $newFilePath)) {
+		//              echo "File renamed: $filePath -> $newFilePath<br>";
+		} else {
+		echo "Error renaming file: $file<br>";
+		}
+	}
+	foreach ($files as $file) {
+		// 检查文件是否是.in文件
+		if (str_ends_with($file, '.in') === false ) {
+		    continue;
+		}
+		echo "$file:<br>";
+		$main=basename($file,".in");
+		// 检查文件名是否以单个数字结尾
+		if (preg_match('/^[^0-9]*([0-9])$/', $main)) {
+		    // 获取文件名中的数字
+		    echo "...";
+		    $number = substr($main, -1);
+		    // 获取文件名中的非数字部分
+		    $nonNumberPart = preg_replace('/[0-9]$/', '', $main);
+		    // 创建新的文件名
+		    $newFileName = $nonNumberPart . '0' . $number;
+		    // 获取文件路径
+		    $filePath = $directory . '/' . $main.".in";
+		    $newFilePath = $directory . '/' . $newFileName.".in";
+		    // 尝试重命名文件
+		    if (rename($filePath, $newFilePath)) {
+		    } else {
+			echo "Error renaming file: $file<br>";
+		    }
+		    $filePath = $directory . '/' . $main.".out";
+		    $newFilePath = $directory . '/' . $newFileName.".out";
+		    // 尝试重命名文件
+		    if (rename($filePath, $newFilePath)) {
+		    } else {
+			echo "Error renaming file: $file<br>";
+		    }
+		}
+	}
+	
+    }
     function getCompleteURL() {
         return getServerURL().$_SERVER["REQUEST_URI"];
     }
+
     $url = getCompleteURL();
     $url_info = parse_url($url);
 	if( !isset($_SERVER['DOCUMENT_ROOT']) ) {
@@ -147,7 +202,9 @@ if (!(isset($_SESSION[$OJ_NAME.'_'.'administrator'])
     if(isset($_GET['ans2out'])){
 	    //echo "Generate out in $current_dir......";
 	    chdir($current_dir);
-	    system("/home/judge/src/install/ans2out $current_dir");
+	    //system("/home/judge/src/install/ans2out $current_dir");
+	    //using php to finish the work without system function
+	    reSortFiles($current_dir);
     }
     if ($resolveIDs){               // php8 default disabled exec()
         $mat_passwd=explode("\n",file_get_contents("/etc/passwd"));
