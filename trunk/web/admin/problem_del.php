@@ -10,16 +10,30 @@ if(!(isset($_SESSION[$OJ_NAME.'_'.'administrator']) || isset($_SESSION[$OJ_NAME.
 
 ?> 
 <?php
-  if($OJ_SAE||function_exists('system')){
-        $id=intval($_GET['id']);
-        
+function recursiveDelete($dir) {
+    if (is_dir($dir)) {
+        $files = scandir($dir);
+        foreach ($files as $file) {
+            if ($file != "." && $file != "..") {
+                $path = $dir . DIRECTORY_SEPARATOR . $file;
+                if (is_dir($path)) {
+                    recursiveDelete($path);
+                } else {
+                    unlink($path);
+                }
+            }
+        }
+        rmdir($dir);
+    }
+}
+
+// 使用示例
+  $id=intval($_GET['id']);
+  if($id>0&&strlen($OJ_DATA)>8){
         $basedir = "$OJ_DATA/$id";
-        if($OJ_SAE){
-			;//need more code to delete files
-	}else{
-	    if(strlen($basedir)>16){
-			system("rm -rf $basedir");
-	    }
+	if(strlen($basedir)>16&&$id>0){
+			//system("rm -rf $basedir");
+			recursiveDelete($basedir);
 	}
         $sql="delete FROM `problem` WHERE `problem_id`=?";
         pdo_query($sql,$id) ;
