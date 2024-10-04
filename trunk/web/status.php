@@ -248,26 +248,30 @@ if (isset($_GET['jresult'])){
 }else{
   $result = -1;
 }
+$showsim = isset($_GET['showsim']) ? intval($_GET['showsim']) : 0;
+if ($OJ_SIM&$showsim>0) {
+        $fields="solution.*,users.nick,users.group_name,users.starred,sim.*";
+}else{
+        $fields="solution.*,users.nick,users.group_name,users.starred";
+}
 if(isset($_GET['school'])&&trim($_GET['school'])!="" || isset($_GET['school'])&&trim($_GET['school'])!=""    ){
 
-	 $sql0="select solution.*,users.nick,users.group_name,users.starred from solution solution inner join users users on solution.user_id=users.user_id";
-	 if(isset($_GET['school'])&&trim($_GET['school'])!=""){
-	    $school=trim($_GET['school']);
-	    $sql.=" and users.school=? "; 
-      	    array_push($param,trim($_GET['school']));
-	    $str2 = $str2."&school=".htmlentities(trim($_GET['school']),ENT_QUOTES);
-	 }
-	 if(isset($_GET['group_name'])&&trim($_GET['group_name'])!=""){
-	    $group_name=trim($_GET['group_name']);
-	    $sql.=" and users.group_name=? "; 
-      	    array_push($param,trim($_GET['group_name']));
-	    $str2 = $str2."&group_name=".htmlentities(trim($_GET['group_name']),ENT_QUOTES);
-	 }
+         $sql0="select $fields from solution solution inner join users users on solution.user_id=users.user_id";
+         if(isset($_GET['school'])&&trim($_GET['school'])!=""){
+            $school=trim($_GET['school']);
+            $sql.=" and users.school=? ";
+            array_push($param,trim($_GET['school']));
+            $str2 = $str2."&school=".htmlentities(trim($_GET['school']),ENT_QUOTES);
+         }
+         if(isset($_GET['group_name'])&&trim($_GET['group_name'])!=""){
+            $group_name=trim($_GET['group_name']);
+            $sql.=" and users.group_name=? ";
+            array_push($param,trim($_GET['group_name']));
+            $str2 = $str2."&group_name=".htmlentities(trim($_GET['group_name']),ENT_QUOTES);
+         }
 }else{
-	$sql0="select solution.*,users.nick,users.group_name,users.starred from solution inner join users on solution.user_id=users.user_id";
+        $sql0="select $fields from solution inner join users on solution.user_id=users.user_id";
 }
-
-$showsim = isset($_GET['showsim']) ? intval($_GET['showsim']) : 0;
 
 if ($OJ_SIM&$showsim>0) {
   //$old=$sql;
