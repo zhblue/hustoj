@@ -3290,9 +3290,10 @@ int get_sim(int solution_id, int lang, int pid, int &sim_s_id)
         pf = fopen("sim", "r");
         if (!sim){
                 execute_cmd("/bin/mkdir ../data/%d/ac/ 2>/dev/null", pid);
-                execute_cmd("/bin/cp %s ../data/%d/ac/%d.%s 2>/dev/null", src_pth, pid, solution_id,
-                                        lang_ext[lang]);
-                //c cpp will
+                execute_cmd("/bin/chown www-data ../data/%d/ac/ 2>/dev/null", pid);
+                execute_cmd("/bin/cp %s ../data/%d/ac/%d.%s 2>/dev/null", src_pth, pid, solution_id,lang_ext[lang]);
+                execute_cmd("/bin/chown www-data ../data/%d/ac/%d.%s 2>/dev/null", pid, solution_id,lang_ext[lang]);
+ 		 //c cpp will
                 if (lang == 0)
                         execute_cmd("/bin/ln ../data/%d/ac/%d.%s ../data/%d/ac/%d.%s 2>/dev/null", pid,
                                                 solution_id, lang_ext[lang], pid, solution_id,
@@ -3454,7 +3455,7 @@ int main(int argc, char **argv)
 	double time_lmt;
 	char time_space_table[BUFFER_SIZE*100];
 	int time_space_index=0;
-
+        umask(0077);
 	init_parameters(argc, argv, solution_id, runner_id);
 
 	init_judge_conf();
