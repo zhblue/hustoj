@@ -1,4 +1,5 @@
 #!/bin/bash
+umask 0077
 EXTENSION=`echo "$1" | cut -d'.' -f2`
 FIRST=""
 for i in `ls ../data/$2/ac/*.$EXTENSION`
