@@ -48,6 +48,8 @@ function pdo_query($sql){
         GLOBAL $POP_UPED,$OJ_NAME,$_SESSION;
         if(!$POP_UPED&&isset($_SESSION[$OJ_NAME.'_administrator'])){
                 echo " $MSG_HELP_UPDATE_DATABASE <a href='/admin/update_db.php'>$MSG_UPDATE_DATABASE</a>。";
+		$view_errors="SQL:".$sql."\n".$e->getMessage();
+		echo htmlentities($view_errors."\n\n");
                 $POP_UPED=true;
         }
 
