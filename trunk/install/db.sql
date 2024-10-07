@@ -192,16 +192,16 @@ CREATE TABLE IF NOT EXISTS `users` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE IF NOT EXISTS `online` (
-  `hash` varchar(32) collate utf8mb4_unicode_ci NOT NULL,
-  `ip` varchar(46) character set utf8mb4 NOT NULL default '',
-  `ua` varchar(255) character set utf8mb4 NOT NULL default '',
-  `refer` varchar(255) collate utf8mb4_unicode_ci default NULL,
+  `hash` varchar(32) NOT NULL,
+  `ip` varchar(46)  NOT NULL default '',
+  `ua` varchar(255)  NOT NULL default '',
+  `refer` varchar(255)  default NULL,
   `lastmove` int(10) NOT NULL,
   `firsttime` int(10) default NULL,
-  `uri` varchar(255) collate utf8mb4_unicode_ci default NULL,
+  `uri` varchar(255) default NULL,
   PRIMARY KEY  (`hash`),
   UNIQUE KEY `hash` (`hash`)
-) ENGINE=MEMORY DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=MEMORY DEFAULT CHARSET=utf8mb4 ;
 
 CREATE TABLE IF NOT EXISTS `runtimeinfo` (
   `solution_id` int(11) NOT NULL DEFAULT 0,
@@ -238,10 +238,10 @@ CREATE TABLE IF NOT EXISTS `balloon` (
 
 CREATE TABLE IF NOT EXISTS `share_code` (
   `share_id` int(11) NOT NULL AUTO_INCREMENT,
-  `user_id` varchar(48) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `title` varchar(32) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `share_code` text COLLATE utf8mb4_unicode_ci,
-  `language` varchar(32) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `user_id` varchar(48)  DEFAULT NULL,
+  `title` varchar(32) DEFAULT NULL,
+  `share_code` text default '',
+  `language` varchar(32) DEFAULT NULL,
   `share_time` datetime DEFAULT NULL,
   PRIMARY KEY (`share_id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=1000 DEFAULT CHARSET=utf8mb4;
