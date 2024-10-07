@@ -240,7 +240,7 @@ CREATE TABLE IF NOT EXISTS `share_code` (
   `share_id` int(11) NOT NULL AUTO_INCREMENT,
   `user_id` varchar(48)  DEFAULT NULL,
   `title` varchar(32) DEFAULT NULL,
-  `share_code` text default '',
+  `share_code` text DEFAULT NULL,
   `language` varchar(32) DEFAULT NULL,
   `share_time` datetime DEFAULT NULL,
   PRIMARY KEY (`share_id`)
