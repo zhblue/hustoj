@@ -5,15 +5,15 @@
     <div style="font-content">
         <h2 class="ui header">评测</h2>
         <p>
-            <br> C 使用 <code>gcc 9.4.0</code> 编译，命令为
+            <br> C 使用 <code>gcc 11.4.0</code> 编译，命令为
             &nbsp;<code>gcc Main.c -o Main -fno-asm -Wall -lm --static -O2 -std=c99 -DONLINE_JUDGE</code>
-            <br> C++ 使用 <code>g++ 9.4.0</code> 编译，命令为
+            <br> C++ 使用 <code>g++ 11.4.0</code> 编译，命令为
             &nbsp;<code>g++ -fno-asm -Wall -lm --static -O2 -std=c++17 -DONLINE_JUDGE -o Main Main.cc</code>；
             <br> 您可以使用 <code>#pragma GCC optimize ("O0")</code> 手工关闭 O2 优化；
             <br> Pascal 使用 <code>fpc 3.0.4</code> 编译，命令为
             &nbsp;<code>fpc Main.pas -oMain -O1 -Co -Cr -Ct -Ci</code>。
             <br> Java 使用 <code>OpenJDK 17.0.4</code> 编译，命令为
-            <code>	javac -J-Xms32m -J-Xmx256m Main.java</code>，如果您的代码中没有 <code>public class</code>，请将入口类命名为 <code>Main</code>，在评测时提供额外 2 秒的运行时间和 512MB 的运行内存。
+            <code>	javac -J-Xms64m -J-Xmx128m Main.java</code>，如果您的代码中没有 <code>public class</code>，请将入口类命名为 <code>Main</code>，在评测时提供额外 2 秒的运行时间和 64MB 的运行内存。
             <br>
             这里给出的编译器版本仅供参考，请以实际编译器版本为准。
         </p>
