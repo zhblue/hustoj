@@ -750,6 +750,7 @@ void make_diff_out_simple(FILE *f1, FILE *f2,char * prefix, int c1, int c2, cons
                                 need=0;
                         }
                         if(isprint(c1))fprintf(diff,"%c",c1);
+			//else fprintf(diff,"`Binary:0x%02x`",c1);
                 }
                 if(!feof(f1)&&fgets(buf,BUFFER_SIZE-1,f1)){
                         if(buf[strlen(buf)-1]=='\n') buf[strlen(buf)-1]='\0';
@@ -767,7 +768,7 @@ void make_diff_out_simple(FILE *f1, FILE *f2,char * prefix, int c1, int c2, cons
                                   fprintf(diff,"\n||");
                         }
                         else if(isprint(c2))fprintf(diff,"%c",c2);
-                        else fprintf(diff,"BinaryCode: 0x%02x",c2);
+                        else fprintf(diff,"`Binary:0x%02x`",c2);
                 }
                 if(!feof(f2)&&fgets(buf,BUFFER_SIZE-1,f2)){
                         str_replace(buf,"|","丨");
