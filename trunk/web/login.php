@@ -53,6 +53,7 @@ if(!$use_cookie){
 }
 if($login){
 	//提取组名
+	session_regenerate_id();
   	$group_name="";
         $group_row=pdo_query("select group_name,nick from users where user_id=?",$login);
         if(!empty($group_row)){
