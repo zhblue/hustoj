@@ -134,7 +134,7 @@ function get_extension($file) {
 }
 
 function import_fps($tempfile) {
-  global $OJ_DATA,$OJ_SAE,$OJ_REDIS,$OJ_REDISSERVER,$OJ_REDISPORT,$OJ_REDISQNAME,$domain,$DOMAIN,$OJ_NAME;
+  global $OJ_DATA,$OJ_SAE,$OJ_REDIS,$OJ_REDISSERVER,$OJ_REDISPORT,$OJ_REDISQNAME,$domain,$DOMAIN,$OJ_NAME,$OJ_REMOTE_JUDGE;
   $xmlDoc = simplexml_load_file($tempfile, 'SimpleXMLElement', LIBXML_PARSEHUGE);
   $searchNodes = $xmlDoc->xpath("/fps/item");
   $spid = 0;
@@ -188,7 +188,7 @@ function import_fps($tempfile) {
             $title=$ptitle;
 
       $pid = addproblem($title, $time_limit, $memory_limit, $description, $input, $output, $sample_input, $sample_output, $hint, $source, $spj, $OJ_DATA);
-      if($remote_oj!=""){
+      if($OJ_REMOTE_JUDGE && $remote_oj!=""){
         $sql="update problem set remote_oj=?,remote_id=? where problem_id=?";
         pdo_query($sql,$remote_oj,$remote_id,$pid);
       }
