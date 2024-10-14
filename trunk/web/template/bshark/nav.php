@@ -150,7 +150,7 @@ if (
                             <?php echo $MSG_LOGOUT; ?>
                         </a>
                         <?php
-                        if ($_SESSION[$OJ_NAME . '_' . 'administrator']) {
+                        if (isset($_SESSION[$OJ_NAME . '_' . 'administrator'])) {
                             ?>
 
                             <a class="item" href="<?php echo $path_fix ?>swadmin">
