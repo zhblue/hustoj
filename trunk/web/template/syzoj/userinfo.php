@@ -16,6 +16,7 @@
     for ($i = count($accall);$i > 0; $i--) {
         if ($AC < $acneed[$i]) {$calsed = $accall[$i - 1];$calledid=$i-1;}
     }
+/*
     for ($i=0;$i<=11;++$i){
     	$ped[$i]=0;
     }
@@ -23,7 +24,9 @@
     $result = pdo_query($sql, $user);
     foreach ($result as $row) {
     	++$ped[$row['result']];
-}?>
+    }
+*/
+?>
 
 <div class="padding">
 <div class="ui grid">
