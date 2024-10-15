@@ -30,7 +30,7 @@
     <div class="row">
         <div class="five wide column">
             <div class="ui card" style="width: 100%; " id="user_card">
-                <div class="blurring dimmable image" id="avatar_container" style="height:325px">
+                <div class="blurring dimmable image" id="avatar_container">
                     <?php $default = ""; $grav_url = "https://www.gravatar.com/avatar/" . md5( strtolower( trim( $email ) ) ) . "?d=" . urlencode( $default ) . "&s=500"; ?>
 		<?php  
 		    // 如果email填写的是qq邮箱，取QQ头像显示
