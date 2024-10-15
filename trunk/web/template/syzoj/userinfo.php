@@ -4,7 +4,8 @@
 #avatar_container:before {
     content: "";
     display: block;
-    padding-top: 100%;
+    height:80%;
+    width:80%;
 }
 </style>
 <?php 
@@ -41,7 +42,7 @@
 
                 ?>
 
-                    <img style="margin-top: -100%; " src="<?php echo $grav_url; ?>">
+                    <img src="<?php echo $grav_url; ?>">
                 </div>
                 <div class="content">
                     <div class="header"><?php echo $nick?></div>
