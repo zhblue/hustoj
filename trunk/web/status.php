@@ -353,7 +353,7 @@ for ($i=0; $i<$rows_cnt; $i++) {
       $view_status[$i][1] = "<a href='userinfo.php?user=".$row['user_id']."' title='".$row['nick']."'>".$row['user_id']."</a>";
   }
   if(isset($row['starred']) && $row['starred'] >0 ) {
-	  $view_status[$i][1]="⭐".$view_status[$i][1]."⭐";	//people who starred us ,we star them
+	  $view_status[$i][1]="⭐".$view_status[$i][1]."<span title='用同名账户给hustoj项目加星，可以点亮此星' >⭐</span>";	//people who starred us ,we star them
   }
   $view_status[$i]['nick']=$row['nick'];
 
