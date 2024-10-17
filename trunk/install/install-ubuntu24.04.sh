@@ -216,6 +216,9 @@ systemctl enable mariadb
 systemctl enable php$PHP_VER-fpm
 #systemctl enable judged
 
+if ps -C memcached; then 
+    sed -i 's/static  $OJ_MEMCACHE=false;/static  $OJ_MEMCACHE=true;/g' /home/judge/src/web/include/db_info.inc.php
+fi
 
 /etc/init.d/mariadb start
 mkdir /var/log/hustoj/
