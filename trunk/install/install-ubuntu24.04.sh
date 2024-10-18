@@ -218,6 +218,8 @@ systemctl enable php$PHP_VER-fpm
 
 if ps -C memcached; then 
     sed -i 's/static  $OJ_MEMCACHE=false;/static  $OJ_MEMCACHE=true;/g' /home/judge/src/web/include/db_info.inc.php
+    sed -i 's/-m 64/-m 8/g' /etc/memcached.conf
+    /etc/init.d/memcached restart
 fi
 
 /etc/init.d/mariadb start
