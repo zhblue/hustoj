@@ -3484,6 +3484,7 @@ int main(int argc, char **argv)
 		mk_shm_workdir(work_dir);
 	}else{
 		execute_cmd("mkdir %s",work_dir);
+		execute_cmd("chown judge %s",work_dir);
 	}
 	
 	clean_workdir(work_dir);
