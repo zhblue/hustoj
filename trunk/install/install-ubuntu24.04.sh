@@ -228,7 +228,7 @@ if test -f  /.dockerenv ;then
         echo "Already in docker, skip docker installation, install some compilers ... "
         apt-get intall -y flex fp-compiler openjdk-14-jdk mono-devel
 else
-        sed -i 's/ubuntu:20/ubuntu:22/g' Dockerfile
+        sed -i 's/ubuntu:22/ubuntu:24/g' Dockerfile
         sed -i 's|/usr/include/c++/9|/usr/include/c++/11|g' Dockerfile
         bash docker.sh
 fi
