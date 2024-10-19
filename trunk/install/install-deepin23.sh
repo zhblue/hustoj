@@ -9,7 +9,7 @@ wget -O hustoj.tar.gz http://dl.hustoj.com/hustoj.tar.gz
 tar xzf hustoj.tar.gz
 svn up src
 #svn co https://github.com/zhblue/hustoj/trunk/trunk/ src
-for PKG in build-essential libmariadb++-dev php-fpm nginx mariadb-server php-mysql php-common php-gd php-zip php-mbstring php-xml php-yaml
+for PKG in build-essential libmariadb++-dev php-fpm php-memcache php-memcached memcached nginx mariadb-server php-mysql php-common php-gd php-zip php-mbstring php-xml php-yaml
 do
    apt-get install -y $PKG 
    apt-get install -f
@@ -109,7 +109,11 @@ systemctl enable nginx
 systemctl enable mariadb
 systemctl enable php$PHP_VER-fpm
 systemctl enable hustoj
-
+if ps -C memcached; then 
+    sed -i 's/static  $OJ_MEMCACHE=false;/static  $OJ_MEMCACHE=true;/g' /home/judge/src/web/include/db_info.inc.php
+    sed -i 's/-m 64/-m 8/g' /etc/memcached.conf
+    /etc/init.d/memcached restart
+fi
 cd /home/judge/src/install
 if test -f  /.dockerenv ;then
 	echo "Already in docker, skip docker installation, install some compilers ... "
