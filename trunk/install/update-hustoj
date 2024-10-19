@@ -4,6 +4,8 @@ git pull .
 
 echo "SVN not available from github any more "
 echo "using 'sudo bash fixing.sh' to get update from dl.hustoj.com "
+cd /home/judge/src/install
+sudo bash fixing.sh
 exit 1
 
 cd /home/judge/src/core
