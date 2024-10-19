@@ -14,6 +14,7 @@ URL=$1
 USER=$2
 PASSWORD=$3
 TARGET=$4
+OSRS=`lsb_release -rs`
 apt-get update
 apt-get install -y subversion
 /usr/sbin/useradd -m -u 1536 -s /sbin/nologin judge
@@ -24,6 +25,7 @@ svn co https://github.com/zhblue/hustoj/trunk/trunk/core src/core
 svn co https://github.com/zhblue/hustoj/trunk/trunk/install src/install
 apt-get install -y make flex g++ libmysqlclient-dev libmysql++-dev
 cd src/install
+sed -i "s/ubuntu:22.04/ubuntu:$OSRS/g" Dockerfile
 sudo bash docker.sh
 cd ../..
 CPU=`grep "cpu cores" /proc/cpuinfo |head -1|awk '{print $4}'`
