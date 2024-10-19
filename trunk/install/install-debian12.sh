@@ -7,7 +7,7 @@ cd /home/judge/
 wget -O hustoj.tar.gz http://dl.hustoj.com/hustoj.tar.gz
 tar xzf hustoj.tar.gz
 
-for PKG in make flex g++ clang mariadb-client libmysqlclient-dev libmysql++-dev php-fpm nginx php-mysql php-common php-gd php-zip php-yaml fp-compiler openjdk-11-jdk mono-devel php-mbstring php-xml mariadb-server libmariadb-dev libmariadbclient-dev libmariadb-dev default-libmysqlclient-dev
+for PKG in make flex g++ clang mariadb-client libmysqlclient-dev libmysql++-dev memcached php-fpm php-memcached php-memcache nginx php-mysql php-common php-gd php-zip php-yaml fp-compiler openjdk-11-jdk mono-devel php-mbstring php-xml mariadb-server libmariadb-dev libmariadbclient-dev libmariadb-dev default-libmysqlclient-dev
 do
    apt-get install -y $PKG 
 done
@@ -106,7 +106,11 @@ systemctl enable nginx
 systemctl enable mysql
 systemctl enable php$PHP_VER-fpm
 systemctl enable judged
-
+if ps -C memcached; then 
+    sed -i 's/static  $OJ_MEMCACHE=false;/static  $OJ_MEMCACHE=true;/g' /home/judge/src/web/include/db_info.inc.php
+    sed -i 's/-m 64/-m 8/g' /etc/memcached.conf
+    /etc/init.d/memcached restart
+fi
 echo "Note: skip-networking is needed for Andorid based Linux Deploy to start mariadb "
 echo "Remember your database account for HUST Online Judge:"
 echo "username:$USER"
