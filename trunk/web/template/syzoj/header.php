@@ -150,16 +150,16 @@
             <a class="item <?php if ($url=="status.php") echo "active";?>" href="<?php echo $path_fix?>status.php"><i
                     class="tasks icon"></i><span class="desktop-only"><?php echo $MSG_STATUS?></span></a>
             <!-- 排名 -->
-            <a class="desktop-only item <?php if ($url=="ranklist.php") echo "active";?> "
+            <a class="item <?php if ($url=="ranklist.php") echo "active";?> "
                 href="<?php echo $path_fix?>ranklist.php"><i class="signal icon"></i><span class="desktop-only"><?php echo $MSG_RANKLIST?></span></a>
             <!--<a class="item <?php //if ($url=="contest.php") echo "active";?>" href="/discussion/global"><i class="comments icon"></i><span class="desktop-only"><?php echo $MSG_BBS?></span></a>-->
             <!-- 近期比赛 -->    
 <?php if(isset($OJ_RECENT_CONTEST)&&$OJ_RECENT_CONTEST){    ?>
-            <a class="desktop-only item <?php if ($url=="recent-contest.php") echo "active";?> "
+            <a class="item <?php if ($url=="recent-contest.php") echo "active";?> "
                 href="<?php echo $path_fix?>recent-contest.php"><i class="bullhorn icon"></i> <span class="desktop-only"><?php echo $MSG_RECENT_CONTEST?></span></a>
 <?php } ?>
             <!-- 常见问答 -->
-            <a class="desktop-only item <?php if ($url=="faqs.php") echo "active";?>" href="<?php echo $path_fix?>faqs.php"><i
+            <a class="item <?php if ($url=="faqs.php") echo "active";?>" href="<?php echo $path_fix?>faqs.php"><i
                     class="help circle icon"></i><span class="desktop-only"> <?php echo $MSG_FAQ?></span></a>
             <!-- 讨论板 -->
               <?php if (isset($OJ_BBS)&& $OJ_BBS){ ?>
