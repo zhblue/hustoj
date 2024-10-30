@@ -325,3 +325,30 @@ function RemoveXSS($val) {
    }
    return $val;
 }
+function exportToExcel($filename='file', $tileArray=[], $dataArray=[]){
+        ini_set('memory_limit','512M');
+        ini_set('max_execution_time',0);
+        ob_end_clean();
+        ob_start();
+        header("Content-Type: text/csv");
+        header("Content-Disposition:filename=".$filename);
+        $fp=fopen('php://output','w');
+        fwrite($fp, chr(0xEF).chr(0xBB).chr(0xBF));//转码 防止乱码(比如微信昵称(乱七八糟的))
+        fputcsv($fp,$tileArray);
+        $index = 0;
+        foreach ($dataArray as $item) {
+            if($index==1000){
+                $index=0;
+                ob_flush();
+                flush();
+            }
+            $index++;
+            $col=count($item)/2;
+            for($i=0;$i<$col;$i++)unset($item[$i]);
+            fputcsv($fp,$item);
+        }
+
+        ob_flush();
+        flush();
+        ob_end_clean();
+}
