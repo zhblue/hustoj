@@ -26,14 +26,15 @@ if(isset($_POST['do'])){
 	$passwd = pwGen($passwd);
 	$sql = "update `users` set `password`=? where `user_id`=?  and user_id not in( select user_id from privilege where rightstr='administrator')";
 	
-	if(pdo_query($sql,$passwd,$user_id) == 1)
+	if(pdo_query($sql,$passwd,$user_id) == 1){
 		echo "<center><h4 class='text-danger'>User ".htmlentities($_POST['user_id'], ENT_QUOTES, 'UTF-8')."'s Password Changed!</h4></center>";
-  else
+		?>
+	 		<script>window.setTimeout("history.go(-2);",2000);</script>
+     		<?php
+	}else{
   	        echo "<center><h4 class='text-danger'>There is No such User ".htmlentities($_POST['user_id'], ENT_QUOTES, 'UTF-8')."! or User ".htmlentities($_POST['user_id'], ENT_QUOTES, 'UTF-8')." is administrator!</h4></center>";
-
-    ?>
-	 <script>window.setTimeout("history.go(-2);",2000);</script>
-     <?php
+	}
+    
 }
 ?>
 
