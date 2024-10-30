@@ -325,7 +325,7 @@ function RemoveXSS($val) {
    }
    return $val;
 }
-function exportToExcel($filename='file', $tileArray=[], $dataArray=[]){
+function exportToExcel($filename='file', $tileArray=[], $dataArray=[],$cut=true){
         ini_set('memory_limit','512M');
         ini_set('max_execution_time',0);
         ob_end_clean();
@@ -343,8 +343,10 @@ function exportToExcel($filename='file', $tileArray=[], $dataArray=[]){
                 flush();
             }
             $index++;
-            $col=count($item)/2;
-            for($i=0;$i<$col;$i++)unset($item[$i]);
+            if($cut) {
+                    $col=count($item)/2;
+                    for($i=0;$i<$col;$i++)unset($item[$i]);
+            }
             fputcsv($fp,$item);
         }
 
