@@ -28,7 +28,7 @@ function import_user($filename) {
                         echo "导入名单：<hr>\n";
                         $gb2312=false;
                         continue;
-                }else if (iconv("gb2312","utf-8",$data[0])=="学号") {
+                }else if (iconv("gbk","utf-8",$data[0])=="学号") {
                         $check=true;
                         $gb2312=true;
                         continue;
@@ -45,9 +45,9 @@ function import_user($filename) {
                     if (isset($data[4])) $email = $data[4];
                     if (isset($data[5])) $group_name = $data[5];
                     if($gb2312) {
-                            $nick=iconv("gb2312","utf-8",$nick);
-                            $school=iconv("gb2312","utf-8",$school);
-                            $group_name=iconv("gb2312","utf-8",$group_name);
+                            $nick=iconv("gbk","utf-8",$nick);
+                            $school=iconv("gbk","utf-8",$school);
+                            $group_name=iconv("gbk","utf-8",$group_name);
                     }
                     if (mb_strlen($nick, 'utf-8') > 20) {
                         $new_len = mb_strlen($nick, 'utf-8');
