@@ -253,6 +253,6 @@ if(isset($_SESSION[$OJ_NAME.'_'.'balloon'])){
             </div>
         </div>
     </div>
-    <div style="margin-top: 28px; ">
+    <div style="margin-top: 49px; ">
         <div id="main" class="ui main container">
 <?php } ?>
