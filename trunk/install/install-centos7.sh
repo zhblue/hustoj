@@ -38,13 +38,13 @@ tar xzf hustoj.tar.gz
 
 #svn co https://github.com/zhblue/hustoj/trunk/trunk/ src
 cd src/install
-while ! wget -O hustoj.docker.tar.bz2  http://dl3.hustoj.com/docker/hustoj.docker.tar.bz2
+while ! wget -O hustoj.docker.tar.bz2  http://dl3.hustoj.com/docker/hustoj.docker.tar.gz
 do
   		echo "Download archive image file fail , try again..."
 done
-bzip2 -d hustoj.docker.tar.bz2
+gzip -d hustoj.docker.tar.gz
 docker import hustoj.docker.tar hustoj
-rm hustoj.docker.tar.bz2
+rm hustoj.docker.tar.gz
 mysql -h localhost -uroot < db.sql
 echo "insert into jol.privilege values('admin','administrator','true','N');"|mysql -h localhost -uroot
 # mysqladmin -u root password $DBPASS
