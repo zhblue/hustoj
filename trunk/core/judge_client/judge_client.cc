@@ -33,6 +33,7 @@
 #include <dirent.h>
 #include <unistd.h>
 #include <time.h>
+#include <math.h>
 #include <stdarg.h>
 #include <ctype.h>
 #include <sys/wait.h>
@@ -2536,9 +2537,9 @@ void run_solution(int &lang, char *work_dir, double &time_lmt, int &usedtime,
 	struct rlimit LIM; // time limit, file limit& memory limit
 	// time limit
 	if (time_limit_to_total)
-		LIM.rlim_cur = (time_lmt / cpu_compensation - usedtime / 1000.0f) + 1;
+		LIM.rlim_cur = ceil(time_lmt / cpu_compensation - usedtime / 1000.0f) + 1;
 	else
-		LIM.rlim_cur = time_lmt / cpu_compensation + 1 ;
+		LIM.rlim_cur = ceil(time_lmt / cpu_compensation) + 1 ;
 	LIM.rlim_max = LIM.rlim_cur + 1 ;
 	//if(DEBUG) printf("LIM_CPU=%d",(int)(LIM.rlim_cur));
 	setrlimit(RLIMIT_CPU, &LIM);
@@ -2550,7 +2551,7 @@ void run_solution(int &lang, char *work_dir, double &time_lmt, int &usedtime,
 //			alarm(1);
 //	}else{
 		if(time_lmt / cpu_compensation>1)
-			alarm( time_lmt / cpu_compensation);
+			alarm( ceil(time_lmt / cpu_compensation)+1);
 		else
 			alarm(1);
 //	}
