@@ -1374,31 +1374,31 @@ int compile(int lang, char *work_dir)
                                                    "-Wall", "-lm", "--static", "-DONLINE_JUDGE", "-o", "Main", "Main.cc", NULL};
 
 	const char *CP_P[] =
-		{"fpc", ".pas", "-Cs32000000", "-Sh", "-O2", "-Co", "-Ct", "-Ci", NULL};
-	//      const char * CP_J[] = { "javac", "-J-Xms32m", "-J-Xmx256m","-encoding","UTF-8", ".java",NULL };
+		{"fpc", "Main.pas", "-Cs32000000", "-Sh", "-O2", "-Co", "-Ct", "-Ci", NULL};
+	//      const char * CP_J[] = { "javac", "-J-Xms32m", "-J-Xmx256m","-encoding","UTF-8", "Main.java",NULL };
 
-	const char *CP_R[] = {"ruby", "-c", ".rb", NULL};
-	const char *CP_B[] = {"chmod", "+rx", ".sh", NULL};
+	const char *CP_R[] = {"ruby", "-c", "Main.rb", NULL};
+	const char *CP_B[] = {"chmod", "+rx", "Main.sh", NULL};
 	const char * CP_Y[] = { "python3", "-c",
-			"import py_compile; py_compile.compile(r'.py')", NULL };
-	const char *CP_PH[] = {"php", "-l", ".php", NULL};
-	const char *CP_PL[] = {"perl", "-c", ".pl", NULL};
-	const char *CP_CS[] = {"mcs","-codepage:utf8", "-warn:0", ".cs", NULL};
-	const char *CP_OC[] = {"gcc", "-o", "", ".m",
+			"import py_compile; py_compile.compile(r'Main.py')", NULL };
+	const char *CP_PH[] = {"php", "-l", "Main.php", NULL};
+	const char *CP_PL[] = {"perl", "-c", "Main.pl", NULL};
+	const char *CP_CS[] = {"mcs","-codepage:utf8", "-warn:0", "Main.cs", NULL};
+	const char *CP_OC[] = {"gcc", "-o", "Main", "Main.m",
 						   "-fconstant-string-class=NSConstantString", "-I",
 						   "/usr/include/GNUstep/", "-L", "/usr/lib/GNUstep/Libraries/",
 						   "-lobjc", "-lgnustep-base", NULL};
-	const char *CP_BS[] = {"fbc", "-lang", "qb", ".bas", NULL};
-	const char *CP_CLANG[] = {"clang", ".c", "-o", "", "-ferror-limit=10", "-fno-asm", "-Wall",
+	const char *CP_BS[] = {"fbc", "-lang", "qb", "Main.bas", NULL};
+	const char *CP_CLANG[] = {"clang", "Main.c", "-o", "Main", "-ferror-limit=10", "-fno-asm", "-Wall",
 							  "-lm", "--static", "-std=c99", "-DONLINE_JUDGE", NULL};
-	const char *CP_CLANG_CPP[] = {"clang++", ".cc", "-o", "", "-ferror-limit=10", "-fno-asm", "-Wall",
+	const char *CP_CLANG_CPP[] = {"clang++", "Main.cc", "-o", "Main", "-ferror-limit=10", "-fno-asm", "-Wall",
 								  "-lm", "--static", "-std=c++0x", "-DONLINE_JUDGE", NULL};
-	const char *CP_LUA[] = {"luac", "-o", "", ".lua", NULL};
-	//const char * CP_JS[] = { "js24","-c", ".js", NULL };
-	const char *CP_GO[] = {"go", "build", "-o", "", ".go", NULL};
-	const char *CP_FORTRAN[] = {"f95", "-static", "-o", "", ".f95", NULL};
-	const char *CP_COBOL[] = {"cobc","-x", "-static", "-o", "", ".cob", NULL};
-	const char *CP_SB3[] = {"scratch-run","--check", ".sb3", NULL};
+	const char *CP_LUA[] = {"luac", "-o", "Main", "Main.lua", NULL};
+	//const char * CP_JS[] = { "js24","-c", "Main.js", NULL };
+	const char *CP_GO[] = {"go", "build", "-o", "Main", "Main.go", NULL};
+	const char *CP_FORTRAN[] = {"f95", "-static", "-o", "Main", "Main.f95", NULL};
+	const char *CP_COBOL[] = {"cobc","-x", "-static", "-o", "Main", "Main.cob", NULL};
+	const char *CP_SB3[] = {"scratch-run","--check", "Main.sb3", NULL};
 
 	char * const envp[]={(char * const )"PYTHONIOENCODING=utf-8",
 			     (char * const )"USER=judge",
@@ -1417,7 +1417,7 @@ int compile(int lang, char *work_dir)
 	sprintf(CP_J[2], "-J%s", java_xmx);
 	sprintf(CP_J[3], "-encoding");
 	sprintf(CP_J[4], "UTF-8");
-	sprintf(CP_J[5], ".java");
+	sprintf(CP_J[5], "Main.java");
 	CP_J[6] = (char *)NULL;
 
 	pid = fork();
@@ -1689,9 +1689,9 @@ void _get_solution_mysql(int solution_id, char *work_dir, int lang)
 	{
 		row = mysql_fetch_row(res);
 		if(row != NULL) {
-			sprintf(src_pth, ".%s", lang_ext[lang]);
+			sprintf(src_pth, "Main.%s", lang_ext[lang]);
 			if (DEBUG)
-				printf("=%s", src_pth);
+				printf("Main=%s", src_pth);
 			FILE *fp_src = fopen(src_pth, "we");
 			fprintf(fp_src, "%s", row[0]);
 			mysql_free_result(res); // free the memory
@@ -1707,9 +1707,9 @@ void _get_solution_http(int solution_id, char *work_dir, int lang)
 	char src_pth[BUFFER_SIZE];
 
 	// create the src file
-	sprintf(src_pth, ".%s", lang_ext[lang]);
+	sprintf(src_pth, "Main.%s", lang_ext[lang]);
 	if (DEBUG)
-		printf("=%s", src_pth);
+		printf("Main=%s", src_pth);
 
 	//login();
 
@@ -1722,7 +1722,7 @@ void _get_solution_http(int solution_id, char *work_dir, int lang)
 void get_solution(int solution_id, char *work_dir, int lang,int p_id)
 {
 	char src_pth[BUFFER_SIZE];
-	sprintf(src_pth, ".%s", lang_ext[lang]);
+	sprintf(src_pth, "Main.%s", lang_ext[lang]);
 	if (http_judge)
 	{
 		_get_solution_http(solution_id, work_dir, lang);
@@ -1735,7 +1735,7 @@ void get_solution(int solution_id, char *work_dir, int lang,int p_id)
 #endif
 	}
 	if(lang == LANG_PYTHON ){    // 从源码中搜索python2字样，失败的结果非零默认python3,成功的结果为0是python2
-		py2 = execute_cmd("/bin/grep 'python2' %s/.py > /dev/null", work_dir);
+		py2 = execute_cmd("/bin/grep 'python2' %s/Main.py > /dev/null", work_dir);
                 execute_cmd("sed -i 's/import.*os//g' %s/%s", work_dir, src_pth);
 	}
 	if(lang == LANG_SB3 ){
@@ -3716,6 +3716,7 @@ int main(int argc, char **argv)
 	{
 		usedtime=0;
 		dirp=namelist[i];
+
 		namelen = isInFile(dirp->d_name); // check if the file is *.in or not
 		if (namelen == 0)
 			continue;
