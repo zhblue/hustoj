@@ -166,6 +166,17 @@ if( isset($OJ_NOIP_KEYWORD) && $OJ_NOIP_KEYWORD ){
 	        }
 	}
 }
+
+	       $solution_file = "$OJ_DATA/$id/output.name";
+
+	 if (file_exists($solution_file)) {
+        // 读取文件内容
+        $content = file_get_contents($solution_file);
+        
+        // 提取文件名部分（去掉扩展名）
+        $filename = pathinfo($content, PATHINFO_FILENAME);
+        
+    } 
 /////////////////////////Template
 require("template/".$OJ_TEMPLATE."/problem.php");
 /////////////////////////Common foot
