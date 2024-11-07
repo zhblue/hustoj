@@ -129,6 +129,7 @@ $(function() {
 });
 </script>
 <script src="include/sortTable.js"></script>
+<script src="<?php echo $OJ_CDN_URL.$path_fix."template/bs3/"?>marked.min.js"></script>
 <script>
 var diff = new Date("<?php echo date("Y/m/d H:i:s")?>").getTime() - new Date().getTime();
 //alert(diff);
@@ -164,6 +165,38 @@ clock();
     }
     setInterval("count_down()", 1000);
 <?php }?>
+    $(document).ready(function (){
+                marked.use({
+                  // 开启异步渲染
+                  async: true,
+                  pedantic: false,
+                  gfm: true,
+                  mangle: false,
+                  headerIds: false
+                });
+
+                $(".md").each(function(){
+                        $(this).html(marked.parse($(this).html()));
+                });
+                // adding note for ```input1  ```output1 in description
+                for(let i=1;i<10;i++){
+                        $(".language-input"+i).parent().before("<div><?php echo $MSG_Input?>"+i+":</div>");
+                        $(".language-output"+i).parent().before("<div><?php echo $MSG_Output?>"+i+":</div>");
+                }
+        $(".md table tr td").css({
+            "border": "1px solid grey",
+            "text-align": "center",
+            "width": "200px",
+            "height": "30px"
+        });
+        $(".md table th").css({
+            "border": "1px solid grey",
+            "width": "200px",
+            "height": "30px",
+            "background-color": "#9e9e9ea1",
+            "text-align": "center"
+        });
+    });
 
 </script>
 
