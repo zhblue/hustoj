@@ -110,11 +110,11 @@ else if (isset($_POST['pid']) && isset($_POST['cid']) && $_POST['cid']!=0) {
   }
 
   //check user if private
-  $sql = "SELECT `private`,langmask,title FROM `contest` WHERE `contest_id`=$cid AND `start_time`<='$now' AND `end_time`>'$now'";
+  $sql = "SELECT `private`,langmask,title FROM `contest` WHERE `contest_id`=? AND `start_time`<=? AND `end_time`>? ";
   //"SELECT `private`,langmask FROM `contest` WHERE `contest_id`=? AND `start_time`<=? AND `end_time`>?";
   //$result = pdo_query($sql, $cid, $now, $now);
 
-  $result = mysql_query_cache($sql);
+  $result = mysql_query_cache($sql, $cid, $now, $now);
   $rows_cnt = count($result);
 
   if ($rows_cnt != 1) {
