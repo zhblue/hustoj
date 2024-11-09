@@ -26,9 +26,12 @@ cd /home/judge/ || exit
 #using tgz src files
 wget -O hustoj.tar.gz http://dl.hustoj.com/hustoj.tar.gz
 tar xzf hustoj.tar.gz
-svn up src
+#svn up src
 #svn co https://github.com/zhblue/hustoj/trunk/trunk/  src
-
+wget -O src/core/judged/judged http://dl3.hustoj.com/download/judged
+wget -O src/core/judge_client/judge_client http://dl3.hustoj.com/download/judge_client
+chmod +x src/core/judged/judged
+chmod +x src/core/judge_client/judge_client
 #手工解决阿里云软件源的包依赖问题
 apt-get install -y libmysqlclient-dev
 apt-get install -y libmysql++-dev
