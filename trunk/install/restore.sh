@@ -28,7 +28,7 @@ chown www-data -R /home/judge/src/web/
 bzip2 -d var/backups/db_${BAKDATE}.sql.bz2
 sed -i 's/COLLATE=utf8mb4_0900_ai_ci//g' var/backups/db_${BAKDATE}.sql
 sed -i 's/COLLATE utf8mb4_0900_ai_ci//g' var/backups/db_${BAKDATE}.sql
-sed -i 's/utf8mb4_0900_ai_ci/utf8mb4_unicode_ci/g' var/backups/db_${BAKDATE}.sql
+sed -i 's/utf8mb4_0900_ai_ci/utf8mb4_general_ci/g' var/backups/db_${BAKDATE}.sql
 if ! mysql -h $SERVER -u$USER -p$PASSWORD $DATABASE < var/backups/db_${BAKDATE}.sql ; then
    mysql $DATABASE < var/backups/db_${BAKDATE}.sql
 fi
