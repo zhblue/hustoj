@@ -568,35 +568,26 @@ function selectMulti( num, answer){
 
 
   <script>
-	  if($('#copyin')[0]!= undefined ){
-
-		    var clipboardin=new Clipboard($('#copyin')[0]);
-		    clipboardin.on('success', function(e){
-		      $("#copyin").text("<?php echo $MSG_COPY.$MSG_SUCCESS; ?>!"); 
-		          setTimeout(function () {$("#copyin").text("<?php echo $MSG_COPY; ?>"); }, 1500);    
-		      console.log(e);
-		    });
-		    clipboardin.on('error', function(e){
-		      $("#copyin").text("<?php echo $MSG_COPY.$MSG_FAIL; ?>!"); 
-		          setTimeout(function () {$("#copyin").text("<?php echo $MSG_COPY; ?>"); }, 1500);
-		      console.log(e);
-		    });
-	  }
-	  if($('#copyout')[0]!= undefined ){
-
-		    var clipboardout=new Clipboard($('#copyout')[0]);
-		    clipboardout.on('success', function(e){
-		      $("#copyout").text("<?php echo $MSG_COPY.$MSG_SUCCESS; ?>!"); 
-		          setTimeout(function () {$("#copyout").text("<?php echo $MSG_COPY; ?>"); }, 1500);    
-		      console.log(e);
-		    });
-		    clipboardout.on('error', function(e){
-		      $("#copyout").text("<?php echo $MSG_COPY.$MSG_FAIL; ?>!"); 
-		          setTimeout(function () {$("#copyout").text("<?php echo $MSG_COPY; ?>"); }, 1500);
-		      console.log(e);
-		    });
-	  }
-
+	var preIndex=1;
+        $(document).ready(function () {
+          $("pre").each(function () {
+                    $(this).attr("id","pre"+preIndex);
+                    $(this).before("<span class='copy' id='copyBtn"+preIndex+"'  data-clipboard-target='#pre"+preIndex+"' ><?php echo $MSG_COPY; ?></span>");
+                    let clipboardin=new Clipboard("#copyBtn"+preIndex);
+                    clipboardin.on('success', function(e){
+                            console.log(e);
+                      $(e.trigger).text("<?php echo $MSG_COPY.$MSG_SUCCESS; ?>!");
+                          setTimeout(function () {$(".copy").text("<?php echo $MSG_COPY; ?>"); }, 1500);
+                      console.log(e);
+                    });
+                    clipboardin.on('error', function(e){
+                      $("#copyin").text("<?php echo $MSG_COPY.$MSG_FAIL; ?>!");
+                          setTimeout(function () {$("#copyin").text("<?php echo $MSG_COPY; ?>"); }, 1500);
+                      console.log(e);
+                    });
+                    preIndex++;
+          });
+        });
   </script>
 <?php if (isset($OJ_MATHJAX)&&$OJ_MATHJAX){?>
     <!--以下为了加载公式的使用而既加入-->
