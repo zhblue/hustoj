@@ -565,28 +565,51 @@ function selectMulti( num, answer){
   </script>   
 
 
-  <script>
-	var preIndex=1;
-        $(document).ready(function () {
-          $("pre").each(function () {
-                    $(this).attr("id","pre"+preIndex);
-                    $(this).before("<span class='copy' id='copyBtn"+preIndex+"'  data-clipboard-target='#pre"+preIndex+"' ><?php echo $MSG_COPY; ?></span>");
-                    let clipboardin=new Clipboard("#copyBtn"+preIndex);
-                    clipboardin.on('success', function(e){
-                            console.log(e);
-                      $(e.trigger).text("<?php echo $MSG_COPY.$MSG_SUCCESS; ?>!");
-                          setTimeout(function () {$(".copy").text("<?php echo $MSG_COPY; ?>"); }, 1500);
-                      console.log(e);
-                    });
-                    clipboardin.on('error', function(e){
-                      $("#copyin").text("<?php echo $MSG_COPY.$MSG_FAIL; ?>!");
-                          setTimeout(function () {$("#copyin").text("<?php echo $MSG_COPY; ?>"); }, 1500);
-                      console.log(e);
-                    });
-                    preIndex++;
-          });
-        });
-  </script>
+<style>
+  .copy {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background-color: #f1f1f1;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 12px;
+    z-index: 10;
+  }
+  .pre-wrapper {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+  }
+</style>
+
+<script>
+var preIndex=1;
+$(document).ready(function () {
+  $("pre").each(function () {
+    $(this).wrap("<div class='pre-wrapper'></div>");
+    $(this).attr("id", "pre" + preIndex);
+    $(this).before("<span class='copy' id='copyBtn" + preIndex + "'  data-clipboard-target='#pre" + preIndex + "' ><?php echo $MSG_COPY; ?></span>");
+    
+    let clipboardin = new Clipboard("#copyBtn" + preIndex);
+    clipboardin.on('success', function(e){
+      $(e.trigger).text("<?php echo $MSG_COPY.$MSG_SUCCESS; ?>!");
+      setTimeout(function () {
+        $(".copy").text("<?php echo $MSG_COPY; ?>");
+      }, 1500);
+    });
+    clipboardin.on('error', function(e){
+      $(e.trigger).text("<?php echo $MSG_COPY.$MSG_FAIL; ?>!");
+      setTimeout(function () {
+        $(".copy").text("<?php echo $MSG_COPY; ?>");
+      }, 1500);
+    });
+    
+    preIndex++;
+  });
+});
+</script>
 <?php if (isset($OJ_MATHJAX)&&$OJ_MATHJAX){?>
     <!--以下为了加载公式的使用而既加入-->
 <script>
