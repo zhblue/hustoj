@@ -451,8 +451,8 @@ function selectMulti( num, answer){
 		});
 	  	// adding note for ```input1  ```output1 in description
 	        for(let i=1;i<10;i++){
-                        $(".language-input"+i).parent().before("<div><?php echo $MSG_Input?>"+i+":</div>");
-                        $(".language-output"+i).parent().before("<div><?php echo $MSG_Output?>"+i+":</div>");
+                        $(".language-input"+i).parent().before("<div><?php echo $MSG_Sample_Input?>"+i+":</div>");
+                        $(".language-output"+i).parent().before("<div><?php echo $MSG_Sample_Output?>"+i+":</div>");
                 }
 
 	       
