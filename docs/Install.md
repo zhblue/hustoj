@@ -10,7 +10,7 @@
 
 **不要**使用 `LNMP` `LAMP` `Cpanel` 等其他面板程序提供的 `MySQL` `Nginx` `Apache` `PHP` 环境，安装脚本已经包含所有必须环境的安装。
 
-若已经安装`宝塔`,推荐参考[宝塔环境安装hustoj说明](https://github.com/zhblue/hustoj/raw/master/docs/%E5%AE%9D%E5%A1%94%E7%B3%BB%E7%BB%9F%E5%AE%89%E8%A3%85HUSTOJ%E6%8C%87%E5%8D%97v0.2.docx)
+若已经安装`宝塔`,推荐参考[宝塔环境安装hustoj说明](https://github.com/zhblue/hustoj/raw/master/docs/%E5%AE%9D%E5%A1%94%E7%B3%BB%E7%BB%9F%E5%AE%89%E8%A3%85HUSTOJ%E6%8C%87%E5%8D%97v0.4.docx)
 
 **腾讯云用户请[换软件源](https://developer.aliyun.com/mirror/ubuntu)，增加 `multiverse` 。**
 
