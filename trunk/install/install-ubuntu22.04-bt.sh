@@ -42,7 +42,7 @@ svn up src
 #svn co https://github.com/zhblue/hustoj/trunk/trunk/  src
 
 #手工解决阿里云软件源的包依赖问题
-apt install libssl1.1=1.1.1f-1ubuntu2.8 -y --allow-downgrades
+#apt install libssl1.1=1.1.1f-1ubuntu2.8 -y --allow-downgrades
 apt-get install -y libmysqlclient-dev
 apt-get install -y libmysql++-dev
 
