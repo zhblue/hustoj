@@ -761,7 +761,7 @@ void make_diff_out_simple(FILE *f1, FILE *f2,char * prefix, int c1, int c2, cons
                 }
                 fprintf(diff,"|");
                 if(row==1){
-                        if(isprint(c2)&&need)fprintf(diff,"%s",prefix);
+                        if(need)fprintf(diff,"%s",prefix);
                         if(c2=='|') fprintf(diff,"丨");
                         else if(c2=='[') fprintf(diff,"［");
                         else if(c2==']') fprintf(diff,"］");
@@ -772,8 +772,7 @@ void make_diff_out_simple(FILE *f1, FILE *f2,char * prefix, int c1, int c2, cons
                         }
                         else if(isprint(c2))fprintf(diff,"%c",c2);
                         else {
-				fprintf(diff,"`Binary:0x%02x`",c2);
-				break;
+				fprintf(diff,"`0x%02x`",c2);   //Binary Code
 			}
                 }
                 if(!feof(f2)&&fgets(buf,BUFFER_SIZE-1,f2)){
@@ -787,7 +786,7 @@ void make_diff_out_simple(FILE *f1, FILE *f2,char * prefix, int c1, int c2, cons
 			       	if (isprint(buf[i]))
                         	   fprintf(diff,"%c",buf[i]);
 				else
-                        	   fprintf(diff,"`Binary:0x%02x`",buf[i]);
+                        	   fprintf(diff,"`0x%02x`",buf[i]);   //Binary Code
 			}
                 }
                 fprintf(diff,"\n");
