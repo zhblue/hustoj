@@ -794,7 +794,7 @@ void make_diff_out_simple(FILE *f1, FILE *f2,char * prefix, int c1, int c2, cons
  * http://code.google.com/p/zoj/source/browse/trunk/judge_client/client/text_checker.cc#25
  * 参考zoj的文件流式比较器，有更低的内存占用
  */
-int compare_zoj(const char *file1, const char *file2,const char * infile,const char * userfile)
+int compare_zoj(const char *file1, const char *file2,const char * infile,const char * userfile,double * spj_mark)
 {
         int ret = OJ_AC;
         int c1, c2;
@@ -870,6 +870,11 @@ end:
 		else
 			make_diff_out_simple(f1, f2, prefix, c1, c2, file1,userfile);
 	}
+	long out_size,user_now;
+	out_size=get_file_size(file1);
+	user_now=ftell(f2);
+	if(DEBUG) printf("user/out=%ld/%ld\n",user_now,out_size);
+	if(user_now>1 && out_size>user_now) *spj_mark=(user_now-1.00)/out_size;
 	if (f1)
 		fclose(f1);
 	if (f2)
@@ -885,11 +890,11 @@ void delnextline(char s[])
 		s[--L] = 0;
 }
 
-int compare(const char *file1, const char *file2, const char * infile,const char * userfile)  
+int compare(const char *file1, const char *file2, const char * infile,const char * userfile,double * spj_mark)  
 {
 #ifdef ZOJ_COM
 	//compare ported and improved from zoj don't limit file size
-	return compare_zoj(file1, file2,infile,userfile);
+	return compare_zoj(file1, file2,infile,userfile,spj_mark);
 #endif
 #ifndef ZOJ_COM
 	//the original compare from the first version of hustoj has file size limit  原始的内存中比较，速度更快但耗用更多内存
@@ -2919,7 +2924,7 @@ void judge_solution(int &ACflg, int &usedtime, double time_lmt, int spj,
 		}
 		else
 		{
-			comp_res = compare(outfile, userfile,infile,userfile);
+			comp_res = compare(outfile, userfile,infile,userfile,spj_mark);
 		}
 		if (comp_res == OJ_WA)
 		{
@@ -3825,14 +3830,11 @@ int main(int argc, char **argv)
 				if(same_subtask(last_name,dirp->d_name)){ //相同子任务，初次失败
 					if(minus_mark>=0) get_mark-=minus_mark;  //扣除任务内积分
 				}
-				if(spj==1){
-					if(DEBUG)printf("1 spj_mark: %.2f mark: %.2f get_mark: %.2f\n",spj_mark,mark,get_mark);
-					get_mark+=mark*spj_mark;	
-					pass_rate+=spj_mark;
-					if(DEBUG)printf("2 spj_mark: %.2f mark: %.2f get_mark: %.2f\n",spj_mark,mark,get_mark);
-				}else{
-					minus_mark= -1 ;                          //当前任务失败，标记
-				}
+				if(DEBUG)printf("1 spj_mark: %.2f mark: %.2f get_mark: %.2f\n",spj_mark,mark,get_mark);
+				get_mark+=mark*spj_mark;	
+				pass_rate+=spj_mark;
+				if(DEBUG)printf("2 spj_mark: %.2f mark: %.2f get_mark: %.2f\n",spj_mark,mark,get_mark);
+				minus_mark= -1 ;                          //当前任务失败，标记
 			}
 			if (finalACflg < ACflg)
 			{
