@@ -870,6 +870,12 @@ int compare_zoj(const char *file1, const char *file2,const char * infile,const c
 			}
 		}
 end:
+	long out_size,user_now;
+	out_size=get_file_size(file1);
+	user_now=ftell(f2);
+	if(DEBUG) printf("user/out=%ld/%ld\n",user_now,out_size);
+	if(user_now>1 && out_size>user_now) *spj_mark=(user_now-1.00)/out_size;
+
 	if (ret == OJ_WA || ret == OJ_PE)
 	{
 		if (full_diff)
@@ -877,11 +883,6 @@ end:
 		else
 			make_diff_out_simple(f1, f2, prefix, c1, c2, file1,userfile);
 	}
-	long out_size,user_now;
-	out_size=get_file_size(file1);
-	user_now=ftell(f2);
-	if(DEBUG) printf("user/out=%ld/%ld\n",user_now,out_size);
-	if(user_now>1 && out_size>user_now) *spj_mark=(user_now-1.00)/out_size;
 	if (f1)
 		fclose(f1);
 	if (f2)
@@ -2911,6 +2912,7 @@ void judge_solution(int &ACflg, int &usedtime, double time_lmt, int spj,
 			if(total_time>real_limit) ACflg = OJ_TL;
 		}
 	}
+
 	if (topmemory > mem_lmt * STD_MB)
 		ACflg = OJ_ML; //issues79
 	// compare
@@ -2943,6 +2945,7 @@ void judge_solution(int &ACflg, int &usedtime, double time_lmt, int spj,
 			PEflg = OJ_PE;
 		ACflg = comp_res;
 	}
+	if((ACflg == OJ_AC)) *spj_mark=1.0;
 	//jvm popup messages, if don't consider them will get miss-WrongAnswer
 	if (lang == LANG_JAVA )
 	{
@@ -3799,7 +3802,7 @@ int main(int argc, char **argv)
 			}
 			*/
 			
-			time_space_index+=sprintf(time_space_table+time_space_index,"%s|%ld|%s|%dk|%dms\n",infile+prelen,get_file_size(infile),jresult[ACflg],topmemory/1024,usedtime);
+			time_space_index+=sprintf(time_space_table+time_space_index,"%s|%ld|%s/%.2f|%dk|%dms\n",infile+prelen,get_file_size(infile),jresult[ACflg],spj_mark,topmemory/1024,usedtime);
 			/*   // full diff code backup
 			 if( ACflg != OJ_AC ){
                                 FILE *DF=fopen("diff.out","a");
