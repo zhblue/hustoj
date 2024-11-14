@@ -319,6 +319,8 @@ int execute_cmd(const char *fmt, ...)   //执行命令获得返回值
 		printf("%s\n", cmd);
 	ret = system(cmd);
 	va_end(ap);
+	if (DEBUG)
+		printf("\n");
 	return ret;
 }
 
@@ -769,7 +771,9 @@ void make_diff_out_simple(FILE *f1, FILE *f2,char * prefix, int c1, int c2, cons
                                   fprintf(diff,"\n||");
                         }
                         else if(isprint(c2))fprintf(diff,"%c",c2);
-                        else fprintf(diff,"`Binary:0x%02x`",c2);
+                        else {
+				fprintf(diff,"`0x%02x`",c2);   //Binary Code
+			}
                 }
                 if(!feof(f2)&&fgets(buf,BUFFER_SIZE-1,f2)){
                         str_replace(buf,"|","丨");
@@ -778,7 +782,12 @@ void make_diff_out_simple(FILE *f1, FILE *f2,char * prefix, int c1, int c2, cons
                         str_replace(buf,"(","（");
                         str_replace(buf,")","）");
                         if(buf[strlen(buf)-1]=='\n') buf[strlen(buf)-1]='\0';
-                        fprintf(diff,"%s",buf);
+			for(size_t i=0;i<strlen(buf);i++){
+			       	if (isprint(buf[i]))
+                        	   fprintf(diff,"%c",buf[i]);
+				else
+                        	   fprintf(diff,"`0x%02x`",buf[i]);   //Binary Code
+			}
                 }
                 fprintf(diff,"\n");
                 if(row>=5) break;
@@ -792,7 +801,7 @@ void make_diff_out_simple(FILE *f1, FILE *f2,char * prefix, int c1, int c2, cons
  * http://code.google.com/p/zoj/source/browse/trunk/judge_client/client/text_checker.cc#25
  * 参考zoj的文件流式比较器，有更低的内存占用
  */
-int compare_zoj(const char *file1, const char *file2,const char * infile,const char * userfile)
+int compare_zoj(const char *file1, const char *file2,const char * infile,const char * userfile,double * spj_mark)
 {
         int ret = OJ_AC;
         int c1, c2;
@@ -868,6 +877,11 @@ end:
 		else
 			make_diff_out_simple(f1, f2, prefix, c1, c2, file1,userfile);
 	}
+	long out_size,user_now;
+	out_size=get_file_size(file1);
+	user_now=ftell(f2);
+	if(DEBUG) printf("user/out=%ld/%ld\n",user_now,out_size);
+	if(user_now>1 && out_size>user_now) *spj_mark=(user_now-1.00)/out_size;
 	if (f1)
 		fclose(f1);
 	if (f2)
@@ -883,11 +897,11 @@ void delnextline(char s[])
 		s[--L] = 0;
 }
 
-int compare(const char *file1, const char *file2, const char * infile,const char * userfile)  
+int compare(const char *file1, const char *file2, const char * infile,const char * userfile,double * spj_mark)  
 {
 #ifdef ZOJ_COM
 	//compare ported and improved from zoj don't limit file size
-	return compare_zoj(file1, file2,infile,userfile);
+	return compare_zoj(file1, file2,infile,userfile,spj_mark);
 #endif
 #ifndef ZOJ_COM
 	//the original compare from the first version of hustoj has file size limit  原始的内存中比较，速度更快但耗用更多内存
@@ -2793,28 +2807,26 @@ float raw_text_judge( char *infile, char *outfile, char *userfile, float *total_
 
 }
 int special_judge(char *oj_home, int problem_id, char *infile, char *outfile,
-				  char *userfile,double* pass_rate,int spj)
+				  char *userfile,double* spj_mark,int spj)
 {
 
 	pid_t pid;
 	char spjpath[BUFFER_SIZE/2];
 	char tpjpath[BUFFER_SIZE/2];
+	char upjpath[BUFFER_SIZE/2];
 	if (DEBUG) printf("pid=%d\n", problem_id);
 	// prevent privileges settings caused spj fail in [issues686]
-	execute_cmd("chgrp judge %s/data/%d/spj %s %s %s", oj_home, problem_id,infile, outfile, userfile);
-	execute_cmd("chmod 751 %s/data/%d/spj %s %s %s", oj_home, problem_id,infile, outfile, userfile);
+	execute_cmd("chgrp judge %s/data/%d/?pj %s %s %s", oj_home, problem_id,infile, outfile, userfile);
+	execute_cmd("chmod 751 %s/data/%d/?pj %s %s %s", oj_home, problem_id,infile, outfile, userfile);
+	sprintf(spjpath,"%s/data/%d/spj", oj_home, problem_id);
+	sprintf(tpjpath,"%s/data/%d/tpj", oj_home, problem_id);
+	sprintf(upjpath,"%s/data/%d/upj", oj_home, problem_id);
 	
 	pid = fork();
 	int ret = 0;
 	if (pid == 0)
 	{
 
-		while (setgid(1536) != 0)
-			sleep(1);
-		while (setuid(1536) != 0)
-			sleep(1);
-		while (setresuid(1536, 1536, 1536) != 0)
-			sleep(1);
 
 		struct rlimit LIM; // time limit, file limit& memory limit
 
@@ -2828,10 +2840,17 @@ int special_judge(char *oj_home, int problem_id, char *infile, char *outfile,
 		LIM.rlim_max = STD_F_LIM + STD_MB;
 		LIM.rlim_cur = STD_F_LIM;
 		setrlimit(RLIMIT_FSIZE, &LIM);
-		sprintf(spjpath,"%s/data/%d/spj", oj_home, problem_id);
-		sprintf(tpjpath,"%s/data/%d/tpj", oj_home, problem_id);
 
-		if( access( tpjpath , X_OK ) == 0 ){
+		while (setgid(1536) != 0)
+			sleep(1);
+		while (setuid(1536) != 0)
+			sleep(1);
+		while (setresuid(1536, 1536, 1536) != 0)
+			sleep(1);
+		if( access( upjpath , X_OK ) == 0 ){
+			ret = execl(upjpath,upjpath, infile, outfile, userfile,NULL);    // hustoj style
+			if (DEBUG) printf("hustoj upj return: %d\n", ret);
+		}else if( access( tpjpath , X_OK ) == 0 ){
 			ret = execute_cmd("%s/data/%d/tpj %s %s %s 2>> diff.out ", oj_home, problem_id, infile, userfile, outfile);    // testlib style
 			if (DEBUG) printf("testlib spj return: %d\n", ret);
 		}else if (access( spjpath , X_OK ) == 0 ) {	
@@ -2844,7 +2863,7 @@ int special_judge(char *oj_home, int problem_id, char *infile, char *outfile,
 			ret=1;
 		}
 		if (ret)
-			exit(1);
+			exit(ret);
 		else
 			exit(0);
 	}
@@ -2854,6 +2873,13 @@ int special_judge(char *oj_home, int problem_id, char *infile, char *outfile,
 
 		waitpid(pid, &status, 0);
 		ret = WEXITSTATUS(status);
+		if( access( upjpath , X_OK ) == 0 ){
+			printf("upj return: %d\n", ret);
+			*spj_mark=ret/100.0;
+			if(ret==100) ret=0;
+			else ret=1;
+			printf("spj_mark: %.2f ret: %d\n",*spj_mark, ret);
+		}
 		if (DEBUG)
 			printf("recorded spj: %d\n", ret);
 	}
@@ -2862,7 +2888,7 @@ int special_judge(char *oj_home, int problem_id, char *infile, char *outfile,
 void judge_solution(int &ACflg, int &usedtime, double time_lmt, int spj,
 					int p_id, char *infile, char *outfile, char *userfile, int &PEflg,
 					int lang, char *work_dir, int &topmemory, int mem_lmt,
-					int solution_id, int num_of_test,double * pass_rate)
+					int solution_id, int num_of_test,double * spj_mark)
 {
 	//usedtime-=1000;
 	int comp_res;
@@ -2892,7 +2918,7 @@ void judge_solution(int &ACflg, int &usedtime, double time_lmt, int spj,
 	{
 		if (spj)
 		{
-			comp_res = special_judge(oj_home, p_id, infile, outfile, userfile,pass_rate,spj);
+			comp_res = special_judge(oj_home, p_id, infile, outfile, userfile,spj_mark,spj);
 
 			if (comp_res == 0)
 				comp_res = OJ_AC;
@@ -2905,7 +2931,7 @@ void judge_solution(int &ACflg, int &usedtime, double time_lmt, int spj,
 		}
 		else
 		{
-			comp_res = compare(outfile, userfile,infile,userfile);
+			comp_res = compare(outfile, userfile,infile,userfile,spj_mark);
 		}
 		if (comp_res == OJ_WA)
 		{
@@ -3708,6 +3734,7 @@ int main(int argc, char **argv)
 	}
 	char last_name[BUFFER_SIZE];
 	int minus_mark=0;
+	double spj_mark=0;
 	char path_buf[BUFFER_SIZE];
 	sprintf(path_buf,"%s/data/%d/",oj_home,p_id);
 	prelen=strlen(path_buf);
@@ -3716,6 +3743,7 @@ int main(int argc, char **argv)
 	for (int i=0 ; (oi_mode || ACflg == OJ_AC || ACflg == OJ_PE) && i < namelist_len ;i++)
 	{
 		usedtime=0;
+		spj_mark=0;
 		dirp=namelist[i];
 
 		namelen = isInFile(dirp->d_name); // check if the file is *.in or not
@@ -3764,7 +3792,7 @@ int main(int argc, char **argv)
 			//判断用户程序输出是否正确，给出结果
 			judge_solution(ACflg, usedtime, time_lmt, spj, p_id, infile,
 						   outfile, userfile, PEflg, lang, work_dir, topmemory,
-						   mem_lmt, solution_id, num_of_test,&pass_rate);
+						   mem_lmt, solution_id, num_of_test,&spj_mark);
 			/*
    			if(usedtime > time_lmt * 1000) {          // 如果觉得的显示超时结果的计时过长，可以覆盖数据。
 					usedtime = time_lmt * 1000;
@@ -3809,6 +3837,10 @@ int main(int argc, char **argv)
 				if(same_subtask(last_name,dirp->d_name)){ //相同子任务，初次失败
 					if(minus_mark>=0) get_mark-=minus_mark;  //扣除任务内积分
 				}
+				if(DEBUG)printf("1 spj_mark: %.2f mark: %.2f get_mark: %.2f\n",spj_mark,mark,get_mark);
+				get_mark+=mark*spj_mark;	
+				pass_rate+=spj_mark;
+				if(DEBUG)printf("2 spj_mark: %.2f mark: %.2f get_mark: %.2f\n",spj_mark,mark,get_mark);
 				minus_mark= -1 ;                          //当前任务失败，标记
 			}
 			if (finalACflg < ACflg)
@@ -3859,6 +3891,7 @@ int main(int argc, char **argv)
 	if(spj!=2){
 		if (oi_mode)
 		{
+			if(DEBUG)printf("raw mark : %.2f %.2f\n",get_mark,pass_rate);
 			if (num_of_test > 0){
 				pass_rate /= num_of_test;
 			}
@@ -3867,6 +3900,7 @@ int main(int argc, char **argv)
 				 if(total_mark>100) pass_rate /= total_mark;
                                 else pass_rate /= 100.0;
 			}
+			if(DEBUG)printf("rec mark: %.2f %.2f\n",get_mark,pass_rate);
 			update_solution(solution_id, finalACflg, usedtime, topmemory >> 10, sim,
 							sim_s_id, pass_rate);
 		}
