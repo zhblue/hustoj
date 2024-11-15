@@ -735,6 +735,59 @@ char * str_replace(char * old, const char * search, const char * replace){
 	}
 	return old;
 }
+bool is_str_utf8(const char* str)
+{
+  unsigned int nBytes = 0;//UFT8可用1-6个字节编码,ASCII用一个字节
+  unsigned char chr = *str;
+  bool bAllAscii = true;
+  for (unsigned int i = 0; str[i] != '\0'; ++i){
+    chr = *(str + i);
+    //判断是否ASCII编码,如果不是,说明有可能是UTF8,ASCII用7位编码,最高位标记为0,0xxxxxxx
+    if (nBytes == 0 && (chr & 0x80) != 0){
+      bAllAscii = false;
+    }
+    if (nBytes == 0) {
+      //如果不是ASCII码,应该是多字节符,计算字节数
+      if (chr >= 0x80) {
+        if (chr >= 0xFC && chr <= 0xFD){
+          nBytes = 6;
+        }
+        else if (chr >= 0xF8){
+          nBytes = 5;
+        }
+        else if (chr >= 0xF0){
+          nBytes = 4;
+        }
+        else if (chr >= 0xE0){
+          nBytes = 3;
+        }
+        else if (chr >= 0xC0){
+          nBytes = 2;
+        }
+        else{
+          return false;
+        }
+        nBytes--;
+      }
+    }
+    else{
+      //多字节符的非首字节,应为 10xxxxxx
+      if ((chr & 0xC0) != 0x80){
+        return false;
+      }
+      //减到为零为止
+      nBytes--;
+    }
+  }
+  //违返UTF8编码规则
+  if (nBytes != 0) {
+    return false;
+  }
+  if (bAllAscii){ //如果全部都是ASCII, 也是UTF8
+    return true;
+  }
+  return true;
+}
 void make_diff_out_simple(FILE *f1, FILE *f2,char * prefix, int c1, int c2, const char *path,const char * userfile )
 {
         char buf1[BUFFER_SIZE];
@@ -758,7 +811,7 @@ void make_diff_out_simple(FILE *f1, FILE *f2,char * prefix, int c1, int c2, cons
                 }
                 if(!feof(f1)&&fgets(buf1,BUFFER_SIZE-1,f1)){
                         str_replace(buf1,"\r","");
-                        str_replace(buf1,"\n","");
+                        str_replace(buf1,"\n","↩");
                         fprintf(diff,"%s",buf1);
                 }
                 fprintf(diff,"|");
@@ -776,7 +829,15 @@ void make_diff_out_simple(FILE *f1, FILE *f2,char * prefix, int c1, int c2, cons
 			else if(c2==EOF)
                         	   fprintf(diff,"🔚");   //Binary Code
                         else {
-				fprintf(diff,"`0x%02x`",c2);   //Binary Code
+				buf2[0]=c2;
+				fgets(buf2+1,BUFFER_SIZE-2,f2);
+				if(is_str_utf8(buf2)){
+					fprintf(diff,"%s\n",buf2);
+					continue;
+				}else{
+					fprintf(diff,"`0x%02x` ",c2);   //Binary Code
+									
+				}
 			}
                 }
                 if(!feof(f2)&&fgets(buf2,BUFFER_SIZE-1,f2)){
@@ -786,17 +847,21 @@ void make_diff_out_simple(FILE *f1, FILE *f2,char * prefix, int c1, int c2, cons
                         str_replace(buf2,"(","（");
                         str_replace(buf2,")","）");
                         str_replace(buf2,"\r","");
-			for(size_t i=0;i<strlen(buf2);i++){
-                        	if(buf2[i]==' ') 
-				   fprintf(diff,"⬜");
-				else if(buf2[i]=='\n') 
-				   fprintf(diff,"↩");
-				else if (isprint(buf2[i]))
-                        	   fprintf(diff,"%c",buf2[i]);
-				else if(buf2[i]==EOF)
-                        	   fprintf(diff,"🔚");   //Binary Code
-				else
-                        	   fprintf(diff,"`0x%02x`",buf2[i]);   //Binary Code
+			if(is_str_utf8(buf2)){
+				fprintf(diff,"%s",buf2);	
+			}else{
+				for(size_t i=0;i<strlen(buf2);i++){
+					if(buf2[i]==' ') 
+					   fprintf(diff,"⬜");
+					else if(buf2[i]=='\n') 
+					   fprintf(diff,"↩");
+					else if (isprint(buf2[i]))
+					   fprintf(diff,"%c",buf2[i]);
+					else if(buf2[i]==EOF)
+					   fprintf(diff,"🔚");   //Binary Code
+					else
+					   fprintf(diff,"`0x%02x` ",buf2[i] & 0xff );   //Binary Code
+				}
 			}
                 }
                 fprintf(diff,"\n");
