@@ -737,7 +737,8 @@ char * str_replace(char * old, const char * search, const char * replace){
 }
 void make_diff_out_simple(FILE *f1, FILE *f2,char * prefix, int c1, int c2, const char *path,const char * userfile )
 {
-        char buf[BUFFER_SIZE];
+        char buf1[BUFFER_SIZE];
+        char buf2[BUFFER_SIZE];
         FILE *diff=fopen("diff.out","a+");
         fprintf(diff,"%s\n--\n", getFileNameFromPath(path));
         fprintf(diff,"|Expected|Yours\n|--|--\n");
@@ -750,14 +751,15 @@ void make_diff_out_simple(FILE *f1, FILE *f2,char * prefix, int c1, int c2, cons
                         fprintf(diff,"%s",prefix);
                         if(feof(f2)&&strlen(prefix)>0){
                                 fprintf(diff,"|%s\n|",prefix);
-                                need=0;
+                                //need=0;
                         }
                         if(isprint(c1))fprintf(diff,"%c",c1);
 			//else fprintf(diff,"`Binary:0x%02x`",c1);
                 }
-                if(!feof(f1)&&fgets(buf,BUFFER_SIZE-1,f1)){
-                        if(buf[strlen(buf)-1]=='\n') buf[strlen(buf)-1]='\0';
-                        fprintf(diff,"%s",buf);
+                if(!feof(f1)&&fgets(buf1,BUFFER_SIZE-1,f1)){
+                        str_replace(buf1,"\r","");
+                        str_replace(buf1,"\n","");
+                        fprintf(diff,"%s",buf1);
                 }
                 fprintf(diff,"|");
                 if(row==1){
@@ -777,20 +779,21 @@ void make_diff_out_simple(FILE *f1, FILE *f2,char * prefix, int c1, int c2, cons
 				fprintf(diff,"`0x%02x`",c2);   //Binary Code
 			}
                 }
-                if(!feof(f2)&&fgets(buf,BUFFER_SIZE-1,f2)){
-                        str_replace(buf,"|","丨");
-                        str_replace(buf,"[","［");
-                        str_replace(buf,"]","］");
-                        str_replace(buf,"(","（");
-                        str_replace(buf,")","）");
-                        if(buf[strlen(buf)-1]=='\n') buf[strlen(buf)-1]='\0';
-			for(size_t i=0;i<strlen(buf);i++){
-			       	if (isprint(buf[i]))
-                        	   fprintf(diff,"%c",buf[i]);
-				else if(buf[i]==EOF)
+                if(!feof(f2)&&fgets(buf2,BUFFER_SIZE-1,f2)){
+                        str_replace(buf2,"|","丨");
+                        str_replace(buf2,"[","［");
+                        str_replace(buf2,"]","］");
+                        str_replace(buf2,"(","（");
+                        str_replace(buf2,")","）");
+                        str_replace(buf2,"\r","");
+                        str_replace(buf2,"\n","`EOL`");
+			for(size_t i=0;i<strlen(buf2);i++){
+			       	if (isprint(buf2[i]))
+                        	   fprintf(diff,"%c",buf2[i]);
+				else if(buf2[i]==EOF)
                         	   fprintf(diff,"`End Of File`");   //Binary Code
 				else
-                        	   fprintf(diff,"`0x%02x`",buf[i]);   //Binary Code
+                        	   fprintf(diff,"`0x%02x`",buf2[i]);   //Binary Code
 			}
                 }
                 fprintf(diff,"\n");
