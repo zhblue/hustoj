@@ -774,7 +774,7 @@ void make_diff_out_simple(FILE *f1, FILE *f2,char * prefix, int c1, int c2, cons
                         }
                         else if(isprint(c2))fprintf(diff,"%c",c2);
 			else if(c2==EOF)
-                        	   fprintf(diff,"`End Of File`");   //Binary Code
+                        	   fprintf(diff,"🔚");   //Binary Code
                         else {
 				fprintf(diff,"`0x%02x`",c2);   //Binary Code
 			}
@@ -786,12 +786,15 @@ void make_diff_out_simple(FILE *f1, FILE *f2,char * prefix, int c1, int c2, cons
                         str_replace(buf2,"(","（");
                         str_replace(buf2,")","）");
                         str_replace(buf2,"\r","");
-                        str_replace(buf2,"\n","`EOL`");
 			for(size_t i=0;i<strlen(buf2);i++){
-			       	if (isprint(buf2[i]))
+                        	if(buf2[i]==' ') 
+				   fprintf(diff,"⬜");
+				else if(buf2[i]=='\n') 
+				   fprintf(diff,"↩");
+				else if (isprint(buf2[i]))
                         	   fprintf(diff,"%c",buf2[i]);
 				else if(buf2[i]==EOF)
-                        	   fprintf(diff,"`End Of File`");   //Binary Code
+                        	   fprintf(diff,"🔚");   //Binary Code
 				else
                         	   fprintf(diff,"`0x%02x`",buf2[i]);   //Binary Code
 			}
