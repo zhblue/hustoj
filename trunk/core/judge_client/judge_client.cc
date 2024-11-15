@@ -847,6 +847,7 @@ void make_diff_out_simple(FILE *f1, FILE *f2,char * prefix, int c1, int c2, cons
                         str_replace(buf2,"(","（");
                         str_replace(buf2,")","）");
                         str_replace(buf2,"\r","");
+                        str_replace(buf2,"\n","↩");
 			if(is_str_utf8(buf2)){
 				fprintf(diff,"%s",buf2);	
 			}else{
