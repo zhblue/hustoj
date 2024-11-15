@@ -827,16 +827,17 @@ void make_diff_out_simple(FILE *f1, FILE *f2,char * prefix, int c1, int c2, cons
                         }
                         else if(isprint(c2))fprintf(diff,"%c",c2);
 			else if(c2==EOF)
-                        	   fprintf(diff,"🔚");   //Binary Code
+                        	   fprintf(diff,"⛔");   //Binary Code
                         else {
 				buf2[0]=c2;
-				fgets(buf2+1,BUFFER_SIZE-2,f2);
-				if(is_str_utf8(buf2)){
-					fprintf(diff,"%s\n",buf2);
-					continue;
-				}else{
-					fprintf(diff,"`0x%02x` ",c2);   //Binary Code
-									
+				if(!feof(f2)&&fgets(buf2+1,BUFFER_SIZE-2,f2)){
+					if(is_str_utf8(buf2)){
+						fprintf(diff,"%s\n",buf2);
+						continue;
+					}else{
+						fprintf(diff,"`0x%02x` ",c2);   //Binary Code
+										
+					}
 				}
 			}
                 }
@@ -859,7 +860,7 @@ void make_diff_out_simple(FILE *f1, FILE *f2,char * prefix, int c1, int c2, cons
 					else if (isprint(buf2[i]))
 					   fprintf(diff,"%c",buf2[i]);
 					else if(buf2[i]==EOF)
-					   fprintf(diff,"🔚");   //Binary Code
+					   fprintf(diff,"⛔");   //Binary Code
 					else
 					   fprintf(diff,"`0x%02x` ",buf2[i] & 0xff );   //Binary Code
 				}
@@ -4007,7 +4008,8 @@ int main(int argc, char **argv)
 	fclose(df);
 	if(DEBUG) printf("ACflg:%d\n",ACflg);
 	printf("final result:%d\n",finalACflg);
-	if(ACflg != OJ_RE && finalACflg!= OJ_RE ) adddiffinfo(solution_id);
+	if(ACflg != OJ_RE && finalACflg!= OJ_RE )
+	       	adddiffinfo(solution_id);
 	if(!turbo_mode)update_user(user_id);
 	if(!turbo_mode)update_problem(p_id,cid);
 	clean_workdir(work_dir);
