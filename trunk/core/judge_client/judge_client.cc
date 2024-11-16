@@ -789,20 +789,24 @@ bool is_str_utf8(const char* str)
   return true;
 }
 inline void fprintSafe(FILE * f,char * buf){
-	str_replace(buf,"|","丨");
-	str_replace(buf,"[","［");
-	str_replace(buf,"]","］");
-	str_replace(buf,"(","（");
-	str_replace(buf,")","）");
-	str_replace(buf,"*","＊");
-	str_replace(buf,"\r","");
-	str_replace(buf,"\n","↩");
 	if(is_str_utf8(buf)){
+		str_replace(buf,"|","丨");
+		str_replace(buf,"[","［");
+		str_replace(buf,"]","］");
+		str_replace(buf,"(","（");
+		str_replace(buf,")","）");
+		str_replace(buf,"*","＊");
+		str_replace(buf,"\r","");
+		str_replace(buf,"\n","↩");
 		fprintf(f,"%s",buf);
 	}else{
 		for(size_t i=0;i<strlen(buf);i++){
 			if(buf[i]==' ') 
 			   fprintf(f,"⬜");
+			else if(buf[i]=='\r') 
+			   continue;
+			else if(buf[i]=='\n') 
+			   fprintf(f,"↩");
 			else if (isprint(buf[i]))
 			   fprintf(f,"%c",buf[i]);
 			else if(buf[i]==EOF)
@@ -820,7 +824,7 @@ void make_diff_out_simple(FILE *f1, FILE *f2,char * prefix, int c1, int c2, cons
         fprintf(diff,"%s\n--\n", getFileNameFromPath(path));
         fprintf(diff,"|Expected|Yours\n|--|--\n");
         int row=0;
-        int need=1;
+        //int need=1;
         while(!(feof(f1)&&feof(f2))){
                 row++;
                 fprintf(diff,"|");
