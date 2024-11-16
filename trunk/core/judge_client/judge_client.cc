@@ -828,31 +828,24 @@ void make_diff_out_simple(FILE *f1, FILE *f2,char * prefix, int c1, int c2, cons
         while(!(feof(f1)&&feof(f2))){
                 row++;
                 fprintf(diff,"|");
-                if(row==1){
+                if(row==1){  
                         fprintf(diff,"%s",prefix);
-                        if(feof(f2)&&strlen(prefix)>0){
-                                fprintf(diff,"|%s\n|",prefix);
-                                //need=0;
-                        }
-			buf1[0]=c1;
+			buf1[0]=c1;     // patch buf1 with c1
 			if(!feof(f1)&&fgets(buf1+1,BUFFER_SIZE-2,f1)){
 				fprintSafe(diff,buf1);
 			}
-			//else fprintf(diff,"`Binary:0x%02x`",c1);
                 }else if(!feof(f1)&&fgets(buf1,BUFFER_SIZE-1,f1)){
 			fprintSafe(diff,buf1);
                 }else{
-                        fprintf(diff,"⛔[");   //Binary Code
+                        fprintf(diff,"⛔[");   // standard output ending
 		}
                 fprintf(diff,"|");
                 if(row==1){
-                       // if(need)
-				fprintSafe(diff,prefix);
-                      //  else if(isprint(c2))fprintf(diff,"%c",c2);
-			if(c2==EOF)
+			fprintSafe(diff,prefix);
+			if(c2==EOF){
                         	   fprintf(diff,"⛔]");   //Binary Code
-                        else {
-				buf2[0]=c2;
+			}else {
+				buf2[0]=c2;  // patch buf2 with c2
 				if(!feof(f2)&&fgets(buf2+1,BUFFER_SIZE-2,f2)){
 						fprintSafe(diff,buf2);
 				}
