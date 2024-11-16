@@ -3873,8 +3873,10 @@ int main(int argc, char **argv)
 					usedtime = time_lmt * 1000;
 			}
 			*/
-			
+			if(internal_mark)
 			time_space_index+=sprintf(time_space_table+time_space_index,"%s|%ld|%s/%.2f|%dk|%dms\n",infile+prelen,get_file_size(infile),jresult[ACflg],spj_mark,topmemory/1024,usedtime);
+			else
+			time_space_index+=sprintf(time_space_table+time_space_index,"%s|%ld|%s|%dk|%dms\n",infile+prelen,get_file_size(infile),jresult[ACflg],topmemory/1024,usedtime);
 			/*   // full diff code backup
 			 if( ACflg != OJ_AC ){
                                 FILE *DF=fopen("diff.out","a");
