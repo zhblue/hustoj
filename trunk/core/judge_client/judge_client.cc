@@ -186,6 +186,7 @@ static int shm_run = 0;
 static char record_call = 0;
 static int use_ptrace = 1;
 static int ignore_esol= 1;
+static int internal_mark= 1;
 static int compile_chroot = 0;
 static int turbo_mode = 0;
 static int python_free=0;
@@ -572,6 +573,7 @@ void init_judge_conf()   //读取判题主目录etc中的配置文件judge.conf
 			read_int(buf, "OJ_TIME_LIMIT_TO_TOTAL", &time_limit_to_total);
 			read_int(buf, "OJ_USE_PTRACE", &use_ptrace);
 			read_int(buf, "OJ_IGNORE_ESOL", &ignore_esol);
+			read_int(buf, "OJ_INTERNAL_MARK", &internal_mark);
 			read_int(buf, "OJ_COMPILE_CHROOT", &compile_chroot);
 			read_int(buf, "OJ_TURBO_MODE", &turbo_mode);
 			read_double(buf, "OJ_CPU_COMPENSATION", &cpu_compensation);
@@ -829,21 +831,24 @@ void make_diff_out_simple(FILE *f1, FILE *f2,char * prefix, int c1, int c2, cons
                 row++;
                 fprintf(diff,"|");
                 if(row==1){  
-                        fprintf(diff,"%s",prefix);
-			buf1[0]=c1;     // patch buf1 with c1
-			if(!feof(f1)&&fgets(buf1+1,BUFFER_SIZE-2,f1)){
-				fprintSafe(diff,buf1);
-			}
+			if(c1!='\n'){
+                        	buf1[0]=c1;     // patch buf1 with c1
+                                if(!feof(f1)&&fgets(buf1+1,BUFFER_SIZE-2,f1)){
+                                        fprintSafe(diff,buf1);
+                                }
+                        }else{
+                           fprintf(diff,"↩");
+                        }
                 }else if(!feof(f1)&&fgets(buf1,BUFFER_SIZE-1,f1)){
 			fprintSafe(diff,buf1);
                 }else{
-                        fprintf(diff,"⛔[");   // standard output ending
+                        fprintf(diff,"⛔");   // standard output ending
 		}
                 fprintf(diff,"|");
                 if(row==1){
 			fprintSafe(diff,prefix);
 			if(c2==EOF){
-                        	   fprintf(diff,"⛔]");   //Binary Code
+                        	   fprintf(diff,"⛔");   //Binary Code
 			}else {
 				buf2[0]=c2;  // patch buf2 with c2
 				if(!feof(f2)&&fgets(buf2+1,BUFFER_SIZE-2,f2)){
@@ -940,7 +945,7 @@ end:
 	out_size=get_file_size(file1);
 	user_now=ftell(f2);
 	if(DEBUG) printf("user/out=%ld/%ld\n",user_now,out_size);
-	if(user_now>1 && out_size>user_now) *spj_mark=(user_now-1.00)/out_size;
+	if(internal_mark && user_now>1 && out_size>user_now) *spj_mark=(user_now-1.00)/out_size;
 
 	if (ret == OJ_WA || ret == OJ_PE)
 	{
