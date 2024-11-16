@@ -831,6 +831,7 @@ void make_diff_out_simple(FILE *f1, FILE *f2,char * prefix, int c1, int c2, cons
                 row++;
                 fprintf(diff,"|");
                 if(row==1){  
+			fprintSafe(diff,prefix);
 			if(c1!='\n'){
                         	buf1[0]=c1;     // patch buf1 with c1
                                 if(!feof(f1)&&fgets(buf1+1,BUFFER_SIZE-2,f1)){
