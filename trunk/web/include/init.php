@@ -55,18 +55,18 @@ if(isset($_SERVER["HTTP_USER_AGENT"])&&strpos($_SERVER["HTTP_USER_AGENT"],"MSIE"
     $OJ_TEMPLATE="bs3";
 }
 
+$ip = ($_SERVER['REMOTE_ADDR']);
+if( isset($_SERVER['HTTP_X_FORWARDED_FOR'] )&&!empty( trim( $_SERVER['HTTP_X_FORWARDED_FOR'] ) ) ){
+    $REMOTE_ADDR = $_SERVER['HTTP_X_FORWARDED_FOR'];
+    $tmp_ip=explode(',',$REMOTE_ADDR);
+    $ip =(htmlentities($tmp_ip[0],ENT_QUOTES,"UTF-8"));
+} else if(isset($_SERVER['HTTP_X_REAL_IP'])&& !empty( trim( $_SERVER['HTTP_X_REAL_IP'] ) ) ){
+    $REMOTE_ADDR = $_SERVER['HTTP_X_REAL_IP'];
+    $tmp_ip=explode(',',$REMOTE_ADDR);
+    $ip =(htmlentities($tmp_ip[0],ENT_QUOTES,"UTF-8"));
+}
 
 if(isset($_SESSION[$OJ_NAME.'_user_id'])&&isset($OJ_LIMIT_TO_1_IP)&& $OJ_LIMIT_TO_1_IP){
-        $ip = ($_SERVER['REMOTE_ADDR']);
-        if( isset($_SERVER['HTTP_X_FORWARDED_FOR'] )&&!empty( trim( $_SERVER['HTTP_X_FORWARDED_FOR'] ) ) ){
-            $REMOTE_ADDR = $_SERVER['HTTP_X_FORWARDED_FOR'];
-            $tmp_ip=explode(',',$REMOTE_ADDR);
-            $ip =(htmlentities($tmp_ip[0],ENT_QUOTES,"UTF-8"));
-        } else if(isset($_SERVER['HTTP_X_REAL_IP'])&& !empty( trim( $_SERVER['HTTP_X_REAL_IP'] ) ) ){
-            $REMOTE_ADDR = $_SERVER['HTTP_X_REAL_IP'];
-            $tmp_ip=explode(',',$REMOTE_ADDR);
-            $ip =(htmlentities($tmp_ip[0],ENT_QUOTES,"UTF-8"));
-        }
         $sql="select ip from loginlog where user_id=? order by time desc";
         $rows=pdo_query($sql,$_SESSION[$OJ_NAME.'_user_id'] );
         $lastip=$rows[0][0];
