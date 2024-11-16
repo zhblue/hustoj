@@ -807,9 +807,23 @@ void make_diff_out_simple(FILE *f1, FILE *f2,char * prefix, int c1, int c2, cons
                                 //need=0;
                         }
                         if(isprint(c1))fprintf(diff,"%c",c1);
+			else{
+				buf1[0]=c1;
+				if(!feof(f1)&&fgets(buf1+1,BUFFER_SIZE-2,f1)){
+					if(is_str_utf8(buf1)){
+						str_replace(buf1,"\r","");
+						str_replace(buf1,"\n","↩");
+						fprintf(diff,"%s",buf1);
+					}else{
+						fprintf(diff,"`0x%02x` ",c1);   //Binary Code
+										
+					}
+				}
+
+			
+			}
 			//else fprintf(diff,"`Binary:0x%02x`",c1);
-                }
-                if(!feof(f1)&&fgets(buf1,BUFFER_SIZE-1,f1)){
+                }else if(!feof(f1)&&fgets(buf1,BUFFER_SIZE-1,f1)){
                         str_replace(buf1,"\r","");
                         str_replace(buf1,"\n","↩");
                         fprintf(diff,"%s",buf1);
