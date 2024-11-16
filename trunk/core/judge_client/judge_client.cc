@@ -794,9 +794,23 @@ inline void fprintSafe(FILE * f,char * buf){
 	str_replace(buf,"]","］");
 	str_replace(buf,"(","（");
 	str_replace(buf,")","）");
+	str_replace(buf,"*","＊");
 	str_replace(buf,"\r","");
 	str_replace(buf,"\n","↩");
-	fprintf(f,"%s",buf);
+	if(is_str_utf8(buf)){
+		fprintf(f,"%s",buf);
+	}else{
+		for(size_t i=0;i<strlen(buf);i++){
+			if(buf[i]==' ') 
+			   fprintf(f,"⬜");
+			else if (isprint(buf[i]))
+			   fprintf(f,"%c",buf[i]);
+			else if(buf[i]==EOF)
+			   fprintf(f,"⛔");   //Binary Code
+			else
+			   fprintf(f,"`0x%02x` ",buf[i] & 0xff );   //Binary Code
+		}
+	}
 }
 void make_diff_out_simple(FILE *f1, FILE *f2,char * prefix, int c1, int c2, const char *path,const char * userfile )
 {
@@ -818,17 +832,8 @@ void make_diff_out_simple(FILE *f1, FILE *f2,char * prefix, int c1, int c2, cons
                         }
 			buf1[0]=c1;
 			if(!feof(f1)&&fgets(buf1+1,BUFFER_SIZE-2,f1)){
-				if(is_str_utf8(buf1)){
-					fprintSafe(diff,buf1);
-				}else if(!isprint(c1)){
-					fprintf(diff,"`0x%02x` ",c1);   //Binary Code
-									
-				}else{
-					fprintSafe(diff,buf1);
-				}
+				fprintSafe(diff,buf1);
 			}
-
-			
 			//else fprintf(diff,"`Binary:0x%02x`",c1);
                 }else if(!feof(f1)&&fgets(buf1,BUFFER_SIZE-1,f1)){
 			fprintSafe(diff,buf1);
@@ -837,7 +842,7 @@ void make_diff_out_simple(FILE *f1, FILE *f2,char * prefix, int c1, int c2, cons
 		}
                 fprintf(diff,"|");
                 if(row==1){
-                        if(need)
+                       // if(need)
 				fprintSafe(diff,prefix);
                       //  else if(isprint(c2))fprintf(diff,"%c",c2);
 			if(c2==EOF)
@@ -845,36 +850,11 @@ void make_diff_out_simple(FILE *f1, FILE *f2,char * prefix, int c1, int c2, cons
                         else {
 				buf2[0]=c2;
 				if(!feof(f2)&&fgets(buf2+1,BUFFER_SIZE-2,f2)){
-					if(is_str_utf8(buf2)){
 						fprintSafe(diff,buf2);
-                				fprintf(diff,"\n");
-						continue;
-					}else if(!isprint(c2)) {
-						fprintf(diff,"`0x%02x` ",c2);   //Binary Code
-					}else{
-						fprintSafe(diff,buf2);
-					}
 				}
 			}
                 }else if(!feof(f2)&&fgets(buf2,BUFFER_SIZE-1,f2)){
-			if(is_str_utf8(buf2)){
 				fprintSafe(diff,buf2);
-			}else{
-				for(size_t i=0;i<strlen(buf2);i++){
-					if(buf2[i]==' ') 
-					   fprintf(diff,"⬜");
-					else if(buf2[i]=='\r') 
-					   continue;
-					else if(buf2[i]=='\n') 
-					   fprintf(diff,"↩");
-					else if (isprint(buf2[i]))
-					   fprintf(diff,"%c",buf2[i]);
-					else if(buf2[i]==EOF)
-					   fprintf(diff,"⛔");   //Binary Code
-					else
-					   fprintf(diff,"`0x%02x` ",buf2[i] & 0xff );   //Binary Code
-				}
-			}
                 }
                 fprintf(diff,"\n");
                 if(row>=5) break;
