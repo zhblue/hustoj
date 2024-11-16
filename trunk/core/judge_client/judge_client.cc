@@ -829,24 +829,21 @@ void make_diff_out_simple(FILE *f1, FILE *f2,char * prefix, int c1, int c2, cons
                 row++;
                 fprintf(diff,"|");
                 if(row==1){  
-                        if(c1!='\n'){
-                        	buf1[0]=c1;     // patch buf1 with c1
-                                if(!feof(f1)&&fgets(buf1+1,BUFFER_SIZE-2,f1)){
-                                        fprintSafe(diff,buf1);
-                                }
-                        }else{
-                           fprintf(diff,"↩");
-                        }
+                        fprintf(diff,"%s",prefix);
+			buf1[0]=c1;     // patch buf1 with c1
+			if(!feof(f1)&&fgets(buf1+1,BUFFER_SIZE-2,f1)){
+				fprintSafe(diff,buf1);
+			}
                 }else if(!feof(f1)&&fgets(buf1,BUFFER_SIZE-1,f1)){
 			fprintSafe(diff,buf1);
                 }else{
-                        fprintf(diff,"⛔");   // standard output ending
+                        fprintf(diff,"⛔[");   // standard output ending
 		}
                 fprintf(diff,"|");
                 if(row==1){
 			fprintSafe(diff,prefix);
 			if(c2==EOF){
-                        	   fprintf(diff,"⛔");   //Binary Code
+                        	   fprintf(diff,"⛔]");   //Binary Code
 			}else {
 				buf2[0]=c2;  // patch buf2 with c2
 				if(!feof(f2)&&fgets(buf2+1,BUFFER_SIZE-2,f2)){
