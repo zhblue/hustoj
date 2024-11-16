@@ -830,10 +830,14 @@ void make_diff_out_simple(FILE *f1, FILE *f2,char * prefix, int c1, int c2, cons
                 fprintf(diff,"|");
                 if(row==1){  
                         fprintf(diff,"%s",prefix);
-			buf1[0]=c1;     // patch buf1 with c1
-			if(!feof(f1)&&fgets(buf1+1,BUFFER_SIZE-2,f1)){
-				fprintSafe(diff,buf1);
-			}
+                        if(c1!='\n'){
+                        	buf1[0]=c1;     // patch buf1 with c1
+                                if(!feof(f1)&&fgets(buf1+1,BUFFER_SIZE-2,f1)){
+                                        fprintSafe(diff,buf1);
+                                }
+                        }else{
+                           fprintf(diff,"↩");
+                        }
                 }else if(!feof(f1)&&fgets(buf1,BUFFER_SIZE-1,f1)){
 			fprintSafe(diff,buf1);
                 }else{
