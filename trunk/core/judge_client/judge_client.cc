@@ -822,7 +822,7 @@ void make_diff_out_simple(FILE *f1, FILE *f2,char * prefix, int c1, int c2, cons
         char buf2[BUFFER_SIZE];
         FILE *diff=fopen("diff.out","a+");
         fprintf(diff,"%s\n--\n", getFileNameFromPath(path));
-        fprintf(diff,"|Expected|Yours\n|--|--\n");
+        fprintf(diff,"|Expected|Yours\n|--|--\n|...|...\n");
         int row=0;
         //int need=1;
         while(!(feof(f1)&&feof(f2))){
