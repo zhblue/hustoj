@@ -877,7 +877,7 @@ int compare_zoj(const char *file1, const char *file2,const char * infile,const c
 {
         int ret = OJ_AC;
         int c1, c2;
-        char prefix[BUFFER_SIZE];
+        char prefix[BUFFER_SIZE]="";
         int preK=0;
         FILE *f1, *f2;
         f1 = fopen(file1, "re");
