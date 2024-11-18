@@ -3018,6 +3018,7 @@ void judge_solution(int &ACflg, int &usedtime, double time_lmt, int spj,
 		ACflg = comp_res;
 	}
 	if((ACflg == OJ_AC)) *spj_mark=1.0;
+	else if (*spj_mark>0.99) *spj_mark=0.99;
 	//jvm popup messages, if don't consider them will get miss-WrongAnswer
 	if (lang == LANG_JAVA )
 	{
