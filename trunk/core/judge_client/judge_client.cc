@@ -2921,11 +2921,11 @@ int special_judge(char *oj_home, int problem_id, char *infile, char *outfile,
 		while (setresuid(1536, 1536, 1536) != 0)
 			sleep(1);
 		if( access( upjpath , X_OK ) == 0 ){
-			ret = execl(upjpath,upjpath, infile, outfile, userfile,NULL);    // hustoj style
+			ret = execl(upjpath,upjpath, infile, outfile, userfile,NULL);    // hustoj new style
 			if (DEBUG) printf("hustoj upj return: %d\n", ret);
 		}else if( access( tpjpath , X_OK ) == 0 ){
 			//ret = execute_cmd("%s/data/%d/tpj %s %s %s 2>> diff.out ", oj_home, problem_id, infile, userfile, outfile);    // testlib style
-			ret = execl(tpjpath,tpjpath, infile,userfile, outfile, NULL);    // hustoj style
+			ret = execl(tpjpath,tpjpath, infile,userfile, outfile, NULL);    // testlib style
 			if (DEBUG) printf("testlib spj return: %d\n", ret);
 		}else if (access( spjpath , X_OK ) == 0 ) {	
 			ret = execl(spjpath,spjpath, infile, outfile, userfile,NULL);    // hustoj style
