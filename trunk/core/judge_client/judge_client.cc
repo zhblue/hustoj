@@ -2924,10 +2924,12 @@ int special_judge(char *oj_home, int problem_id, char *infile, char *outfile,
 			ret = execl(upjpath,upjpath, infile, outfile, userfile,NULL);    // hustoj style
 			if (DEBUG) printf("hustoj upj return: %d\n", ret);
 		}else if( access( tpjpath , X_OK ) == 0 ){
-			ret = execute_cmd("%s/data/%d/tpj %s %s %s 2>> diff.out ", oj_home, problem_id, infile, userfile, outfile);    // testlib style
+			//ret = execute_cmd("%s/data/%d/tpj %s %s %s 2>> diff.out ", oj_home, problem_id, infile, userfile, outfile);    // testlib style
+			ret = execl(tpjpath,tpjpath, infile,userfile, outfile, NULL);    // hustoj style
 			if (DEBUG) printf("testlib spj return: %d\n", ret);
 		}else if (access( spjpath , X_OK ) == 0 ) {	
-			ret = execute_cmd("%s/data/%d/spj %s %s %s", oj_home, problem_id, infile, outfile, userfile);    // hustoj style
+			ret = execl(spjpath,spjpath, infile, outfile, userfile,NULL);    // hustoj style
+			//ret = execute_cmd("%s/data/%d/spj %s %s %s", oj_home, problem_id, infile, outfile, userfile);    // hustoj style
 			if (DEBUG) printf("hustoj spj return: %d\n", ret);
 		}else if(spj == 2){
 
