@@ -518,34 +518,11 @@ FILE *read_cmd_output(const char *fmt, ...)
 
 	return ret;
 }
-// read the configue file
-void init_judge_conf()   //读取判题主目录etc中的配置文件judge.conf
-{
-	FILE *fp = NULL;
-	char buf[BUFFER_SIZE];
-	host_name[0] = 0;
-	user_name[0] = 0;
-	password[0] = 0;
-	db_name[0] = 0;
-	port_number = 3306;
-	max_running = 3;
-	sleep_time = 3;
-	strcpy(java_xms, "-Xms32m");
-	strcpy(java_xmx, "-Xmx256m");
-	strcpy(cc_std,"-std=c99");
-	strcpy(cc_opt,"-O2");
-	if(__GNUC__ > 9 || (  __GNUC__ == 9 &&  __GNUC_MINOR__ >= 3 ) ){ 
-		// ubuntu20.04 introduce g++9.3
-		strcpy(cc_std,"-std=c17");
-		strcpy(cpp_std,"-std=c++14");    // CCF NOI change settings for NOIP to C++14 on 2021-9-1
-	}else{
-		strcpy(cc_std,"-std=c99");
-		strcpy(cpp_std,"-std=c++11");
-	}
-	sprintf(buf, "%s/etc/judge.conf", oj_home);
-	fp = fopen("./etc/judge.conf", "re");
-	if (fp != NULL)
-	{
+void load_conf(const char * judge_path ){
+
+	FILE *fp = fopen(judge_path, "re");
+	if (fp != NULL){
+		char buf[BUFFER_SIZE]="";
 		while (fgets(buf, BUFFER_SIZE - 1, fp))
 		{
 			read_buf(buf, "OJ_HOST_NAME", host_name);
@@ -587,6 +564,33 @@ void init_judge_conf()   //读取判题主目录etc中的配置文件judge.conf
 		}
 		fclose(fp);
 	}
+
+}
+// read the configue file
+void init_judge_conf()   //读取判题主目录etc中的配置文件judge.conf
+{
+	char judge_conf[BUFFER_SIZE]="/home/judge/etc/judge.conf";
+	host_name[0] = 0;
+	user_name[0] = 0;
+	password[0] = 0;
+	db_name[0] = 0;
+	port_number = 3306;
+	max_running = 3;
+	sleep_time = 3;
+	strcpy(java_xms, "-Xms32m");
+	strcpy(java_xmx, "-Xmx256m");
+	strcpy(cc_std,"-std=c99");
+	strcpy(cc_opt,"-O2");
+	if(__GNUC__ > 9 || (  __GNUC__ == 9 &&  __GNUC_MINOR__ >= 3 ) ){ 
+		// ubuntu20.04 introduce g++9.3
+		strcpy(cc_std,"-std=c17");
+		strcpy(cpp_std,"-std=c++14");    // CCF NOI change settings for NOIP to C++14 on 2021-9-1
+	}else{
+		strcpy(cc_std,"-std=c99");
+		strcpy(cpp_std,"-std=c++11");
+	}
+	sprintf(judge_conf, "%s/etc/judge.conf", oj_home);
+	load_conf(judge_conf);
 //	fclose(fp);
 	if(use_docker){
 		shm_run=0;
@@ -2921,11 +2925,11 @@ int special_judge(char *oj_home, int problem_id, char *infile, char *outfile,
 		while (setresuid(1536, 1536, 1536) != 0)
 			sleep(1);
 		if( access( upjpath , X_OK ) == 0 ){
-			ret = execl(upjpath,upjpath, infile, outfile, userfile,NULL);    // hustoj new style
+			ret = execl(upjpath,upjpath, infile, outfile, userfile,NULL);    // hustoj style
 			if (DEBUG) printf("hustoj upj return: %d\n", ret);
 		}else if( access( tpjpath , X_OK ) == 0 ){
 			//ret = execute_cmd("%s/data/%d/tpj %s %s %s 2>> diff.out ", oj_home, problem_id, infile, userfile, outfile);    // testlib style
-			ret = execl(tpjpath,tpjpath, infile,userfile, outfile, NULL);    // testlib style
+			ret = execl(tpjpath,tpjpath, infile,userfile, outfile, NULL);    // hustoj style
 			if (DEBUG) printf("testlib spj return: %d\n", ret);
 		}else if (access( spjpath , X_OK ) == 0 ) {	
 			ret = execl(spjpath,spjpath, infile, outfile, userfile,NULL);    // hustoj style
@@ -3814,7 +3818,14 @@ int main(int argc, char **argv)
 	int minus_mark=0;
 	double spj_mark=0;
 	char path_buf[BUFFER_SIZE];
+	char problem_conf[BUFFER_SIZE+64];
+
 	sprintf(path_buf,"%s/data/%d/",oj_home,p_id);
+	sprintf(problem_conf,"%s/judge.conf",path_buf);
+ 	if (access(problem_conf, R_OK ) != -1){
+		load_conf(problem_conf);
+	}
+
 	prelen=strlen(path_buf);
 	if (prelen<strlen(oj_home)+6) prelen=strlen(oj_home)+6;
 
