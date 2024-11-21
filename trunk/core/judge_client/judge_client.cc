@@ -518,45 +518,47 @@ FILE *read_cmd_output(const char *fmt, ...)
 
 	return ret;
 }
-void load_conf(const char * judge_path ){
+void load_conf(const char * judge_path ,int sys ){
 
 	FILE *fp = fopen(judge_path, "re");
 	if (fp != NULL){
 		char buf[BUFFER_SIZE]="";
 		while (fgets(buf, BUFFER_SIZE - 1, fp))
 		{
-			read_buf(buf, "OJ_HOST_NAME", host_name);
-			read_buf(buf, "OJ_USER_NAME", user_name);
-			read_buf(buf, "OJ_PASSWORD", password);
-			read_buf(buf, "OJ_DB_NAME", db_name);
-			read_int(buf, "OJ_PORT_NUMBER", &port_number);
+			if(sys){
+				read_buf(buf, "OJ_HOST_NAME", host_name);
+				read_buf(buf, "OJ_USER_NAME", user_name);
+				read_buf(buf, "OJ_PASSWORD", password);
+				read_buf(buf, "OJ_DB_NAME", db_name);
+				read_int(buf, "OJ_PORT_NUMBER", &port_number);
+				read_int(buf, "OJ_HTTP_JUDGE", &http_judge);
+				read_buf(buf, "OJ_HTTP_BASEURL", http_baseurl);
+				read_buf(buf, "OJ_HTTP_APIPATH", http_apipath);
+				read_buf(buf, "OJ_HTTP_LOGINPATH", http_loginpath);
+				read_buf(buf, "OJ_HTTP_USERNAME", http_username);
+				read_buf(buf, "OJ_HTTP_PASSWORD", http_password);
+				read_int(buf, "OJ_HTTP_DOWNLOAD", &http_download);
+				read_int(buf, "OJ_USE_PTRACE", &use_ptrace);
+				read_int(buf, "OJ_COMPILE_CHROOT", &compile_chroot);
+				read_int(buf, "OJ_USE_DOCKER",&use_docker);
+				read_int(buf, "OJ_PYTHON_FREE", &python_free);
+			}
 			read_int(buf, "OJ_JAVA_TIME_BONUS", &java_time_bonus);
 			read_int(buf, "OJ_JAVA_MEMORY_BONUS", &java_memory_bonus);
 			read_int(buf, "OJ_SIM_ENABLE", &sim_enable);
 			read_buf(buf, "OJ_JAVA_XMS", java_xms);
 			read_buf(buf, "OJ_JAVA_XMX", java_xmx);
-			read_int(buf, "OJ_HTTP_JUDGE", &http_judge);
-			read_buf(buf, "OJ_HTTP_BASEURL", http_baseurl);
-			read_buf(buf, "OJ_HTTP_APIPATH", http_apipath);
-			read_buf(buf, "OJ_HTTP_LOGINPATH", http_loginpath);
-			read_buf(buf, "OJ_HTTP_USERNAME", http_username);
-			read_buf(buf, "OJ_HTTP_PASSWORD", http_password);
-			read_int(buf, "OJ_HTTP_DOWNLOAD", &http_download);
 			read_int(buf, "OJ_OI_MODE", &oi_mode);
 			read_int(buf, "OJ_FULL_DIFF", &full_diff);
 			read_int(buf, "OJ_RAW_TEXT_DIFF", &raw_text_diff);
 			read_int(buf, "OJ_SHM_RUN", &shm_run);
 			read_int(buf, "OJ_USE_MAX_TIME", &use_max_time);
 			read_int(buf, "OJ_TIME_LIMIT_TO_TOTAL", &time_limit_to_total);
-			read_int(buf, "OJ_USE_PTRACE", &use_ptrace);
 			read_int(buf, "OJ_IGNORE_ESOL", &ignore_esol);
 			read_int(buf, "OJ_INTERNAL_MARK", &internal_mark);
-			read_int(buf, "OJ_COMPILE_CHROOT", &compile_chroot);
 			read_int(buf, "OJ_TURBO_MODE", &turbo_mode);
 			read_double(buf, "OJ_CPU_COMPENSATION", &cpu_compensation);
-			read_int(buf, "OJ_PYTHON_FREE", &python_free);
 			read_int(buf, "OJ_COPY_DATA", &copy_data);
-			read_int(buf, "OJ_USE_DOCKER",&use_docker);
 			read_buf(buf, "OJ_CC_STD", cc_std);
 			read_buf(buf, "OJ_CPP_STD", cpp_std);
 			read_buf(buf, "OJ_CC_OPT", cc_opt);
@@ -590,7 +592,7 @@ void init_judge_conf()   //读取判题主目录etc中的配置文件judge.conf
 		strcpy(cpp_std,"-std=c++11");
 	}
 	sprintf(judge_conf, "%s/etc/judge.conf", oj_home);
-	load_conf(judge_conf);
+	load_conf(judge_conf,1);
 //	fclose(fp);
 	if(use_docker){
 		shm_run=0;
@@ -3823,7 +3825,7 @@ int main(int argc, char **argv)
 	sprintf(path_buf,"%s/data/%d/",oj_home,p_id);
 	sprintf(problem_conf,"%s/judge.conf",path_buf);
  	if (access(problem_conf, R_OK ) != -1){
-		load_conf(problem_conf);
+		load_conf(problem_conf,0);
 	}
 
 	prelen=strlen(path_buf);
