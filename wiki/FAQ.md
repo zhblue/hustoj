@@ -107,6 +107,31 @@ echo "insert into jol.privilege values('admin','administrator','true','N');" | .
 * 当OJ_USE_MAX_TIME=1时，记录的是最高耗时。
 因此，当测试数据组数较多时，推荐设定OJ_USE_MAX_TIME=0，OJ_TIME_LIMIT_TO_TOTAL=1 。
 
+对某一道题的判题规则希望进行订制，但不想影响全局如何设置？
+--
+如果希望不是对系统全局设置进行改动，只希望对某个题的规则进行订制，可以在测试数据目录下创建judge.conf，该文件中的相关设置只对该题生效。
+* OJ_JAVA_TIME_BONUS 虚拟机语言时间宽松
+* OJ_JAVA_MEMORY_BONUS 虚拟机语言内存宽松
+* OJ_SIM_ENABLE 检查相似度
+* OJ_JAVA_XMS JRE内存参数
+* OJ_JAVA_XMX JRE内存参数
+* OJ_OI_MODE OI模式判题，出错时继续后续测试点
+* OJ_FULL_DIFF 完整对比
+* OJ_RAW_TEXT_DIFF 原始对比
+* OJ_SHM_RUN 共享内存运行
+* OJ_USE_MAX_TIME 使用最长的单例作为显示时间
+* OJ_TIME_LIMIT_TO_TOTAL 限制时间为总时间
+* OJ_IGNORE_ESOL 忽略行末空白字符
+* OJ_INTERNAL_MARK 允许单例内部通过比例分
+* OJ_TURBO_MODE 加速模式
+* OJ_CPU_COMPENSATION CPU计时系数
+* OJ_COPY_DATA 复制测试数据到data.in
+* OJ_CC_STD GCC编译标准参数
+* OJ_CPP_STD G++编译标准参数
+* OJ_CC_OPT C/C++优化级别参数
+* OJ_AUTO_RESULT 自动判题AC的状态值：4是AC,14是等待人工确认。
+
+
 测试文件的文件名命名有什么规则？
 --
 * 一般推荐用英文命名，相同文件名的.in .out文件为一组。
