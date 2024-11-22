@@ -207,9 +207,14 @@ if ($test_run) {
 }
 
 $tempfile = $_FILES ["answer"] ["tmp_name"];
+$len=$_FILES['answer']['size'];
 if($tempfile!=""){
 	if($language!=23){
-
+		if ($len > 65536) {
+			  $view_errors = $MSG_TOO_LONG."<br>";
+			  require "template/" . $OJ_TEMPLATE . "/error.php";
+			  exit(0);
+		}
 		$source=file_get_contents($tempfile);
 		$len = strlen($source);
 		unlink($tempfile);
@@ -255,8 +260,18 @@ if ($test_run) {
   $id = 0;
 }
 
-if($language!=23) $len = strlen($source);else $len = $_FILES['answer']['size'];
-//echo $source;
+if($language!=23) $len = strlen($source); else $len = $_FILES['answer']['size'];
+if ($len < 2) {
+  $view_errors = $MSG_TOO_SHORT.$tempfile."<br>";
+  require "template/".$OJ_TEMPLATE."/error.php";
+  exit(0);
+}
+if ($len > 65536) {
+  $view_errors = $MSG_TOO_LONG."<br>";
+  require "template/" . $OJ_TEMPLATE . "/error.php";
+  exit(0);
+}
+
 
 setcookie('lastlang', $language, time()+360000);
 
@@ -269,17 +284,6 @@ if (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
 }
 
 
-if ($len < 2) {
-  $view_errors = $MSG_TOO_SHORT.$tempfile."<br>";
-  require "template/".$OJ_TEMPLATE."/error.php";
-  exit(0);
-}
-
-if ($len > 65536) {
-  $view_errors = $MSG_TOO_LONG."<br>";
-  require "template/" . $OJ_TEMPLATE . "/error.php";
-  exit(0);
-}
 
 if (!$OJ_BENCHMARK_MODE) {
   // last submit
