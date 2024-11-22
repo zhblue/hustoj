@@ -13,11 +13,12 @@ if (!(isset($_SESSION[$OJ_NAME.'_'.'administrator'])
 // 这不是后门(Webshell)文件，不要理会阿里云的误报。
     $charset = "UTF-8";
     //@setlocale(LC_CTYPE, 'C');
+    putenv("LC_ALL=en_US.UTF-8");  //可能解决某些文件名乱码问题
     header("Pragma: no-cache");
     header("Cache-Control: no-store");
 	header("Content-Type: text/html; charset=".$charset);
 	//@ini_set('default_charset', $charset);
-    if (false) {
+    if (false) {   // php8.0 removed get_magic_quotes_gpc
         function stripslashes_deep($value){
             return is_array($value)? array_map('stripslashes_deep', $value):$value;
         }
@@ -25,7 +26,17 @@ if (!(isset($_SESSION[$OJ_NAME.'_'.'administrator'])
         $_GET = array_map('stripslashes_deep', $_GET);
         $_COOKIE = array_map('stripslashes_deep', $_COOKIE);
     }
-	// Server Vars
+    //php ver < 8.0 has no endsWith function
+    if (!function_exists('str_ends_with')) {
+        function str_ends_with( $haystack, $needle ) {
+            $length = strlen( $needle );
+            if( !$length ) {
+                return true;
+            }
+            return substr( $haystack, -$length ) === $needle;
+        }
+    }
+    // Server Vars
     function get_client_ip() {
         $ipaddress = '';
         if (isset($_SERVER['HTTP_CLIENT_IP'])) $ipaddress = $_SERVER['HTTP_CLIENT_IP'];
@@ -50,9 +61,63 @@ if (!(isset($_SESSION[$OJ_NAME.'_'.'administrator'])
         if ($_SERVER["SERVER_PORT"] != "80") $url .= ":".$_SERVER["SERVER_PORT"];
         return $url;
     }
+    function reSortFiles($directory) {
+	// 列出目录中的所有文件
+	$files = scandir($directory);
+	// 遍历所有文件
+	foreach ($files as $file) {
+	// 检查文件是否是.ans文件
+		if (str_ends_with($file, '.ans') === false ) {
+		    continue;
+		}
+		$main=basename($file,".ans");
+		$filePath = $directory . '/' . $main.".ans";
+		$newFilePath = $directory . '/' . $main.".out";
+		if (rename($filePath, $newFilePath)) {
+		//              echo "File renamed: $filePath -> $newFilePath<br>";
+		} else {
+		echo "Error renaming file: $file<br>";
+		}
+	}
+	foreach ($files as $file) {
+		// 检查文件是否是.in文件
+		if (str_ends_with($file, '.in') === false ) {
+		    continue;
+		}
+		//echo "$file:<br>";
+		$main=basename($file,".in");
+		// 检查文件名是否以单个数字结尾
+		if (preg_match('/^[^0-9]*([0-9])$/', $main)) {
+		    // 获取文件名中的数字
+		  //  echo "...";
+		    $number = substr($main, -1);
+		    // 获取文件名中的非数字部分
+		    $nonNumberPart = preg_replace('/[0-9]$/', '', $main);
+		    // 创建新的文件名
+		    $newFileName = $nonNumberPart . '0' . $number;
+		    // 获取文件路径
+		    $filePath = $directory . '/' . $main.".in";
+		    $newFilePath = $directory . '/' . $newFileName.".in";
+		    // 尝试重命名文件
+		    if (rename($filePath, $newFilePath)) {
+		    } else {
+			echo "Error renaming file: $file<br>";
+		    }
+		    $filePath = $directory . '/' . $main.".out";
+		    $newFilePath = $directory . '/' . $newFileName.".out";
+		    // 尝试重命名文件
+		    if (rename($filePath, $newFilePath)) {
+		    } else {
+			echo "Error renaming file: $file<br>";
+		    }
+		}
+	}
+	
+    }
     function getCompleteURL() {
         return getServerURL().$_SERVER["REQUEST_URI"];
     }
+
     $url = getCompleteURL();
     $url_info = parse_url($url);
 	if( !isset($_SERVER['DOCUMENT_ROOT']) ) {
@@ -78,14 +143,20 @@ if (!(isset($_SESSION[$OJ_NAME.'_'.'administrator'])
         case 1: error_reporting(E_ERROR | E_PARSE | E_COMPILE_ERROR); @ini_set("display_errors",1); break;
         case 2: error_reporting(E_ALL); @ini_set("display_errors",1); break;
     }
-    if(isset($_GET['pid'])){
-		$current_dir="$OJ_DATA/".intval($_GET['pid'])."/";
-    }else{
-	$pid=intval(basename($current_dir));
-	if($pid==0) $pid=intval(basename($dir_dest));
 
-	$current_dir="$OJ_DATA/".intval($pid)."/";
+    $pid=0;
+    if(isset($_GET['pid'])){
+        $pid=intval($_GET['pid']);
+    }else{
+        $pid=intval(basename($current_dir));
+        if($pid==0) $pid=intval(basename($dir_dest));
     }
+    $current_dir="$OJ_DATA/$pid/";
+    if(! (isset($_SESSION[$OJ_NAME.'_'.'administrator']) || isset($_SESSION[$OJ_NAME.'_'."p".$pid])) ){
+        echo "No Privilege.<br>你不是管理员，也不是这个题的原创作者，因此不能管理这个题的数据。";
+        exit(0)    ;
+    }
+
     $dir_dest=$current_dir;
     if (!isset($current_dir)){
         $current_dir = $path_info["dirname"]."/";
@@ -118,9 +189,35 @@ if (!(isset($_SESSION[$OJ_NAME.'_'.'administrator'])
         $resolveIDs=($resolveIDs)?0:1;
         setcookie("resolveIDs", $resolveIDs, time()+$cookie_cache_time, "/");
     }
-    if ($resolveIDs){
-        exec("cat /etc/passwd",$mat_passwd);
-        exec("cat /etc/group",$mat_group);
+    if(isset($_GET['generate'])){
+            //echo "Generate out in $current_dir......";
+            chdir($current_dir);
+            if(file_exists($current_dir."/Main.c")){
+                if(!$OJ_SaaS_ENABLE)system("/home/judge/src/install/gcc.sh $current_dir");
+                if(!system("/home/judge/src/install/makeout.sh Main"))
+                        echo "makeout fail:<br>chgrp -R www-data /home/judge";
+            }else if(file_exists($current_dir."/Main.cc")){
+                if(!$OJ_SaaS_ENABLE)system("/home/judge/src/install/g++.sh $current_dir");
+                if(!system("/home/judge/src/install/makeout.sh Main"))
+                        echo "makeout fail:<br>chgrp -R www-data to /home/judge";
+            }else{
+                echo "未找到Main.c或Main.cc,自动生成9组空文件。";
+                for($i=1;$i<10;$i++){
+                        touch("test_$i.in");
+                        touch("test_$i.out");
+                }
+            }
+    }
+    if(isset($_GET['ans2out'])){
+	    //echo "Generate out in $current_dir......";
+	    chdir($current_dir);
+	    //system("/home/judge/src/install/ans2out $current_dir");
+	    //using php to finish the work without system function
+	    reSortFiles($current_dir);
+    }
+    if ($resolveIDs){               // php8 default disabled exec()
+        $mat_passwd=explode("\n",file_get_contents("/etc/passwd"));
+        $mat_group=explode("\n",file_get_contents("/etc/group"));
     }
     $fm_color['Bg'] = "EEEEEE";
     $fm_color['Text'] = "000000";
@@ -156,7 +253,7 @@ if ($loggedon==$auth_pass){
             }
     }
 } else {
-    if (isset($pass)) login();
+    if (isset($_SESSION[$OJ_NAME.'_administrator'])||isset($_SESSION[$OJ_NAME.'_problem_editor'])) login();
     else login_form();
 }
 // +--------------------------------------------------
@@ -165,7 +262,7 @@ if ($loggedon==$auth_pass){
 class config {
     var $data;
     var $filename;
-    function config(){
+    function __construct(){
         global $fm_self;
 	global $OJ_LANG;
         $this->data = array(
@@ -296,7 +393,6 @@ function et($tag){
     $en['ConfTrySave'] = 'File without write permisson.\\nTry to save anyway';
     $en['ConfSaved'] = 'Configurations saved';
     $en['PassSaved'] = 'Password saved';
-    $en['FileDirExists'] = 'File or directory already exists';
     $en['NoPhpinfo'] = 'Function phpinfo disabled';
     $en['NoReturn'] = 'no return';
     $en['FileSent'] = 'File sent';
@@ -322,7 +418,10 @@ function et($tag){
     $en['Seconds'] = 'sec';
     $en['ErrorReport'] = 'Error Reporting';
     $en['Random-data'] = 'Random-data generator';
-    
+    $en['GenerateOut'] = 'Generate Out files';
+    $en['Ans2out'] = '*.ans -> *.out';
+    $en['IOFilename'] = 'Specify IOFilename';
+    $en['SolutionFilename'] = 'Specify Solution filename';
     // chinese
 	$cn['Version'] = '版本';
     $cn['DocRoot'] = '根目录';
@@ -430,7 +529,11 @@ function et($tag){
     $cn['RenderTime'] = '页面执行时间';
     $cn['Seconds'] = '秒';
     $cn['ErrorReport'] = '错误报告';
-    $en['Random-data'] = '随机测试数据生成器';
+    $cn['Random-data'] = '随机测试数据生成器';
+    $cn['GenerateOut'] = '用标程Main.c/Main.cc覆盖生成Out文件';
+    $cn['Ans2out'] = '自动修订文件名';
+    $cn['IOFilename'] = '指定输入输出文件名';
+    $cn['SolutionFilename'] = '指定NOIP提交代码文件名';
 
     // Portuguese by - Fabricio Seger Kolling
     $pt['Version'] = 'Versão';
@@ -540,7 +643,9 @@ function et($tag){
     $pt['RenderTime'] = 'Tempo para gerar esta página';
     $pt['Seconds'] = 'seg';
     $pt['ErrorReport'] = 'Error Reporting';
-
+   $pt['IOFilename'] = 'Specify IOFilename';
+    $pt['SolutionFilename'] = 'Specify Solution filename';
+ 
 	// Spanish - by Sh Studios
     $es['Version'] = 'Versión';
     $es['DocRoot'] = 'Raiz del programa';
@@ -649,7 +754,9 @@ function et($tag){
     $es['RenderTime'] = 'Generado en';
     $es['Seconds'] = 'seg';
     $es['ErrorReport'] = 'Reporte de error';
-
+   $es['IOFilename'] = 'Specify IOFilename';
+    $es['SolutionFilename'] = 'Specify Solution filename';
+ 
 	// Korean - by Airplanez
     $kr['Version'] = '버전';
     $kr['DocRoot'] = '웹서버 루트';
@@ -749,7 +856,9 @@ function et($tag){
     $kr['SelAll'] = '모든';
     $kr['SelNone'] = '제로';
     $kr['SelInverse'] = '역';
-
+    $kr['IOFilename'] = 'Specify IOFilename';
+    $kr['SolutionFilename'] = 'Specify Solution filename';
+ 
     // German - by Guido Ogrzal
     $de1['Version'] = 'Version';
     $de1['DocRoot'] = 'Dokument Wurzelverzeichnis';
@@ -858,7 +967,9 @@ function et($tag){
     $de1['RenderTime'] = 'Zeit, um die Seite anzuzeigen';
     $de1['Seconds'] = 's';
     $de1['ErrorReport'] = 'Fehlerreport';
-
+    $de1['IOFilename'] = 'Specify IOFilename';
+    $de1['SolutionFilename'] = 'Specify Solution filename';
+ 
     // German - by AXL
     $de2['Version'] = 'Version';
     $de2['DocRoot'] = 'Document Stammverzeichnis';
@@ -967,7 +1078,9 @@ function et($tag){
     $de2['RenderTime'] = 'Zeit zum Erzeugen der Seite';
     $de2['Seconds'] = 'Sekunden';
     $de2['ErrorReport'] = 'Fehler berichten';
-
+   $de2['IOFilename'] = 'Specify IOFilename';
+    $de2['SolutionFilename'] = 'Specify Solution filename';
+ 
 	// German - by Mathias Rothe
     $de3['Version'] = 'Version';
     $de3['DocRoot'] = 'Dokumenten Root';
@@ -1076,7 +1189,9 @@ function et($tag){
     $de3['RenderTime'] = 'Zeit zur Erzeugung dieser Seite';
     $de3['Seconds'] = 'sec';
     $de3['ErrorReport'] = 'Fehlermeldungen';
-
+   $de3['IOFilename'] = 'Specify IOFilename';
+    $de3['SolutionFilename'] = 'Specify Solution filename';
+ 
     // French - by Jean Bilwes
     $fr1['Version'] = 'Version';
     $fr1['DocRoot'] = 'Racine des documents';
@@ -1185,7 +1300,9 @@ function et($tag){
     $fr1['RenderTime'] = 'Temps pour afficher cette page';
     $fr1['Seconds'] = 'sec';
     $fr1['ErrorReport'] = 'Rapport d\'erreur';
-
+    $fr1['IOFilename'] = 'Specify IOFilename';
+    $fr1['SolutionFilename'] = 'Specify Solution filename';
+ 
 	// French - by Sharky
     $fr2['Version'] = 'Version';
     $fr2['DocRoot'] = 'Racine document';
@@ -2371,13 +2488,13 @@ function save_upload($temp_file,$filename,$dir_dest) {
             if (file_exists($file)){
                 if (unlink($file)){
                     if (copy($temp_file,$file)){
-                        @chmod($file,0611);
+                        @chmod($file,0744);
                         $out = 6;
                     } else $out = 2;
                 } else $out = 5;
             } else {
                 if (copy($temp_file,$file)){
-                    @chmod($file,0611);
+                    @chmod($file,0744);
                     $out = 1;
                 } else $out = 2;
             }
@@ -2400,7 +2517,7 @@ function zip_extract(){
                 foreach(explode('/',$complete_path) AS $k) {
                     $tmp .= $k.'/';
                     if(!file_exists($tmp)) {
-                        @mkdir($current_dir.$tmp, 0611);
+                        @mkdir($current_dir.$tmp, 0711);
                     }
                 }
             }
@@ -2803,7 +2920,7 @@ function tree($dir_before,$dir_current,$indice){
                 }
                 for ($x=0;$x<count($mat_dir);$x++){
                     if (($dir_before == $dir_current)||(strstr($expanded_dir_list,":$dir_current/$dir_name"))){
-                        tree($dir_current."/",$dir_current."/".$mat_dir[$x],$indice);
+                       // tree($dir_current."/",$dir_current."/".$mat_dir[$x],$indice);
                     } else flush();
                 }
             } else {
@@ -3016,6 +3133,16 @@ function dir_list_form() {
         <!--
         function go(arg) {
             document.location.href='".addslashes($path_info["basename"])."?frame=3&pid='+arg;
+        }
+        function ans2out() {
+	    if(confirm('可能覆盖已有.out文件，请三思而行！\\n Are you sure about overwrite all .out files ?')){
+            	document.location.href='".addslashes($path_info["basename"])."?frame=3&ans2out=1&current_dir=".addslashes($current_dir)."';
+            }
+        }
+        function generate() {
+	    if(confirm('将覆盖所有.out文件，请三思而行！\\n Are you sure about overwrite all .out files ?')){
+            	document.location.href='".addslashes($path_info["basename"])."?frame=3&generate=1&current_dir=".addslashes($current_dir)."';
+            }
         }
         function resolveIDs() {
             document.location.href='".addslashes($path_info["basename"])."?frame=3&set_resolveIDs=1&current_dir=".addslashes($current_dir)."';
@@ -3241,7 +3368,7 @@ function dir_list_form() {
             }
         }
         function edit_file(arg){
-            var w = 1024;
+            var w = 1150;
             var h = 768;
             // if(confirm('".uppercase(et('Edit'))." \\' '+arg+' \\' ?'))
             window.open('".addslashes($path_info["basename"])."?action=7&current_dir=".addslashes($current_dir)."&filename='+escape(arg), '', 'width='+w+',height='+h+',fullscreen=no,scrollbars=no,resizable=yes,status=no,toolbar=no,menubar=no,location=no');
@@ -3328,6 +3455,10 @@ function dir_list_form() {
                 document.form_action.cmd_arg.value = prompt('".et('TypeDir').".');
             } else if (arg == 2){
                 document.form_action.cmd_arg.value = prompt('".et('TypeArq').".');
+            } else if (arg == 21){
+                document.form_action.cmd_arg.value = prompt('".et('IOFilename').".');
+            } else if (arg == 22){
+                document.form_action.cmd_arg.value = prompt('".et('SolutionFilename').".');
             } else if (arg == 71){
                 if (!is_anything_selected()) erro = '".et('NoSel').".';
                 else document.form_action.cmd_arg.value = prompt('".et('TypeArqComp')."');
@@ -3415,11 +3546,24 @@ function dir_list_form() {
             <tr>
             <td bgcolor=\"#DDDDDD\" colspan=50><nobr>
             <input type=button onclick=\"test_prompt(2)\" value=\"".et('CreateArq')."\">
-            <input type=button onclick=\"upload()\" value=\"".et('Upload')."\">
-            <b>$ip</b>
-            <b><a href='https://muzea-demo.github.io/random-data/' target='_blank'>".et('Random-data')."</a></b>
+	    <input type=button onclick=\"upload()\" value=\"".et('Upload')."\">";
+	if(!$OJ_SaaS_ENABLE)$out.="<input type=button onclick=\"generate()\" value=\"".et('GenerateOut')."\">";
+	$out.="<input type=button onclick=\"ans2out()\" value=\"".et('Ans2out')."\">";
+	$out.="<input type=button onclick=\"test_prompt(21)\" value=\"".et('IOFilename')."\">";
+	$out.="<input type=button onclick=\"test_prompt(22)\" value=\"".et('SolutionFilename')."\">";
+	if(isset($_GET['pid'])){
+                $pid=intval($_GET['pid']);
+                $_SESSION[$OJ_NAME."_PID"]=$pid;
+        }else{
+                $pid=$_SESSION[$OJ_NAME."_PID"];
+        }
+        $title=pdo_query('select title from problem where problem_id=?',$pid)[0][0];
+        $out.="<b></b>
+            <a class='btn' href='https://muzea-demo.github.io/random-data/' target='_blank'>".et('Random-data')."</a>
+            <b><a href='../problem.php?id=$pid' target='_self'><font color=blue>$title </font></a></b>
             </nobr>";
         $uplink = "";
+
         if ($current_dir != $fm_current_root){
             $mat = explode("/",$current_dir);
             $dir_before = "";
@@ -3437,7 +3581,17 @@ function dir_list_form() {
                     <input type=\"button\" style=\"width:100\" onclick=\"test_prompt(71)\" value=\"".et('Compress')."\">";
             if ($islinux) $out .= "
                     <input type=\"button\" style=\"width:100\" onclick=\"resolveIDs()\" value=\"".et('ResolveIDs')."\">";
-            $out .= "
+            $out .= "<span title='一般推荐用英文命名，相同文件名的.in .out文件为一组。
+不支持.ans的扩展名，请在上传前用Windows的命令行统一修改ren *.ans *.out。
+支持在文件名中使用方括号[]来标注分数。如 test01[20].in / test01[20].out将视为分数是20分,未标注的文件按10分计分，
+系统最终根据所有文件的总分和运行得分，记录提交的通过率pass_rate放入solution表，用于前台显示。
+对于所有文件都没有标注的题目，按每组文件相同权重对待。
+评测的时候根据所有.in文件的字典序来评测, 因此test10先于test2评测, 后于test02评测。
+subtask的命名规则，可以在分数之前，再增加一个英文句号. 系统认为这个句号之前的内容为subtask的名字，相同subtask名字的测试数据为一组，互相绑定。
+例如: subtask1.1[10].in/out 和 subtask1.2[20].in/out 为一组subtask,必须同时通过才能得分共30分。
+subtask不限定必须是数字，如 TaskA.a[20].in/out 和 TaskA.b[20].in/out也可以是一组，共计40分。
+subtask的题目中也可以有不跟其他数据绑定的，认为是自己一组，如big[30].in/out可以跟前面两个例子同时放在一个题目中，共计100分。' >
+               命名规则: .in/.out 对应，[]标记分数，.标记subtask ， 如 TaskA.a[20].in/out 和 TaskA.b[20].in/out 是一组subtask，共计40分。</span>
                 </nobr></td>
                 </tr>
 				<tr>
@@ -4019,9 +4173,7 @@ function edit_file_form(){
         fputs($fh,$file_data,strlen($file_data));
         fclose($fh);
     }
-    $fh=fopen($file,"r");
-    $file_data=fread($fh, filesize($file));
-    fclose($fh);
+    $file_data=file_get_contents($file);
     html_header();
     echo "<body marginwidth=\"0\" marginheight=\"0\">
     <table border=0 cellspacing=0 cellpadding=5 align=center>
@@ -4031,7 +4183,7 @@ function edit_file_form(){
     <input type=hidden name=current_dir value=\"$current_dir\">
     <input type=hidden name=filename value=\"$filename\">
     <tr><th colspan=2>".$filename."</th></tr>
-    <tr><td colspan=2><textarea name=file_data style='width:1000px;height:680px;'>".html_encode($file_data)."</textarea></td></tr>
+    <tr><td colspan=2><textarea name=file_data style='width:1000px;height:500px;'>".html_encode($file_data)."</textarea></td></tr>
     <tr><td><input type=button value=\"".et('Refresh')."\" onclick=\"document.edit_form_refresh.submit()\"></td><td align=right><input type=button value=\"".et('SaveFile')."\" onclick=\"go_save()\"></td></tr>
     </form>
     <form name=\"edit_form_refresh\" action=\"".$path_info["basename"]."\" method=\"post\">
@@ -4405,6 +4557,31 @@ function frame3(){
                 } else alert(et('FileDirExists').".");
             }
             break;
+            case 21: // create IOFilename
+            if (strlen($cmd_arg)){
+                $filename = $current_dir."input.name";
+		if ($fh = @fopen($filename, "w")){
+		        fprintf($fh,"%s.in\n",$cmd_arg);	
+                        @fclose($fh);
+                }
+                @chmod($filename,0644);
+                $filename = $current_dir."output.name";
+		if ($fh = @fopen($filename, "w")){
+		        fprintf($fh,"%s.out\n",$cmd_arg);	
+                        @fclose($fh);
+                }
+                @chmod($filename,0644);
+            }
+	    case 22: // create SolutionFilename
+            if (strlen($cmd_arg)){
+                $filename = $current_dir."solution.name";
+		if ($fh = @fopen($filename, "w")){
+		        fprintf($fh,"%s\n",$cmd_arg);	// maybe   "%s.cpp\n" ?
+                        @fclose($fh);
+                }
+                @chmod($filename,0644);
+            }
+            break;
             case 3: // rename arq ou dir
             if ((strlen($old_name))&&(strlen($new_name))){
                 rename($current_dir.$old_name,$current_dir.$new_name);
@@ -4626,7 +4803,7 @@ function frameset(){
  */
 class archive
 {
-    function archive($name)
+    function __construct($name)
     {
         $this->options = array(
             'basedir'=>".",
@@ -4647,7 +4824,27 @@ class archive
         $this->storeonly = array();
         $this->error = array();
     }
-
+ function archive($name)
+    {
+        $this->options = array(
+            'basedir'=>".",
+            'name'=>$name,
+            'prepend'=>"",
+            'inmemory'=>0,
+            'overwrite'=>0,
+            'recurse'=>1,
+            'storepaths'=>1,
+            'level'=>3,
+            'method'=>1,
+            'sfx'=>"",
+            'type'=>"",
+            'comment'=>""
+        );
+        $this->files = array();
+        $this->exclude = array();
+        $this->storeonly = array();
+        $this->error = array();
+    }
     function set_options($options)
     {
         foreach($options as $key => $value)
@@ -4998,7 +5195,7 @@ class archive
 
 class tar_file extends archive
 {
-    function tar_file($name)
+    function __construct($name)
     {
         $this->archive($name);
         $this->options['type'] = "tar";
@@ -5179,7 +5376,7 @@ class tar_file extends archive
 
 class gzip_file extends tar_file
 {
-    function gzip_file($name)
+    function __construct($name)
     {
         $this->tar_file($name);
         $this->options['type'] = "gzip";
@@ -5224,7 +5421,7 @@ class gzip_file extends tar_file
 
 class bzip_file extends tar_file
 {
-    function bzip_file($name)
+    function __construct($name)
     {
         $this->tar_file($name);
         $this->options['type'] = "bzip";
@@ -5269,7 +5466,7 @@ class bzip_file extends tar_file
 
 class zip_file extends archive
 {
-    function zip_file($name)
+    function __construct($name)
     {
         $this->archive($name);
         $this->options['type'] = "zip";
