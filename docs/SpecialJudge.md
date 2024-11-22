@@ -46,6 +46,7 @@ int main(int argc, char *args[]) {
     FILE * f_in   = fopen(args[1],"r");
     FILE * f_out  = fopen(args[2],"r");
     FILE * f_user = fopen(args[3],"r");
+    if(f_user==NULL||f_out==NULL||f_in==NULL) return 1;  //文件打开出错，直接判错。
     int ret = 0;
     int a, b, c;
     while(fscanf(f_in,"%d %d",&a, &b) != EOF) {
@@ -107,6 +108,7 @@ int main(int argc, char *args[]) {
     FILE * f_in   = fopen(args[1], "r");    //测试输入
     FILE * f_out  = fopen(args[2], "r");    //测试输出
     FILE * f_user = fopen(args[3], "r");    //用户输出
+    if(f_user==NULL||f_out==NULL||f_in==NULL) return 1;  //文件打开出错，直接判错。
     int ret = 0;                            //返回值
     int T, n, a, b;
     fscanf(f_in, "%d", &T);                 //从输入中读取数据组数T
@@ -159,6 +161,7 @@ int main(int argc,char *args[]) {
     FILE * f_in   = fopen(args[1], "r");    //测试输入
     FILE * f_out  = fopen(args[2], "r");    //测试输出
     FILE * f_user = fopen(args[3], "r");    //用户输出
+    if(f_user==NULL||f_out==NULL||f_in==NULL) return 1;  //文件打开出错，直接判错。
     int ret = 0;                            //返回值
     int T;
     double a, x;
