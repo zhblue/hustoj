@@ -1,4 +1,7 @@
 #!/bin/bash
+
+OSRS=`lsb_release -rs`
+ 
 cd /home/judge/src/install || exit 1；
 dpkg --configure -a
 while ! apt-get install -y docker.io containerd
@@ -36,11 +39,11 @@ then
  	do
   		echo "Download archive image file fail , try again..."
   	done
-	bzip2 -d hustoj.docker.tar.bz2
-	#docker load < hustoj.docker.tar
-        if docker import hustoj.docker.tar hustoj 
+	bzip2 -d hustoj.docker.$OSRS.tar.bz2
+	#docker load < hustoj.docker.$OSRS.tar
+        if docker import hustoj.docker.$OSRS.tar hustoj 
 	then
- 	    rm	hustoj.docker.tar.bz2
+ 	    rm	hustoj.docker.$OSRS.tar
         fi
 fi
  
