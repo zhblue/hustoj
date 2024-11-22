@@ -35,15 +35,15 @@ if ! docker build -t hustoj .
 then
     	echo "Network fail, retry... you might want to make sure https://hub.docker.com/ is available"
 	echo "Docker image failed, try download from temporary site ... "
-	while ! wget -O hustoj.docker.tar.bz2  http://dl3.hustoj.com/docker/hustoj.docker.tar.bz2
+	while ! wget -O hustoj.docker.tar.bz2  http://dl3.hustoj.com/docker/hustoj.docker.$OSRS.tar.bz2
  	do
   		echo "Download archive image file fail , try again..."
   	done
-	bzip2 -d hustoj.docker.$OSRS.tar.bz2
-	#docker load < hustoj.docker.$OSRS.tar
-        if docker import hustoj.docker.$OSRS.tar hustoj 
+	bzip2 -d hustoj.docker.tar.bz2
+	#docker load < hustoj.docker.tar
+        if docker import hustoj.docker.tar hustoj 
 	then
- 	    rm	hustoj.docker.$OSRS.tar
+ 	    rm	hustoj.docker.tar
         fi
 fi
  
