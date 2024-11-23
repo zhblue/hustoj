@@ -17,7 +17,11 @@ cat > /etc/docker/daemon.json <<EOF
 				"https://docker.m.daocloud.io",
 				"https://huecker.io",
 				"https://dockerhub.timeweb.cloud",
-			        "https://registry.cn-hangzhou.aliyuncs.com"
+			        "https://registry.cn-hangzhou.aliyuncs.com",
+	   			"https://hub.geekery.cn",
+       				"https://dockerpull.com",
+	   			"https://docker.1panel.dev",
+       				"https://docker.5z5f.com"
     	],
 	"live-restore": true,
 	"log-opts": {
