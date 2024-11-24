@@ -29,6 +29,10 @@
 .accordion > .content > .accordion > .content > :last-child {
     margin-bottom: -10px !important;
 }
+td > code {
+    color:red;
+}
+
 </style>
 <div class="padding">
     <div style="margin-top: 0px; margin-bottom: 14px; " v-if="content != null && content !== ''">
