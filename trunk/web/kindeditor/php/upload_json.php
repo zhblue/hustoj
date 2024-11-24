@@ -37,7 +37,7 @@ $ext_arr = array(
 $max_size = 400*1024*1024;
 
 $save_path = realpath($save_path) . '/';
-
+if($save_path=="/") $save_path="/home/judge/src/upload/";
 //PHP上传失败
 if (!empty($_FILES['imgFile']['error'])) {
 	switch($_FILES['imgFile']['error']){
