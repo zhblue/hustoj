@@ -2511,7 +2511,18 @@ function zip_extract(){
         if (zip_entry_filesize($zip_entry)) {
             $complete_path = $path.dirname(zip_entry_name($zip_entry));
             $complete_name = $path.zip_entry_name($zip_entry);
+	    if(str_ends_with($complete_name,".txt")){   // atcoder zip
+                $ext=".txt";
+                if (str_contains($complete_path,"in")){   //  A/in/*.txt
+                        $complete_name=basename($complete_name,".txt").".in";
+                }
+                if (str_contains($complete_path,"out")){   //  A/out/*.txt
+                        $complete_name=basename($complete_name,".txt").".out";
+                }
+            }
+
 	    $complete_path=remove_special_chars($complete_path);
+		
             if(!file_exists($complete_path)) {
                 $tmp = '';
                 foreach(explode('/',$complete_path) AS $k) {
