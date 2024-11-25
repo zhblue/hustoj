@@ -868,7 +868,7 @@ void make_diff_out_simple(FILE *f1, FILE *f2,char * prefix, int c1, int c2, cons
 				fprintSafe(diff,buf2);
                 }
                 fprintf(diff,"\n");
-                if(row>=5) break;
+                if(row>=5||ftell(diff)>128) break;
         }
         fprintf(diff,"\n\n");
         fclose(diff);
