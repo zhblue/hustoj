@@ -59,6 +59,7 @@ static  $OJ_LOGIN_MOD="hustoj"; //需要在include目录下配置login-xxxx.php�
 static  $OJ_REGISTER=true; //允许注册新用户
 static  $OJ_REG_NEED_CONFIRM=false; //新注册用户需要审核
 static  $OJ_EMAIL_CONFIRM=false; //允许邮件激活账号
+static  $OJ_EXPIRY_DAYS=365; // 手工添加账户的默认过期天数
 
 static  $OJ_NEED_LOGIN=false; //需要登录才能访问
 static  $OJ_LONG_LOGIN=false; //启用长时间登录信息保留
