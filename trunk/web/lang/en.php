@@ -170,6 +170,7 @@
         $MSG_LAST_LOGIN="Last Login";
         $MSG_OFFLINE_ZIP_IMPORT="Import a offline contest ZIP file, which using the following structure: ";
         $MSG_OFFLINE="Offline";
+        $MSG_EXPIRY_DATE="Expiry Date";
 
   //contest.php
   $MSG_PRIVATE_WARNING="Contest has not started or you don't have privilege of it.";

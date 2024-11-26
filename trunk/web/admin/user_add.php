@@ -46,7 +46,8 @@ if(isset($_POST['do'])){
           $ulist = $ulist.$id_pw[0]." ".$id_pw[1]."\n";
         } else {
           $passwd = pwGen($id_pw[1]);
-          $sql = "INSERT INTO `users` (`user_id`, `password`, `reg_time`, `nick`) VALUES (?, ?, NOW(), ?);";
+          if(!isset($OJ_EXPIRY_DAYS)) $OJ_EXPIRY_DAYS=365;
+          $sql = "INSERT INTO `users` (`user_id`, `password`, `reg_time`,`expiry_date`, `nick`) VALUES (?, ?, NOW(),date_add(curdate(),interval $OJ_EXPIRY_DAYS  day), ?);";
           pdo_query($sql, $id_pw[0], $passwd, $id_pw[0]);
           echo $id_pw[0]." is added!<br>";
 

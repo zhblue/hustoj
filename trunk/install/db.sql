@@ -183,6 +183,7 @@ CREATE TABLE IF NOT EXISTS `users` (
   `language` int(11) NOT NULL DEFAULT '1',
   `password` varchar(32) DEFAULT NULL,
   `reg_time` datetime DEFAULT NULL,
+  `expiry_date` date not null default '2099-01-01',	
   `nick` varchar(20) NOT NULL DEFAULT '',
   `school` varchar(20) NOT NULL DEFAULT '',
   `group_name` varchar(16) not null default '',

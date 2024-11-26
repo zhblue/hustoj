@@ -26,6 +26,7 @@ alter table contest add index key_c_def(defunct);
 alter table contest add index key_c_end(end_time);
 alter table contest add index key_c_dend(defunct,end_time);
 alter table users add column starred int default 0 after activecode ;
+alter table users add column expiry_date date not null default '2099-01-01' after reg_time;
 #create fulltext index problem_title_source_index on problem(title,source);
 
                                                                                                          
