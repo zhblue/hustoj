@@ -31,6 +31,7 @@
 }
 td > code {
     color:red;
+    white-space:nowrap;
 }
 
 </style>
@@ -117,17 +118,17 @@ td > code {
                 }
 
 
-        $("#errtxt table").addClass("ui mini-table cell striped");
+        $("#errtxt table").addClass("ui mini-table cell striped table");
         $("#errtxt table tr:odd td").css({
             "border": "1px solid grey",
-            "text-align": "center",
+           // "text-align": "center",
             "width": "200px",
             "background-color": "#8521d022",
             "height": "30px"
         });
         $("#errtxt table tr:even td").css({
             "border": "1px solid grey",
-            "text-align": "center",
+           // "text-align": "center",
             "width": "200px",
             "background-color": "#2185d022",
             "height": "30px"
