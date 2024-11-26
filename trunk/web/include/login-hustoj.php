@@ -6,7 +6,7 @@
 		$pass2 = 'No Saved';
 		if(isset($_SESSION))session_destroy();
 		session_start();
-		$sql="SELECT `user_id`,`password` FROM `users` WHERE `user_id`=? and defunct='N' ";
+		$sql="SELECT `user_id`,`password` FROM `users` WHERE `user_id`=? and defunct='N'  and expiry_date >= curdate()  ";
 		$result=pdo_query($sql,$user_id);
 		if(count($result)==1){
 			$row = $result[0];
