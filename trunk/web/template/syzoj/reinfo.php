@@ -118,7 +118,7 @@ td > code {
                 }
 
 
-        $("#errtxt table").addClass("ui mini-table cell striped table");
+        $("#errtxt table").addClass("ui mini-table cell striped");
         $("#errtxt table tr:odd td").css({
             "border": "1px solid grey",
            // "text-align": "center",
