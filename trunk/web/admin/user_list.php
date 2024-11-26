@@ -36,14 +36,14 @@ $trash="";
 if(isset($_GET['keyword']) && $_GET['keyword']!=""){
   $gkeyword = $_GET['keyword'];
   $keyword = "%$gkeyword%";
-  $sql = "SELECT `user_id`,`nick`,email,`accesstime`,`reg_time`,`ip`,`school`,`group_name`,`defunct` FROM `users` WHERE (user_id LIKE ?) OR (nick LIKE ?) OR (school LIKE ?) or (ip like ?) ORDER BY `user_id` DESC";
+  $sql = "SELECT `user_id`,`nick`,email,`accesstime`,`reg_time`,`expiry_date`,`ip`,`school`,`group_name`,`defunct` FROM `users` WHERE (user_id LIKE ?) OR (nick LIKE ?) OR (school LIKE ?) or (ip like ?) ORDER BY `user_id` DESC";
   $result = pdo_query($sql,$keyword,$keyword,$keyword,$keyword);
 }else if(isset($_GET['trash'])){
   $trash="&trash";
-  $sql = "SELECT `user_id`,`nick`,email,`accesstime`,`reg_time`,`ip`,`school`,`group_name`,`defunct` FROM `users` where defunct='Y' ORDER BY `accesstime` DESC LIMIT $sid, $idsperpage";
+  $sql = "SELECT `user_id`,`nick`,email,`accesstime`,`reg_time`,`expiry_date`,`ip`,`school`,`group_name`,`defunct` FROM `users` where defunct='Y' ORDER BY `accesstime` DESC LIMIT $sid, $idsperpage";
   $result = pdo_query($sql);
 }else{
-  $sql = "SELECT `user_id`,`nick`,email,`accesstime`,`reg_time`,`ip`,`school`,`group_name`,`defunct` FROM `users` where defunct='N' ORDER BY `accesstime` DESC LIMIT $sid, $idsperpage";
+  $sql = "SELECT `user_id`,`nick`,email,`accesstime`,`reg_time`,`expiry_date`,`ip`,`school`,`group_name`,`defunct` FROM `users` where defunct='N' ORDER BY `accesstime` DESC LIMIT $sid, $idsperpage";
   $result = pdo_query($sql);
 }
 ?>
@@ -52,7 +52,7 @@ if(isset($_GET['keyword']) && $_GET['keyword']!=""){
 <form action=user_list.php class="form-search form-inline">
   <input type="text" name="keyword"  value="<?php echo htmlentities($gkeyword,ENT_QUOTES) ?>"  class="form-control search-query" placeholder="<?php echo $MSG_USER_ID.', '.$MSG_NICK.', '.$MSG_SCHOOL?>">
   <button type="submit" class="form-control"><?php echo $MSG_SEARCH?></button>
-   <a href="user_list.php?trash"><i class='icon large trash color grey' ></i></a>
+  <a href="user_list.php?trash"><i class='icon large trash color grey' ></i></a>
 </form>
 </center>
 
@@ -67,6 +67,7 @@ if(isset($_GET['keyword']) && $_GET['keyword']!=""){
       <td><?php echo $MSG_GROUP_NAME?></td>
       <td><?php echo $MSG_LAST_LOGIN?></td>
       <td><?php echo $MSG_REGISTER?></td>
+      <td><?php echo $MSG_EXPIRY_DATE?></td>
       <td><?php echo $MSG_STATUS?></td>
       <td><?php echo $MSG_SETPASSWORD?></td>
       <td><?php echo $MSG_PRIVILEGE."-".$MSG_ADD ?></td>
@@ -88,6 +89,7 @@ if(isset($_GET['keyword']) && $_GET['keyword']!=""){
         echo "<td><span fd='group_name' user_id='".$row['user_id']."'>".$row['group_name']."</span></td>";
         echo "<td>".$row['accesstime']."</td>";
         echo "<td>".$row['reg_time']."</td>";
+        echo "<td><span fd='expiry_date' user_id='".$row['user_id']."' >".$row['expiry_date']."</span></td>";
       if(isset($_SESSION[$OJ_NAME.'_'.'administrator'])){
         echo "<td><a href=user_df_change.php?cid=".$row['user_id']."&getkey=".$_SESSION[$OJ_NAME.'_'.'getkey'].">".
                   ($row['defunct']=="N"?"<span class=green>$MSG_NORMAL</span>":"<span class=red>$MSG_DELETED</span>")."</a></td>";
@@ -178,6 +180,28 @@ function admin_mod(){
                                 $.post("ajax.php",sp.find("form").serialize()).done(function(){
                                         console.log("new nick:"+newnick);
                                         sp.html(newnick);
+                                });
+
+                        });
+                });
+
+
+        });
+        $("span[fd=expiry_date]").each(function(){
+                let sp=$(this);
+                let user_id=$(this).attr('user_id');
+                $(this).dblclick(function(){
+                        let expiry_date=sp.text();
+                        console.log("user_id:"+user_id+"  expiry_date:"+expiry_date);
+                        sp.html("<form onsubmit='return false;'><input type=hidden name='m' value='user_update_expiry_date'><input type='hidden' name='user_id' value='"+user_id+"'><input type='date' name='expiry_date' value='"+expiry_date+"' selected='true' class='input-mini' size=2 ></form>");
+                        let ipt=sp.find("input[name=expiry_date]");
+                        ipt.focus();
+                        ipt[0].select();
+                        sp.find("input").change(function(){
+                                let newexpiry_date=sp.find("input[name=expiry_date]").val();
+                                $.post("ajax.php",sp.find("form").serialize()).done(function(){
+                                        console.log("new expiry_date:"+newexpiry_date);
+                                        sp.html(newexpiry_date);
                                 });
 
                         });
