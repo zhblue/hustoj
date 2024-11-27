@@ -17,7 +17,7 @@ yum -y install wget
 yum -y install epel-release yum-utils
 yum -y install http://rpms.remirepo.net/enterprise/remi-release-7.rpm
 
-yum -y install gcc-c++  mysql-devel glibc-static libstdc++-static flex java-1.8.0-openjdk java-1.8.0-openjdk-devel
+yum -y install gcc-c++  mariadb-devel glibc-static libstdc++-static flex java-1.8.0-openjdk java-1.8.0-openjdk-devel
 
 # install semanage to setup selinux
 yum -y install policycoreutils-python
@@ -34,7 +34,6 @@ cd /home/judge/
 wget -O hustoj.tar.gz http://dl.hustoj.com/hustoj.tar.gz
 tar xzf hustoj.tar.gz
 
-#svn co https://github.com/zhblue/hustoj/trunk/trunk/ src
 cd src/install
 docker build -t hustoj .
 mysql -h localhost -uroot < db.sql
@@ -53,16 +52,16 @@ if grep "OJ_SHM_RUN=0" etc/judge.conf ; then
 	chown www run0 run1 run2 run3
 fi
 
-# sed -i "s/OJ_USER_NAME=root/OJ_USER_NAME=$USER/g" etc/judge.conf
-# sed -i "s/OJ_PASSWORD=root/OJ_PASSWORD=$DBPASS/g" etc/judge.conf
+sed -i "s/OJ_USER_NAME=root/OJ_USER_NAME=$DBUSER/g" etc/judge.conf
+sed -i "s/OJ_PASSWORD=root/OJ_PASSWORD=$DBPASS/g" etc/judge.conf
 sed -i "s/OJ_COMPILE_CHROOT=1/OJ_COMPILE_CHROOT=0/g" etc/judge.conf
 sed -i "s/OJ_RUNNING=1/OJ_RUNNING=$CPU/g" etc/judge.conf
 
 chmod 700 backup
 chmod 700 etc/judge.conf
 
-# sed -i "s/DB_USER=\"root\"/DB_USER=\"$USER\"/g" src/web/include/db_info.inc.php
-# sed -i "s/DB_PASS=\"root\"/DB_PASS=\"$DBPASS\"/g" src/web/include/db_info.inc.php
+sed -i "s/DB_USER=\"root\"/DB_USER=\"$DBUSER\"/g" src/web/include/db_info.inc.php
+sed -i "s/DB_PASS=\"root\"/DB_PASS=\"$DBPASS\"/g" src/web/include/db_info.inc.php
 
 sed -i "s+//date_default_timezone_set(\"PRC\");+date_default_timezone_set(\"PRC\");+g" src/web/include/db_info.inc.php
 sed -i "s+//pdo_query(\"SET time_zone ='\+8:00'\");+pdo_query(\"SET time_zone ='\+8:00'\");+g" src/web/include/db_info.inc.php
@@ -132,5 +131,5 @@ chown www -R /var/log/hustoj/
 
 reset
 echo "Remember your database account for HUST Online Judge:"
-echo "username:root"
+echo "username:$DBUSER"
 echo "password:$DBPASS"
