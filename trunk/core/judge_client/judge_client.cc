@@ -48,7 +48,7 @@
 #include <sys/stat.h>
 #include <unistd.h>
 #ifdef OJ_USE_MYSQL
-	#include <mysql/mysql.h>
+	#include <mysql.h>
 #endif
 #include <assert.h>
 #include "okcalls.h"
