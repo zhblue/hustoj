@@ -8,6 +8,13 @@
 		session_start();
 		$sql="SELECT `user_id`,`password` FROM `users` WHERE `user_id`=? and defunct='N'  and expiry_date >= curdate()  ";  //有效期当天可以登录
 		$result=pdo_query($sql,$user_id);
+		if($result==-1){
+                        //database need update 
+                        $sql="alter table users add column expiry_date date not null default '2099-01-01' after reg_time;";  // 更新库结构
+                        $result=pdo_query($sql);
+			$sql="SELECT `user_id`,`password` FROM `users` WHERE `user_id`=? and defunct='N'  and expiry_date >= curdate()  ";  //有效期当天可以登录
+			$result=pdo_query($sql,$user_id);
+                }
 		if(count($result)==1){
 			$row = $result[0];
 			if( pwCheck($password,$row['password'])){
