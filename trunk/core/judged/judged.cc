@@ -38,7 +38,7 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #ifdef OJ_USE_MYSQL
-	#include <mysql/mysql.h>
+	#include <mysql.h>
 #endif
 
 #define BUFFER_SIZE 1024
