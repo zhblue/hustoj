@@ -165,7 +165,7 @@ static char java_xms[BUFFER_SIZE/10];
 static char java_xmx[BUFFER_SIZE/10];
 static int sim_enable = 0;
 static int oi_mode = 0;
-static int full_diff = 0;
+static int full_diff = 1;
 static int raw_text_diff = 1;
 static int use_max_time = 0;
 static int time_limit_to_total= 1;
@@ -956,10 +956,7 @@ end:
 
 	if (ret == OJ_WA || ret == OJ_PE)
 	{
-		if (full_diff)
-			make_diff_out_full(f1, f2, c1, c2, file1,infile,userfile);
-		else
-			make_diff_out_simple(f1, f2, prefix, c1, c2, file1,userfile);
+		if (full_diff)  make_diff_out_simple(f1, f2, prefix, c1, c2, file1,userfile);
 	}
 	if (f1)
 		fclose(f1);
