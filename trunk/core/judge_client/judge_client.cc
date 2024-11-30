@@ -3652,8 +3652,8 @@ int main(int argc, char **argv)
 	//never bigger than judged set value;
 	if (time_lmt > 300 || time_lmt < 0)
 		time_lmt = 1;
-	if (mem_lmt > 1024 || mem_lmt < 1)
-		mem_lmt = 1024;
+	if (mem_lmt > 2048 || mem_lmt < 1)
+		mem_lmt = 2048;
 
 	if (DEBUG)
 		printf("time: %g mem: %d\n", time_lmt, mem_lmt);
