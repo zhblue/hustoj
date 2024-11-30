@@ -2596,7 +2596,7 @@ void run_solution(int &lang, char *work_dir, double &time_lmt, int &usedtime,
 	}
 	execute_cmd("chmod 760 %s/user.out", work_dir);
 	if (   
-		(!use_docker) && lang != 3 && lang != 5 && lang != 20 && lang != 9 && lang !=LANG_CJ && !(lang ==6 && python_free )
+		(!use_docker) && lang != 3 && lang != 5 && lang != 20 && lang != 9  && !(lang ==6 && python_free )
 	   ){
 		
 		if(DEBUG)printf("chroot...............................................\n");
@@ -2619,7 +2619,7 @@ void run_solution(int &lang, char *work_dir, double &time_lmt, int &usedtime,
 			&& lang != LANG_MATLAB 
 			&& lang != LANG_CSHARP
 			&& lang != LANG_R
-			&& lang != LANG_CJ
+		//	&& lang != LANG_CJ
 			&& !(lang == LANG_PYTHON && python_free )
 	   ){
 		
