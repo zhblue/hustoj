@@ -4,7 +4,7 @@ if ($ok==true){
 $brush=strtolower($language_name[$slanguage]);
 if ($brush=='pascal') $brush='delphi';
 if ($brush=='obj-c') $brush='c';
-if ($brush=='python3') $brush='python';
+if ($brush=='python3'||$brush=='cangjie') $brush='python';
 if ($brush=='clang') $brush='c';
 if ($brush=='clang++') $brush='c++';
 if ($brush=='freebasic') $brush='vb';

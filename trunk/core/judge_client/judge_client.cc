@@ -208,8 +208,8 @@ static int py2=1; // caution: py2=1 means default using py3
 MYSQL *conn;
 #endif
 static char jresult[15][4]={"PD","PR","CI","RJ","AC","PE","WA","TLE","MLE","OLE","RE","CE","CO","TR","MC"};
-static char lang_ext[24][8] = {"c", "cc", "pas", "java", "rb", "sh", "py",
-			       "php", "pl", "cs", "m", "bas", "scm", "c", "cc", "lua", "js", "go","sql","f95","m","cob","R","sb3"};
+static char lang_ext[25][8] = {"c", "cc", "pas", "java", "rb", "sh", "py",
+			       "php", "pl", "cs", "m", "bas", "scm", "c", "cc", "lua", "js", "go","sql","f95","m","cob","R","sb3","cj"};
 //static char buf[BUFFER_SIZE];
 
 int lockfile(int fd) {
@@ -444,6 +444,9 @@ void init_syscalls_limits(int lang)      //白名单初始化
 	}else if(lang == LANG_SB3 ){
 		for (i = 0; i == 0 || LANG_SB3V[i]; i++)
 			call_counter[LANG_SB3V[i]] = HOJ_MAX_LIMIT;
+	}else if(lang == LANG_CJ ){
+		for (i = 0; i == 0 || LANG_CJV[i]; i++)
+			call_counter[LANG_CJV[i]] = HOJ_MAX_LIMIT;
 	}
 #ifdef __aarch64__
 	if (lang==3)call_counter[220]= 100;
@@ -1490,9 +1493,13 @@ int compile(int lang, char *work_dir)
 	const char *CP_FORTRAN[] = {"f95", "-static", "-o", "Main", "Main.f95", NULL};
 	const char *CP_COBOL[] = {"cobc","-x", "-static", "-o", "Main", "Main.cob", NULL};
 	const char *CP_SB3[] = {"scratch-run","--check", "Main.sb3", NULL};
+	const char *CP_CJ[] = {"/opt/cangjie/bin/cjc","-o","Main", "Main.cj", NULL};
 
 	char * const envp[]={(char * const )"PYTHONIOENCODING=utf-8",
 			     (char * const )"USER=judge",
+			     (char * const )"GOCACHE=/tmp",
+			     (char * const )"PATH=/bin:/usr/bin:/opt/cangjie/bin",
+			     (char * const )"LD_LIBRARY_PATH=/opt/cangjie/runtime/lib/linux_x86_64_llvm:/opt/cangjie/tools/lib",
 			     (char * const )"GOCACHE=/tmp",
 			     (char * const )"LANG=zh_CN.UTF-8",
 			     (char * const )"LANGUAGE=zh_CN.UTF-8",
@@ -1660,6 +1667,9 @@ int compile(int lang, char *work_dir)
 			break;
 		case LANG_SB3:
 			execvp(CP_SB3[0], (char *const *)CP_SB3);
+			break;
+		case LANG_CJ:
+			execvp(CP_CJ[0], (char *const *)CP_CJ);
 			break;
 		default:
 			printf("nothing to do!\n");
@@ -2549,6 +2559,8 @@ void run_solution(int &lang, char *work_dir, double &time_lmt, int &usedtime,
 {
 	//准备环境变量处理中文，如果希望使用非中文的语言环境，可能需要修改这些环境变量
 	char * const envp[]={(char * const )"PYTHONIOENCODING=utf-8",
+			     (char * const )"PATH=/bin:/usr/bin:/opt/cangjie/bin",
+			     (char * const )"LD_LIBRARY_PATH=/opt/cangjie/runtime/lib/linux_x86_64_llvm:/opt/cangjie/tools/lib",
 			     (char * const )"LANG=zh_CN.UTF-8",
 			     (char * const )"LANGUAGE=zh_CN.UTF-8",
 			     (char * const )"LC_ALL=zh_CN.utf-8",NULL};
@@ -2584,7 +2596,7 @@ void run_solution(int &lang, char *work_dir, double &time_lmt, int &usedtime,
 	}
 	execute_cmd("chmod 760 %s/user.out", work_dir);
 	if (   
-		(!use_docker) && lang != 3 && lang != 5 && lang != 20 && lang != 9 && !(lang ==6 && python_free )
+		(!use_docker) && lang != 3 && lang != 5 && lang != 20 && lang != 9 && lang !=LANG_CJ && !(lang ==6 && python_free )
 	   ){
 		
 		if(DEBUG)printf("chroot...............................................\n");
@@ -2607,6 +2619,7 @@ void run_solution(int &lang, char *work_dir, double &time_lmt, int &usedtime,
 			&& lang != LANG_MATLAB 
 			&& lang != LANG_CSHARP
 			&& lang != LANG_R
+			&& lang != LANG_CJ
 			&& !(lang == LANG_PYTHON && python_free )
 	   ){
 		
@@ -2663,6 +2676,7 @@ void run_solution(int &lang, char *work_dir, double &time_lmt, int &usedtime,
 	case LANG_PYTHON:  //python
 	case LANG_SCHEME:
 	case LANG_JS:
+	case LANG_CJ:
 	case LANG_MATLAB:
 		LIM.rlim_cur = LIM.rlim_max = 200;
 		break;
@@ -2697,6 +2711,7 @@ void run_solution(int &lang, char *work_dir, double &time_lmt, int &usedtime,
 	case LANG_GO:
 	case LANG_FORTRAN:
 	case LANG_COBOL:
+	case LANG_CJ:
 		execle("./Main", "./Main", (char *)NULL,envp);
 		break;
 	case LANG_JAVA:
@@ -3115,6 +3130,7 @@ void watch_solution(pid_t pidApp, char *infile, int &ACflg, int spj,
 		    lang == LANG_GO || 
 		    lang == LANG_MATLAB||
 		    lang == LANG_COBOL||
+		    lang == LANG_CJ||
 		    lang == LANG_SB3
 		    )
 		{
@@ -3607,7 +3623,7 @@ int main(int argc, char **argv)
 	if (p_id == 0)
 	{
 		time_lmt = 5;
-		mem_lmt = 128;
+		mem_lmt = 256;
 		spj = 0;
 	}
 	else
@@ -3781,7 +3797,7 @@ int main(int argc, char **argv)
 						   p_id, PEflg, work_dir);
 		}
 		if(DEBUG) printf("custom running result:%d PEflg:%d\n",ACflg,PEflg);
-		if (ACflg == OJ_RE||get_file_size("error.out")>0)
+		if (ACflg == OJ_RE||( lang!=LANG_CJ  && get_file_size("error.out")>0))
 		{
 			if (DEBUG)
 				printf("add RE info of %d..... \n", solution_id);

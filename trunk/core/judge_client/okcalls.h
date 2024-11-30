@@ -43,6 +43,7 @@
 #define LANG_COBOL 21
 #define LANG_R 22
 #define LANG_SB3 23
+#define LANG_CJ 24
 
 #ifdef __i386
    #include "okcalls32.h"
