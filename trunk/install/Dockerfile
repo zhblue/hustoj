@@ -43,6 +43,8 @@ RUN     cd /home/judge/src/core/ && bash make.sh
 #RUN     DEBIAN_FRONTEND=noninteractive apt-get -y install --no-install-recommends octave
 #RUN     DEBIAN_FRONTEND=noninteractive apt-get -y install --no-install-recommends gnucobol
 #RUN     DEBIAN_FRONTEND=noninteractive apt-get -y install --no-install-recommends r-base
+#RUN     wget -O /opt/cangjie.tar.gz http://dl3.hustoj.com/docker/Cangjie-STS-linux_x64.tar.gz && cd /opt && tar xzf cangjie.tar.gz && chmod +rx -R cangjie && rm cangjie.tar.gz
+
 
 #  Scratch3 judge need these lines
 #RUN wget -c http://dl.hustoj.com/scratch-run_0.1.5_linux_amd64.zip
