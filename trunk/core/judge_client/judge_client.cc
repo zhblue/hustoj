@@ -1493,7 +1493,7 @@ int compile(int lang, char *work_dir)
 	const char *CP_FORTRAN[] = {"f95", "-static", "-o", "Main", "Main.f95", NULL};
 	const char *CP_COBOL[] = {"cobc","-x", "-static", "-o", "Main", "Main.cob", NULL};
 	const char *CP_SB3[] = {"scratch-run","--check", "Main.sb3", NULL};
-	const char *CP_CJ[] = {"/opt/cangjie/bin/cjc","--diagnostic-format","noColor","-o","Main", "Main.cj", NULL};
+	const char *CP_CJ[] = {"/opt/cangjie/bin/cjc","--static-std","--static-libs","--diagnostic-format","noColor","-o","Main", "Main.cj", NULL};
 
 	char * const envp[]={(char * const )"PYTHONIOENCODING=utf-8",
 			     (char * const )"USER=judge",
