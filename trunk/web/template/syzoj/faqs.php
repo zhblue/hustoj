@@ -125,6 +125,25 @@ for line in sys.stdin:
     a = line.split()
     print(int(a[0]) + int(a[1]))</code></pre>
         </div>
+        <p><strong>仓颉 (.cj)</strong></p>
+        <div class="ui existing segment">
+            <pre style="margin-top: 0; margin-bottom: 0; ">
+<code class="lang-python">import std.core.*
+import std.console.*
+import std.collection.*
+import std.convert.*
+
+main(): Int64 {
+    while (let Some(line) <- Console.stdIn.readln()) {
+        let nums = map(Int.parse)(line.split(" "))
+        let sum = reduce({a: Int64, b: Int64 => a + b})(nums)
+        if (let Some(r) <- sum) {
+            Console.stdOut.writeln(r)
+        }
+    }
+    return 0
+}</code></pre>
+        </div>
     </div>
 </div>
 
