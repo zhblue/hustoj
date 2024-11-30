@@ -6,7 +6,7 @@ RUN     apt-get update && apt-get -y upgrade
 
 RUN    	DEBIAN_FRONTEND=noninteractive  apt-get -y install --no-install-recommends        apt-utils 	
 RUN    	DEBIAN_FRONTEND=noninteractive  apt-get -y install --no-install-recommends        libmariadb-dev 
-RUN    	DEBIAN_FRONTEND=noninteractive  apt-get -y install --no-install-recommends        libmysqlclient-dev 
+#RUN    	DEBIAN_FRONTEND=noninteractive  apt-get -y install --no-install-recommends        libmysqlclient-dev 
 RUN    	DEBIAN_FRONTEND=noninteractive  apt-get -y install --no-install-recommends        libmysql++-dev 
 RUN    	DEBIAN_FRONTEND=noninteractive  apt-get -y install --no-install-recommends        build-essential 
 RUN    	DEBIAN_FRONTEND=noninteractive  apt-get -y install --no-install-recommends        flex 
