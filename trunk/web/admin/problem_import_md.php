@@ -112,80 +112,125 @@ function import_dir($json) {
     return $pid;
 }
 
+function create_upload_dir($base_dir)
+{
+    $date_dir = date("Ymd");
+    $full_path = $base_dir . "/" . $date_dir;
+
+    if (!file_exists($full_path)) {
+        mkdir($full_path, 0755, true);
+    }
+
+    return $full_path;
+}
+
+function process_md_and_images($zip_path, $upload_dir)
+{
+    $zip = new ZipArchive();
+    if ($zip->open($zip_path) === TRUE) {
+        $upload_date_dir = create_upload_dir($upload_dir);
+        $temp_dir = sys_get_temp_dir() . "/md_import_" . uniqid();
+
+        if (!file_exists($temp_dir)) {
+            mkdir($temp_dir, 0755, true);
+        }
+
+        // Extract all files to a temporary directory
+        $zip->extractTo($temp_dir);
+        $zip->close();
+
+        $md_files = glob($temp_dir . "/*.md");
+        $output_files = [];
+
+        foreach ($md_files as $md_file) {
+            $md_content = file_get_contents($md_file);
+
+            // Find and process image paths in the Markdown file
+            $md_content = preg_replace_callback('/!\[.*?\]\((.*?)\)/', function ($matches) use ($temp_dir, $upload_date_dir) {
+                $original_path = $matches[1];
+                $image_path = realpath($temp_dir . "/" . $original_path);
+
+                if (file_exists($image_path)) {
+                    // Create a unique name for the uploaded image
+                    $image_ext = pathinfo($image_path, PATHINFO_EXTENSION);
+                    $new_image_name = date("YmdHis") . "_" . uniqid() . "." . $image_ext;
+                    $new_image_path = $upload_date_dir . "/" . $new_image_name;
+
+                    if (copy($image_path, $new_image_path)) {
+                        // Return the new path in Markdown format
+                        return "![{$new_image_name}](/upload/image/" . basename($upload_date_dir) . "/" . $new_image_name . ")";
+                    }
+                }
+
+                return $matches[0]; // Return original if unable to process
+            }, $md_content);
+
+            $output_files[] = [
+                'filename' => basename($md_file),
+                'content' => $md_content
+            ];
+        }
+
+        // Cleanup the temp directory
+        array_map('unlink', glob("$temp_dir/*.*"));
+        rmdir($temp_dir);
+
+        return $output_files;
+    } else {
+        return [];
+    }
+}
 
 if ($_FILES ["fps"] ["error"] > 0) {
   echo "&nbsp;&nbsp;- Error: ".$_FILES ["fps"] ["error"]."File size is too big, change in PHP.ini<br />";
 }
 else {
   $tempdir = sys_get_temp_dir()."/import_markdown".time();	
-  mkdir($tempdir);
+  mkdir($tempdir, 0755, true); // 确保目录存在并可写
   $tempfile = $_FILES ["fps"] ["tmp_name"];
   if (get_extension( $_FILES ["fps"] ["name"])=="zip") {
     echo "&nbsp;&nbsp;- zip file, only Markdown .md file is supported<hr>\n";
-    $resource = zip_open($tempfile);
-    $save_path="";
-    $i = 1;
-    $pid=$title=$description=$input=$output=$sample_input=$sample_output=$hint=$source=$spj="";
-    $type="normal";
-    while ($dir_resource = zip_read($resource)) {
-      if (zip_entry_open($resource,$dir_resource)) {
-        $file_name = $save_path.zip_entry_name($dir_resource);
-        $file_path = substr($file_name,0,strrpos($file_name, "/"));
-		if (!is_dir($file_name)) {
-			$ymd ="/upload/".$domain."/". date("Ymd");
-			$save_path = $ymd ;
-			$file_size = zip_entry_filesize($dir_resource);
-			$file_content = zip_entry_read($dir_resource,$file_size);
-			if(endsWith(basename($file_name),".md")){
-				$hydrop=explode("\n",$file_content);	
-				$title=str_replace("#","",$hydrop[0]);	
-				$title=str_replace("\r","",$title);	
-				$source="";	
-				echo "<hr>".htmlentities($file_name." $title $source");
-				$regex = '/<(?!div)/';
-			//	$file_content = preg_replace($regex, '＜',$file_content);
-				$regex = '/(?<!div)>\s?/';
-			//	$file_content = preg_replace($regex, '＞', $file_content);
-				//$file_content = str_replace("&", '＆', $file_content);
-	//			if(strpos($file_content,"##")===false) 
-	//				$description=$file_content;
-	  //                      else 
-				if($type=="normal")$description="<span class=\"md\">".$file_content."</span>";
-				else $description="<span class=\"md auto_select\">".$file_content."</span>";
-				$description=preg_replace('/{{ select\(\d+\) }}/', "", $description); 
-				if($save_path){
-					$description=str_replace("file://",$save_path."/",$description);
-				
-			//		echo htmlentities($description);
-				}
 
-				//echo htmlentities("$description");
-				$tail=0;
-				$ptitle = $title;
-				while (hasProblem($ptitle)) {
-					 $tail++;
-					 $ptitle = $title."_".$tail;
-				}
-				$title=$ptitle;
-				$pid = addproblem($title,1,128, $description, $input, $output, $sample_input, $sample_output, $hint, $source, $spj, $OJ_DATA);
-				mkdir($OJ_DATA."/$pid/");
-				
-				echo "PID:<a href='../problem.php?id=$pid' >".htmlentities($title,ENT_QUOTES,"UTF-8")."</a>";
-			}
-		}
-	}else{
-       		zip_entry_close($dir_resource);
-      	}
+    $upload_dir = "/home/judge/src/web/upload/image";
+    $output_files = process_md_and_images($tempfile, $upload_dir);
+
+    foreach ($output_files as $file) {
+        $hydrop=explode("\n",$file['content']);	
+        $title=str_replace("#","",$hydrop[0]);	
+        $title=str_replace("\r","",$title);	
+        $source="";	
+        echo "<hr>".htmlentities($file['filename']." $title $source");
+        $regex = '/<(?!div)/';
+        $regex = '/(?<!div)>\s?/';
+        $description="<span class=\"md\">".$file['content']."</span>";
+        $description=preg_replace('/{{ select\(\d+\) }}/', "", $description); 
+        $tail=0;
+        $ptitle = $title;
+        while (hasProblem($ptitle)) {
+          $tail++;
+          $ptitle = $title."_".$tail;
+        }
+        $title=$ptitle;
+
+        // 初始化变量
+        $input = "";
+        $output = "";
+        $sample_input = "";
+        $sample_output = "";
+        $hint = "";
+        $spj = 0;
+
+        $pid = addproblem($title,1,128, $description, $input, $output, $sample_input, $sample_output, $hint, $source, $spj, $OJ_DATA);
+        if (!file_exists($OJ_DATA."/$pid/")) {
+            mkdir($OJ_DATA."/$pid/", 0755, true);
+        }
+        echo "PID:<a href='../problem.php?id=$pid' >".htmlentities($title,ENT_QUOTES,"UTF-8")."</a>";
     }
-    zip_close($resource);
+
     unlink ( $_FILES ["fps"] ["tmp_name"] );
     rmdir ($tempdir);
-    }
-  else {
-  		echo ($tempfile);
+  } else {
+    echo "&nbsp;&nbsp;- Only zip files are supported<br />";
   }
- 
 }
- 
-
 ?>
