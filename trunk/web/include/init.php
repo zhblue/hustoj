@@ -51,8 +51,11 @@ if($OJ_SaaS_ENABLE){
 	$DOMAIN=$domain;
 }
 
-if(isset($_SERVER["HTTP_USER_AGENT"])&&strpos($_SERVER["HTTP_USER_AGENT"],"MSIE")){  // 360 or IE use bs3 instead
-    $OJ_TEMPLATE="bs3";
+$UA="";
+if(isset($_SERVER["HTTP_USER_AGENT"])){  // 360 or IE use bs3 instead
+    $UA=$_SERVER["HTTP_USER_AGENT"];
+    if(str_contains($UA,"w3m"))
+        $OJ_TEMPLATE="bs3";
 }
 
 $ip = ($_SERVER['REMOTE_ADDR']);
