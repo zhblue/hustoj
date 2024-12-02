@@ -46,9 +46,13 @@ do
 	done
 done
 
-USER=$(grep user /etc/mysql/debian.cnf|head -1|awk  '{print $3}')
-PASSWORD=$(grep password /etc/mysql/debian.cnf|head -1|awk  '{print $3}')
+USER="hustoj"
+PASSWORD=`tr -cd '[:alnum:]' < /dev/urandom | fold -w30 | head -n1`
+mysql < src/install/db.sql
+echo "DROP USER $USER;" | mysql
+echo "CREATE USER $USER identified by '$PASSWORD';grant all privileges on jol.* to $USER ;flush privileges;"|mysql
 CPU=$(grep "cpu cores" /proc/cpuinfo |head -1|awk '{print $4}')
+MEM=`free -m|grep Mem|awk '{print $2}'`
 
 mkdir etc data log backup
 
@@ -90,7 +94,6 @@ else
 	sed -i "s:include /etc/nginx/mime.types;:client_max_body_size    80m;\n\tinclude /etc/nginx/mime.types;:g" /etc/nginx/nginx.conf
 fi
 
-mysql -h localhost -u"$USER" -p"$PASSWORD" < src/install/db.sql
 echo "insert into jol.privilege values('admin','administrator','true','N');"|mysql -h localhost -u"$USER" -p"$PASSWORD" 
 echo "insert into jol.privilege values('admin','source_browser','true','N');"|mysql -h localhost -u"$USER" -p"$PASSWORD" 
 
