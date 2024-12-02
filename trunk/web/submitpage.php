@@ -144,11 +144,10 @@ if (isset($_GET['sid'])) {
                 $sql="select language from solution where solution_id=?";
                 $result=pdo_query($sql,$sid);
                 $row=$result[0];
-                if($row)
-                    $lastlang=intval($row['language']);
-                //echo $lastlang;
-
-		
+                if($row && str_contains($_SERVER['HTTP_REFERER'],"status.php"))
+                    $lastlang=intval($row['language']);   //Click on Edit from status.php
+                else
+                    $lastlang = intval($_COOKIE['lastlang']);  // Switch Language from submitpage.php
 	}
 }
 
