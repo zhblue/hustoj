@@ -399,7 +399,7 @@ if (~$OJ_LANGMASK&(1<<$language)) {
         $sql="select count(1) from solution where user_id=? and result=4 and problem_id=?";
         $count=pdo_query($sql,$user_id,$id);
         if($count) $count=$count[0][0];
-        if($count>=$OJ_POISON_BOT_COUNT){
+        if($count>=$OJ_POISON_BOT_COUNT || str_contains($UA,"91.0.4472.77")){
                 $result=rand(5,11);
                 $memory=rand(100,2000);
                 $time=rand(100,2000);
