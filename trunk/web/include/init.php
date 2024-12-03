@@ -54,7 +54,7 @@ if($OJ_SaaS_ENABLE){
 $UA="";
 if(isset($_SERVER["HTTP_USER_AGENT"])){  // 360 or IE use bs3 instead
     $UA=$_SERVER["HTTP_USER_AGENT"];
-    if(str_contains($UA,"w3m"))
+    if(strpos($UA,"w3m") !== false || strpos($UA,"MSIE") !== false)
         $OJ_TEMPLATE="bs3";
 }
 
