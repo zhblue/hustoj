@@ -31,14 +31,13 @@ chattr +i -R /www/server/panel/logs/request
 
 apt-get update && apt-get -y upgrade
 
-apt-get install -y subversion
 /usr/sbin/useradd -m -u 1536 -s /sbin/nologin judge
 cd /home/judge/ || exit
 
 #using tgz src files
 wget -O hustoj.tar.gz http://dl.hustoj.com/hustoj.tar.gz
 tar xzf hustoj.tar.gz
-svn up src
+
 #svn co https://github.com/zhblue/hustoj/trunk/trunk/  src
 
 #手工解决阿里云软件源的包依赖问题
@@ -102,7 +101,11 @@ COMPENSATION=$(grep 'mips' /proc/cpuinfo|head -1|awk -F: '{printf("%.2f",$2/5000
 sed -i "s/OJ_CPU_COMPENSATION=1.0/OJ_CPU_COMPENSATION=$COMPENSATION/g" etc/judge.conf
 
 
-cd src/core || exit
+cd src/core/judged || exit
+g++ -Wall -c -DOJ_USE_MYSQL  -I/www/server/mysql/include judged.cc
+g++ -Wall -o judged judged.o -L/www/server/mysql/lib -lmysqlclient
+
+cd ..  
 chmod +x ./make.sh
 ./make.sh
 if grep "/usr/bin/judged" /etc/rc.local ; then
