@@ -95,10 +95,12 @@ echo "insert into jol.privilege values('admin','administrator','true','N');"|mys
 COMPENSATION=$(grep 'mips' /proc/cpuinfo|head -1|awk -F: '{printf("%.2f",$2/5000)}')
 sed -i "s/OJ_CPU_COMPENSATION=1.0/OJ_CPU_COMPENSATION=$COMPENSATION/g" etc/judge.conf
 
-
-cd src/core || exit
+cd src/core/judged  || exit
+g++ -Wall -c -DOJ_USE_MYSQL  -I/www/server/mysql/include judged.cc
+g++ -Wall -o judged judged.o -L/www/server/mysql/lib -lmysqlclient
+cd ..
 chmod +x ./make.sh
-./make.sh
+bash make.sh
 if grep "/usr/bin/judged" /etc/rc.local ; then
         echo "auto start judged added!"
 else
