@@ -95,10 +95,14 @@ systemctl restart php-fpm.service
 chmod 755 /home/judge
 chown www -R /home/judge/src/web/
 
+cd /home/judge/src/core/judged
+g++ -Wall -c -DOJ_USE_MYSQL  -I/www/server/mysql/include judged.cc
+g++ -Wall -o judged judged.o -L/www/server/mysql/lib -lmysqlclient
 
 cd /home/judge/src/core
 chmod +x make.sh
 ./make.sh
+
 
 if grep "/usr/bin/judged" /etc/rc.local ; then
 	echo "auto start judged added!"
