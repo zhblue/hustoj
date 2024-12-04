@@ -103,12 +103,6 @@ if (isset($_POST['id'])) {
   $langmask = $OJ_LANGMASK;
 }
 else if (isset($_POST['pid']) && isset($_POST['cid']) && $_POST['cid']!=0) {
-  $pid = intval($_POST['pid']);
-  $cid = intval($_POST['cid']);
-
-  if ($test_run) {
-    $cid = -$cid;
-  }
 
   //check user if private
   $sql = "SELECT `private`,langmask,title FROM `contest` WHERE `contest_id`=? AND `start_time`<=? AND `end_time`>? ";
