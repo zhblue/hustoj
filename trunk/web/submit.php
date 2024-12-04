@@ -55,11 +55,12 @@ $test_run = false;
 if (isset($_POST['cid'])) {
   $pid = intval($_POST['pid']);
   $cid = intval($_POST['cid']);
-  $_GET['cid']=$cid;
-  require_once("contest-check.php");
   $test_run = $cid<0;
   if($test_run) $cid =-$cid ;
+  $_GET['cid']=$cid;
+  require_once("contest-check.php");
   $sql = "SELECT `problem_id`,'N' FROM `contest_problem` WHERE `num`='$pid' AND contest_id=$cid";
+
 }
 else {
   $id = intval($_POST['id']);
