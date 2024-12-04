@@ -1,7 +1,11 @@
 <?php
   require_once("include/curl.php");
   $unixnow = time();
-  $cid = intval($_GET['cid']);
+  $cid = abs(intval($_GET['cid']));
+  if(isset($_SESSION[$OJ_NAME."_user_id"])) 
+      $user_id=$_SESSION[$OJ_NAME."_user_id"];
+  else 
+      $user_id="";
   if ($cid<0) $cid=-$cid;
         $view_cid = $cid;
         //print $cid;
@@ -41,6 +45,7 @@
                         $_SESSION[$OJ_NAME.'_'.'c'.$cid] = true;
 
                 if ($row['private'] && !isset($_SESSION[$OJ_NAME.'_'.'c'.$cid])){
+
                       $sql = "SELECT count(*) FROM `privilege` WHERE `user_id`=? AND `rightstr`=?";
                       $result = pdo_query($sql, $user_id, "c$cid");
                       $row = $result[0];
