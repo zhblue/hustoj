@@ -28,7 +28,7 @@ echo "optimize table compileinfo,contest,contest_problem,loginlog,news,privilege
 echo "这里有警告是正常现象，请勿担心，下面的打包压缩耗时较长，请耐心等待备份结束，重新回到命令行提示符。"
 echo "The warning here is normal, don't worry, the following packaging and compression takes a long time, please wait patiently for the backup to end and return to the command line prompt."
 mkdir /var/backups 
-mysqldump -h $SERVER -P $PORT $DATABASE -u$USER -p$PASSWORD | bzip2 >/var/backups/db_${DATE}.sql.bz2
+mysqldump --default-character-set=utf8mb4 -h $SERVER -P $PORT $DATABASE -u$USER -p$PASSWORD | bzip2 >/var/backups/db_${DATE}.sql.bz2
 if tar cjf /var/backups/hustoj_${DATE}.tar.bz2 /home/judge/data /home/judge/src/web /home/judge/src/core /home/judge/etc /var/backups/db_${DATE}.sql.bz2; then
 	rm /var/backups/hustoj_${OLD3}.tar.bz2  2> /dev/null
 	rm /var/backups/db_${OLD}.sql.bz2  2> /dev/null
