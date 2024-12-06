@@ -33,8 +33,8 @@ EOF
 
 bash add_dns_to_docker.sh
 
-systemctl restart docker
-
+systemctl enable docker
+service docker start
 if ! docker build -t hustoj .
 then
     	echo "Network fail, retry... you might want to make sure https://hub.docker.com/ is available"
