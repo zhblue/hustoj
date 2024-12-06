@@ -4,6 +4,10 @@ while ! apt-get install -y podman containerd
 do
 		echo "Network fail, retry... you might want to make sure podman is available in your apt source"
 done
+
+systemctl enable podman
+service podman start
+
 IP=`curl http://hustoj.com/ip.php`
 while ! podman build -t hustoj .
 do
