@@ -96,8 +96,10 @@ if($NOIP_flag[0]==0)$view_month_rank=mysql_query_cache("select user_id,nick,coun
                         </tr>
                     </thead>
                     <tbody>
-                    <?php
+                   <?php
                         // 未解之谜
+		$noip_problems=array_merge(...mysql_query_cache("select problem_id from contest c left join contest_problem cp on start_time<'$now' and end_time>'$now' and c.title like ? and c.contest_id=cp.contest_id","%$OJ_NOIP_KEYWORD%"));
+		$noip_problems=array_unique($noip_problems);
                          if(isset($_SESSION[$OJ_NAME."_user_id"])) $user_id=$_SESSION[$OJ_NAME."_user_id"]; else $user_id='guest';
                         $sql_problems = "select p.problem_id,title,max_in_date from (select problem_id,min(result) best,max(in_date) max_in_date from solution
                                 where user_id=? and result>=4 and problem_id>0 group by problem_id ) s inner join problem p on s.problem_id=p.problem_id
@@ -105,14 +107,14 @@ if($NOIP_flag[0]==0)$view_month_rank=mysql_query_cache("select user_id,nick,coun
                         $result_problems = mysql_query_cache( $sql_problems ,$user_id);
                         if ( !empty($result_problems) ) {
                             $i = 1;
-                            foreach ( $result_problems as $row ) {
+			    foreach ( $result_problems as $row ) {
+				if(in_array(strval($row['problem_id']),$noip_problems)) continue;
                                 echo "<tr>"."<td>"
                                     ."<a href=\"problem.php?id=".$row["problem_id"]."\">"
                                     .$row["title"]."</a></td>"
                                     ."<td>".substr($row["max_in_date"],5,5)."</td>"."</tr>";
                             }
                         }
-
                     ?>
                     </tbody>
                 </table>
