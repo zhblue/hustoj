@@ -29,7 +29,7 @@ int LANG_PV[CALL_ARRAY_SIZE] = {
         SYS_stat, SYS_execve, SYS_uname, SYS_readlink, SYS_mmap, SYS_getrlimit, 0 };
 //java
 int LANG_JV[CALL_ARRAY_SIZE] = {
-        0, 262,318,334,435, SYS_mprotect, SYS_getuid, SYS_getgid, SYS_geteuid, SYS_getegid, SYS_munmap, SYS_getppid, SYS_getpgrp,
+        0, 262,267,318,334,435, SYS_mprotect, SYS_getuid, SYS_getgid, SYS_geteuid, SYS_getegid, SYS_munmap, SYS_getppid, SYS_getpgrp,
         SYS_brk, SYS_rt_sigaction, SYS_rt_sigprocmask, SYS_prctl, SYS_arch_prctl, SYS_ioctl, SYS_pread64, SYS_open,
         SYS_futex, SYS_set_thread_area, SYS_access, SYS_getdents64, SYS_set_tid_address, SYS_pipe, SYS_exit_group,
         SYS_openat, SYS_set_robust_list, SYS_close, SYS_prlimit64, SYS_dup2, SYS_getpid, SYS_stat, SYS_fstat, SYS_clone,
