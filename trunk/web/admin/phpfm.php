@@ -13,19 +13,11 @@ if (!(isset($_SESSION[$OJ_NAME.'_'.'administrator'])
 // 这不是后门(Webshell)文件，不要理会阿里云的误报。
     $charset = "UTF-8";
     //@setlocale(LC_CTYPE, 'C');
-    putenv("LC_ALL=en_US.UTF-8");  //可能解决某些文件名乱码问题
+    if (function_exists('putenv')) putenv("LC_ALL=en_US.UTF-8");  //可能解决某些文件名乱码问题
     header("Pragma: no-cache");
     header("Cache-Control: no-store");
-	header("Content-Type: text/html; charset=".$charset);
-	//@ini_set('default_charset', $charset);
-    if (false) {   // php8.0 removed get_magic_quotes_gpc
-        function stripslashes_deep($value){
-            return is_array($value)? array_map('stripslashes_deep', $value):$value;
-        }
-        $_POST = array_map('stripslashes_deep', $_POST);
-        $_GET = array_map('stripslashes_deep', $_GET);
-        $_COOKIE = array_map('stripslashes_deep', $_COOKIE);
-    }
+    header("Content-Type: text/html; charset=".$charset);
+    //@ini_set('default_charset', $charset);
     //php ver < 8.0 has no endsWith function
     if (!function_exists('str_ends_with')) {
         function str_ends_with( $haystack, $needle ) {
