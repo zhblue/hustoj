@@ -2,6 +2,16 @@
 require_once(dirname(__FILE__)."/db_info.inc.php");
 require_once(dirname(__FILE__)."/curl.php");
 require_once(dirname(__FILE__)."/const.inc.php");
+function addDays($days) {
+    // 创建一个 DateTime 对象，表示当前日期
+    $date = new DateTime();
+    // 创建一个 DateInterval 对象，表示要增加的天数
+    $interval = new DateInterval('P' . $days . 'D');
+    // 使用 DateTime::add 方法增加天数
+    $date->add($interval);
+    // 返回结果日期
+    return $date->format('Y-m-d');
+}
 function has_bad_words($words){
         global $bad_words;
         foreach($bad_words as $bad){
