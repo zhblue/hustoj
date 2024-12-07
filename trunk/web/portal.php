@@ -4,6 +4,7 @@
 	require_once('include/const.inc.php');   // 导入需要的一些可选常量
 	require_once('include/my_func.inc.php'); // 导入自定义的一些可选函数
 	require_once('include/curl.php'); // 导入与爬虫有关的一些可选函数
+        $now =  date('Y-m-d H:i', time());
 	if(isset($_SESSION[$OJ_NAME.'_user_id'])){  //如果用户已经登录
 		$user_id=$_SESSION[$OJ_NAME.'_user_id'];
 		$show_title="Hello ".$_SESSION[$OJ_NAME.'_user_id']."!";
@@ -17,6 +18,8 @@
 				if($row['result'] == 4) $acc_arr[$row['problem_id']] = true;		
 			}		
 		}
+		$noip_problems=array_merge(...mysql_query_cache("select problem_id from contest c left join contest_problem cp on start_time<'$now' and end_time>'$now' and c.title like ? and c.contest_id=cp.contest_id","%$OJ_NOIP_KEYWORD%"));
+		$noip_problems=array_unique($noip_problems);
 	}else{    //没有登录的用户按Guest处理
 		$user_id="Guest";
 		$show_title="HelloWorld!";
@@ -31,6 +34,7 @@ $cnt = 0;
 $view_problemset = Array();  //用于传递查询结果给显示页的二维数组
 $i = 0;
 foreach ($result as $row) {
+	if(in_array($row['problem_id'],$noip_problems)) continue;
 	$view_problemset[$i] = Array();    //第$i行的数组初始化
 	if (isset($sub_arr[$row['problem_id']])) {
 		if (isset($acc_arr[$row['problem_id']])) 
