@@ -98,18 +98,22 @@ if($NOIP_flag[0]==0)$view_month_rank=mysql_query_cache("select user_id,nick,coun
                     <tbody>
                     <?php
                         // 未解之谜
+			$noip_contests=array_merge(...mysql_query_cache("select contest_id from contest where start_time<'$now' and end_time>'$now' and title like ?","%$OJ_NOIP_KEYWORD%"));
+			$noip_contests=array_unique($noip_contests);
+			//echo count($noip_contests);
                          if(isset($_SESSION[$OJ_NAME."_user_id"])) $user_id=$_SESSION[$OJ_NAME."_user_id"]; else $user_id='guest';
-                        $sql_problems = "select p.problem_id,title,max_in_date from (select problem_id,min(result) best,max(in_date) max_in_date from solution
-                                where user_id=? and result>=4 and problem_id>0 group by problem_id ) s inner join problem p on s.problem_id=p.problem_id
+                        $sql_problems = "select p.problem_id,title,max_in_date,contest_id from (select problem_id,contest_id,min(result) best,max(in_date) max_in_date from solution
+                                where user_id=? and result>=4 and problem_id>0 group by problem_id,contest_id ) s inner join problem p on s.problem_id=p.problem_id
                              where s.best>4 order by max_in_date desc  LIMIT 5";
                         $result_problems = mysql_query_cache( $sql_problems ,$user_id);
                         if ( !empty($result_problems) ) {
                             $i = 1;
-                            foreach ( $result_problems as $row ) {
+			    foreach ( $result_problems as $row ) {
+				if(in_array(strval($row['contest_id']),$noip_contests)) continue;
                                 echo "<tr>"."<td>"
                                     ."<a href=\"problem.php?id=".$row["problem_id"]."\">"
                                     .$row["title"]."</a></td>"
-                                    ."<td>".substr($row["max_in_date"],5,5)."</td>"."</tr>";
+                                    ."<td>".substr($row["max_in_date"],5,5)."[".$row['contest_id'].$noip_contests[0]."]"."</td>"."</tr>";
                             }
                         }
 
