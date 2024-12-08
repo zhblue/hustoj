@@ -34,7 +34,7 @@ EOF
 bash add_dns_to_docker.sh
 
 systemctl enable docker
-service docker start
+service docker restart
 
 # 最大尝试次数
 max_attempts=5
