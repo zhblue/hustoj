@@ -194,8 +194,7 @@ if(file_exists($solution_file)){
         <h4 class="ui block header top attached" id="show_tag_title_div" style="margin-bottom: 0; margin-left: -1px; margin-right: -1px; ">
         <?php echo $MSG_SOURCE?>
         </h4>
-        <div class="ui bottom attached segment" id="show_tag_div">
-
+        <div fd="source" pid="<?php echo $id?>" class="ui bottom attached segment" id="show_tag_div">
           <?php foreach($cats as $cat){
             if(trim($cat)=="") continue;
             $label_theme=$color[$tcolor%count($color)];
@@ -210,8 +209,6 @@ if(file_exists($solution_file)){
               <?php echo htmlentities($cat,ENT_QUOTES,'utf-8'); ?>
             </a>
           <?php } ?>
-
-
         </div>
      
       </div>
