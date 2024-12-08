@@ -19,8 +19,8 @@ else
         wget -O "$INSTALL" "$URL"
         chmod +x "$INSTALL"
         
-        ALIPING=`LANG=c ping -c 5 mirrors.aliyun.com|grep ttl|awk '{print $8}'|awk -F= '{print $2*1000}'|sort -n|head -1`
-        NEPING=`LANG=c ping -c 5 mirrors.163.com|grep ttl|awk '{print $8}'|awk -F= '{print $2*1000}'|sort -n|head -1`
+        ALIPING=`LANG=c ping -c 5 mirrors.aliyun.com|grep ttl| awk -F= '{print $4}'|awk '{print $1*1000}'|sort -n|head -1`
+        NEPING=`LANG=c ping -c 5 mirrors.163.com    |grep ttl| awk -F= '{print $4}'|awk '{print $1*1000}'|sort -n|head -1`
         echo "aliyun:$ALIPING"
         echo "netease:$NEPING"
         if [ "$ALIPING" -gt "$NEPING" ] ; then
