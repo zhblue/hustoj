@@ -44,8 +44,7 @@ $(document).ready(function(){
 	  $("tr").mouseover(function(){$(this).addClass("active")});
 	  $("tr").mouseout(function(){$(this).removeClass("active")})
   }
-<<<<<<< Updated upstream
-=======
+
 <?php if(isset($_SESSION[$OJ_NAME."_administrator"]) ||isset($_SESSION[$OJ_NAME."_problem_editor"]) || isset($_SESSION[$OJ_NAME."_tag_adder"])  ){  ?>
 	$("div[fd=source]").each(function(){
 		let pid=$(this).attr('pid');	
@@ -53,7 +52,7 @@ $(document).ready(function(){
 	});
 
 <?php  } ?>
->>>>>>> Stashed changes
+
 });
 
 
