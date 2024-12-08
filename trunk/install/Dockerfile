@@ -2,6 +2,7 @@ FROM ubuntu:22.04
 ENV DEBIAN_FRONTEND noninteractive
 #RUN     echo "nameserver 8.8.8.8" >> /etc/resolv.conf
 #RUN     echo "100.100.2.148 mirrors.cloud.aliyuncs.com" >> /etc/hosts
+RUN     sed -i 's/archive.ubuntu/mirrors.aliyun/g' /etc/apt/sources.list || sed -i 's/archive.ubuntu/mirrors.aliyun/g' /etc/apt/sources.list.d/ubuntu.sources
 RUN     apt-get update && apt-get -y upgrade
 
 RUN    	DEBIAN_FRONTEND=noninteractive  apt-get -y install --no-install-recommends        apt-utils 	
