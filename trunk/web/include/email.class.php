@@ -44,6 +44,7 @@ function email($address,$mailtitle,$mailcontent,$html=""){
 			    $mail->Body= $mailcontent;
 			    $mail->isHTML(false);
 		    }
+		    $mail->Subject= $mailtitle;
                     $mail->AltBody = $mailcontent;
 		    $mail->send();
 		    echo 'Message has been sent';
