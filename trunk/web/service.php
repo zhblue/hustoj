@@ -19,6 +19,7 @@ function login($m){
                                 $result=pdo_query($sql,"service_port",$m->user_id);
                                 if(is_array($result)&&count($result)==1){
                                         $_SESSION[$OJ_NAME."_service_port"]=true;
+                                        $_SESSION[$OJ_NAME."_user_id"]=$m->user_id;
                                         return array("login"=>"ok");
                                 }
                         }
@@ -32,7 +33,7 @@ function submit($m){
         $source=$m->source;
         $len=strlen($source);
         $sql = "INSERT INTO solution(problem_id,user_id,nick,in_date,language,ip,code_length,result) VALUES(?,?,?,NOW(),?,?,?,14)";
-        $insert_id = pdo_query($sql, $problem_id,"guest","test", $language, $ip, $len);
+        $insert_id = pdo_query($sql, $problem_id,$_SESSION[$OJ_NAME."_user_id"],"service_port", $language, $ip, $len);
         if($insert_id>0){
 
                 $sql = "INSERT INTO `source_code`(`solution_id`,`source`) VALUES(?,?)";
