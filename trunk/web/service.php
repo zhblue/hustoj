@@ -6,7 +6,7 @@ exit();
 // Press F12 to watch network payload in Devtab,if you don't know what to do, you need to learn more before using this page.
 require_once ("include/db_info.inc.php");
 require_once ("include/my_func.inc.php");
-ini_set("display_errors", "On");  //set this to "On" for debugging  ,especially when no reason blank shows up.
+ini_set("display_errors", "Off");  //set this to "On" for debugging  ,especially when no reason blank shows up.
 function login($m){
 		// 拥有service_port权限的账号才能登陆接口
 		global $OJ_NAME,$_SESSION;
