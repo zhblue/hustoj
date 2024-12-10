@@ -209,7 +209,7 @@ if ($_FILES["fps"]["error"] > 0) {
     if (get_extension($_FILES["fps"]["name"]) == "zip") {
         echo "&nbsp;&nbsp;- zip file, only Markdown .md file is supported<hr>\n";
 
-        $upload_dir = "/home/moniti/src/web/upload/image";
+        $upload_dir = dirname(dirname(__FILE__))."/upload/image";
         $output_files = process_md_and_files($tempfile, $upload_dir);
 
         
