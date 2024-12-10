@@ -126,7 +126,6 @@ function do_result_one($remote_site,$sid,$rid){
 		echo "$sid : $result -> ";
 		if($result<4) return -1;
 		if($result==11) {
-
 				$form=array(
 					'solution_id' => $rid,
 					'action' => 'ce'
@@ -141,6 +140,18 @@ function do_result_one($remote_site,$sid,$rid){
 				pdo_query($sql,$result,0,$time,$memory,$sid);
 				return $result;	
 		}
+		if($result==10||$ressult==4||$result==6) {
+                                $form=array(
+                                        'solution_id' => $rid,
+                                        'action' => 're'
+                                );
+                                $form=array("m"=>json_encode($form));
+                                $json=json_decode(curl_post_urlencoded($remote_site,$form));
+                                $reinfo=$json->error;
+                                $sql="insert into runtimeinfo(solution_id,error) values(?,?) on duplicate key update error=? ";
+                                pdo_query($sql,$sid,$reinfo,$reinfo);
+                }
+ 
 		if($result==4) $pass_rate=1;else $pass_rate=0;
 		$sql="update solution set result=?,pass_rate=?,time=?,memory=?,judger=?,judgetime=now()  where solution_id=?";
 		$ret=pdo_query($sql,$result,$pass_rate,$time,$memory,get_domain($remote_site),$sid);
