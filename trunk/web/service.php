@@ -35,10 +35,8 @@ function submit($m){
     	$sql = "INSERT INTO solution(problem_id,user_id,nick,in_date,language,ip,code_length,result) VALUES(?,?,?,NOW(),?,?,?,14)";
     	$insert_id = pdo_query($sql, $problem_id,$_SESSION[$OJ_NAME."_user_id"],"service_port", $language, $ip, $len);
 	if($insert_id>0){
-	
 		$sql = "INSERT INTO `source_code`(`solution_id`,`source`) VALUES(?,?)";
 		pdo_query($sql, $insert_id, $source);
-
 		if ($problem_id==0) {
 		    $sql = "INSERT INTO `custominput`(`solution_id`,`input_text`) VALUES(?,?)";
 		    pdo_query($sql, $insert_id, $m->input_text);
@@ -79,7 +77,6 @@ function ce($m){
 			return $ret[0];
 		}
 	}
-
 	if(is_array($ret)&&!isset($ret[0]))
 		return array("error"=>"not found","debug"=>$m);
 	else
@@ -135,8 +132,7 @@ if(isset($_POST['m'])){
 Press F12 to watch network payload in Devtab,if you don't know what to do, you need to learn more before using this page.
 	<form action="service.php" method="POST">
 		submit a solution to a problem
-		<textarea name=m rows=5 cols=80 >
-{
+		<textarea name=m rows=5 cols=80 >{
    "action":"submit",
    "problem_id":1000,
    "language":1,
@@ -147,8 +143,7 @@ Press F12 to watch network payload in Devtab,if you don't know what to do, you n
 	</form>
 	<form action="service.php" method="POST">
 		test run
-		<textarea name=m rows=5 cols=80 >
-{
+		<textarea name=m rows=5 cols=80 >{
    "action":"submit",
    "problem_id":0,
    "input_text":"1 2",
@@ -160,8 +155,7 @@ Press F12 to watch network payload in Devtab,if you don't know what to do, you n
 	</form>
 	<form action="service.php" method="POST">
 	query result of a solution	
-		<textarea name=m rows=5 cols=80 >
-{
+		<textarea name=m rows=5 cols=80 >{
    "action":"query",
    "solution_id":1001
 }
@@ -170,8 +164,7 @@ Press F12 to watch network payload in Devtab,if you don't know what to do, you n
 	</form>
 	<form action="service.php" method="POST">
 	query compile error of a solution	
-		<textarea name=m rows=5 cols=80 >
-{
+		<textarea name=m rows=5 cols=80 >{
    "action":"ce",
    "solution_id":1001
 }
@@ -202,8 +195,5 @@ Press F12 to watch network payload in Devtab,if you don't know what to do, you n
 		</textarea>
 		<input type=submit >
 	</form>
-
-
 <?php
-
 }
