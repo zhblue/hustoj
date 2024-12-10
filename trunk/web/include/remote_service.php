@@ -198,8 +198,8 @@ function do_result($remote_site){
 
 }
 
-$remote_oj="demo";
-$remote_site="http://demo.hustoj.com/service.php";  // 需要远程服务器开启service_port
+$remote_oj="service";   // problem表的remote_oj字段设demo，这里就设demo，本文件复制一份改名成remote_demo.php，并在../remote.php中增加扫描项。
+$remote_site="http://demo.hustoj.com/service.php";  // 需要远程服务器运行开启service_port的最新版本HUSTOJ
 $remote_user='账号';    //  远程系统具有 service_port 的可用状态(正常登录、未到期，有权限)账号
 $remote_pass='密码';      //账号、密码 注意保存，更新时可能覆盖此文件
 $remote_cookie=$OJ_DATA.'/'.get_domain($remote_site).'.cookie';
