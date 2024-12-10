@@ -91,7 +91,7 @@ function do_submit($remote_site,$remote_user){
 			//40s once
 			break;
 		}
-		usleep(150000);
+		usleep(1500);
 	}
 }
 function do_result_one($remote_site,$sid,$rid){
