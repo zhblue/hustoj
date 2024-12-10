@@ -3,7 +3,6 @@ require_once(realpath(dirname(__FILE__)."/..")."/include/db_info.inc.php");
 require_once(realpath(dirname(__FILE__)."/..")."/include/init.php");
 require_once(dirname(__FILE__)."/curl.php");
 ini_set("display_errors", "Off");  //set this to "On" for debugging  ,especially when no reason blank shows up.
-
 function is_login($remote_site){
 	$html=curl_get($remote_site);
 	//echo $html;
@@ -32,11 +31,9 @@ function do_login($remote_site,$username,$password){
 	else return true;
 }
 function do_submit_one($remote_site,$username,$sid){
-	
 	$problem_id=1000;
 	$language=1;
 	$source="";
-	
 	$sql="select * from solution where result=16 and solution_id=?";
  	$data=pdo_query($sql,$sid);	
 	if(count($data)>0){
@@ -71,11 +68,9 @@ function do_submit_one($remote_site,$username,$sid){
         $data=curl_post_urlencoded($remote_site,$form);
         if(str_contains($data,"error")) {
                 $sid=0;
-	
 	}else{
 		$json=json_decode($data);
-		$sid=$json->solution_id;
-		
+		$sid=$json->solution_id;	
         }
         echo intval($sid);
         return $sid;
@@ -98,10 +93,8 @@ function do_submit($remote_site,$remote_user){
 		}
 		usleep(150000);
 	}
-
 }
 function do_result_one($remote_site,$sid,$rid){
-
 	$form=array(
 		'solution_id' => ($rid),
 		'action' => 'query'
@@ -109,15 +102,11 @@ function do_result_one($remote_site,$sid,$rid){
 	//var_dump($form);
 	$form=array("m"=>json_encode($form));
 	$json=json_decode(curl_post_urlencoded($remote_site,$form));
-
         if(isset($json->error)) {
 		echo $json->error;
                 $sid=0;
 		return -1;	
 	}else{
-	//	$json=json_decode($data);
-//		$sid=$json->solution_id;
-		
 		$reinfo="";
 		$ac=0;
 		$result=$json->result;
@@ -151,7 +140,6 @@ function do_result_one($remote_site,$sid,$rid){
                                 $sql="insert into runtimeinfo(solution_id,error) values(?,?) on duplicate key update error=? ";
                                 pdo_query($sql,$sid,$reinfo,$reinfo);
                 }
- 
 		if($result==4) $pass_rate=1;else $pass_rate=0;
 		$sql="update solution set result=?,pass_rate=?,time=?,memory=?,judger=?,judgetime=now()  where solution_id=?";
 		$ret=pdo_query($sql,$result,$pass_rate,$time,$memory,get_domain($remote_site),$sid);
@@ -186,7 +174,6 @@ function do_result($remote_site){
 	foreach($data as $row){
 		$sid=$row['solution_id'];
 		$rid=$row['remote_id'];
-	//	echo "$sid=>$rid";
 		$ret=do_result_one($remote_site,$sid,$rid);
 		if($ret<0) {
 			echo "error code:".$ret;
@@ -195,15 +182,13 @@ function do_result($remote_site){
 			usleep(1500);
 		}		
 	}
-
 }
-
 $remote_oj="service";   // problem表的remote_oj字段设demo，这里就设demo，本文件复制一份改名成remote_demo.php，并在../remote.php中增加扫描项。
 $remote_site="http://demo.hustoj.com/service.php";  // 需要远程服务器运行开启service_port的最新版本HUSTOJ
 $remote_user='账号';    //  远程系统具有 service_port 的可用状态(正常登录、未到期，有权限)账号
 $remote_pass='密码';      //账号、密码 注意保存，更新时可能覆盖此文件
 $remote_cookie=$OJ_DATA.'/'.get_domain($remote_site).'.cookie';
-$remote_delay=15;
+$remote_delay=5;
 if(isset($_POST[$OJ_NAME.'_refer'])){
 	header("location:".$_SESSION[$OJ_NAME.'_refer']);
 	unset($_SESSION[$OJ_NAME.'_refer']);
@@ -212,7 +197,6 @@ if(isset($_POST[$OJ_NAME.'_refer'])){
 		touch($remote_cookie.".sub");
 		do_submit($remote_site,$remote_user);
 	}
-
 	if (!is_login($remote_site)){
 		var_dump(do_login($remote_site,$remote_user,$remote_pass));
 	}else if(isset($_SESSION[$OJ_NAME.'_refer'])){
