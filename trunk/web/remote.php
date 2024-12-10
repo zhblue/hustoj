@@ -5,6 +5,7 @@
                  "bas"       // "pku","hdu"     //使用一本通启蒙设为："bas"  
         );
 	$sites=array(
+		"demo" => "http://demo.hustoj.com/",
 		"pku" => "http://poj.org/",
 		"hdu" => "http://acm.hdu.edu.cn/",
 		"bas" => "http://www.ssoier.cn:18087/pubtest/"
