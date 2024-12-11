@@ -14,13 +14,7 @@
 </head>
 
 <body>
-
-
-
-
-
-
-
+ 
 <!-- Bootstrap core JavaScript
 ================================================== -->
 <!-- Placed at the end of the document so the pages load faster -->
@@ -36,8 +30,13 @@
             board.keydown();
     });
     $('html').keydown(function(e) {
-	if(e.keyCode==13)
-            board.keydown();
+        if(e.keyCode==13){
+                if(e.shiftKey)
+                        window.setInterval("board.keydown()",3000);
+                else
+                board.keydown();
+        }
+
     });
 </script>
 </body>
