@@ -205,17 +205,17 @@ include_once("kindeditor.php") ;
       $description = $_POST['description'];
      // $description = str_replace("<p>", "", $description);
      // $description = str_replace("</p>", "<br />", $description);
-      $description = str_replace(",", "&#44;", $description);
+    //  $description = str_replace(",", "&#44;", $description);
 
       $input = $_POST['input'];
      // $input = str_replace("<p>", "", $input);
      // $input = str_replace("</p>", "<br />", $input);
-      $input = str_replace(",", "&#44;", $input);
+    //  $input = str_replace(",", "&#44;", $input);
 
       $output = $_POST['output'];
      // $output = str_replace("<p>", "", $output);
      // $output = str_replace("</p>", "<br />", $output);
-      $output = str_replace(",", "&#44;", $output);
+     // $output = str_replace(",", "&#44;", $output);
 
       $sample_input = $_POST['sample_input'];
       $sample_output = $_POST['sample_output'];
@@ -225,7 +225,7 @@ include_once("kindeditor.php") ;
       $hint = $_POST['hint'];
      // $hint = str_replace("<p>", "", $hint);
     //  $hint = str_replace("</p>", "<br />", $hint);
-      $hint = str_replace(",", "&#44;", $hint);
+    //  $hint = str_replace(",", "&#44;", $hint);
 
       $source = $_POST['source'];
       $remote_oj= $_POST['remote_oj'];
