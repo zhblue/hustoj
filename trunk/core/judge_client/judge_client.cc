@@ -3894,14 +3894,23 @@ int main(int argc, char **argv)
 			total_time+=usedtime;
 			printf("time:%d/%d\n",usedtime,total_time);
 			//判断用户程序输出是否正确，给出结果
-			judge_solution(ACflg, usedtime, time_lmt, spj, p_id, infile,
-						   outfile, userfile, PEflg, lang, work_dir, topmemory,
-						   mem_lmt, solution_id, num_of_test,&spj_mark);
-			/*
-   			if(usedtime > time_lmt * 1000) {          // 如果觉得的显示超时结果的计时过长，可以覆盖数据。
-					usedtime = time_lmt * 1000;
+			printf("test userfile ... %s\n", userfile);
+			if (access(userfile, R_OK ) == -1){
+				printf("userfile missing... %s\n", userfile);
+				ACflg=OJ_WA;
+			}else{
+				//判断用户程序输出是否正确，给出结果
+				printf("before judge_solution");
+				judge_solution(ACflg, usedtime, time_lmt, spj, p_id, infile,
+							   outfile, userfile, PEflg, lang, work_dir, topmemory,
+							   mem_lmt, solution_id, num_of_test,&spj_mark);
+				printf("after judge_solution");
+				/*
+				if(usedtime > time_lmt * 1000) {          // 如果觉得的显示超时结果的计时过长，可以覆盖数据。
+						usedtime = time_lmt * 1000;
+				}
+				*/
 			}
-			*/
 			if(internal_mark)
 			time_space_index+=sprintf(time_space_table+time_space_index,"%s|%ld|%s/%.2f|%dk|%dms\n",infile+prelen,get_file_size(infile),jresult[ACflg],spj_mark,topmemory/1024,usedtime);
 			else
