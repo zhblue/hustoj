@@ -656,7 +656,16 @@ Board.prototype.updateTeamStatus = function(team) {
     })(thisBoard, team);
 
 }
-
+function showTeam(teamId){
+	console.log("show:"+teamId);
+            	    var clientHeight = document.documentElement.clientHeight || document.body.clientHeight || 0;
+		    var teamTopHeight = $("div[team-id=\"" + teamId + "\"]").offset().top - clientHeight + 100;
+		    //移动视点
+		    $('body,html').stop().animate({
+			    scrollTop: teamTopHeight
+			},
+			500);
+}
 
 /**
  * 更新队伍div的位置
@@ -671,10 +680,11 @@ Board.prototype.moveTeam = function(toPos) {
         for (var i = 0; i < thisBoard.teamCount; ++i) {
             var teamId = thisBoard.teamNextSequence[i].teamId;
             //延时1.2s更新位置，为了等待题目状态更新完成
-            if(toPos != -1)
+            if(toPos != -1){
                 $("div[team-id=\"" + teamId + "\"]").animate({ margin: 0 }, 200).animate({ top: i * teamHeight + headerHeight }, 1000, function() {
                     thisBoard.noAnimate = true;
                 });
+	    }
             else
                 $("div[team-id=\"" + teamId + "\"]").animate({ margin: 0 }, 200 ,function() {
                     thisBoard.noAnimate = true;
@@ -703,5 +713,7 @@ Board.prototype.keydown = function() {
             //无队伍可更新时取消高亮边框
             $('.team-item.hold').removeClass("hold");
         }
+	
+	window.setTimeout("showTeam('"+team.teamId+"')",800);
     }
 }
