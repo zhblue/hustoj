@@ -75,7 +75,7 @@ if(isset($_GET['keyword']) && $_GET['keyword']!=""){
     <?php
     foreach($result as $row){
       echo "<tr>";
-        echo "<td><a href='../userinfo.php?user=".$row['user_id']."'>".$row['user_id']."</a></td>";
+        echo "<td><a href='../userinfo.php?user=".htmlentities(urlencode($row['user_id']))."'>".$row['user_id']."</a></td>";
         echo "<td><span fd='nick' user_id='".$row['user_id']."'>".$row['nick']."</span></td>";
         echo "<td><a href='user_list.php?keyword=".htmlentities(urlencode($row['ip']))."' >".$row['ip']."</td>";
         if($OJ_SaaS_ENABLE && $domain == $DOMAIN){
