@@ -388,7 +388,8 @@ if (~$OJ_LANGMASK&(1<<$language)) {
           !(isset($_SESSION[$OJ_NAME."_administrator"])||
             isset($_SESSION[$OJ_NAME."_source_browser"])||
             isset($_SESSION[$OJ_NAME."_contest_creator"])||
-            isset($_SESSION[$OJ_NAME."_problem_editor"])
+            isset($_SESSION[$OJ_NAME."_problem_editor"])||
+	    $id==0
            )
     ){
         $sql="select count(1) from solution where user_id=? and result=4 and problem_id=?";
