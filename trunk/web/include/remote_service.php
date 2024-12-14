@@ -6,8 +6,7 @@ ini_set("display_errors", "Off");  //set this to "On" for debugging  ,especially
 function is_login($remote_site){
 	$html=curl_get($remote_site);
 	//echo $html;
-	if (str_contains($html,"login")) return false; 
-	else return true;
+	return str_contains($html,"query")); 
 }
 function show_vcode($remote_site){
 	$url = $remote_site.'/submit'; 
