@@ -130,9 +130,9 @@ if($_SERVER['REQUEST_METHOD'] === 'POST' && ( $_SERVER['CONTENT_TYPE'] === 'appl
 }else if (isset($_SESSION[$OJ_NAME."_service_port"])){
 ?>
 请使用F12调试这个接口的示例，帮助理解如何开发对接。如果看不懂这些东西如何使用，也许您不适合使用这个接口，请删除本文件。
-Press F12 to watch network payload in Devtab,if you don't know what to do, you need to learn more before using this page.
+Press F12 to watch network payload in Devtab,if you don't know what to do, you need to learn more before using this page.<br>
 	<form action="service.php" method="POST">
-		submit a solution to a problem
+		submit a solution to a problem<br>
 		<textarea name=m rows=5 cols=80 >{
    "action":"submit",
    "problem_id":1000,
@@ -143,7 +143,7 @@ Press F12 to watch network payload in Devtab,if you don't know what to do, you n
 		<input type=submit >
 	</form>
 	<form action="service.php" method="POST">
-		test run
+		test run<br>
 		<textarea name=m rows=5 cols=80 >{
    "action":"submit",
    "problem_id":0,
@@ -155,7 +155,7 @@ Press F12 to watch network payload in Devtab,if you don't know what to do, you n
 		<input type=submit >
 	</form>
 	<form action="service.php" method="POST">
-	query result of a solution	
+	query result of a solution<br>
 		<textarea name=m rows=5 cols=80 >{
    "action":"query",
    "solution_id":1001
@@ -164,7 +164,7 @@ Press F12 to watch network payload in Devtab,if you don't know what to do, you n
 		<input type=submit >
 	</form>
 	<form action="service.php" method="POST">
-	query compile error of a solution	
+	query compile error of a solution<br>	
 		<textarea name=m rows=5 cols=80 >{
    "action":"ce",
    "solution_id":1001
@@ -173,7 +173,7 @@ Press F12 to watch network payload in Devtab,if you don't know what to do, you n
 		<input type=submit >
 	</form>
 	<form action="service.php" method="POST">
-	query runtime error of a solution	
+	query runtime error of a solution<br>	
 		<textarea name=m rows=5 cols=80 >
 {
    "action":"re",
@@ -186,7 +186,7 @@ Press F12 to watch network payload in Devtab,if you don't know what to do, you n
 	}else{
 ?>
 	<form action="service.php" method="POST">
-		login the service port
+		login the service port<br>
 		<textarea name=m rows=5 cols=80 >
 {
    "action":"login",
