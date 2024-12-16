@@ -101,8 +101,9 @@ function re($m){
 	else
 		return array("error"=>"internal error ","debug"=>$m);
 }
-if(isset($_POST['m'])){
-	$m=$_POST['m'];
+if($_SERVER['REQUEST_METHOD'] === 'POST' && ( $_SERVER['CONTENT_TYPE'] === 'application/json' || isset($_POST['m']) )){
+	if (isset($_POST['m'])) $m=$_POST['m'];
+	else $m=file_get_contents('php://input');   // accept both x-www-form-urlencoded and raw-json-encoded-post
 	$m=json_decode($m);
 	$ret=array("error"=>"not implemented yet ");
 	if($m->action=="login"){
