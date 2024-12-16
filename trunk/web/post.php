@@ -73,15 +73,8 @@ if($_REQUEST['action']=='reply' || !is_null($tid)){
   
     if(!is_null($tid) && isset($_POST['content']) && $_POST['content']!=''){
       $rows = pdo_query("SELECT tid FROM topic WHERE tid=?",$tid);
-      if(isset($rows[0])){
-        $ip = ($_SERVER['REMOTE_ADDR']);
-  
-        if(!empty($_SERVER['HTTP_X_FORWARDED_FOR'])){
-            $REMOTE_ADDR = $_SERVER['HTTP_X_FORWARDED_FOR'];
-            $tmp_ip = explode(',',$REMOTE_ADDR);
-            $ip = (htmlentities($tmp_ip[0],ENT_QUOTES,"UTF-8"));
-        }
-  
+      if(isset($rows[0]) && $rows[0][0]>0 ){
+ 
         $sql = "INSERT INTO `reply` (`author_id`, `time`, `content`, `topic_id`,`ip`) VALUES(?,NOW(),?,?,?)";
         if(pdo_query($sql, $_SESSION[$OJ_NAME.'_'.'user_id'],$_POST['content'],$tid,$ip)){
             if(isset($_REQUEST['cid'])){
