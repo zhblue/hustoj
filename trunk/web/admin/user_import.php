@@ -24,6 +24,11 @@ function import_user($filename) {
     if (($h = fopen("{$filename}", "r")) !== FALSE) {
         // 文件中的每一行数据都被转换为我们调用的单个数组$data
         // 数组的每个元素以逗号分隔
+	$bom = fread($h, 3);  // 文件有BOM，跳过这三个字节
+        if ($bom !== "\xEF\xBB\xBF") {
+            fseek($h, 0);  // 文件没有BOM，退回文件头部
+        }
+
         while (($data = fgetcsv($h, 1000, ",")) !== FALSE) {
          // 每个单独的数组都被存入到嵌套的数组中
 	    if(!check){
