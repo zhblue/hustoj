@@ -7,6 +7,10 @@ if (!function_exists('str_contains')) {
         return empty($needle) || strpos($haystack, $needle) !== false;
     }
 }
+function is_date($value) {
+    // 正则表达式匹配 YYYY-MM-DD 格式的日期
+    return preg_match('/^\d{4}-\d{2}-\d{2}$/', $value);
+}
 function addDays($days) {
     // 创建一个 DateTime 对象，表示当前日期
     $date = new DateTime();
