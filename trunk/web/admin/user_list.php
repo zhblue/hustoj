@@ -92,7 +92,8 @@ if(isset($_GET['keyword']) && $_GET['keyword']!=""){
         echo "<td><span fd='expiry_date' user_id='".$row['user_id']."' >".$row['expiry_date']."</span></td>";
       if(isset($_SESSION[$OJ_NAME.'_'.'administrator'])){
         echo "<td><a href=user_df_change.php?cid=".$row['user_id']."&getkey=".$_SESSION[$OJ_NAME.'_'.'getkey'].">".
-                  ($row['defunct']=="N"?"<span class=green>$MSG_NORMAL</span>":"<span class=red>$MSG_DELETED</span>")."</a></td>";
+           ($row['defunct']=="N"?"<span class=green title='$MSG_CLICK_TO_DELETE'>$MSG_NORMAL</span>":"<span class=red title='$MSG_CLICK_TO_RECOVER'>$MSG_DELETED</span>")
+            ."</a></td>";
       }
       else {
         echo "<td>".($row['defunct']=="N"?"<span>$MSG_NORMAL</span>":"<span>$MSG_DELETED</span>")."</td>";
