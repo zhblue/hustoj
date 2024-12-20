@@ -63,6 +63,7 @@ function import_user($filename) {
                             $group_name=iconv("gb2312","utf-8",$group_name);
                             $expiry_date=iconv("gb2312","utf-8",$expiry_date);
                     }
+		    if (!is_date($expiry_date)&&is_numeric($expiry_date)) $expiry_date=addDays($expiry_date);
                     if (mb_strlen($nick, 'utf-8') > 20) {
                         $new_len = mb_strlen($nick, 'utf-8');
                         if ($new_len > $max_length) {
