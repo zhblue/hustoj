@@ -11,7 +11,7 @@ function is_date($value) {
     // 正则表达式匹配 YYYY-MM-DD 格式的日期
     return preg_match('/^\d{4}-\d{2}-\d{2}$/', $value);
 }
-function addDays($days) {
+function add_days($days) {
     // 创建一个 DateTime 对象，表示当前日期
     $date = new DateTime();
     // 创建一个 DateInterval 对象，表示要增加的天数
