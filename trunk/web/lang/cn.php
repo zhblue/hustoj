@@ -186,6 +186,9 @@
 	$MSG_OFFLINE_ZIP_IMPORT="导入zip文件，遵循下面的目录结构:";
 	$MSG_OFFLINE="离线";
         $MSG_EXPIRY_DATE="有效期";
+        $MSG_CLICK_TO_DELETE="点击删除";
+        $MSG_CLICK_TO_RECOVER="点击恢复";
+
   //contest.php
   $MSG_PRIVATE_WARNING="比赛尚未开始或私有，不能查看题目。";
   $MSG_PRIVATE_USERS_ADD="*可以将学生学号从Excel整列复制过来，然后要求他们用学号做UserID注册,就能进入Private的比赛作为作业和测验。";
