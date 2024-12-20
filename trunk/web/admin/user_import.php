@@ -26,6 +26,7 @@ function import_user($filename) {
         // 数组的每个元素以逗号分隔
         while (($data = fgetcsv($h, 1000, ",")) !== FALSE) {
          // 每个单独的数组都被存入到嵌套的数组中
+	    if(!check){
                 if ($data[0] == "学号") {
                         $check=true;
                         echo "导入名单：<hr>\n";
@@ -38,6 +39,7 @@ function import_user($filename) {
 			$expire=(iconv("gb2312","utf-8",$data[6])==$MSG_EXPIRY_DATE );
                         continue;
                 }
+	    }
             if($check){
                     $user_id = mb_trim($data[0]);
                     $nick = $data[1];
