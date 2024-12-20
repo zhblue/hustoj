@@ -180,6 +180,8 @@ $MSG_ABSENT="Absent";
         $MSG_OFFLINE_ZIP_IMPORT="Import a offline contest ZIP file, which using the following structure: ";
         $MSG_OFFLINE="Offline";
         $MSG_EXPIRY_DATE="Expiry Date";
+        $MSG_CLICK_TO_DELETE="Click to delete";
+        $MSG_CLICK_TO_RECOVER="Click to recover";
 
 
   //contest.php
