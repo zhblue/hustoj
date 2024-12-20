@@ -52,7 +52,7 @@ function import_user($filename) {
                     $school = "";
                     $email = "";
                     $group_name="";
-		    $expiry_date=addDays($OJ_EXPIRY_DAYS);
+		    $expiry_date=add_days($OJ_EXPIRY_DAYS);
                     if (isset($data[3])) $school = $data[3];
                     if (isset($data[4])) $email = $data[4];
                     if (isset($data[5])) $group_name = $data[5];
@@ -63,7 +63,7 @@ function import_user($filename) {
                             $group_name=iconv("gb2312","utf-8",$group_name);
                             $expiry_date=iconv("gb2312","utf-8",$expiry_date);
                     }
-		    if (!is_date($expiry_date)&&is_numeric($expiry_date)) $expiry_date=addDays($expiry_date);
+		    if (!is_date($expiry_date)&&is_numeric($expiry_date)) $expiry_date=add_days($expiry_date);
                     if (mb_strlen($nick, 'utf-8') > 20) {
                         $new_len = mb_strlen($nick, 'utf-8');
                         if ($new_len > $max_length) {
