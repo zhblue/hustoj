@@ -89,7 +89,14 @@ if(isset($_GET['keyword']) && $_GET['keyword']!=""){
         echo "<td><span fd='group_name' user_id='".$row['user_id']."'>".$row['group_name']."</span></td>";
         echo "<td>".$row['accesstime']."</td>";
         echo "<td>".$row['reg_time']."</td>";
-        echo "<td><span fd='expiry_date' user_id='".$row['user_id']."' >".$row['expiry_date']."</span></td>";
+        $color="red";
+        $edate= new DateTime($row['expiry_date']);
+        $tomorrow= new DateTime(add_days(1));
+        $today= new DateTime(add_days(0));
+        if($edate>$tomorrow) $color="green";
+        if($edate==$tomorrow||$edate==$today) $color="blue";
+        echo "<td><span fd='expiry_date' user_id='".$row['user_id']."' class='".$color."' >".$row['expiry_date']."</span></td>";
+
       if(isset($_SESSION[$OJ_NAME.'_'.'administrator'])){
         echo "<td><a href=user_df_change.php?cid=".$row['user_id']."&getkey=".$_SESSION[$OJ_NAME.'_'.'getkey'].">".
            ($row['defunct']=="N"?"<span class=green title='$MSG_CLICK_TO_DELETE'>$MSG_NORMAL</span>":"<span class=red title='$MSG_CLICK_TO_RECOVER'>$MSG_DELETED</span>")
