@@ -256,7 +256,7 @@ if ($OJ_SIM&$showsim>0) {
 }
 if(isset($_GET['school'])&&trim($_GET['school'])!="" || isset($_GET['school'])&&trim($_GET['school'])!=""    ){
 
-         $sql0="select $fields from solution solution inner join users users on solution.user_id=users.user_id";
+         $sql0="select $fields from solution solution inner join users users on solution.user_id=users.user_id  and users.defunct='N' ";
          if(isset($_GET['school'])&&trim($_GET['school'])!=""){
             $school=trim($_GET['school']);
             $sql.=" and users.school=? ";
@@ -270,7 +270,7 @@ if(isset($_GET['school'])&&trim($_GET['school'])!="" || isset($_GET['school'])&&
             $str2 = $str2."&group_name=".htmlentities(trim($_GET['group_name']),ENT_QUOTES);
          }
 }else{
-        $sql0="select $fields from solution inner join users on solution.user_id=users.user_id";
+        $sql0="select $fields from solution inner join users on solution.user_id=users.user_id  and users.defunct='N' ";
 }
 
 if ($OJ_SIM&$showsim>0) {
