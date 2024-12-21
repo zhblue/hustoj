@@ -91,10 +91,10 @@ if(isset($_GET['keyword']) && $_GET['keyword']!=""){
         echo "<td>".$row['reg_time']."</td>";
         $color="red";
         $edate= new DateTime($row['expiry_date']);
-        $tomorrow= new DateTime(add_days(1));
+        $tomorrow= new DateTime(add_days(7));   // 7 日临期预警蓝色
         $today= new DateTime(add_days(0));
         if($edate>$tomorrow) $color="green";
-        if($edate==$tomorrow||$edate==$today) $color="blue";
+        else if($edate>=$today) $color="blue";
         echo "<td><span fd='expiry_date' user_id='".$row['user_id']."' class='".$color."' >".$row['expiry_date']."</span></td>";
 
       if(isset($_SESSION[$OJ_NAME.'_'.'administrator'])){
