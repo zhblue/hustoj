@@ -423,11 +423,11 @@ Star us, please!
 
 **各类公有云首选, 最容易，成功率最高，近期部署数量最多，开发者原型机**
 	
-**仅支持原生Ubuntu系统，不支持WSL和docker中的Ubuntu系统**
+**仅支持原生Ubuntu系统，不支持docker中的Ubuntu系统**
 	
 ### 基于 Ubuntu 24.04 安装	
 	
-**仅支持原生Ubuntu系统，不支持WSL和docker中的Ubuntu系统**	
+**仅支持原生Ubuntu系统，不支持docker中的Ubuntu系统**	
 
 ### 基于 Debian12  安装	
 
