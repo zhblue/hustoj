@@ -150,6 +150,14 @@ Star us, please!
 ## 更新日志
 
 <details open>
+<summary><b>2025年</b></summary>
+	
+日期  | 类型 |  更新内容
+------- | :--: | :-------
+01-01 | 预定 | 新年好！
+
+<details>
+
 <summary><b>2024年</b></summary>
 	
 日期  | 类型 |  更新内容
