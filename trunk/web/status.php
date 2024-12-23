@@ -254,7 +254,7 @@ if ($OJ_SIM&$showsim>0) {
 }else{
         $fields="solution.*,users.nick,users.group_name,users.starred";
 }
-if(isset($_GET['school'])&&trim($_GET['school'])!="" || isset($_GET['school'])&&trim($_GET['school'])!=""    ){
+if(isset($_GET['school'])&&trim($_GET['school'])!="" || isset($_GET['group_name'])&&trim($_GET['group_name'])!=""    ){
 
          $sql0="select $fields from solution solution inner join users users on solution.user_id=users.user_id  and users.defunct='N' ";
          if(isset($_GET['school'])&&trim($_GET['school'])!=""){
