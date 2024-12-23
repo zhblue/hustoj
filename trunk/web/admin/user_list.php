@@ -36,8 +36,8 @@ $trash="";
 if(isset($_GET['keyword']) && $_GET['keyword']!=""){
   $gkeyword = $_GET['keyword'];
   $keyword = "%$gkeyword%";
-  $sql = "SELECT `user_id`,`nick`,email,`accesstime`,`reg_time`,`expiry_date`,`ip`,`school`,`group_name`,`defunct` FROM `users` WHERE (user_id LIKE ?) OR (nick LIKE ?) OR (school LIKE ?) or (ip like ?) ORDER BY `user_id` DESC";
-  $result = pdo_query($sql,$keyword,$keyword,$keyword,$keyword);
+  $sql = "SELECT `user_id`,`nick`,email,`accesstime`,`reg_time`,`expiry_date`,`ip`,`school`,`group_name`,`defunct` FROM `users` WHERE (user_id LIKE ?) OR (nick LIKE ?) OR (school LIKE ?)  OR (group_name LIKE ?) or (ip like ?) ORDER BY `user_id` DESC";
+  $result = pdo_query($sql,$keyword,$keyword,$keyword,$keyword,$keyword);
 }else if(isset($_GET['trash'])){
   $trash="&trash";
   $sql = "SELECT `user_id`,`nick`,email,`accesstime`,`reg_time`,`expiry_date`,`ip`,`school`,`group_name`,`defunct` FROM `users` where defunct='Y' ORDER BY `accesstime` DESC LIMIT $sid, $idsperpage";
