@@ -546,17 +546,13 @@ for ($i=0; $i<$rows_cnt; $i++) {
     $view_status[$i][8]= $row['in_date'];
 }
 if($total_count>0) $avg_delay/= $total_count;
-?>
 
-<?php
 /////////////////////////Template
 if (isset($_GET['cid']))
   require("template/".$OJ_TEMPLATE."/conteststatus.php");
 else
   require("template/".$OJ_TEMPLATE."/status.php");
-/////////////////////////Common foot
-if(file_exists('./include/cache_end.php'))
-  require_once('./include/cache_end.php');
+
 
 //触发Remote judge模块
 $remote_delay=5;   //最小轮询周期，单位秒
@@ -566,5 +562,7 @@ if( $need_refresh_remote && isset($OJ_REMOTE_JUDGE)&&$OJ_REMOTE_JUDGE&& (time()-
         <iframe src='remote.php' width=0 height=0 ></iframe>
        <?php
 }
-?>
 
+/////////////////////////Common foot
+if(file_exists('./include/cache_end.php'))
+  require_once('./include/cache_end.php');
