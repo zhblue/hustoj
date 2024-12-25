@@ -76,7 +76,7 @@ function do_submit($remote_site,$remote_user,$remote_pass){
 		}else{
 			continue;
 		}
-		usleep(150000);
+		usleep(150000);  // 150 ms
 	}
 }
 function getResult($short){
