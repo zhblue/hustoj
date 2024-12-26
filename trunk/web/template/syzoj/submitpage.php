@@ -355,13 +355,13 @@ function resume(){
 	var t=$("#TestRun")[0];
 	if(count<0){
 		 $("#Submit").attr("disabled",false);
-		 $("#Submit").text("<?php echo $MSG_SUBMIT?>");
+		 $("#Submit").val("<?php echo $MSG_SUBMIT?>");
 		if(t!=null) $("#TestRun").attr("disabled",false);
 		if(t!=null) $("#TestRun").val("<?php echo $MSG_TR?>");
 		if( handler_interval) window.clearInterval( handler_interval);
 		if($("#vcode")!=null) $("#vcode").click();
 	}else{
-		 $("#Submit").text("<?php echo $MSG_SUBMIT?>("+count+")");
+		 $("#Submit").val("<?php echo $MSG_SUBMIT?>("+count+")");
 		if(t!=null)t.value="<?php echo $MSG_TR?>("+count+")";
 		window.setTimeout("resume();",1000);
 	}
