@@ -1,7 +1,7 @@
 <?php
-//header("HTTP/1.0 404 Not Found");
-//echo "接口未启用";
-//exit();
+header("HTTP/1.0 404 Not Found");
+echo "接口未启用";
+exit();
 // 注释以上代码启用接口，注意这可能是不安全的，仅用于内部调用。
 // Press F12 to watch network payload in Devtab,if you don't know what to do, you need to learn more before using this page.
 require_once ("include/db_info.inc.php");
