@@ -4,7 +4,70 @@
  */
 
  @import url(../bootstrap/css/bootstrap.css);
-
+ /* 整体侧边栏样式 */
+        #sidebar {
+            background-color: #222; /* 深灰色背景 */
+            color: white;
+            width: 250px;
+            padding: 15px;
+            border-right: 2px solid #444; /* 右侧添加一条深色边框 */
+            box-sizing: border-box;
+            height: 100vh; /* 占满整个视口高度 */
+            position: fixed; /* 固定定位，方便页面滚动时始终显示 */
+            left: 0;
+            top: 0;
+            overflow-y: auto; /* 当内容超出时出现滚动条 */
+        }
+        /* 每个板块的外层容器样式 */
+       .sidebar-section {
+            margin-bottom: 20px;
+            border-bottom: 1px solid #444; /* 每个板块底部添加一条细线分割 */
+            padding-bottom: 10px;
+        }
+        /* 板块标题样式 */
+       .sidebar-section h3 {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            margin-bottom: 10px;
+            font-size: 18px;
+            color: #ccc; /* 标题文字淡灰色 */
+        }
+        /* 为标题添加图标样式（这里使用Font Awesome图标） */
+       .sidebar-section h3 i {
+            margin-right: 10px;
+            font-size: 20px;
+        }
+        /* 板块内链接列表样式 */
+       .sidebar-section ul {
+            list-style-type: none;
+            padding-left: 0;
+            margin-top: 5px;
+        }
+        /* 单个链接样式 */
+       .sidebar-section li {
+            margin-bottom: 8px;
+        }
+       .sidebar-section a {
+            color: white;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            padding: 8px 12px;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+            font-size: 16px;
+        }
+       .sidebar-section a:hover {
+            background-color: #444; /* 鼠标悬停时背景色加深 */
+        }
+        /* 链接的图标样式 */
+       .sidebar-section a i {
+            margin-right: 10px;
+            font-size: 18px;
+            width: 20px;
+            text-align: center;
+        }
 .menu-btn{
 
 	text-decoration: none;
@@ -295,3 +358,4 @@ button a:hover{
     font-size: 20px;
     float: right;
 }
+
