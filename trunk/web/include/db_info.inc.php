@@ -105,8 +105,8 @@ static  $OJ_PUBLIC_STATUS=true; //是否公开所有人的判题结果,设为fal
 static  $OJ_FANCY_RESULT=false; //是否在AC时显示fancy.php里的动画
 static  $OJ_FANCY_MP3='http://cdn.hustoj.com/mp3.php'; // 答案正确时的音效
 
-//static  $OJ_EXAM_CONTEST_ID=1000; // 启用考试状态，填写考试比赛ID
-//static  $OJ_ON_SITE_CONTEST_ID=1000; //启用现场赛状态，填写现场赛比赛ID
+//static  $OJ_EXAM_CONTEST_ID=1000; // 启用考试状态，填写考试比赛ID，比赛开始前可以随便坐，机器有问题及时更换座位，比赛开始后IP锁定，只能从最后一次登录的位置登录。更换机器需要管理员后台手工指定IP。
+//static  $OJ_ON_SITE_CONTEST_ID=1000; //启用现场赛状态，填写现场赛比赛ID，全系统其他功能禁用，自动跳转指定编号的比赛。
 
 
 
