@@ -47,7 +47,7 @@ $OJ_TEMPLATE = "bs3";
                     <li><a href="user_import.php" target="main" title="<?php echo $MSG_HELP_USER_IMPORT?>"><i class="glyphicon glyphicon-upload"></i><?php echo $MSG_USER."-".$MSG_IMPORT?></a></li>
                 <?php }?>
                 <?php if (isset($_SESSION[$OJ_NAME.'_'.'administrator'])||isset( $_SESSION[$OJ_NAME.'_'.'password_setter'])){?>
-                    <li><a href="changepass.php" target="main" title="<?php echo $MSG_HELP_SETPASSWORD?>"><i class="glyphicon glyphicon-refresh"></i><?php echo $MSG_USER."-".$MSG_SETPASSWORD?></a></li>
+                    <li><a href="changepass.php" target="main" title="<?php echo $MSG_HELP_SETPASSWORD?>"><i class="glyphicon glyphicon-lock"></i><?php echo $MSG_USER."-".$MSG_SETPASSWORD?></a></li>
                 <?php }?>
                 <?php if (isset($_SESSION[$OJ_NAME.'_'.'administrator'])){?>
                     <li><a href="privilege_list.php" target="main" title="<?php echo $MSG_HELP_PRIVILEGE_LIST?>"><i class="glyphicon glyphicon-list-alt"></i><?php echo $MSG_USER."-".$MSG_PRIVILEGE."-".$MSG_LIST?></a></li>
@@ -72,14 +72,14 @@ $OJ_TEMPLATE = "bs3";
 
 
         <div class="sidebar-section">
-            <h3><i class="glyphicon glyphicon-fire"></i><?php echo $MSG_CONTEST."-".$MSG_ADMIN?></h3>
+            <h3><i class="glyphicon glyphicon-flag"></i><?php echo $MSG_CONTEST."-".$MSG_ADMIN?></h3>
             <ul>
                 <?php if (isset($_SESSION[$OJ_NAME.'_'.'administrator'])||isset($_SESSION[$OJ_NAME.'_'.'contest_creator'])){?>
                     <li><a href="contest_list.php" target="main"  title="<?php echo $MSG_HELP_CONTEST_LIST?>"><i class="glyphicon glyphicon-list"></i><?php echo $MSG_CONTEST."-".$MSG_LIST?></a></li>
                     <li><a href="contest_add.php" target="main"  title="<?php echo $MSG_HELP_ADD_CONTEST?>"><i class="glyphicon glyphicon-plus"></i><?php echo $MSG_CONTEST."-".$MSG_ADD?></a></li>
                     <li><a href="user_set_ip.php" target="main" title="<?php echo $MSG_HELP_SET_LOGIN_IP?>"><i class="glyphicon glyphicon-check"></i><?php echo $MSG_CONTEST."-".$MSG_SET_LOGIN_IP?></a></li>
-                    <li><a href="team_generate.php" target="main" title="<?php echo $MSG_HELP_TEAMGENERATOR?>"><i class="glyphicon glyphicon-user"></i><?php echo $MSG_CONTEST."-".$MSG_TEAMGENERATOR?></a></li>
-                    <li><a href="team_generate2.php" target="main" title="<?php echo $MSG_HELP_TEAMGENERATOR?>"><i class="glyphicon glyphicon-user"></i><?php echo $MSG_CONTEST."-".$MSG_TEAMGENERATOR?></a></li>
+                    <li><a href="team_generate.php" target="main" title="<?php echo $MSG_HELP_TEAMGENERATOR?>"><i class="glyphicon glyphicon-share"></i><?php echo $MSG_CONTEST."-".$MSG_TEAMGENERATOR?></a></li>
+                    <li><a href="team_generate2.php" target="main" title="<?php echo $MSG_HELP_TEAMGENERATOR?>"><i class="glyphicon glyphicon-share"></i><?php echo $MSG_CONTEST."-".$MSG_TEAMGENERATOR?></a></li>
                     <li><a href="offline_import.php" target="main" title="<?php echo $MSG_IMPORT.$MSG_CONTEST?>"><i class="glyphicon glyphicon-import"></i><?php echo $MSG_CONTEST."-".$MSG_IMPORT?></a></li>
                 <?php }?>
             </ul>
