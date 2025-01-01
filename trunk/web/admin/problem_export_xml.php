@@ -292,11 +292,11 @@ else {
     <output><![CDATA[<?php echo $row['output']?>]]></output>
     <sample_input><![CDATA[<?php echo $row['sample_input']?>]]></sample_input>
     <sample_output><![CDATA[<?php echo $row['sample_output']?>]]></sample_output>
-    <?php printTestCases($row['problem_id'],$OJ_DATA)?>
+    <?php  if($_POST['remote_name']=="")  printTestCases($row['problem_id'],$OJ_DATA)?>
     <hint><![CDATA[<?php echo $row['hint']?>]]></hint>
     <source><![CDATA[<?php echo fixcdata($row['source'])?>]]></source>
-    <remote_oj><![CDATA[<?php echo fixcdata($row['remote_oj'])?>]]></remote_oj>
-    <remote_id><![CDATA[<?php echo fixcdata($row['remote_id'])?>]]></remote_id>
+    <remote_oj><![CDATA[<?php echo $_POST['remote_name']!=""?basename($_POST['remote_name']):fixcdata($row['remote_oj'])?>]]></remote_oj>
+    <remote_id><![CDATA[<?php echo $_POST['remote_name']!=""?$row['problem_id']:fixcdata($row['remote_id'])?>]]></remote_id>
 
     <?php
     $pid = $row['problem_id'];
