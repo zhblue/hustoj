@@ -39,6 +39,11 @@
         <input class="form-control" name="in" type="text" placeholder="1001,1003,1005, ... ">
       </div>
       <br><br>
+     <div class="form-group">
+        <label>3) 为远程判题导出题面填写远程别名，正常导出请留空 for Remote judge only :</label>
+        <input class="form-control" name="remote_name" type="text" placeholder="my">
+      </div>
+      <br><br>
 
       <center>
       <div class='form-group'>
