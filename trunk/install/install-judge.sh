@@ -20,9 +20,10 @@ apt-get install -y subversion
 /usr/sbin/useradd -m -u 1536 -s /sbin/nologin judge
 mkdir -p $TARGET
 cd $TARGET/
-mkdir src
-svn co https://github.com/zhblue/hustoj/trunk/trunk/core src/core
-svn co https://github.com/zhblue/hustoj/trunk/trunk/install src/install
+
+wget -O hustoj.tar.gz http://dl.hustoj.com/hustoj.tar.gz
+tar xzf hustoj.tar.gz
+
 apt-get install -y make flex g++ libmysqlclient-dev libmysql++-dev
 cd src/install
 sed -i "s/ubuntu:22.04/ubuntu:$OSRS/g" Dockerfile
