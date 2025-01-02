@@ -1,4 +1,5 @@
 <?php
+ini_set("display_errors", "On");  //set this to "On" for debugging  ,especially when no reason blank shows up.
 require_once("../include/db_info.inc.php");
 if(!(isset($_SESSION[$OJ_NAME.'_administrator'])||isset($_SESSION[$OJ_NAME.'_problem_editor'])||isset($_SESSION[$OJ_NAME.'_contest_creator'])||isset($_SESSION[$OJ_NAME.'_tag_adder']))){
   echo "<a href='../loginpage.php'>Please Login First!</a>";
@@ -49,6 +50,14 @@ if($_SERVER['REQUEST_METHOD']=="POST"){
                 $group_name=$_POST['group_name'];
                 $sql="update users set group_name=? where user_id=?";
                 echo pdo_query($sql,$group_name,$user_id);
+        }
+	$tb="news";
+	$fd="importance";
+	if($m==$tb."_update_".$fd  && ( isset($_SESSION[$OJ_NAME.'_administrator']) )){
+                $data_id=$_POST[$tb.'_id'];
+                $new_value=$_POST[$fd];
+                $sql="update ".$tb." set `".$fd."`=? where ".$tb."_id=?";
+                echo pdo_query($sql,$new_value,$data_id);
         }
 	if($m=="get_user_list_of_contest"  && ( isset($_SESSION[$OJ_NAME.'_administrator'])||isset($_SESSION[$OJ_NAME.'_contest_creator']) )){
 			$contest_id=$_POST['contest_id'];

@@ -43,10 +43,10 @@ $sql = "";
 if(isset($_GET['keyword']) && $_GET['keyword']!=""){
   $keyword = $_GET['keyword'];
   $keyword = "%$keyword%";
-  $sql = "SELECT `news_id`,`user_id`,`title`,`time`,`defunct`,`menu` FROM `news` WHERE (title LIKE ?) OR (content LIKE ?) ORDER BY `news_id` DESC";
+  $sql = "SELECT `news_id`,`user_id`,`title`,`time`,`defunct`,`importance`,`menu` FROM `news` WHERE (title LIKE ?) OR (content LIKE ?) ORDER BY `news_id` DESC";
   $result = pdo_query($sql,$keyword,$keyword);
 }else{
-  $sql = "SELECT `news_id`,`user_id`,`title`,`time`,`defunct`,`menu` FROM `news` ORDER BY `news_id` DESC LIMIT $sid, $idsperpage";
+  $sql = "SELECT `news_id`,`user_id`,`title`,`time`,`defunct`,`importance`,`menu` FROM `news` ORDER BY `news_id` DESC LIMIT $sid, $idsperpage";
   $result = pdo_query($sql);
 }
 ?>
@@ -66,17 +66,19 @@ if(isset($_GET['keyword']) && $_GET['keyword']!=""){
       <td>UPDATE</td>
       <td>NOW</td>
       <td>COPY</td>
+      <td>IMPORTANCE</td>
       <td>MENU</td>
     </tr>
     <?php
     foreach($result as $row){
-      echo "<tr style='height:22px;'>";
+      echo "<tr style='height:22px;' news_id='".$row['news_id']."'>";
         echo "<td>".$row['news_id']."</td>";
         echo "<td><a href='news_edit.php?id=".$row['news_id']."'>".($row['title']==""?"Empty":$row['title'])."</a>"."</td>";
         echo "<td>".$row['time']."</td>";
         echo "<td><a href=news_df_change.php?id=".$row['news_id']."&getkey=".$_SESSION[$OJ_NAME.'_'.'getkey'].">".($row['defunct']=="N"?"<span class=green>On</span>":"<span class=red>Off</span>")."</a>"."</td>";
         echo "<td><a href=news_add_page.php?cid=".$row['news_id'].">Copy</a></td>";
-        echo "<td>" . ($row['menu'] == 1 ? "YES" : "NO") . "</td>";
+        echo "<td fd='importance'>" . ($row['importance']). "</td>";
+        echo "<td fd='menu'>" . ($row['menu'] == 1 ? "YES" : "NO") . "</td>";
       echo "</tr>";
     }
     ?>
@@ -104,3 +106,39 @@ if(!(isset($_GET['keyword']) && $_GET['keyword']!=""))
 ?>
 
 </div>
+<script>
+function admin_mod(){
+	var tb_name="news";
+	var fd_name="importance";
+	let fd_array = ["importance", "menu"];
+
+// 使用 for...of 循环
+	for (let fd_name of fd_array) {
+		$("td[fd=importance]").each(function(){
+			let sp=$(this);
+			let fd=$(this).attr("fd");
+			let data_id=$(this).parent().attr(tb_name+'_id');
+			$(this).dblclick(function(){
+				let data=sp.text();
+				sp.html("<form onsubmit='return false;'><input type=hidden name='m' value='"+tb_name+"_update_"+fd+"'><input type='hidden' name='"+tb_name+"_id' value='"+data_id+"'><input type='text' name='"+fd+"' value='"+data+"' selected='true' class='input-mini' size=20 ></form>");
+				let ipt=sp.find("input[name="+fd+"]");
+				ipt.focus();
+				ipt[0].select();
+				sp.find("input").change(function(){
+					let newdata=sp.find("input[name="+fd+"]").val();
+					$.post("ajax.php",sp.find("form").serialize()).done(function(){
+						console.log("new "+fd );
+						sp.html(newdata);
+					});
+
+				});
+			});
+		});
+	}
+}
+$(document).ready(function(){
+        admin_mod();
+});
+
+</script>
+
