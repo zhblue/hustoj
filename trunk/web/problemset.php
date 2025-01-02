@@ -59,7 +59,7 @@ if (isset($_GET['search']) && trim($_GET['search'])!="") {
 	//$limit_sql = " LIMIT ".($page-1)*$page_cnt.",".$page_cnt;
 	$limit_sql="";  // list 不翻页
 }else {
-	$filter_sql = " 1";
+	$filter_sql = " problem_id > 0";
 	$limit_sql = " LIMIT ".($page-1)*$page_cnt.",".$page_cnt;
 }
 
@@ -68,7 +68,7 @@ if (isset($_GET['search']) && trim($_GET['search'])!="") {
 $sub_arr = Array(); 
 $acc_arr = Array(); 
 if (isset($_SESSION[$OJ_NAME.'_'.'user_id'])){
-	$sql = "SELECT problem_id, MIN(result) AS result FROM solution WHERE user_id=? and result>=4 GROUP BY problem_id ";
+	$sql = "select problem_id, MIN(result) AS result FROM solution WHERE user_id=? and result>=4 GROUP BY problem_id ";
 	$result = pdo_query($sql,$_SESSION[$OJ_NAME.'_'.'user_id']);
 	foreach ($result as $row){
 		$sub_arr[$row['problem_id']] = true;
@@ -94,8 +94,8 @@ if (isset($_SESSION[$OJ_NAME.'_'.'administrator'])) {  //all problems
 }
 // End Page Setting
     pdo_query("SET sort_buffer_size = 1024*1024");   // Out of sort memory, consider increasing server sort buffer size
-    $sql = "SELECT `problem_id`,`title`,`source`,`submit`,`accepted`,defunct FROM problem A WHERE $filter_sql $order_by $limit_sql ";
-    $count_sql= "SELECT count(1) from problem where  $filter_sql ";
+    $sql = "select `problem_id`,`title`,`source`,`submit`,`accepted`,defunct FROM problem A WHERE $filter_sql $order_by $limit_sql ";
+    $count_sql= "select count(1) from problem where  $filter_sql ";
     //echo htmlentities( $sql);
 if (isset($_GET['search']) && trim($_GET['search'])!="") {
 	$total = pdo_query($count_sql,$search,$search);
@@ -107,7 +107,7 @@ else {
 	$cnt = $total[0][0] / $page_cnt;
 	$result = mysql_query_cache($sql);
 }
-echo "";
+//echo "$cnt $count_sql";
 
 $view_total_page = ceil($cnt*1.0);
 
