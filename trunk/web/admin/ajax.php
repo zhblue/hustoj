@@ -5,6 +5,18 @@ if(!(isset($_SESSION[$OJ_NAME.'_administrator'])||isset($_SESSION[$OJ_NAME.'_pro
   echo "<a href='../loginpage.php'>Please Login First!</a>";
   exit(1);  
 }
+function try_ajax($tb,$fd,$pr){
+	global $OJ_NAME,$_SESSION,$_POST;
+	$m=$_POST["m"];	
+	if($m==$tb."_update_".$fd  && ( isset($_SESSION[$OJ_NAME.'_'.$pr]) )){
+                $data_id=$_POST[$tb.'_id'];
+                $new_value=$_POST[$fd];
+		if($tb=="user") $tb_name="users";
+		else $tb_name=$tb;
+                $sql="update ".$tb_name." set `".$fd."`=? where ".$tb."_id=?";
+                echo pdo_query($sql,$new_value,$data_id);
+        }
+}
 if($_SERVER['REQUEST_METHOD']=="POST"){
 	$m=$_POST["m"];	
 	if($m=="problem_add_source" && ( isset($_SESSION[$OJ_NAME.'_administrator']) || isset($_SESSION[$OJ_NAME.'_problem_editor']) || isset($_SESSION[$OJ_NAME.'_tag_adder']) ) ){
@@ -25,6 +37,7 @@ if($_SERVER['REQUEST_METHOD']=="POST"){
                 $row=mysql_query_cache($sql,$pid)[0];
                 echo $row['title']."&nbsp;&nbsp;<span class='label label-success'>".$row['source']."</span>";
 	}
+	/*
         if($m=="user_update_nick"  && ( isset($_SESSION[$OJ_NAME.'_administrator']) )){
                 $user_id=$_POST['user_id'];
                 $nick=$_POST['nick'];
@@ -50,15 +63,13 @@ if($_SERVER['REQUEST_METHOD']=="POST"){
                 $group_name=$_POST['group_name'];
                 $sql="update users set group_name=? where user_id=?";
                 echo pdo_query($sql,$group_name,$user_id);
-        }
-	$tb="news";
-	$fd="importance";
-	if($m==$tb."_update_".$fd  && ( isset($_SESSION[$OJ_NAME.'_administrator']) )){
-                $data_id=$_POST[$tb.'_id'];
-                $new_value=$_POST[$fd];
-                $sql="update ".$tb." set `".$fd."`=? where ".$tb."_id=?";
-                echo pdo_query($sql,$new_value,$data_id);
-        }
+	}
+	 */
+	try_ajax("user","nick","administrator");
+	try_ajax("user","expiry_date","administrator");
+	try_ajax("user","school","administrator");
+	try_ajax("user","group_name","administrator");
+	try_ajax("news","importance","administrator");
 	if($m=="get_user_list_of_contest"  && ( isset($_SESSION[$OJ_NAME.'_administrator'])||isset($_SESSION[$OJ_NAME.'_contest_creator']) )){
 			$contest_id=$_POST['contest_id'];
 			$sql= "select distinct user_id from privilege where rightstr=? ";
