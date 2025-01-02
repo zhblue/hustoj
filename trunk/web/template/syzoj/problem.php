@@ -426,7 +426,7 @@ function db_click_modify(){
 				let data=sp.text();
 				sp.html("<form onsubmit='return false;'><input type=hidden name='m' value='"+tb_name
 					+"_update_"+fd+"'><input type='hidden' name='"+tb_name+"_id' value='"+data_id
-					+"'><input type='text' name='"+fd+"' value='"+data+"' selected='true' class='input-mini' size=20 ></form>");
+					+"'><input type='text' name='"+fd+"' value='"+data+"' selected='true' class='ui input mini' size=5 ></form>");
 				let ipt=sp.find("input[name="+fd+"]");
 				ipt.focus();
 				ipt[0].select();
