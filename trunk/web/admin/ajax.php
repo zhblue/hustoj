@@ -71,6 +71,9 @@ if($_SERVER['REQUEST_METHOD']=="POST"){
 	try_ajax("user","school","administrator");
 	try_ajax("user","group_name","administrator");
 	try_ajax("news","importance","administrator");
+	try_ajax("problem","time_limit","administrator");
+        try_ajax("problem","memory_limit","administrator");
+
 	if($m=="get_user_list_of_contest"  && ( isset($_SESSION[$OJ_NAME.'_administrator'])||isset($_SESSION[$OJ_NAME.'_contest_creator']) )){
 			$contest_id=$_POST['contest_id'];
 			$sql= "select distinct user_id from privilege where rightstr=? ";
