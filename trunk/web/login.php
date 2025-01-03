@@ -65,7 +65,7 @@ if($login){
                 $sql = "SELECT * FROM `privilege` WHERE `user_id`=?";
                 $_SESSION[ $OJ_NAME . '_' . 'user_id' ] = $login;
                 $result = pdo_query( $sql, $login );
-        }else{
+        }else{  // 如果去掉下面的 and rightstr like 'c%' 则能获得该组的所有权限，如：在teacher组可以有teacher用户的所有权限。管理方便，但需谨慎使用。
                 $sql = "SELECT * FROM `privilege` WHERE `user_id`=? or (user_id=? and rightstr like 'c%' )";
                 $_SESSION[ $OJ_NAME . '_' . 'user_id' ] = $login;
                 $result = pdo_query( $sql, $login ,$group_name);
