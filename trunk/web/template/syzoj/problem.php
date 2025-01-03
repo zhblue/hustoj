@@ -63,8 +63,8 @@ if(file_exists($solution_file)){
 </style>
           
 	      
-	  <span class="ui label" problem_id="<?php echo $id?>" ><?php echo $MSG_Memory_Limit ?>：<span fd="memory_limit"><?php echo $row['memory_limit']; ?></span> MB</span>
-          <span class="ui label" problem_id="<?php echo $id?>" ><?php echo $MSG_Time_Limit ?>：<span fd="time_limit"><?php echo $row['time_limit']; ?></span> S</span>
+	  <span class="ui label" problem_id="<?php echo $id?>" ><?php echo $MSG_Memory_Limit ?>：<span tb="problem" fd="memory_limit"><?php echo $row['memory_limit']; ?></span> MB</span>
+          <span class="ui label" problem_id="<?php echo $id?>" ><?php echo $MSG_Time_Limit ?>：<span tb="problem" fd="time_limit"><?php echo $row['time_limit']; ?></span> S</span>
          <!-- <span class="ui label">标准输入输出</span> -->
       </div>
       <div class="row" style="margin-top: -23px">
@@ -417,16 +417,17 @@ function selectMulti( num, answer){
   editor.text(rep);
 }
 
-var tb_name="problem";
 function db_click_modify(){
 			let sp=$(this);
+			sp.attr("title","双击修改");
 			let fd=$(this).attr("fd");
-			let data_id=$(this).parent().attr(tb_name+'_id');
+			let tb=$(this).attr("tb");
+			let data_id=$(this).parent().attr(tb+'_id');
 			$(this).dblclick(function(){
 				let data=sp.text();
-				sp.html("<form onsubmit='return false;'><input type=hidden name='m' value='"+tb_name
-					+"_update_"+fd+"'><input type='hidden' name='"+tb_name+"_id' value='"+data_id
-					+"'><input type='text' name='"+fd+"' value='"+data+"' selected='true' class='ui input mini' size=5 ></form>");
+				sp.html("<form onsubmit='return false;'><input type=hidden name='m' value='"+tb
+					+"_update_"+fd+"'><input type='hidden' name='"+tb+"_id' value='"+data_id
+					+"'><input type='text' name='"+fd+"' value='"+data+"' selected='true' class='ui mini input' size=5 ></form>");
 				let ipt=sp.find("input[name="+fd+"]");
 				ipt.focus();
 				ipt[0].select();
