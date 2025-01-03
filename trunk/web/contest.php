@@ -184,7 +184,8 @@ else {
 		$result = pdo_query($sql,$_SESSION[$OJ_NAME.'_user_id']);
 
 		foreach ($result as $row) {
-			$mycontests .= ",".$row[0];
+		      if(intval($row['contest_id'])>0)
+                              $mycontests .= ",".$row['contest_id'];
 	        }
 
 		$len = mb_strlen($OJ_NAME.'_');
