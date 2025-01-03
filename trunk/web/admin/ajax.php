@@ -37,7 +37,7 @@ if($_SERVER['REQUEST_METHOD']=="POST"){
                 $row=mysql_query_cache($sql,$pid)[0];
                 echo $row['title']."&nbsp;&nbsp;<span class='label label-success'>".$row['source']."</span>";
 	}
-	/*
+	
         if($m=="user_update_nick"  && ( isset($_SESSION[$OJ_NAME.'_administrator']) )){
                 $user_id=$_POST['user_id'];
                 $nick=$_POST['nick'];
@@ -46,7 +46,8 @@ if($_SERVER['REQUEST_METHOD']=="POST"){
 		$sql= "update solution set nick=? where user_id=?";
                 pdo_query($sql,$nick,$user_id);
         }
-	if($m=="user_update_expiry_date"  && ( isset($_SESSION[$OJ_NAME.'_administrator']) )){
+	/*
+        if($m=="user_update_expiry_date"  && ( isset($_SESSION[$OJ_NAME.'_administrator']) )){
                 $user_id=$_POST['user_id'];
                 $expiry_date=$_POST['expiry_date'];
                 $sql= "update users set expiry_date=? where user_id=?";
@@ -65,7 +66,7 @@ if($_SERVER['REQUEST_METHOD']=="POST"){
                 echo pdo_query($sql,$group_name,$user_id);
 	}
 	 */
-	try_ajax("user","nick","administrator");
+	// try_ajax("user","nick","administrator");
 	try_ajax("user","expiry_date","administrator");
 	try_ajax("user","school","administrator");
 	try_ajax("user","group_name","administrator");
