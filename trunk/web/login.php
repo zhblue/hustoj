@@ -57,8 +57,8 @@ if($login){
   	$group_name="";
         $group_row=pdo_query("select group_name,nick from users where user_id=?",$login);
         if(!empty($group_row)){
-                $group_name=$group_row[0][0];
-		$_SESSION[ $OJ_NAME . '_nick']=$group_row[0][1];
+                $group_name=$group_row[0]['group_name'];
+		$_SESSION[ $OJ_NAME . '_nick']=$group_row[0]['nick'];
 		$_SESSION[ $OJ_NAME . '_group_name']=$group_name;
         }
         if(empty($group_name)){
