@@ -15,7 +15,7 @@ if ( isset( $OJ_ON_SITE_CONTEST_ID ) ) {
 ///////////////////////////MAIN	
 //NOIP赛制比赛时，移除相关题目
 $exceptions=array();
-if(isset($OJ_NOIP_KEYWORD)&&$OJ_NOIP_KEYWORD && !isset($_SESSION[$OJ_NAME."_administrator"])){  // && !isset($_SESSION[$OJ_NAME."_administrator"])   管理员不受限
+if(isset($OJ_NOIP_KEYWORD)&&$OJ_NOIP_KEYWORD && !isset($_SESSION[$OJ_NAME."_administrator"])){  //  管理员不受限
 		                     $now =  date('Y-m-d H:i', time());
 				     $sql="select distinct problem_id from contest_problem cp inner join contest c on cp.contest_id=c.contest_id and
 					      c.start_time<'$now' and c.end_time>'$now' and c.title like '%$OJ_NOIP_KEYWORD%'";
@@ -29,8 +29,8 @@ if(isset($_GET['list'])){
   if(isset($_GET['group_name'])) $group_name=basename($_GET['group_name']);
   else $group_name=$_SESSION[$OJ_NAME.'_group_name'];
   if(!empty($group_name)){
-        $users=pdo_query("select user_id from users where group_name=? and defunct='N' ",$group_name);
-         $user_ida = array_column($users,0);
+        $users=pdo_query("select user_id from users where group_name=? and defunct='N' limit 300 ",$group_name);  // 预防出现DoS攻击
+        $user_ida = array_column($users,0);
   }
   $user_ids="";
   if(!empty($user_ida) && strlen($user_ida[0])>0){
