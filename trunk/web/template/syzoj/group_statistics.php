@@ -42,8 +42,8 @@ if(!empty($result)){
 <?php
     foreach($result as $row){
       echo "<tr>";
-      echo "<td>".$row['user_id']."</td>";
-      echo "<td>".$row['nick']."</td>";
+      echo "<td><a href='userinfo.php?user=".htmlentities($row['user_id'])."'>".$row['user_id']."</a></td>";
+      echo "<td><a href='userinfo.php?user=".htmlentities($row['user_id'])."' target='_blank'>".$row['nick']."</a></td>";
         $ac=0;
   	foreach($pida as $pid){
       		if($row["P$pid"]==4) $ac++;
