@@ -20,7 +20,7 @@
     for ($i=0;$i<=11;++$i){
     	$ped[$i]=0;
     }
-    $sql="SELECT * FROM `solution` WHERE `user_id`=?";
+    $sql="select * FROM `solution` WHERE `user_id`=?";
     $result = pdo_query($sql, $user);
     foreach ($result as $row) {
     	++$ped[$row['result']];
@@ -124,7 +124,7 @@
                                     }
                                     <?php
 				    $ac=array();
-                                    $sql = "SELECT `problem_id`,count(1) from solution where `user_id`=? and result=4 and problem_id != 0 group by `problem_id` ORDER BY `problem_id` ASC";
+                                    $sql = "select `problem_id`,count(1) from solution where `user_id`=? and result=4 and problem_id != 0 group by `problem_id` ORDER BY `problem_id` ASC";
                                     if ($ret = pdo_query($sql, $user)) {
                                         $len = count($ret);
                                         echo "ptot($len);";
@@ -152,7 +152,7 @@
                                             " </a>");
                                     }
                                     <?php
-                                    $sql = "SELECT `sol`.`problem_id`, count(1) from solution sol where `sol`.`user_id`=? and `sol`.`result`!=4 and sol.problem_id != 0 group by `sol`.`problem_id` ORDER BY `sol`.`problem_id` ASC";
+                                    $sql = "select `sol`.`problem_id`, count(1) from solution sol where `sol`.`user_id`=? and `sol`.`result`!=4 and sol.problem_id != 0 group by `sol`.`problem_id` ORDER BY `sol`.`problem_id` ASC";
                                     if ($result = pdo_query($sql, $user)) {
                                         foreach ($result as $row)
                                             if(!in_array($row[0],$ac))echo "p($row[0],$row[1]);";
@@ -163,7 +163,28 @@
                         </div>
                     </div>
     
-
+		    <div class="row">
+                        <div class="column">
+                            <h4 class="ui top attached block header">系统题单</h4>
+                            <div class="ui bottom attached segment">
+<?php 
+echo "<table class='ui striped table '>";
+foreach($plista as $plist){
+	echo "<tr>";
+	$name=$plist["name"];
+	echo "<td>$name</td>";
+	$list=explode(",",$plist['list']);
+	foreach($list as $pid){
+		if (in_array($pid,$ac)) $color="green"; else $color="red";
+	 	echo "<td class='ui $color basic label'><a href=problem.php?id=$pid>".$bible[$pid]."</a></td>";
+	}
+	echo "</tr>";
+}
+echo "</table>";
+?>
+                            </div>
+                        </div>
+                    </div>
                                         <div class="row">
                         <div class="column">
                             <h4 class="ui top attached block header">
@@ -285,7 +306,7 @@
 <?php 
 $sub_data = [];
 $max_count = 0;
-$sql = "SELECT DATE(in_date),count(*) FROM solution WHERE user_id=? AND  in_date >= DATE_SUB(CURDATE(),INTERVAL 1 YEAR) AND result < 13 GROUP BY DATE(in_date);";
+$sql = "select DATE(in_date),count(*) FROM solution WHERE user_id=? AND  in_date >= DATE_SUB(CURDATE(),INTERVAL 1 YEAR) AND result < 13 GROUP BY DATE(in_date);";
 $ret = pdo_query($sql, $user);
 foreach ($ret as $row) {
     array_push($sub_data, [$row[0], (int)$row[1]]);

@@ -1,6 +1,6 @@
 <?php
- $cache_time=120; 
- $OJ_CACHE_SHARE=true;
+ $cache_time=10; 
+ $OJ_CACHE_SHARE=false;
 	require_once('./include/cache_start.php');
         require_once('./include/db_info.inc.php');
 	require_once('./include/setlang.php');
@@ -11,7 +11,7 @@ $now =  date('Y-m-d H:i', time());
 	if(isset($OJ_OI_MODE)&&$OJ_OI_MODE&&!isset($_SESSION[$OJ_NAME."_administrator"])){
                
                 $sql="select count(contest_id) from contest where start_time<'$now' and end_time>'$now' and title like '%$OJ_NOIP_KEYWORD%'";
-                $row=mysql_query_cache($sql);
+                $row=pdo_query($sql);
                 $cols=$row[0];
                 //echo $sql;
                 //echo $cols[0];
@@ -29,10 +29,74 @@ if (!is_valid_user_name($user)){
 	exit(0);
 }
 
-//检查用户当前是否在参加NOIP模式比赛，如果是则不显示用户信息以防看到提交结果 2020.7.25
+function extractPlistBlocks($inputString) {
+    // 定义正则表达式模式
+    $pattern = '/\[plist=[^\]]*\][^[]*?\[\/plist\]/';
 
+    // 使用 preg_match_all 函数查找所有匹配项
+    preg_match_all($pattern, $inputString, $matches);
+
+    return $matches[0];
+}
+function extractPlistData($inputString) {
+    // 定义正则表达式模式
+    $pattern = '/\[plist=([^]]*)\](.*?)\[\/plist\]/s';
+
+    // 使用 preg_match 函数查找匹配项
+    if (preg_match($pattern, $inputString, $matches)) {
+        // 返回匹配到的 example1 和 内容1
+        return [
+            'name' => $matches[2],
+            'list' => str_replace("&#44;", ",", trim($matches[1]))
+        ];
+    }
+
+    return null;
+}
+$sql="select content from news where content like '%[plist=%' and defunct='N' ";
+// 示例输入字符串
+$news=array_column(pdo_query($sql),'content');
+$news=array_unique($news);
+$plista=array();
+$bible=array();
+foreach($news as $plists){
+// 提取 plist 块
+	$plistBlocks = extractPlistBlocks($plists);
+	foreach($plistBlocks as $plistB){
+		$plist=extractPlistData($plistB);
+//		print_r($plist);
+//		echo "<br>";
+		array_push($plista,$plist);
+	}
+// 输出结果
+	//$plista=array_merge($plist,$plistBlocks);
+}
+foreach($plista as $plist){
+	$name=$plist["name"];
+	$list=explode(",",$plist['list']);
+	foreach($list as $pid){
+		array_push($bible,$pid);
+	}
+}
+$bible=array_unique($bible);
+
+if(!empty($bible)){
+	$bible=pdo_query("select problem_id,title from problem where problem_id in (".implode(",",$bible).")");
+  // 提取 id 列作为键
+	$keys = array_column($bible, 'problem_id');
+
+	// 提取 name 列作为值
+	$values = array_column($bible, 'title');
+
+	// 使用 array_combine 将键和值组合成一个映射
+	$bible= array_combine($keys, $values);
+  // var_dump($ptitle);
+
+//	print_r($bible);
+}
+//检查用户当前是否在参加NOIP模式比赛，如果是则不显示用户信息以防看到提交结果 2020.7.25
 $sql = "select 1 from `solution` where  `user_id`=? and  problem_id>0 and `contest_id` IN (select `contest_id` from `contest` where `start_time` < ? and `end_time` > ? and `title` like ?)";
-$rrs = mysql_query_cache($sql, $user ,$now , $now , "%$OJ_NOIP_KEYWORD%");
+$rrs = pdo_query($sql, $user ,$now , $now , "%$OJ_NOIP_KEYWORD%");
 $flag = count($rrs) > 0 ;
 if($flag&&!isset($_SESSION[$OJ_NAME.'_'.'administrator'])) // administrator need to view userinfo 
 {	
@@ -42,11 +106,11 @@ if($flag&&!isset($_SESSION[$OJ_NAME.'_'.'administrator'])) // administrator need
 }
 
 $view_title=$user ."@".$OJ_NAME;
-if(isset($_SESSION[$OJ_NAME.'_'.'administrator']) || (isset($_SESSION[$OJ_NAME.'_'.'user_id']) && $_SESSION[$OJ_NAME.'_'.'user_id']==$user) )
-    $sql="SELECT * FROM `users` WHERE `user_id`=? ";
+if(isset($_SESSION[$OJ_NAME.'_'.'administrator']))
+    $sql="select * FROM `users` WHERE `user_id`=? ";
 else 
-    $sql="SELECT * FROM `users` WHERE `user_id`=? and user_id not in ($OJ_RANK_HIDDEN) ";
-$result=mysql_query_cache($sql,$user);
+    $sql="select * FROM `users` WHERE `user_id`=? and user_id not in ($OJ_RANK_HIDDEN) ";
+$result=pdo_query($sql,$user);
 $row_cnt=count($result);
 if ($row_cnt==0){ 
 	$view_errors= "No such User!";
@@ -54,47 +118,45 @@ if ($row_cnt==0){
 	exit(0);
 }
 
-$row=$result[0];
+ $row=$result[0];
 $school=$row['school'];
 $email=$row['email'];
 $nick=$row['nick'];
 $starred=$row['starred'];
-//check and update starred
-if($starred==0 && starred($user)){
+if(!$starred && starred($user)){
         pdo_query("update users set starred=1 where user_id=?",$user);
         $starred=1;
 }
 
 
 // count solved
-$sql="SELECT count(DISTINCT problem_id) as `ac` FROM `solution` WHERE `user_id`=? AND `result`=4";
-$result=mysql_query_cache($sql,$user) ;
- $row=$result[0];
+$sql="select count(DISTINCT problem_id) as `ac` FROM `solution` WHERE `user_id`=? AND `result`=4";
+$result=pdo_query($sql,$user) ;
+$row=$result[0];
 $AC=$row['ac'];
 
-
 // count submission
-$sql="SELECT count(solution_id) as `Submit` FROM `solution` WHERE `user_id`=? and  problem_id>0";
-$result=mysql_query_cache($sql,$user) ;
+$sql="select count(solution_id) as `Submit` FROM `solution` WHERE `user_id`=? and  problem_id>0";
+$result=pdo_query($sql,$user) ;
  $row=$result[0];
 $Submit=$row['Submit'];
 
 // update solved 
 $sql="UPDATE `users` SET `solved`='".strval($AC)."',`submit`='".strval($Submit)."' WHERE `user_id`=?";
 $result=pdo_query($sql,$user);
-$sql="SELECT count(*) as `Rank` FROM `users` WHERE `solved`>? and defunct='N' and user_id not in (".$OJ_RANK_HIDDEN.") ";
-$result=mysql_query_cache($sql,$AC);
+$sql="select count(*) as `Rank` FROM `users` WHERE `solved`>? and defunct='N' and user_id not in (".$OJ_RANK_HIDDEN.") ";
+$result=pdo_query($sql,$AC);
 $row=$result[0];
 $Rank=intval($row[0])+1;
 
-if (isset($_SESSION[$OJ_NAME.'_'.'administrator'])){
-	$sql="SELECT user_id,password,ip,`time` FROM `loginlog` WHERE `user_id`=? order by `time` desc LIMIT 0,10";
-	$view_userinfo=mysql_query_cache($sql,$user) ;
-//echo "</table>";
+ if (isset($_SESSION[$OJ_NAME.'_'.'administrator'])){
+$sql="select user_id,password,ip,`time` FROM `loginlog` WHERE `user_id`=? order by `time` desc LIMIT 0,50";
+$view_userinfo=pdo_query($sql,$user) ;
+echo "</table>";
 
 }
-$sql="SELECT result,count(1) FROM solution WHERE `user_id`=? AND result>=4 group by result order by result";
-	$result=mysql_query_cache($sql,$user);
+$sql="select result,count(1) FROM solution WHERE `user_id`=? AND result>=4 group by result order by result";
+	$result=pdo_query($sql,$user);
 	$view_userstat=array();
 	$i=0;
 	 foreach($result as $row){
@@ -102,8 +164,8 @@ $sql="SELECT result,count(1) FROM solution WHERE `user_id`=? AND result>=4 group
 	}
 	
 
-$sql=	"SELECT UNIX_TIMESTAMP(date(in_date))*1000 md,count(1) c FROM `solution` where  `user_id`=?  group by md order by md desc ";
-	$result=mysql_query_cache($sql,$user);//mysql_escape_string($sql));
+$sql=	"select UNIX_TIMESTAMP(date(in_date))*1000 md,count(1) c FROM `solution` where  `user_id`=?  group by md order by md desc ";
+	$result=pdo_query($sql,$user);//mysql_escape_string($sql));
 	$chart_data_all= array();
 //echo $sql;
     
@@ -111,8 +173,8 @@ $sql=	"SELECT UNIX_TIMESTAMP(date(in_date))*1000 md,count(1) c FROM `solution` w
 		$chart_data_all[$row['md']]=$row['c'];
     }
     
-$sql=	"SELECT UNIX_TIMESTAMP(date(in_date))*1000 md,count(1) c FROM `solution` where  `user_id`=? and result=4 group by md order by md desc ";
-	$result=mysql_query_cache($sql,$user);//mysql_escape_string($sql));
+$sql=	"select UNIX_TIMESTAMP(date(in_date))*1000 md,count(1) c FROM `solution` where  `user_id`=? and result=4 group by md order by md desc ";
+	$result=pdo_query($sql,$user);//mysql_escape_string($sql));
 	$chart_data_ac= array();
 //echo $sql;
     
@@ -122,7 +184,7 @@ $sql=	"SELECT UNIX_TIMESTAMP(date(in_date))*1000 md,count(1) c FROM `solution` w
   
 $acc_arr=Array();
 if (isset($_SESSION[$OJ_NAME.'_'.'user_id'])) {
-        $sql = "SELECT distinct `problem_id` FROM `solution` WHERE `user_id`=? AND `result`=4 ";
+        $sql = "select distinct `problem_id` FROM `solution` WHERE `user_id`=? AND `result`=4 ";
         if(isset($pids)&&$pids!="") $sql.=" and problem_id in ($pids)";
         $result = mysql_query_cache($sql,$_SESSION[$OJ_NAME.'_'.'user_id']);
         foreach ($result as $row)
@@ -136,3 +198,4 @@ require("template/".$OJ_TEMPLATE."/userinfo.php");
 if(file_exists('./include/cache_end.php'))
 	require_once('./include/cache_end.php');
 ?>
+
