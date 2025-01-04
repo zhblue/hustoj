@@ -116,8 +116,11 @@ class BBCode
   // Renders a BBCode string to HTML, for inclusion into a document.
   static public function bbcode_to_html($input) : string
   {
-    global $MSG_TOTAL;
-    global $MSG_NUMBER_OF_PROBLEMS;
+    global $MSG_TOTAL,$MSG_NUMBER_OF_PROBLEMS,$MSG_STATISTICS,$MSG_GROUP_NAME;
+// 定义正则表达式
+//$regex = '/<(?!div)/';
+//$input = preg_replace($regex, '&lt;', $input);
+
 
     // split input string into array using regex, UTF-8 aware
     //  this should give us tokens to work with
@@ -172,7 +175,7 @@ class BBCode
         // OPENING TAG
 
         // Big if / elseif ladder to handle each tag
-        if ($name === 'b' || $name === 'u' || $name === 'sup' || $name === 'sub' ||
+        if ($name === 'b' || $name === 'u' || $name === 's' || $name === 'sup' || $name === 'sub' ||
             $name === 'blockquote' ||
             $name === 'ol' || $name === 'ul' ||
             $name === 'table') {
@@ -313,8 +316,10 @@ class BBCode
             // emit the tag 如果希望题单显示2列，修改下面的col-lg-12为col-lg-6
 	    $output = $output . '<div class="col-xs-12 col-lg-12"><div class="panel '.$plist_color[$colorIndex%count($plist_color)].'">'
 				.'<div class="panel-heading" onclick="$(\'#plist'.$colorIndex.'\').load(\'problemset.php?ajax=1&list='.$url.'\').toggle()"  style="cursor: pointer" >'
-		                .'<h4 class="panel-title" ><a class="collapsed" href="problemset.php?list=' . $url . '"  target="_blank">' 
-		    		. self::encode($buffer) . '</a> <span class="pull-right">'.$MSG_TOTAL.' '.$pnum.' '.$MSG_NUMBER_OF_PROBLEMS.'</span> </h4> '
+				.'<h4 class="panel-title" >'
+				.'<a class="collapsed" href="problemset.php?list=' . $url . '"  target="_blank">'.self::encode($buffer) . '</a> '
+				.'<a class="collapsed" href="group_statistics.php?list=' . $url . '"  target="_blank"> &nbsp; &nbsp;['.$MSG_GROUP_NAME.$MSG_STATISTICS. ']</a> '
+				.'<span class="pull-right">'.$MSG_TOTAL.' '.$pnum.' '.$MSG_NUMBER_OF_PROBLEMS.'</span> </h4> '
 				.' </div><div id="plist'.$colorIndex.'"  style="display:none"  > </div></div></div>';
 	    $colorIndex++;
             // advance ptr (again)
@@ -424,18 +429,17 @@ class BBCode
 function filterDIV($input){
   $count1=substr_count($input,"<div");
   $count2=substr_count($input,"</div>");
-  //  echo $count1."-".$count2."=".($count1-$count2)."<br>";
+//  echo $count1."-".$count2."=".($count1-$count2)."<br>";
   if($count1!=$count2){
-          $value=mb_ereg_replace("<[dD][iI][vV][a-zA-Z -_=\"\']*>","",$input);
-          $value=mb_ereg_replace("</[dD][iI][vV]>","",$value);
-          $value=mb_ereg_replace("<([^>]+)<","&lt;\\1&lt;",$value); //fixing 0<m<7000
-          $value=mb_ereg_replace(">([^<]+)>","&gt;\\1&gt;",$value); //fixing  7000>m>7000
+	  $value=mb_ereg_replace("<[dD][iI][vV][a-zA-Z -_=\"\']*>","",$input);
+	  $value=mb_ereg_replace("</[dD][iI][vV]>","",$value);
+	  $value=mb_ereg_replace("<([^>]+)<","&lt;\\1&lt;",$value); //fixing 0<m<7000
+	  $value=mb_ereg_replace(">([^<]+)>","&gt;\\1&gt;",$value); //fixing  7000>m>7000
   }else{
-         $value=$input;
+  	 $value=$input;
   }
   return $value;
 }
-
 // procedural
 function bbcode_to_html($input) : string
 {
