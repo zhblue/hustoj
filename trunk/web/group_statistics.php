@@ -15,19 +15,24 @@ if ( isset( $OJ_ON_SITE_CONTEST_ID ) ) {
 ///////////////////////////MAIN	
 //NOIP赛制比赛时，移除相关题目
 $exceptions=array();
-if(isset($OJ_NOIP_KEYWORD)&&$OJ_NOIP_KEYWORD && !isset($_SESSION[$OJ_NAME."_administrator"])){  //  管理员不受限
-		                     $now =  date('Y-m-d H:i', time());
-				     $sql="select distinct problem_id from contest_problem cp inner join contest c on cp.contest_id=c.contest_id and
-					      c.start_time<'$now' and c.end_time>'$now' and c.title like '%$OJ_NOIP_KEYWORD%'";
-		                     $row=pdo_query($sql);
-				     if(count($row)>0){
-				        $exceptions=array_column($row,'problem_id');
-				//	var_dump($exceptions);			
-				     }
+if(isset($OJ_NOIP_KEYWORD)&&$OJ_NOIP_KEYWORD && !isset($_SESSION[$OJ_NAME."_administrator"])){  // 管理员不受限
+                                     $now =  date('Y-m-d H:i', time());
+                                     $sql="select contest_id from contest c where  c.start_time<'$now' and c.end_time>'$now' and c.title like '%$OJ_NOIP_KEYWORD%'";
+                                     $row=pdo_query($sql);
+                                     if(count($row)>0){
+                                        $exceptions=array_column($row,'contest_id');
+                                //      var_dump($exceptions);
+                                     }
 }
+
 if(isset($_GET['list'])){
-  if(isset($_GET['group_name'])) $group_name=basename($_GET['group_name']);
-  else $group_name=$_SESSION[$OJ_NAME.'_group_name'];
+   if(isset($_GET['group_name']))  $group_name=basename($_GET['group_name']);
+   else 						     $group_name=$_SESSION[$OJ_NAME.'_group_name'];
+   if(isset($_GET['down'])){
+	        header ( "Content-type:   application/excel" );
+	        header ( "content-disposition:   attachment;   filename=$MSG_GROUP_NAME.$MSG_STATISTICS"."_".$group_name.".xls" );
+   }
+ 
   if(!empty($group_name)){
         $users=pdo_query("select user_id from users where group_name=? and defunct='N' limit 300 ",$group_name);  // 预防出现DoS攻击
         $user_ida = array_column($users,0);
@@ -59,8 +64,9 @@ if(isset($_GET['list'])){
   	$sql.=" ,min(case problem_id when $pid then result else 15 end) P$pid";
   }
   //$user_ids=implode("','",$user_ida);
-  $sql.=" from solution where user_id in ($user_ids) group by user_id,nick ";
-  $result = pdo_query($sql,$user_ida);
+  if(empty($exceptions))   $sql.=" from solution where user_id in ($user_ids) group by user_id,nick ";
+  else                                  $sql.=" from solution where user_id in ($user_ids) and contest_id not in (".implode(",",$exceptions).") group by user_id,nick ";
+ $result = pdo_query($sql,$user_ida);
 
 //  echo $sql;
   $ptitle=pdo_query("select problem_id,title from problem where problem_id in (".$pids.")");
