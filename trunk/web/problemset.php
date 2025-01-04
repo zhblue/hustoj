@@ -49,11 +49,14 @@ if (isset($_GET['search']) && trim($_GET['search'])!="") {
  	$postfix="&search=".urlencode($_GET['search']);
 }else if (isset($_GET['list']) && trim($_GET['list']!="")){
         $plist= explode(",",$_GET['list']);
-	$pids="0";
-	foreach($plist as $pid){
-	  $pid=intval($pid);
-     	  $pids.=",$pid";
-	}
+        $pids="";
+        foreach($plist as $pid){
+          $pid=intval($pid);
+          if($pids=="")
+             $pids.=$pid;
+          else
+             $pids.=",$pid";
+        }
 	$filter_sql = " problem_id in ($pids) ";
 	$order_by = "order by FIELD(problem_id,$pids)"; // 如果希望按难度顺序改成 order by accepted desc ;
 	//$limit_sql = " LIMIT ".($page-1)*$page_cnt.",".$page_cnt;
