@@ -31,7 +31,7 @@ function import_user($filename) {
 
         while (($data = fgetcsv($h, 1000, ",")) !== FALSE) {
          // 每个单独的数组都被存入到嵌套的数组中
-	    if(!check){
+	    if(!$check){
                 if ($data[0] == "学号") {
                         $check=true;
                         echo "导入名单：<hr>\n";
