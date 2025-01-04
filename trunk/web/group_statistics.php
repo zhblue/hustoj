@@ -28,11 +28,13 @@ if(isset($OJ_NOIP_KEYWORD)&&$OJ_NOIP_KEYWORD && !isset($_SESSION[$OJ_NAME."_admi
 if(isset($_GET['list'])){
   if(isset($_GET['group_name'])) $group_name=basename($_GET['group_name']);
   else $group_name=$_SESSION[$OJ_NAME.'_group_name'];
-  $users=pdo_query("select user_id from users where group_name=? and defunct='N' ",$group_name); 
-  $user_ida = array_column($users,0);
+  if(!empty($group_name)){
+        $users=pdo_query("select user_id from users where group_name=? and defunct='N' ",$group_name);
+         $user_ida = array_column($users,0);
+  }
   $user_ids="";
-  if(count($user_ida)>0 && strlen($user_ida[0])>0){
-  $len=count($user_ida);	  
+  if(!empty($user_ida) && strlen($user_ida[0])>0){
+    $len=count($user_ida);	  
     for($i=0; $i<$len; $i++){
       if($user_ids) $user_ids.=",";
       $user_ids.="?";
