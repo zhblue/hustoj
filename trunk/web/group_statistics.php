@@ -6,7 +6,7 @@ require_once( './include/db_info.inc.php' );
 require_once( './include/memcache.php' );
 require_once( './include/setlang.php' );
 require_once( './include/bbcode.php' );
-$view_title = "Problem list statistics for group";
+$view_title = "$MSG_PROBLEM$MSG_LIST - $MSG_GROUP_NAME$MSG_STATISTICS";
 $result = false;
 if ( isset( $OJ_ON_SITE_CONTEST_ID ) ) {
 	header( "location:contest.php?cid=" . $OJ_ON_SITE_CONTEST_ID );
