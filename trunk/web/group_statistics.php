@@ -36,6 +36,8 @@ if(isset($_GET['list'])){
   if(!empty($group_name)){
         $users=pdo_query("select user_id from users where group_name=? and defunct='N' limit 300 ",$group_name);  // 预防出现DoS攻击
         $user_ida = array_column($users,0);
+  }else{
+  	$user_ida=['admin'];
   }
   $user_ids="";
   if(!empty($user_ida) && strlen($user_ida[0])>0){
