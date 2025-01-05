@@ -52,7 +52,7 @@ foreach($news as $plists){
 		$plist=extractPlistData($plistB);
 //		print_r($plist);
 //		echo "<br>";
-		array_push($plista,$plist);
+		 if(!empty($pid))  array_push($plista,$plist);
 	}
 // 输出结果
 	//$plista=array_merge($plist,$plistBlocks);
