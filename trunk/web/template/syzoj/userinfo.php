@@ -124,7 +124,7 @@
                                     }
                                     <?php
 				    $ac=array();
-                                    $sql = "select `problem_id`,count(1) from solution where `user_id`=? and result=4 and problem_id != 0 group by `problem_id` ORDER BY `problem_id` ASC";
+                                    $sql = "select `problem_id`,count(1) from solution where `user_id`=? and result=4 and problem_id != 0 $not_in_noip group by `problem_id` ORDER BY `problem_id` ASC";
                                     if ($ret = mysql_query_cache($sql, $user)) {
                                         $len = count($ret);
                                         echo "ptot($len);";
@@ -152,7 +152,7 @@
                                             " </a>");
                                     }
                                     <?php
-                                    $sql = "select `sol`.`problem_id`, count(1) from solution sol where `sol`.`user_id`=? and `sol`.`result`!=4 and sol.problem_id != 0 group by `sol`.`problem_id` ORDER BY `sol`.`problem_id` ASC";
+                                    $sql = "select `sol`.`problem_id`, count(1) from solution sol where `sol`.`user_id`=? and `sol`.`result`!=4 and sol.problem_id != 0  $not_in_noip group by `sol`.`problem_id` ORDER BY `sol`.`problem_id` ASC";
                                     if ($result = mysql_query_cache($sql, $user)) {
                                         foreach ($result as $row)
                                             if(!in_array($row[0],$ac))echo "p($row[0],$row[1]);";
@@ -306,7 +306,7 @@ echo "</table>";
 <?php 
 $sub_data = [];
 $max_count = 0;
-$sql = "select DATE(in_date),count(*) FROM solution WHERE user_id=? AND  in_date >= DATE_SUB(CURDATE(),INTERVAL 1 YEAR) AND result < 13 GROUP BY DATE(in_date);";
+$sql = "select DATE(in_date),count(*) FROM solution WHERE user_id=? AND  in_date >= DATE_SUB(CURDATE(),INTERVAL 1 YEAR) AND result < 13 $not_in_noip GROUP BY DATE(in_date);";
 $ret = mysql_query_cache($sql, $user);
 foreach ($ret as $row) {
     array_push($sub_data, [$row[0], (int)$row[1]]);
