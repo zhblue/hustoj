@@ -14,7 +14,7 @@
 			
 			}
 		?>
-	</select>
+	</select> <button onclick="$('body').html($('#statistics').parent().html()).css('overflow','scroll');">FullScreen</button>
 </form>
 </div>
 <?php
@@ -67,7 +67,8 @@ if(!empty($plista)){
 	  	console.log("sort");
     		sortTable('statistics', 2, 'int');	
     		sortTable('statistics', 2, 'int');	
-		$('#statistics').parent().css('margin-left',(548-window.innerWidth/2)+'px').css('margin-right',(548-window.innerWidth/2)+'px').css("overflow-x","scroll");
-    
+		  $('#statistics').css("overflow-x","scroll");
+                $('#statistics').parent().css("overflow-x","scroll");
+
     	  });
       </script>
