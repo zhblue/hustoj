@@ -29,8 +29,8 @@ if(!empty($plista)){
         echo "<th>$MSG_AC</th>";
 	foreach($plista as $plist){
 		$name=$plist["name"];
-		echo "<th>$name";
-		echo "</th>";
+		$list=$plist['list'];
+                echo "<th><a href='group_statistics.php?list=".htmlentities($list)."&group_name=".htmlentities($group_name)."'>$name</a></th>";
 	}
 	echo "</tr></thead><tbody>";
 	foreach($users as $user){
