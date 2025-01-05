@@ -21,7 +21,7 @@
     	$ped[$i]=0;
     }
     $sql="select * FROM `solution` WHERE `user_id`=?";
-    $result = pdo_query($sql, $user);
+    $result = mysql_query_cache($sql, $user);
     foreach ($result as $row) {
     	++$ped[$row['result']];
     }
@@ -125,7 +125,7 @@
                                     <?php
 				    $ac=array();
                                     $sql = "select `problem_id`,count(1) from solution where `user_id`=? and result=4 and problem_id != 0 group by `problem_id` ORDER BY `problem_id` ASC";
-                                    if ($ret = pdo_query($sql, $user)) {
+                                    if ($ret = mysql_query_cache($sql, $user)) {
                                         $len = count($ret);
                                         echo "ptot($len);";
                                         foreach ($ret as $row){
@@ -153,7 +153,7 @@
                                     }
                                     <?php
                                     $sql = "select `sol`.`problem_id`, count(1) from solution sol where `sol`.`user_id`=? and `sol`.`result`!=4 and sol.problem_id != 0 group by `sol`.`problem_id` ORDER BY `sol`.`problem_id` ASC";
-                                    if ($result = pdo_query($sql, $user)) {
+                                    if ($result = mysql_query_cache($sql, $user)) {
                                         foreach ($result as $row)
                                             if(!in_array($row[0],$ac))echo "p($row[0],$row[1]);";
                                     }
@@ -307,7 +307,7 @@ echo "</table>";
 $sub_data = [];
 $max_count = 0;
 $sql = "select DATE(in_date),count(*) FROM solution WHERE user_id=? AND  in_date >= DATE_SUB(CURDATE(),INTERVAL 1 YEAR) AND result < 13 GROUP BY DATE(in_date);";
-$ret = pdo_query($sql, $user);
+$ret = mysql_query_cache($sql, $user);
 foreach ($ret as $row) {
     array_push($sub_data, [$row[0], (int)$row[1]]);
     $max_count = max($max_count, (int)$row[1]);
