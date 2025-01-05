@@ -32,9 +32,11 @@ if(isset($_GET['list'])){
 	        header ( "Content-type:   application/excel" );
 	        header ( "content-disposition:   attachment;   filename=$MSG_GROUP_NAME.$MSG_STATISTICS"."_".$group_name.".xls" );
    }
- 
+  $limit=10;
+  if(isset($_SESSION[$OJ_NAME.'_contest_creator'])) $limit+=70;
+  if(isset($_SESSION[$OJ_NAME.'_administrator'])) $limit+=100;
   if(!empty($group_name)){
-        $users=pdo_query("select user_id from users where group_name=? and defunct='N' limit 300 ",$group_name);  // 预防出现DoS攻击
+        $users=pdo_query("select user_id from users where group_name=? and defunct='N'  order by solved desc  limit $limit ",$group_name);  // 预防出现DoS攻击
         $user_ida = array_column($users,0);
   }else{
   	$user_ida=['admin'];
