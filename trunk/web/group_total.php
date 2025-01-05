@@ -92,8 +92,7 @@ if(isset($OJ_NOIP_KEYWORD)&&$OJ_NOIP_KEYWORD && !isset($_SESSION[$OJ_NAME."_admi
   $limit=10;
   if(isset($_SESSION[$OJ_NAME.'_contest_creator'])) $limit+=70;
   if(isset($_SESSION[$OJ_NAME.'_administrator'])) $limit+=100;
-  $users=pdo_query("select user_id,nick from users where group_name=? and defunct='N' limit $limit ",$group_name);
-  
+  $users=pdo_query("select user_id,nick from users where group_name=? and defunct='N'  order by solved desc  limit $limit ",$group_name);
   $user_ida = array_column($users,0);
 /////////////////////////Template
 require( "template/" . $OJ_TEMPLATE . "/".basename(__FILE__));
