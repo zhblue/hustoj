@@ -42,7 +42,7 @@ function p(id,c){
 	document.write("<a href=problem.php?id="+id+">"+id+" </a>(<a href='status.php?user_id=<?php echo $user?>&problem_id="+id+"'>"+c+"</a>)");
 
 }
-<?php $sql="SELECT `problem_id`,count(1) from solution where `user_id`=? and result=4 group by `problem_id` ORDER BY `problem_id` ASC";
+<?php $sql="SELECT `problem_id`,count(1) from solution where `user_id`=? and result=4 group by `problem_id` $not_in_noip ORDER BY `problem_id` ASC";
 if ($result=pdo_query($sql,$user)){ 
     foreach($result as $row)
     echo "p($row[0],$row[1]);";
