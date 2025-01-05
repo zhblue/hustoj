@@ -47,9 +47,7 @@ foreach($news as $plists){
 	$plistBlocks = extractPlistBlocks($plists);
 	foreach($plistBlocks as $plistB){
 		$plist=extractPlistData($plistB);
-//		print_r($plist);
-//		echo "<br>";
-		array_push($plista,$plist);
+		if(!empty($plist)) array_push($plista,$plist);
 	}
 // 输出结果
 	//$plista=array_merge($plist,$plistBlocks);
@@ -58,23 +56,18 @@ foreach($plista as $plist){
 	$name=$plist["name"];
 	$list=explode(",",$plist['list']);
 	foreach($list as $pid){
-		array_push($bible,$pid);
+		if(!empty($pid)) array_push($bible,$pid);
 	}
 }
 $bible=array_unique($bible);
 if(!empty($bible)){
 	$bible=pdo_query("select problem_id,title from problem where problem_id in (".implode(",",$bible).")");
-  // 提取 id 列作为键
+        // 提取 id 列作为键
 	$keys = array_column($bible, 'problem_id');
-
 	// 提取 name 列作为值
 	$values = array_column($bible, 'title');
-
 	// 使用 array_combine 将键和值组合成一个映射
 	$bible= array_combine($keys, $values);
-  // var_dump($ptitle);
-
-//	print_r($bible);
 }
 
 ///////////////////////////MAIN	
