@@ -67,7 +67,7 @@ if(!empty($plista)){
 	  	console.log("sort");
     		sortTable('statistics', 2, 'int');	
     		sortTable('statistics', 2, 'int');	
-		  $('#statistics').css("overflow-x","scroll");
+		$('#main').removeClass("container");
                 $('#statistics').parent().css("overflow-x","scroll");
 
     	  });
