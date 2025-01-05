@@ -34,25 +34,29 @@ if(!empty($plista)){
 	}
 	echo "</tr></thead><tbody>";
 	foreach($users as $user){
-		$sql="select DISTINCT problem_id ac FROM `solution` WHERE `user_id`=? AND `result`=4 $not_in_noip ";
-		$ac=mysql_query_cache($sql,$user['user_id']) ;
-		$ac=array_column($ac,'ac');
-		echo "<tr>";
-		echo "<td><a href='userinfo.php?user=".htmlentities($user['user_id'])."'>".$user['user_id']."</a></td>";
-		echo "<td><a href='userinfo.php?user=".htmlentities($user['user_id'])."'>".$user['nick']."</a></td>";
-      		echo "<td>".count($ac)."</td>";
-		foreach($plista as $plist){
-			echo "<td>";
-			$name=$plist["name"];
-			$list=explode(",",$plist['list']);
-			foreach($list as $pid){
-				$color='red';
-				if(in_array($pid,$ac)) $color='green';
-				echo "<a class='ui $color label mini' href='problem.php?id=$pid'>".$bible[$pid]."</a>";
-			}
-			echo "</td>";
-		}
-		echo "</tr>";
+                $sql="select DISTINCT problem_id sb FROM `solution` WHERE `user_id`=?  $not_in_noip ";
+                $sb=mysql_query_cache($sql,$user['user_id']) ;
+                $sb=array_column($sb,'sb');
+                $sql="select DISTINCT problem_id ac FROM `solution` WHERE `user_id`=? AND `result`=4 $not_in_noip ";
+                $ac=mysql_query_cache($sql,$user['user_id']) ;
+                $ac=array_column($ac,'ac');
+                echo "<tr>";
+                echo "<td><a href='userinfo.php?user=".htmlentities($user['user_id'])."'>".$user['user_id']."</a></td>";
+                echo "<td><a href='userinfo.php?user=".htmlentities($user['user_id'])."'>".$user['nick']."</a></td>";
+                echo "<td>".count($ac)."</td>";
+                foreach($plista as $plist){
+                        echo "<td>";
+                        $name=$plist["name"];
+                        $list=explode(",",$plist['list']);
+                        foreach($list as $pid){
+                                $color='white';
+                                if(in_array($pid,$sb)) $color='red';
+                                if(in_array($pid,$ac)) $color='green';
+                                echo "<a class='ui $color label mini' href='problem.php?id=$pid'>".$bible[$pid]."</a>";
+                        }
+                        echo "</td>";
+                }
+                echo "</tr>";
 	}
 	echo "</tbody></table>";
 
