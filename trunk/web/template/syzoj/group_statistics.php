@@ -62,7 +62,7 @@ if(!empty($result)){
       </tbody>
 </table>
 <?php } ?>
-<a href="javascript:history.go(-1);" >Back</a>
+<a href="javascript:history.go(-1);" >Back</a><a href="group_total.php?group_name=<?php echo htmlentities($group_name) ?>" >Total View</a>
 </center>
 <?php include("template/$OJ_TEMPLATE/footer.php");?>
 <script src="<?php echo $OJ_CDN_URL?>include/sortTable.js"></script>
