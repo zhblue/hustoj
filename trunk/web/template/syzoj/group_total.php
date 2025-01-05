@@ -6,13 +6,12 @@
 <form action="<?php echo basename(__FILE__)?>" method=get ><?php echo $MSG_GROUP_NAME ?>
 	<select name=group_name onchange="$('form').submit()">
 		<?php
-			if(!isset($_GET['group_name'])) echo "<option value='' />";
-			$groups=pdo_query("select distinct group_name from users");
-			$groups=array_column($groups,'group_name');
-			foreach($groups as $group){
-				echo "<option value='".htmlentities($group)."' ". ($group==$_GET['group_name']?"selected":"") ."   >$group</option>";
-			
-			}
+                        if(empty($group_name)) echo "<option value='' />";
+                        $groups=pdo_query("select distinct group_name from users");
+                        $groups=array_column($groups,'group_name');
+                        foreach($groups as $group){
+                                echo "<option value='".htmlentities($group)."' ". ($group==$group_name?"selected":"") ."   >$group</option>";
+                        }
 		?>
 	</select> <button onclick="$('body').html($('#statistics').parent().html()).css('overflow','scroll');">FullScreen</button>
 </form>
