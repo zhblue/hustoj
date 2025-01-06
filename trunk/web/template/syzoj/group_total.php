@@ -30,48 +30,49 @@
 if(!empty($plista)){
 ?>
 
-	
-	<?php
-
-	echo "<table id='statistics' class='ui striped table'  >";
-	echo "<thead><tr><th>$MSG_USER_ID</th><th>$MSG_NICK</th>";
+        <?php
+        echo "<table id='statistics' class='ui striped table'  >";
+        echo "<thead><tr><th>$MSG_USER_ID</th><th>$MSG_NICK</th>";
         echo "<th>$MSG_AC</th>";
-	foreach($plista as $plist){
-		$name=$plist["name"];
-		$list=$plist['list'];
+        foreach($plista as $plist){
+                $name=$plist["name"];
+                $list=$plist['list'];
                 echo "<th><a href='group_statistics.php?list=".htmlentities($list)."&group_name=".htmlentities($group_name)."'>$name</a></th>";
-	}
-	echo "</tr></thead><tbody>";
-	foreach($users as $user){
+        }
+        echo "</tr></thead><tbody>";
+        foreach($users as $user){
                 $sql="select DISTINCT problem_id sb FROM `solution` WHERE `user_id`=?  $not_in_noip ";
                 $sb=mysql_query_cache($sql,$user['user_id']) ;
                 $sb=array_column($sb,'sb');
                 $sql="select DISTINCT problem_id ac FROM `solution` WHERE `user_id`=? AND `result`=4 $not_in_noip ";
                 $ac=mysql_query_cache($sql,$user['user_id']) ;
                 $ac=array_column($ac,'ac');
+                $pass=0;
                 echo "<tr>";
                 echo "<td><a href='userinfo.php?user=".htmlentities($user['user_id'])."'>".$user['user_id']."</a></td>";
                 echo "<td><a href='userinfo.php?user=".htmlentities($user['user_id'])."'>".$user['nick']."</a></td>";
-                echo "<td>".count($ac)."</td>";
+                $line="";
                 foreach($plista as $plist){
-                        echo "<td>";
+                        $line.="<td>";
                         $name=$plist["name"];
                         $list=explode(",",$plist['list']);
                         foreach($list as $pid){
                                 $color='white';
                                 if(in_array($pid,$sb)) $color='red';
-                                if(in_array($pid,$ac)) $color='green';
-				else if(isset($_GET['down'])) continue;
-                                echo "<a class='ui $color label mini' href='problem.php?id=$pid'>".$bible[$pid]."</a>\n";
-				if(isset($_GET['down'])) echo "<br>\n";
+                                if(in_array($pid,$ac)) {$color='green';$pass++;}
+                                else if(isset($_GET['down'])) continue;
+                                $line.= "<a class='ui $color label mini' href='problem.php?id=$pid'>".$bible[$pid]."</a>\n";
+                                if(isset($_GET['down'])) echo "<br>\n";
                         }
-                        echo "</td>";
+                        $line.= "</td>";
                 }
+                echo "<td>".$pass."</td>";
+                echo $line;
                 echo "</tr>";
-	}
-	echo "</tbody></table>";
+        }
+        echo "</tbody></table>";
+        ?>
 
-	?>
 <?php }
 	if(!isset($_GET['down'])){	
 ?>
