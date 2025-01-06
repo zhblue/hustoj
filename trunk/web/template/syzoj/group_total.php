@@ -3,24 +3,33 @@
 <hr>
 <div class='padding'>
 <div ><h1><?php echo $MSG_GROUP_NAME.$MSG_STATISTICS ?></h1>
+<?php
+        if(!isset($_GET['down'])){
+?>
 <form action="<?php echo basename(__FILE__)?>" method=get ><?php echo $MSG_GROUP_NAME ?>
-	<select name=group_name onchange="$('form').submit()">
-		<?php
+        <select name=group_name onchange="$('form').submit()">
+                <?php
                         if(empty($group_name)) echo "<option value='' />";
                         $groups=pdo_query("select distinct group_name from users");
                         $groups=array_column($groups,'group_name');
                         foreach($groups as $group){
                                 echo "<option value='".htmlentities($group)."' ". ($group==$group_name?"selected":"") ."   >$group</option>";
                         }
-		?>
-	</select> <button onclick="$('body').html($('#statistics').parent().html()).css('overflow','scroll');">FullScreen</button>
+                ?>
+        </select> <button onclick="$('body').html($('#statistics').parent().html()).css('overflow','scroll');">FullScreen</button>
+        <a href="?group_name=<?php echo htmlentities($group_name)?>&down"><?php echo $MSG_DOWNLOAD ?></a>
 </form>
+        <center>
+<?php }
+
+?>
+
 </div>
 <?php
 if(!empty($plista)){
 ?>
 
-	<center>
+	
 	<?php
 
 	echo "<table id='statistics' class='ui striped table'  >";
@@ -51,7 +60,9 @@ if(!empty($plista)){
                                 $color='white';
                                 if(in_array($pid,$sb)) $color='red';
                                 if(in_array($pid,$ac)) $color='green';
-                                echo "<a class='ui $color label mini' href='problem.php?id=$pid'>".$bible[$pid]."</a>";
+				else if(isset($_GET['down'])) continue;
+                                echo "<a class='ui $color label mini' href='problem.php?id=$pid'>".$bible[$pid]."</a>\n";
+				if(isset($_GET['down'])) echo "<br>\n";
                         }
                         echo "</td>";
                 }
@@ -60,8 +71,11 @@ if(!empty($plista)){
 	echo "</tbody></table>";
 
 	?>
-<?php } ?>
-<a href="javascript:history.go(-1);" >Back</a>
+<?php }
+	if(!isset($_GET['down'])){	
+?>
+		<a href="javascript:history.go(-1);" >Back</a>
+
 </center>
 <?php include("template/$OJ_TEMPLATE/footer.php");?>
 <script src="<?php echo $OJ_CDN_URL?>include/sortTable.js"></script>
@@ -75,3 +89,4 @@ if(!empty($plista)){
 
     	  });
       </script>
+<?php 	} ?>
