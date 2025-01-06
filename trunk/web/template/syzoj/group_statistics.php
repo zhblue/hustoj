@@ -13,7 +13,7 @@
                                 echo "<option value='".htmlentities($group)."' ". ($group==$group_name?"selected":"") ."   >$group</option>";
                         }
 		?>
-	</select>
+	</select><a href="javascript:history.go(-1);" >Back</a> &nbsp;&nbsp;&nbsp;&nbsp; <a href="group_total.php?group_name=<?php echo htmlentities($group_name) ?>" >TotalView</a>
 	<input type=hidden name=list value='<?php echo $pids ?>' >
 </form>
 </div>
@@ -61,7 +61,7 @@ if(!empty($result)){
       </tbody>
 </table>
 <?php } ?>
-<a href="javascript:history.go(-1);" >Back</a> &nbsp;&nbsp;&nbsp;&nbsp; <a href="group_total.php?group_name=<?php echo htmlentities($group_name) ?>" >Total View</a>
+
 </center>
 <?php include("template/$OJ_TEMPLATE/footer.php");?>
 <script src="<?php echo $OJ_CDN_URL?>include/sortTable.js"></script>
