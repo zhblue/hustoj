@@ -17,7 +17,8 @@
                         }
                 ?>
         </select> <button onclick="$('body').html($('#statistics').parent().html()).css('overflow','scroll');">FullScreen</button>
-        <a href="?group_name=<?php echo htmlentities($group_name)?>&down&spa"><?php echo $MSG_DOWNLOAD ?></a>
+	
+        <a href="?group_name=<?php echo htmlentities($group_name)?>&down&spa"><?php echo $MSG_DOWNLOAD ?></a> &nbsp;  &nbsp;  &nbsp;  &nbsp; <a href="javascript:history.go(-1);" >Back</a>
 </form>
         <center>
 <?php }
@@ -74,7 +75,7 @@ if(!empty($plista)){
 <?php }
 	if(!isset($_GET['down'])){	
 ?>
-		<a href="javascript:history.go(-1);" >Back</a>
+		
 
 </center>
 <?php include("template/$OJ_TEMPLATE/footer.php");?>
