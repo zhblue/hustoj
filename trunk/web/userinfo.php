@@ -108,8 +108,10 @@ if ($row_cnt==0){
 	exit(0);
 }
 
- $row=$result[0];
+$row=$result[0];
 $school=$row['school'];
+$group_name=$row['group_name'];
+if(empty($group_name)) $group_name="[".getMappedSpecial($user)."]";
 $email=$row['email'];
 $nick=$row['nick'];
 $starred=$row['starred'];
