@@ -154,6 +154,7 @@ Star us, please!
 	
 日期  | 类型 |  更新内容
 ------- | :--: | :-------
+01-06 | 更新 | 增加全局题单班组(group_name)统计显示页group_total.php 。
 01-04 | 更新 | 增加题单的班组(group_name)统计显示页group_statistics.php 。
 01-02 | 更新 | 允许新闻用importance字段排序，允许双击修改importance。
 01-01 | 预定 | 新年好！
