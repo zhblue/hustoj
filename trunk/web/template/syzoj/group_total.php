@@ -16,9 +16,12 @@
                                 echo "<option value='".htmlentities($group)."' ". ($group==$group_name?"selected":"") ."   >$group</option>";
                         }
                 ?>
-        </select> <button onclick="$('body').html($('#statistics').parent().html()).css('overflow','scroll');">FullScreen</button>
-	
-        <a href="?group_name=<?php echo htmlentities($group_name)?>&down&spa"><?php echo $MSG_DOWNLOAD ?></a> &nbsp;  &nbsp;  &nbsp;  &nbsp; <a href="javascript:history.go(-1);" >Back</a>
+        </select>
+		
+        <span class='ui button primary' onclick="$('body').html($('#statistics').parent().html()).css('overflow','scroll');">FullScreen</span>
+        <span id="swapButton" type=button class='ui button red' > 矩阵转置/行列转换 </span>
+        <a class='ui button green'  href="?group_name=<?php echo htmlentities($group_name)?>&down"><?php echo $MSG_DOWNLOAD ?></a>
+	&nbsp;  &nbsp;  &nbsp;  &nbsp; <a href="javascript:history.go(-1);" >Back</a>
 
 	
 </form>
