@@ -137,9 +137,10 @@ else
 if(isset($OJ_REG_NEED_CONFIRM)&&$OJ_REG_NEED_CONFIRM) $defunct="Y";
 else $defunct="N";
 $sql="INSERT INTO `users`("
-."`user_id`,`email`,`ip`,`accesstime`,`password`,`reg_time`,`nick`,`school`,`defunct`,activecode)"
-."VALUES(?,?,?,NOW(),?,NOW(),?,?,?,?)";
-$rows=pdo_query($sql,$user_id,$email,$ip,$password,$nick,$school,$defunct,$_SESSION[$OJ_NAME.'_'.'activecode']);// or die("Insert Error!\n");
+."`user_id`,`email`,`ip`,`accesstime`,`password`,`reg_time`,`nick`,`school`,`group_name`,`defunct`,activecode)"
+."VALUES(?,?,?,NOW(),?,NOW(),?,?,?,?,?)";
+$rows=pdo_query($sql,$user_id,$email,$ip,$password,$nick,$school,getMappedSpecial($user_id),$defunct,$_SESSION[$OJ_NAME.'_'.'activecode']);// or die("Insert Error!\n");
+
 //发送激活邮件
 if (isset($OJ_EMAIL_CONFIRM) && $OJ_EMAIL_CONFIRM ) {
 	$link= 'http://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['REQUEST_URI'])."active.php?code=".$_SESSION[$OJ_NAME.'_'.'activecode'];
