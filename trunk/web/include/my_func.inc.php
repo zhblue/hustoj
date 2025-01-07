@@ -7,6 +7,25 @@ if (!function_exists('str_contains')) {
         return empty($needle) || strpos($haystack, $needle) !== false;
     }
 }
+function getMappedSpecial($user_id) {
+        $map=[
+            '0701' => '人智',
+            '0708' => '网工',
+            '5702' => '电科',
+            '5701' => '软工',
+            '0207' => '数技'
+        ];
+    // 遍历 map 数组
+    foreach ($map as $key => $value) {
+        // 检查 user_id 是否包含当前键
+        if (strpos($user_id, $key) !== false) {
+            return substr($user_id,0,2).$value; // 返回对应的值
+        }
+    }
+    // 如果没有匹配的键，返回空字符串
+    return '';
+}
+
 function is_date($value) {
     // 正则表达式匹配 YYYY-MM-DD 格式的日期
     return preg_match('/^\d{4}-\d{2}-\d{2}$/', $value);
