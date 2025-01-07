@@ -20,7 +20,7 @@
 	
         <a href="?group_name=<?php echo htmlentities($group_name)?>&down&spa"><?php echo $MSG_DOWNLOAD ?></a> &nbsp;  &nbsp;  &nbsp;  &nbsp; <a href="javascript:history.go(-1);" >Back</a>
 
-	<button id="swapButton">矩阵转置/行列转换</button>
+	
 </form>
         <center>
 <?php }
@@ -81,7 +81,7 @@ if(!empty($plista)){
 		
 
 </center>
-	
+<button id="swapButton">矩阵转置/行列转换</button>	
 
 <script>
 $(document).ready(function() {
