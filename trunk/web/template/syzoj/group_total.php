@@ -91,22 +91,26 @@ $(document).ready(function() {
 
         // Get all rows from the original table
         var rows = originalTable.find('tr');
-
+        var row_count=rows.length;
+        var col_count = $(rows[0]).find("th,td").length;
+        console.log("row_count:"+row_count);
+        console.log("col_count:"+col_count);
         // Create a new row for each column
-        rows.each(function(index) {
-            var newRow = $('<tr></tr>');
-            $(this).find('th, td').each(function(i) {
-                // Create a new cell and add it to the new row
-                var newCell = $('<td></td>').html($(rows[i]).find('th, td').eq(index).html());
-                newRow.append(newCell);
-            });
-            newTable.append(newRow);
-        });
-
-        // Replace the original table with the new table
+        for(let i=0;i<col_count;i++){
+                var newRow = $('<tr></tr>');
+                for(let index=0;index<row_count;index++) {
+                        // Create a new cell and add it to the new row
+                    let cols=$(rows[index]).find('th,td');
+                    let html=$(cols[i]).html();
+                    var newCell = $('<td></td>').html(html);
+                    newRow.append(newCell);
+                }
+                newTable.append(newRow);
+        }
         originalTable.replaceWith(newTable);
     });
 });
+
 </script>
 
 <?php include("template/$OJ_TEMPLATE/footer.php");?>
