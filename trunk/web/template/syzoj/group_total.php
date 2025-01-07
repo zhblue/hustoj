@@ -19,6 +19,8 @@
         </select> <button onclick="$('body').html($('#statistics').parent().html()).css('overflow','scroll');">FullScreen</button>
 	
         <a href="?group_name=<?php echo htmlentities($group_name)?>&down&spa"><?php echo $MSG_DOWNLOAD ?></a> &nbsp;  &nbsp;  &nbsp;  &nbsp; <a href="javascript:history.go(-1);" >Back</a>
+
+	<button id="swapButton">矩阵转置/行列转换</button>
 </form>
         <center>
 <?php }
@@ -79,6 +81,34 @@ if(!empty($plista)){
 		
 
 </center>
+	
+
+<script>
+$(document).ready(function() {
+    $('#swapButton').click(function() {
+        var originalTable = $('#statistics');
+        var newTable = $('<table class="ui table striped"></table>');
+
+        // Get all rows from the original table
+        var rows = originalTable.find('tr');
+
+        // Create a new row for each column
+        rows.each(function(index) {
+            var newRow = $('<tr></tr>');
+            $(this).find('th, td').each(function(i) {
+                // Create a new cell and add it to the new row
+                var newCell = $('<td></td>').html($(rows[i]).find('th, td').eq(index).html());
+                newRow.append(newCell);
+            });
+            newTable.append(newRow);
+        });
+
+        // Replace the original table with the new table
+        originalTable.replaceWith(newTable);
+    });
+});
+</script>
+
 <?php include("template/$OJ_TEMPLATE/footer.php");?>
 <script src="<?php echo $OJ_CDN_URL?>include/sortTable.js"></script>
       <script>
