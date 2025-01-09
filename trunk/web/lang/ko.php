@@ -248,6 +248,7 @@ $MSG_HIDE="Hide";
 	$MSG_SHOW_TAGS="태그 보기";
 	$MSG_SHOW_ALL_TAGS="모든 태그";
 	$MSG_RESERVED="숨겨짐";
+        $MSG_TABLE_TRANSPOSE="Table Transpose";
 
 	$MSG_HELP_SEEOJ="OJ 확인";
 	$MSG_HELP_ADD_NEWS="첫 페이지 공지사항 추가";
