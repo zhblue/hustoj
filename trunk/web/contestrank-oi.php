@@ -22,9 +22,9 @@ class TM{
         function __construct(){
                 $this->solved=0;
                 $this->time=0;
-                $this->p_wa_num=array(0);
-                $this->p_ac_sec=array(0);
-                $this->p_pass_rate=array(0);
+                $this->p_wa_num=array();
+                $this->p_ac_sec=array();
+                $this->p_pass_rate=array();
 		$this->total=0;
         }
         function Add($pid,$sec,$res,$result){
