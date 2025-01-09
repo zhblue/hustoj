@@ -256,7 +256,8 @@
  $MSG_SHOW_TAGS ="顯示分類標籤";
  $MSG_SHOW_ALL_TAGS ="所有標籤";
  $MSG_RESERVED ="未啟用";
- 
+ $MSG_TABLE_TRANSPOSE="行列轉換";
+
  $MSG_HELP_SEEOJ ="跳轉回到前台";
  $MSG_HELP_ADD_NEWS ="添加首頁顯示的新聞";
  $MSG_HELP_NEWS_LIST ="管理已經發布的新聞";
