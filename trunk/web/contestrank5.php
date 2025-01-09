@@ -22,14 +22,14 @@ class TM{
         function TM(){
                 $this->solved=0;
                 $this->time=0;
-                $this->p_wa_num=array(0);
-                $this->p_ac_sec=array(0);
-                $this->p_pass_rate=array(0);
+                $this->p_wa_num=array();
+                $this->p_ac_sec=array();
+                $this->p_pass_rate=array();
 		$this->total=0;
         }
         function Add($pid,$sec,$res,$result){
 //              echo "Add $pid $sec $res<br>";
-                if (isset($this->p_ac_sec[$pid])&&$this->p_ac_sec[$pid]>0)
+                if (isset($this->p_ac_sec[$pid]) || $this->p_ac_sec[$pid]<0)
                         return;
                 if ($result!=4){
                         if(isset($this->p_pass_rate[$pid])){
