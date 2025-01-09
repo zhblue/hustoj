@@ -22,14 +22,14 @@ class TM{
 	function TM(){
 		$this->solved=0;
 		$this->time=0;
-		$this->p_wa_num=array(0);
-		$this->p_ac_sec=array(0);
+		$this->p_wa_num=array();
+		$this->p_ac_sec=array();
 	}
 	function Add($pid,$sec,$res,$mark_base,$mark_per_problem,$mark_per_punish){
 		global $OJ_CE_PENALTY;
 //		echo "Add $pid $sec $res<br>";
 	
-		if (isset($this->p_ac_sec[$pid])&&$this->p_ac_sec[$pid]>0)
+		if (isset($this->p_ac_sec[$pid])||$this->p_ac_sec[$pid]<0)
 			return;
 		if ($res!=4){
 			if(isset($OJ_CE_PENALTY)&&!$OJ_CE_PENALTY&&$res==11) return;  // ACM WF punish no ce 
