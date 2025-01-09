@@ -134,7 +134,7 @@
         $MSG_ACTIVE_YOUR_ACCOUNT="激活账号";
         $MSG_CLICK_COPY="点击或者复制访问链接";
         $MSG_CHECK="检查";
-
+        
 	//problem.php
 	$MSG_NO_SUCH_PROBLEM="题目当前不可用!<br>它可能被用于未来的比赛、过去的私有比赛，或者管理员由于尚未测试通过等其他原因暂时停止了该题目用于练习。";
 	$MSG_Description="题目描述"  ;
@@ -265,6 +265,7 @@
   $MSG_PASS_RATE="通过率";
   $MSG_SHOW_TAGS="显示分类标签";
   $MSG_SHOW_ALL_TAGS="所有标签";  
+  $MSG_TABLE_TRANSPOSE="行列转换";
 
   $MSG_HELP_SEEOJ="跳转回到前台";
   $MSG_HELP_ADD_NEWS="添加首页显示的新闻";

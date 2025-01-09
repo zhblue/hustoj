@@ -258,7 +258,8 @@
  $MSG_SHOW_TAGS =" Показать теги категорий ";
  $MSG_SHOW_ALL_TAGS = " все теги ";
  $MSG_RESERVED = " Не включено ";
- 
+ $MSG_TABLE_TRANSPOSE="Table Transpose";
+
  $MSG_HELP_SEEOJ =" Вернуться на передний план ";
  $MSG_HELP_ADD_NEWS = " Добавить новость на домашнюю страницу ";
  $MSG_HELP_NEWS_LIST =" Управление опубликованными новостями ";

@@ -60,7 +60,8 @@
         <?php if(isset($_SESSION[$OJ_NAME.'_'.'administrator']) || isset($_SESSION[$OJ_NAME.'_m'.$cid ])) {?>
           <a href="suspect_list.php?cid=<?php echo $view_cid?>" class="ui small blue button"><?php echo $MSG_IP_VERIFICATION?></a>
           <a href="user_set_ip.php?cid=<?php echo $view_cid?>" class="ui small green button"><?php echo $MSG_SET_LOGIN_IP?></a>
-          <a target="_blank" href="../../admin/contest_edit.php?cid=<?php echo $view_cid?>" class="ui small red button"><?php echo "EDIT"?></a>
+          <a target="_blank" href="../../admin/contest_edit.php?cid=<?php echo $view_cid?>" class="ui small red button"><?php echo "$MSG_EDIT"?></a>
+          <a target="_blank" href="group_statistics.php?list=<?php echo $pids?>" class="ui small blue button"><?php echo "$MSG_GROUP_NAME $MSG_STATISTICS"?></a>
         <?php } ?>
 
                     <span class="ui small button"><?php echo $MSG_Server_Time ?>:<span id=nowdate><?php echo date("Y-m-d H:i:s")?></span></span>

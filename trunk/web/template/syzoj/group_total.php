@@ -16,9 +16,14 @@
                                 echo "<option value='".htmlentities($group)."' ". ($group==$group_name?"selected":"") ."   >$group</option>";
                         }
                 ?>
-        </select> <button onclick="$('body').html($('#statistics').parent().html()).css('overflow','scroll');">FullScreen</button>
+        </select>
+		
+        <span class='ui button primary' onclick="$('body').html($('#statistics').parent().html()).css('overflow','scroll');">FullScreen</span>
+        <span id="swapButton" type=button class='ui button red' > 矩阵转置/行列转换 </span>
+        <a class='ui button green'  href="?group_name=<?php echo htmlentities($group_name)?>&down"><?php echo $MSG_DOWNLOAD ?></a>
+	&nbsp;  &nbsp;  &nbsp;  &nbsp; <a href="javascript:history.go(-1);" >Back</a>
+
 	
-        <a href="?group_name=<?php echo htmlentities($group_name)?>&down&spa"><?php echo $MSG_DOWNLOAD ?></a> &nbsp;  &nbsp;  &nbsp;  &nbsp; <a href="javascript:history.go(-1);" >Back</a>
 </form>
         <center>
 <?php }
@@ -79,6 +84,38 @@ if(!empty($plista)){
 		
 
 </center>
+<button id="swapButton">矩阵转置/行列转换</button>	
+
+<script>
+$(document).ready(function() {
+    $('#swapButton').click(function() {
+        var originalTable = $('#statistics');
+        var newTable = $('<table class="ui table striped"></table>');
+
+        // Get all rows from the original table
+        var rows = originalTable.find('tr');
+        var row_count=rows.length;
+        var col_count = $(rows[0]).find("th,td").length;
+        console.log("row_count:"+row_count);
+        console.log("col_count:"+col_count);
+        // Create a new row for each column
+        for(let i=0;i<col_count;i++){
+                var newRow = $('<tr></tr>');
+                for(let index=0;index<row_count;index++) {
+                        // Create a new cell and add it to the new row
+                    let cols=$(rows[index]).find('th,td');
+                    let html=$(cols[i]).html();
+                    var newCell = $('<td></td>').html(html);
+                    newRow.append(newCell);
+                }
+                newTable.append(newRow);
+        }
+        originalTable.replaceWith(newTable);
+    });
+});
+
+</script>
+
 <?php include("template/$OJ_TEMPLATE/footer.php");?>
 <script src="<?php echo $OJ_CDN_URL?>include/sortTable.js"></script>
       <script>

@@ -259,6 +259,7 @@ $MSG_ABSENT="Absent";
   $MSG_SHOW_TAGS="Show Tags";
   $MSG_SHOW_ALL_TAGS="All Tags";
   $MSG_RESERVED="Reserved";
+  $MSG_TABLE_TRANSPOSE="Table Transpose";
 
   $MSG_HELP_SEEOJ="ئالدىنىقى بەتكە قايتىش  ";
   $MSG_HELP_ADD_NEWS="باش بەتكە ئۇقتۇرۇش يېزىش";

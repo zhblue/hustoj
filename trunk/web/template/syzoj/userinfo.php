@@ -51,6 +51,7 @@
                     <div class="header"><?php echo $nick?></div>
                     <div class="meta">
                         <a class="group"><?php echo $school?></a>
+			<a class="group"><?php echo $group_name?></a>
                     </div>
                 </div>
                  <table class="table table-hover" style="width:100%">

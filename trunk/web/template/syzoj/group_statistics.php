@@ -15,6 +15,7 @@
 		?>
 	</select><a href="javascript:history.go(-1);" >Back</a> &nbsp;&nbsp;&nbsp;&nbsp; <a href="group_total.php?group_name=<?php echo htmlentities($group_name) ?>" >TotalView</a>
 	<input type=hidden name=list value='<?php echo $pids ?>' >
+	<span id="swapButton" type=button class='ui button red' > <?php echo $MSG_TABLE_TRANSPOSE ?> </span>
 </form>
 </div>
 <?php
@@ -61,8 +62,40 @@ if(!empty($result)){
       </tbody>
 </table>
 <?php } ?>
-
 </center>
+<script>
+        function setScale(scale) {
+            $(".label.mini").css("transform",`scale(${scale})`);
+        }
+
+$(document).ready(function() {
+    $('#swapButton').click(function() {
+        var originalTable = $('#statistics');
+        var newTable = $('<table id=statistics class="ui table striped"></table>');
+
+        // Get all rows from the original table
+        var rows = originalTable.find('tr');
+        var row_count=rows.length;
+        var col_count = $(rows[0]).find("th,td").length;
+        console.log("row_count:"+row_count);
+        console.log("col_count:"+col_count);
+        // Create a new row for each column
+        for(let i=0;i<col_count;i++){
+                var newRow = $('<tr></tr>');
+                for(let index=0;index<row_count;index++) {
+                        // Create a new cell and add it to the new row
+                    let cols=$(rows[index]).find('th,td');
+                    let html=$(cols[i]).html();
+                    var newCell = $('<td></td>').html(html);
+                    newRow.append(newCell);
+                }
+                newTable.append(newRow);
+        }
+        originalTable.replaceWith(newTable);
+    });
+});
+</script>
+
 <?php include("template/$OJ_TEMPLATE/footer.php");?>
 <script src="<?php echo $OJ_CDN_URL?>include/sortTable.js"></script>
       <script>
