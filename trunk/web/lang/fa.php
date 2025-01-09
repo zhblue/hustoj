@@ -242,6 +242,7 @@
   $MSG_SHOW_TAGS="Show Tags";
   $MSG_SHOW_ALL_TAGS="All Tags";
   $MSG_RESERVED="Reserved";
+  $MSG_TABLE_TRANSPOSE="Table Transpose";
 
   $MSG_HELP_SEEOJ="watch the front pages";
   $MSG_HELP_ADD_NEWS="add news for the homepage";
