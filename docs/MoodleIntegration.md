@@ -137,3 +137,6 @@ DELIMITER ;
 当学生在hustoj中提交代码，moodle将在作业里同步显示他们的最新成绩。
 
 ![](images/moddle.png)
+
+
+另外有知乎贴：[打通hustoj和moodle，构建多功能信息学竞赛系统](https://zhuanlan.zhihu.com/p/626006464) [相关代码](https://github.com/zhblue/hustoj/blob/master/docs/moodle-hustoj.zip)
