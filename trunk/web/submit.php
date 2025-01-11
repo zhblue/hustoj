@@ -106,7 +106,7 @@ if (isset($_POST['id'])) {
 else if (isset($_POST['pid']) && isset($_POST['cid']) && $_POST['cid']!=0) {
 
   //check user if private
-  $sql = "SELECT `private`,langmask,title FROM `contest` WHERE `contest_id`=? AND `start_time`<=? AND `end_time`>? ";
+  $sql = "select `private`,langmask,title FROM `contest` WHERE `contest_id`=? AND `start_time`<=? AND `end_time`>? ";
   //"SELECT `private`,langmask FROM `contest` WHERE `contest_id`=? AND `start_time`<=? AND `end_time`>?";
   //$result = pdo_query($sql, $cid, $now, $now);
 
@@ -120,9 +120,10 @@ else if (isset($_POST['pid']) && isset($_POST['cid']) && $_POST['cid']!=0) {
   }
   else {
     $row = $result[0];
-    $isprivate = intval($row[0]);
-    $langmask = $row[1];
-    $title = $row[2];
+    $isprivate = intval($row['private']);
+    $langmask = $row['langmask'];
+    $title = $row['title'];
+
 
     if ($isprivate==1 && !isset($_SESSION[$OJ_NAME.'_'.'c'.$cid])) {
       $sql = "SELECT count(*) FROM `privilege` WHERE `user_id`=? AND `rightstr`=?";
