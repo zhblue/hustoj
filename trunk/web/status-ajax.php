@@ -64,7 +64,7 @@ if (!empty($result)) {
 			
 			 if ($contest_id>0 && $row['problem_id']>0) {
 				$result = pdo_query("select title from contest where contest_id=?",$contest_id);
-				$contest_title = $result[0][0];
+				$contest_title = $result[0]['title'];
 				if (stripos($contest_title,$OJ_NOIP_KEYWORD)!==false) {
 					echo "$OJ_NOIP_KEYWORD";
 					exit(0);
