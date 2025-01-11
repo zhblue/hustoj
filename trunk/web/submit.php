@@ -112,11 +112,10 @@ else if (isset($_POST['pid']) && isset($_POST['cid']) && $_POST['cid']!=0) {
   //$result = pdo_query($sql, $cid, $now, $now);
 
   $result = mysql_query_cache($sql, $cid, $now, $now);
-  $rows_cnt = count($result);
+  
 
-  if ($rows_cnt != 1) {
+  if (empty($result)) {
     $view_errors .= $MSG_NOT_IN_CONTEST;
-
     require "template/" . $OJ_TEMPLATE . "/error.php";
     exit(0);
   }
@@ -144,14 +143,11 @@ else if (isset($_POST['pid']) && isset($_POST['cid']) && $_POST['cid']!=0) {
   $sql = "SELECT `problem_id` FROM `contest_problem` WHERE `contest_id`=? AND `num`=?";
   $result = pdo_query($sql, $cid, $pid);
 
-  $rows_cnt = count($result);
-
-  if ($rows_cnt != 1) {
+  if (empty($result)) {
     $view_errors = $MSG_NO_PROBLEM."\n";
     require "template/".$OJ_TEMPLATE."/error.php";
     exit(0);
-  }
-  else {
+  }else {
     $row = $result[0];
     $id = intval($row['problem_id']);
     
