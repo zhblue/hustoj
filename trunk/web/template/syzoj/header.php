@@ -2,12 +2,12 @@
         require_once(dirname(__FILE__)."/../../include/memcache.php");
         function checkmail(){  // check if has mail
           global $OJ_NAME;
-          $sql="SELECT count(1) FROM `mail` WHERE new_mail=1 AND `to_user`=?";
+          $sql="select count(1) cnt FROM `mail` WHERE new_mail=1 AND `to_user`=?";
           $result=pdo_query($sql,$_SESSION[$OJ_NAME.'_'.'user_id']);
-          if(!$result) return false;
+          if(empty($result)) return false;
           $row=$result[0];
           //if(intval($row[0])==0) return false;
-          $retmsg="<span id=red>(".$row[0].")</span>";
+          $retmsg="<span id=red>(".$row['cnt'].")</span>";
           return $retmsg;
         }
 
