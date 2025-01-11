@@ -62,10 +62,9 @@ if (!empty($result)) {
 		else if(( isset($OJ_PUBLIC_STATUS) && $OJ_PUBLIC_STATUS ) ||( isset($_SESSION[$OJ_NAME.'_'.'user_id']) && $_SESSION[$OJ_NAME.'_'.'user_id']== $row['user_id']) || isset($_SESSION[$OJ_NAME.'_'.'source_browser'])  ) {
 			$contest_id = $row['contest_id'];
 			
-			if ($contest_id>0) {
+			 if ($contest_id>0 && $row['problem_id']>0) {
 				$result = pdo_query("select title from contest where contest_id=?",$contest_id);
 				$contest_title = $result[0][0];
-				
 				if (stripos($contest_title,$OJ_NOIP_KEYWORD)!==false) {
 					echo "$OJ_NOIP_KEYWORD";
 					exit(0);
