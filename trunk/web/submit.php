@@ -24,11 +24,10 @@ $user_id = $_SESSION[$OJ_NAME.'_'.'user_id'];
 $language = intval($_POST['language']);
 
 if (!$OJ_BENCHMARK_MODE) {
-  $sql = "SELECT count(1) FROM `solution` WHERE result<4";
+  $sql = "select count(1) cnt FROM `solution` WHERE result<4";
   $result = mysql_query_cache($sql);
   $row = $result[0];
-
-  if ($row[0] > 50) {
+  if ($row['cnt'] > 50) {
     $OJ_VCODE = true;
   }
 
@@ -317,11 +316,11 @@ if (!$OJ_BENCHMARK_MODE) {
 }
 
 if (~$OJ_LANGMASK&(1<<$language)) {
-  $sql = "SELECT nick FROM users WHERE user_id=?";
+  $sql = "select nick FROM users WHERE user_id=?";
   $nick = pdo_query($sql, $user_id);
 	
   if (!empty($nick)) {
-    $nick = $nick[0][0];
+    $nick = $nick[0]['nick'];
   }else{
     $nick = "Guest";
   }
