@@ -1,12 +1,12 @@
 #!/bin/bash
-cd /home/judge/git
+cd /home/judge/
+git clone https://gitbub.com/zhblue/hustoj.git git
+cd git
 git pull .
-
-echo "SVN not available from github any more "
-echo "using 'sudo bash fixing.sh' to get update from dl.hustoj.com "
-cd /home/judge/src/install
-sudo bash fixing.sh
-exit 1
+cd ..
+cp /home/judge/src/web/include/db_info.inc.php /home/judge/old.inc.php
+cp -r git/trunk/* /home/judge/src/
+bash /home/judge/src/install/merge.sh /home/judge/old.inc.php /home/judge/src/web/include/db_info.inc.php
 
 cd /home/judge/src/core
 pkill -9 judged
