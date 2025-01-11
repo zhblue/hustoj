@@ -82,7 +82,7 @@ if(!$test_run){
 	  exit(0);
 	}
 }
-if ($res[0][1]!='N' && !($test_run||isset($_SESSION[$OJ_NAME.'_'.'administrator']))) {
+if ((!empty($res) ) && $res[0][1]!='N' && !($test_run||isset($_SESSION[$OJ_NAME.'_'.'administrator']))) {
    // echo "res:$res,count:".count($res);
    //  echo "$sql";
   $view_errors = $MSG_PROBLEM_RESERVED."<br>";
@@ -203,9 +203,14 @@ if ($test_run) {
   $id = -$id;
 }
 
-$tempfile = $_FILES ["answer"] ["tmp_name"];
-$len=$_FILES['answer']['size'];
-if($tempfile!=""){
+if(!empty($_FILES)){
+        $tempfile = $_FILES ["answer"] ["tmp_name"];
+        $len=$_FILES['answer']['size'];
+        $origin_name=trim($_FILES ["answer"]['name']);
+}else{
+        $origin_name="not upload";
+}
+if(isset($tempfile)&&$tempfile!=""){
 	if($language!=23){
 		if ($len > 65536) {
 			  $view_errors = $MSG_TOO_LONG."<br>";
@@ -219,7 +224,6 @@ if($tempfile!=""){
 		$source="Main.sb3";
 	}
 }
-$origin_name=trim($_FILES ["answer"]['name']);
 $solution_file = "$OJ_DATA/$id/solution.name";
 if(file_exists($solution_file)){
         $solution_name=trim(file_get_contents($solution_file));
