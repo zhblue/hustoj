@@ -323,13 +323,14 @@ if (!$OJ_BENCHMARK_MODE) {
 if (~$OJ_LANGMASK&(1<<$language)) {
   $sql = "SELECT nick FROM users WHERE user_id=?";
   $nick = pdo_query($sql, $user_id);
-
-  if ($nick) {
+	
+  if (!empty($nick)) {
     $nick = $nick[0][0];
-  }
-  else {
+  }else{
     $nick = "Guest";
   }
+  if(empty($nick)) $nick=$user_id;
+
 
   if (!isset($pid)) {
     $sql = "INSERT INTO solution(problem_id,user_id,nick,in_date,language,ip,code_length,result) VALUES(?,?,?,NOW(),?,?,?,14)";
