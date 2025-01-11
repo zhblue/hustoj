@@ -1,14 +1,16 @@
 #!/bin/bash
+export DATE=`date +%Y%m%d%H%M`
 cd /home/judge/
 git clone https://gitbub.com/zhblue/hustoj.git git
 cd git
 git pull .
 cd ..
 cp /home/judge/src/web/include/db_info.inc.php /home/judge/old.inc.php
-cp -r git/trunk/* /home/judge/src/
-bash /home/judge/src/install/merge.sh /home/judge/old.inc.php /home/judge/src/web/include/db_info.inc.php
-
-cd /home/judge/src/core
+mv src "old.$DATE"
+cp -r git/trunk src
+bash /home/judge/src/install/merge.sh old.inc.php src/web/include/db_info.inc.php
+cp -r old.$DATE/web/upload/* src/web/upload/
+cd src/core
 pkill -9 judged
 bash make.sh
 cd ../install
