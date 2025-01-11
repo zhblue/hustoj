@@ -152,13 +152,14 @@ Star us, please!
 <details open>
 <summary><b>2025年</b></summary>
 	
-日期  | 类型 |  更新内容
-------- | :--: | :-------
-01-07 | 更新 | 增加矩阵转置按钮。
-01-06 | 更新 | 增加全局题单班组(group_name)统计显示页group_total.php 。
-01-04 | 更新 | 增加题单的班组(group_name)统计显示页group_statistics.php 。
-01-02 | 更新 | 允许新闻用importance字段排序，允许双击修改importance。
-01-01 | 预定 | 新年好！
+日期  | 类型 |  更新内容 | 图
+------- | :--:  | :--: | :-------
+01-07 | 更新 | 增加矩阵转置按钮。| ![image](https://github.com/user-attachments/assets/835135b0-72d8-4515-8df1-070835689a9b)
+01-06 | 更新 | 增加全局题单班组(group_name)统计显示页group_total.php 。 | ![image](https://github.com/user-attachments/assets/86d8f6ca-dd11-4336-964f-907cac988f54)
+01-04 | 更新 | 增加题单的班组(group_name)统计显示页group_statistics.php 。 |  ![image](https://github.com/user-attachments/assets/3173e20a-df5c-4588-9b74-60564c6c1975)
+01-02 | 更新 | 允许新闻用importance字段排序，允许双击修改importance。| ![image](https://github.com/user-attachments/assets/fb20d0bd-5ef9-4d73-893f-575487d16131)
+01-01 | 预定 | 新年好！| ![image](https://github.com/user-attachments/assets/23d4fb3c-b324-46fa-a482-2cad341e5e1f)
+
 
 
 <details>
