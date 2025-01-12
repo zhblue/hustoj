@@ -145,8 +145,6 @@ $Rank=intval($row[0])+1;
  if (isset($_SESSION[$OJ_NAME.'_'.'administrator'])){
 $sql="select user_id,password,ip,`time` FROM `loginlog` WHERE `user_id`=? order by `time` desc LIMIT 0,50";
 $view_userinfo=mysql_query_cache($sql,$user) ;
-echo "</table>";
-
 }
 $sql="select result,count(1) FROM solution WHERE `user_id`=? AND result>=4 $not_in_noip group by result order by result";
 	$result=mysql_query_cache($sql,$user);
