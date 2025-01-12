@@ -38,13 +38,9 @@
                  ?>
                 <tr><td class="ip">
                 <?php $l = $ip->getlocation($u['ip']);
-                   
-                    echo $u->ip.'<br />';
-                    if(strlen(trim($l['area']))==0)
-                        echo $l['country'];
-                    else
-                        echo $l['area'].'@'.$l['country'];
-                    ?></td><td><?php echo $u->uri?></td><td><?php echo $u['refer']?></td>
+                                echo $u['ip'].'<br />';
+                                if(!empty($l)) echo $l;  ?>
+                </td><td><?php echo $u->uri?></td><td><?php echo $u['refer']?></td>
                 <td class="time"><?php echo sprintf("%dmin %dsec",($u['lastmove']-$u['firsttime'])/60,($u['lastmove']-$u['firsttime']) % 60)?></td><td><?php echo $u['ua']?></td></tr>
                 <?php 
                 }
