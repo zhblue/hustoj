@@ -4,9 +4,7 @@ require_once('./include/const.inc.php');
 require_once('./include/memcache.php');
 require_once('./include/setlang.php');
 require_once('./include/curl.php');
-
 $view_title = $MSG_SUBMIT;
-
 if (!isset($_SESSION[$OJ_NAME.'_'.'user_id'])){
 	if (isset($OJ_GUEST) && $OJ_GUEST) {
 		$_SESSION[$OJ_NAME.'_'.'user_id'] = "Guest";
@@ -36,14 +34,12 @@ else {
 	require("template/".$OJ_TEMPLATE."/error.php");
 	exit(0);
 }
-
 $view_src = "";
 $lastlang = 1;
 if (isset($_GET['sid'])) {
   $sid = intval($_GET['sid']);
 	$sql = "SELECT * FROM `solution` WHERE `solution_id`=?";
 	$result = pdo_query($sql,$sid);
-
 	$row = $result[0];
 	$cid = intval($row['contest_id']);
 	$sproblem_id= intval($row['problem_id']);
@@ -62,17 +58,12 @@ if (isset($_GET['sid'])) {
 				$now=time();
 				if( $end_time < $now ){ // 当前提交，属于已经结束的比赛，考察是否有进行中的比赛在使用。
 					$need_check_using=true;
-					
-				}else{			// 属于进行中的比赛，可以看
-							
-		//			echo $now.'-'.$end_time;
+				}else{			// 属于进行中的比赛，可以看		
 					$need_check_using=false;
-				
 				}
 			}
-
 		}else{ //非比赛提交.考察是否有进行中的比赛在使用
-		//			echo $now.'+'.$end_time;
+		//	echo $now.'+'.$end_time;
 			if(isset($_SESSION[$OJ_NAME.'_'.'source_browser']))
 				$need_check_using=false;
 			else
