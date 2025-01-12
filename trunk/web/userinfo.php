@@ -1,19 +1,20 @@
 <?php
  $cache_time=10; 
  $OJ_CACHE_SHARE=false;
-	require_once('./include/cache_start.php');
-        require_once('./include/db_info.inc.php');
-	require_once('./include/setlang.php');
-	require_once("./include/const.inc.php");
-	require_once("./include/my_func.inc.php");
+	require_once('include/cache_start.php');
+        require_once('include/db_info.inc.php');
+	require_once('include/setlang.php');
+	require_once("include/const.inc.php");
+	require_once("include/my_func.inc.php");
 	require_once("include/memcache.php");
-
+        require_once("include/iplocation.php");
  // check user
 $user=$_GET['user'];
 if (!is_valid_user_name($user)){
 	echo "No such User!";
 	exit(0);
 }
+$iplocation = new IpLocation();
 
 function extractPlistBlocks($inputString) {
     // 定义正则表达式模式
