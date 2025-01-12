@@ -196,7 +196,7 @@ class IpLocation
         }
         $location["country"] = iconv("GB2312", "UTF-8", $location["country"]);
         $location["area"] = iconv("GB2312", "UTF-8", $location["area"]);
-        return $location;
+        return $location["country"].$location["area"];
     }
     /**
      * 构造函数，打开 QQWry.Dat 文件并初始化类中的信息
