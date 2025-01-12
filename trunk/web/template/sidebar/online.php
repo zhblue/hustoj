@@ -33,12 +33,8 @@
 		?>
 		<tr>
 			<td><?php $l = $ip->getlocation($u['ip']);
-				echo $u['ip'].'<br />';
-				if(strlen(trim($l['area']))==0)
-					echo $l['country'];
-				else
-					echo $l['area'].'@'.$l['country'];
-		            ?>
+                                echo $u['ip'].'<br />';
+                                if(!empty($l)) echo $l;  ?>
 			</td>
 			<td><?php echo $u['uri']?></td>
 			<td><?php echo $u['refer']?></td>
