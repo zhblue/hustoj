@@ -7,6 +7,25 @@ if (!function_exists('str_contains')) {
         return empty($needle) || strpos($haystack, $needle) !== false;
     }
 }
+function ip_to_integer($ip) {
+    // 使用 ip2long 函数将 IP 地址转换为整数
+    return ip2long($ip);
+}
+
+function is_ip_in_subnet($ip, $subnet) {
+    list($subnet_ip, $mask) = explode('/', $subnet);
+
+    // 将子网的 IP 地址和掩码转换为整数
+    $subnet_ip_int = ip_to_integer($subnet_ip);
+    $mask_int = ip_to_integer(str_repeat('255.', $mask - 1) . str_pad('', $mask % 8, '255', STR_PAD_LEFT));
+
+    // 将给定的 IP 地址转换为整数
+    $ip_int = ip_to_integer($ip);
+
+    // 检查给定的 IP 地址是否在子网的范围内
+    return ($ip_int & $mask_int) == ($subnet_ip_int & $mask_int);
+}
+
 function getMappedSpecial($user_id) {
         $map=[
             '0701' => '人智',
