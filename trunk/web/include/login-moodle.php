@@ -29,6 +29,7 @@
 			if($row&&$password==$row[0]){
 				$ret=$user_id;
 			}
+			$sth->closeCursor();
 		}
 		
 		return $ret; 
