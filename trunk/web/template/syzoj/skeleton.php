@@ -1,7 +1,7 @@
 <?php $show_title="$view_title - $OJ_NAME"; ?>
 <?php include("template/$OJ_TEMPLATE/header.php");?>
 <div class='padding'>
-<h1><?php echo "Hello skeleton" ?></h1>
+<h1><?php echo  $view_title ?></h1>
 
 <span class="md">
 	<?php echo $view_content; ?> 
