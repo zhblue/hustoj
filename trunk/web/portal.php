@@ -7,7 +7,7 @@
         $now =  date('Y-m-d H:i', time());
 	if(isset($_SESSION[$OJ_NAME.'_user_id'])){  //如果用户已经登录
 		$user_id=$_SESSION[$OJ_NAME.'_user_id'];
-		$show_title="Hello ".$_SESSION[$OJ_NAME.'_user_id']."!";
+		$show_title = $MSG_TODO." - ".$OJ_NAME;
 		$sub_arr = Array(); //已经提交的题目号
 		$acc_arr = Array(); //已经通过的题目号
 		if (isset($_SESSION[$OJ_NAME.'_'.'user_id'])){ 
