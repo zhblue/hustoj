@@ -8,7 +8,7 @@ require_once( './include/db_info.inc.php' );
 require_once( './include/memcache.php' );
 require_once( './include/setlang.php' );
 require_once( './include/bbcode.php' );
-$view_title = "Hello skeleton";
+$view_title = "Hello skeleton <br> 每增加一个公式就少一半读者, 每依赖一种框架就少一半开发者。";
 
 //演示如何查询数据库
 $sql="select count(1) cnt from users where defunct=? ";
