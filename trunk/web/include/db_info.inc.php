@@ -5,6 +5,7 @@
 //for people using hustoj out of China , try using translator program with the comments
 // 本文件是系统配置文件，全局包含，修改时请慎重保存，千万不要少分号，少引号，出现语法错误可导致全站无法打开。
 // 若遇到此种情况，可以备份后删除本文件，用/home/judge/src/install/fixing.sh脚本修复生成。
+// $DB_PASS="xxxx"; 里面放的密码是安装是随机生成的，请不要泄露，最好也不要随意修改为低强度的其他密码，您在linux命令行可以用sudo mysql直接以root身份登录mysql。
 // connect db 
 static 	$DB_HOST="localhost";  //数据库服务器ip或域名
 static 	$DB_NAME="jol";   //数据库名
