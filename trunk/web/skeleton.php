@@ -33,8 +33,12 @@ $view_content.="\n\n当前有效用户: $cnt 人";
 
 // 执行当前模板下同名的视图页
 /////////////////////////Template
-require( "template/" . $OJ_TEMPLATE . "/".basename(__FILE__));
-
+if(file_exists("template/" . $OJ_TEMPLATE . "/".basename(__FILE__))){
+        require( "template/" . $OJ_TEMPLATE . "/".basename(__FILE__));
+}else{
+        $view_errors=$view_content;
+        require( "template/" . $OJ_TEMPLATE . "/error.php");
+}
 // 缓存结束
 /////////////////////////Common foot
 if ( file_exists( './include/cache_end.php' ) )
