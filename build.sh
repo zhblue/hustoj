@@ -1,6 +1,6 @@
 #!/bin/sh
 
-sudo apt-get install debhelper
+sudo apt-get -y install debhelper build-essential:native
 set -ex \
 && git clone https://github.com/zhblue/hustoj.git \
 && git clone https://github.com/zhblue/hustoj-deb-ubuntu.git \
