@@ -4,7 +4,7 @@
 	//require_once('./include/cache_start.php');
         require_once('./include/db_info.inc.php');
 	require_once('./include/setlang.php');
-	$view_title= "Welcome To Online Judge";
+	$view_title= "Modify Userinfo";
 	//require_once("./include/check_post_key.php");
 	require_once("./include/my_func.inc.php");
 if(
@@ -24,7 +24,7 @@ $school=trim($_POST['school']);
 $nick=trim($_POST['nick']);
 $len=strlen($nick);
 if ($len>100){
-	$err_str=$err_str."Nick Name Too Long!";
+	$err_str=$err_str."$MSG_NICK $MSG_TOO_LONG !";
 	$err_cnt++;
 }else if ($len==0) $nick=$user_id;
 $password=$_POST['opassword'];
@@ -35,38 +35,38 @@ if ($row && pwCheck($password,$row['password'])) $rows_cnt = 1;
 else $rows_cnt = 0;
 
 if ($rows_cnt==0){
-	$err_str=$err_str."Old Password Wrong";
+	$err_str=$err_str."$MSG_OLD $MSG_PASSWORD $MSG_WRONG";
 	$err_cnt++;
 }
 $len=strlen($_POST['npassword']);
 if (too_simple($_POST['npassword'])){
 	$err_cnt++;
-	$err_str=$err_str."Password too simple !\\n";
+	$err_str=$err_str."$MSG_PASSWORD $MSG_TOO_SIMPLE !\\n";
 }else if (strcmp($_POST['npassword'],$_POST['rptpassword'])!=0){
-	$err_str=$err_str."Two Passwords Not Same!";
+	$err_str=$err_str."$MSG_REPEAT_PASSWORD $MSG_DIFFERENT !";
 	$err_cnt++;
 }
 $len=strlen($_POST['school']);
 if ($len>100){
-	$err_str=$err_str."School Name Too Long!";
+	$err_str=$err_str."$MSG_SCHOOL $MSG_TOO_LONG!";
 	$err_cnt++;
 }
 $len=strlen($_POST['email']);
 if ($len>100){
-	$err_str=$err_str."Email Too Long!";
+	$err_str=$err_str."$MSG_EMAIL $MSG_TOO_LONG!";
 	$err_cnt++;
 }
 
 if(has_bad_words($user_id)){
-        $err_str=$err_str.$MSG_USER_ID." Too Bad!\\n";
+        $err_str=$err_str.$MSG_USER_ID." $MSG_TOO_BAD!\\n";
         $err_cnt++;
 }
 if(has_bad_words($school)){
-        $err_str=$err_str.$MSG_SCHOOL." Too Bad!\\n";
+        $err_str=$err_str.$MSG_SCHOOL." $MSG_TOO_BAD!\\n";
         $err_cnt++;
 }
 if(has_bad_words($nick)){
-        $err_str=$err_str.$MSG_NICK." Too Bad!\\n";
+        $err_str=$err_str.$MSG_NICK." $MSG_TOO_BAD!\\n";
         $err_cnt++;
 }
 if ($err_cnt>0){
