@@ -7,7 +7,7 @@ if (!function_exists('str_contains')) {
         return empty($needle) || strpos($haystack, $needle) !== false;
     }
 }
-function too_simple($password) {
+function too_simple($password,$level=3 ) {
     // 初始化计数器
     $conditionsMet = 0;
     // 长度要求（至少8个字符）
@@ -30,8 +30,8 @@ function too_simple($password) {
     if (preg_match('/[!@#$%^&*(),.?":{}|<>]/', $password)) {
         $conditionsMet++;
     }
-    // 如果符合的条件数小于4，则认为密码过于简单
-    return $conditionsMet < 4;
+    // 如果符合的条件数小于3，则认为密码过于简单
+    return $conditionsMet < $level;
 }
 function ip_to_integer($ip) {
     // 使用 ip2long 函数将 IP 地址转换为整数
