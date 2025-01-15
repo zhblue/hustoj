@@ -127,7 +127,13 @@
  $MSG_ACTIVE_YOUR_ACCOUNT="Active Your Account ";
  $MSG_CLICK_COPY="Click or Copy the LINK to open in browser ";
  $MSG_CHECK="Check out ";
-
+ $MSG_OLD="舊";
+ $MSG_DIFFERENT="不一致";
+ $MSG_WRONG="錯誤";
+ $MSG_TOO_LONG="太長";
+ $MSG_TOO_SHORT="太短";
+ $MSG_TOO_SIMPLE="太簡單";
+ $MSG_TOO_BAD="請文明上網";
  //problem.php
  $MSG_NO_SUCH_PROBLEM ="題目當前不可用!<br>它可能被用於未來的比賽、過去的私有比賽，或者管理員由於尚未測試通過等其他原因暫時停止了該題目用於練習。 ";
  $MSG_Description ="題目描述" ;
