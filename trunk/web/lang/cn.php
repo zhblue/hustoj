@@ -135,7 +135,9 @@
         $MSG_ACTIVE_YOUR_ACCOUNT="激活账号";
         $MSG_CLICK_COPY="点击或者复制访问链接";
         $MSG_CHECK="检查";
+        $MSG_OLD="旧";
         $MSG_DIFFERENT="不一致";
+        $MSG_WRONG="错误";
         $MSG_TOO_LONG="太长";
         $MSG_TOO_SHORT="太短";
 	$MSG_TOO_SIMPLE="太简单";
