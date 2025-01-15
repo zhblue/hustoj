@@ -8,13 +8,13 @@
 <div class="padding">
     <div class="ui three column grid">
         <div class="eleven wide column">
-            <?php if(file_exists("image/1.jpg")){ ?>
-            <h4 class="ui top attached block header" style='margin-top: 10px;'><i class="th icon"></i>轮播图</h4>
+            <?php if(file_exists("image/slide1.jpg")){ ?>
+            <h4 class="ui top attached block header" style='margin-top: 10px;'><i class="th icon"></i><?php echo $OJ_NAME ?></h4>
             <div class="ui bottom attached center aligned segment carousel">
                 <div class="carousel-arrow left" onclick="prevSlide()">&lt;</div> <!-- 左箭头 -->
-                <div class="carousel-slide active" style="background-image: url('image/1.jpg')"></div>
-                <div class="carousel-slide" style="background-image: url('image/2.jpg')"></div>
-                <div class="carousel-slide" style="background-image: url('image/3.jpg')"></div>
+                <?php for($i=1;file_exists("image/slide$i.jpg");$i++){ ?>
+                <div class="carousel-slide <?php if($i==1) echo "active";?>" style="background-image: url('image/slide<?php echo $i ?>.jpg')"></div>
+                <?php } ?>
                 <div class="carousel-arrow right" onclick="nextSlide()">&gt;</div> <!-- 右箭头 -->
                 <div class="carousel-dots">
                     <span class="carousel-dot active" data-index="0"></span>
@@ -23,6 +23,7 @@
                 </div>
             </div>
             <?php } ?>
+
             <h4 class="ui top attached block header"><i class="ui info icon"></i><?php echo $MSG_NEWS;?></h4>
             <div class="ui bottom attached segment">
                 <table class="ui very basic table">
