@@ -127,6 +127,13 @@
  $MSG_ACTIVE_YOUR_ACCOUNT="Active Your Account ";
  $MSG_CLICK_COPY="Click or Copy the LINK to open in browser ";
  $MSG_CHECK="Check out ";
+	$MSG_OLD="Old";
+	$MSG_DIFFERENT="Different";
+	$MSG_WRONG="Wrong";
+	$MSG_TOO_LONG="Too long";
+	$MSG_TOO_SHORT="Too short";
+	$MSG_TOO_SIMPLE="Too simple";
+	$MSG_TOO_BAD="Please surf the internet in a civilized manner";
 
  //проблема.php
  $MSG_NO_SUCH_PROBLEM =" Проблема в настоящее время недоступна!<br>Она может быть использована для будущих соревнований, прошлых частных соревнований, или администратор временно остановил вопрос для практики по другим причинам, например, из-за того, что тест еще не пройден. ";
