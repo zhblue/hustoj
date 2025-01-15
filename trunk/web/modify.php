@@ -39,9 +39,9 @@ if ($rows_cnt==0){
 	$err_cnt++;
 }
 $len=strlen($_POST['npassword']);
-if ($len<6 && $len>0){
+if (too_simple($_POST['npassword'])){
 	$err_cnt++;
-	$err_str=$err_str."Password should be Longer than 6!\\n";
+	$err_str=$err_str."Password too simple !\\n";
 }else if (strcmp($_POST['npassword'],$_POST['rptpassword'])!=0){
 	$err_str=$err_str."Two Passwords Not Same!";
 	$err_cnt++;
