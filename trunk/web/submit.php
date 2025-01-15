@@ -60,13 +60,13 @@ if (isset($_POST['cid'])) {
   if($test_run) $cid =-$cid ;
   $_GET['cid']=$cid;
   require_once("contest-check.php");
-  $sql = "SELECT `problem_id`,'N' FROM `contest_problem` WHERE `num`='$pid' AND contest_id=$cid";
+  $sql = "select `problem_id`,'N' defunct  FROM `contest_problem` WHERE `num`='$pid' AND contest_id=$cid";
 
 }
 else {
   $id = intval($_POST['id']);
   $test_run = $id<=0;
-  $sql = "SELECT `problem_id`,defunct FROM `problem` WHERE `problem_id`='$id' ";
+  $sql = "select `problem_id`,defunct FROM `problem` WHERE `problem_id`='$id' ";
     
   if(!($test_run||isset($_SESSION[$OJ_NAME.'_'.'administrator'])))
     $sql .= " and defunct='N'";
@@ -81,7 +81,7 @@ if(!$test_run){
 	  exit(0);
 	}
 }
-if ((!empty($res) ) && $res[0][1]!='N' && !($test_run||isset($_SESSION[$OJ_NAME.'_'.'administrator']))) {
+if ((!empty($res) ) && $res[0]['defunct']!='N' && !($test_run||isset($_SESSION[$OJ_NAME.'_'.'administrator']))) {
    // echo "res:$res,count:".count($res);
    //  echo "$sql";
   $view_errors = $MSG_PROBLEM_RESERVED."<br>";
