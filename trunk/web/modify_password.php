@@ -34,9 +34,9 @@ if ($rows_cnt==0){
 	$err_cnt++;
 }
 $len=strlen($_POST['new1-password']);
-if ($len<6 && $len>0){
+if (too_simple($_POST['new1-password'])){
 	$err_cnt++;
-	$err_str=$err_str."密码长度至少6位\\n";
+	$err_str=$err_str."密码太简单\\n";
 }else if (strcmp($_POST['new1-password'],$_POST['new2-password'])!=0){
 	$err_str=$err_str."密码不一致！";
 	$err_cnt++;
