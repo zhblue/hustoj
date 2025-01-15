@@ -20,38 +20,38 @@ if($OJ_VCODE&&($vcode!= $_SESSION[$OJ_NAME.'_'."vcode"]||$vcode==""||$vcode==nul
 	$_SESSION[ $OJ_NAME . '_' . "vfail" ]=true;
 }
 if($OJ_LOGIN_MOD!="hustoj"){
-	$err_str=$err_str."System do not allow register.\\n";
+	$err_str=$err_str."$MSG_SYSTEM $MSG_DISABLE $MSG_REGISTER \\n";
 	$err_cnt++;
 }
 
 if($len>48){ 
-	$err_str=$err_str."User ID Too Long!\\n";
+	$err_str=$err_str."$MSG_USER_ID $MSG_TOO_LONG !\\n";
 	$err_cnt++;
 }else if ($len<3){
 	$err_str=$err_str." $MSG_WARNING_USER_ID_SHORT\\n";
 	$err_cnt++;
 }
 if (!is_valid_user_name($user_id)){
-	$err_str=$err_str."User ID can only contain NUMBERs & LETTERs!\\n";
+	$err_str=$err_str."$MSG_USER_ID $MSG_WRONG !\\n";
 	$err_cnt++;
 }
 $nick=trim($_POST['nick']);
 $len=strlen($nick);
 if ($len>20){
-	$err_str=$err_str."Nick Name Too Long!\\n";
+	$err_str=$err_str."$MSG_NICK $MSG_TOO_LONG !\\n";
 	$err_cnt++;
 }else if ($len==0) $nick=$user_id;
 
 if(has_bad_words($user_id)){
-        $err_str=$err_str.$MSG_USER_ID." Too Bad!\\n";
+        $err_str=$err_str.$MSG_USER_ID."$MSG_TOO_BAD!\\n";
         $err_cnt++;
 }
 if(has_bad_words($school)){
-        $err_str=$err_str.$MSG_SCHOOL." Too Bad!\\n";
+        $err_str=$err_str.$MSG_SCHOOL." $MSG_TOO_BAD!\\n";
         $err_cnt++;
 }
 if(has_bad_words($nick)){
-        $err_str=$err_str.$MSG_NICK." Too Bad!\\n";
+        $err_str=$err_str.$MSG_NICK." $MSG_TOO_BAD!\\n";
         $err_cnt++;
 }
 
@@ -65,12 +65,12 @@ if (strlen($_POST['password'])<6){
 }
 $len=strlen($_POST['school']);
 if ($len>20){
-	$err_str=$err_str."School Name Too Long!\\n";
+	$err_str=$err_str."$MSG_SCHOOL $MSG_TOO_LONG!\\n";
 	$err_cnt++;
 }
 $len=strlen($_POST['email']);
 if ($len>100){
-	$err_str=$err_str."Email Too Long!\\n";
+	$err_str=$err_str."$MSG_EMAIL $MSG_TOO_LONG!\\n";
 	$err_cnt++;
 }
 if ($err_cnt>0){
@@ -87,13 +87,13 @@ $result=pdo_query($sql,$user_id);
 $rows_cnt=count($result);
 if ($rows_cnt == 1){
 	print "<script language='javascript'>\n";
-	print "alert('User Existed!\\n');\n";
+	print "alert('$MSG_USER_ID Existed!\\n');\n";
 	print "history.go(-1);\n</script>";
 	exit(0);
 }
 if ($domain==$DOMAIN && $OJ_NAME==$user_id){
         print "<script language='javascript'>\n";
-        print "alert('User Existed!\\n');\n";
+        print "alert('$MSG_USER_ID Existed!\\n');\n";
         print "history.go(-1);\n</script>";
         exit(0);
 }
