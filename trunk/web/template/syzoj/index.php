@@ -1,73 +1,16 @@
 <?php $show_title="$MSG_HOME - $OJ_NAME"; ?>
 <?php include("template/$OJ_TEMPLATE/header.php");?>
 <head>
-<style>
-     .carousel {
-            position: relative;
-            width: 100%;
-            height: 300px;
-            overflow: hidden;
-        }
-     .carousel-slide {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            background-size: cover;
-            background-repeat: no-repeat;
-            background-position: center;
-            opacity: 0;
-            transition: opacity 1s ease-in-out;
-        }
-     .carousel-slide.active {
-            opacity: 1;
-        }
-     .carousel-dots {
-            position: absolute;
-            bottom: 10px;
-            left: 50%;
-            transform: translateX(-50%);
-            display: flex;
-            z-index: 2;
-        }
-     .carousel-dot {
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            background-color: rgba(255, 255, 255, 0.5);
-            margin: 0 5px;
-            cursor: pointer;
-        }
-     .carousel-dot.active {
-            background-color: white;
-        }
-     .carousel-arrow {
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 30px;
-            height: 30px;
-            background-color: rgba(0, 0, 0, 0.5);
-            color: white;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            cursor: pointer;
-            font-size: 20px;
-            z-index: 2;
-        }
-     .carousel-arrow.left {
-            left: 10px;
-        }
-     .carousel-arrow.right {
-            right: 10px;
-        }
-</style>
+
+<link rel="stylesheet" href="<?php echo "template/$OJ_TEMPLATE";?>/css/slide.css">
+
 </head>
 <div class="padding">
     <div class="ui three column grid">
         <div class="eleven wide column">
+            <?php if(file_exists("image/1.jpg")){ ?>
             <h4 class="ui top attached block header" style='margin-top: 10px;'><i class="th icon"></i>轮播图</h4>
-                <div class="ui bottom attached center aligned segment carousel">
+            <div class="ui bottom attached center aligned segment carousel">
                 <div class="carousel-arrow left" onclick="prevSlide()">&lt;</div> <!-- 左箭头 -->
                 <div class="carousel-slide active" style="background-image: url('image/1.jpg')"></div>
                 <div class="carousel-slide" style="background-image: url('image/2.jpg')"></div>
@@ -79,6 +22,7 @@
                     <span class="carousel-dot" data-index="2"></span>
                 </div>
             </div>
+            <?php } ?>
             <h4 class="ui top attached block header"><i class="ui info icon"></i><?php echo $MSG_NEWS;?></h4>
             <div class="ui bottom attached segment">
                 <table class="ui very basic table">
@@ -238,8 +182,8 @@ if($NOIP_flag[0]==0)$view_month_rank=mysql_query_cache("select user_id,nick,coun
     </div>
 </div>
 <?php include("template/$OJ_TEMPLATE/footer.php");?>
-
-<script>
+<?php if(file_exists("image/1.jpg")){ ?>
+    <script>
         const slides = document.querySelectorAll('.carousel-slide');
         const dots = document.querySelectorAll('.carousel-dot');
         let currentIndex = 0;
@@ -292,7 +236,7 @@ if($NOIP_flag[0]==0)$view_month_rank=mysql_query_cache("select user_id,nick,coun
         carousel.addEventListener('mouseenter', () => clearInterval(autoPlayInterval));
         carousel.addEventListener('mouseleave', () => autoPlayInterval = setInterval(nextSlide, 5000));
     </script>
-    
+ <?php } ?>   
   <script language="javascript" type="text/javascript" src="<?php echo $OJ_CDN_URL?>include/jquery.flot.js"></script>
         <script type="text/javascript">
                 $( function () {
