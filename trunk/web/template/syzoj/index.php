@@ -1,8 +1,84 @@
 <?php $show_title="$MSG_HOME - $OJ_NAME"; ?>
 <?php include("template/$OJ_TEMPLATE/header.php");?>
+<head>
+<style>
+     .carousel {
+            position: relative;
+            width: 100%;
+            height: 300px;
+            overflow: hidden;
+        }
+     .carousel-slide {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center;
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+        }
+     .carousel-slide.active {
+            opacity: 1;
+        }
+     .carousel-dots {
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            z-index: 2;
+        }
+     .carousel-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.5);
+            margin: 0 5px;
+            cursor: pointer;
+        }
+     .carousel-dot.active {
+            background-color: white;
+        }
+     .carousel-arrow {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 30px;
+            height: 30px;
+            background-color: rgba(0, 0, 0, 0.5);
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            font-size: 20px;
+            z-index: 2;
+        }
+     .carousel-arrow.left {
+            left: 10px;
+        }
+     .carousel-arrow.right {
+            right: 10px;
+        }
+</style>
+</head>
 <div class="padding">
     <div class="ui three column grid">
         <div class="eleven wide column">
+            <h4 class="ui top attached block header" style='margin-top: 10px;'><i class="th icon"></i>轮播图</h4>
+                <div class="ui bottom attached center aligned segment carousel">
+                <div class="carousel-arrow left" onclick="prevSlide()">&lt;</div> <!-- 左箭头 -->
+                <div class="carousel-slide active" style="background-image: url('image/1.jpg')"></div>
+                <div class="carousel-slide" style="background-image: url('image/2.jpg')"></div>
+                <div class="carousel-slide" style="background-image: url('image/3.jpg')"></div>
+                <div class="carousel-arrow right" onclick="nextSlide()">&gt;</div> <!-- 右箭头 -->
+                <div class="carousel-dots">
+                    <span class="carousel-dot active" data-index="0"></span>
+                    <span class="carousel-dot" data-index="1"></span>
+                    <span class="carousel-dot" data-index="2"></span>
+                </div>
+            </div>
             <h4 class="ui top attached block header"><i class="ui info icon"></i><?php echo $MSG_NEWS;?></h4>
             <div class="ui bottom attached segment">
                 <table class="ui very basic table">
@@ -163,6 +239,60 @@ if($NOIP_flag[0]==0)$view_month_rank=mysql_query_cache("select user_id,nick,coun
 </div>
 <?php include("template/$OJ_TEMPLATE/footer.php");?>
 
+<script>
+        const slides = document.querySelectorAll('.carousel-slide');
+        const dots = document.querySelectorAll('.carousel-dot');
+        let currentIndex = 0;
+        let autoPlayInterval;
+
+        function showSlide(index) {
+            slides.forEach((slide, i) => {
+                if (i === index) {
+                    slide.classList.add('active');
+                } else {
+                    slide.classList.remove('active');
+                }
+            });
+            dots.forEach((dot, i) => {
+                if (i === index) {
+                    dot.classList.add('active');
+                } else {
+                    dot.classList.remove('active');
+                }
+            });
+        }
+
+        function nextSlide() {
+            currentIndex = (currentIndex + 1) % slides.length;
+            showSlide(currentIndex);
+        }
+
+        function prevSlide() {
+            currentIndex = (currentIndex - 1 + slides.length) % slides.length;
+            showSlide(currentIndex);
+        }
+
+        // 自动播放，调整为 5 秒切换一次
+        autoPlayInterval = setInterval(nextSlide, 5000); 
+
+        dots.forEach(dot => {
+            dot.addEventListener('click', () => {
+                const targetIndex = parseInt(dot.dataset.index);
+                if (targetIndex!== currentIndex) {
+                    currentIndex = targetIndex;
+                    showSlide(currentIndex);
+                    clearInterval(autoPlayInterval);
+                    autoPlayInterval = setInterval(nextSlide, 5000);
+                }
+            });
+        });
+
+        // 鼠标悬停暂停自动播放
+        const carousel = document.querySelector('.carousel');
+        carousel.addEventListener('mouseenter', () => clearInterval(autoPlayInterval));
+        carousel.addEventListener('mouseleave', () => autoPlayInterval = setInterval(nextSlide, 5000));
+    </script>
+    
   <script language="javascript" type="text/javascript" src="<?php echo $OJ_CDN_URL?>include/jquery.flot.js"></script>
         <script type="text/javascript">
                 $( function () {
