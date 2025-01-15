@@ -12,7 +12,7 @@
                 </div>
                 <div class="field">
                     <label for="username"><?php echo $MSG_NICK?>*</label>
-                    <input name="nick" placeholder="" type="text">
+                    <input name="nick" placeholder="教学系统建议用真名" type="text">
                 </div>
                 <div class="two fields">
                     <div class="field">
