@@ -1411,7 +1411,7 @@ void _update_problem_mysql(int p_id,int cid) {
 	}else{
 
 		sprintf(sql,
-			"UPDATE `problem` SET `accepted`=(SELECT count(*) FROM `solution` WHERE `problem_id`=%d AND `result`=4) WHERE `problem_id`=%d",
+			"UPDATE `problem` SET `accepted`=(SELECT count(*) FROM `solution` WHERE `problem_id`=%d AND `result`=4 and contest_id=0 ) WHERE `problem_id`=%d",
 			p_id, p_id);
 		printf("sql:[%s]\n",sql);
 		if (mysql_real_query(conn, sql, strlen(sql)))
