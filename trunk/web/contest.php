@@ -28,7 +28,7 @@ if (isset($_GET['cid'])) {
         $pids=array_column($result,'problem_id');
         if(!empty($pids)) $pids=implode(",",$pids);
 	$cnt = 0;
-	$noip = (time()<$end_time) && (stripos($view_title,$OJ_NOIP_KEYWORD)!==false);
+	$noip = (time()<$end_time) && (stripos($view_title,$OJ_NOIP_KEYWORD)!==false ||contest_locked($cid,20)  );
 	if(isset($_SESSION[$OJ_NAME.'_'."administrator"])||
 		isset($_SESSION[$OJ_NAME.'_'."m$cid"])||
 		isset($_SESSION[$OJ_NAME.'_'."source_browser"])||
@@ -80,12 +80,14 @@ if (isset($_GET['cid'])) {
 
 		//$view_problemset[$cnt][3] = $row['source'];
 
-		if (!$noip)
+		if (!$noip){
 			$view_problemset[$cnt][3] = $row['accepted'];
-		else
-			$view_problemset[$cnt][3] = "";
+    			$view_problemset[$cnt][4] = $row['submit'];
+		}else{
+			$view_problemset[$cnt][3] = "hidden";
+			$view_problemset[$cnt][4] = "hidden";
+		}
     
-    $view_problemset[$cnt][4] = $row['submit'];
     $cnt++;
   }
 }
