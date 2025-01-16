@@ -1,6 +1,7 @@
 <?php
 ////////////////////////////Common head
 require_once( './include/db_info.inc.php' );
+require_once( './include/my_func.inc.php' );
 if((!isset($OJ_DOWNLOAD))||!$OJ_DOWNLOAD){
     $view_errors="Download Disabled!";
     require("template/".$OJ_TEMPLATE."/error.php");
@@ -12,9 +13,14 @@ $name=basename($_GET['name'],".out");
 $sql="select problem_id,contest_id,user_id from solution where solution_id=?";
 $data=pdo_query($sql,$sid);
 //var_dump($sql);
-if(count($data)>0){
+if(!empty($data)){
    $row=$data[0];
    $pid=$row[0];
+   if(problem_locked($pid,2)){
+	    $view_errors = "<h2> $MSG_NOIP_WARNING </h2>";
+	    require("template/".$OJ_TEMPLATE."/error.php");
+	    exit(0);
+   }
    $cid=$row[1];
    $uid=$row[2];
    if(!(isset($_SESSION[$OJ_NAME.'_'.'user_id']) && $uid == $_SESSION[$OJ_NAME.'_'.'user_id']

@@ -100,7 +100,7 @@ if ($start_time>time()){
 		isset($_SESSION[$OJ_NAME.'_'."source_browser"])||
 		isset($_SESSION[$OJ_NAME.'_'."contest_creator"])
 	   ) $noip=false;
-if($noip){
+if($noip||contest_locked($cid,20)){
       $view_errors =  "<h2> $MSG_NOIP_WARNING</h2>";
       require("template/".$OJ_TEMPLATE."/error.php");
       exit(0);
