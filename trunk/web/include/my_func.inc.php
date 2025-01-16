@@ -7,7 +7,76 @@ if (!function_exists('str_contains')) {
         return empty($needle) || strpos($haystack, $needle) !== false;
     }
 }
-function too_simple($password,$level=3 ) {
+function formatTimeLength($length) {
+  $hour = 0;
+  $minute = 0;
+  $second = 0;
+  $result = '';
+
+  global $MSG_SECONDS, $MSG_MINUTES, $MSG_HOURS, $MSG_DAYS;
+
+  if ($length>=60) {
+    $second = $length%60;
+    
+    if ($second>0 && $second<10) {
+      $result = '0'.$second.' '.$MSG_SECONDS;}
+    else if ($second>0) {
+      $result = $second.' '.$MSG_SECONDS;
+    }
+
+    $length = floor($length/60);
+    if ($length >= 60) {
+      $minute = $length%60;
+      
+      if ($minute==0) {
+        if ($result != '') {
+          $result = '00'.' '.$MSG_MINUTES.' '.$result;
+        }
+      }
+      else if ($minute>0 && $minute<10) {
+        if ($result != '') {
+          $result = '0'.$minute.' '.$MSG_MINUTES.' '.$result;}
+        }
+        else {
+          $result = $minute.' '.$MSG_MINUTES.' '.$result;
+        }
+        
+        $length = floor($length/60);
+
+        if ($length >= 24) {
+          $hour = $length%24;
+
+        if ($hour==0) {
+          if ($result != '') {
+            $result = '00'.' '.$MSG_HOURS.' '.$result;
+          }
+        }
+        else if ($hour>0 && $hour<10) {
+          if($result != '') {
+            $result = '0'.$hour.' '.$MSG_HOURS.' '.$result;
+          }
+        }
+        else {
+          $result = $hour.' '.$MSG_HOURS.' '.$result;
+        }
+
+        $length = floor($length / 24);
+        $result = $length .$MSG_DAYS.' '.$result;
+      }
+      else {
+        $result = $length.' '.$MSG_HOURS.' '.$result;
+      }
+    }
+    else {
+      $result = $length.' '.$MSG_MINUTES.' '.$result;
+    }
+  }
+  else {
+    $result = $length.' '.$MSG_SECONDS;
+  }
+  return $result;
+}
+function too_simple($password) {
     // 初始化计数器
     $conditionsMet = 0;
     // 长度要求（至少8个字符）
@@ -30,8 +99,8 @@ function too_simple($password,$level=3 ) {
     if (preg_match('/[!@#$%^&*(),.?":{}|<>]/', $password)) {
         $conditionsMet++;
     }
-    // 如果符合的条件数小于3，则认为密码过于简单
-    return $conditionsMet < $level;
+    // 如果符合的条件数小于4，则认为密码过于简单
+    return $conditionsMet < 4;
 }
 function ip_to_integer($ip) {
     // 使用 ip2long 函数将 IP 地址转换为整数
@@ -51,7 +120,56 @@ function is_ip_in_subnet($ip, $subnet) {
     // 检查给定的 IP 地址是否在子网的范围内
     return ($ip_int & $mask_int) == ($subnet_ip_int & $mask_int);
 }
+function contest_locked($contest_id,$level=1){
+	global $OJ_NOIP_KEYWORD;
+	$now = date('Y-m-d H:i', time());
+	$sql="select c.contest_id cid from contest c where (c.contest_type & ? > 0  or c.title like ? ) and start_time<? and end_time> ?  ";
+	$result=pdo_query($sql,$level,"%$OJ_NOIP_KEYWORD%",$now,$now);
+	if(empty($result)||$result[0]['cid']==0) return false;
+	else return $result[0]['cid'];
+}
+function problem_locked($problem_id,$level=1){
+	global $OJ_NOIP_KEYWORD;
+	$now = date('Y-m-d H:i', time());
+	$sql="select c.contest_id cid from contest c inner join contest_problem cp on c.contest_id=cp.contest_id and cp.problem_id=? and (c.contest_type & ? > 0  or c.title like ? ) and start_time<? and end_time> ?  ";
+	$result=pdo_query($sql,$problem_id,$level,"%$OJ_NOIP_KEYWORD%",$now,$now);
+	if(empty($result)||$result[0]['cid']==0) return false;
+	else return $result[0]['cid'];
+}
 
+function source_available($solution_id,$contest_id=0){
+	global $OJ_NAME,$_SESSION,$ip;
+	if(isset($_SESSION[$OJ_NAME."_administrator"])||isset($_SESSION[$OJ_NAME."_source_browser"])){
+		return true;
+	}
+	$sql="select user_id,problem_id,contest_id from solution where solution_id=?";
+	$result=pdo_query($sql,$solution_id);
+	if(empty($result)){
+		return false;
+	}else{
+		$user_id=$result[0]["user_id"];
+		$problem_id=$result[0]["problem_id"];
+		$solution_cid=$result[0]["contest_id"];
+		if($problem_id==0) return false;
+		if($user_id!=$_SESSION[$OJ_NAME."_user_id"]) return false;
+		if($contest_id>0 && $solution_cid!=$contest_id){
+			$sql="select contest_type,subnet from contest where contest_id=? ";
+			$result=pdo_query($sql,$contest_id);
+			if(!empty($result)){
+				$contest_type=$result[0]['contest_type'];
+				$subnet=$result[0]['subnet'];
+				if($contest_type>0) return false;
+				if(!is_ip_in_subnet($ip,$subnet)) return false;
+			}
+		}else{
+			if(problem_locked($problem_id)) return false;
+		
+		}
+
+	}
+	
+	return true;
+}
 function getMappedSpecial($user_id) {
         $map=[
             '0701' => '人智',
