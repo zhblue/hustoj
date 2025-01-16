@@ -22,6 +22,7 @@
                 $view_title = $row['title'];
                 $view_start_time = $row['start_time'];
                 $view_end_time = $row['end_time'];
+                $subnet= $row['subnet'];
         }
         $contest_ok = true;
         $password = "";
@@ -32,7 +33,10 @@
         if (false) {
                 $password = stripslashes($password);
         }
-
+	if(!in_subnet_of_contest($ip,$cid)){
+		$contest_ok = false;
+                $view_description = "Not in $MSG_SUBNET $subnet";
+	}
 
         if ($rows_cnt==0) {
                 $view_title = "比赛已经关闭!";
