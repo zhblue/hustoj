@@ -452,6 +452,9 @@ $MSG_TOO_BAD="Please surf the internet in a civilized manner";
  	//email
 	$MSG_SYS_WARN="System Warning!";
 	$MSG_IS_ROBOT="could be a robot , verify and disable it !";
+       $MSG_FORBIDDEN="forbidden ";
+       $MSG_OTHERS="other's ";
+       $MSG_SUBNET="subnet ";
 //SaaS friendly
  $MSG_TEMPLATE="Template";
   $MSG_FRIENDLY_LEVEL="Friendly Level";
