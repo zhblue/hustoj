@@ -218,8 +218,8 @@ $tsql[50]="alter table $DB_NAME.contest add index key_c_end(end_time);";
 $csql[50]="alter table $DB_NAME.contest add index key_c_dend(defunct,end_time);";
 $tsql[51]="alter table $DB_NAME.users add column starred int default 0 after activecode ;";
 $csql[51]="alter table $DB_NAME.users add column expiry_date date not null default '2099-01-01' after reg_time;";
-//$tsql[52]="alter table $DB_NAME.contest add column contest_type tinyint default 0 after `password` ";
-//$csql[52]="alter table $DB_NAME.contest add column subnet varchar(255) not null default '' after contest_type;";
+$tsql[52]="alter table $DB_NAME.contest add column contest_type tinyint unsigned default 0 after `password` ";
+$csql[52]="alter table $DB_NAME.contest add column subnet varchar(255) not null default '' after contest_type;";
 // 删除6个月以前的非正确源码，优化数据库空间。
 // delete from source_code  where solution_id in (select solution_id from solution where result>4 and  in_date<date_sub(now(),interval 6 month) ); //
 if(isset($_POST['do'])){
