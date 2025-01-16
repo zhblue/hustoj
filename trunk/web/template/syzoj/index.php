@@ -183,7 +183,7 @@ if($NOIP_flag[0]==0)$view_month_rank=mysql_query_cache("select user_id,nick,coun
     </div>
 </div>
 <?php include("template/$OJ_TEMPLATE/footer.php");?>
-<?php if(file_exists("image/1.jpg")){ ?>
+<?php if(file_exists("image/slide1.jpg")){ ?>
     <script>
         const slides = document.querySelectorAll('.carousel-slide');
         const dots = document.querySelectorAll('.carousel-dot');
