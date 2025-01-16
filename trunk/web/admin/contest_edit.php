@@ -189,7 +189,7 @@ if(isset($_POST['startdate'])){
       <input id="plist" onchange="showTitles()" class=input-xxlarge type=text style="width:100%" name=cproblem value='<?php echo $plist?>'>
       <div id="ptitles"></div>
     </p>
-    <br>subnet
+    <br><?php echo $MSG_SUBNET ?>
       <input class=input-xxlarge type=text style="width:100%" name=subnet value='<?php echo htmlentities($subnet)?>' placeholder='0.0.0.0/0'>
     <p align=left>
       <?php echo "<h4>".$MSG_CONTEST."-".$MSG_Description."</h4>"?>
