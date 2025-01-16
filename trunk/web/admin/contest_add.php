@@ -204,7 +204,7 @@ else{
       <input id="plist" onchange="showTitles()" class=input-xxlarge placeholder="Example:1000,1001,1002" type=text style="width:100%" name=cproblem value="<?php echo isset($plist)?$plist:""?>">
       <div id="ptitles"></div>
     </p>
-    <br>subnet
+    <br><?php echo $MSG_SUBNET ?>
       <input class=input-xxlarge type=text style="width:100%" name=subnet value='' placeholder='0.0.0.0/0'>
     <br>
     <p align=left>
