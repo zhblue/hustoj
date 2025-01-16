@@ -112,11 +112,11 @@ function is_ip_in_subnet($ip, $subnet) {
 
     // 将子网的 IP 地址和掩码转换为整数
     $subnet_ip_int = ip_to_integer($subnet_ip);
-    $mask_int = ip_to_integer(str_repeat('255.', $mask - 1) . str_pad('', $mask % 8, '255', STR_PAD_LEFT));
+    $mask_int = ip2long("255.255.255.255") << (32 - $mask);
 
     // 将给定的 IP 地址转换为整数
     $ip_int = ip_to_integer($ip);
-
+    //echo "$subnet_ip_int | $mask_int | $ip_int ";
     // 检查给定的 IP 地址是否在子网的范围内
     return ($ip_int & $mask_int) == ($subnet_ip_int & $mask_int);
 }
@@ -169,6 +169,28 @@ function source_available($solution_id,$contest_id=0){
 	}
 	
 	return true;
+}
+function in_subnet_of_contest($ip,$contest_id){
+	
+	$sql="select contest_type,subnet from contest where contest_id=? ";
+	$result=pdo_query($sql,$contest_id);
+	if(!empty($result)){
+		$contest_type=$result[0]['contest_type'];
+		$subnet=$result[0]['subnet'];
+		if(!empty($subnet)){
+			$subnets=explode(",",$subnet);	
+			foreach( $subnets as $net){
+				if(is_ip_in_subnet($ip,$net)){
+			//		echo "subnet:$net<br>";
+				       	return true;
+				}
+			}
+			return false;
+		}else{
+			return true;
+		}
+	}
+
 }
 function getMappedSpecial($user_id) {
         $map=[
