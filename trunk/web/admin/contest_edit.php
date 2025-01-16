@@ -190,7 +190,7 @@ if(isset($_POST['startdate'])){
       <div id="ptitles"></div>
     </p>
     <br>subnet
-      <input class=input-xxlarge type=text style="width:100%" name=subnet value='' placeholder='0.0.0.0/0'>
+      <input class=input-xxlarge type=text style="width:100%" name=subnet value='<?php echo htmlentities($subnet)?>' placeholder='0.0.0.0/0'>
     <p align=left>
       <?php echo "<h4>".$MSG_CONTEST."-".$MSG_Description."</h4>"?>
       <textarea class=kindeditor rows=13 name=description cols=80>
