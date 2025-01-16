@@ -182,7 +182,7 @@ if(isset($_POST['update_solution'])){
 	pdo_query($sql,$user_id,$user_id);
   //  echo $sql;
 	
-	$sql="UPDATE `users` SET `submit`=(SELECT count(*) FROM `solution` WHERE `user_id`=? and problem_id>0) WHERE `user_id`=?";
+	$sql="UPDATE `users` SET `solved`=(SELECT count(DISTINCT `problem_id`) FROM `solution` s left join contest c on s.`user_id`=? AND s.`result`=4 and s.contest_id=c.contest_id and s.problem_id>0 and c.contest_type & 20 = 0 ) WHERE `user_id`=? ";
 	pdo_query($sql,$user_id,$user_id);
   //	echo $sql;
 	
@@ -195,11 +195,7 @@ if(isset($_POST['update_solution'])){
 	//	$sql="UPDATE `contest_problem` SET `c_submit`=(SELECT count(1) FROM `solution` WHERE `problem_id`=? and contest_id=?) WHERE `problem_id`=? and contest_id=?";
 	//	pdo_query($sql,$pid,$cid,$pid,$cid);
 	}else{
-	//	$sql="UPDATE `problem` SET `submit`=(SELECT count(1) FROM `solution` WHERE `problem_id`=?) WHERE `problem_id`=?";
-	//echo $sql;
-	//	pdo_query($sql,$pid,$pid);
-		$sql="UPDATE `problem` SET `accepted`=(SELECT count(1) FROM `solution` WHERE `problem_id`=? AND `result`=4) WHERE `problem_id`=?";
-	//echo $sql;
+		$sql="UPDATE `problem` SET `accepted`=(SELECT count(1) FROM `solution` WHERE `problem_id`=? AND `result`=4 and contest_id = 0) WHERE `problem_id`=?";
 		pdo_query($sql,$pid,$pid);
 	}
 
