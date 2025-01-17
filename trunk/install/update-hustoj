@@ -1,7 +1,7 @@
 #!/bin/bash
 export DATE=`date +%Y%m%d%H%M`
 cd /home/judge/
-git clone https://github.com/zhblue/hustoj.git git
+git clone https://gitee.com/zhblue/hustoj.git git
 cd git
 git pull .
 cd ..
