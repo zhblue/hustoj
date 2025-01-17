@@ -5,11 +5,10 @@ git clone https://gitee.com/zhblue/hustoj.git git
 cd git
 git pull .
 cd ..
-cp /home/judge/src/web/include/db_info.inc.php /home/judge/old.inc.php
-mv src "old.$DATE"
-cp -r git/trunk src
-bash /home/judge/src/install/merge.sh old.inc.php src/web/include/db_info.inc.php
-cp -r old.$DATE/web/upload/* src/web/upload/
+chmod +x git/trunk/install/merge.sh
+cp git/trunk/web/include/db_info.inc.php ./
+git/trunk/install/merge.sh src/web/include/db_info.inc.php db_info.inc.php
+cp -r git/trunk/* src/
 cd src/core
 pkill -9 judged
 bash make.sh
