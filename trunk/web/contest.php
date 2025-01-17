@@ -80,13 +80,14 @@ if (isset($_GET['cid'])) {
 
 		//$view_problemset[$cnt][3] = $row['source'];
 
-		if (!$noip){
-			$view_problemset[$cnt][3] = $row['accepted'];
-    			$view_problemset[$cnt][4] = $row['submit'];
-		}else{
-			$view_problemset[$cnt][3] = "hidden";
-			$view_problemset[$cnt][4] = "hidden";
-		}
+                if ($noip){
+                        $view_problemset[$cnt][3] = "<span class=red>?</span>";
+                        $view_problemset[$cnt][4] = "<span class=red>?</span>";
+                }else{
+                        $view_problemset[$cnt][3] = $row['accepted'];
+                        $view_problemset[$cnt][4] = $row['submit'];
+                }
+
     
     $cnt++;
   }
