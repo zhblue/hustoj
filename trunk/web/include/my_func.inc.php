@@ -121,13 +121,14 @@ function is_ip_in_subnet($ip, $subnet) {
     return ($ip_int & $mask_int) == ($subnet_ip_int & $mask_int);
 }
 function contest_locked($contest_id,$level=1){
-	global $OJ_NOIP_KEYWORD;
-	$now = date('Y-m-d H:i', time());
-	$sql="select c.contest_id cid from contest c where (c.contest_type & ? > 0  or c.title like ? ) and start_time<? and end_time> ?  ";
-	$result=pdo_query($sql,$level,"%$OJ_NOIP_KEYWORD%",$now,$now);
-	if(empty($result)||$result[0]['cid']==0) return false;
-	else return $result[0]['cid'];
+        global $OJ_NOIP_KEYWORD;
+        $now = date('Y-m-d H:i', time());
+        $sql="select c.contest_id cid from contest c where contest_id=? and (c.contest_type & ? > 0  or c.title like ? ) and start_time<? and end_time> ?  ";
+        $result=pdo_query($sql,$contest_id,$level,"%$OJ_NOIP_KEYWORD%",$now,$now);
+        if(empty($result)||$result[0]['cid']==0) return false;
+        else return $result[0]['cid'];
 }
+
 function problem_locked($problem_id,$level=1){
 	global $OJ_NOIP_KEYWORD;
 	$now = date('Y-m-d H:i', time());
