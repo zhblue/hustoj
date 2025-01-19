@@ -2571,7 +2571,7 @@ void run_solution(int &lang, char *work_dir, double &time_lmt, int &usedtime,
 		char noip_file_name[BUFFER_SIZE];
 		sprintf(noip_file_name,"%s/data/%d/input.name",oj_home,p_id);
 		if(DEBUG) printf("---------NOIP filename:%s\n",noip_file_name);
-		if (access(noip_file_name, R_OK ) == -1){   //不存在指定文件名，使用标准输入
+		if (p_id==0 || access(noip_file_name, R_OK ) == -1){   //不存在指定文件名，使用标准输入
 			if(copy_data){
 				stdin=freopen("data.in", "r", stdin);
 			}else{
