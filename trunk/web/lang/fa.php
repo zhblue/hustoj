@@ -455,6 +455,8 @@
        $MSG_FORBIDDEN="forbidden ";
        $MSG_OTHERS="other's ";
        $MSG_SUBNET="subnet ";
+       $MSG_SHOW_DIFF="Show Differ Output";
+
 //SaaS friendly
  $MSG_TEMPLATE="Template";
   $MSG_FRIENDLY_LEVEL="Friendly Level";
