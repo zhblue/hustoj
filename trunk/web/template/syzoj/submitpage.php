@@ -220,6 +220,10 @@ function fresh_result(solution_id)
 		if (xmlhttp.readyState==4 && xmlhttp.status==200)
 		{
 			var r=xmlhttp.responseText;
+			if(r=="<?php echo $OJ_NOIP_KEYWORD?>") {
+				tb.innerHTML="<?php echo $contest_locks[4]?>";
+				return;
+			}
 			var ra=r.split(",");
 			// alert(r);
 			// alert(judge_result[r]);
