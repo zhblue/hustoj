@@ -490,7 +490,7 @@
   $MSG_SYS_WARN="系统警告！";
   $MSG_IS_ROBOT="疑似机器人，注意封禁！";
   $MSG_FORBIDDEN="禁止";
-  $MSG_OTHERS="其他人";
+  $MSG_OTHERS="查看其他人";
   $MSG_SUBNET="子网";
   //SaaS friendly
   $MSG_TEMPLATE="模板";
