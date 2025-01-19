@@ -1,5 +1,5 @@
 <?php
-ini_set("display_errors", "On");  //set this to "On" for debugging  ,especially when no reason blank shows up.
+ini_set("display_errors", "Off");  //set this to "On" for debugging  ,especially when no reason blank shows up.
 header("Cache-Control: no-cache, must-revalidate"); // HTTP/1.1
 header("Expires: Sat, 26 Jul 1997 05:00:00 GMT"); // Date in the past
 
@@ -85,7 +85,7 @@ if (!empty($result)) {
 					echo $row['result'].",".$row['memory']." KB,".$row['time']." ms,"."none,".($row['pass_rate']*100).",".$row['user_id'];
 			}
 		}else{
-			echo "$MSG_FORBBIDEN";
+			echo $contest_locks[4];
 		
 		}
 	}
