@@ -239,8 +239,8 @@ else{
               <?php echo $MSG_FORBIDDEN?><br>
               <?php
               $locks_count = count($contest_locks);
-              $contest_lock = (~((int)$contest_type))&((1<<$locks_count)-1);
-
+              $contest_lock = 0;
+              $contest_type = 32;
               for($i=0; $i<$locks_count; $i++){
                 echo "<input type=checkbox name='contest_type[]'  value=$i ".( $contest_type&(1<<$i)?"checked":"").">".$contest_locks[$i]."<br>";
               }
