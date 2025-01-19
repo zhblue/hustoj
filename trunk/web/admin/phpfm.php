@@ -187,11 +187,11 @@ if (!(isset($_SESSION[$OJ_NAME.'_'.'administrator'])
             if(file_exists($current_dir."/Main.c")){
                 if(!$OJ_SaaS_ENABLE)system("/home/judge/src/install/gcc.sh $current_dir");
                 if(!system("/home/judge/src/install/makeout.sh Main"))
-                        echo "makeout fail:<br>chgrp -R www-data /home/judge";
+                        echo "makeout fail:<br>chgrp -R www-data ".getcwd();
             }else if(file_exists($current_dir."/Main.cc")){
                 if(!$OJ_SaaS_ENABLE)system("/home/judge/src/install/g++.sh $current_dir");
                 if(!system("/home/judge/src/install/makeout.sh Main"))
-                        echo "makeout fail:<br>chgrp -R www-data to /home/judge";
+                        echo "makeout fail:<br>chgrp -R www-data to ".getcwd();
             }else{
                 echo "未找到Main.c或Main.cc,自动生成9组空文件。";
                 for($i=1;$i<10;$i++){
