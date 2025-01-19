@@ -471,6 +471,9 @@
  //email
   $MSG_SYS_WARN="系統警告！";
   $MSG_IS_ROBOT="疑似機器人，註意封禁！";
+   $MSG_FORBIDDEN="禁止";
+  $MSG_OTHERS="其他人";
+  $MSG_SUBNET="子網";
   //SaaS friendly
   $MSG_TEMPLATE="模板";
   $MSG_FRIENDLY_LEVEL="友善級別";

@@ -9,6 +9,7 @@ $OJ_CACHE_SHARE = false;
 
 require_once('./include/cache_start.php');
 require_once('./include/db_info.inc.php');
+require_once('./include/my_func.inc.php');
 require_once('./include/memcache.php');
 require_once("./include/const.inc.php");
 require_once('./include/setlang.php');
@@ -17,75 +18,6 @@ if (isset($OJ_LANG)) {
   require_once("./lang/$OJ_LANG.php");
 }
 
-function formatTimeLength($length) {
-  $hour = 0;
-  $minute = 0;
-  $second = 0;
-  $result = '';
-
-  global $MSG_SECONDS, $MSG_MINUTES, $MSG_HOURS, $MSG_DAYS;
-
-  if ($length>=60) {
-    $second = $length%60;
-    
-    if ($second>0 && $second<10) {
-    	$result = '0'.$second.' '.$MSG_SECONDS;}
-    else if ($second>0) {
-    	$result = $second.' '.$MSG_SECONDS;
-    }
-
-    $length = floor($length/60);
-    if ($length >= 60) {
-      $minute = $length%60;
-      
-      if ($minute==0) {
-      	if ($result != '') {
-      		$result = '00'.' '.$MSG_MINUTES.' '.$result;
-      	}
-      }
-      else if ($minute>0 && $minute<10) {
-      	if ($result != '') {
-      		$result = '0'.$minute.' '.$MSG_MINUTES.' '.$result;}
-				}
-				else {
-					$result = $minute.' '.$MSG_MINUTES.' '.$result;
-				}
-				
-				$length = floor($length/60);
-
-				if ($length >= 24) {
-					$hour = $length%24;
-
-				if ($hour==0) {
-					if ($result != '') {
-						$result = '00'.' '.$MSG_HOURS.' '.$result;
-					}
-				}
-				else if ($hour>0 && $hour<10) {
-					if($result != '') {
-						$result = '0'.$hour.' '.$MSG_HOURS.' '.$result;
-					}
-				}
-				else {
-					$result = $hour.' '.$MSG_HOURS.' '.$result;
-				}
-
-				$length = floor($length / 24);
-				$result = $length .$MSG_DAYS.' '.$result;
-			}
-			else {
-				$result = $length.' '.$MSG_HOURS.' '.$result;
-			}
-		}
-		else {
-			$result = $length.' '.$MSG_MINUTES.' '.$result;
-		}
-	}
-	else {
-		$result = $length.' '.$MSG_SECONDS;
-	}
-	return $result;
-}
 
 if (isset($_GET['cid'])) {
 	$cid = intval($_GET['cid']);

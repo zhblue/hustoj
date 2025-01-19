@@ -75,13 +75,13 @@ if(!empty($bible)){
 
 $exceptions=array();
 if(isset($OJ_NOIP_KEYWORD)&&$OJ_NOIP_KEYWORD && !isset($_SESSION[$OJ_NAME."_administrator"])){  // 管理员不受限
-                                     $now =  date('Y-m-d H:i', time());
-                                     $sql="select contest_id from contest c where  c.start_time<'$now' and c.end_time>'$now' and c.title like '%$OJ_NOIP_KEYWORD%'";
-                                     $row=pdo_query($sql);
-                                     if(count($row)>0){
-                                        $exceptions=array_column($row,'contest_id');
-                                //      var_dump($exceptions);
-                                     }
+	     $now =  date('Y-m-d H:i', time());
+	     $sql="select contest_id from contest c where  c.start_time<'$now' and c.end_time>'$now' and ( c.title like '%$OJ_NOIP_KEYWORD%' or ( c.contest_type & 20 ) > 0 )";
+	     $row=pdo_query($sql);
+	     if(count($row)>0){
+		$exceptions=array_column($row,'contest_id');
+	//      var_dump($exceptions);
+	     }
 }
   if(isset($_GET['group_name'])) $group_name=basename($_GET['group_name']);
   else $group_name=$_SESSION[$OJ_NAME.'_group_name'];

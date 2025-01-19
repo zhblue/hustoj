@@ -45,15 +45,21 @@ if(isset($_POST['startdate'])){
   $langmask = ((1<<count($language_ext))-1)&(~$langmask);
   //echo $langmask; 
 
-  $sql = "INSERT INTO `contest`(`title`,`start_time`,`end_time`,`private`,`langmask`,`description`,`password`,`user_id`)
-          VALUES(?,?,?,?,?,?,?,?)";
+  $subnet= $_POST['subnet'];
+  $contest_types= $_POST['contest_type'];
+  $contest_type=0;
+  foreach($contest_types as $t){
+    $contest_type |= 1<<$t;
+  } 
+  $sql = "INSERT INTO `contest`(`title`,`start_time`,`end_time`,`private`,`langmask`,`description`,`password`,subnet,contest_type,`user_id`)
+          VALUES(?,?,?,?,?,?,?,?,?,?)";
 
   $description = str_replace("<p>", "", $description); 
   $description = str_replace("</p>", "<br />", $description);
   $description = str_replace(",", "&#44; ", $description);
   $user_id=$_SESSION[$OJ_NAME.'_'.'user_id'];
-  echo $sql.$title.$starttime.$endtime.$private.$langmask.$description.$password,$user_id;
-  $cid = pdo_query($sql,$title,$starttime,$endtime,$private,$langmask,$description,$password,$user_id) ;
+ // echo $sql.$title.$starttime.$endtime.$private.$langmask.$description.$password,$user_id;
+  $cid = pdo_query($sql,$title,$starttime,$endtime,$private,$langmask,$description,$password,$subnet,$contest_type,$user_id) ;
   echo "Add Contest ".$cid;
 
   $sql = "DELETE FROM `contest_problem` WHERE `contest_id`=$cid";
@@ -103,7 +109,7 @@ if(isset($_POST['startdate'])){
 else{
   if(isset($_GET['cid'])){
     $cid = intval($_GET['cid']);
-    $sql = "SELECT * FROM contest WHERE `contest_id`=?";
+    $sql = "select * FROM contest WHERE `contest_id`=?";
     $result = pdo_query($sql,$cid);
     $row = $result[0];
     $title = $row['title']."-Copy";
@@ -113,7 +119,7 @@ else{
     $description = $row['description'];
 
     $plist = "";
-    $sql = "SELECT `problem_id` FROM `contest_problem` WHERE `contest_id`=? ORDER BY `num`";
+    $sql = "select `problem_id` FROM `contest_problem` WHERE `contest_id`=? ORDER BY `num`";
     $result = pdo_query($sql,$cid);
     foreach($result as $row){
       if($plist) $plist = $plist.',';
@@ -121,7 +127,7 @@ else{
     }
 
     $ulist = "";
-    $sql = "SELECT `user_id` FROM `privilege` WHERE `rightstr`=? order by user_id";
+    $sql = "select `user_id` FROM `privilege` WHERE `rightstr`=? order by user_id";
     $result = pdo_query($sql,"c$cid");
 
     foreach($result as $row){
@@ -150,7 +156,7 @@ else{
     $spid = intval($_GET['spid']);
 
     $plist = "";
-    $sql = "SELECT `problem_id` FROM `problem` WHERE `problem_id`>=? ";
+    $sql = "select `problem_id` FROM `problem` WHERE `problem_id`>=? ";
     $result = pdo_query($sql,$spid);
     foreach($result as $row){
       if($plist) $plist.=',';
@@ -198,6 +204,8 @@ else{
       <input id="plist" onchange="showTitles()" class=input-xxlarge placeholder="Example:1000,1001,1002" type=text style="width:100%" name=cproblem value="<?php echo isset($plist)?$plist:""?>">
       <div id="ptitles"></div>
     </p>
+    <br><?php echo $MSG_SUBNET ?>
+      <input class=input-xxlarge type=text style="width:100%" name=subnet value='' placeholder='0.0.0.0/0'>
     <br>
     <p align=left>
       <?php echo "<h4>".$MSG_CONTEST."-".$MSG_Description."</h4>"?>
@@ -224,6 +232,19 @@ else{
               }
               ?>
               </select>
+            </p>
+          </td>
+          <td rowspan=2>
+            <p aligh=left>
+              <?php echo $MSG_FORBIDDEN?><br>
+              <?php
+              $locks_count = count($contest_locks);
+              $contest_lock = (~((int)$contest_type))&((1<<$locks_count)-1);
+
+              for($i=0; $i<$locks_count; $i++){
+                echo "<input type=checkbox name='contest_type[]'  value=$i ".( $contest_type&(1<<$i)?"checked":"").">".$contest_locks[$i]."<br>";
+              }
+              ?>
             </p>
           </td>
           <td height="10px">

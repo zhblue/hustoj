@@ -13,75 +13,6 @@ require_once('./include/const.inc.php');
 require_once('./include/setlang.php');
 $view_title= $MSG_CONTEST;
 
-function formatTimeLength($length) {
-  $hour = 0;
-  $minute = 0;
-  $second = 0;
-  $result = '';
-
-  global $MSG_SECONDS, $MSG_MINUTES, $MSG_HOURS, $MSG_DAYS;
-
-  if ($length>=60) {
-    $second = $length%60;
-    
-    if ($second>0 && $second<10) {
-    	$result = '0'.$second.' '.$MSG_SECONDS;}
-    else if ($second>0) {
-    	$result = $second.' '.$MSG_SECONDS;
-    }
-
-    $length = floor($length/60);
-    if ($length >= 60) {
-      $minute = $length%60;
-      
-      if ($minute==0) {
-      	if ($result != '') {
-      		$result = '00'.' '.$MSG_MINUTES.' '.$result;
-      	}
-      }
-      else if ($minute>0 && $minute<10) {
-      	if ($result != '') {
-      		$result = '0'.$minute.' '.$MSG_MINUTES.' '.$result;}
-				}
-				else {
-					$result = $minute.' '.$MSG_MINUTES.' '.$result;
-				}
-				
-				$length = floor($length/60);
-
-				if ($length >= 24) {
-					$hour = $length%24;
-
-				if ($hour==0) {
-					if ($result != '') {
-						$result = '00'.' '.$MSG_HOURS.' '.$result;
-					}
-				}
-				else if ($hour>0 && $hour<10) {
-					if($result != '') {
-						$result = '0'.$hour.' '.$MSG_HOURS.' '.$result;
-					}
-				}
-				else {
-					$result = $hour.' '.$MSG_HOURS.' '.$result;
-				}
-
-				$length = floor($length / 24);
-				$result = $length .$MSG_DAYS.' '.$result;
-			}
-			else {
-				$result = $length.' '.$MSG_HOURS.' '.$result;
-			}
-		}
-		else {
-			$result = $length.' '.$MSG_MINUTES.' '.$result;
-		}
-	}
-	else {
-		$result = $length.' '.$MSG_SECONDS;
-	}
-	return $result;
-}
 $now = time();
 
 if (isset($_GET['cid'])) {
@@ -97,7 +28,7 @@ if (isset($_GET['cid'])) {
         $pids=array_column($result,'problem_id');
         if(!empty($pids)) $pids=implode(",",$pids);
 	$cnt = 0;
-	$noip = (time()<$end_time) && (stripos($view_title,$OJ_NOIP_KEYWORD)!==false);
+	$noip = (time()<$end_time) && (stripos($view_title,$OJ_NOIP_KEYWORD)!==false ||contest_locked($cid,20)  );
 	if(isset($_SESSION[$OJ_NAME.'_'."administrator"])||
 		isset($_SESSION[$OJ_NAME.'_'."m$cid"])||
 		isset($_SESSION[$OJ_NAME.'_'."source_browser"])||
@@ -149,12 +80,15 @@ if (isset($_GET['cid'])) {
 
 		//$view_problemset[$cnt][3] = $row['source'];
 
-		if (!$noip)
-			$view_problemset[$cnt][3] = $row['accepted'];
-		else
-			$view_problemset[$cnt][3] = "";
+                if ($noip){
+                        $view_problemset[$cnt][3] = "<span class=red>?</span>";
+                        $view_problemset[$cnt][4] = "<span class=red>?</span>";
+                }else{
+                        $view_problemset[$cnt][3] = $row['accepted'];
+                        $view_problemset[$cnt][4] = $row['submit'];
+                }
+
     
-    $view_problemset[$cnt][4] = $row['submit'];
     $cnt++;
   }
 }

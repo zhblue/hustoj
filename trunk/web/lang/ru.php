@@ -412,7 +412,7 @@
  $MSG_NEED_SEMICOLON = " В этой строке, отмеченной выше, отсутствует точка с запятой в конце. ";
  $MSG_EXTRA_TOKEN_AT_END_OF_INCLUDE =" Инструкция включения должна находиться на отдельной строке и не может быть размещена на той же строке, что и следующая инструкция ";
  $MSG_INT_HAS_NEXT = " hasNext() следует заменить на nextInt() ";
- $MSG_UNTERMINATED_COMMENT =" Комментарий не закончен, пожалуйста, проверьте правильность терминатора "*/", соответствующего "/*" ";
+ $MSG_UNTERMINATED_COMMENT =" Комментарий не закончен, пожалуйста, проверьте правильность терминатора \"*/\", соответствующего \"/*\" ";
  $MSG_EXPECTED_BRACES_TOKEN ="В объявлении функции отсутствуют круглые скобки (), например, int main() записывается как int main ";
  $MSG_REACHED_END_OF_FILE_1 = " Проверить, не скопирован ли исходный код полностью или отсутствует закрывающая фигурная скобка ";
  $MSG_SUBSCRIPT_ERROR =" Невозможно индексировать доступ к переменным, которые не являются массивами или указателями ";
@@ -475,6 +475,9 @@
  	//email
 	$MSG_SYS_WARN="System Warning!";
 	$MSG_IS_ROBOT="could be a robot , verify and disable it !";
+       $MSG_FORBIDDEN="forbidden ";
+       $MSG_OTHERS="other's ";
+       $MSG_SUBNET="subnet ";
 //SaaS friendly
  $MSG_TEMPLATE="Template";
   $MSG_FRIENDLY_LEVEL="Friendly Level";

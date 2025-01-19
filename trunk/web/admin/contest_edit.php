@@ -53,6 +53,13 @@ if(isset($_POST['startdate'])){
   $langmask = ((1<<count($language_ext))-1)&(~$langmask);
   //echo $langmask; 
 
+  $subnet= $_POST['subnet'];
+  $contest_types= $_POST['contest_type'];
+  $contest_type=0;
+  foreach($contest_types as $t){
+    $contest_type |= 1<<$t;
+  } 
+
   $cid=intval($_POST['cid']);
 
   if(!(isset($_SESSION[$OJ_NAME.'_'."m$cid"])||isset($_SESSION[$OJ_NAME.'_'.'administrator'])||isset($_SESSION[$OJ_NAME.'_'.'contest_creator']))) exit();
@@ -60,11 +67,11 @@ if(isset($_POST['startdate'])){
   $description = str_replace("<p>", "", $description); 
   $description = str_replace("</p>", "<br />", $description);
   $description = str_replace(",", "&#44;", $description);
+  //echo "$subnet[$contest_type]";
 
-
-  $sql = "UPDATE `contest` SET `title`=?,`description`=?,`start_time`=?,`end_time`=?,`private`=?,`langmask`=?,`password`=? WHERE `contest_id`=?";
+  $sql = "UPDATE `contest` SET `title`=?,`description`=?,`start_time`=?,`end_time`=?,`private`=?,`langmask`=?,`password`=?,subnet=?,contest_type=? WHERE `contest_id`=?";
   //echo $sql;
-  pdo_query($sql,$title,$description,$starttime,$endtime,$private,$langmask,$password,$cid);
+  pdo_query($sql,$title,$description,$starttime,$endtime,$private,$langmask,$password,$subnet,$contest_type,$cid);
 
   $sql = "DELETE FROM `contest_problem` WHERE `contest_id`=?";
   pdo_query($sql,$cid);
@@ -85,9 +92,9 @@ if(isset($_POST['startdate'])){
          if($plist) $plist.=",";
          $plist.=intval($pieces[$i]);
          pdo_query($sql_1,$cid,$pieces[$i],$num);
-	 $sql="UPDATE `contest_problem` SET `c_accepted`=(SELECT count(1) FROM `solution` WHERE `problem_id`=? and contest_id=? AND `result`=4) WHERE `problem_id`=? and contest_id=?";
+	 $sql="UPDATE `contest_problem` SET `c_accepted`=(select count(1) FROM `solution` WHERE `problem_id`=? and contest_id=? AND `result`=4) WHERE `problem_id`=? and contest_id=?";
 	 pdo_query($sql,$pid,$cid,$pid,$cid);
-	 $sql="UPDATE `contest_problem` SET `c_submit`=(SELECT count(1) FROM `solution` WHERE `problem_id`=? and contest_id=?) WHERE `problem_id`=? and contest_id=?";
+	 $sql="UPDATE `contest_problem` SET `c_submit`=(select count(1) FROM `solution` WHERE `problem_id`=? and contest_id=?) WHERE `problem_id`=? and contest_id=?";
 	 pdo_query($sql,$pid,$cid,$pid,$cid);
       	 $sql_2 = "update solution set num=? where contest_id=? and problem_id=?;";
       	 pdo_query($sql_2,$num,$cid,$pid);
@@ -116,7 +123,7 @@ if(isset($_POST['startdate'])){
   exit();
 }else{
   $cid = intval($_GET['cid']);
-  $sql = "SELECT * FROM `contest` WHERE `contest_id`=?";
+  $sql = "select * FROM `contest` WHERE `contest_id`=?";
   $result = pdo_query($sql,$cid);
 
   if(count($result)!=1){
@@ -130,11 +137,13 @@ if(isset($_POST['startdate'])){
   $private = $row['private'];
   $password = $row['password'];
   $langmask = $row['langmask'];
+  $subnet= $row['subnet'];
+  $contest_type= $row['contest_type'];
   $description = $row['description'];
   $title = htmlentities($row['title'],ENT_QUOTES,"UTF-8");
 
   $plist = "";
-  $sql = "SELECT `problem_id` FROM `contest_problem` WHERE `contest_id`=? ORDER BY `num`";
+  $sql = "select `problem_id` FROM `contest_problem` WHERE `contest_id`=? ORDER BY `num`";
   $result=pdo_query($sql,$cid);
 
   foreach($result as $row){
@@ -143,7 +152,7 @@ if(isset($_POST['startdate'])){
   }
 
   $ulist = "";
-  $sql = "SELECT `user_id` FROM `privilege` WHERE `rightstr`=? order by user_id";
+  $sql = "select `user_id` FROM `privilege` WHERE `rightstr`=? order by user_id";
   $result = pdo_query($sql,"c$cid");
 
   foreach($result as $row){
@@ -180,7 +189,8 @@ if(isset($_POST['startdate'])){
       <input id="plist" onchange="showTitles()" class=input-xxlarge type=text style="width:100%" name=cproblem value='<?php echo $plist?>'>
       <div id="ptitles"></div>
     </p>
-    <br>
+    <br><?php echo $MSG_SUBNET ?>
+      <input class=input-xxlarge type=text style="width:100%" name=subnet value='<?php echo htmlentities($subnet)?>' placeholder='0.0.0.0/0'>
     <p align=left>
       <?php echo "<h4>".$MSG_CONTEST."-".$MSG_Description."</h4>"?>
       <textarea class=kindeditor rows=13 name=description cols=80>
@@ -208,6 +218,20 @@ if(isset($_POST['startdate'])){
               }
               ?>
               </select>
+            </p>
+          </td>
+
+          <td rowspan=2>
+            <p aligh=left>
+              <?php echo $MSG_FORBIDDEN?><br>
+              <?php
+              $locks_count = count($contest_locks);
+              $contest_lock = (~((int)$contest_type))&((1<<$locks_count)-1);
+
+              for($i=0; $i<$locks_count; $i++){
+                echo "<input type=checkbox name='contest_type[]'  value=$i ".( $contest_type&(1<<$i)?"checked":"").">".$contest_locks[$i]."<br>";
+              }
+              ?>
             </p>
           </td>
 

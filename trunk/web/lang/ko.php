@@ -462,6 +462,9 @@ $MSG_HIDE="Hide";
 	//email
 	$MSG_SYS_WARN="시스템 경고!";
 	$MSG_IS_ROBOT="봇으로 추정됩니다. 확인 후 비활성화하시기 바랍니다.";
+       $MSG_FORBIDDEN="forbidden ";
+       $MSG_OTHERS="other's ";
+       $MSG_SUBNET="subnet ";
 //SaaS friendly
  $MSG_TEMPLATE="Template";
   $MSG_FRIENDLY_LEVEL="Friendly Level";
