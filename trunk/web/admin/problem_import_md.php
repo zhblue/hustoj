@@ -1,5 +1,5 @@
 <?php
-ini_set("display_errors", "On");  //set this to "On" for debugging  ,especially when no reason blank shows up.
+ini_set("display_errors", "Off");  //set this to "On" for debugging  ,especially when no reason blank shows up.
 require_once ("admin-header.php");
 //require_once("../include/check_post_key.php");
 
