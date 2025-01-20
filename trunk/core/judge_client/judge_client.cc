@@ -1355,8 +1355,8 @@ void _update_user_mysql(char *user_id)
 	if (mysql_real_query(conn, sql, strlen(sql)))
 		write_log(mysql_error(conn));
 	sprintf(sql,
-			"UPDATE `users` SET `submit`=(SELECT count(*) FROM `solution` WHERE `user_id`=\'%s\' and problem_id>0) WHERE `user_id`=\'%s\'",
-			user_id, user_id);
+			 "UPDATE `users` SET `submit`=(SELECT count(*) FROM `solution`  s left join contest c on s.`user_id`=\'%s\' and s.problem_id>0 and c.contest_type & 20 = 0 ) WHERE `user_id`=\'%s\'",
+		         user_id, user_id);
 	if (mysql_real_query(conn, sql, strlen(sql)))
 		write_log(mysql_error(conn));
 }
