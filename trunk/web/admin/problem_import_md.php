@@ -124,7 +124,7 @@ function create_upload_dir($base_dir)
     return $full_path;
 }
 
-function process_md_and_images($zip_path, $upload_dir)
+function process_md_and_files($zip_path, $upload_dir)
 {
     $zip = new ZipArchive();
     if ($zip->open($zip_path) === TRUE) {
