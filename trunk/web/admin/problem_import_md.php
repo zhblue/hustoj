@@ -255,7 +255,7 @@ if ($_FILES["fps"]["error"] > 0) {
                 }
                 echo "PID:<a href='../problem.php?id=$pid' >" . htmlentities($title, ENT_QUOTES, "UTF-8") . "</a>";
 
-                
+                $basename=basename($file['filename']);
 
                 // 根据基文件名匹配对应的 .cpp 文件，并重命名为 题目编号-std.cpp
                 if (isset($cpp_files[$basename])) {
