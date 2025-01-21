@@ -21,9 +21,9 @@
 		$noip_problems=array_merge(...mysql_query_cache("select problem_id from contest c left join contest_problem cp on start_time<'$now' and end_time>'$now' and (c.title like ? or (c.contest_type & 20) >0) and c.contest_id=cp.contest_id","%$OJ_NOIP_KEYWORD%"));
 		$noip_problems=array_unique($noip_problems);
 	}else{    //没有登录的用户按Guest处理
-		$user_id="Guest";
-		$show_title="HelloWorld!";
-
+                $view_errors = "<a href=loginpage.php>$MSG_Login</a>";
+                require("template/".$OJ_TEMPLATE."/error.php");
+                exit(0);
 	}
 	$sql="select * from problem p inner join (
  			select distinct problem_id,contest_id from solution where result!=4 and user_id=? and problem_id not in 
