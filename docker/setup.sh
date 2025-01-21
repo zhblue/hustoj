@@ -130,6 +130,7 @@ do
       	fi
 done
 sed -i 's/static  $OJ_TEMPLATE="bs3";/static  $OJ_TEMPLATE="syzoj";/' include/db_info.inc.php
+w3m -dump http://127.0.0.1/status.php 
 exit 0
 #w3m -dump http://127.0.0.1/status.php | grep 'AWT'
 #w3m -dump http://hustoj.com/ip.php
