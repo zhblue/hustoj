@@ -1350,12 +1350,12 @@ void _update_user_mysql(char *user_id)
 {
 	char sql[BUFFER_SIZE];
 	sprintf(sql,
-			"UPDATE `users` SET `solved`=(SELECT count(DISTINCT `problem_id`) FROM `solution` s left join contest c on s.`user_id`=\'%s\' AND s.`result`=4 and s.contest_id=c.contest_id and s.problem_id>0 and c.contest_type & 20 = 0 ) WHERE `user_id`=\'%s\'",
+			"UPDATE `users` SET `solved`=(SELECT count(DISTINCT `problem_id`) FROM `solution` s where  s.`user_id`=\'%s\' AND s.`result`=4 and problem_id not in(select problem_id from contest_problem where contest_id in (select contest_id from contest where contest_type & 20 > 0)) ) WHERE `user_id`=\'%s\'",
 			user_id, user_id);
 	if (mysql_real_query(conn, sql, strlen(sql)))
 		write_log(mysql_error(conn));
 	sprintf(sql,
-			 "UPDATE `users` SET `submit`=(SELECT count(*) FROM `solution`  s left join contest c on s.`user_id`=\'%s\' and s.problem_id>0 and c.contest_type & 20 = 0 ) WHERE `user_id`=\'%s\'",
+			 "UPDATE `users` SET `submit`=(SELECT count(DISTINCT `problem_id`) FROM `solution` s where  s.`user_id`=\'%s\' and problem_id not in(select problem_id from contest_problem where contest_id in (select contest_id from contest where contest_type & 20 > 0)) ) WHERE `user_id`=\'%s\'",
 		         user_id, user_id);
 	if (mysql_real_query(conn, sql, strlen(sql)))
 		write_log(mysql_error(conn));
