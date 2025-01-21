@@ -9,6 +9,7 @@ chmod +x git/trunk/install/merge.sh
 cp git/trunk/web/include/db_info.inc.php ./
 git/trunk/install/merge.sh src/web/include/db_info.inc.php db_info.inc.php
 cp -r git/trunk/* src/
+cp db_info.inc.php src/web/include/
 cd src/core
 pkill -9 judged
 bash make.sh
