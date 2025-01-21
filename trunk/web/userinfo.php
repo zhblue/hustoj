@@ -85,7 +85,7 @@ if(!empty($bible)){
 $exceptions=array();
 if(isset($OJ_NOIP_KEYWORD)&&$OJ_NOIP_KEYWORD && !isset($_SESSION[$OJ_NAME."_administrator"])){  // && !isset($_SESSION[$OJ_NAME."_administrator"])   管理员不受限
 		                     $now =  date('Y-m-d H:i', time());
-				     $sql="select contest_id from contest c where  c.start_time<'$now' and c.end_time>'$now' and c.title like '%$OJ_NOIP_KEYWORD%'";
+				     $sql="select contest_id from contest c where  c.start_time<'$now' and c.end_time>'$now' and ( c.title like '%$OJ_NOIP_KEYWORD%' or (c.contest_type & 20) >0 )";
 		                     $row=pdo_query($sql);
 				     if(count($row)>0){
 				        $exceptions=array_column($row,'contest_id');
@@ -129,7 +129,7 @@ $row=$result[0];
 $AC=$row['ac'];
 
 // count submission
-$sql="select count(solution_id) as `Submit` FROM `solution` WHERE `user_id`=? and  problem_id>0 $not_in_noip ";
+$sql="select count(DISTINCT problem_id) as `Submit` FROM `solution` WHERE `user_id`=? and  problem_id>0 $not_in_noip ";
 $result=mysql_query_cache($sql,$user) ;
  $row=$result[0];
 $Submit=$row['Submit'];
