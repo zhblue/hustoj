@@ -20,7 +20,7 @@
 		}
 		$noip_problems=array_merge(...mysql_query_cache("select problem_id from contest c left join contest_problem cp on start_time<'$now' and end_time>'$now' and (c.title like ? or (c.contest_type & 20) >0) and c.contest_id=cp.contest_id","%$OJ_NOIP_KEYWORD%"));
 		$noip_problems=array_unique($noip_problems);
-	}else{    //没有登录的用户按Guest处理
+	}else{    //没有登录的用户提示登录
                 $view_errors = "<a href=loginpage.php>$MSG_Login</a>";
                 require("template/".$OJ_TEMPLATE."/error.php");
                 exit(0);
