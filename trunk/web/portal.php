@@ -1,5 +1,5 @@
 <?php
-	ini_set("display_errors", "On");  // 当我们需要调试的时候，把这里设成On，在出问题的时候php会尝试在页面上输出错误信息
+	ini_set("display_errors", "Off");  // 当我们需要调试的时候，把这里设成On，在出问题的时候php会尝试在页面上输出错误信息
 	require_once("include/db_info.inc.php"); // 导入基本配置和数据库操作函数
 	require_once('include/const.inc.php');   // 导入需要的一些可选常量
 	require_once('include/my_func.inc.php'); // 导入自定义的一些可选函数
