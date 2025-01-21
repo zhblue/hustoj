@@ -208,7 +208,7 @@ $csql[45]="alter table $DB_NAME.problem modify description mediumtext not null, 
 $tsql[46]="alter table $DB_NAME.users add column activecode varchar(16) not null default '' after school;";
 $csql[46]="";
 $tsql[47]="alter table $DB_NAME.users add column group_name varchar(16) not null default '' after school;";
-$csql[47]="";
+$csql[47]="alter table $DB_NAME.online modify refer varchar(4096) DEFAULT NULL;";
 $tsql[48]="alter table $DB_NAME.loginlog add column log_id int not null auto_increment primary key first;";
 $csql[48]="delete from $DB_NAME.loginlog where time<curdate()-interval 6 month;";
 
@@ -220,6 +220,7 @@ $tsql[51]="alter table $DB_NAME.users add column starred int default 0 after act
 $csql[51]="alter table $DB_NAME.users add column expiry_date date not null default '2099-01-01' after reg_time;";
 $tsql[52]="alter table $DB_NAME.contest add column contest_type tinyint unsigned default 0 after `password` ";
 $csql[52]="alter table $DB_NAME.contest add column subnet varchar(255) not null default '' after contest_type;";
+
 // 删除6个月以前的非正确源码，优化数据库空间。
 // delete from source_code  where solution_id in (select solution_id from solution where result>4 and  in_date<date_sub(now(),interval 6 month) ); //
 if(isset($_POST['do'])){
