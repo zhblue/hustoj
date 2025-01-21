@@ -474,9 +474,9 @@ sudo bash install.sh
 ```bash
 sudo bash install-ubuntu18-bytgz.sh 19.06.04.tar.gz
 ```
-### 基于 Ubuntu 20.04+宝塔 安装
+### 基于 Ubuntu 22.04+宝塔 安装
 	
-*先看*[宝塔系统安装HUSTOJ指南v0.2.docx](https://github.com/zhblue/hustoj/raw/master/docs/%E5%AE%9D%E5%A1%94%E7%B3%BB%E7%BB%9F%E5%AE%89%E8%A3%85HUSTOJ%E6%8C%87%E5%8D%97v0.2.docx)
+*先看*[宝塔系统安装HUSTOJ指南v0.4.docx](https://github.com/zhblue/hustoj/raw/master/docs/%E5%AE%9D%E5%A1%94%E7%B3%BB%E7%BB%9F%E5%AE%89%E8%A3%85HUSTOJ%E6%8C%87%E5%8D%97v0.2.docx)
 
 
 	
