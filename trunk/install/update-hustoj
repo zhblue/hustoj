@@ -3,7 +3,7 @@ export DATE=`date +%Y%m%d%H%M`
 cd /home/judge/
 git clone https://gitee.com/zhblue/hustoj.git git
 cd git
-git pull .
+git pull 
 cd ..
 chmod +x git/trunk/install/merge.sh
 cp git/trunk/web/include/db_info.inc.php ./
