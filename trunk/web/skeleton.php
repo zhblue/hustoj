@@ -1,13 +1,18 @@
 <?php
 // 每增加一个公式就少一半读者, 每依赖一种框架就少一半开发者。
+ini_set("display_errors", "Off");  // 当我们需要调试的时候，把这里设成On，在出问题的时候php会尝试在页面上输出错误信息
 $cache_time = 30;    // 缓存时长
 $OJ_CACHE_SHARE = false;   // 是否跨会话共享
-// 缓存开启
-require_once( './include/cache_start.php' );
-require_once( './include/db_info.inc.php' );
-require_once( './include/memcache.php' );
-require_once( './include/setlang.php' );
-require_once( './include/bbcode.php' );
+require_once( 'include/cache_start.php' );   // 缓存开启
+require_once( 'include/db_info.inc.php' );   // 导入基本配置和数据库操作函数
+require_once( 'include/memcache.php' );      // memcache工具  
+require_once( 'include/setlang.php' );       // 语言变量设置
+require_once( 'include/bbcode.php' );        // 引入bbcode语法工具
+require_once( 'include/const.inc.php');      // 导入需要的一些可选常量
+require_once( 'include/my_func.inc.php');    // 导入自定义的一些可选函数
+require_once( 'include/curl.php');           // 导入与爬虫有关的一些可选函数
+
+
 $view_title = "Hello skeleton <br> 每增加一个公式就少一半读者, 每依赖一种框架就少一半开发者。";
 
 //演示如何查询数据库
