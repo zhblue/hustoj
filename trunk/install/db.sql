@@ -198,7 +198,7 @@ CREATE TABLE IF NOT EXISTS `online` (
   `hash` varchar(32) NOT NULL,
   `ip` varchar(46)  NOT NULL default '',
   `ua` varchar(255)  NOT NULL default '',
-  `refer` varchar(255)  default NULL,
+  `refer` varchar(4096)  default NULL,
   `lastmove` int(10) NOT NULL,
   `firsttime` int(10) default NULL,
   `uri` varchar(255) default NULL,
