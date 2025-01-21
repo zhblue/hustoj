@@ -179,11 +179,11 @@ if(isset($_POST['update_solution'])){
 }else if(isset($_POST['updateuser'])){
 	
   	$user_id=$_POST['user_id'];
-	$sql="UPDATE `users` SET `solved`=(SELECT count(DISTINCT `problem_id`) FROM `solution` WHERE `user_id`=? AND `result`=4) WHERE `user_id`=?";
+	$sql="UPDATE `users` SET `solved`=( SELECT count(DISTINCT `problem_id`) FROM `solution` s where  s.`user_id`=? AND s.`result`=4 and problem_id not in(select problem_id from contest_problem where contest_id in (select contest_id from contest where contest_type & 20 > 0)) ) WHERE `user_id`=?";
 	pdo_query($sql,$user_id,$user_id);
   //  echo $sql;
 	
-	$sql="UPDATE `users` SET `solved`=(SELECT count(DISTINCT `problem_id`) FROM `solution` s left join contest c on s.`user_id`=? AND s.`result`=4 and s.contest_id=c.contest_id and s.problem_id>0 and c.contest_type & 20 = 0 ) WHERE `user_id`=? ";
+	$sql="UPDATE `users` SET `solved`=(SELECT count(DISTINCT `problem_id`) FROM `solution` s where  s.`user_id`=? and problem_id not in(select problem_id from contest_problem where contest_id in (select contest_id from contest where contest_type & 20 > 0)) ) WHERE `user_id`=? ";
 	pdo_query($sql,$user_id,$user_id);
   //	echo $sql;
 	
