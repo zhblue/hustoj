@@ -95,9 +95,7 @@ td > code {
     }
     explain();
 </script>
-
-        <?php if(isset($OJ_MARKDOWN)&&$OJ_MARKDOWN){ ?>
-          <script src="<?php echo $OJ_CDN_URL.$path_fix."template/bs3/"?>marked.min.js"></script>
+<script src="<?php echo $OJ_CDN_URL.$path_fix."template/bs3/"?>marked.min.js"></script>
 <script>
     $(document).ready(function(){
                 marked.use({
@@ -175,10 +173,6 @@ td > code {
         });
 
     });
-
 </script>
-
-    <?php } ?>
-
 
 <?php include("template/$OJ_TEMPLATE/footer.php");?>
