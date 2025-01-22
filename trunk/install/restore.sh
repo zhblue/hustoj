@@ -14,6 +14,10 @@ SERVER=`cat $config|grep 'OJ_HOST_NAME' |awk -F= '{print $2}'`
 USER=`cat $config|grep 'OJ_USER_NAME' |awk -F= '{print $2}'`
 PASSWORD=`cat $config|grep 'OJ_PASSWORD' |awk -F= '{print $2}'`
 DATABASE=`cat $config|grep 'OJ_DB_NAME' |awk -F= '{print $2}'`
+web_user=`grep www /etc/passwd|awk -F: '{print $1}'`
+
+chmod 770 /home/judge/src/web/upload
+chown $web_user -R /home/judge/src/web/upload
 mkdir hustoj-restore
 cd hustoj-restore
 MAIN="../$1"
@@ -21,10 +25,10 @@ MAIN="../$1"
 tar xjf $MAIN
 mv /home/judge/data /home/judge/data.del.$DATE
 mv home/judge/data /home/judge/
-chown www-data -R /home/judge/data
+chown  $web_user  -R /home/judge/data
 mv /home/judge/src/web/upload /home/judge/src/web/upload.del.$DATE
 mv home/judge/src/web/upload /home/judge/src/web/
-chown www-data -R /home/judge/src/web/
+chown  $web_user -R /home/judge/src/web/
 bzip2 -d var/backups/db_${BAKDATE}.sql.bz2
 sed -i 's/COLLATE=utf8mb4_0900_ai_ci//g' var/backups/db_${BAKDATE}.sql
 sed -i 's/COLLATE utf8mb4_0900_ai_ci//g' var/backups/db_${BAKDATE}.sql
