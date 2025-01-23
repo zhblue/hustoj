@@ -4,6 +4,10 @@ require_once("../include/check_get_key.php");
 $user_id=$_GET['cid'];
 //echo htmlentities($user_id,ENT_QUOTE,'UTF-8');
 if(!isset($_SESSION[$OJ_NAME.'_'.'administrator'])) exit();
+if($_SESSION[$OJ_NAME."_user_id"]==$user_id){
+        echo "Can't defunct yourself!";
+        exit(0);
+}
 $sql="select `defunct`,email FROM `users` WHERE `user_id`=?";
 $result=pdo_query($sql,$user_id);
 $num=count($result);
