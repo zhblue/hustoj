@@ -72,8 +72,11 @@ if(isset($_GET['keyword']) && $_GET['keyword']!=""){
         echo "<td>".$row['rightstr'];
 	if($row['valuestr']!="true") echo ":".$row['valuestr'];
 	echo "</td>";
-        echo "<td><a href='privilege_delete.php?uid=".htmlentities($row['user_id'],ENT_QUOTES,"UTF-8")."&rightstr={$row['rightstr']}&getkey=".$_SESSION[$OJ_NAME.'_'.'getkey']."'>Delete</a></td>";
-      echo "</tr>";
+	if($row['rightstr']!="administrator"  ||$row['user_id']!=$_SESSION[$OJ_NAME."_user_id"])
+        	echo "<td><a href='privilege_delete.php?uid=".htmlentities($row['user_id'],ENT_QUOTES,"UTF-8")."&rightstr={$row['rightstr']}&getkey=".$_SESSION[$OJ_NAME.'_'.'getkey']."'>Delete</a></td>";
+	else
+		echo "Can't suicide";
+	echo "</tr>";
     }
     ?>
   </table>
