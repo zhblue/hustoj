@@ -68,7 +68,7 @@ if(isset($_GET['keyword']) && $_GET['keyword']!=""){
       <td><?php echo $MSG_LAST_LOGIN?></td>
       <td><?php echo $MSG_REGISTER?></td>
       <td><?php echo $MSG_EXPIRY_DATE?></td>
-      <td><?php echo $MSG_DELETE?></td>
+      <td><?php echo isset($_GET['trash'])?$MSG_CLICK_TO_RECOVER:$MSG_DELETE?></td>
       <td><?php echo $MSG_SETPASSWORD?></td>
       <td><?php echo $MSG_PRIVILEGE."-".$MSG_ADD ?></td>
       </tr>
@@ -100,7 +100,7 @@ if(isset($_GET['keyword']) && $_GET['keyword']!=""){
 
       if(isset($_SESSION[$OJ_NAME.'_'.'administrator']) && $row['user_id']!=$_SESSION[$OJ_NAME."_user_id"]){
         echo "<td><a href=user_df_change.php?cid=".$row['user_id']."&getkey=".$_SESSION[$OJ_NAME.'_'.'getkey'].">".
-           ($row['defunct']=="N"?"<span class='label label-danger' title='$MSG_CLICK_TO_DELETE'>$MSG_CLICK_TO_DELETE</span>":"<span class='label label-success' title='$MSG_CLICK_TO_RECOVER'>$MSG_CLICK_TO_RECOVER</span>")
+           ($row['defunct']=="N"?"<span class='label label-danger' title='$MSG_CLICK_TO_DELETE'>$MSG_DELETE</span>":"<span class='label label-success' title='$MSG_CLICK_TO_RECOVER'>$MSG_CLICK_TO_RECOVER</span>")
             ."</a></td>";
       }
       else {
