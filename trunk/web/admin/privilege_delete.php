@@ -7,6 +7,10 @@ if (!(isset($_SESSION[$OJ_NAME.'_'.'administrator']))){
 if(isset($_GET['uid'])){
 	$user_id=$_GET['uid'];
 	$rightstr =$_GET['rightstr'];
+	if($_SESSION[$OJ_NAME."_user_id"]==$user_id && $rightstr=="administrator" ){
+	        echo "Can't remove administrator for yourself!";
+	        exit(0);
+	}
 	$sql="delete from `privilege` where user_id=? and rightstr=?";
 	$rows=pdo_query($sql,$user_id,$rightstr);
 	echo "$user_id $rightstr deleted!";
