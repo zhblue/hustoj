@@ -58,21 +58,24 @@ if(isset($_GET['keyword']) && $_GET['keyword']!=""){
 
 <center>
   <table width=100% border=1 style="text-align:center;" class="ui striped aligned table">
+<thead>
     <tr>
-    <td><?php echo $MSG_USER_ID?></td>
-      <td><?php echo $MSG_NICK?></td>
-      <td>IP</td>
-      <td><?php echo $MSG_EMAIL?></td>
-      <td><?php echo $MSG_SCHOOL?></td>
-      <td><?php echo $MSG_GROUP_NAME?></td>
-      <td><?php echo $MSG_LAST_LOGIN?></td>
-      <td><?php echo $MSG_REGISTER?></td>
-      <td><?php echo $MSG_EXPIRY_DATE?></td>
-      <td><?php echo $MSG_STATUS?></td>
-      <td><?php echo $MSG_ADMIN ?></td>
-      <td><?php echo $MSG_SETPASSWORD?></td>
-      <td><?php echo $MSG_PRIVILEGE."-".$MSG_ADD ?></td>
+    <th><?php echo $MSG_USER_ID?></th>
+      <th><?php echo $MSG_NICK?></th>
+      <th>IP</th>
+      <th><?php echo $MSG_EMAIL?></th>
+      <th><?php echo $MSG_SCHOOL?></th>
+      <th><?php echo $MSG_GROUP_NAME?></th>
+      <th><?php echo $MSG_LAST_LOGIN?></th>
+      <th><?php echo $MSG_REGISTER?></th>
+      <th><?php echo $MSG_EXPIRY_DATE?></th>
+      <th><?php echo $MSG_STATUS?></th>
+      <th><?php echo $MSG_ADMIN ?></th>
+      <th><?php echo $MSG_SETPASSWORD?></th>
+      <th><?php echo $MSG_PRIVILEGE."-".$MSG_ADD ?></th>
       </tr>
+</thead>
+
     <?php
     foreach($result as $row){
       echo "<tr>";
