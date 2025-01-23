@@ -1,9 +1,9 @@
-<?php require_once("admin-header.php");?>
-<?php if (!(isset($_SESSION[$OJ_NAME.'_'.'administrator']))){
+<?php require_once("admin-header.php");
+require_once("../include/email.class.php");
+if (!(isset($_SESSION[$OJ_NAME.'_'.'administrator']))) {
 	echo "<a href='../loginpage.php'>Please Login First!</a>";
 	exit(1);
 }
-
 ?>
 
 <title>Privilege Add</title>
@@ -16,8 +16,8 @@
 if (isset($_POST['do'])) {
 	require_once("../include/check_post_key.php");
 
-	$user_id = $_POST['user_id'];
-	$rightstr = $_POST['rightstr'];
+	$user_id = trim($_POST['user_id']);
+	$rightstr = trim($_POST['rightstr']);
 	$valuestr = "true";
 	if(isset($_POST['valuestr']))
 		$valuestr = $_POST['valuestr'];
@@ -29,8 +29,18 @@ if (isset($_POST['do'])) {
 		$rightstr = "s$rightstr";
 
 	$sql = "insert into `privilege`(user_id,rightstr,valuestr,defunct) values(?,?,?,'N')";
-	$rows = pdo_query($sql,$user_id,$rightstr,$valuestr);
-	echo "<center><h4 class='text-danger'>User ".htmlentities($_POST['user_id'], ENT_QUOTES, 'UTF-8')."'s Privilege Added!</h4></center>";
+	$link= 'http://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['REQUEST_URI']);
+        $msg = $_SESSION[$OJ_NAME.'_user_id']." $MSG_ADD $rightstr [$valuestr] $MSG_PRIVILEGE -> $user_id @  ".date('Y-m-d h:i:s a', time());
+        $msg .="\n\nmessage from site: $link";
+        if(!empty($user_id)) $rows = pdo_query($sql,$user_id,$rightstr,$valuestr);
+        if ($OJ_ADMIN=="root@localhost"){
+                $sql="select email from users where user_id=? ";
+                $OJ_ADMIN=pdo_query($sql,$_SESSION[$OJ_NAME.'_user_id'])[0][0];
+		//email($OJ_ADMIN,"Privilege Add Warning!",$msg);
+        }else{
+       	 	email($OJ_ADMIN,"Privilege Add Warning!",$msg);
+	}
+        echo "<center><h4 class='text-danger'>User ".htmlentities($_POST['user_id'], ENT_QUOTES, 'UTF-8')."'s Privilege Added!</h4></center>";
 }
 ?>
 
@@ -53,14 +63,16 @@ if (isset($_POST['do'])) {
 		<label class="col-sm-offset-3 col-sm-3 control-label"><?php echo $MSG_PRIVILEGE_TYPE?></label>
 		<select class="col-sm-3" name="rightstr" onchange="show_value_input(this.value)" >
 		<?php
-			$rightarray = array("administrator","problem_editor","source_browser","contest_creator","http_judge","password_setter","printer","balloon","vip",'problem_start','problem_end');
-			while (list($key, $val)=each($rightarray)) {
-				if (isset($rightstr) && ($rightstr == $val)) {
-					echo '<option value="'.$val.'" selected>'.$val.'</option>';
-				} else {
-					echo '<option value="'.$val.'">'.$val.'</option>';
-				}
-			}
+			$rightarray = array("administrator","problem_editor","problem_importer","tag_adder","problem_verifiter","source_browser","contest_creator","user_adder","http_judge","password_setter","printer","balloon","vip",'problem_start','problem_end','service_port');
+			while ($val=current($rightarray)) {
+                                $key=key($rightarray);
+                                if (isset($rightstr) && ($rightstr == $val)) {
+                                        echo '<option value="'.$val.'" selected>'.$val.'</option>';
+                                } else {
+                                        echo '<option value="'.$val.'">'.$val.'</option>';
+                                }
+                                next($rightarray);
+                        }
 		?>
 		</select>
 		<div class="col-sm-offset-9"><input id='value_input' type="text" class="form-control" name="valuestr" value="true"></div>
@@ -161,3 +173,4 @@ if (isset($_POST['do'])) {
 </form>
 </div>
 
+</div>
