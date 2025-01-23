@@ -154,6 +154,8 @@ Star us, please!
 	
 日期  | 类型 |  更新内容 | 图
 ------- | :--:  | :--: | :-------
+01-23 | 更新 | 优化用户列表的显示。 | ![image](https://github.com/user-attachments/assets/4f703d94-523e-4afa-9e47-66207c3bc182)
+01-20 | 更新 | 增加比赛的禁止选项。| ![image](https://github.com/user-attachments/assets/1f82abcc-eac3-4278-bffc-59d31225edee)
 01-07 | 更新 | 增加矩阵转置按钮。| ![image](https://github.com/user-attachments/assets/835135b0-72d8-4515-8df1-070835689a9b)
 01-06 | 更新 | 增加全局题单班组(group_name)统计显示页group_total.php 。 | ![image](https://github.com/user-attachments/assets/86d8f6ca-dd11-4336-964f-907cac988f54)
 01-04 | 更新 | 增加题单的班组(group_name)统计显示页group_statistics.php 。 |  ![image](https://github.com/user-attachments/assets/3173e20a-df5c-4588-9b74-60564c6c1975)
