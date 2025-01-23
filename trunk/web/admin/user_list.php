@@ -98,7 +98,7 @@ if(isset($_GET['keyword']) && $_GET['keyword']!=""){
         else if($edate>=$today) $color="blue";
         echo "<td><span fd='expiry_date' user_id='".$row['user_id']."' class='".$color."' >".$row['expiry_date']."</span></td>";
 
-      if(isset($_SESSION[$OJ_NAME.'_'.'administrator'])){
+      if(isset($_SESSION[$OJ_NAME.'_'.'administrator']) && $row['user_id']!=$_SESSION[$OJ_NAME."_user_id"] ){
         echo "<td><a href=user_df_change.php?cid=".$row['user_id']."&getkey=".$_SESSION[$OJ_NAME.'_'.'getkey'].">".
            ($row['defunct']=="N"?"<span class=green title='$MSG_CLICK_TO_DELETE'>$MSG_NORMAL</span>":"<span class=red title='$MSG_CLICK_TO_RECOVER'>$MSG_DELETED</span>")
             ."</a></td>";
