@@ -91,7 +91,7 @@ if(isset($_SESSION[$OJ_NAME.'_'.'balloon'])){
 }
 
 if(isset($_SESSION[$OJ_NAME.'_'.'administrator'])||isset($_SESSION[$OJ_NAME.'_'.'contest_creator'])||isset($_SESSION[$OJ_NAME.'_'.'problem_editor'])){
-    $profile.= "<dd><a href=".$path_fix."swadmin/>$MSG_ADMIN</a></dd>";
+    $profile.= "<dd><a href=".$path_fix."admin/>$MSG_ADMIN</a></dd>";
 }
 
 //$profile.="</ul></li>";
