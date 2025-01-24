@@ -237,7 +237,7 @@
                         <?php if(isset($_SESSION[$OJ_NAME.'_'.'administrator']) || isset($_SESSION[$OJ_NAME.'_'.'contest_creator'])) {?>
                             <a href="suspect_list.php?cid=<?php echo $view_cid?>" class="item"><?php echo $MSG_IP_VERIFICATION?></a>
                             <a href="user_set_ip.php?cid=<?php echo $view_cid?>" class="item"><?php echo $MSG_SET_LOGIN_IP?></a>
-                            <a target="_blank" href="../../bsadmin/contest_edit.php?cid=<?php echo $view_cid ?>" class="item"><?php echo $MSG_EDIT.$MSG_CONTEST;?></a>
+                            <a target="_blank" href="admin/contest_edit.php?cid=<?php echo $view_cid ?>" class="item"><?php echo $MSG_EDIT.$MSG_CONTEST;?></a>
                         <?php } ?>
                     </div>
                 </div>
