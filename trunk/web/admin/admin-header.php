@@ -19,7 +19,9 @@ $("document").ready(function (){
 	echo "<a href='../loginpage.php'>Please Login First!</a>";
 	exit(1);
 }
-require_once("../template/$OJ_TEMPLATE/css.php");
+if(file_exists("../template/$OJ_TEMPLATE/css.php")) require_once("../template/$OJ_TEMPLATE/css.php");
+else require_once("../template/bs3/css.php");
+
 if(file_exists("../lang/$OJ_LANG.php")) require_once("../lang/$OJ_LANG.php");
 ?>
 <iframe src="../session.php" height=0px width=0px ></iframe>
