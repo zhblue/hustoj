@@ -136,7 +136,7 @@
                             <a href="user_set_ip.php?cid=<?php echo $view_cid ?>" class="active item">
                                 <?php echo $MSG_SET_LOGIN_IP ?>
                             </a>
-                            <a target="_blank" href="../../bsadmin/contest_edit.php?cid=<?php echo $view_cid ?>"
+                            <a target="_blank" href="admin/contest_edit.php?cid=<?php echo $view_cid ?>"
                                 class="item">
                                 <?php echo $MSG_EDIT . $MSG_CONTEST; ?>
                             </a>
