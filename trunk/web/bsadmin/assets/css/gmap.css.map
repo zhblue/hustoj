@@ -1,7 +1,0 @@
-{
-"version": 3,
-"mappings": "AAEA,IAAK;EACH,KAAK,EAAE,IAAI;EACX,MAAM,EAAE,KAAK",
-"sources": ["../sass/gmap.scss"],
-"names": [],
-"file": "gmap.css"
-}

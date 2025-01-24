@@ -1,7 +1,0 @@
-{
-"version": 3,
-"mappings": "AACA,QAAS;EACL,QAAQ,EAAE,MAAM;EAChB,MAAM,EAAE,iBAAiB;EACzB,kBAAkB,EAAE,wCAAwC;EAC5D,eAAe,EAAE,wCAAwC;EACzD,UAAU,EAAE,wCAAwC;EACpD,gBAAgB,ECiBP,OAAO;EDhBhB,UAAU,EAAE,OAAO;EACnB,UAAE;IACE,OAAO,EAAE,kBAAkB;IAC3B,SAAS,EAAE,IAAI;;AAIvB;OACQ;EACJ,MAAM,EAAE,KAAK",
-"sources": ["../sass/scrollable.scss","../sass/variable.scss"],
-"names": [],
-"file": "scrollable.css"
-}

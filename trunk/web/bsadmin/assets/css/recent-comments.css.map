@@ -1,7 +1,0 @@
-{
-"version": 3,
-"mappings": "AAEI,sBAAO;EACH,aAAa,EAAE,iBAAiB;EAChC,cAAc,EAAE,IAAI;AAExB,2BAAY;EACR,aAAa,EAAE,IAAI;EACnB,+BAAI;IACA,aAAa,EAAE,KAAK;AAIxB,8BAAG;EACC,SAAS,EAAE,IAAI;AAEnB,6BAAE;EACE,aAAa,EAAE,IAAI;;AAK/B,eAAgB;EACZ,KAAK,EAAE,IAAI;EACX,sBAAO;IACH,cAAc,EAAE,SAAS;IACzB,WAAW,ECxBb,uBAAuB;ED0BzB,iBAAE;IACE,OAAO,EAAE,OAAO;;AAIxB,aAAc;EACV,KAAK,EAAE,KAAK;EACZ,KAAK,ECnBH,OAAO;EDoBT,WAAW,EClCT,uBAAuB",
-"sources": ["../sass/recent-comments.scss","../sass/variable.scss"],
-"names": [],
-"file": "recent-comments.css"
-}

@@ -1,7 +1,0 @@
-{
-"version": 3,
-"mappings": "AAGQ,sCAAY;EACR,WAAW,EAAE,GAAG;EAChB,UAAU,EAAE,iBAAiB;AAEjC,sCAAY;EACR,aAAa,EAAE,iBAAiB;AAGxC,sBAAM;EACF,UAAU,ECJT,OAAO;EDKR,UAAU,EAAE,IAAI;EAChB,yBAAG;IACC,KAAK,ECQV,IAAI;IDPC,WAAW,EAAE,IAAI;AAGzB,sBAAM;EACF,UAAU,ECGX,IAAI;EDFH,UAAU,EAAE,IAAI;EAChB,yBAAG;IACC,KAAK,EAAE,OAAO",
-"sources": ["../sass/order-list.scss","../sass/variable.scss"],
-"names": [],
-"file": "order-list.css"
-}

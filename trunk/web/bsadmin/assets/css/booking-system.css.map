@@ -1,7 +1,0 @@
-{
-"version": 3,
-"mappings": "AAEA,wBAAwB;EACtB,GAAG,EAAE,cAAc;EACnB,KAAK,EAAE,IAAI;;AAIb,mBAAmB;EACjB,WAAW,EAAE,IAAI;;AAMjB,WAAW;EAEP,cAAc,EAAE,MAAM;EACxB,gBAAI;IACF,SAAS,EAAE,IAAI;IACf,KAAK,ECZF,OAAO;EDcZ,aAAC;IACC,KAAK,ECPL,OAAO;IDQP,WAAW,EAAE,IAAI",
-"sources": ["../sass/booking-system.scss","../sass/variable.scss"],
-"names": [],
-"file": "booking-system.css"
-}

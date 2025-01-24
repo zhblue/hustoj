@@ -1,7 +1,0 @@
-{
-"version": 3,
-"mappings": "AAKA,4BAA4B;EACxB,UAAU,ECQR,OAAO;EDPT,WAAW,ECLT,uBAAuB;EDMzB,OAAO,EAAE,QAAQ;EACjB,KAAK,ECcF,IAAI;EDbP,WAAW,EAAE,GAAG;EAChB,SAAS,EAAE,IAAI;EACf,cAAc,EAAE,UAAU;EAC1B,aAAa,EAAE,GAAG",
-"sources": ["../sass/datamap.scss","../sass/variable.scss"],
-"names": [],
-"file": "datamap.css"
-}

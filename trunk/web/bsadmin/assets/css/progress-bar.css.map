@@ -1,7 +1,0 @@
-{
-"version": 3,
-"mappings": "AAIA,aAAc;EACZ,gBAAgB,ECGT,OAAO;;ADEhB,qBAAsB;EACpB,gBAAgB,ECHT,OAAO;;ADQhB,qBAAsB;EACpB,gBAAgB,ECRT,OAAO;;ADahB,kBAAmB;EACjB,gBAAgB,ECbZ,OAAO;;ADkBb,oBAAqB;EACnB,gBAAgB,EClBV,OAAO;;ADwBf,qBAAsB;EACpB,gBAAgB,ECxBT,OAAO;;AD6BhB,kBAAmB;EACjB,gBAAgB,EC7BZ,OAAO",
-"sources": ["../sass/progress-bar.scss","../sass/variable.scss"],
-"names": [],
-"file": "progress-bar.css"
-}

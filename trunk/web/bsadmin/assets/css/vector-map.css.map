@@ -1,7 +1,0 @@
-{
-"version": 3,
-"mappings": "AAEA,KAAK;EACH,KAAK,EAAE,IAAI;EACX,MAAM,EAAE,KAAK",
-"sources": ["../sass/vector-map.scss"],
-"names": [],
-"file": "vector-map.css"
-}

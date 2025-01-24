@@ -1,7 +1,0 @@
-{
-"version": 3,
-"mappings": "AACA,aAAc;EACV,MAAM,EAAE,SAAS;EACjB,QAAQ,EAAE,QAAQ;EAClB,GAAG,EAAE,GAAG;EACR,SAAS,EAAE,2BAA2B;EACtC,KAAK,EAAE,GAAG;;AAIV,oBAAO;EACH,SAAS,EAAE,IAAI;EACf,YAAY,EAAE,IAAI;EAClB,UAAU,EAAE,GAAG;;AAIvB,cAAe;EACb,aAAa,EAAE,GAAG",
-"sources": ["../sass/modal.scss"],
-"names": [],
-"file": "modal.css"
-}
