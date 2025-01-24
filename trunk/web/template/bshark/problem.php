@@ -188,7 +188,7 @@
 						if (isset($_SESSION[$OJ_NAME . '_' . 'administrator']) || isset($_SESSION[$OJ_NAME . '_' . 'problem_manager'])) {
 							require_once("include/set_get_key.php");
 							?> 
-																			<a href="swadmin/problem_edit.php?id=<?php echo $id ?>&getkey=<?php echo $_SESSION[$OJ_NAME . '_' . 'getkey'] ?>" class="item"><?php echo $MSG_EDIT; ?></a>
+																			<a href="admin/problem_edit.php?id=<?php echo $id ?>&getkey=<?php echo $_SESSION[$OJ_NAME . '_' . 'getkey'] ?>" class="item"><?php echo $MSG_EDIT; ?></a>
 																			<a href='javascript:phpfm(<?php echo $row['problem_id']; ?>)' class="item"><?php echo $MSG_TESTDATA; ?></a>
 						<?php } ?>
 					</div>
