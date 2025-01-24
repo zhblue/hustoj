@@ -7,7 +7,7 @@ if (!(isset($_SESSION[$OJ_NAME.'_'.'administrator']))){
 }
 ?>
 
-<div class="container">
+<div class="padding">
 <br>
 <br>
 <br>

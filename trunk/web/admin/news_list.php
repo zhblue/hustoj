@@ -16,7 +16,7 @@ if(isset($OJ_LANG)){
 <hr>
 <center><h3><?php echo $MSG_NEWS."-".$MSG_LIST?></h3></center>
 
-<div class='container'>
+<div class='padding'>
 
 <?php
 $sql = "SELECT COUNT('news_id') AS ids FROM `news`";

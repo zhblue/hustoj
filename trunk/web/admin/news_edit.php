@@ -14,7 +14,7 @@ echo "<center><h3>".$MSG_NEWS."-"."Edit"."</h3></center>";
 include_once("kindeditor.php");
 ?>
 
-<div class="container">
+<div class="padding">
 <?php
 if(isset($_POST['news_id'])){
   require_once("../include/check_post_key.php");
