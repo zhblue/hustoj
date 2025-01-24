@@ -153,7 +153,7 @@ if (
                         if (isset($_SESSION[$OJ_NAME . '_' . 'administrator'])) {
                             ?>
 
-                            <a class="item" href="<?php echo $path_fix ?>swadmin">
+                            <a class="item" href="<?php echo $path_fix ?>admin">
                                 <?php echo $MSG_ADMIN; ?>
                             </a>
                             <?php
@@ -296,7 +296,7 @@ if (
                             if ($_SESSION[$OJ_NAME . '_' . 'administrator']) {
                                 ?>
 
-                                <a class="item" href="./swadmin">
+                                <a class="item" href="./admin">
                                     <?php echo $MSG_ADMIN; ?>
                                 </a>
                                 <?php
