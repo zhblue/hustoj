@@ -41,7 +41,7 @@ if(isset($_POST['pid'])){
 }
 ?>
 
-<div class="container">
+<div class="padding">
   <form method=POST action=news_add.php>
     <p align=left>
       <label class="col control-label"><?php echo $MSG_TITLE?></label>

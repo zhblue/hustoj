@@ -24,7 +24,7 @@
 
 <hr>
 <body leftmargin="30" >
-  <div id="main" class="container">
+  <div id="main" class="padding">
     <form method=POST action=problem_add.php>
       <input type=hidden name=problem_id value="New Problem">
         <p align=left>
@@ -201,7 +201,7 @@ function untransform() {
     console.log("预览关闭");
     // 恢复原始的 #main 元素样式
     let main = $("#main");
-    main.addClass("container");
+    main.addClass("padding");
     main.css("width", "");
     main.css("margin-left", "");
 

@@ -16,7 +16,7 @@ if(isset($OJ_LANG)){
 <hr>
 <center><h3><?php echo $MSG_USER."-".$MSG_PRIVILEGE."-".$MSG_LIST?></h3></center>
 
-<div class='container'>
+<div class='padding'>
 
 <?php
 $sql = "SELECT COUNT(*) AS ids FROM privilege WHERE rightstr IN ('administrator','source_browser','contest_creator','user_adder','http_judge','problem_editor','tag_adder','problem_importer','problem_verifiter','password_setter','printer','balloon','vip','problem_start','problem_end','service_port') ORDER BY user_id, rightstr";

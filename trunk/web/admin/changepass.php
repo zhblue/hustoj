@@ -14,7 +14,7 @@ if(isset($OJ_LANG)){
 <hr>
 <center><h3><?php echo $MSG_USER."-".$MSG_SETPASSWORD?></h3></center>
 
-<div class='container'>
+<div class='padding'>
 
 <?php
 if(isset($_POST['do'])){	

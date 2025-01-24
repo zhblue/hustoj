@@ -179,7 +179,7 @@ else{
   include_once("kindeditor.php") ;
 ?>
 
-  <div class="container">
+  <div class="padding">
     <form method=POST>
     <p align=left>
       <?php echo "<h3>".$MSG_CONTEST."-".$MSG_TITLE."</h3>"?>

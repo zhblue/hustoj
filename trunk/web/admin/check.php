@@ -17,7 +17,7 @@
 
 
 
-<div class="container-fluid">
+<div class="padding">
 	<?php require_once("admin-bar.php"); ?>
 	<div class="row-fluid top-space">
 		<div class="span2" >

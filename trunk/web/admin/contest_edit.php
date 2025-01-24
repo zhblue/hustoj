@@ -162,7 +162,7 @@ if(isset($_POST['startdate'])){
 }
 ?>
 
-<div class="container">
+<div class="padding">
   <form method=POST>
     <?php require_once("../include/set_post_key.php");?>
     <input type=hidden name='cid' value=<?php echo $cid?>>
