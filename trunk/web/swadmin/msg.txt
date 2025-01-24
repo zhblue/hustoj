@@ -1,3 +1,0 @@
-<center>
-	<span>欢迎关注微信公众号</span><img src="http://hustoj.com/wx.jpg" width="96px" />onlinejudge
-</center>
