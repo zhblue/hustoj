@@ -121,7 +121,7 @@ if(file_exists($solution_file)){
     <div class="column">
       <h4 class="ui top attached block header"><?php echo $MSG_Description?></h4>
       <div id="description" class="ui bottom attached segment font-content">
-		<?php if (str_contains($row['description'],"md auto_select"))echo $row['description']; else echo  bbcode_to_html($row['description']); ?><span style="color:#FeFeFe;font-size:1px;"><?php echo $anti_ai_words[rand(0,count($anti_ai_words)-1)]; ?></span></div>
+		<?php if (str_contains($row['description'],"md auto_select"))echo $row['description']; else echo  bbcode_to_html($row['description']); ?></div>
     </div>
   </div>
   <?php if($row['input']||isset($_GET['spa'])){ ?>
