@@ -16,6 +16,7 @@ bash make.sh
 cd ../install
 chmod +x g++.sh gcc.sh makeout.sh
 mysql jol< update.sql
+sed -i 's/OJ_INTERNAL_CLIENT=1/OJ_INTERNAL_CLIENT=0/g' /home/judge/etc/judge.conf
 judged
 
 web_user=`grep www /etc/passwd|awk -F: '{print $1}'`

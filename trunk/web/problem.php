@@ -179,6 +179,7 @@ if( isset($OJ_NOIP_KEYWORD) && $OJ_NOIP_KEYWORD){
         $filename = pathinfo($content, PATHINFO_FILENAME);
         
     } 
+//if($row['spj']<=1) $row['description']=aaiw($row['description']);
 /////////////////////////Template
 require("template/".$OJ_TEMPLATE."/problem.php");
 /////////////////////////Common foot
