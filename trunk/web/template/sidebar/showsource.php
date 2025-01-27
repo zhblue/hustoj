@@ -27,7 +27,7 @@ if ($brush=='pascal') $brush='delphi';
 if ($brush=='clang') $brush='c';
 if ($brush=='clang++') $brush='c++';
 if ($brush=='obj-c') $brush='c';
-if ($brush=='python3') $brush='python';
+if ($brush=='python3'||$brush=='cangjie') $brush='python';
 if ($brush=='swift') $brush='csharp';
 if ($brush=='r') $brush='delphi';
 echo "<pre class=\"brush:".$brush.";\">";

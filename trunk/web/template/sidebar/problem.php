@@ -21,16 +21,7 @@
 div[class*=ace_br] {
     border-radius: 0 !important;
 }
-.copy {
-    font-size: 12px;
-    color: #4d4d4d;
-    background-color: white;
-    padding: 2px 8px;
-    margin: 8px;
-    border-radius: 4px;
-    cursor: pointer;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.05), 0 2px 4px rgba(0,0,0,0.05);
-}
+
 </style>
 <script src="<?php echo $OJ_CDN_URL.$path_fix."template/$OJ_TEMPLATE/"?>clipboard.min.js"></script>
 <script src="<?php echo $OJ_CDN_URL.$path_fix."template/bs3/"?>marked.min.js"></script>
@@ -57,8 +48,23 @@ div[class*=ace_br] {
       </h1>
     </div>
       <div class="row" style="margin-top: -15px">
-          <span class="ui label"><?php echo $MSG_Memory_Limit ?>：<?php echo $row['memory_limit']; ?> MB</span>
-          <span class="ui label"><?php echo $MSG_Time_Limit ?>：<?php echo $row['time_limit']; ?> S</span>
+           <span class="ui label"><?php echo "文件提交" ?>：<?php 
+if(file_exists($solution_file)){
+    echo("<span class='red-bold'>文件名：$filename</span>");
+}else{
+    echo("<span class='red-bold'>无需freopen</span>");
+}
+?></span>
+<style>
+    .red-bold {
+    color: red;
+    font-weight: bold;
+}
+</style>
+          
+	      
+	  <span class="ui label" problem_id="<?php echo $id?>" ><?php echo $MSG_Memory_Limit ?>：<span tb="problem" fd="memory_limit"><?php echo $row['memory_limit']; ?></span> MB</span>
+          <span class="ui label" problem_id="<?php echo $id?>" ><?php echo $MSG_Time_Limit ?>：<span tb="problem" fd="time_limit"><?php echo $row['time_limit']; ?></span> S</span>
          <!-- <span class="ui label">标准输入输出</span> -->
       </div>
       <div class="row" style="margin-top: -23px">
@@ -145,7 +151,6 @@ div[class*=ace_br] {
     <div class="row">
         <div class="column">
           <h4 class="ui top attached block header"><?php echo $MSG_Sample_Input?> 
-          <span class="copy" id="copyin" data-clipboard-text="<?php echo htmlentities($sinput, ENT_QUOTES, 'UTF-8'); ?>"><?php echo $MSG_COPY; ?></span>
           </h4>
           <!-- <span class=copy id=\"copyin\" data-clipboard-text=\"".($sinput)."\"><?php echo $MSG_COPY; ?></span> -->
           <div class="ui bottom attached segment font-content">
@@ -159,7 +164,6 @@ div[class*=ace_br] {
     <div class="row">
         <div class="column">
           <h4 class="ui top attached block header"><?php echo $MSG_Sample_Output?>
-          <span class="copy" id="copyout" data-clipboard-text="<?php echo htmlentities($soutput, ENT_QUOTES, 'UTF-8'); ?>"><?php echo $MSG_COPY; ?></span>
           </h4>
           <!-- <span class=copy id=\"copyout\" data-clipboard-text=\"".($soutput)."\"><?php echo $MSG_COPY; ?></span> -->
           <div class="ui bottom attached segment font-content">
@@ -190,8 +194,7 @@ div[class*=ace_br] {
         <h4 class="ui block header top attached" id="show_tag_title_div" style="margin-bottom: 0; margin-left: -1px; margin-right: -1px; ">
         <?php echo $MSG_SOURCE?>
         </h4>
-        <div class="ui bottom attached segment" id="show_tag_div">
-
+        <div fd="source" pid="<?php echo $id?>" class="ui bottom attached segment" id="show_tag_div">
           <?php foreach($cats as $cat){
             if(trim($cat)=="") continue;
             $label_theme=$color[$tcolor%count($color)];
@@ -206,8 +209,6 @@ div[class*=ace_br] {
               <?php echo htmlentities($cat,ENT_QUOTES,'utf-8'); ?>
             </a>
           <?php } ?>
-
-
         </div>
      
       </div>
@@ -416,6 +417,37 @@ function selectMulti( num, answer){
   editor.text(rep);
 }
 
+function db_click_modify(){
+			let sp=$(this);
+			sp.attr("title","双击修改");
+			let fd=$(this).attr("fd");
+			let tb=$(this).attr("tb");
+			let data_id=$(this).parent().attr(tb+'_id');
+			$(this).dblclick(function(){
+				let data=sp.text();
+				sp.html("<form onsubmit='return false;'><input type=hidden name='m' value='"+tb
+					+"_update_"+fd+"'><input type='hidden' name='"+tb+"_id' value='"+data_id
+					+"'><input type='text' name='"+fd+"' value='"+data+"' selected='true' class='ui mini input' size=5 ></form>");
+				let ipt=sp.find("input[name="+fd+"]");
+				ipt.focus();
+				ipt[0].select();
+				sp.find("input").change(function(){
+					let newdata=sp.find("input[name="+fd+"]").val();
+					$.post("admin/ajax.php",sp.find("form").serialize()).done(function(){
+						console.log("new "+fd );
+						sp.html(newdata);
+					});
+
+				});
+			});
+}
+function admin_mod(){
+	let fd_array = ["time_limit", "memory_limit"];
+// 使用 for...of 循环
+	for (let fd_name of fd_array) {
+		$("span[fd="+fd_name+"]").each(db_click_modify);
+	}
+}
   $(document).ready(function(){
     	$("#creator").load("problem-ajax.php?pid=<?php echo $id?>");
 	<?php if(isset($OJ_MARKDOWN)&&$OJ_MARKDOWN){ ?>
@@ -430,7 +462,7 @@ function selectMulti( num, answer){
 		
 		$(".md").each(function(){
 <?php if ($OJ_MARKDOWN  && $OJ_MARKDOWN=="marked.js") {?>
-			$(this).html(marked.parse($(this).html()));
+			$(this).html(marked.parse($(this).html()));             // html() make > to &gt;   text() keep >
 <?php }else if ($OJ_MARKDOWN  && $OJ_MARKDOWN=="markdown-it") {?>
 			const md = window.markdownit();
 			$(this).html(md.render($(this).text()));
@@ -438,8 +470,8 @@ function selectMulti( num, answer){
 		});
 	  	// adding note for ```input1  ```output1 in description
 	        for(let i=1;i<10;i++){
-                        $(".language-input"+i).parent().before("<div><?php echo $MSG_Input?>"+i+":</div>");
-                        $(".language-output"+i).parent().before("<div><?php echo $MSG_Output?>"+i+":</div>");
+                        $(".language-input"+i).parent().before("<div><?php echo $MSG_Sample_Input?>"+i+":</div>");
+                        $(".language-output"+i).parent().before("<div><?php echo $MSG_Sample_Output?>"+i+":</div>");
                 }
 
 	       
@@ -547,42 +579,57 @@ function selectMulti( num, answer){
 	<?php if ($row['spj']>1 || isset($_GET['sid']) || (isset($OJ_AUTO_SHOW_OFF)&&$OJ_AUTO_SHOW_OFF)){?>
 	    transform();
 	<?php }?>
+		admin_mod();
 
   });
   </script>   
 
 
-  <script>
-	  if($('#copyin')[0]!= undefined ){
+<style>
+  .copy {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background-color: #f1f1f1;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 12px;
+    z-index: 10;
+  }
+  .pre-wrapper {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+  }
+</style>
 
-		    var clipboardin=new Clipboard($('#copyin')[0]);
-		    clipboardin.on('success', function(e){
-		      $("#copyin").text("<?php echo $MSG_COPY.$MSG_SUCCESS; ?>!"); 
-		          setTimeout(function () {$("#copyin").text("<?php echo $MSG_COPY; ?>"); }, 1500);    
-		      console.log(e);
-		    });
-		    clipboardin.on('error', function(e){
-		      $("#copyin").text("<?php echo $MSG_COPY.$MSG_FAIL; ?>!"); 
-		          setTimeout(function () {$("#copyin").text("<?php echo $MSG_COPY; ?>"); }, 1500);
-		      console.log(e);
-		    });
-	  }
-	  if($('#copyout')[0]!= undefined ){
-
-		    var clipboardout=new Clipboard($('#copyout')[0]);
-		    clipboardout.on('success', function(e){
-		      $("#copyout").text("<?php echo $MSG_COPY.$MSG_SUCCESS; ?>!"); 
-		          setTimeout(function () {$("#copyout").text("<?php echo $MSG_COPY; ?>"); }, 1500);    
-		      console.log(e);
-		    });
-		    clipboardout.on('error', function(e){
-		      $("#copyout").text("<?php echo $MSG_COPY.$MSG_FAIL; ?>!"); 
-		          setTimeout(function () {$("#copyout").text("<?php echo $MSG_COPY; ?>"); }, 1500);
-		      console.log(e);
-		    });
-	  }
-
-  </script>
+<script>
+var preIndex=1;
+$(document).ready(function () {
+  $("pre").each(function () {
+    $(this).wrap("<div class='pre-wrapper'></div>");
+    $(this).attr("id", "pre" + preIndex);
+    $(this).before("<span class='copy' id='copyBtn" + preIndex + "'  data-clipboard-target='#pre" + preIndex + "' ><?php echo $MSG_COPY; ?></span>");
+    
+    let clipboardin = new Clipboard("#copyBtn" + preIndex);
+    clipboardin.on('success', function(e){
+      $(e.trigger).text("<?php echo $MSG_COPY.$MSG_SUCCESS; ?>!");
+      setTimeout(function () {
+        $(".copy").text("<?php echo $MSG_COPY; ?>");
+      }, 1500);
+    });
+    clipboardin.on('error', function(e){
+      $(e.trigger).text("<?php echo $MSG_COPY.$MSG_FAIL; ?>!");
+      setTimeout(function () {
+        $(".copy").text("<?php echo $MSG_COPY; ?>");
+      }, 1500);
+    });
+    
+    preIndex++;
+  });
+});
+</script>
 <?php if (isset($OJ_MATHJAX)&&$OJ_MATHJAX){?>
     <!--以下为了加载公式的使用而既加入-->
 <script>

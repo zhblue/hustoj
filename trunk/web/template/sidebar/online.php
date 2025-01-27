@@ -34,8 +34,9 @@
 		<tr>
 			<td><?php $l = $ip->getlocation($u['ip']);
                                 echo $u['ip'].'<br />';
-                                if(!empty($l)) echo $l;  ?>
-			</td>
+                                if(!empty($l))  echo $l;
+                            ?>
+                        </td>
 			<td><?php echo $u['uri']?></td>
 			<td><?php echo $u['refer']?></td>
 			<td><?php echo sprintf("%dmin %dsec",($u['lastmove']-$u['firsttime'])/60,($u['lastmove']-$u['firsttime']) % 60)?></td>

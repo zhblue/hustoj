@@ -10,4 +10,4 @@
 <link href="<?php echo $OJ_CDN_URL.$path_fix."template/$OJ_TEMPLATE"?>/css/morris.min.css" rel="stylesheet">
 <link href="<?php echo $OJ_CDN_URL.$path_fix."template/$OJ_TEMPLATE"?>/css/FiraMono.css" rel="stylesheet">
 <link href="<?php echo $path_fix."template/$OJ_TEMPLATE"?>/css/latin.css" rel="stylesheet">
-<link href="<?php echo $path_fix."template/$OJ_TEMPLATE"?>/css/Exo.css" rel="stylesheet">
+<link href="<?php echo $path_fix."template/$OJ_TEMPLATE"?>/css/Exo.css?v=0.1" rel="stylesheet">

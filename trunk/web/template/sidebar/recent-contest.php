@@ -19,11 +19,11 @@
 
         </tbody>
     </table>
-    <div>数据来源：<a href="http://algcontest.rainng.com/contests.json" target="_blank">https://algcontest.rainng.com/contests.json</a>&nbsp;&nbsp;&nbsp;&nbsp;作者：<a href="https://www.rainng.com/"  target="_blank" >Rainng</a></div>
+    <div>数据来源：<a href="https://algcontest.rainng.com/contests.json" target="_blank">https://algcontest.rainng.com/contests.json</a>&nbsp;&nbsp;&nbsp;&nbsp;作者：<a href="https://www.rainng.com/"  target="_blank" >Azure99</a></div>
     </div>
         <script>
                 var contestList = $("#contest-list");
-                $.get("http://algcontest.rainng.com/contests.json",function(response){
+                $.get("https://algcontest.rainng.com/contests.json",function(response){
                         response.map(function(val){
                                 var item = "<tr><td class='column-1'>"+val.oj+"</td>"+
                                         "<td class='column-2'><a target='_blank' href='"+val.link+"'>"+val.name+"</a></td>"+

@@ -3,8 +3,6 @@
   include("template/$OJ_TEMPLATE/header.php");
 ?>
 <div class="padding">
-
-
 			<?php
 			if (isset($_GET['cid'])) {
 				$cid = intval($_GET['cid']);

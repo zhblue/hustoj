@@ -40,12 +40,36 @@ $(document).ready(function(){
   if(screen_width < 800) $("#MainBg-C").attr("class","");
 
 <?php if(isset($OJ_BG)&&$OJ_BG!="") echo " $('body').css('background','url($OJ_BG)').css('background-repeat','no-repeat').css('background-size','100%'); " ?>
+  if(window.location.href.indexOf("rank")==-1){
+	  $("tr").mouseover(function(){$(this).addClass("active")});
+	  $("tr").mouseout(function(){$(this).removeClass("active")})
+  }
 
-  $("tr").mouseover(function(){$(this).addClass("active")});
-  $("tr").mouseout(function(){$(this).removeClass("active")})
+<?php if(isset($_SESSION[$OJ_NAME."_administrator"]) ||isset($_SESSION[$OJ_NAME."_problem_editor"]) || isset($_SESSION[$OJ_NAME."_tag_adder"])  ){  ?>
+	$("div[fd=source]").each(function(){
+		let pid=$(this).attr('pid');	
+		$(this).append("<span><span class='label label-success' pid='"+pid+"' onclick='problem_add_source(this,"+pid+");'>+</span></span>");
+	});
+
+<?php  } ?>
 
 });
 
+
+function problem_add_source(sp,pid){
+	console.log("pid:"+pid);
+	let p=$(sp).parent();
+	p.html("<form onsubmit='return false;'><input type='hidden' name='m' value='problem_add_source'><input type='hidden' name='pid' value='"+pid+"'><input type='text' class='input input-large' name='ns'></form>");
+	p.find("input").focus();
+	p.find("input").change(function(){
+		console.log(p.find("form").serialize());
+		let ns=p.find("input[name=ns]").val();
+		console.log("new source:"+ns);
+		$.post("admin/ajax.php",p.find("form").serialize());
+		p.parent().append("<span class='label label-success'>"+ns+"</span>");
+		p.html("<span class='label label-success' pid='"+pid+"' onclick='problem_add_source(this,"+pid+");'>+</span>");
+	});
+}
 $(".hint pre").each(function(){
         var plus="<span class='glyphicon glyphicon-plus'><?php echo $MSG_CLICK_VIEW_HINT?></span>";
         var content=$(this);

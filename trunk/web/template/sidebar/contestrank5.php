@@ -7,7 +7,7 @@
 		color: #000;
 	}
 </style>
-<div style="margin-bottom:40px; ">
+<div style="margin-bottom:40px; "  class="padding" >
 <h1 style="text-align:left;">Contest<?php echo $cid ?> -- <?php echo $title ?> -- <?php echo $MSG_REVIEW_CONTESTRANK ?>
 <button  class='ui small yellow button' onclick='$("tr[class!=active]").toggle();'><?php echo $MSG_SHOW ?>/<?php echo $MSG_HIDE ?></button>	
 <a class='ui small blue button' href="contestrank-oi.php?cid=<?php echo $cid?>" ><?php echo $MSG_BACK ?></a> 

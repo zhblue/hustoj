@@ -220,6 +220,10 @@ function fresh_result(solution_id)
 		if (xmlhttp.readyState==4 && xmlhttp.status==200)
 		{
 			var r=xmlhttp.responseText;
+			if(r=="<?php echo $OJ_NOIP_KEYWORD?>") {
+				tb.innerHTML="<?php echo $contest_locks[4]?>";
+				return;
+			}
 			var ra=r.split(",");
 			// alert(r);
 			// alert(judge_result[r]);
@@ -355,19 +359,19 @@ function resume(){
 	var t=$("#TestRun")[0];
 	if(count<0){
 		 $("#Submit").attr("disabled",false);
-		 $("#Submit").text("<?php echo $MSG_SUBMIT?>");
+		 $("#Submit").val("<?php echo $MSG_SUBMIT?>");
 		if(t!=null) $("#TestRun").attr("disabled",false);
-		if(t!=null) $("#TestRun").text("<?php echo $MSG_TR?>");
+		if(t!=null) $("#TestRun").val("<?php echo $MSG_TR?>");
 		if( handler_interval) window.clearInterval( handler_interval);
 		if($("#vcode")!=null) $("#vcode").click();
 	}else{
-		 $("#Submit").text("<?php echo $MSG_SUBMIT?>("+count+")");
+		 $("#Submit").val("<?php echo $MSG_SUBMIT?>("+count+")");
 		if(t!=null)t.value="<?php echo $MSG_TR?>("+count+")";
 		window.setTimeout("resume();",1000);
 	}
 }
 function switchLang(lang){
-   var langnames=new Array("c_cpp","c_cpp","pascal","java","ruby","sh","python","php","perl","csharp","objectivec","vbscript","scheme","c_cpp","c_cpp","lua","javascript","golang","sql","fortran","matlab","cobol","r");
+   var langnames=new Array("c_cpp","c_cpp","pascal","java","ruby","sh","python","php","perl","csharp","objectivec","vbscript","scheme","c_cpp","c_cpp","lua","javascript","golang","sql","fortran","matlab","cobol","r","c_cpp","python");
    editor.getSession().setMode("ace/mode/"+langnames[lang]);
 
 }

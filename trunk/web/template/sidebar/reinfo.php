@@ -31,6 +31,7 @@
 }
 td > code {
     color:red;
+    white-space:nowrap;
 }
 
 </style>
@@ -94,9 +95,7 @@ td > code {
     }
     explain();
 </script>
-
-        <?php if(isset($OJ_MARKDOWN)&&$OJ_MARKDOWN){ ?>
-          <script src="<?php echo $OJ_CDN_URL.$path_fix."template/bs3/"?>marked.min.js"></script>
+<script src="<?php echo $OJ_CDN_URL.$path_fix."template/bs3/"?>marked.min.js"></script>
 <script>
     $(document).ready(function(){
                 marked.use({
@@ -120,14 +119,14 @@ td > code {
         $("#errtxt table").addClass("ui mini-table cell striped");
         $("#errtxt table tr:odd td").css({
             "border": "1px solid grey",
-            "text-align": "center",
+           // "text-align": "center",
             "width": "200px",
             "background-color": "#8521d022",
             "height": "30px"
         });
         $("#errtxt table tr:even td").css({
             "border": "1px solid grey",
-            "text-align": "center",
+           // "text-align": "center",
             "width": "200px",
             "background-color": "#2185d022",
             "height": "30px"
@@ -174,10 +173,6 @@ td > code {
         });
 
     });
-
 </script>
-
-    <?php } ?>
-
 
 <?php include("template/$OJ_TEMPLATE/footer.php");?>

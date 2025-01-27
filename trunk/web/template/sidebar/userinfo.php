@@ -4,7 +4,8 @@
 #avatar_container:before {
     content: "";
     display: block;
-    padding-top: 100%;
+    height:80%;
+    width:80%;
 }
 </style>
 <?php 
@@ -15,21 +16,24 @@
     for ($i = count($accall);$i > 0; $i--) {
         if ($AC < $acneed[$i]) {$calsed = $accall[$i - 1];$calledid=$i-1;}
     }
+/*
     for ($i=0;$i<=11;++$i){
     	$ped[$i]=0;
     }
-    $sql="SELECT * FROM `solution` WHERE `user_id`=?";
-    $result = pdo_query($sql, $user);
+    $sql="select * FROM `solution` WHERE `user_id`=?";
+    $result = mysql_query_cache($sql, $user);
     foreach ($result as $row) {
     	++$ped[$row['result']];
-}?>
+    }
+*/
+?>
 
 <div class="padding">
 <div class="ui grid">
     <div class="row">
         <div class="five wide column">
             <div class="ui card" style="width: 100%; " id="user_card">
-                <div class="blurring dimmable image" id="avatar_container" style="height:325px">
+                <div class="blurring dimmable image" id="avatar_container">
                     <?php $default = ""; $grav_url = "https://www.gravatar.com/avatar/" . md5( strtolower( trim( $email ) ) ) . "?d=" . urlencode( $default ) . "&s=500"; ?>
 		<?php  
 		    // 如果email填写的是qq邮箱，取QQ头像显示
@@ -41,12 +45,13 @@
 
                 ?>
 
-                    <img style="margin-top: -100%; " src="<?php echo $grav_url; ?>">
+                    <img src="<?php echo $grav_url; ?>">
                 </div>
                 <div class="content">
                     <div class="header"><?php echo $nick?></div>
                     <div class="meta">
                         <a class="group"><?php echo $school?></a>
+			<a class="group"><?php echo $group_name?></a>
                     </div>
                 </div>
                  <table class="table table-hover" style="width:100%">
@@ -60,7 +65,7 @@
               </table>
                 <div class="extra content">
                     <a><i class="check icon"></i>通过 <?php echo $AC ?> 题</a>
-                    <a style="float: right; "><i class="star icon <?php if($starred) echo "active"?>"></i>排名 <?php echo $Rank ?></a>
+                    <a style="float: right; "><i class="star icon <?php if($starred) echo "active"?>" title='用同名账户给hustoj项目加星，可以点亮此星' ></i>排名 <?php echo $Rank ?></a>
                     
                      <?php if ($email != "") { ?>
                             <div style="margin-top:10px;margin-bottom:10px">
@@ -120,8 +125,8 @@
                                     }
                                     <?php
 				    $ac=array();
-                                    $sql = "SELECT `problem_id`,count(1) from solution where `user_id`=? and result=4 and problem_id != 0 group by `problem_id` ORDER BY `problem_id` ASC";
-                                    if ($ret = pdo_query($sql, $user)) {
+                                    $sql = "select `problem_id`,count(1) from solution where `user_id`=? and result=4 and problem_id != 0 $not_in_noip group by `problem_id` ORDER BY `problem_id` ASC";
+                                    if ($ret = mysql_query_cache($sql, $user)) {
                                         $len = count($ret);
                                         echo "ptot($len);";
                                         foreach ($ret as $row){
@@ -148,8 +153,8 @@
                                             " </a>");
                                     }
                                     <?php
-                                    $sql = "SELECT `sol`.`problem_id`, count(1) from solution sol where `sol`.`user_id`=? and `sol`.`result`!=4 and sol.problem_id != 0 group by `sol`.`problem_id` ORDER BY `sol`.`problem_id` ASC";
-                                    if ($result = pdo_query($sql, $user)) {
+                                    $sql = "select `sol`.`problem_id`, count(1) from solution sol where `sol`.`user_id`=? and `sol`.`result`!=4 and sol.problem_id != 0  $not_in_noip group by `sol`.`problem_id` ORDER BY `sol`.`problem_id` ASC";
+                                    if ($result = mysql_query_cache($sql, $user)) {
                                         foreach ($result as $row)
                                             if(!in_array($row[0],$ac))echo "p($row[0],$row[1]);";
                                     }
@@ -159,7 +164,28 @@
                         </div>
                     </div>
     
-
+		    <div class="row">
+                        <div class="column">
+                            <h4 class="ui top attached block header">系统题单</h4>
+                            <div class="ui bottom attached segment">
+<?php 
+echo "<table class='ui striped table '>";
+foreach($plista as $plist){
+	echo "<tr>";
+	$name=$plist["name"];
+	echo "<td>$name</td>";
+	$list=explode(",",$plist['list']);
+	foreach($list as $pid){
+		if (in_array($pid,$ac)) $color="green"; else $color="red";
+	 	echo "<td class='ui $color basic label'><a href=problem.php?id=$pid>".$bible[$pid]."</a></td>";
+	}
+	echo "</tr>";
+}
+echo "</table>";
+?>
+                            </div>
+                        </div>
+                    </div>
                                         <div class="row">
                         <div class="column">
                             <h4 class="ui top attached block header">
@@ -281,8 +307,8 @@
 <?php 
 $sub_data = [];
 $max_count = 0;
-$sql = "SELECT DATE(in_date),count(*) FROM solution WHERE user_id=? AND  in_date >= DATE_SUB(CURDATE(),INTERVAL 1 YEAR) AND result < 13 GROUP BY DATE(in_date);";
-$ret = pdo_query($sql, $user);
+$sql = "select DATE(in_date),count(*) FROM solution WHERE user_id=? AND  in_date >= DATE_SUB(CURDATE(),INTERVAL 1 YEAR) AND result < 13 $not_in_noip GROUP BY DATE(in_date);";
+$ret = mysql_query_cache($sql, $user);
 foreach ($ret as $row) {
     array_push($sub_data, [$row[0], (int)$row[1]]);
     $max_count = max($max_count, (int)$row[1]);

@@ -8,8 +8,16 @@
             <div class="ui search" style="width: 280px; height: 28px; margin-top: -5.3px; ">
               <div class="ui left icon input" style="width: 100%; ">
                 <input class="prompt" style="width: 100%; " type="text" value="" placeholder=" <?php echo $MSG_CONTEST_NAME ?> …" name="keyword">
-                <i class="search icon"></i>
-                <a  class="ui button"  href="contest.php" ><?php echo $MSG_VIEW_ALL_CONTESTS ?></a>
+                <i class="search icon"></i>&nbsp;&nbsp;&nbsp;
+                <?php
+                if(isset($_GET['my'])){
+                
+                echo '<a  class="ui button"  href="contest.php" >'.$MSG_VIEW_ALL_CONTESTS .'</a>';
+                }else{
+                
+                echo '<a  class="ui button"  href="contest.php?my" >显示我的作业比赛</a>';
+                };
+                ?>
               </div>
               <div class="results" style="width: 100%; "></div>
             </div>
