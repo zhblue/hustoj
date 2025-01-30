@@ -18,7 +18,8 @@
 	$MSG_STATISTICS="통계";
 	$MSG_USERINFO="회원정보";
 	$MSG_MAIL="E-mail";
-        $MSG_TODO="ToDo";
+    $MSG_TODO="ToDo";
+	
 	//status.php
 	$MSG_Pending="채점 대기중";
 	$MSG_Pending_Rejudging="재채점 대기중";
@@ -34,16 +35,17 @@
 	$MSG_Compile_Error="컴파일 에러";
 	$MSG_Runtime_Click="실행중 에러(클릭)";
 	$MSG_Compile_Click="컴파일 에러(클릭)";
-	$MSG_Compile_OK="컴파일 완료";
-	$MSG_Click_Detail="내용 확인";
+	$MSG_Compile_OK="컴파일 성공";
+	$MSG_MANUAL_CONFIRMATION="자동채점 후, 수동확인 대기중";
+	$MSG_Click_Detail="상세내용 확인";
 	$MSG_Manual="수동채점";
 	$MSG_OK="확인";
 	$MSG_Explain="이유나 설명을 입력하세요.";
 	$MSG_MARK="점수";
-
-	$MSG_MANUAL_CONFIRMATION="수동확인 대기중...";
-	$MSG_MC="수동확인";
-
+	$MSG_SUBMITTING="제출중";
+	$MSG_REMOTE_PENDING="원격 제출중";
+	$MSG_REMOTE_JUDGING="원격 채점중";	
+	$MSG_RP="원격 대기";
 
 	$MSG_TEST_RUN="테스트 실행 완료";
 
@@ -52,7 +54,7 @@
 	$MSG_PROBLEM="문제";
 	$MSG_RESULT="채점결과";
 	$MSG_MEMORY="메모리사용량";
-	$MSG_TIME="실행시간";
+	//$MSG_TIME="실행시간";
 	$MSG_LANG="제출언어";
 	$MSG_CODE_LENGTH="코드용량";
 	$MSG_SUBMIT_TIME="제출시간";
@@ -71,7 +73,8 @@
 	$MSG_RE="RE";
 	$MSG_CE="CE";
 	$MSG_CO="CO";
-	$MSG_TR="Test";
+	$MSG_TR="TR";
+	$MSG_MC="MC";
 	$MSG_RESET="초기화";
 
 	//problemset.php
@@ -79,6 +82,7 @@
 	$MSG_PROBLEM_ID="문제ID";
 	$MSG_TITLE="제목";
 	$MSG_SOURCE="출처/분류";
+    $MSG_REMOTE_OJ="호스트OJ";	
 	$MSG_SUBMIT_NUM="제출";
 	$MSG_SUBMIT="제출";
 	$MSG_SHOW_OFF="제출창";
@@ -104,27 +108,27 @@
 	$MSG_WEEK="주간-순위";
 	$MSG_MONTH="월간-순위";
 	$MSG_YEAR="연간-순위";
-        $MSG_ABSENT="Absent";
+    $MSG_ABSENT="결석";
 
 	//registerpage.php
 	$MSG_USER_ID="사용자ID";
 	$MSG_PASSWORD="비밀번호";
 	$MSG_REPEAT_PASSWORD="비밀번호 확인";
 	$MSG_SCHOOL="소속/학교";
-        $MSG_GROUP_NAME="Group";
+    $MSG_GROUP_NAME="그룹";
 	$MSG_EMAIL="E-mail";
 	$MSG_REG_INFO="등록정보";
 	$MSG_VCODE="확인코드";
-        $MSG_ACTIVE_YOUR_ACCOUNT="Active Your Account ";
-        $MSG_CLICK_COPY="Click or Copy the LINK to open in browser ";
-        $MSG_CHECK="Check out ";
-	$MSG_OLD="Old";
-	$MSG_DIFFERENT="Different";
-	$MSG_WRONG="Wrong";
-	$MSG_TOO_LONG="Too long";
-	$MSG_TOO_SHORT="Too short";
-	$MSG_TOO_SIMPLE="Too simple";
-	$MSG_TOO_BAD="Please surf the internet in a civilized manner";
+    $MSG_ACTIVE_YOUR_ACCOUNT="계정 활성화";
+    $MSG_CLICK_COPY="링크 복사";
+    $MSG_CHECK="확인";
+	$MSG_OLD="이전";
+	$MSG_DIFFERENT="차이";
+	$MSG_WRONG="틀림";
+	$MSG_TOO_LONG="김";
+	$MSG_TOO_SHORT="짧음";
+	$MSG_TOO_SIMPLE="단순함";
+	$MSG_TOO_BAD="인터넷을 검색하세요";
 
 	//problem.php
 	$MSG_NO_SUCH_PROBLEM="문제가 없습니다!";
@@ -138,13 +142,13 @@
 	$MSG_NJ="일반 채점" ;
 	$MSG_SPJ="특별 채점" ;
 	$MSG_RTJ="텍스트 채점" ;
-	$MSG_CLICK_VIEW_HINT="힌트보기";
 	$MSG_HINT="도움";
 	$MSG_Source="출처";
 	$MSG_Time_Limit="시간제한";
 	$MSG_Memory_Limit="메모리제한";
 	$MSG_EDIT="수정";
 	$MSG_TESTDATA="채점 데이터";
+	$MSG_CLICK_VIEW_HINT="힌트보기";
 
 	//admin menu
 	$MSG_SEEOJ="OJ확인";
@@ -157,6 +161,7 @@
 	$MSG_SAVE="저장";
 	$MSG_DELETED="삭제됨";
 	$MSG_NORMAL="정상";
+    $MSG_RESERVED="비활성화됨";
 
 	$MSG_TEAMGENERATOR="팀 생성기";
 	$MSG_SETMESSAGE="메시지설정";
@@ -174,11 +179,10 @@
 	$MSG_NEWS_MENU="메뉴 보기";
 	$MSG_LAST_LOGIN="최근 로그인";
 	$MSG_OFFLINE_ZIP_IMPORT="Import a offline contest ZIP file, which using the following structure: ";
-        $MSG_OFFLINE="Offline";
-        $MSG_EXPIRY_DATE="Expiry Date";
-        $MSG_CLICK_TO_DELETE="Click to delete";
-        $MSG_CLICK_TO_RECOVER="Click to recover";
-
+    $MSG_OFFLINE="Offline";
+    $MSG_EXPIRY_DATE="Expiry Date";
+    $MSG_CLICK_TO_DELETE="Click to delete";
+    $MSG_CLICK_TO_RECOVER="Click to recover";
 
 	//contest.php
 	$MSG_PRIVATE_WARNING="대회에 참가할 수 있는 권한이 없습니다.";
@@ -191,16 +195,16 @@
 	$MSG_SERVER_TIME="현재 시간";
 	$MSG_START_TIME="시작 시간";
 	$MSG_END_TIME="종료 시간";
-	$MSG_CONTEST_ID="대회ID";
 	$MSG_VIEW_ALL_CONTESTS="모든 대회 보기";
+	$MSG_CONTEST_ID="대회ID";
 	$MSG_CONTEST_NAME="대회 이름";
 	$MSG_CONTEST_STATUS="대회 상태";
 	$MSG_CONTEST_OPEN="대회 구분";
 	$MSG_CONTEST_CREATOR="등록자";
 	$MSG_CONTEST_PENALTY="누적시간";
+	$MSG_IP_VERIFICATION="IP검증";
 	$MSG_LOG="기록";
 	$MSG_SUSPECT="의심스러운 사용자";
-	$MSG_IP_VERIFICATION="IP검증";
 	$MSG_CONTEST_SUSPECT1="여러 개의 ID가 사용된 IP 주소. 대회 중에 같은 컴퓨터에서 다른 ID로 접근하면 기록됩니다.";
 	$MSG_CONTEST_SUSPECT2="여러 개의 IP 주소에서 접속된 ID. 대회 중에 다른 컴퓨터로 바꾸면 기록됩니다.";
 	$MSG_REVIEW_CONTESTRANK="대회 문제 검토자 순위"; // rank of people who reviewed problems of contest after it's over
@@ -222,9 +226,9 @@
 	$MSG_Ended="대회종료";
 	$MSG_Login="로그인하세요.";
 	$MSG_JUDGER="채점서버";
-$MSG_DOWNLOAD="Download";
-$MSG_SHOW="Show";
-$MSG_HIDE="Hide";
+    $MSG_DOWNLOAD="다운로드";
+    $MSG_SHOW="보이기";
+    $MSG_HIDE="숨기기";
   
 	$MSG_SOURCE_NOT_ALLOWED_FOR_EXAM="대회중에는 이전에 제출했던 코드를 볼 수 없습니다.";
 	$MSG_BBS_NOT_ALLOWED_FOR_EXAM="대회중에는 게시판을 사용할 수 없습니다.";
@@ -241,28 +245,30 @@ $MSG_HIDE="Hide";
 	$MSG_IMPORTED="관리자 업로드";
 	$MSG_PRINTER="인쇄";
 	$MSG_PRINT_DONE="인쇄 완료";
-	$MSG_PRINT_PENDING="인쇄 보류";
+	$MSG_PRINT_PENDING="인쇄 요청중";
 	$MSG_PRINT_WAITING="동일한 인쇄 작업을 반복해서 제출하지 말고 기다려 주십시오.";
 	$MSG_COLOR="색상";
 	$MSG_BALLOON="풍선";
 	$MSG_BALLOON_DONE="풍선 전송";
 	$MSG_BALLOON_PENDING="풍선 대기중";
+
 	$MSG_DATE="날짜";
+    $MSG_TIME="시간";
 	$MSG_SIGN="서명";
 	$MSG_RECENT_PROBLEM="최근 문제";
 	$MSG_RECENT_CONTEST="최근 대회";
 	$MSG_PASS_RATE="통과율";
 	$MSG_SHOW_TAGS="태그 보기";
 	$MSG_SHOW_ALL_TAGS="모든 태그";
-	$MSG_RESERVED="숨겨짐";
-        $MSG_TABLE_TRANSPOSE="Table Transpose";
+    $MSG_TABLE_TRANSPOSE="Table Transpose";
 
 	$MSG_HELP_SEEOJ="OJ 확인";
 	$MSG_HELP_ADD_NEWS="첫 페이지 공지사항 추가";
 	$MSG_HELP_NEWS_LIST="첫 페이지 공지사항 활성화/비활성화/수정";
 	$MSG_HELP_USER_LIST="사용자 활성화/비활성화";
 	$MSG_HELP_USER_ADD="사용자 등록";
-	$MSG_HELP_ADD_PROBLEM="문제 등록. 문제 등록 후, 문제리스트에서 각 문제별 채점데이터 추가 가능";
+    $MSG_HELP_USER_IMPORT="사용자 가져오기";	
+	$MSG_HELP_ADD_PROBLEM="문제 등록. TestData 버튼을 눌러 여러 개의 채점 데이터를 추가할 수 있습니다. 새로 등록된 문제는 <b>숨겨집니다.</b>. 빨간색 <font color='red '> 문제를 활성화하려면 녹색 <font color='green'>보이기</font>버튼을 눌러 전환하세요.";
 	$MSG_HELP_PROBLEM_LIST="문제 관리. zip 파일로 채점데이터 파일 업로드 가능";
 	$MSG_HELP_ADD_CONTEST="대회 등록. 쉼표(,)로 구분해 문제 입력. 비공개대회(비밀번호/사용자등록) 가능";
 	$MSG_HELP_CONTEST_LIST="대회 확인. 대회시간/공개/비공개 수정. 이미 시작된 대회는 수정 권장하지 않음";
@@ -283,10 +289,10 @@ $MSG_HIDE="Hide";
 	$MSG_HELP_AC="모두 정답을 출력했습니다.";
 	$MSG_HELP_PE="출력된 형식이 다릅니다. 출력형식/공백/줄바꿈 등을 다시 확인해주세요."; 
 	$MSG_HELP_WA="틀린 답을 출력했습니다. 입력되는 입력데이터의 범위, 출력되어야 할 결과 등을 다시 확인해주세요."; 
-	$MSG_HELP_TLE="실행 제한시간을 초과하였습니다."; 
-	$MSG_HELP_MLE="메모리사용 제한용량을 초과하였습니다."; 
-	$MSG_HELP_OLE="너무 많이 출력되었습니다. 무한 반복 출력 등.";
-	$MSG_HELP_RE="프로그램이 실행되는 도중에 에러가 발생하였습니다.";
+	$MSG_HELP_TLE="실행시간 제한을 초과하였습니다."; 
+	$MSG_HELP_MLE="메모리사용 제한을 초과하였습니다."; 
+	$MSG_HELP_OLE="출력 제한을 초과하였습니다. 무한 반복 출력 등.";
+	$MSG_HELP_RE="프로그램이 실행되는 도중에 오류가 발생하였습니다.";
 	$MSG_HELP_CE="제출한 코드를 컴파일러가 실행파일로 번역하지 못 했습니다. 링크를 눌러 컴파일 에러를 확인해주세요."; 
 
 	$MSG_HELP_MORE_TESTDATA_LATER="문제를 등록한 후, 더 많은 채점 데이터를 추가할 수 있습니다.";
@@ -294,9 +300,8 @@ $MSG_HIDE="Hide";
 	$MSG_HELP_HUSTOJ="<sub><a target='_blank' href='https://github.com/zhblue/hustoj'><span class='glyphicon glyphicon-heart' aria-hidden='true'></span> HUSTOJ Github 에서 <span class='glyphicon glyphicon-star' aria-hidden='true'></span>Star를 부탁드립니다!</a></sub>";
 	$MSG_HELP_SPJ="자세한 내용은 <a href='https://cn.bing.com/search?q=hustoj+special+judge' target='_blank'>search hustoj special judge</a>"; 
 	$MSG_HELP_BALLOON_SCHOOL="인쇄, 풍선 계정의 학교 필드는 작업 목록을 필터링하는 데 사용됩니다. 예를 들어 [동부 캠퍼스]를 채우면 계정이 [동부 캠퍼스]로 시작하는 작업만 표시됩니다.";	
-        $MSG_HELP_LEFT_EMPTY="If you don't want to modify, please left this empty.";
-        $MSG_HELP_LOCAL_EMPTY="Left empty for local problem.";
- 
+    $MSG_HELP_LEFT_EMPTY="If you don't want to modify, please left this empty.";
+    $MSG_HELP_LOCAL_EMPTY="Left empty for local problem.";
 	$MSG_WARNING_LOGIN_FROM_DIFF_IP="다른 컴퓨터/IP로 로그인했습니다.";
 	$MSG_WARNING_DURING_EXAM_NOT_ALLOWED="시험중에는 허용되지 않습니다.";
 	$MSG_WARNING_ACCESS_DENIED="볼 수 없습니다! 권한이 없거나 제한되어 있습니다.";
@@ -304,11 +309,13 @@ $MSG_HIDE="Hide";
 	$MSG_WARNING_PASSWORD_SHORT="비밀번호는 6문자 이상 입력해야 합니다!";
 	$MSG_WARNING_REPEAT_PASSWORD_DIFF="비밀번호가 다릅니다!";
 
-	$MSG_LOSTPASSWORD_MAILBOX=" Email로 전송된 코드를 입력하세요.";
-	$MSG_LOSTPASSWORD_WILLBENEW=" 입력된 코드가 정확하면 입력된 코드가 새로운 비밀번호로 저장됩니다.";
 
 
-  //discuss.php
+	$MSG_LOSTPASSWORD_MAILBOX="Email로 전송된 코드를 입력하세요.";
+	$MSG_LOSTPASSWORD_WILLBENEW="입력된 코드가 정확하면 입력된 코드가 새로운 비밀번호로 저장됩니다.";
+
+
+    //discuss.php
 	$MSG_LAST_REPLY="최근답변";
 	$MSG_REPLY_COUNTS="답변개수";
 	$MSG_REPLY_NUMBER="순번";	
@@ -321,7 +328,7 @@ $MSG_HIDE="Hide";
 	$MSG_REPLY="답글쓰기";	
 	$MSG_REGISTER_REPLY="답글등록";
 	$MSG_DISABLE="숨김";		
-  $MSG_LOCK="숨김";
+    $MSG_LOCK="잠김";
 	$MSG_RESUME="보여줌";
 	$MSG_DISCUSS_DELETE="삭제";	
 	$MSG_DISCUSS_NOTICE="공지";		
@@ -329,22 +336,25 @@ $MSG_HIDE="Hide";
 	$MSG_DISCUSS_NORMAL="일반";
 
 
+
 	// template/../reinfo.php
 	$MSG_A_NOT_ALLOWED_SYSTEM_CALL="허용되지 않은 시스템 기능을 호출하였습니다. 권한이 없는 파일이나 프로세스에 접근하려고 했는지 확인해보세요. 제출한 채점 코드나 채점 데이터에 문제가 없는데도 이 메시지가 보이는 경우에는 HUSTOJ 사이트 관리자에게 확인을 받고, 이 메시지가 발생하지 않도록 수정할 수 있습니다.";
 	$MSG_SEGMETATION_FAULT="배열 크기를 벗어난 위치에 접근했거나, 포인터를 잘 못 사용하였거나, 접근이 제한된 메모리 영역에 접근했습니다.";
 	$MSG_FLOATING_POINT_EXCEPTION="실수 계산 오류가 발생하여 예외 처리되었습니다. 0 으로 나눗셈을 계산한 경우가 없는지 확인해주세요.";
+	$MSG_WRONG_OUTPUT_TYPE_EXCEPTION="숫자를 문자로 출력했는지, 출력할 수 없는 문자를 출력했는지 확인해주세요.";	
 	$MSG_BUFFER_OVERFLOW_DETECTED="메모리 버퍼 오버플로우가 감지되었습니다. 저장하려는 문자열의 길이가 배열 크기를 초과하는지 확인해주세요.";
 	$MSG_PROCESS_KILLED="메모리제한 또는 시간제한을 초과하여 채점 프로세스가 종료되었습니다. 무한 반복 실행이 있는지 확인해주세요.";
 	$MSG_ALARM_CLOCK="시간제한을 초과하여 채점 프로세스가 종료되었습니다. 무한 반복 실행이 있는지 확인해보세요. 시간제한 초과가 발생했습니다.";
 	$MSG_CALLID_20="배열 크기를 벗어난 위치에 접근했을 수 있습니다. 문제에서 제시된 최대 데이터의 크기와 채점으로 제출한 코드의 배열 크기를 정확히 확인해주세요.";
 	$MSG_ARRAY_INDEX_OUT_OF_BOUNDS_EXCEPTION="배열 크기를 벗어난 위치에 접근했는지 확인해주세요.";
 	$MSG_STRING_INDEX_OUT_OF_BOUNDS_EXCEPTION="문자열에 대한 참조번호가 크기를 벗어났습니다. subString, charAt 등에 사용된 매개 변수를 확인해주세요.";
-	$MSG_WRONG_OUTPUT_TYPE_EXCEPTION="숫자를 문자로 출력했는지, 출력할 수 없는 문자를 출력했는지 확인해주세요.";
+    $MSG_WRONG_OUTPUT_TYPE_EXCEPTION="출력 오류. 실수로 문자로 출력되는지, 아니면 인쇄할 수 없는 문자가 출력되는지 확인해주세요.";
 	$MSG_NON_ZERO_RETURN="main() 함수에서 0이 아닌 값을 반환하면 오류로 간주합니다. 반환 값을 확인해주세요.";
-  $MSG_EXPECTED="Expected Output";
-  $MSG_YOURS="Your Output";
-  $MSG_FILENAME="Filename";
-  $MSG_SIZE="Size";
+    $MSG_EXPECTED="정답 출력";
+    $MSG_YOURS="채점 출력";
+    $MSG_FILENAME="파일명";
+    $MSG_SIZE="크기";
+
 
 	// template/../ceinfo.php
 	$MSG_ERROR_EXPLAIN="설명";
@@ -415,9 +425,11 @@ $MSG_HIDE="Hide";
 	$MSG_EXPECTED_IDENTIFIER="변수를 사용하기 전에 미리 선언하지 않았거나 변수를 선언할 때 소괄호 기호 () 를 누락했을 수 있습니다.";
 	$MSG_VARIABLY_MODIFIED="배열 크기를 변수로 지정할 수 없습니다. C 에서는 전역 배열의 크기를 선언할 때, 변수를 사용할 수 없습니다. const 형 변수도 사용할 수 없습니다.";
 	$MSG_FUNCTION_GETS_REMOVIED="std::gets 함수는 C++14 에서 지원되지 않습니다. fgets나 #define gets(S) fgets(S,sizeof(S),stdin)를 사용하세요.";
+	$MSG_NON_ZERO_RETURN="Main 함수는 0이 아닌 값을 반환할 수 없습니다. 그렇지 않으면 프로그램 오류로 간주됩니다.";
 	$MSG_PROBLEM_USED_IN="비공개 대회에 등록되어 있습니다.";
 	$MSG_MAIL_CAN_ONLY_BETWEEN_TEACHER_AND_STUDENT="메일은 교사와 학생 사이에서만 주고 받을 수 있습니다. 학생들끼리는 불가능합니다.";
 	$MSG_COPY_USER_LIST_FROM_CONTEST="Copy user list from a history contest... ";
+
 	$MSG_REFRESH_PRIVILEGE="권한 갱신";
 
 	$MSG_SAVED_DATE="저장 일시";
@@ -435,15 +447,16 @@ $MSG_HIDE="Hide";
 	//bbcode.php
 	$MSG_TOTAL="";
 	$MSG_NUMBER_OF_PROBLEMS="문제";
-  $MSG_GLOBAL="Global ";
-  $MSG_THIS_CONTEST="This Contest's ";
+
+    $MSG_GLOBAL="Global ";
+    $MSG_THIS_CONTEST="This Contest's ";
 	$MSG_SUBMIT_RECORD="채점기록";
 	$MSG_RETURN_CONTEST="대회로 돌아가기";
 	$MSG_COPY="복사";
 	$MSG_SUCCESS="성공";
 	$MSG_FAIL="실패";
 	$MSG_TEXT_COMPARE="텍스트 비교";
-	$MSG_JUDGE_STYLE="체점 스타일";
+	$MSG_JUDGE_STYLE="채점 스타일";
 	// reinfo.php 
 	$MSG_ERROR_INFO="오류 정보";
 	$MSG_INFO_EXPLAINATION="상세 설명";
@@ -459,24 +472,25 @@ $MSG_HIDE="Hide";
 	$MSG_BACK="이전 페이지로 돌아가기";
 	$MSG_NEXT_PAGE="Next Page";
 	$MSG_PREV_PAGE="Prev Page";
+
 	//email
 	$MSG_SYS_WARN="시스템 경고!";
 	$MSG_IS_ROBOT="봇으로 추정됩니다. 확인 후 비활성화하시기 바랍니다.";
-       $MSG_FORBIDDEN="forbidden ";
-       $MSG_OTHERS="other's ";
-       $MSG_SUBNET="subnet ";
-       $MSG_SHOW_DIFF="Show Differ Output";
+    $MSG_FORBIDDEN="forbidden ";
+    $MSG_OTHERS="other's ";
+    $MSG_SUBNET="subnet ";
+    $MSG_SHOW_DIFF="Show Differ Output";
+    //SaaS friendly
+    $MSG_TEMPLATE="Template";
+    $MSG_FRIENDLY_LEVEL="Friendly Level";
+    $MSG_FRIENDLY_L0="Not friendly at all";
+    $MSG_FRIENDLY_L1="Using UTC+8 TimeZone";
+    $MSG_FRIENDLY_L2="Using Chinese UI";
+    $MSG_FRIENDLY_L3="Show differ,No Verify Code";
+    $MSG_FRIENDLY_L4="Using mail,Code auto share";
+    $MSG_FRIENDLY_L5="Allow test running";
+    $MSG_FRIENDLY_L6="Keep long login";
+    $MSG_FRIENDLY_L7="Enable discus";
+    $MSG_FRIENDLY_L8="Allow download test data";
+    $MSG_FRIENDLY_L9="Allow guest to submit";
 
-//SaaS friendly
- $MSG_TEMPLATE="Template";
-  $MSG_FRIENDLY_LEVEL="Friendly Level";
-  $MSG_FRIENDLY_L0="Not friendly at all";
-  $MSG_FRIENDLY_L1="Using UTC+8 TimeZone";
-  $MSG_FRIENDLY_L2="Using Chinese UI";
-  $MSG_FRIENDLY_L3="Show differ,No Verify Code";
-  $MSG_FRIENDLY_L4="Using mail,Code auto share";
-  $MSG_FRIENDLY_L5="Allow test running";
-  $MSG_FRIENDLY_L6="Keep long login";
-  $MSG_FRIENDLY_L7="Enable discus";
-  $MSG_FRIENDLY_L8="Allow download test data";
-  $MSG_FRIENDLY_L9="Allow guest to submit";
