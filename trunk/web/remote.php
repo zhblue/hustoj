@@ -1,6 +1,7 @@
 <?php session_start();
      require_once "include/db_info.inc.php";
      require_once "include/init.php";
+     if(!$OJ_REMOTE_JUDGE) exit(0);
         $remote_ojs=array(
                  "bas"       // "pku","hdu"     //使用一本通启蒙设为："bas"  
         );
