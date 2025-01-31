@@ -1,6 +1,7 @@
 <?php
 require_once(realpath(dirname(__FILE__)."/..")."/include/db_info.inc.php");
 require_once(realpath(dirname(__FILE__)."/..")."/include/init.php");
+ if(!$OJ_REMOTE_JUDGE) exit(0);
 require_once(dirname(__FILE__)."/curl.php");
 
 function is_login($remote_site){
