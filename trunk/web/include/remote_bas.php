@@ -2,6 +2,7 @@
 // 接口描述参考文件末尾注释
 require_once(realpath(dirname(__FILE__)."/..")."/include/db_info.inc.php");
 require_once(realpath(dirname(__FILE__)."/..")."/include/init.php");
+ if(!$OJ_REMOTE_JUDGE) exit(0);
 require_once(dirname(__FILE__)."/curl.php");
 function do_submit_one($remote_site,$username,$password,$sid){	
 	$langMap= array(
