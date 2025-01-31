@@ -2,6 +2,7 @@
 require_once(realpath(dirname(__FILE__)."/..")."/include/db_info.inc.php");
 require_once(realpath(dirname(__FILE__)."/..")."/include/init.php");
 require_once(dirname(__FILE__)."/curl.php");
+ if(!$OJ_REMOTE_JUDGE) exit(0);
 ini_set("display_errors", "Off");  //set this to "On" for debugging  ,especially when no reason blank shows up.
 function is_login($remote_site){
 	$html=curl_get($remote_site);
