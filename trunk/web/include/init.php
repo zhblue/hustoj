@@ -40,7 +40,7 @@ if (isset($_SESSION[$OJ_NAME . '_' . 'OJ_LANG'])) {
 }
 require(dirname(__FILE__)."/../lang/$OJ_LANG.php");
 
-$domain=basename($_SERVER["HTTP_HOST"]);
+$domain=basename($_SERVER["HTTP_HOST"]??"");
 
 if($OJ_SaaS_ENABLE){
 	$DOMAIN="my.hustoj.com";   //   如启用，需要替换为SaaS服务的主域名。
@@ -62,7 +62,7 @@ if(isset($_SERVER["HTTP_USER_AGENT"])){  // 360 or IE use bs3 instead
         $OJ_TEMPLATE="bs3";
 }
 
-$ip = ($_SERVER['REMOTE_ADDR']);
+$ip = ($_SERVER['REMOTE_ADDR']??"");
 if( isset($_SERVER['HTTP_X_FORWARDED_FOR'] )&&!empty( trim( $_SERVER['HTTP_X_FORWARDED_FOR'] ) ) ){
     $REMOTE_ADDR = $_SERVER['HTTP_X_FORWARDED_FOR'];
     $tmp_ip=explode(',',$REMOTE_ADDR);
