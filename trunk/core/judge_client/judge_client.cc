@@ -865,6 +865,8 @@ void make_diff_out_simple(FILE *f1, FILE *f2,char * prefix, int c1, int c2, cons
 						fprintf(diff,"`");
 						fprintSafe(diff,buf2);
 						fprintf(diff,"`");
+				}else{
+					  fprintf(diff,"%c",c2);
 				}
 			}
                 }else if(!feof(f2)&&fgets(buf2,BUFFER_SIZE-1,f2)){
