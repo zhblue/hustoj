@@ -845,7 +845,9 @@ void make_diff_out_simple(FILE *f1, FILE *f2,char * prefix, int c1, int c2, cons
                         	buf1[0]=c1;     // patch buf1 with c1
                                 if(!feof(f1)&&fgets(buf1+1,BUFFER_SIZE-2,f1)){
                                         fprintSafe(diff,buf1);
-                                }
+                                }else{
+				        fprintf(diff,"%c",c1);
+				}
                         }else{
                            fprintf(diff,"↩");
                         }
@@ -866,7 +868,7 @@ void make_diff_out_simple(FILE *f1, FILE *f2,char * prefix, int c1, int c2, cons
 						fprintSafe(diff,buf2);
 						fprintf(diff,"`");
 				}else{
-					  fprintf(diff,"%c",c2);
+					  fprintf(diff,"`%c`",c2);
 				}
 			}
                 }else if(!feof(f2)&&fgets(buf2,BUFFER_SIZE-1,f2)){
