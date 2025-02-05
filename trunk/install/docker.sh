@@ -13,15 +13,21 @@ done
 cat > /etc/docker/daemon.json <<EOF
 {
 	"registry-mirrors": [
- 				"https://yczv4b52.mirror.aliyuncs.com",
-				"https://docker.m.daocloud.io",
-				"https://huecker.io",
-				"https://dockerhub.timeweb.cloud",
-			        "https://registry.cn-hangzhou.aliyuncs.com",
-	   			"https://hub.geekery.cn",
-       				"https://dockerpull.com",
-	   			"https://docker.1panel.dev",
-       				"https://docker.5z5f.com"
+		    "https://docker.hpcloud.cloud",
+		    "https://docker.m.daocloud.io",
+		    "https://docker.unsee.tech",
+		    "https://docker.1panel.live",
+		    "http://mirrors.ustc.edu.cn",
+		    "https://docker.chenby.cn",
+		    "http://mirror.azure.cn",
+		    "https://dockerpull.org",
+		    "https://dockerhub.icu",
+		    "https://hub.rat.dev",
+		    "https://proxy.1panel.live",
+		    "https://docker.1panel.top",
+		    "https://docker.m.daocloud.io",
+		    "https://docker.1ms.run",
+		    "https://docker.ketches.cn"
     	],
 	"live-restore": true,
 	"log-opts": {
