@@ -960,10 +960,18 @@ end:
 	user_now=ftell(f2);
 	if(DEBUG) printf("user/out=%ld/%ld\n",user_now,out_size);
 	if(internal_mark && user_now>1 && out_size>user_now) *spj_mark=(user_now-1.00)/out_size;
-
 	if (ret == OJ_WA || ret == OJ_PE)
 	{
-		if (full_diff)  make_diff_out_simple(f1, f2, prefix, c1, c2, file1,userfile);
+		switch(full_diff)
+		{
+                        case 1: make_diff_out_simple(f1, f2, prefix, c1, c2, file1,userfile);
+                                break;
+                        case 2: make_diff_out(f1, f2,  c1, c2, file1,userfile);
+                                break;
+                        case 3: make_diff_out_full(f1, f2, c1, c2,file1,infile,userfile);
+                                break;
+                        default: ;
+                }
 	}
 	if (f1)
 		fclose(f1);
