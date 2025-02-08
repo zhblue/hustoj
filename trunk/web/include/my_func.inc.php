@@ -99,8 +99,8 @@ function too_simple($password) {
     if (preg_match('/[!@#$%^&*(),.?":{}|<>]/', $password)) {
         $conditionsMet++;
     }
-    // 如果符合的条件数小于4，则认为密码过于简单
-    return $conditionsMet < 4;
+    // 如果符合的条件数小于2，则认为密码过于简单
+    return $conditionsMet < 2;
 }
 function ip_to_integer($ip) {
     // 使用 ip2long 函数将 IP 地址转换为整数
