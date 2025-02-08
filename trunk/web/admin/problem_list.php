@@ -98,7 +98,7 @@ echo "</select>";
     </tr>
         <tr>
         <td colspan=2 style="height:40px;"><?php echo "$MSG_CHECK_TO"?></td>
-      <td colspan=6>
+      <td colspan=7>
       <input type=submit name='problem2contest' value='<?php echo $MSG_NEW_CONTEST?>'>
       <input type=submit name='enable' value='<?php echo $MSG_AVAILABLE ?>' onclick='$("form").attr("action","problem_df_change.php")'>
       <input type=submit name='disable' value='<?php echo $MSG_RESERVED ?>' onclick='$("form").attr("action","problem_df_change.php")'>
@@ -163,7 +163,7 @@ echo "</select>";
 ?>
     <tr>
       <td colspan=2 style="height:40px;"><?php echo "$MSG_CHECK_TO"?></td>
-      <td colspan=6>
+      <td colspan=7>
       <input type=submit name='problem2contest' value='<?php echo $MSG_NEW_CONTEST?>'>
       <input type=submit name='enable' value='<?php echo $MSG_AVAILABLE ?>' onclick='$("form").attr("action","problem_df_change.php")'>
       <input type=submit name='disable' value='<?php echo $MSG_RESERVED ?>' onclick='$("form").attr("action","problem_df_change.php")'>
