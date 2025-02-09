@@ -48,7 +48,7 @@
             <a href=ranklist.php?scope=y>Year</a>
             &nbsp;
           </td>
-        <tr>        
+        </tr>        
       </table>
       <br>
 
@@ -58,6 +58,7 @@
             <td class='text-center'><?php echo $MSG_Number?></td>
             <td class='text-center'><?php echo $MSG_USER?></td>
             <td class='text-center'><?php echo $MSG_NICK?></td>
+            <td class='text-center'><?php echo $MSG_GROUP_NAME?></td>
             <td class='text-center'><?php echo $MSG_SOVLED?></td>
             <td class='text-center'><?php echo $MSG_SUBMIT?></td>
             <td class='text-center'><?php echo $MSG_RATIO?></td>
