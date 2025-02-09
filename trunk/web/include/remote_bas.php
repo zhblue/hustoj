@@ -177,7 +177,7 @@ function do_result_one($remote_site,$username,$password,$sid,$rid){
                      $sql="UPDATE `contest_problem` SET `c_accepted`=(SELECT count(*) FROM `solution` WHERE `problem_id`=? AND `result`=4 and contest_id=?) WHERE `problem_id`=? and contest_id=?";
                      pdo_query($sql,$pid,$cid, $pid,$cid);
                 }
-		$sql="UPDATE `users` SET `solved`=(SELECT count(DISTINCT `problem_id`) FROM `solution` WHERE `user_id`=? AND `result`=4) WHERE `user_id`=?";
+		$sql="UPDATE `users` SET `solved`=( SELECT count(DISTINCT `problem_id`) FROM `solution` s where  s.`user_id`=? AND s.`result`=4 and problem_id not in(select problem_id from contest_problem where contest_id in (select contest_id from contest where contest_type & 20 > 0)) ) WHERE `user_id`=?";
 		pdo_query($sql,$user_id,$user_id);
 	}
 	return $result;
