@@ -123,13 +123,13 @@ if(!$starred && starred($user)){
 
 
 // count solved
-$sql="select count(DISTINCT problem_id) as `ac` FROM `solution` WHERE `user_id`=? AND `result`=4 $not_in_noip ";
+$sql="select count(DISTINCT problem_id) as `ac` FROM `solution` WHERE `user_id`=? AND `result`=4 and problem_id>0 $not_in_noip ";
 $result=mysql_query_cache($sql,$user) ;
 $row=$result[0];
 $AC=$row['ac'];
 
 // count submission
-$sql="select count(DISTINCT problem_id) as `Submit` FROM `solution` WHERE `user_id`=? and  problem_id>0 $not_in_noip ";
+$sql="select count(DISTINCT problem_id) as `Submit` FROM `solution` WHERE `user_id`=? and  problem_id>0  $not_in_noip ";
 $result=mysql_query_cache($sql,$user) ;
  $row=$result[0];
 $Submit=$row['Submit'];
