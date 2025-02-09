@@ -181,8 +181,8 @@ function do_result_one($remote_site,$sid,$rid){
         $data=pdo_query("select user_id from solution where solution_id=?",$sid);
         $user_id=$data[0]['user_id'];
         //update user
-        $sql="UPDATE `users` SET `solved`=( SELECT count(DISTINCT `problem_id`) FROM `solution` s where  s.`user_id`=? AND s.`result`=4 and problem_id not in(select problem_id from contest_problem where contest_id in (select contest_id from contest where contest_type & 20 > 0)) ) WHERE `user_id`=?";
-        pdo_query($sql,$user_id,$user_id);
+        $sql="UPDATE `users` SET `solved`=( SELECT count(DISTINCT `problem_id`) FROM `solution` s where  s.`user_id`=? AND s.`result`=4 and problem_id>0 and problem_id not in(select problem_id from contest_problem where contest_id in (select contest_id from contest where contest_type & 20 > 0 and end_time>now() )) ) WHERE `user_id`=?";
+	pdo_query($sql,$user_id,$user_id);
         $sql="UPDATE `users` SET `submit`=(SELECT count(DISTINCT `problem_id`) FROM `solution` WHERE `user_id`=?               ) WHERE `user_id`=?";
         pdo_query($sql,$user_id,$user_id);
 
