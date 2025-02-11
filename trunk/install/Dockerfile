@@ -19,7 +19,7 @@ RUN    	DEBIAN_FRONTEND=noninteractive  apt-get -y install --no-install-recommen
 #RUN    	DEBIAN_FRONTEND=noninteractive  apt-get -y install --no-install-recommends	busybox 
 RUN    	DEBIAN_FRONTEND=noninteractive  apt-get -y install --no-install-recommends	dos2unix
 RUN    	DEBIAN_FRONTEND=noninteractive  apt-get -y install --no-install-recommends        openjdk-17-jdk
-#RUN    	DEBIAN_FRONTEND=noninteractive  apt-get -y install --no-install-recommends	subversion 
+RUN    	DEBIAN_FRONTEND=noninteractive  apt-get -y install --no-install-recommends	iptables 
 RUN    	DEBIAN_FRONTEND=noninteractive  apt-get -y install --no-install-recommends	wget
 RUN     apt-get -y install sqlite3
 RUN     useradd -m -u 1536 judge
