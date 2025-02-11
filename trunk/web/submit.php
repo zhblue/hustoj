@@ -68,7 +68,7 @@ else {
   $test_run = $id<=0;
   $sql = "select `problem_id`,defunct FROM `problem` WHERE `problem_id`='$id' ";
     
-  if(!($test_run||isset($_SESSION[$OJ_NAME.'_'.'administrator'])))
+  if(!($test_run||isset($_SESSION[$OJ_NAME.'_'.'administrator']) || isset($_SESSION[$OJ_NAME.'_'.'problem_editor']) || isset($_SESSION[$OJ_NAME.'_'.'problem_verifiter']) ))
     $sql .= " and defunct='N'";
 }
 
