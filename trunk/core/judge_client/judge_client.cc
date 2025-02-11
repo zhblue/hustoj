@@ -53,6 +53,9 @@
 #include <assert.h>
 #include "okcalls.h"
 
+#include <map>
+
+
 #define STD_MB 1048576LL
 #define STD_T_LIM 2
 #define STD_F_LIM (STD_MB << 9) //default file size limit 512m ,2^9=512
@@ -3085,6 +3088,15 @@ void clean_session(pid_t p)
 	execute_cmd("ps aux |grep \\^judge|awk '{print $2}'|xargs kill");
 }
 
+#ifndef PTRACE_O_TRACEFORK
+
+#define PTRACE_O_TRACEFORK 0x00000002
+#define PTRACE_O_TRACEVFORK	0x00000004
+#define PTRACE_O_TRACECLONE	0x00000008
+#define PTRACE_O_EXITKILL	0x00100000
+
+#endif
+
 void watch_solution(pid_t pidApp, char *infile, int &ACflg, int spj,
 					char *userfile, char *outfile, int solution_id, int lang,
 					int &topmemory, int mem_lmt, int &usedtime, double time_lmt, int &p_id,
@@ -3097,34 +3109,47 @@ void watch_solution(pid_t pidApp, char *infile, int &ACflg, int spj,
 		printf("pid=%d judging %s\n", pidApp, infile);
 
 	int status, sig, exitcode;
-	char white_code[256]={0};
-        white_code[0]=1;  // add more if new signal complain
-        white_code[5]=1;
-        white_code[17]=1;
-        white_code[23]=1;
-        white_code[133]=1;
-        char buf[BUFFER_SIZE];
+	// char white_code[256]={0};
+  //       white_code[0]=1;  // add more if new signal complain
+  //       white_code[5]=1;
+  //       // white_code[11]=1;
+  //       // white_code[17]=1;
+  //       // white_code[19]=1;
+  //       // white_code[23]=1;
+  //       // white_code[133]=1;
+  //       char buf[BUFFER_SIZE];
 
 	struct user_regs_struct reg;
 	struct rusage ruse;
-	int first = true;
 	int tick=0;
 	long outFileSize=get_file_size(outfile);
-	while (1)
+
+	// 对于多线程程序,在watch的时候需要让对应的被停住的程序继续往前
+	// 如果有其它停止信号,比如Java的JVM会使用一个SIGSEGV的停止信号,这个停止码需要通过ptrace发给被trace程序   -- by Sempr
+	pid_t pidCur=pidApp;
+	int stopSignal = 0;
+
+
+	std::map<int,int> pidStat;
+	const int PID_STATE_SYSCALL_ENTRY=2;
+	const int PID_STATE_SYSCALL_EXIT=3;
+
+	pidStat[pidApp]=PID_STATE_SYSCALL_ENTRY;
+	int first=true;
+
+	for (;;ptrace(PTRACE_SYSCALL, pidCur, NULL, stopSignal)) // 把放进程继续运行放到循环的最后以防止忘记 -- by Sempr
 	{
 		tick++;
 		// check the usage
 
-		wait4(pidApp, &status, __WALL, &ruse);     //等待子进程切换内核态（调用系统API或者运行状态变化）
-		if (first)
-		{ //
-			ptrace(PTRACE_SETOPTIONS, pidApp, NULL, PTRACE_O_TRACESYSGOOD | PTRACE_O_TRACEEXIT
-				   //	|PTRACE_O_EXITKILL
-				   //	|PTRACE_O_TRACECLONE
-				   //	|PTRACE_O_TRACEFORK
-				   //	|PTRACE_O_TRACEVFORK
-			           //   有的发行版带的PTRACE不识别以上宏，因此注释掉
-			);
+		pidCur=wait4(-1, &status, __WALL, &ruse);     //等待子进程切换内核态（调用系统API或者运行状态变化）
+		stopSignal=0; // 清掉stopSignal
+
+		if (first){
+			ptrace(PTRACE_SETOPTIONS, pidApp, NULL, PTRACE_O_TRACESYSGOOD 
+				|PTRACE_O_EXITKILL|PTRACE_O_TRACECLONE|PTRACE_O_TRACEFORK|PTRACE_O_TRACEVFORK);
+				 // 有的发行版带的PTRACE不识别以上宏，因此注释掉 -> 恢复
+			first=false;
 		}
 
 		//jvm gc ask VM before need,so used kernel page fault times and page size
@@ -3159,16 +3184,46 @@ void watch_solution(pid_t pidApp, char *infile, int &ACflg, int spj,
 		}
 		//sig = status >> 8;/*status >> 8 EXITCODE*/
 
-		if (WIFEXITED(status)) { // 子进程已经退出 ，返回值不为0则判RE
-                        exitcode = WEXITSTATUS(status);
-			char error[BUFFER_SIZE];
-                        if(exitcode){
-				ACflg=OJ_RE;
-                        	sprintf(error, "\t    non-zero return = %d \n", exitcode);
-                        	print_runtimeerror(infile+prelen,error);
+		if (WIFEXITED(status)) { // 子进程已经退出 ，返回值不为0则判RE -> 因为多个进程或者线程的原因,只检查最后退出的一个 -- by Sempr
+			pidStat.erase(pidCur);
+			if (pidStat.empty()){
+				exitcode = WEXITSTATUS(status);
+				char error[BUFFER_SIZE];
+				if(exitcode){
+					ACflg=OJ_RE;
+					sprintf(error, "\t    non-zero return = %d \n", exitcode);
+					print_runtimeerror(infile+prelen,error);
+				}
+				break;
+			}else{
+				continue;
 			}
-                        break;
-                }
+		}
+
+		// 如果是STOPPED,检查是正常的trap还是有event出现,获取子进程的pid
+		if (WIFSTOPPED(status) ){
+			// 不是TRAP, 处理停止信号,继续往后走
+			if ((WSTOPSIG(status)&0x7f) != SIGTRAP){
+				stopSignal = WSTOPSIG(status);
+				continue;
+			}
+			// 如果是TRAP且有EVENT,取得新的进程号之后continue
+			int event = status>>16;
+			if (event==PTRACE_EVENT_CLONE || event==PTRACE_EVENT_FORK || event==PTRACE_EVENT_VFORK || event==PTRACE_EVENT_VFORK_DONE){
+				int pidNew;
+				ptrace(PTRACE_GETEVENTMSG, pidCur, NULL, &pidNew);
+				pidStat[pidNew] = PID_STATE_SYSCALL_ENTRY;
+				continue;
+			}
+			// 如果是其它sig,吃掉并且continue,否则继续往下走
+			// if (event==PTRACE_EVENT_EXIT){
+			// 	int pidNew;
+			// 	ptrace(PTRACE_GETEVENTMSG, pidCur, NULL, &pidNew);
+			// 	printf("exit pid %d\n", pidNew);
+			// 	continue;
+			// }
+		}
+
 		if ((lang < LANG_RUBY ||lang == LANG_BASH || lang == LANG_CSHARP ) && get_file_size("error.out") && !oi_mode)
 		{
 			ACflg = OJ_RE;
@@ -3184,55 +3239,6 @@ void watch_solution(pid_t pidApp, char *infile, int &ACflg, int spj,
 			break;
 		}
 
-                exitcode = WEXITSTATUS(status) % 256 ;
-                /*exitcode == 5 waiting for next CPU allocation          * ruby using system to run,exit 17 ok
-                 *  Runtime Error:Unknown signal xxx need be added here
-                 */
-                if (white_code[exitcode]
-                        // || ( (exitcode == 17||exitcode == 23) && (lang >= LANG_JAVA && lang!= LANG_OBJC && lang != LANG_CLANG && lang != LANG_CLANGPP) )
-                   ){  // 进程休眠或等待IO
-                        //go on and on
-                        ;
-                }else{
-
-
-			if (DEBUG)
-			{
-				printf("status>>8=%d\n", exitcode);
-			}
-			//psignal(exitcode, NULL);
-
-			if (ACflg == OJ_AC)
-			{
-				switch (exitcode)                  // 根据退出的原因给出判题结果
-				{
-				case SIGCHLD:
-				case SIGALRM:
-					alarm(0);
-					if (DEBUG)
-						printf("alarm:%g\n", time_lmt);
-				case SIGKILL:
-				case SIGXCPU:
-					ACflg = OJ_TL;
-					usedtime = time_lmt * 1000;
-					if (DEBUG)
-						printf("TLE:%d\n", usedtime);
-					break;
-				case SIGXFSZ:
-					ACflg = OJ_OL;
-					break;
-				default:
-					ACflg = OJ_RE;
-				}
-				print_runtimeerror(infile+prelen,strsignal(exitcode));
-				sprintf(buf,"if you can confirm the code is right and your system is somehow different from others , try adding: ' white_code[%d]=1; ' after judge_client:2888 for it, but don't panic just for a Segmentfault. ",exitcode);
-                                print_runtimeerror(buf,strsignal(exitcode));
-
-			}
-			ptrace(PTRACE_KILL, pidApp, NULL, NULL);    // 杀死出问题的进程
-
-			break;
-		}
 		if (WIFSIGNALED(status))
 		{
 			/*  WIFSIGNALED: if the process is terminated by signal
@@ -3276,45 +3282,51 @@ void watch_solution(pid_t pidApp, char *infile, int &ACflg, int spj,
 		 WSTOPSIG: get the signal if it was stopped by signal
 		 */
 
+
+
 		// check the system calls
-	if (!use_ptrace){
-		ptrace(PTRACE_SYSCALL, pidApp, NULL, NULL);
-		continue;
-	}
+	if (!use_ptrace) continue;
+
 #ifdef __mips__
 //		if(exitcode!=5&&exitcode!=133){
 	//https://github.com/strace/strace/blob/master/linux/mips/syscallent-n32.h#L344
-		ptrace(PTRACE_GETREGS, pidApp, NULL, &reg);
+		ptrace(PTRACE_GETREGS, pidCur, NULL, &reg);
 		call_id=(unsigned int)reg.REG_SYSCALL;
 		if( (call_id > 1000 && call_id <5000 )|| (lang == LANG_PYTHON && call_id < 5500)  || call_id> 6500){
 		    // not a valid syscall
-			ptrace(PTRACE_SYSCALL, pidApp, NULL, NULL);
+			//ptrace(PTRACE_SYSCALL, pidApp, NULL, NULL);
 			continue;
 		}else{
 #endif
 #ifdef __arm__
-		call_id=ptrace(PTRACE_GETREGS, pidApp, NULL, &reg);
+		call_id=ptrace(PTRACE_GETREGS, pidCur, NULL, &reg);
 		call_id = ((unsigned int)reg.REG_SYSCALL) % call_array_size;
 #endif
 #ifdef __aarch64__
-		call_id=ptrace(PTRACE_GETREGS, pidApp, (void *)NT_ARM_SYSTEM_CALL, &reg);
+		call_id=ptrace(PTRACE_GETREGS, pidCur, (void *)NT_ARM_SYSTEM_CALL, &reg);
 		print_arm_regs(reg.regs);
 		printf("return call_id:%d\n",call_id);
 		call_id = ((unsigned int)reg.REG_SYSCALL) % call_array_size;
 		printf("regist call_id:%d\n",call_id);
 #endif
 #ifdef __i386__
-		call_id=ptrace(PTRACE_GETREGS, pidApp, NULL, &reg);
+		call_id=ptrace(PTRACE_GETREGS, pidCur, NULL, &reg);
 			call_id = ((unsigned int)reg.REG_SYSCALL) % call_array_size;
 #endif 
 #ifdef __x86_64__
-		call_id=ptrace(PTRACE_GETREGS, pidApp, NULL, &reg);
-			call_id = ((unsigned int)reg.REG_SYSCALL) % call_array_size;
+		ptrace(PTRACE_GETREGS, pidCur, NULL, &reg);
+		call_id = ((unsigned int)reg.REG_SYSCALL) % call_array_size;
 #endif 
 //			printf("call_id:%x %d\n",call_id,call_counter[call_id]);
 			call_id = call_id % call_array_size;
 //			printf("call_id:%d %d\n",call_id,call_counter[call_id]);
-			
+			pidStat[pidCur] ^= 1;
+			if (DEBUG) printf("pid=%d call=%d EE=%d\n", pidCur, call_id, pidStat[pidCur]&1);
+
+			if (call_id==511){
+				printf("CALLID=511 status=%x\n", status);
+				continue;
+			}
 
 			if (record_call)
 			{
@@ -3349,9 +3361,6 @@ void watch_solution(pid_t pidApp, char *infile, int &ACflg, int spj,
 //		   }
 		}
 #endif
-		ptrace(PTRACE_SYSCALL, pidApp, NULL, NULL);    // 继续等待下一次的系统调用或其他中断
-		first = false;
-		//usleep(1);
 	}
 	
 	ptrace(PTRACE_KILL, pidApp, NULL, NULL);    // 杀死出问题的进程
