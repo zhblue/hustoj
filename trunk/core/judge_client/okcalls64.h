@@ -29,12 +29,8 @@ int LANG_PV[CALL_ARRAY_SIZE] = {
         SYS_stat, SYS_execve, SYS_uname, SYS_readlink, SYS_mmap, SYS_getrlimit, 0 };
 //java
 int LANG_JV[CALL_ARRAY_SIZE] = {
-        0, 262,267,318,334,435, SYS_mprotect, SYS_getuid, SYS_getgid, SYS_geteuid, SYS_getegid, SYS_munmap, SYS_getppid, SYS_getpgrp,
-        SYS_brk, SYS_rt_sigaction, SYS_rt_sigprocmask, SYS_prctl, SYS_arch_prctl, SYS_ioctl, SYS_pread64, SYS_open,
-        SYS_futex, SYS_set_thread_area, SYS_access, SYS_getdents64, SYS_set_tid_address, SYS_pipe, SYS_exit_group,
-        SYS_openat, SYS_set_robust_list, SYS_close, SYS_prlimit64, SYS_dup2, SYS_getpid, SYS_stat, SYS_fstat, SYS_clone,
-        SYS_execve, SYS_lstat, SYS_wait4, SYS_uname, SYS_fcntl, SYS_getcwd, SYS_lseek, SYS_readlink, SYS_mmap,
-        SYS_getrlimit, 0 };
+        0, SYS_restart_syscall, SYS_exit, SYS_getegid, SYS_getgid, SYS_futex ,SYS_mprotect ,SYS_mmap ,SYS_rt_sigprocmask ,SYS_sysinfo ,SYS_clone3 ,SYS_openat ,SYS_sched_getaffinity ,SYS_madvise ,SYS_fstat ,SYS_close ,SYS_readlink ,SYS_execve ,SYS_newfstatat ,SYS_munmap ,SYS_set_robust_list ,SYS_prctl ,SYS_lseek ,SYS_write ,SYS_rseq ,SYS_gettid ,SYS_rt_sigaction ,SYS_pread64 ,SYS_clock_nanosleep ,SYS_ftruncate ,SYS_getdents64 ,SYS_unlink ,SYS_prlimit64 ,SYS_brk ,SYS_fchdir ,SYS_readlinkat ,SYS_geteuid ,SYS_access ,SYS_sched_yield ,SYS_rt_sigreturn ,SYS_flock ,SYS_getpid ,SYS_faccessat2 ,SYS_mkdir ,SYS_fcntl ,SYS_getrandom ,SYS_clock_getres ,SYS_arch_prctl ,SYS_set_tid_address ,SYS_ioctl ,SYS_socket ,SYS_connect ,SYS_uname ,SYS_getcwd ,SYS_getrusage ,SYS_getuid, SYS_exit_group, SYS_read, 0};
+
 //ruby
 int LANG_RV[CALL_ARRAY_SIZE] = {
         0, SYS_write, SYS_mprotect, SYS_getuid, SYS_getgid, SYS_geteuid, SYS_getegid, SYS_munmap, SYS_brk,
@@ -126,7 +122,7 @@ int LANG_JSV[CALL_ARRAY_SIZE] = {
         SYS_gettimeofday, SYS_getrlimit, 0 };
 //go-lang
 int LANG_GOV[CALL_ARRAY_SIZE] = {
-        0, 3, 35,511, SYS_write, SYS_mprotect, SYS_munmap, SYS_rt_sigaction, SYS_sigaltstack, SYS_rt_sigprocmask,
+        0, 3, 35,511, SYS_madvise, SYS_getrlimit, SYS_setrlimit, SYS_write, SYS_mprotect, SYS_munmap, SYS_rt_sigaction, SYS_sigaltstack, SYS_rt_sigprocmask,
         SYS_arch_prctl, SYS_pread64, SYS_gettid, SYS_futex, SYS_sched_getaffinity, SYS_clock_gettime, SYS_exit_group,
         SYS_sched_yield, SYS_openat, SYS_readlinkat, SYS_clone, SYS_execve, SYS_fcntl, SYS_mmap, 0 };
 //sqlite3
