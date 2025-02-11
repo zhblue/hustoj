@@ -52,7 +52,7 @@
 #endif
 #include <assert.h>
 #include "okcalls.h"
-
+#include <sched.h>
 #include <map>
 
 
@@ -2617,6 +2617,7 @@ void run_solution(int &lang, char *work_dir, double &time_lmt, int &usedtime,
 	stdout=freopen("user.out", "w", stdout);
 	stderr=freopen("error.out", "a+", stderr);
 	// trace me
+	unshare(CLONE_NEWNET);
 	ptrace(PTRACE_TRACEME, 0, NULL, NULL);
 	// run me
 	if (   
@@ -3132,7 +3133,7 @@ void watch_solution(pid_t pidApp, char *infile, int &ACflg, int spj,
 
 	std::map<int,int> pidStat;
 	const int PID_STATE_SYSCALL_ENTRY=2;
-	const int PID_STATE_SYSCALL_EXIT=3;
+	//const int PID_STATE_SYSCALL_EXIT=3;
 
 	pidStat[pidApp]=PID_STATE_SYSCALL_ENTRY;
 	int first=true;
