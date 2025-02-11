@@ -347,10 +347,10 @@ void run_client(int runid, int clientid) {
 		sprintf(data_v,"%s:/home/judge/data",follow);
 		if(follow!=data_path) {
 				printf("data volume param :%s \n",data_v);
-				execl(docker_path,docker_path, "container","run" ,"--pids-limit", "100","--rm","--cap-add","SYS_PTRACE", "--net=host",
+				execl(docker_path,docker_path, "container","run" ,"--pids-limit", "100","--rm","--cap-add","SYS_PTRACE",  "--cap-add" ,"CAP_SYS_ADMIN" , "--net=host",
 								"-v", docker_v,"-v",data_v, "hustoj", client_path, runidstr, buf, (char *) NULL);
 		}else{
-				execl(docker_path,docker_path, "container","run" ,"--pids-limit", "100","--rm","--cap-add","SYS_PTRACE", "--net=host",
+				execl(docker_path,docker_path, "container","run" ,"--pids-limit", "100","--rm","--cap-add","SYS_PTRACE",  "--cap-add" ,"CAP_SYS_ADMIN" , "--net=host",
 								"-v", docker_v, "hustoj", client_path, runidstr, buf, (char *) NULL);
 		}
 
