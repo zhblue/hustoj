@@ -22,7 +22,8 @@ judged
 web_user=`grep www /etc/passwd|awk -F: '{print $1}'`
 mkdir /var/log/hustoj/
 chown -R $web_user /var/log/hustoj
-
+chmod 710 -R /home/judge/data 
+chmod 700 /home/judge/etc/judge.conf
 chmod 770 /home/judge/src/web/upload
 chown $web_user -R /home/judge/src/web/upload
 
