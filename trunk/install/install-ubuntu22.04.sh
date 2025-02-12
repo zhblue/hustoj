@@ -125,9 +125,7 @@ sed -i "s/DB_USER[[:space:]]*=[[:space:]]*\".*\"/DB_USER=\"$USER\"/g" src/web/in
 sed -i "s/DB_PASS[[:space:]]*=[[:space:]]*\".*\"/DB_PASS=\"$PASSWORD\"/g" src/web/include/db_info.inc.php
 chmod 700 src/web/include/db_info.inc.php
 chown -R www-data:www-data src/web/
-
-chown -R root:root src/web/.svn
-chmod 750 -R src/web/.svn
+chmod 710 -R src/web/.svn
 
 chown www-data:www-data src/web/upload
 chown www-data:judge data
