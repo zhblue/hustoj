@@ -38,6 +38,8 @@ if [ `whoami` = "root" ];then
 	bash mysql.sh  <  update.sql
         cd ../..
 	chown $WWW:$WWW -R src
+	chmod 710 -R /home/judge/data 
+	chmod 700 /home/judge/etc/judge.conf
 else
 	echo "usage: sudo $0"
 fi
