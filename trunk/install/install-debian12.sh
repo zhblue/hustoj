@@ -33,7 +33,7 @@ sed -i "s/OJ_RUNNING=1/OJ_RUNNING=$CPU/g" etc/judge.conf
 
 chown www-data -R /home/judge
 chgrp judge -R  /home/judge
-chmod 755 -R /home/judge
+chmod 710 -R /home/judge/data
 chmod 700 backup
 chmod 700 etc/judge.conf
 
