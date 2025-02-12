@@ -85,10 +85,6 @@ sed -i "s/DB_PASS[[:space:]]*=[[:space:]]*\"root\"/DB_PASS=\"$PASSWORD\"/g" src/
 chmod 700 src/web/include/db_info.inc.php
 chgrp www /home/judge
 chown -R www src/web/
-
-chown -R root:root src/web/.svn
-chmod 750 -R src/web/.svn
-
 chown www:judge src/web/upload
 chown www:judge data
 chmod 711 -R data
