@@ -36,13 +36,13 @@ echo "optimize table compileinfo,contest,contest_problem,loginlog,news,privilege
 echo "这里有警告是正常现象，请勿担心，下面的打包压缩耗时较长，请耐心等待备份结束，重新回到命令行提示符。"
 echo "The warning here is normal, don't worry, the following packaging and compression takes a long time, please wait patiently for the backup to end and return to the command line prompt."
 mkdir /var/backups 
-mysqldump --default-character-set=utf8mb4 -h $SERVER -P $PORT $DATABASE -u$USER -p$PASSWORD | bzip2 >/var/backups/db_${OJ_NAME}_${DATE}.sql.bz2
-if tar cjf /var/backups/hustoj_${OJ_NAME}_${DATE}.tar.bz2 $OJ_HOME/data $OJ_HOME/src/web $OJ_HOME/src/core $OJ_HOME/etc /var/backups/db_${OJ_NAME}_${DATE}.sql.bz2; then
-	rm /var/backups/hustoj_${OJ_NAME}_${OLD3}.tar.bz2  2> /dev/null
-	rm /var/backups/db_${OJ_NAME}_${OLD}.sql.bz2  2> /dev/null
+mysqldump --default-character-set=utf8mb4 -h $SERVER -P $PORT $DATABASE -u$USER -p$PASSWORD | bzip2 >/var/backups/${OJ_NAME}_${DATE}.sql.bz2
+if tar cjf /var/backups/${OJ_NAME}_${DATE}.tar.bz2 $OJ_HOME/data $OJ_HOME/src/web $OJ_HOME/src/core $OJ_HOME/etc /var/backups/${OJ_NAME}_${DATE}.sql.bz2; then
+	rm /var/backups/${OJ_NAME}_${OLD3}.tar.bz2  2> /dev/null
+	rm /var/backups/${OJ_NAME}_${OLD}.sql.bz2  2> /dev/null
 	# 如果经常遇到磁盘空间不足，可以尝试启用下面的内容
 	# find /var/backups/ -maxdepth 2 -ctime 5 -name "*.bz2" -exec rm -f {} \;
 fi
-echo "备份完成，请检查并用FileZilla通过sftp下载备份文件：/var/backups/hustoj_${OJ_NAME}_${DATE}.tar.bz2"
-echo "After the backup is complete, please check and download the backup file via sftp with FileZilla: /var/backups/hustoj_${OJ_NAME}_${DATE}.tar.bz2"
+echo "备份完成，请检查并用FileZilla通过sftp下载备份文件：/var/backups/${OJ_NAME}_${DATE}.tar.bz2"
+echo "After the backup is complete, please check and download the backup file via sftp with FileZilla: /var/backups/${OJ_NAME}_${DATE}.tar.bz2"
 
