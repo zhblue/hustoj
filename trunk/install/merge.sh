@@ -34,7 +34,9 @@ do
                 if [[ $KEY =~ "LOG" ]] ; then continue; fi
                 VALUE=$( echo "$VALUE" | sed 's|"|\\"|g'  )
 #               echo $VALUE
-                echo -e 's|\'$KEY'=.*;|\'$KEY'='$VALUE';|' >> merge.sed
+                if [ -n "$VALUE" ]; then
+                    echo -e 's|\'$KEY'=.*;|\'$KEY'='$VALUE';|' >> merge.sed
+                fi
         fi
 done
 sed -i -f merge.sed $NEW 
