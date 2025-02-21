@@ -5,6 +5,7 @@
 #source {
     width: 80%;
     height: 600px;
+    background-color:rgb(255,225,225,0.5);
 }
 
 .ace-chrome .ace_marker-layer .ace_active-line{   /*当前行*/
@@ -16,6 +17,10 @@
     line-height: 1.2;
 
 }
+body{
+        background: url("http://m.hustoj.com:8090/bg/nz.gif") 0% 0% / 100% no-repeat;
+}
+
   </style>
     
 <center>
