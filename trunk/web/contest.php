@@ -28,7 +28,7 @@ if (isset($_GET['cid'])) {
         $pids=array_column($result,'problem_id');
         if(!empty($pids)) $pids=implode(",",$pids);
 	$cnt = 0;
-	$noip = (time()<$end_time) && (stripos($view_title,$OJ_NOIP_KEYWORD)!==false ||contest_locked($cid,20)  );
+	$noip = (time()<$end_time) && (stripos($view_title,$OJ_NOIP_KEYWORD)!==false ||contest_locked($cid,16)  );
 	if(isset($_SESSION[$OJ_NAME.'_'."administrator"])||
 		isset($_SESSION[$OJ_NAME.'_'."m$cid"])||
 		isset($_SESSION[$OJ_NAME.'_'."source_browser"])||
