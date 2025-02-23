@@ -7,7 +7,10 @@ fi
 if [ "$IN_SCREEN" == "no" ] ;then
         echo "not in screen";
         apt update
-        apt install screen -y
+        if ! apt install screen -y  ; then
+                echo " apt locked , stop auto update proccess and try again"
+                exit
+        fi
         chmod +x $0
         screen bash $0 $*
 else
