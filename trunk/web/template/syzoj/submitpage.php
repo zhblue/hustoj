@@ -1,3 +1,4 @@
+
 <?php $show_title="$MSG_SUBMIT - $OJ_NAME"; ?>
 <?php include("template/$OJ_TEMPLATE/header.php");?>
 
@@ -20,7 +21,11 @@
 body{
         background: url("http://m.hustoj.com:8090/bg/nz.gif") 0% 0% / 100% no-repeat;
 }
-
+ /* 定义错误行的样式 */
+  .ace_error_marker {
+    position: absolute;
+    background-color: rgba(255, 0, 0, 0.3); /* 红色半透明背景 */
+  }
   </style>
     
 <center>
@@ -186,9 +191,38 @@ foreach($judge_result as $result){
     echo "'$result',";
 }
 ?>''];
-function print_result(solution_id){
-	sid=solution_id;
-	$("#out").load("status-ajax.php?tr=1&solution_id="+solution_id);
+
+function print_result(solution_id) {
+    var sid = solution_id;
+
+    $.ajax({
+        url: "status-ajax.php",
+        type: "GET",
+        data: { tr: 1, solution_id: solution_id },
+        success: function(data) {
+            $("#out").val(data);
+            var resultVariable = data;
+             if (myVariable == 11) {
+                var errorLines = [];
+
+                var regex = /(\w+\.cc):(\d+):\d+:/g;
+                var match;
+                while ((match = regex.exec(resultVariable)) !== null) {
+                    var lineNumber = parseInt(match[2], 10);
+                    errorLines.push(lineNumber);
+                }
+                
+                errorLines.forEach(function(line) {
+                    var Range = ace.require("ace/range").Range;
+                    var range = new Range(line - 1, 0, line - 1, Infinity);
+                    editor.getSession().addMarker(range, "ace_error_marker", "fullLine", false);
+                });
+            }
+        },
+        error: function(xhr, status, error) {
+            console.error("Error fetching data: ", error);
+        }
+    });
 }
 function fancy(td){
         $("body",parent.document).append("<div id='bannerFancy' style='position:absolute;top:0px;left:0px;width:100%;z-index:3' class='ui main container'></div><audio autoplay=\"autoplay\" preload=\"auto\" src=\"<?php echo $OJ_FANCY_MP3 ?>\"> </audio>");
@@ -234,6 +268,7 @@ function fresh_result(solution_id)
 			// alert(judge_result[r]);
 			var loader="<img width=18 src=image/loader.gif>";
 			var tag="span";
+			window.myVariable = ra[0];
 			if(ra[0]<4) tag="span disabled=true";
 			else tag="a";
 			{
@@ -447,6 +482,18 @@ function loadFromBlockly(){
 	// theme: "ace/theme/ambiance",   // Black theme
         fontSize: "18px"
     });
+    
+editor.getSession().on("change", function() {
+   
+    var markers = editor.getSession().getMarkers(false);
+    for (var id in markers) {
+        if (markers[id].clazz === "ace_error_marker") {
+            editor.getSession().removeMarker(id);
+        }
+    }
+});
+
+
    reloadtemplate($("#language").val()); 
    function autoSave(){
         var mark="<?php echo isset($id)?'problem_id':'cid';?>";
