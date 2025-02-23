@@ -142,6 +142,7 @@ if(!isset($OJ_SUBMIT_COOLDOWN_TIME)) $OJ_SUBMIT_COOLDOWN_TIME=3;
 if(isset($OJ_ON_SITE_CONTEST_ID) || isset($OJ_EXAM_CONTEST_ID)) $OJ_FREE_PRACTICE=false;
 
 // $OJ_BG="/image/bg".date('H').".jpg";  //每个整点更换壁纸，需要准备bg[0~23].jpg在image目录
+if (time() < strtotime('2025-3-31')) $OJ_BG="http://cdn.hustoj.com/upload/bg/nz0".(date('i')%9+1).".png";  //哪吒2上映期间，每分钟更换一张哪吒壁纸
 // if OJ_BG==bing ,using bing.com for daily change background
 if(isset($OJ_BG)&&$OJ_BG=="bing"){
     $logfile="/dev/shm/bing.log";
