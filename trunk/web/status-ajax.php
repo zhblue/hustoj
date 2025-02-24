@@ -69,7 +69,7 @@ if (!empty($result)) {
 				$result = pdo_query("select title,contest_type from contest where contest_id=?",$contest_id);
 				$contest_title = $result[0]['title'];
 				$contest_type= $result[0]['contest_type'];
-				if (stripos($contest_title,$OJ_NOIP_KEYWORD)!==false || ($contest_type & 20 ) > 0  ) {
+				if (stripos($contest_title,$OJ_NOIP_KEYWORD)!==false || ($contest_type & 16 ) > 0  ) {
 					echo "$OJ_NOIP_KEYWORD";
 					exit(0);
 				}
