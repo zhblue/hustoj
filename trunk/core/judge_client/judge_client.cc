@@ -3266,6 +3266,9 @@ void watch_solution(pid_t pidApp, char *infile, int &ACflg, int spj,
 				case SIGKILL:
 				case SIGXCPU:
 					ACflg = OJ_TL;
+					usedtime += time_lmt * 1000;  // 等待IO的Alarm超时虽然没有占用CPU，但为了省去给每个人解释的时间，计入用时。
+					if (DEBUG)
+						printf("TLE:%d\n", usedtime);
 					break;
 				case SIGXFSZ:
 					ACflg = OJ_OL;
