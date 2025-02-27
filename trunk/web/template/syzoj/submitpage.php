@@ -205,7 +205,7 @@ function print_result(solution_id) {
              if (myVariable == 11) {
                 var errorLines = [];
 
-                var regex = /(\w+\.cc):(\d+):\d+:/g;
+                var regex = /(\w+\.<?php echo $language_ext[$lastlang]?>):(\d+):\d+:/g;
                 var match;
                 while ((match = regex.exec(resultVariable)) !== null) {
                     var lineNumber = parseInt(match[2], 10);
