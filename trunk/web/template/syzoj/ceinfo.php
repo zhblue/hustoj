@@ -168,19 +168,33 @@ pats[i]=/variably modified/;
 exps[i++]="<?php echo $MSG_VARIABLY_MODIFIED; ?>";
 
 function explain(){
-//alert("asdf");
-var errmsg=$("#errtxt").text();
-var expmsg="";
-for(var i=0;i<pats.length;i++){
-var pat=pats[i];
-var exp=exps[i];
-var ret=pat.exec(errmsg);
-if(ret){
-expmsg+=ret+":"+exp+"<br>";
-}
-}
-document.getElementById("errexp").innerHTML=expmsg;
-//alert(expmsg);
+	//alert("asdf");
+	var errmsg=$("#errtxt").text();
+	var expmsg="";
+	for(var i=0;i<pats.length;i++){
+	var pat=pats[i];
+	var exp=exps[i];
+	var ret=pat.exec(errmsg);
+	if(ret){
+	expmsg+=ret+":"+exp+"<br>";
+	}
+	}
+	document.getElementById("errexp").innerHTML=expmsg;
+	//alert(expmsg);
+		
+		var resultVariable = errmsg;
+                var errorLines = [];
+                var regex = /(\w+\.<?php echo $language_ext[$lang]?>):(\d+):\d+:/g;
+                var match;
+                while ((match = regex.exec(resultVariable)) !== null) {
+                    var lineNumber = parseInt(match[2], 10);
+                    errorLines.push(lineNumber);
+                }
+                errorLines.forEach(function(line) {
+                        console.log("line"+line);
+                        $("div .number"+line).addClass("highlighted");
+                });
+
 }
 </script> 
 <script src='<?php echo $OJ_CDN_URL?>highlight/scripts/shCore.js' type='text/javascript'></script>
