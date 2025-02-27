@@ -18,9 +18,11 @@
     line-height: 1.2;
 
 }
+<?php if (time() < strtotime('2025-3-31')) { ?>
 body{
         background: url("http://m.hustoj.com:8090/bg/nz.gif") 0% 0% / 100% no-repeat;
 }
+<?php } ?>
  /* 定义错误行的样式 */
   .ace_error_marker {
     position: absolute;
