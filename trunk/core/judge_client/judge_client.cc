@@ -131,6 +131,28 @@ struct user_regs_struct {
 
 #endif
 
+// https://github.com/torvalds/linux/blob/master/tools/include/nolibc/arch-loongarch.h
+/* Syscalls for LoongArch :
+ *   - stack is 16-byte aligned
+ *   - syscall number is passed in a7
+ *   - arguments are in a0, a1, a2, a3, a4, a5
+ *   - the system call is performed by calling "syscall 0"
+ *   - syscall return comes in a0
+ *   - the arguments are cast to long and assigned into the target
+ *     registers which are then simply passed as registers to the asm code,
+ *     so that we don't have to experience issues with register constraints.
+ */
+#ifdef __loongarch_lp64        // lonngarch64 龙芯的寄存器结构
+	#define REG_ARG0 regs[4]   // a0 (x4)
+	#define REG_ARG1 regs[5]   // a1 (x5)
+ 	#define REG_ARG2 regs[6]   // a2 (x6)
+ 	#define REG_ARG3 regs[7]   // a3 (x7)
+ 	#define REG_ARG4 regs[8]   // a4 (x8)
+ 	#define REG_ARG5 regs[9]   // a5 (x9)
+ 	#define REG_SYSCALL regs[17]  // a7 (x17) 系统调用号
+ 	#define REG_RETVAL regs[4] // a0 (x4) 返回值存放
+#endif
+
 #ifdef __i386          //32位x86寄存器
 #define REG_SYSCALL orig_eax
 #define REG_RET eax
@@ -1549,6 +1571,10 @@ int compile(int lang, char *work_dir)
 			LIM.rlim_max = STD_MB << 12;
 			LIM.rlim_cur = STD_MB << 12;
 #endif
+#ifdef __loongarch_lp64
+			LIM.rlim_max = STD_MB << 12;
+			LIM.rlim_cur = STD_MB << 12;
+#endif
 #ifdef __arm__
 			LIM.rlim_max = STD_MB << 11;
 			LIM.rlim_cur = STD_MB << 11;
@@ -2137,6 +2163,10 @@ void copy_shell_runtime(char *work_dir)
 	execute_cmd("cp  /lib/mips64el-linux-gnuabi64/libpthread.so.0 %s/lib/mips64el-linux-gnuabi64/",work_dir);
 	execute_cmd("/bin/cp -a /bin/bash %s/bin/", work_dir);
 
+#endif
+
+#ifdef __loongarch_lp64
+	//
 #endif
 
 #ifdef __i386
@@ -3317,6 +3347,10 @@ void watch_solution(pid_t pidApp, char *infile, int &ACflg, int spj,
 		call_id=ptrace(PTRACE_GETREGS, pidCur, NULL, &reg);
 			call_id = ((unsigned int)reg.REG_SYSCALL) % call_array_size;
 #endif 
+#ifdef __loongarch_lp64
+		ptrace(PTRACE_GETREGS, pidCur, NULL, &reg);
+		call_id = ((unsigned int)reg.REG_SYSCALL) % call_array_size;
+#endif
 #ifdef __x86_64__
 		ptrace(PTRACE_GETREGS, pidCur, NULL, &reg);
 		call_id = ((unsigned int)reg.REG_SYSCALL) % call_array_size;
