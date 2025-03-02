@@ -60,3 +60,6 @@
 #ifdef __mips__
    #include "okcalls_mips.h"
 #endif
+#ifdef __loongarch_lp64
+   #include "okcalls_loongarch64.h"
+#endif
