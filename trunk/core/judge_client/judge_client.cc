@@ -1447,15 +1447,15 @@ void _update_problem_mysql(int p_id,int cid) {
 			p_id,cid, p_id,cid);
 		if (mysql_real_query(conn, sql, strlen(sql)))
 			write_log(mysql_error(conn));
-	}else{
-
-		sprintf(sql,
-			"UPDATE `problem` SET `accepted`=(SELECT count(*) FROM `solution` WHERE `problem_id`=%d AND `result`=4 and contest_id=0 ) WHERE `problem_id`=%d",
-			p_id, p_id);
-		printf("sql:[%s]\n",sql);
-		if (mysql_real_query(conn, sql, strlen(sql)))
-			write_log(mysql_error(conn));
 	}
+
+	sprintf(sql,
+		 "UPDATE `problem` SET `accepted`=(SELECT count(*) FROM `solution` s where  s.`problem_id`=%d AND s.`result`=4 and problem_id not in(select problem_id from contest_problem where contest_id in (select contest_id from contest where contest_type & 16 > 0  and end_time>now() )) ) WHERE `problem_id`=%d ",
+		p_id, p_id);
+	printf("sql:[%s]\n",sql);
+	if (mysql_real_query(conn, sql, strlen(sql)))
+		write_log(mysql_error(conn));
+	
 	
 }
 #endif
