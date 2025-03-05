@@ -93,6 +93,9 @@ $(document).ready(function() {
         }
         originalTable.replaceWith(newTable);
     });
+   $('#swapButton').click();
+   $('#swapButton').click();
+
 });
 </script>
 
