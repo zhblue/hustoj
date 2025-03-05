@@ -93,8 +93,7 @@ $(document).ready(function() {
         }
         originalTable.replaceWith(newTable);
     });
-   $('#swapButton').click();
-   $('#swapButton').click();
+
 
 });
 </script>
@@ -106,6 +105,7 @@ $(document).ready(function() {
 	  	console.log("sort");
     		sortTable('statistics', 2, 'int');	
     		sortTable('statistics', 2, 'int');	
-    
+		$('#swapButton').click();
+		$('#swapButton').click();
     	  });
       </script>
