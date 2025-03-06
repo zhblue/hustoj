@@ -193,7 +193,7 @@ function fixImageURL(&$html,&$did) {
 }
 
 
-if (!(isset($_SESSION[$OJ_NAME.'_'.'administrator']) || isset($_SESSION[$OJ_NAME.'_'.'contest_creator']))) {
+if (!(isset($_SESSION[$OJ_NAME.'_'.'administrator']) || isset($_SESSION[$OJ_NAME.'_'.'problem_importer']))) {
   echo "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">";
   echo "<a href='../loginpage.php'>Please Login First!</a>";
   exit ( 1 );
