@@ -5,6 +5,9 @@
         <script charset="utf-8" src="../kindeditor/lang/zh_CN.js"></script>
         <script charset="utf-8" src="../kindeditor/plugins/code/prettify.js"></script>
         <script>
+var kindeditorSeted=false;
+if(!kindeditorSeted){
+
         $(document).ready(window.setTimeout(function (){
                 KindEditor.ready(function(K) {
                         let editor1 = K.create('textarea[class="kindeditor"]', {
@@ -44,5 +47,8 @@
                         prettyPrint();
                 });
         }),100);
+         kindeditorSeted=true;
+}
+
         </script>
 
