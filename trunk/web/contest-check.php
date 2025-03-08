@@ -38,8 +38,9 @@
                 $view_description = "Not in $MSG_SUBNET $subnet";
 	}
 
-        if ($rows_cnt==0) {
+        if ($rows_cnt==0 || ($row['defunct']=='Y' && !isset($_SESSION[$OJ_NAME.'_administrator']) )) {
                 $view_title = "比赛已经关闭!";
+		 $contest_ok=false;
         }
         else{
 
