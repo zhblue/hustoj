@@ -31,7 +31,7 @@
                                 }
 				if(isset($OJ_EXAM_CONTEST_ID)&&intval($OJ_EXAM_CONTEST_ID)>0){  //考试模式
 					$ccid=$OJ_EXAM_CONTEST_ID;
-					$sql="select min(start_time) from contest where start_time<=now() and end_time>=now() and contest_id>=?";
+					$sql="select min(start_time - INTERVAL 30 MINUTE) from contest where start_time<=now() and end_time>=now() and contest_id>=?";
 					$rows=pdo_query($sql,$ccid);
 					$start_time=$rows[0][0];
 					$sql="select ip from loginlog where user_id=? and time>? order by time desc limit 1";
