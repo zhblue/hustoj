@@ -39,12 +39,14 @@ if ($rows_cnt==0){
 	$err_cnt++;
 }
 $len=strlen($_POST['npassword']);
-if (too_simple($_POST['npassword'])){
-	$err_cnt++;
-	$err_str=$err_str."$MSG_PASSWORD $MSG_TOO_SIMPLE !\\n";
-}else if (strcmp($_POST['npassword'],$_POST['rptpassword'])!=0){
-	$err_str=$err_str."$MSG_REPEAT_PASSWORD $MSG_DIFFERENT !";
-	$err_cnt++;
+if($len>0) {
+	if(too_simple($_POST['npassword'])){
+		$err_cnt++;
+		$err_str=$err_str."$MSG_PASSWORD $MSG_TOO_SIMPLE !\\n";
+	}else if (strcmp($_POST['npassword'],$_POST['rptpassword'])!=0){
+		$err_str=$err_str."$MSG_REPEAT_PASSWORD $MSG_DIFFERENT !";
+		$err_cnt++;
+	}
 }
 $len=strlen($_POST['school']);
 if ($len>100){
