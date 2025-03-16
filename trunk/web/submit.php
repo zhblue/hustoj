@@ -1,6 +1,7 @@
 <?php 
 @ini_set("display_errors", "Off");
 @session_start();
+@ob_start();
 require_once "include/db_info.inc.php";
 require_once "include/my_func.inc.php";
 require_once "include/email.class.php";
@@ -509,6 +510,7 @@ if (!$test_run&&!isset($_GET['ajax'])) {
 }
 else {
   if (isset($_GET['ajax'])) {
+    ob_clean();
     echo $insert_id;
   }
   else {
