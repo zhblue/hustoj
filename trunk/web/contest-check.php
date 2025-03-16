@@ -86,14 +86,14 @@
         }
         if(!isset($OJ_CONTEST_LIMIT_KEYWORD)) $OJ_CONTEST_LIMIT_KEYWORD="限时";
         if($contest_ok && str_contains($view_description,$OJ_CONTEST_LIMIT_KEYWORD)&&isset($_SESSION[$OJ_NAME."_user_id"])){
-                echo "<!-- 个人限时赛  -->";
+                //echo "<!-- 个人限时赛  -->";
                 $contest_limit_minutes=intval(getPartByMark($view_description,$OJ_CONTEST_LIMIT_KEYWORD,"分钟"));  //允许比赛描述中用 "限时xx分钟" 规定个人做题时间。
                 if($contest_limit_minutes==0) $contest_limit_minutes=120;
-                echo "<!-- $contest_limit_minutes mins -->";
+                //echo "<!-- $contest_limit_minutes mins -->";
                 $user_id=$_SESSION[$OJ_NAME."_user_id"];
                 $first_login_contest=pdo_query("select time from loginlog where user_id=? and password=?",$user_id,"c".$cid);
                 if(empty($first_login_contest)){
-                        echo "<!-- 首次访问  -->";
+                        //echo "<!-- 首次访问  -->";
                                 $ip = ($_SERVER['REMOTE_ADDR']);
                                 if( isset($_SERVER['HTTP_X_FORWARDED_FOR'] )&&!empty( trim( $_SERVER['HTTP_X_FORWARDED_FOR'] ) ) ){
                                     $REMOTE_ADDR = $_SERVER['HTTP_X_FORWARDED_FOR'];
@@ -111,7 +111,7 @@
                         $first_login_contest=strtotime($first_login_contest[0][0]);
                 }
                 $unixnow=time();
-                echo "<!-- $unixnow - $first_login_contest = ".($unixnow-$first_login_contest)." -->";
+                //echo "<!-- $unixnow - $first_login_contest = ".($unixnow-$first_login_contest)." -->";
                 if($unixnow-$first_login_contest>=$contest_limit_minutes*60 && !isset($_SESSION[$OJ_NAME."_m".$cid]) && !isset($_SESSION[$OJ_NAME."_administrator"])){
                         $contest_ok=false;
 
