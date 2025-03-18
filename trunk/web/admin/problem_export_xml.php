@@ -145,7 +145,7 @@ function fixurl($img_url) {
 
 function image_base64_encode($img_url) {
   $img_url = fixurl($img_url);
-echo $img_url;
+  //echo $img_url;
   if (substr($img_url,0,4)!="http")
     return false;
   $context = stream_context_create(array('http' => array('timeout' => 5)));    // prevent stuck on export image failed
