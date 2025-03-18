@@ -1,8 +1,12 @@
 <?php
 @session_start ();
-echo "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
 require_once ("../include/db_info.inc.php");
 
+if (!(isset($_SESSION[$OJ_NAME.'_'.'administrator']) || isset($_SESSION[$OJ_NAME.'_'.'problem_importer']))) {
+  echo "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">";
+  echo "<a href='../loginpage.php'>Please Login First!</a>";
+  exit ( 1 );
+}
 if (!isset($OJ_LANG)) {
   $OJ_LANG = "en";
 }
@@ -10,6 +14,9 @@ if (!isset($OJ_LANG)) {
 require_once("../lang/$OJ_LANG.php");
 require_once("../include/const.inc.php");
 
+function write_xml($handle, $content) {
+        fwrite($handle, $content . "\n");
+}
 function fixcdata($content) {
   $content = str_replace("\x1a","",$content);   // remove some strange \x1a [SUB] char from datafile
   return str_replace("]]>","]]]]><![CDATA[>",$content);
@@ -29,7 +36,7 @@ function getTestFileOut($pid, $testfile,$OJ_DATA) {
     return "";
 }
 
-function printTestCases($pid,$OJ_DATA) {
+function printTestCases($xmlHandle,$pid,$OJ_DATA) {
   if (strstr($OJ_DATA,"saestor:")) {
     // echo "<debug>$pid</debug>";
     $store = new SaeStorage();
@@ -48,11 +55,11 @@ function printTestCases($pid,$OJ_DATA) {
           $infile = "$pid/".$f.".in";
 
           if ($store->fileExists("data",$infile)) {
-            echo "<test_input><![CDATA[".fixcdata($store->read("data",$infile))."]]></test_input>\n";
+            write_xml($xmlHandle,"<test_input><![CDATA[".fixcdata($store->read("data",$infile))."]]></test_input>\n");;
           }
 
           if ($store->fileExists("data",$outfile)) {
-            echo "<test_output><![CDATA[".fixcdata($store->read("data",$outfile))."]]></test_output>\n";
+            write_xml($xmlHandle,"<test_output><![CDATA[".fixcdata($store->read("data",$outfile))."]]></test_output>\n");
           }
           //break;
         }
@@ -77,11 +84,11 @@ function printTestCases($pid,$OJ_DATA) {
         $infile = "$OJ_DATA/$pid/".$ret.".in";
 
         if (file_exists($infile)) {
-          echo "<test_input name=\"".$ret."\"><![CDATA[".fixcdata(file_get_contents($infile))."]]></test_input>\n";
+          write_xml($xmlHandle, "<test_input name=\"".$ret."\"><![CDATA[".fixcdata(file_get_contents($infile))."]]></test_input>\n");
         }
 
         if (file_exists($outfile)) {
-          echo "<test_output name=\"".$ret."\"><![CDATA[".fixcdata(file_get_contents($outfile))."]]></test_output>\n";
+          write_xml($xmlHandle,"<test_output name=\"".$ret."\"><![CDATA[".fixcdata(file_get_contents($outfile))."]]></test_output>\n");
         }
         //break;
       }
@@ -169,7 +176,7 @@ function getImages($content) {
   return array_merge($images[1],$mdImages[1]);
 }
 
-function fixImageURL(&$html,&$did) {
+function fixImageURL($xmlHandle,&$html,&$did) {
   $images = getImages($html);
   $imgs = array_unique($images);
 
@@ -181,11 +188,7 @@ function fixImageURL(&$html,&$did) {
     if (!in_array($img,$did)) {
       $base64 = image_base64_encode($img);
       if ($base64) {
-        echo "<img><src><![CDATA[";
-        echo fixurl($img);
-        echo "]]></src><base64><![CDATA[";
-        echo $base64;
-        echo "]]></base64></img>";   
+        write_xml($xmlHandle, "<img><src><![CDATA[".fixurl($img). "]]></src><base64><![CDATA[". $base64. "]]></base64></img>");   
       }
       array_push($did,$img);
     }
@@ -193,11 +196,6 @@ function fixImageURL(&$html,&$did) {
 }
 
 
-if (!(isset($_SESSION[$OJ_NAME.'_'.'administrator']) || isset($_SESSION[$OJ_NAME.'_'.'problem_importer']))) {
-  echo "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">";
-  echo "<a href='../loginpage.php'>Please Login First!</a>";
-  exit ( 1 );
-}
 
 
 if (isset($_POST['do']) || isset($_GET['cid'])) {
@@ -248,116 +246,125 @@ if (isset($_POST['do']) || isset($_GET['cid'])) {
 
 //echo $sql;
 
+//   ob_start(); // 开始输出缓冲
+    $tmpDir = sys_get_temp_dir() . '/oj_export_' . uniqid();
+    mkdir($tmpDir, 0700, true);
+
 if (isset($_POST['submit']) && $_POST['submit']== "Export")
   header('Content-Type:text/xml');
 else {
   header("content-type:application/file");
-  header("content-disposition:attachment;filename=\"fps-".$_SESSION[$OJ_NAME.'_'.'user_id'].$filename.".xml\"");
 }
-?>
+    $xmlPath = $tmpDir . '/problem.xml';
+    $zipPath = $tmpDir . '/export.zip';
+   $xmlHandle = fopen($xmlPath, 'w');
+   write_xml($xmlHandle, "<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+   write_xml($xmlHandle,"<!DOCTYPE fps PUBLIC"); 
+   write_xml($xmlHandle,'"-//freeproblemset//An opensource XML standard for Algorithm Contest Problem Set//EN"');
+   write_xml($xmlHandle,'"http://hustoj.com/fps.current.dtd" >');
+   write_xml($xmlHandle,'<fps version="1.5" url="https://github.com/zhblue/freeproblemset/">');
+   write_xml($xmlHandle,'<generator name="HUSTOJ" url="https://github.com/zhblue/hustoj/" />');
+   foreach ($result as  $row) {
+	write_xml($xmlHandle,'<item>');
+	write_xml($xmlHandle,'<title><![CDATA['. $row['title'] . ']]></title>');
+	write_xml($xmlHandle,'<url><![CDATA['.'http://'.$_SERVER['HTTP_HOST'].dirname(dirname($_SERVER['REQUEST_URI']))."problem.php?id=".$row['problem_id'].']]></url>');
+	$time=$row['time_limit'];     
+	if (intval($time)==$time)
+	    write_xml($xmlHandle, '<time_limit unit="s"><![CDATA['.intval($time).']]></time_limit>');
+	else
+	    write_xml($xmlHandle, '<time_limit unit="s"><![CDATA['.$time.']]></time_limit>');
+	write_xml($xmlHandle,'<memory_limit unit="mb"><![CDATA['.$row['memory_limit'].']]></memory_limit>');
 
-<!DOCTYPE fps PUBLIC 
-  "-//freeproblemset//An opensource XML standard for Algorithm Contest Problem Set//EN"
-  "http://hustoj.com/fps.current.dtd" >
+	$did = array();
+	fixImageURL($xmlHandle,$row['description'],$did);
+	fixImageURL($xmlHandle,$row['input'],$did);
+	fixImageURL($xmlHandle,$row['output'],$did);
+	fixImageURL($xmlHandle,$row['hint'],$did);
 
-<fps version="1.5" url="https://github.com/zhblue/freeproblemset/">
-  <generator name="HUSTOJ" url="https://github.com/zhblue/hustoj/" />
-  <?php
-  foreach ($result as  $row) {
-  ?>
+	write_xml($xmlHandle,'<description><![CDATA[' . $row['description'] . ']]></description>');
+	write_xml($xmlHandle,'<input><![CDATA[' .  $row['input']. ']]></input>');
+	write_xml($xmlHandle,'<output><![CDATA[' . $row['output']. ']]></output>');
+	write_xml($xmlHandle,'<sample_input><![CDATA['. $row['sample_input'].']]></sample_input>');
+	write_xml($xmlHandle,'<sample_output><![CDATA['.  $row['sample_output'].']]></sample_output>');
+	if($_POST['remote_name']=="")  
+	    printTestCases($xmlHandle,$row['problem_id'],$OJ_DATA);
+	write_xml($xmlHandle,'<hint><![CDATA['. $row['hint'].']]></hint>');
+	write_xml($xmlHandle,'<source><![CDATA[' . fixcdata($row['source']) . ']]></source>');
+	write_xml($xmlHandle,'<remote_oj><![CDATA[' . (trim($_POST['remote_name'])!=""?trim(basename($_POST['remote_name'])):fixcdata($row['remote_oj'])).']]></remote_oj>');
+	write_xml($xmlHandle,'<remote_id><![CDATA[' . ($_POST['remote_name']!=""?$row['problem_id']:fixcdata($row['remote_id'])).']]></remote_id>');
 
-  <item>
-    <title><![CDATA[<?php echo $row['title']?>]]></title>
-    <url><![CDATA[<?php echo 'http://'.$_SERVER['HTTP_HOST'].dirname(dirname($_SERVER['REQUEST_URI']))."problem.php?id=".$row['problem_id']?>]]></url>
-    <time_limit unit="s"><![CDATA[<?php    // 兼容老版本和QDUOJ之类的其他OJ   
-            $time=$row['time_limit'];     
-            if (intval($time)==$time)
-                    echo intval($time);
-            else
-                    echo $time;
-?>]]></time_limit>
+	$pid = $row['problem_id'];
+	for ($lang=0; $lang<count($language_ext); $lang++) {
+		$solution = getSolution($pid,$lang);
 
-    <memory_limit unit="mb"><![CDATA[<?php echo $row['memory_limit']?>]]></memory_limit>
+		if ($solution->language){
+			write_xml($xmlHandle,'<solution language="'. $solution->language. '"><![CDATA['. fixcdata($solution->source_code). ']]></solution>');
+		}
+		$pta = array("prepend","template","append");
+		foreach ($pta as $pta_file) {
+			$append_file = "$OJ_DATA/$pid/$pta_file.".$language_ext[$lang];
+			//echo "<filename value=\"$lang  $append_file $language_ext[$lang]\"/>";
+			if (file_exists($append_file)) { 
+				write_xml($xmlHandle,'<'.$pta_file. ' language="'. $language_name[$lang] . '"><![CDATA[' . fixcdata(file_get_contents($append_file)). ']]></'.$pta_file.'>');
+			}
+		}
+  	}
+	  if ($row['spj'] == 1) {
+	    $filec = "$OJ_DATA/".$row['problem_id']."/spj.c";
+	    $filecc = "$OJ_DATA/".$row['problem_id']."/spj.cc";
 
-    <?php
-    $did = array();
-    fixImageURL($row['description'],$did);
-    fixImageURL($row['input'],$did);
-    fixImageURL($row['output'],$did);
-    fixImageURL($row['hint'],$did);
-    ?>
+	    if (file_exists($filec)) {
+	      write_xml($xmlHandle, "<spj language=\"C\"><![CDATA[");
+	      write_xml($xmlHandle, fixcdata(file_get_contents($filec)));
+	      write_xml($xmlHandle, "]]></spj>");
+	    }
+	    else if (file_exists($filecc)) {
+	      write_xml($xmlHandle, "<spj language=\"C++\"><![CDATA[");
+	      write_xml($xmlHandle, fixcdata(file_get_contents ($filecc )));
+	      write_xml($xmlHandle, "]]></spj>");
+	    }
+	    $filec = "$OJ_DATA/".$row['problem_id']."/tpj.c";
+	    $filecc = "$OJ_DATA/".$row['problem_id']."/tpj.cc";
 
-    <description><![CDATA[<?php echo $row['description']?>]]></description>
-    <input><![CDATA[<?php echo $row['input']?>]]></input> 
-    <output><![CDATA[<?php echo $row['output']?>]]></output>
-    <sample_input><![CDATA[<?php echo $row['sample_input']?>]]></sample_input>
-    <sample_output><![CDATA[<?php echo $row['sample_output']?>]]></sample_output>
-    <?php  if($_POST['remote_name']=="")  printTestCases($row['problem_id'],$OJ_DATA)?>
-    <hint><![CDATA[<?php echo $row['hint']?>]]></hint>
-    <source><![CDATA[<?php echo fixcdata($row['source'])?>]]></source>
-    <remote_oj><![CDATA[<?php echo $_POST['remote_name']!=""?basename($_POST['remote_name']):fixcdata($row['remote_oj'])?>]]></remote_oj>
-    <remote_id><![CDATA[<?php echo $_POST['remote_name']!=""?$row['problem_id']:fixcdata($row['remote_id'])?>]]></remote_id>
+	    if (file_exists($filec)) {
+	      write_xml($xmlHandle, "<tpj language=\"C\"><![CDATA[");
+	      write_xml($xmlHandle, fixcdata(file_get_contents($filec)));
+	      write_xml($xmlHandle, "]]></tpj>");
+	    }
+	    else if (file_exists($filecc)) {
+	      write_xml($xmlHandle, "<tpj language=\"C++\"><![CDATA[");
+	      write_xml($xmlHandle, fixcdata(file_get_contents ($filecc )));
+	      write_xml($xmlHandle, "]]></tpj>)");
+	    }
+	  }else if ($row['spj'] == 2){
+	     write_xml($xmlHandle, "<spj language=\"Text\">text judge</spj>");
+	  }
+	write_xml($xmlHandle,"</item>");
+	  //	 $content=ob_get_clean();
+	  //	 fwrite($xmlHandle, $content );
+   }
 
-    <?php
-    $pid = $row['problem_id'];
-    for ($lang=0; $lang<count($language_ext); $lang++) {
-      $solution = getSolution($pid,$lang);
-
-      if ($solution->language)
-    {?>
-        <solution language="<?php echo $solution->language?>"><![CDATA[<?php echo fixcdata($solution->source_code)?>]]></solution>
-    <?php 
-    }
-    
-    $pta = array("prepend","template","append");
-    
-    foreach ($pta as $pta_file) {
-      $append_file = "$OJ_DATA/$pid/$pta_file.".$language_ext[$lang];
-      //echo "<filename value=\"$lang  $append_file $language_ext[$lang]\"/>";
-    
-      if (file_exists($append_file)) { ?>
-        <<?php echo $pta_file?> language="<?php echo $language_name[$lang]?>"><![CDATA[<?php echo fixcdata(file_get_contents($append_file))?>]]></<?php echo $pta_file?>>
-        <?php 
-      }
-    }
-  }
-?>
-
-<?php
-  if ($row['spj'] == 1) {
-    $filec = "$OJ_DATA/".$row['problem_id']."/spj.c";
-    $filecc = "$OJ_DATA/".$row['problem_id']."/spj.cc";
-
-    if (file_exists($filec)) {
-      echo "<spj language=\"C\"><![CDATA[";
-      echo fixcdata(file_get_contents($filec));
-      echo "]]></spj>";
-    }
-    else if (file_exists($filecc)) {
-      echo "<spj language=\"C++\"><![CDATA[";
-      echo fixcdata(file_get_contents ($filecc ));
-      echo "]]></spj>";
-    }
-    $filec = "$OJ_DATA/".$row['problem_id']."/tpj.c";
-    $filecc = "$OJ_DATA/".$row['problem_id']."/tpj.cc";
-
-    if (file_exists($filec)) {
-      echo "<tpj language=\"C\"><![CDATA[";
-      echo fixcdata(file_get_contents($filec));
-      echo "]]></tpj>";
-    }
-    else if (file_exists($filecc)) {
-      echo "<tpj language=\"C++\"><![CDATA[";
-      echo fixcdata(file_get_contents ($filecc ));
-      echo "]]></tpj>";
-    }
-  }else if ($row['spj'] == 2){
-     echo "<spj language=\"Text\">text judge</spj>";
-  }
-?>
-</item>
-
-<?php }
-echo "</fps>";
+  write_xml($xmlHandle,"</fps>");
 }
-?>
+	 fclose($xmlHandle);
+
+	     // 创建ZIP压缩包
+    $zip = new ZipArchive();
+    if ($zip->open($zipPath, ZipArchive::CREATE) === TRUE) {
+        $zip->addFile($xmlPath, 'problem.xml');
+        $zip->close();
+        // 发送ZIP文件
+        header("Content-Type: application/zip");
+        header("Content-Disposition: attachment; filename=export_".$_SESSION[$OJ_NAME.'_'.'user_id']."_".$filename."_".date('YmdHis').".zip");
+        header("Content-Length: " . filesize($zipPath));
+	ob_clean();
+	flush();
+        readfile($zipPath);
+
+        // 清理临时文件
+        array_map('unlink', glob("$tmpDir/*"));
+        rmdir($tmpDir);
+        exit;
+    } else {
+        die("无法创建压缩文件");
+    }
