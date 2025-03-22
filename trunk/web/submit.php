@@ -502,7 +502,7 @@ $statusURI = "status.php?user_id=".$_SESSION[$OJ_NAME.'_'.'user_id'];
 if(isset($_GET['spa'])) $statusURI .="&spa";
 
 if (isset($cid)) {
-  $statusURI .= "&cid=$cid&fixed=";
+  $statusURI .= "&cid=$cid&top=$insert_id&fixed=";
 }
 
 if (!$test_run&&!isset($_GET['ajax'])) {
