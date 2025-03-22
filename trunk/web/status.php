@@ -56,8 +56,10 @@ if (isset($_GET['cid'])) {
     if($noip){
       $view_errors =  "<h2> $MSG_NOIP_WARNING <a href=\"contest.php?cid=$cid\">$MSG_RETURN_CONTEST</a></h2>";
       $refererUrl = parse_url($_SERVER['HTTP_REFERER']);
-      if($refererUrl['path']=="/submitpage.php") 
-	$view_errors="<h2>$MSG_SUBMIT $MSG_SUCCESS!</h2><a href=\"contest.php?cid=$cid\">$MSG_RETURN_CONTEST</a></h2>";
+      $top=intval($_GET['top']);
+      if($refererUrl['path']=="/submitpage.php") {
+	$view_errors="<h2>$MSG_SUBMIT $MSG_SUCCESS! $top </h2><a href=\"contest.php?cid=$cid\">$MSG_RETURN_CONTEST</a></h2>";
+      }
       require("template/".$OJ_TEMPLATE."/error.php");
       exit(0);
     }
