@@ -54,10 +54,10 @@ if (isset($_GET['cid'])) {
 		isset($_SESSION[$OJ_NAME.'_'."contest_creator"])
 	   ) $noip=false;
     if($noip){
-      $view_errors =  "<h2> $MSG_NOIP_WARNING <a href=\"contest.php?cid=$cid\">返回比赛</a></h2>";
+      $view_errors =  "<h2> $MSG_NOIP_WARNING <a href=\"contest.php?cid=$cid\">$MSG_RETURN_CONTEST</a></h2>";
       $refererUrl = parse_url($_SERVER['HTTP_REFERER']);
       if($refererUrl['path']=="/submitpage.php") 
-	$view_errors="<h2>提交成功!</h2><a href=\"contest.php?cid=$cid\">返回比赛</a></h2>";
+	$view_errors="<h2>$MSG_SUBMIT $MSG_SUCCESS!</h2><a href=\"contest.php?cid=$cid\">$MSG_RETURN_CONTEST</a></h2>";
       require("template/".$OJ_TEMPLATE."/error.php");
       exit(0);
     }
