@@ -262,6 +262,7 @@ function fresh_result(solution_id)
 		{
 			var r=xmlhttp.responseText;
 			if(r=="<?php echo $OJ_NOIP_KEYWORD?>") {
+				alert("<?php echo $MSG_SUBMIT.$MSG_SUCCESS.$contest_locks[4]?>");
 				tb.innerHTML="<?php echo $contest_locks[4]?>";
 				return;
 			}
