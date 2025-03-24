@@ -72,7 +72,8 @@ echo"<option value=$i ".( $lastlang==$i?"selected":"").">
 <?php echo $MSG_VCODE?>:
 <input name="vcode" size=4 type=text autocomplete=off ><img id="vcode" alt="click to change" src="vcode.php" onclick="this.src='vcode.php?'+Math.random()">
 <?php }?>
-<button  id="Submit" type="button" class="ui primary icon button"  onclick="do_submit();"><?php echo $MSG_SUBMIT?></button>
+<button  id="Submit" type="button" class="ui primary icon button"  onclick="do_submit();"><?php echo $MSG_SUBMIT?></button> 
+<label id="countDown" ></label>
 <?php if (isset($OJ_ENCODE_SUBMIT)&&$OJ_ENCODE_SUBMIT){?>
 <input class="btn btn-success" title="WAF gives you reset ? try this." type=button value="Encoded <?php echo $MSG_SUBMIT?>"  onclick="encoded_submit();">
 <input type=hidden id="encoded_submit_mark" name="reverse2" value="reverse"/>
@@ -673,6 +674,25 @@ function formatCode() {
 
 </script>
 <?php }?>
+<script>
+function auto_submit(){
+        if(countDown>0){
+                countDown--;
+                $("#countDown").text("<?php echo $MSG_LeftTime?>"+countDown+"<?php echo $MSG_SECONDS?>");
+        }
+
+}
+<?php if(isset($cid)&&$cid>0){
+        $sql="select unix_timestamp(end_time)-unix_timestamp(now()) from contest where contest_id=?";
+        $countStart=pdo_query($sql,$cid);
+        if(!empty($countStart)){
+                $countStart=$countStart[0][0];
+                echo "var countDown=".$countStart.";";
+                echo "setInterval('auto_submit()',1000);";
+        }
+      }
+?>
+</script>
 
   </body>
 </html>
