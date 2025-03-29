@@ -33,14 +33,14 @@ div[class*=ace_br] {
       <h1 class="ui header">
         <?php
           if($pr_flag){
-            echo "$id: ".$row['title'];
+            echo "$id"."：".$row['title'];
             // <%= problem.title %><% if (problem.allowedEdit && !problem.is_public) { %><span class="ui tiny red label">未公开</span><% } %>";
             //echo "<title>$MSG_PROBLEM".$row['problem_id']."--". $row['title']."</title>";
             //echo "<center><h2><strong>$id: ".$row['title']."</strong></h2>";
           }else{
             $id=$row['problem_id'];
             //echo "<title>$MSG_PROBLEM ".$PID[$pid].": ".$row['title']." </title>";
-            echo "$MSG_PROBLEM ".$PID[$pid].": ".$row['title'];
+            echo "$MSG_PROBLEM ".$PID[$pid]."：".$row['title'];
           }
           if($row['defunct']=="Y")
           echo "<span class=\"p-label ui tiny red label\">$MSG_RESERVED</span>";
