@@ -83,14 +83,6 @@
       </div>
       <?php require_once("../include/set_post_key.php");?>
     </form> <hr>
-    - unkownOJ - json - zip<br>曾经以为是QDUOJ，但似乎不是，谁知道请告诉我<br>
-    <form class='form-inline' action='problem_import_unkownoj.php' method=post enctype="multipart/form-data">
-      <div class='form-group'>
-        <input class='form-control' type=file name=fps>
-        <button class='btn btn-primary btn-sm' type=submit>Upload to HUSTOJ</button>
-      </div>
-      <?php require_once("../include/set_post_key.php");?>
-    </form> <hr>
     - SYZOJ - zip<br><br>
     <form class='form-inline' action='problem_import_syzoj.php' method=post enctype="multipart/form-data">
       <div class='form-group'>
