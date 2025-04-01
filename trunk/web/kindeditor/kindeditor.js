@@ -3187,7 +3187,9 @@ _extend(KCmd, {
 		var html = '<img src="' + _escape(url) + '" data-ke-src="' + _escape(url) + '" ';
 		if (width) {
 			html += 'width="' + _escape(width) + '" ';
-		}
+		}else{
+                        html += 'width="680px" ';
+                }
 		if (height) {
 			html += 'height="' + _escape(height) + '" ';
 		}
