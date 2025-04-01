@@ -646,19 +646,19 @@ function confirm_upload() {
             "display": "block",
         });
         //alert('正在上传中');
-    }, 1500);
+    }, 500);
 
     setTimeout(function() {
         $('.file_dig').text('注意：不要上传空数据');
-    }, 4500);
+    }, 1500);
 
     setTimeout(function() {
         $('.file_dig').text('建议上传的单张图片控制在300KB之内');
-    }, 6000);
+    }, 2000);
 
     setTimeout(function() {
         $('.file_dig').text('上传成功 [请点击 全部插入 图片！！！]');
-    }, 8000);
+    }, 3000);
 
     setTimeout(function() {
         $('.file_dig').css({
@@ -669,7 +669,7 @@ function confirm_upload() {
         $('.fileSubmit').text('确认上传文件').css({
             'color': 'red',
         });
-    }, 12000);
+    }, 4000);
 
     //var t1=setTimeout("alert('图片正在上传中...')",2500);
     //var t2=setTimeout("alert('图片已成功上传！')",5000);
