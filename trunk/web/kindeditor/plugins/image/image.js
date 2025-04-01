@@ -188,25 +188,27 @@ KindEditor.plugin('image', function(K) {
 			form : K('.ke-form', div),
 			target : target,
 			width: 60,
-			afterUpload : function(data) {
+			afterUpload : function(dataArray) {
 				dialog.hideLoading();
-				if (data.error === 0) {
-					var url = data.url;
-					if (formatUploadUrl) {
-						url = K.formatUrl(url, 'absolute');
-					}
-					if (self.afterUpload) {
-						self.afterUpload.call(self, url, data, name);
-					}
-					if (!fillDescAfterUploadImage) {
-						clickFn.call(self, url, data.title, data.width, data.height, data.border, data.align);
+				for(const data of dataArray){
+					if (data.error === 0) {
+						var url = data.url;
+						if (formatUploadUrl) {
+							url = K.formatUrl(url, 'absolute');
+						}
+						if (self.afterUpload) {
+							self.afterUpload.call(self, url, data, name);
+						}
+						if (!fillDescAfterUploadImage) {
+							clickFn.call(self, url, data.title, data.width, data.height, data.border, data.align);
+						} else {
+							K(".ke-dialog-row #remoteUrl", div).val(url);
+							K(".ke-tabs-li", div)[0].click();
+							K(".ke-refresh-btn", div).click();
+						}
 					} else {
-						K(".ke-dialog-row #remoteUrl", div).val(url);
-						K(".ke-tabs-li", div)[0].click();
-						K(".ke-refresh-btn", div).click();
+						alert(data.message);
 					}
-				} else {
-					alert(data.message);
 				}
 			},
 			afterError : function(html) {

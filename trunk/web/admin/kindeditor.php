@@ -16,6 +16,7 @@ if(!kindeditorSeted){
                                 uploadJson : '../kindeditor/php/upload_json.php',
                                 fileManagerJson : '../kindeditor/php/file_manager_json.php',
                                 allowFileManager : false,
+                                allowImageRemote: true,
                                 filterMode:false,
                                 cssData: 'body { font-family:"Consolas";font-size: 18px;line-height:150% }  ',
 <?php if(isset($OJ_MARKDOWN)&&$OJ_MARKDOWN)

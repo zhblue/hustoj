@@ -73,7 +73,8 @@ KindEditor.plugin('insertfile', function(K) {
 				fieldName : filePostName,
 				url : K.addParam(uploadJson, 'dir=file'),
 				extraParams : extraParams,
-				afterUpload : function(data) {
+				afterUpload : function(dataArray) {
+				    for(const data of dataArray){
 					dialog.hideLoading();
 					if (data.error === 0) {
 						var url = data.url;
@@ -88,6 +89,7 @@ KindEditor.plugin('insertfile', function(K) {
 					} else {
 						alert(data.message);
 					}
+				    }
 				},
 				afterError : function(html) {
 					dialog.hideLoading();
