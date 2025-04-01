@@ -3772,13 +3772,13 @@ function upload_form(){
         <tr><th colspan=2>".et('Upload')."</th></tr>
         <tr><td align=right><b>".et('Destination').":<td><b><nobr>".basename($current_dir)."</nobr>";
         for ($x=0;$x<$num_uploads;$x++){
-            echo "<tr><td align=right><b>".et('File').":<td><nobr><input type=\"file\" multiple name=\"files[]\"></nobr>";
+            echo "<tr><td align=right><b>".et('File').":<td><nobr><input type=\"file\" multiple name=\"files[]\"   title='一次可以选择多个文件上传'   ></nobr>";
             $test_js .= "(document.upload_form.files.value.length>0)||";
         }
         echo "
         <input type=button value=\"".et('Send')."\" onclick=\"test_upload_form()\"></nobr>
         <tr><td> <td><input type=checkbox name=fechar value=\"1\" checked> <a href=\"JavaScript:troca();\">".et('AutoClose')."</a>
-        <tr><td colspan=2>zip file can be decompressed on the server later. 
+        <tr><td colspan=2>一次可以选择多个文件上传<br> zip file can be decompressed on the server later. 
 			  just don't add dirs,please<br>
 			  可以上传zip文件，之后点击decompress解压缩，但是请不要在zip文件中包含子目录。
 	</td></tr>
