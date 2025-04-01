@@ -3200,7 +3200,7 @@ _extend(KCmd, {
 			html += 'align="' + _escape(align) + '" ';
 		}
 		html += 'alt="' + _escape(title) + '" ';
-		html += '/>';
+		html += '/>\n';
 		return this.inserthtml(html);
 	},
 	createlink : function(url, type) {
