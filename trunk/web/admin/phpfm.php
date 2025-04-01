@@ -3760,7 +3760,7 @@ subtask的题目中也可以有不跟其他数据绑定的，认为是自己一�
 }
 function upload_form(){
     global $_FILES,$current_dir,$dir_dest,$fechar,$quota_mb,$path_info;
-    $num_uploads = 5;
+    $num_uploads = 1;
     html_header();
     echo "<body marginwidth=\"0\" marginheight=\"0\">";
     if (count($_FILES)==0){
@@ -3772,8 +3772,8 @@ function upload_form(){
         <tr><th colspan=2>".et('Upload')."</th></tr>
         <tr><td align=right><b>".et('Destination').":<td><b><nobr>".basename($current_dir)."</nobr>";
         for ($x=0;$x<$num_uploads;$x++){
-            echo "<tr><td align=right><b>".et('File').":<td><nobr><input type=\"file\" name=\"file$x\"></nobr>";
-            $test_js .= "(document.upload_form.file$x.value.length>0)||";
+            echo "<tr><td align=right><b>".et('File').":<td><nobr><input type=\"file\" multiple name=\"files[]\"></nobr>";
+            $test_js .= "(document.upload_form.files.value.length>0)||";
         }
         echo "
         <input type=button value=\"".et('Send')."\" onclick=\"test_upload_form()\"></nobr>
@@ -3791,13 +3791,8 @@ function upload_form(){
             }
             foi = false;
             function test_upload_form(){
-                if(".substr($test_js,0,strlen($test_js)-2)."){
-                    if (foi) alert('".et('SendingForm')."...');
-                    else {
                         foi = true;
                         document.upload_form.submit();
-                    }
-                } else alert('".et('NoFileSel').".');
             }
             window.moveTo((window.screen.width-400)/2,((window.screen.height-200)/2)-20);
         //-->
@@ -3805,9 +3800,12 @@ function upload_form(){
     } else {
         $out = "<tr><th colspan=2>".et('UploadEnd')."</th></tr>
                 <tr><th colspan=2><nobr>".et('Destination').": ".basename($dir_dest)."</nobr>";
-        for ($x=0;$x<$num_uploads;$x++){
-            $temp_file = $_FILES["file".$x]["tmp_name"];
-            $filename = $_FILES["file".$x]["name"];
+      //  for ($x=0;$x<$num_uploads;$x++){
+      $response = [];
+	foreach ($_FILES['files']['tmp_name'] as $key => $tmpName) {
+	   
+            $temp_file = $tmpName ;
+            $filename = $_FILES['files']['name'][$key];
             if (strlen($filename)) $resul = save_upload($temp_file,$filename,$dir_dest);
             else $resul = 7;
             switch($resul){
@@ -3839,8 +3837,7 @@ function upload_form(){
             echo "
             <script language=\"Javascript\" type=\"text/javascript\">
             <!--
-		window.opener.location.reload();
-                window.close();
+		window.setTimeout('window.opener.location.reload(); window.close();',1000);
             //-->
             </script>
             ";
