@@ -94,7 +94,8 @@ function upload_one_file($file_name,$tmp_name,$file_size){
 		mkdir($save_path);
 	}
 	//新文件名
-	$new_file_name = date("YmdHis") . '_' . rand(10000, 99999) . '.' . $file_ext;
+	//$new_file_name = date("YmdHis") . '_' . rand(10000, 99999) . '.' . $file_ext;
+	$new_file_name = basename($file_name,".$file_ext") . '.' . $file_ext;
 	//移动文件
 	$file_path = $save_path . $new_file_name;
 	$file_url = $save_url . $new_file_name;
