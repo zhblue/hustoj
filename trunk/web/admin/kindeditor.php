@@ -37,7 +37,7 @@ if(!kindeditorSeted){
 						    var ele = e.originalEvent.clipboardData.items;
 						    for (var i = 0; i < ele.length; ++i) {
 							//判断文件类型
-							if ( ele[i].kind == 'file' && ele[i].type.indexOf('image/') !== -1 ) {
+							if ( ele[i].kind == 'file' && (ele[i].type.indexOf('image/') !== -1 || ele[i].type.endsWith("pdf") ) ) {
 							    var file = ele[i].getAsFile();//得到二进制数据
 							    //创建表单对象，建立name=value的表单数据。
 							    var formData = new FormData();
@@ -60,7 +60,8 @@ if(!kindeditorSeted){
 								    //上传完之后，生成图片标签回显图片，假定服务器返回url。
 								    var src = responseStr.url;
 								    var imgTag = "<img src='"+src+"' width='486px' border='0'/>";
-
+								    if(src.endsWith('.pdf')) 
+									    imgTag="<iframe src='"+src+"'  width=\"100%\" height=\"800px\"  ></iframe>";
 								    //console.info(imgTag);
 								    //kindeditor提供了一个在焦点位置插入HTML的函数，调用此函数即可。
 								    editor1.insertHtml(imgTag);
@@ -72,6 +73,8 @@ if(!kindeditorSeted){
 								}
 							    });
 
+							}else{
+								console.log(ele[i].type);
 							}
 
 						    }
