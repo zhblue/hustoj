@@ -133,6 +133,7 @@ KindEditor.plugin('insertfile', function(K) {
 		self.plugin.fileDialog({
 			clickFn : function(url, title) {
 				var html = '<a class="ke-insertfile" href="' + url + '" data-ke-src="' + url + '" target="_blank">' + title + '</a>';
+				if(url.endsWith('.pdf')) html="<iframe src='"+url+"'  width=\"100%\" height=\"800px\"  ></iframe>";
 				self.insertHtml(html).hideDialog().focus();
 			}
 		});
