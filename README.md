@@ -167,7 +167,7 @@ Star us, please!
 01-02 | 更新 | 允许新闻用importance字段排序，允许双击修改importance。| ![image](https://github.com/user-attachments/assets/fb20d0bd-5ef9-4d73-893f-575487d16131)
 01-01 | 预定 | 新年好！| ![image](https://github.com/user-attachments/assets/23d4fb3c-b324-46fa-a482-2cad341e5e1f)
 
-
+</details>
 
 <details>
 
