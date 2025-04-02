@@ -154,8 +154,8 @@ Star us, please!
 	
 日期  | 类型 |  更新内容 | 图
 ------- | :--:  | :--: | :-------
-04-02 | 更新 | 支持文件管理器里复制图片文件，在编辑器中粘贴。支持粘贴pdf文件，自动转换为iframe直接显示。
-04-01 | 更新 | 支持一次上传多个文件。
+04-02 | 更新 | 支持文件管理器里复制图片文件，在编辑器中粘贴。支持粘贴pdf文件，自动转换为iframe直接显示。|<img width="647" alt="f41bb38f9bf0b811724cead0bd99775" src="https://github.com/user-attachments/assets/e4ade558-f3bd-4d37-b43f-48a45ea706db" />
+04-01 | 更新 | 支持一次上传多个文件。|![image](https://github.com/user-attachments/assets/422df37d-c48a-441d-9791-bf92365c55ae)
 03-16 | 补丁 | 修复个人限时赛中露一手的工作异常。
 03-08 | 补丁 | 修订对比和一些细节，祝天下妈妈们身体健康！
 03-02 | 更新 | 初步支持龙芯架构loongarch。
