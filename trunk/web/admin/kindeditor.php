@@ -72,7 +72,7 @@ if(!kindeditorSeted){
 								    console.log("error");
 								}
 							    });
-							    if(ele.length==1) return false;
+							    if(ele.length==1||ele[i-1].type=="text/html") return false;
 							}else{
 								console.log(ele[i].type);
 							}
