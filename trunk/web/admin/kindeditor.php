@@ -41,8 +41,10 @@ if(!kindeditorSeted){
 							    var file = ele[i].getAsFile();//得到二进制数据
 							    //创建表单对象，建立name=value的表单数据。
 							    var formData = new FormData();
-							    formData.append("imgFile",file);//name,value
-
+							    if(ele.length==1||file.name=="image.png")
+                                                                formData.append("imgFile",file,"img"+(new Date().getTime())+".png");//name,value
+                                                            else
+                                                                formData.append("imgFile",file);//name,value
 							    //用jquery Ajax 上传二进制数据
 							    $.ajax({
 								url : '/kindeditor/php/upload_json.php?dir=image',
@@ -65,14 +67,12 @@ if(!kindeditorSeted){
 								    //console.info(imgTag);
 								    //kindeditor提供了一个在焦点位置插入HTML的函数，调用此函数即可。
 								    editor1.insertHtml(imgTag);
-
-
 								},
 								error : function(responseStr) {
 								    console.log("error");
 								}
 							    });
-
+							    if(ele.length==1) return false;
 							}else{
 								console.log(ele[i].type);
 							}
