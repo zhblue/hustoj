@@ -273,14 +273,14 @@ if ($len > 65536) {
 
 setcookie('lastlang', $language, time()+360000);
 
-$ip = $_SERVER['REMOTE_ADDR'];
-
-if (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
-  $REMOTE_ADDR = $_SERVER['HTTP_X_FORWARDED_FOR'];
-  $tmp_ip = explode(',', $REMOTE_ADDR);
-  $ip = htmlentities($tmp_ip[0], ENT_QUOTES, "UTF-8");
+if(!isset($ip)){
+	$ip = $_SERVER['REMOTE_ADDR'];
+	if (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+		  $REMOTE_ADDR = $_SERVER['HTTP_X_FORWARDED_FOR'];
+		  $tmp_ip = explode(',', $REMOTE_ADDR);
+		  $ip = htmlentities($tmp_ip[0], ENT_QUOTES, "UTF-8");
+	}
 }
-
 
 
 if (!$OJ_BENCHMARK_MODE) {
