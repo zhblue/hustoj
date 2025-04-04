@@ -103,7 +103,7 @@ function upload_one_file($file_name,$tmp_name,$file_size){
 		alert("上传文件失败。");
 	}
 	@chmod($file_path, 0644);
-	$result=array('error' => 0, 'url' => $file_url,'save'=>$file_path);
+	$result=array('error' => 0, 'url' => $file_url,'save'=>basename($file_path));
 	return $result;
 
 }
