@@ -72,7 +72,9 @@ if( isset($_SERVER['HTTP_X_FORWARDED_FOR'] )&&!empty( trim( $_SERVER['HTTP_X_FOR
     $tmp_ip=explode(',',$REMOTE_ADDR);
     $ip =(htmlentities($tmp_ip[0],ENT_QUOTES,"UTF-8"));
 }
-
+if(isset($OJ_LIP_URL) && isset($_COOKIE['lip']) ){
+	 $ip=long2ip(intval($_COOKIE['lip']));
+}
 if(isset($_SESSION[$OJ_NAME.'_user_id'])&&isset($OJ_LIMIT_TO_1_IP)&& $OJ_LIMIT_TO_1_IP){
         $sql="select ip from loginlog where user_id=? order by time desc";
         $rows=pdo_query($sql,$_SESSION[$OJ_NAME.'_user_id'] );
