@@ -10,7 +10,7 @@ $OJ_CACHE_SHARE=false;
 	$on = new online();
 	$view_title= "Welcome To Online Judge";
 	require_once('./include/iplocation.php');
-	$ip = new IpLocation();
+	$location = new IpLocation();
 	$users = $on->getAll();
 	
 $view_online=Array();
