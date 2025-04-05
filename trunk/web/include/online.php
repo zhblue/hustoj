@@ -71,21 +71,15 @@ class online{
 	 */
 	function __construct()
 	{
-		global $OJ_NAME;
-		
+		global $OJ_NAME,$ip;
+		/*
 		$this->ip = ($_SERVER['REMOTE_ADDR']);
-      
-      
-         if( !empty( $_SERVER['HTTP_X_FORWARDED_FOR'] ) ){
-
-                    $REMOTE_ADDR = $_SERVER['HTTP_X_FORWARDED_FOR'];
-                    
-                    $tmp_ip=explode(',',$REMOTE_ADDR);
-
-                    $this->ip =(htmlentities($tmp_ip[0],ENT_QUOTES,"UTF-8"));
-
-        }
-
+	         if( !empty( $_SERVER['HTTP_X_FORWARDED_FOR'] ) ){
+	                    $REMOTE_ADDR = $_SERVER['HTTP_X_FORWARDED_FOR']               
+	                    $tmp_ip=explode(',',$REMOTE_ADDR);
+	                    $this->ip =(htmlentities($tmp_ip[0],ENT_QUOTES,"UTF-8"));
+	        }
+		*/
 		if(isset($_SESSION[$OJ_NAME.'_'.'user_id']))
 			$this->ua = htmlentities($_SESSION[$OJ_NAME.'_'.'user_id'],ENT_QUOTES,"UTF-8");
 		else
