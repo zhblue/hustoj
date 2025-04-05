@@ -32,7 +32,7 @@
 			 if(!empty($u)){
 		?>
 		<tr>
-			<td><?php $l = $ip->getlocation($u['ip']);
+			<td><?php $l = $location->getlocation($u['ip']);
                                 echo $u['ip'].'<br />';
                                 if(!empty($l))  echo $l;
                             ?>
@@ -65,9 +65,15 @@
 			<?php 
 				foreach($view_online as $row){
 					echo "<tr>";
+					$i=0;
 					foreach($row as $table_cell){
 						echo "<td>";
 						echo "\t".$table_cell;
+						if($i==2){
+                                                        $l = $location->getlocation( $table_cell );
+                                                        echo "<br>".$l['country'].$l['area']??"";
+                                                }
+						$i++;
 						echo "</td>";
 					}
 					echo "</tr>";
