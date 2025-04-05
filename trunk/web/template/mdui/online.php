@@ -37,7 +37,7 @@
                  if(is_array($u)){
                  ?>
                 <tr><td class="ip">
-                <?php $l = $ip->getlocation($u['ip']);
+                <?php $l = $location->getlocation($u['ip']);
                                 echo $u['ip'].'<br />';
                                 if(!empty($l)) echo $l;  ?>
                 </td><td><?php echo $u->uri?></td><td><?php echo $u['refer']?></td>
@@ -58,22 +58,21 @@
             <tbody>
          <tr  class=toprow align=center ><td>UserID<td>Password<td>IP<td>Time</tr>
                 <?php 
-                $cnt=0;
-                foreach($view_online as $row){
-                    if ($cnt) 
-                        echo "<tr class='oddrow'>";
-                    else
-                        echo "<tr class='evenrow'>";
-                    foreach($row as $table_cell){
-                        echo "<td>";
-                        echo "\t".$table_cell;
-                        echo "</td>";
-                    }
-                                        
-                    echo "</tr>";
-                    
-                    $cnt=1-$cnt;
-                }
+              				foreach($view_online as $row){
+              					echo "<tr>";
+              					$i=0;
+              					foreach($row as $table_cell){
+              						echo "<td>";
+              						echo "\t".$table_cell;
+              						if($i==2){
+                                                                      $l = $location->getlocation( $table_cell );
+                                                                      echo "<br>".$l['country'].$l['area']??"";
+                                                              }
+              						$i++;
+              						echo "</td>";
+              					}
+              					echo "</tr>";
+              				}
                 ?>
                 </tbody>
         <?php
