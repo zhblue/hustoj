@@ -217,14 +217,12 @@ if (!$view_src) {
 }
 
 $sql = "SELECT count(1) FROM `solution` WHERE result<4";
-$result = mysql_query_cache($sql);
+$result = pdo_query($sql);
 
 $row = $result[0];
 
 if ($row[0]>10) {
 	$OJ_VCODE = true;
-	//$OJ_TEST_RUN=false;
-	//echo "$row[0]";
 }
 
 /////////////////////////Template
