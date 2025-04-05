@@ -71,7 +71,7 @@ $isadmin = isset($_SESSION[$OJ_NAME.'_'.'administrator']);
                     <div id="post<?php echo $row['rid'];?>" class="md" style="text-align:left; clear:both;">
                       <?php
                       if($row['status']==0){
-                          echo htmlentities($row['content'],ENT_QUOTES,"UTF-8");
+                          echo "<pre>".htmlentities($row['content'],ENT_QUOTES,"UTF-8")."</pre>";
                       }else{
                           if(!$isuser || $isadmin){
                               echo "<div style=\"border-left:10px solid gray\"><font color=gray><i>".$MSG_BLOCKED."</i></font></div>";
