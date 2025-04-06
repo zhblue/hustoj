@@ -287,6 +287,8 @@ function create_subdomain($user_id,$template="bs3",$friendly="0"){
         $FARMBASE="/home/saas";
         $templates=array("bs3","mdui","bshark","sweet","syzoj","sidebar");
         if(!in_array($template,$templates)) $template="bs3";
+	$upass=pdo_query("select password from users where user_id=?",$user_id)[0][0];
+	
         pdo_query("create database `jol_$user_id`;\n");
         pdo_query("drop USER '$NEW_USER'@'localhost';");
         pdo_query("create USER '$NEW_USER'@'localhost' identified by '$NEW_PASS';");
@@ -295,6 +297,7 @@ function create_subdomain($user_id,$template="bs3",$friendly="0"){
         $sql="use `jol_$user_id`;\n";
         $csql=file_get_contents("/home/judge/src/install/db.sql");
         $sql.=mb_substr($csql,64);
+	$sql.="update users set password='$upass' where user_id='$user_id' ;";
         pdo_query($sql);
         $CONF_STR="<?php \$OJ_NAME='$user_id';\n";
         $CONF_STR.="\$DB_HOST='localhost';\n";  //数据库服务器ip或域名
@@ -436,14 +439,14 @@ function pwCheck($password,$saved)
   if (isOldPW($saved)){
     if(!isOldPW($password)) $mpw = md5($password);
     else $mpw=$password;
-    if ($mpw==$saved) return True;
+    if (hash_equals($mpw,$saved)) return True;
     else return False;
   }
   $svd=base64_decode($saved);
   $salt=substr($svd,20);
   if(!isOldPW($password)) $password=md5($password);
   $hash = base64_encode( sha1(($password) . $salt, true) . $salt );
-  if (strcmp($hash,$saved)==0) return True;
+  if (hash_equals($hash,$saved)) return True;
   else return False;
 }
 
