@@ -13,14 +13,15 @@ if(isset($_SESSION[$OJ_NAME."_user_id"])){
 <?php
         }
 }
-$OJ_LIP_URL="http://192.168.2.36/lip.php";
-if(isset($_GET['lip'])){
-        $lip=intval($_GET['lip']);
-        setcookie("lip",$lip);
-}else if (!isset($_COOKIE['lip'])){
-        echo "<img src='$OJ_LIP_URL' width=1 height=1 > ";
+// $OJ_LIP_URL="http://192.168.2.36/lip.php";
+if (!empty($OJ_LIP_URL)){
+        if(isset($_GET['lip'])){
+                $lip=intval($_GET['lip']);
+                setcookie("lip",$lip);
+        }else if (!isset($_COOKIE['lip'])){
+                echo "<img src='$OJ_LIP_URL' width=1 height=1 > ";
+        }
 }
-
 ?>
 
    <script>window.setTimeout('window.location.reload();',300000);</script>
