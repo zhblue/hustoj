@@ -7,11 +7,8 @@ require_once('./include/setlang.php');
 require_once("./include/const.inc.php");
 require_once("./include/my_func.inc.php");
 require_once("./include/memcache.php");
-
 $view_title = $MSG_CONTEST.$MSG_RANKLIST;
-
 $title = "";
-
 class TM {
 	var $solved = 0;
 	var $time = 0;
@@ -19,26 +16,21 @@ class TM {
 	var $p_ac_sec;
 	var $user_id;
 	var $nick;
-
 	function __construct() {
 		$this->solved = 0;
 		$this->time = 0;
 		$this->p_wa_num = array();
 		$this->p_ac_sec = array();
 	}
-
 	function Add($pid,$sec,$res) {
 		global $OJ_CE_PENALTY;
 		//echo "Add $pid $sec $res<br>";
 		if ($sec<0) return;  // restarted contest ignore previous submission
-		
 		if (isset($this->p_ac_sec[$pid]) || $this->p_ac_sec[$pid] < 0)
 			return;
-
 		if ($res!=4) {
 			if (isset($OJ_CE_PENALTY)&&!$OJ_CE_PENALTY&&$res==11)
 				return;  // ACM WF punish no ce 
-
 			if (isset($this->p_wa_num[$pid])) {
 				$this->p_wa_num[$pid]++;
 			}
@@ -130,13 +122,14 @@ if ($start_time>time()) {
 	exit(0);
 }
 
-	$noip = (time()<$end_time) && (stripos($title,$OJ_NOIP_KEYWORD)!==false);
-	if(isset($_SESSION[$OJ_NAME.'_'."administrator"])||
-		isset($_SESSION[$OJ_NAME.'_'."m$cid"])||
-		isset($_SESSION[$OJ_NAME.'_'."source_browser"])||
-		isset($_SESSION[$OJ_NAME.'_'."contest_creator"])
-	   ) $noip=false;
-if ($noip||contest_locked($cid,20)) {
+$noip = (time()<$end_time) && (stripos($title,$OJ_NOIP_KEYWORD)!==false);
+if(isset($_SESSION[$OJ_NAME.'_'."administrator"])||
+	isset($_SESSION[$OJ_NAME.'_'."m$cid"])||
+	isset($_SESSION[$OJ_NAME.'_'."source_browser"])||
+	isset($_SESSION[$OJ_NAME.'_'."contest_creator"])
+) {
+	$noip=false;
+}else if ($noip||contest_locked($cid,20)) {
 	$view_errors =  "<h2>$MSG_NOIP_WARNING</h2>";
 	require("template/".$OJ_TEMPLATE."/error.php");
 	exit(0);
