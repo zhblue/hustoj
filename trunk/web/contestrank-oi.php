@@ -2,7 +2,7 @@
         $OJ_CACHE_SHARE=false;
         $cache_time=10;
         require_once('./include/cache_start.php');
-    require_once('./include/db_info.inc.php');
+        require_once('./include/db_info.inc.php');
         require_once('./include/setlang.php');
         $view_title= $MSG_CONTEST.$MSG_RANKLIST;
 	$show_title= $view_title;
@@ -127,13 +127,14 @@ if ($start_time>time()){
         require("template/".$OJ_TEMPLATE."/error.php");
         exit(0);
 }
-	$noip = (time()<$end_time) && (stripos($title,$OJ_NOIP_KEYWORD)!==false);
-	if(isset($_SESSION[$OJ_NAME.'_'."administrator"])||
+$noip = (time()<$end_time) && (stripos($title,$OJ_NOIP_KEYWORD)!==false);
+if(isset($_SESSION[$OJ_NAME.'_'."administrator"])||
 		isset($_SESSION[$OJ_NAME.'_'."m$cid"])||
 		isset($_SESSION[$OJ_NAME.'_'."source_browser"])||
 		isset($_SESSION[$OJ_NAME.'_'."contest_creator"])
-	   ) $noip=false;
-if ($noip||contest_locked($cid,20)) {
+	   ) {
+	$noip=false;
+}else if ($noip||contest_locked($cid,20)) {
       $view_errors =  "<h2>$MSG_NOIP_WARNING</h2>";
       require("template/".$OJ_TEMPLATE."/error.php");
       exit(0);
@@ -177,19 +178,14 @@ require("./include/contest_solutions.php");
 $user_cnt=0;
 $user_name='';
 $U=array();
-for ($i=0;$i<$rows_cnt;$i++){
-        
+for ($i=0;$i<$rows_cnt;$i++){   
         $row=$result[$i];
-      
-
         $n_user=$row['user_id'];
         if (strcmp($user_name,$n_user)){
                 $user_cnt++;
                 $U[$user_cnt]=new TM();
-
                 $U[$user_cnt]->user_id=$row['user_id'];
                 $U[$user_cnt]->nick=$row['nick'];
-
                 $user_name=$n_user;
         }
 	if($row['result']!=4 && $row['pass_rate']>=0.95) $row['pass_rate']=0.95;
