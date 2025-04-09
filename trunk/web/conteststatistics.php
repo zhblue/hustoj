@@ -24,12 +24,12 @@ $title=$row[0];
 $contest_type=$row['contest_type'];
 $end_time=strtotime($row[1]);
 $start_time=strtotime($row[2]);
-	$noip = (time()<$end_time) && ((stripos($title,$OJ_NOIP_KEYWORD)!==false)  || ( ( $contest_type & 20 ) >0 ));
-	if(isset($_SESSION[$OJ_NAME.'_'."administrator"])||
-		isset($_SESSION[$OJ_NAME.'_'."m$cid"])||
-		isset($_SESSION[$OJ_NAME.'_'."source_browser"])||
-		isset($_SESSION[$OJ_NAME.'_'."contest_creator"])
-	   ) $noip=false;
+$noip = (time()<$end_time) && ((stripos($title,$OJ_NOIP_KEYWORD)!==false)  || ( ( $contest_type & 20 ) >0 ));
+if(isset($_SESSION[$OJ_NAME.'_'."administrator"])||
+	isset($_SESSION[$OJ_NAME.'_'."m$cid"])||
+	isset($_SESSION[$OJ_NAME.'_'."source_browser"])||
+	isset($_SESSION[$OJ_NAME.'_'."contest_creator"])
+   ) $noip=false;
 if($noip){
       $view_errors =  "<h2>$MSG_NOIP_WARNING</h2>";
       require("template/".$OJ_TEMPLATE."/error.php");
