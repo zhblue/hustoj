@@ -208,16 +208,17 @@ if ($end_time > time()) {
     exit(0);
 }
 
-	$noip = (time()<$end_time) && (stripos($title,$OJ_NOIP_KEYWORD)!==false);
-	if(isset($_SESSION[$OJ_NAME.'_'."administrator"])||
-		isset($_SESSION[$OJ_NAME.'_'."m$cid"])||
-		isset($_SESSION[$OJ_NAME.'_'."source_browser"])||
-		isset($_SESSION[$OJ_NAME.'_'."contest_creator"])
-	   ) $noip=false;
-if($noip||contest_locked($cid,20)){
-      $view_errors =  "<h2>$MSG_NOIP_WARNING</h2>";
-      require("template/".$OJ_TEMPLATE."/error.php");
-      exit(0);
+$noip = (time()<$end_time) && (stripos($title,$OJ_NOIP_KEYWORD)!==false);
+if(isset($_SESSION[$OJ_NAME.'_'."administrator"])||
+	isset($_SESSION[$OJ_NAME.'_'."m$cid"])||
+	isset($_SESSION[$OJ_NAME.'_'."source_browser"])||
+	isset($_SESSION[$OJ_NAME.'_'."contest_creator"])
+   ){ 
+	$noip=false;
+}else if($noip||contest_locked($cid,20)){
+	$view_errors =  "<h2>$MSG_NOIP_WARNING</h2>";
+	require("template/".$OJ_TEMPLATE."/error.php");
+	exit(0);
 }
 // json 请求时
 if (isset($_GET['type'])&&$_GET['type']=='json') {
