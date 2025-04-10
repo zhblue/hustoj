@@ -36,6 +36,7 @@ class TM {
 			return;
 
 		if ($res!=4) {
+			$this->p_ac_sec[$pid]=0;
 			if (isset($OJ_CE_PENALTY)&&!$OJ_CE_PENALTY&&$res==11)
 				return;  // ACM WF punish no ce 
 
