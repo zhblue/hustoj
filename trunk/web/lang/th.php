@@ -189,6 +189,7 @@ $MSG_TOO_BAD="Please surf the internet in a civilized manner";
 	$MSG_END_TIME="End Time";
 	$MSG_CONTEST_ID="CONTEST ID";
 	$MSG_VIEW_ALL_CONTESTS="Show All Contests";
+	$MSG_VIEW_MY_CONTESTS="My Contests Only";
 	$MSG_CONTEST_NAME="CONTEST NAME";
 	$MSG_CONTEST_STATUS="STATUS";
 	$MSG_CONTEST_OPEN="OPEN";
