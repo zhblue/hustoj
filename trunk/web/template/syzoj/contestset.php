@@ -12,10 +12,10 @@
                 <?php
                 if(isset($_GET['my'])){
                 
-                echo '<a  class="ui button"  href="contest.php" >'.$MSG_VIEW_ALL_CONTESTS .'</a>';
+                echo '<a  class="ui button primary"  href="contest.php" >'.$MSG_VIEW_ALL_CONTESTS .'</a>';
                 }else{
                 
-                echo '<a  class="ui button"  href="contest.php?my" >显示我的作业比赛</a>';
+                echo '<a  class="ui button red"  href="contest.php?my" >显示我的作业比赛</a>';
                 };
                 ?>
               </div>
