@@ -196,6 +196,7 @@
 	$MSG_START_TIME="시작 시간";
 	$MSG_END_TIME="종료 시간";
 	$MSG_VIEW_ALL_CONTESTS="모든 대회 보기";
+	$MSG_VIEW_MY_CONTESTS="My Contests Only";
 	$MSG_CONTEST_ID="대회ID";
 	$MSG_CONTEST_NAME="대회 이름";
 	$MSG_CONTEST_STATUS="대회 상태";
