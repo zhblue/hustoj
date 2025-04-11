@@ -32,7 +32,7 @@ class TM {
 		//echo "Add $pid $sec $res<br>";
 		if ($sec<0) return;  // restarted contest ignore previous submission
 		
-		if (isset($this->p_ac_sec[$pid]) || $this->p_ac_sec[$pid]<0)
+		if (isset($this->p_ac_sec[$pid]))
 			return;
 
 		if ($res!=4) {
