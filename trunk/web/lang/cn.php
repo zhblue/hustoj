@@ -208,7 +208,8 @@
 	$MSG_SERVER_TIME="服务器时间";
 	$MSG_START_TIME="开始时间";
 	$MSG_END_TIME="结束时间";
-	$MSG_VIEW_ALL_CONTESTS="显示所有作业比赛";
+	$MSG_VIEW_ALL_CONTESTS="所有作业比赛";
+	$MSG_VIEW_MY_CONTESTS="我的作业比赛";
 	$MSG_CONTEST_ID="作业比赛编号";
 	$MSG_CONTEST_NAME="作业比赛名称";
 	$MSG_CONTEST_STATUS="作业比赛状态";
