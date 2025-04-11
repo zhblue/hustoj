@@ -29,7 +29,7 @@ class TM{
         }
         function Add($pid,$sec,$res,$result){
 //              echo "Add $pid $sec $res<br>";
-                if (isset($this->p_ac_sec[$pid]) || $this->p_ac_sec[$pid]<0)
+                if (isset($this->p_ac_sec[$pid]))
                         return;
                 if ($result!=4){
 			//$this->p_ac_sec[$pid]=0;
