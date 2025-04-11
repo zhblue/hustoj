@@ -15,7 +15,7 @@
                 echo '<a  class="ui button primary"  href="contest.php" >'.$MSG_VIEW_ALL_CONTESTS .'</a>';
                 }else{
                 
-                echo '<a  class="ui button red"  href="contest.php?my" >显示我的作业比赛</a>';
+                echo '<a  class="ui button red"  href="contest.php?my" >'.$MSG_VIEW_MY_CONTESTS .'</a>';
                 };
                 ?>
               </div>
