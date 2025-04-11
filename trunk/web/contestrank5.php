@@ -32,7 +32,7 @@ class TM{
                 if (isset($this->p_ac_sec[$pid]) || $this->p_ac_sec[$pid]<0)
                         return;
                 if ($result!=4){
-			$this->p_ac_sec[$pid]=0;
+			//$this->p_ac_sec[$pid]=0;
                         if(isset($this->p_pass_rate[$pid])){
                                 if($res>$this->p_pass_rate[$pid]){
 					$this->total-=$this->p_pass_rate[$pid]*100;
