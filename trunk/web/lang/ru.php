@@ -201,6 +201,7 @@
  $MSG_START_TIME =" время начала ";
  $MSG_END_TIME =" время окончания ";
  $MSG_VIEW_ALL_CONTESTS =" Показать все конкурсы домашних заданий ";
+ $MSG_VIEW_MY_CONTESTS="My Contests Only";
  $MSG_CONTEST_ID =" номер конкурса домашних заданий ";
  $MSG_CONTEST_NAME =" название конкурса домашних заданий ";
  $MSG_CONTEST_STATUS = " Статус конкурса вакансий ";
