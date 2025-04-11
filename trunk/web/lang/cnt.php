@@ -198,6 +198,7 @@
  $MSG_START_TIME ="開始時間";
  $MSG_END_TIME ="結束時間";
  $MSG_VIEW_ALL_CONTESTS ="顯示所有作業比賽";
+ $MSG_VIEW_MY_CONTESTS="我的作業比賽";
  $MSG_CONTEST_ID ="作業比賽編號";
  $MSG_CONTEST_NAME ="作業比賽名稱";
  $MSG_CONTEST_STATUS ="作業比賽狀態";
