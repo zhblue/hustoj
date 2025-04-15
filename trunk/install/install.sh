@@ -49,7 +49,10 @@ DATABASE=`cat $config|grep 'OJ_DB_NAME' |awk -F= '{print $2}'`
 PORT=`cat $config|grep 'OJ_PORT_NUMBER' |awk -F= '{print $2}'`
 IP=`curl http://hustoj.com/ip.php`
 LIP=`ip a|grep inet|grep brd|head -1|awk '{print $2}'|awk -F/ '{print $1}'`
-
+cd /home/judge/src/web/
+wget dl.hustoj.com/hello.tar.gz
+tar xzf hello.tar.gz
+chown www-data -R hello
 clear
 reset
 
