@@ -1,6 +1,6 @@
 <?php $show_title="$MSG_STATUS - $OJ_NAME"; ?>
 <?php include("template/$OJ_TEMPLATE/header.php");?>
-<script src="template/<?php echo $OJ_TEMPLATE?>/js/textFit.min.js"></script>
+<script src="<?php echo $OJ_CDN_URL?>template/<?php echo $OJ_TEMPLATE?>/js/textFit.min.js"></script>
 <div class="padding" >
 
   <!-- <form action="" class="ui mini form" method="get" role="form" id="form"> -->
