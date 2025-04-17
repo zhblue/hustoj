@@ -54,8 +54,7 @@ static  $OJ_REDISQNAME="hustoj";
 static  $SAE_STORAGE_ROOT="http://hustoj-web.stor.sinaapp.com/";  //新浪云存储引擎
 static  $OJ_CDN_URL="";  // 如果服务器带宽较小，可选用他人同版本的OJ作为静态资源来源 http://cdn.m.hustoj.com:8090/ 或者在本地局域网搭建静态资源服务器。
 static  $OJ_TEMPLATE="syzoj"; //使用的默认模板,template目录下的每个子目录都是一个模板, [bs3 mdui sweet syzoj sidebar bshark] work with discuss3
-static 	$OJ_BG="/image/background.jpg";  //双引号里面填写背景图片的url。
-// $OJ_BG="http://cdn.hustoj.com/upload/bg/bing".date('H').".jpg";  //每个整点更换壁纸，例如准备bing[00~23].jpg在image目录。
+static 	$OJ_BG="/image/background.jpg";  //双引号里面填写背景图片的url。 例如配置：$OJ_BG="http://cdn.hustoj.com/upload/bg/bing".date('H').".jpg"; 每个整点更换壁纸，例如准备bing[00~23].jpg在image目录。如果使用变量，需要移除开头的static修饰词。
 static  $OJ_LOGIN_MOD="hustoj"; //需要在include目录下配置login-xxxx.php来调用其他登录模块。
 static  $OJ_REGISTER=true; //允许注册新用户
 static  $OJ_REG_NEED_CONFIRM=false; //新注册用户需要审核
