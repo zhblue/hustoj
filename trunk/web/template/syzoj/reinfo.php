@@ -1,8 +1,8 @@
 <?php $show_title=$id." - $MSG_ERROR_INFO - $OJ_NAME"; ?>
 <?php include("template/$OJ_TEMPLATE/header.php");?>
 
-<script src="<?php echo "template/bs3/"?>marked.min.js"></script>
-<script src="template/<?php echo $OJ_TEMPLATE?>/js/textFit.min.js"></script>
+<script src="<?php echo $OJ_CDN_URL."template/bs3/"?>marked.min.js"></script>
+<script src="<?php echo $OJ_CDN_URL?>template/<?php echo $OJ_TEMPLATE?>/js/textFit.min.js"></script>
 <style>
 .single-subtask {
     box-shadow: none !important;
