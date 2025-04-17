@@ -1,6 +1,6 @@
 <?php $show_title="评测状态 - $OJ_NAME"; ?>
 <?php include("template/$OJ_TEMPLATE/header.php");?>
-<script src="template/<?php echo $OJ_TEMPLATE?>/js/textFit.min.js"></script>
+<script src="<?php echo $OJ_CDN_URL?>template/<?php echo $OJ_TEMPLATE?>/js/textFit.min.js"></script>
 <div class="padding">
 
     <h1>Contest<?php echo $view_cid?> - <?php echo $view_title ?></h1>
