@@ -7,6 +7,21 @@ if (!function_exists('str_contains')) {
         return empty($needle) || strpos($haystack, $needle) !== false;
     }
 }
+function myLocation($ip){
+        $locations=array(
+                        array(ip2long("10.1.48.1"),ip2long("10.1.48.54"),"X504A"),
+                        array(ip2long("10.1.48.55"),ip2long("10.1.48.253"),"X504B"),
+                        array(ip2long("10.1.44.1"),ip2long("10.1.44.254"),"X506"),
+                        array(ip2long("10.1.43.1"),ip2long("10.1.43254"),"X212")
+                        );
+        $vip=ip2long($ip);
+        foreach($locations as $location){
+                if($vip>=$location[0] && $vip <=$location[1]) return $location[2];
+        }
+        if(str_starts_with($ip,"10.")) return "校园网$ip";
+        return $ip;
+}
+
 function formatTimeLength($length) {
   $hour = 0;
   $minute = 0;
