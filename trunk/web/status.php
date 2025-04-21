@@ -189,8 +189,14 @@ if ($OJ_SIM&$showsim>0) {
         $fields="solution.*,users.nick,users.group_name,users.starred";
 }
 if(isset($_GET['school'])&&trim($_GET['school'])!="" || isset($_GET['group_name'])&&trim($_GET['group_name'])!=""    ){
-
-         $sql0="select $fields from solution solution inner join users users on solution.user_id=users.user_id  and users.defunct='N' ";
+         $topwhere=$sql;
+         $sql0="select $fields from (select * from solution $topwhere $order_str LIMIT 1500) solution inner join users users on solution.user_id=users.user_id  and users.defunct='N' ";
+	if (!empty($param)) {
+	    $values=array_values($param);
+	    foreach ($values as $v){
+	    	array_push($param,$v);
+	    }
+	}
          if(isset($_GET['school'])&&trim($_GET['school'])!=""){
             $school=trim($_GET['school']);
             $sql.=" and users.school=? ";
@@ -204,7 +210,16 @@ if(isset($_GET['school'])&&trim($_GET['school'])!="" || isset($_GET['group_name'
             $str2 = $str2."&group_name=".htmlentities(trim($_GET['group_name']),ENT_QUOTES);
          }
 }else{
-        $sql0="select $fields from solution inner join users on solution.user_id=users.user_id  and users.defunct='N' ";
+         $topwhere=$sql;
+	if (!empty($param)) {
+	    $values=array_values($param);
+	    foreach ($values as $v){
+	    	array_push($param,$v);
+	    }
+	}
+	  
+        // if ($_SESSION[$OJ_NAME."_user_id"]=='zhblue')echo $sql;
+	 $sql0="select $fields from ( select * from solution $topwhere $order_str limit 50 )solution inner join users on solution.user_id=users.user_id  and users.defunct='N' ";
 }
 
 if ($OJ_SIM&$showsim>0) {
@@ -224,7 +239,7 @@ else {
 //echo $sql;
 //exit();
 $sql = $sql.$order_str." LIMIT 50";
-//echo $sql;
+// if ($_SESSION[$OJ_NAME."_user_id"]=='zhblue')echo $sql;
 
 
 if (!empty($param)) {
@@ -289,7 +304,7 @@ for ($i=0; $i<$rows_cnt; $i++) {
   if(isset($row['starred']) && $row['starred'] >0 ) {
 	  $view_status[$i][1]="⭐".$view_status[$i][1]."<span title='用同名账户给hustoj项目加星，可以点亮此星' >⭐</span>";	//people who starred us ,we star them
   }
-  $view_status[$i]['nick']="<span title='".$row['group_name']."'>".$row['nick']."</span>";
+  $view_status[$i]['nick']="<span title='".$row['group_name']."@".myLocation($row['ip'])."'>".$row['nick']."</span>";
 
   if ($row['contest_id']>0) {
     if (isset($end_time) && time() < $end_time) {
