@@ -15,6 +15,7 @@
 <script src='<?php echo $OJ_CDN_URL?>highlight/scripts/shBrushPerl.js' type='text/javascript'></script>
 <script src='<?php echo $OJ_CDN_URL?>highlight/scripts/shBrushCSharp.js' type='text/javascript'></script>
 <script src='<?php echo $OJ_CDN_URL?>highlight/scripts/shBrushVb.js' type='text/javascript'></script>
+<script src='<?php echo $OJ_CDN_URL?>highlight/scripts/shBrushSql.js' type='text/javascript'></script>
 <script language='javascript'>
 SyntaxHighlighter.config.bloggerMode = false;
 SyntaxHighlighter.config.clipboardSwf = 'highlight/scripts/clipboard.swf';
