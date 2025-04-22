@@ -7,6 +7,7 @@ require_once( './include/db_info.inc.php' );
 require_once( './include/memcache.php' );
 require_once( './include/setlang.php' );
 require_once( './include/bbcode.php' );
+require_once("./include/my_func.inc.php");
 $view_title = "Welcome To Online Judge";
 $result = false;
 if ( isset( $OJ_ON_SITE_CONTEST_ID ) ) {
@@ -15,12 +16,24 @@ if ( isset( $OJ_ON_SITE_CONTEST_ID ) ) {
 }
 ///////////////////////////MAIN	
 //NOIP赛制比赛时，暂时屏蔽本月之星
+$now =  date('Y-m-d H:i', time());
 if(isset($OJ_NOIP_KEYWORD)&&$OJ_NOIP_KEYWORD){
-		                     $now =  date('Y-m-d H:i', time());
         	                     $sql="select count(contest_id) from contest where start_time<'$now' and end_time>'$now' and ( title like '%$OJ_NOIP_KEYWORD%' or (contest_type & 20)>0 )  ";
 		                     $row=pdo_query($sql);
 		                    if(!empty($row)) $NOIP_flag=$row[0];
 				    else $NOIP_flag=false;
+}
+$sql="select contest_id from contest where start_time<'$now' and end_time>'$now' ";
+$res=pdo_query($sql);
+$NOIP_flag2=0;
+if($res){
+    foreach($res as $row){
+        $cid=$row[0];
+        if(contest_locked($cid,20)){
+            $NOIP_flag2=1;
+            break;
+        }
+    }
 }
 $view_news = "";
 $sql = "select * "
