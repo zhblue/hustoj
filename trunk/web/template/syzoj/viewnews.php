@@ -1,5 +1,6 @@
 <?php $show_title="$MSG_NEWS - $OJ_NAME"; ?>
 <?php include("template/$OJ_TEMPLATE/header.php");?>
+<script src="<?php echo "template/bs3/"?>marked.min.js"></script>
 <div class="padding">
     <h1><?php echo $news_title ?></h1>
     <p style="margin-bottom: 5px; ">
