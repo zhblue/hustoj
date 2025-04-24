@@ -91,7 +91,7 @@ function mkpta($pid,$prepends,$node) {
 
 
 function import_dir($json) {
-  global $OJ_DATA,$OJ_SAE,$OJ_REDIS,$OJ_REDISSERVER,$OJ_REDISPORT,$OJ_REDISQNAME,$domain,$DOMAIN;
+  global $OJ_DATA,$OJ_SAE,$OJ_REDIS,$OJ_REDISSERVER,$OJ_REDISPORT,$OJ_REDISQNAME,$domain,$DOMAIN,$_SESSION;
   $qduoj_problem=json_decode($json);
   echo( $qduoj_problem->{'problem'}->{'title'})."<br>";
 
@@ -159,6 +159,9 @@ else {
 				$pid = addproblem($title,1,128, $description, $input, $output, $sample_input, $sample_output, $hint, $source, $spj, $OJ_DATA);
                                 mkdir($OJ_DATA."/$pid/");	
 				array_push($inserted,$title);
+				$sql = "INSERT INTO `privilege` (`user_id`,`rightstr`) VALUES(?,?)";
+				pdo_query($sql, $_SESSION[$OJ_NAME.'_'.'user_id'], "p$pid");
+				$_SESSION[$OJ_NAME.'_'."p$pid"] = true;
 			}
 		}else if(basename($file_name)=="problem_zh.md"||basename($file_name)=="problem.md"){
 			
@@ -183,6 +186,9 @@ else {
 				echo htmlentities("$description");
 				mkdir($OJ_DATA."/$pid/");
 				array_push($inserted,$title);
+				$sql = "INSERT INTO `privilege` (`user_id`,`rightstr`) VALUES(?,?)";
+				pdo_query($sql, $_SESSION[$OJ_NAME.'_'.'user_id'], "p$pid");
+				$_SESSION[$OJ_NAME.'_'."p$pid"] = true;
 			}else{
 				$sql="update problem set description=? where problem_id=?";
 				pdo_query($sql,$description,$pid);
