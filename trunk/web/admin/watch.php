@@ -55,7 +55,7 @@ if(function_exists('system')){
             foreach($history as $sample ){
                 array_push($chart_cpu,array($sample[4],$sample[0]));
                 array_push($chart_mem,array($sample[4],$sample[1]/$total_mem*100));
-                array_push($chart_swap,array($sample[4],$sample[2]/$total_swap*100));
+                array_push($chart_swap,array($sample[4],$total_swap?$sample[2]/$total_swap*100:0));
                 array_push($chart_tcp,array($sample[4],$sample[3]/2));
             }
                 if(isset($_GET['json'])){
