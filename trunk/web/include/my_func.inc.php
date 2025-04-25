@@ -7,6 +7,12 @@ if (!function_exists('str_contains')) {
         return empty($needle) || strpos($haystack, $needle) !== false;
     }
 }
+if (!function_exists('str_starts_with')) {
+    function str_starts_with( $string, $startString ){
+             $len = strlen($startString);
+             return (substr($string, 0, $len) === $startString);
+    }
+}
 if (!function_exists('mb_trim')) {
 	function mb_trim($string, $trim_chars = '\s'){
 	    return preg_replace('/^['.$trim_chars.']*(?U)(.*)['.$trim_chars.']*$/u', '\\1',$string);
