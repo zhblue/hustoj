@@ -31,7 +31,7 @@ do
                 if [[ $KEY =~ "BG" ]] ; then continue; fi
                 if [[ $KEY =~ "FANCY" ]] ; then continue; fi
                 if [[ $KEY =~ "BLOCKLY" ]] ; then continue; fi
-                if [[ $KEY =~ "LOG" ]] ; then continue; fi
+                if [[ $KEY =~ "_LOG_" ]] ; then continue; fi
                 VALUE=$( echo "$VALUE" | sed 's|"|\\"|g'  )
 #               echo $VALUE
                 if [ -n "$VALUE" ]; then
