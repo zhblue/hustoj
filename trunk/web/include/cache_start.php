@@ -48,7 +48,7 @@
         }
         if ($use_cache) {
                 //header ( "Location: $file" );
-                include ($cache_file);
+                echo file_get_contents($cache_file);
                 exit ();
         } else {
                 ob_start ();
