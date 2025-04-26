@@ -18,15 +18,15 @@
         }
 
         $sid=md5($sid);
-        $file = "cache/cache_$sid.html";
+        $cache_file = "cache/cache_$sid.html";
         if($OJ_MEMCACHE){
                     $success = false;
                     if(extension_loaded('apcu')&&apcu_enabled()){
-                            $content = apcu_fetch($file, $success);
+                            $content = apcu_fetch($cache_file, $success);
                     }else{
                             $mem = new Memcache;
                             $mem->connect($OJ_MEMSERVER,  $OJ_MEMPORT);
-                            $content=$mem->get($file);
+                            $content=$mem->get($cache_file);
                             $success=!empty($content);
                     }
                     if ($success) {
@@ -39,8 +39,8 @@
                     }
         }else{
 
-                if (file_exists ( $file ))
-                        $last = filemtime ( $file );
+                if (file_exists ( $cache_file ))
+                        $last = filemtime ( $cache_file );
                 else
                         $last =0;
                 $use_cache=(time () - $last < $cache_time);
@@ -48,7 +48,7 @@
         }
         if ($use_cache) {
                 //header ( "Location: $file" );
-                include ($file);
+                include ($cache_file);
                 exit ();
         } else {
                 ob_start ();
