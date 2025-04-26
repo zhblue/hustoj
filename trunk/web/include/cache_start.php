@@ -16,33 +16,35 @@
         if (isset($_SERVER["REQUEST_URI"])){
                 $sid.=$_SERVER["REQUEST_URI"];
         }
-        
+
         $sid=md5($sid);
         $file = "cache/cache_$sid.html";
-        
-        if($OJ_MEMCACHE ){
-                $mem = new Memcache;
-                if($OJ_SAE)
-                        $mem=memcache_init();
-                else{
-                        $mem->connect($OJ_MEMSERVER,  $OJ_MEMPORT);
-                }
-                $content=$mem->get($file);
-                if($content){
-                         echo $content;
-                         exit();
-                }else{
-                        $use_cache=false;
-                        $write_cache=true;
-                }
+        if($OJ_MEMCACHE){
+                    $success = false;
+                    if(extension_loaded('apcu')&&apcu_enabled()){
+                            $content = apcu_fetch($file, $success);
+                    }else{
+                            $mem = new Memcache;
+                            $mem->connect($OJ_MEMSERVER,  $OJ_MEMPORT);
+                            $content=$mem->get($file);
+                            $success=!empty($content);
+                    }
+                    if ($success) {
+                        echo $content;
+                        echo "<!-- cached -->";
+                        exit();
+                    } else {
+                        $use_cache = false;
+                        $write_cache = true;
+                    }
         }else{
-                
+
                 if (file_exists ( $file ))
                         $last = filemtime ( $file );
                 else
                         $last =0;
                 $use_cache=(time () - $last < $cache_time);
-                
+
         }
         if ($use_cache) {
                 //header ( "Location: $file" );
@@ -51,5 +53,3 @@
         } else {
                 ob_start ();
         }
-//cache head stop
-?>
