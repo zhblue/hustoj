@@ -19,7 +19,7 @@ if (!empty($OJ_LIP_URL)){
                 $lip=intval($_GET['lip']);
                 setcookie("lip",$lip);
         }else if (!isset($_COOKIE['lip'])){
-                echo "<img src='$OJ_LIP_URL' width=1 height=1 > ";
+                echo "<script>window.location.href='$OJ_LIP_URL';</script> ";
         }
 }
 ?>
