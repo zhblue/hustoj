@@ -3054,30 +3054,25 @@ void judge_solution(int &ACflg, int &usedtime, double time_lmt, int spj,
 	// compare
 	if (ACflg == OJ_AC)
 	{
-		if (spj)
-		{
+		if (spj){  
+			execute_cmd("/bin/cp %s/data/%d/checker %s",oj_home,p_id,work_dir);
+                        execute_cmd("/bin/chown judge  %s/checker",work_dir); 
 			comp_res = special_judge(oj_home, p_id, infile, outfile, userfile,spj_mark,spj);
-
 			if (comp_res == 0)
 				comp_res = OJ_AC;
-			else
-			{
+			else{
 				if (DEBUG)
 					printf("fail test %s\n", infile);
 				comp_res = OJ_WA;
 			}
-		}
-		else
-		{
+		}else{
 			comp_res = compare(outfile, userfile,infile,userfile,spj_mark);
 		}
-		if (comp_res == OJ_WA)
-		{
+		if (comp_res == OJ_WA){
 			ACflg = OJ_WA;
 			if (DEBUG)
 				printf("fail test %s\n", infile);
-		}
-		else if (comp_res == OJ_PE)
+		}else if (comp_res == OJ_PE)
 			PEflg = OJ_PE;
 		ACflg = comp_res;
 	}
