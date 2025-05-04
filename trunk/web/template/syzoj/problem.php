@@ -627,6 +627,7 @@ $(document).ready(function () {
     });
     
     preIndex++;
+     $(this).show();	  
   });
 });
 </script>
