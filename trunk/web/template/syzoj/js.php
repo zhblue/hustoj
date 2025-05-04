@@ -77,7 +77,7 @@ $(".hint pre").each(function(){
         $(this).prev().click(function(){
                 content.toggle();
         });
-        $(this).hide();
+   //     $(this).hide();
 });
 
 
