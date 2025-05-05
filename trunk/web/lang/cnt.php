@@ -476,6 +476,7 @@
   $MSG_OTHERS="其他人";
   $MSG_SUBNET="子網";
   $MSG_SHOW_DIFF="顯示對比輸出";
+  $MSG_UPSOLVING="補題";
   //SaaS friendly
   $MSG_TEMPLATE="模板";
   $MSG_FRIENDLY_LEVEL="友善級別";
