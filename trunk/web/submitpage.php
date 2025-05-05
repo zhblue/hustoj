@@ -31,7 +31,7 @@ if(!empty($_SERVER['HTTP_REFERER'])){
                 if(!empty($contest_type)) $contest_type=$contest_type[0][0];
                 //echo "[ $contest_type ]";
                 if($contest_type&64){
-                        $view_errors="$MSG_NO_UPSOLVING";
+                        $view_errors="$MSG_FORBIDDEN.$MSG_UPSOLVING";
                         require("template/$OJ_TEMPLATE/error.php");
                         exit();
                 }
