@@ -469,9 +469,10 @@
 	$MSG_SYS_WARN="System Warning!";
 	$MSG_IS_ROBOT="could be a robot , verify and disable it !";
        $MSG_FORBIDDEN="forbidden ";
-       $MSG_OTHERS="other's ";
-       $MSG_SUBNET="subnet ";
+       $MSG_OTHERS="Other's ";
+       $MSG_SUBNET="Subnet ";
        $MSG_SHOW_DIFF="Show Differ Output";
+       $MSG_UPSOLVING="Upsolving";
   //SaaS friendly
   $MSG_TEMPLATE="Template";
   $MSG_FRIENDLY_LEVEL="Friendly Level";
