@@ -18,6 +18,26 @@ if (!isset($_SESSION[$OJ_NAME.'_'.'user_id'])){
 }
 $langmask=$OJ_LANGMASK;
 $problem_id = 1000;
+if(!empty($_SERVER['HTTP_REFERER'])){
+        $queryString = parse_url($_SERVER['HTTP_REFERER'], PHP_URL_QUERY);
+        if ($queryString) {
+            // 将查询参数解析为关联数组
+            parse_str($queryString, $queryParams);
+            // 检查是否存在 cid 参数
+            if (isset($queryParams['cid'])) {
+                // 返回过滤后的 cid（例如：确保是整数）
+                $sql="select contest_type from contest where contest_id=?";
+                $contest_type=pdo_query($sql,intval($queryParams['cid']));
+                if(!empty($contest_type)) $contest_type=$contest_type[0][0];
+                //echo "[ $contest_type ]";
+                if($contest_type&64){
+                        $view_errors="$MSG_NO_UPSOLVING";
+                        require("template/$OJ_TEMPLATE/error.php");
+                        exit();
+                }
+            }
+        }
+}
 if (isset($_GET['id'])) {
 	$id = intval($_GET['id']);
 }
