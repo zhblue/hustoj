@@ -536,7 +536,7 @@ function admin_mod(){
                         let ol=$(this).prev("ol");
                         if(ol!=undefined && ol.attr("start")!=undefined) i=ol.attr("start");
                         console.log("id["+i+"]");
-                        if($(ol).html().indexOf("多选")>0|| (ol!=undefined && ol.html()!=undefined && ol.html().indexOf("multiselect")>0)) type="checkbox";
+                        if( ol!=undefined && ol.html()!=undefined &&($(ol).html().indexOf("多选")>0|| ol.html().indexOf("multiselect")>0)) type="checkbox";
                         let j=0;
                         $(this).find("li").each(function(){
                                 let option=options[j];
