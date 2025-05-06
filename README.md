@@ -154,6 +154,8 @@ Star us, please!
 	
 日期  | 类型 |  更新内容 | 图
 ------- | :--:  | :--: | :-------
+05-06 | 补丁 | 修复markdown中的选择题选项控件。
+05-05 | 更新 | 比赛禁止补题选项。|![79f8dff90b22d13e8a1fd5f09fc4e96e](https://github.com/user-attachments/assets/2e99ae26-86d0-4b29-8f11-f5109a77d5c5)
 04-25 | 更新 | PHP8.4 兼容。
 04-03 | 更新 | 支持截屏粘贴转为上传文件。
 04-02 | 更新 | 支持文件管理器里复制图片文件，在编辑器中粘贴。支持粘贴pdf文件，自动转换为iframe直接显示。|<img width="647" alt="f41bb38f9bf0b811724cead0bd99775" src="https://github.com/user-attachments/assets/e4ade558-f3bd-4d37-b43f-48a45ea706db" />
