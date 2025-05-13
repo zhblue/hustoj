@@ -277,7 +277,7 @@ if(file_exists($solution_file)){
 		$("#submitPage").html("<iframe src='"+submitURL+"&spa' width='"+width+"px' height='"+height+"px' ></iframe>");
 	}
 	$("#submit").remove();
-	<?php if ($row['spj']>1){ ?>
+	<?php if ($row['spj']>1 && !isset($_GET['spa']) ){ ?>
             window.setTimeout('$("iframe")[0].contentWindow.$("#TestRun").remove();',1000);
         <?php }?>
       
@@ -576,10 +576,10 @@ function admin_mod(){
                 });
                 selectMulti(num,answer);
         }).css("width","24px").css("height","21px");
-	<?php if ($row['spj']>1 || isset($_GET['sid']) || (isset($OJ_AUTO_SHOW_OFF)&&$OJ_AUTO_SHOW_OFF)){?>
+	<?php if (  ($row['spj']>1 || isset($_GET['sid']) || (isset($OJ_AUTO_SHOW_OFF)&&$OJ_AUTO_SHOW_OFF)  )  && !isset($_GET['spa']) ){?>
 	    transform();
 	<?php }?>
-		admin_mod();
+	    admin_mod();
 
   });
   </script>   
