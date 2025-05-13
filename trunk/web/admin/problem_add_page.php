@@ -157,17 +157,20 @@
 	let description=$("textarea").eq(1).val();
 	preview.find("#description").html(description);
 	preview.find("#description .md").each(function(){
+		if($("#previewFrame")[0] != undefined) $("#previewFrame")[0].contentWindow.MathJax.typeset();
 		$(this).html(marked.parse($(this).html()));
 	});
   
 	let input=$("textarea").eq(3).val();
 	preview.find("#input").html(input);
 	preview.find("#input .md").each(function(){
+		if($("#previewFrame")[0] != undefined) $("#previewFrame")[0].contentWindow.MathJax.typeset();
 		$(this).html(marked.parse($(this).html()));
 	});
 	let output=$("textarea").eq(5).val();
 	preview.find("#output").html(output);
 	preview.find("#output .md").each(function(){
+		if($("#previewFrame")[0] != undefined) $("#previewFrame")[0].contentWindow.MathJax.typeset();
 		$(this).html(marked.parse($(this).html()));
 	});
 
@@ -178,6 +181,7 @@
 	let hint=$("textarea").eq(11).val();
 	preview.find("#hint").html(hint);
 	preview.find("#hint .md").each(function(){
+		if($("#previewFrame")[0] != undefined) $("#previewFrame")[0].contentWindow.MathJax.typeset();
 		$(this).html(marked.parse($(this).html()));
 	});
 	if($("#previewFrame")[0] != undefined) $("#previewFrame")[0].contentWindow.MathJax.typeset();
