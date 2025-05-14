@@ -82,7 +82,7 @@ if(!kindeditorSeted){
 							if ( ele[i].kind == 'file' && (ele[i].type.indexOf('image/') !== -1 || ele[i].type.endsWith("pdf") ) ) {
 							    var file = ele[i].getAsFile();//得到二进制数据
 							    console.log(file);
-							    upload(file,editor1);
+							    upload(file,self);
 							    //创建表单对象，建立name=value的表单数据。
 							    if(ele.length==1||ele[i-1].type=="text/html") return false;
 							}else{
@@ -97,7 +97,7 @@ if(!kindeditorSeted){
 							if(dt.files != undefined ){
 							    for(const file of dt.files){
 							    	console.log(file);
-								upload(file,editor1);
+								upload(file,self);
 							    }
 							}
 						});
