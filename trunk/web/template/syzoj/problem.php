@@ -278,7 +278,8 @@ if(file_exists($solution_file)){
 	}
 	$("#submit").remove();
 	<?php if ($row['spj']>1 && !isset($_GET['spa']) ){ ?>
-            window.setTimeout('$("iframe")[0].contentWindow.$("#TestRun").remove();',1000);
+            if($("iframe")[0].contentWindow.$!=undefined ) 
+		    window.setTimeout('$("iframe")[0].contentWindow.$("#TestRun").remove();',1000);
         <?php }?>
       
 // Add code to place drag button on the left side of the iframe
