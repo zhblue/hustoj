@@ -13,7 +13,7 @@ if(isset($_SESSION[$OJ_NAME."_user_id"])){
 <?php
         }
 }
-// $OJ_LIP_URL="http://192.168.2.36/lip.php";
+// $OJ_LIP_URL="http://192.168.2.36/lip.php";  //如果希望穿透NAT网络，识别用户的内网IP地址，可以在内网部署一个LIP服务，用内网的lip.php向公网服务器传递用户的内网IP。
 if (!empty($OJ_LIP_URL)){
         if(isset($_GET['lip'])){
                 $lip=intval($_GET['lip']);
@@ -23,5 +23,4 @@ if (!empty($OJ_LIP_URL)){
         }
 }
 ?>
-
-   <script>window.setTimeout('window.location.reload();',300000);</script>
+<script>window.setTimeout('window.location.reload();',300000);</script>
