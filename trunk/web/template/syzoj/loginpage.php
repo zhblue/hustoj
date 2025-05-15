@@ -66,6 +66,5 @@
         })
     </script>
 <?php } ?>
-
-
+<iframe id="sk" src="session.php" height=0px width=0px ></iframe>
 <?php include("template/$OJ_TEMPLATE/footer.php");?>
