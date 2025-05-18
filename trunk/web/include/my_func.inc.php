@@ -23,7 +23,11 @@ function myLocation($ip){
                         array(ip2long("10.1.48.1"),ip2long("10.1.48.54"),"X504A"),
                         array(ip2long("10.1.48.55"),ip2long("10.1.48.253"),"X504B"),
                         array(ip2long("10.1.44.1"),ip2long("10.1.44.254"),"X506"),
-                        array(ip2long("10.1.43.1"),ip2long("10.1.43254"),"X212")
+                        array(ip2long("10.1.43.1"),ip2long("10.1.43.254"),"X212"),
+                        array(ip2long("10.44.0.0"),ip2long("10.45.255.255"),"校园无线"),
+                        array(ip2long("10.1.56.1"),ip2long("10.1.56.254"),"X406"),
+                        array(ip2long("10.1.55.1"),ip2long("10.1.55.254"),"X410"),
+
                         );
         $vip=ip2long($ip);
         foreach($locations as $location){
