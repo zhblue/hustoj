@@ -79,7 +79,7 @@ class online{
 	                    $this->ip =(htmlentities($tmp_ip[0],ENT_QUOTES,"UTF-8"));
 	        }
 		if((!empty($OJ_LIP_URL)) && isset($_COOKIE['lip']) ){
-			 $ip=long2ip(intval($_COOKIE['lip']));
+			$this->ip=long2ip(intval($_COOKIE['lip']));
 		}
 		if(isset($_SESSION[$OJ_NAME.'_'.'user_id']))
 			$this->ua = htmlentities($_SESSION[$OJ_NAME.'_'.'user_id'],ENT_QUOTES,"UTF-8");
