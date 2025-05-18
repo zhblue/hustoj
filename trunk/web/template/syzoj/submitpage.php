@@ -186,7 +186,7 @@ echo"<option value=$i ".( $lastlang==$i?"selected":"").">
 <?php }?> 
 </form>
 </center>
-<script type="module" src="sqlite/sqlite3.js"></script>
+<script type="module" src="<?php echo $OJ_CDN_URL?>sqlite/sqlite3.js"></script>
 <script>
 var sid=0;
 var i=0;
