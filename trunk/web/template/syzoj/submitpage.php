@@ -186,7 +186,7 @@ echo"<option value=$i ".( $lastlang==$i?"selected":"").">
 <?php }?> 
 </form>
 </center>
-
+<script type="module" src="sqlite/sqlite3.js"></script>
 <script>
 var sid=0;
 var i=0;
@@ -373,6 +373,55 @@ function do_submit(){
 <?php }?>
 
 }
+<?php
+
+        $append_file = "$OJ_DATA/$id/append.sql";
+        $appendsource="";
+        if (isset($OJ_APPENDCODE) && $OJ_APPENDCODE && file_exists($append_file)) {
+          $appendsource .= "\n".file_get_contents($append_file);
+        }
+        echo "var appendSQL=".json_encode($appendsource).";";
+
+?>
+
+function startSQL (sqlite3,input_sql,user_sql){
+ // log('Running SQLite3 version', sqlite3.version.libVersion);
+  const db = new sqlite3.oo1.DB('/mydb.sqlite3', 'ct');
+ // log('Created transient database', db.filename);
+
+  try {
+   // log('Creating a table...');
+    try{
+            db.exec(input_sql);
+    }finally{};
+   // log('Query data with exec()...');
+    db.exec({
+      sql: user_sql+appendSQL,
+      callback: (row) => {
+        $("#out").val($("#out").val()+(row.join("|")+"\n"));
+        console.log(row);
+      },
+    });
+  } finally {
+    db.close();
+  }
+};
+
+function runSQL(input,sql){
+//      log('Loading and initializing SQLite3 module...');
+        sqlite3InitModule().then((sqlite3) => {
+//        log('Done initializing. Running demo...');
+          try {
+            $("#out").val("");
+            startSQL(sqlite3,input,sql);
+          } catch (err) {
+            console.log(err.name, err.message);
+          }
+        });
+
+}
+
+
 var handler_interval;
 function do_test_run(){
 	if( handler_interval) window.clearInterval( handler_interval);
@@ -383,6 +432,12 @@ function do_test_run(){
 		source=editor.getValue();
         	$("#hide_source").val(source);
 	}
+        let lang=$("#language").val();
+        if(lang==18){
+                console.log("Using Wasm SQLite");
+                runSQL($("#input_text").val(),source);
+                return;
+        }
 	if(source.length<10) return alert("too short!");
 	if(tb!=null)tb.innerHTML=loader;
 
