@@ -42,7 +42,7 @@ insert into user values(1,2,3),(4,5,6);</textarea>
 	};
 
 function run(){
-	const input='CREATE TABLE IF NOT EXISTS user(a,b,c);insert into user values(1,2,3),(4,5,6);';
+	const input=$("#input").val();
 	$("#output").val("");
 	runSQL(input,$("#sql").val()); 
 }
