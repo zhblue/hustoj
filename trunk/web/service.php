@@ -7,7 +7,7 @@ exit();
 require_once ("include/db_info.inc.php");
 require_once ("include/my_func.inc.php");
 $OJ_NAME.="_service_";
-ini_set("display_errors", "Off");  //set this to "On" for debugging  ,especially when no reason blank shows up.
+ini_set("display_errors","Off");  //set this to "On" for debugging  ,especially when no reason blank shows up.
 function login($m){
                 // 拥有service_port权限的账号才能登陆接口
                 global $OJ_NAME,$_SESSION;
