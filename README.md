@@ -154,6 +154,7 @@ Star us, please!
 	
 日期  | 类型 |  更新内容 | 图
 ------- | :--:  | :--: | :-------
+05-17 | 更新 | 用Wasm版本的SQLite在浏览器中执行SQL语言的测试运行，分散服务器测试运行的压力。
 05-06 | 补丁 | 修复markdown中的选择题选项控件。
 05-05 | 更新 | 比赛禁止补题选项。|![79f8dff90b22d13e8a1fd5f09fc4e96e](https://github.com/user-attachments/assets/2e99ae26-86d0-4b29-8f11-f5109a77d5c5)
 04-25 | 更新 | PHP8.4 兼容。
