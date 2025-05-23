@@ -66,7 +66,7 @@ $isadmin = isset($_SESSION[$OJ_NAME.'_'.'administrator']);
                   </td>
                   <td>
                          <?php if($i==0) echo "$MSG_PROBLEM_ID : ".(($problemid==0)?"----":("<a href=\"problem.php?id=$problemid\">"."$problemid</a>"))."<br>";?>
-                         <?php if($i==0) echo "$MSG_QUESTION : ".$titles."<br><br>";?>
+                         <?php if($i==0) echo "$MSG_QUESTION : ".htmlspecialchars($titles)."<br><br>";?>
             
                     <div id="post<?php echo $row['rid'];?>" class="md" style="text-align:left; clear:both;">
                       <?php
