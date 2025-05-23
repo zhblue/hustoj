@@ -259,7 +259,7 @@ for each row
 begin
  declare acTimes int;
  if new.result=4 then
-    select count(1) from solution where problem_id=new.problem_id and result=4 and first_time=1 into acTimes;
+    select count(1) from solution where problem_id=new.problem_id and result=4 and first_time=1 and  user_id=new.user_id into acTimes;
     if acTimes=0 then
         set new.first_time=1;
     end if;
