@@ -30,6 +30,7 @@ alter table users add column expiry_date date not null default '2099-01-01' afte
 alter table contest add column contest_type tinyint UNSIGNED default 0 after `password`;
 alter table contest add column subnet varchar(255) not null default '' after contest_type;
 alter table online modify refer varchar(4096) DEFAULT NULL;
+alter table solution add column first_time tinyint(1) default 0 after pass_rate ;
 #create fulltext index problem_title_source_index on problem(title,source);
 
                                                                                                          
