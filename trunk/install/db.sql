@@ -143,6 +143,7 @@ CREATE TABLE IF NOT EXISTS `solution` (
   `code_length` int(11) NOT NULL DEFAULT 0,
   `judgetime` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `pass_rate` DECIMAL(4,3) UNSIGNED NOT NULL DEFAULT 0,
+  `first_time` tinyint(1) not null default 0,
   `lint_error` int UNSIGNED NOT NULL DEFAULT 0,
   `judger` CHAR(16) NOT NULL DEFAULT 'LOCAL',
   `remote_oj` char(16) not NULL DEFAULT '',
@@ -250,6 +251,21 @@ CREATE TABLE IF NOT EXISTS `share_code` (
 ) ENGINE=MyISAM AUTO_INCREMENT=1000 DEFAULT CHARSET=utf8mb4;
 
 delimiter //
+	
+drop trigger if exists firstAC//
+create trigger firstAC
+before update on solution
+for each row
+begin
+ declare acTimes int;
+ if new.result=4 then
+    select count(1) from solution where problem_id=new.problem_id and result=4 and first_time=1 into acTimes;
+    if acTimes=0 then
+        set new.first_time=1;
+    end if;
+end if;
+end;//
+	
 drop trigger if exists simfilter//
 create trigger simfilter
 before insert on sim
