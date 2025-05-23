@@ -136,7 +136,7 @@ if(isset($_POST['update_solution'])){
 	}
 	
 	
-}else if(isset($_POST['getcustominput'])){
+}else if(isset($_POST['getcustominput']) && !isset($_SESSION[$OJ_NAME.'_'.'administrator'])){
 	
 	$sid=intval($_POST['sid']);
 	$sql="SELECT input_text FROM custominput WHERE solution_id=? ";
@@ -146,7 +146,7 @@ if(isset($_POST['update_solution'])){
 	}
 	
 	
-}else if(isset($_POST['getprobleminfo'])){
+}else if(isset($_POST['getprobleminfo'])&& !isset($_SESSION[$OJ_NAME.'_'.'administrator'])){
 	
 	$pid=intval($_POST['pid']);
 	$sql="SELECT time_limit,memory_limit,spj FROM problem where problem_id=?";
@@ -159,7 +159,7 @@ if(isset($_POST['update_solution'])){
 	}
 	
 	
-}else if(isset($_POST['addceinfo'])){
+}else if(isset($_POST['addceinfo'])&& !isset($_SESSION[$OJ_NAME.'_'.'administrator'])){
 	
 	$sid=intval($_POST['sid']);
 	$sql="DELETE FROM compileinfo WHERE solution_id=? ";
