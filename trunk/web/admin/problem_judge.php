@@ -10,15 +10,15 @@ if (!(isset($_SESSION[$OJ_NAME.'_'.'http_judge']))){
 header('Content-Type: text/plain');
 
 if(isset($_POST['manual'])){
-
         $sid=intval($_POST['sid']);
         $result=intval($_POST['result']);
+	$judger=$_SESSION[$OJ_NAME.'_'.'user_id'];
         if($result>=0){
           if($result==4)
-                $sql="UPDATE solution SET result=?,pass_rate=1.0 WHERE solution_id=? LIMIT 1";
+                $sql="UPDATE solution SET result=?,pass_rate=1.0,judger=? WHERE solution_id=? LIMIT 1";
           else
-                $sql="UPDATE solution SET result=?,pass_rate=0 WHERE solution_id=? LIMIT 1";
-          pdo_query($sql,$result,$sid);
+                $sql="UPDATE solution SET result=?,pass_rate=0,judger=? WHERE solution_id=? LIMIT 1";
+          pdo_query($sql,$result,$judger,$sid);
         }
         if(isset($_POST['explain'])){
              $sql="DELETE FROM runtimeinfo WHERE solution_id=? ";
