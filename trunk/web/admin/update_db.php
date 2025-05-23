@@ -221,7 +221,7 @@ $csql[51]="alter table $DB_NAME.users add column expiry_date date not null defau
 $tsql[52]="alter table $DB_NAME.contest add column contest_type tinyint unsigned default 0 after `password` ";
 $csql[52]="alter table $DB_NAME.contest add column subnet varchar(255) not null default '' after contest_type;";
 $tsql[53]="alter table $DB_NAME.solution add column first_time tinyint(1) default 0 after pass_rate ;";
-$csql[53]="drop trigger if exists firstAC;
+$csql[53]="drop trigger if exists $DB_NAME.firstAC;
 create trigger $DB_NAME.firstAC
 before update on $DB_NAME.solution
 for each row
