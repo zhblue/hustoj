@@ -388,6 +388,7 @@ for ($i=0; $i<$rows_cnt; $i++) {
     $mark = "";
 
   $view_status[$i][3] = "<span class='hidden' style='display:none' result=".$row['result']."></span>";
+  if($row['first_time']==1) $view_status[$i][3] .="⭐";
   if (intval($row['result'])==11 && ((isset($_SESSION[$OJ_NAME.'_'.'user_id']) && $row['user_id']==$_SESSION[$OJ_NAME.'_'.'user_id']) || isset($_SESSION[$OJ_NAME.'_'.'source_browser']))) {
     $view_status[$i][3] .= "<a href=ceinfo.php?sid=".$row['solution_id']." class='".$judge_color[$row['result']]."' title='$MSG_Tips'>".$MSG_Compile_Error."</a>";
   }
