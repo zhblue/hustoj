@@ -33,8 +33,9 @@ alter table online modify refer varchar(4096) DEFAULT NULL;
 alter table solution add column first_time tinyint(1) default 0 after pass_rate ;
 
 delimiter //
-	
+
 drop trigger if exists firstAC//
+UPDATE solution s JOIN (SELECT user_id,problem_id, MIN(solution_id) AS first_solution_id FROM solution WHERE result = 4 GROUP BY user_id, problem_id ) t ON s.solution_id = t.first_solution_id SET s.first_time = 1 //
 create trigger firstAC
 before update on solution
 for each row
