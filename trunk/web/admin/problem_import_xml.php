@@ -151,7 +151,7 @@ function import_fps($tempfile) {
     if ($unit=='ms')
       $time_limit /= 1000;
 
-    $memory_limit = getValue($searchNode,'memory_limit');
+    $memory_limit = intval(getValue($searchNode,'memory_limit'));
     $unit = getAttribute($searchNode,'memory_limit','unit');
 
     if ($unit=='kb')
