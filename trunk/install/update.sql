@@ -31,7 +31,7 @@ alter table contest add column contest_type tinyint UNSIGNED default 0 after `pa
 alter table contest add column subnet varchar(255) not null default '' after contest_type;
 alter table online modify refer varchar(4096) DEFAULT NULL;
 alter table solution add column first_time tinyint(1) default 0 after pass_rate ;
-
+alter table solution add index fst(first_time);
 delimiter //
 
 drop trigger if exists firstAC//
