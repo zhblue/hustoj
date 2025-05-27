@@ -86,7 +86,7 @@
                         $sql="SELECT users.`user_id`,`nick`,s.`solved`,t.`submit`,group_name,starred FROM `users`
                                         inner join
                                         (select count(distinct (problem_id)) solved ,user_id from solution
-                                               where solution_id>$last_id and user_id not in (".$OJ_RANK_HIDDEN.") and problem_id>0 and result=4
+                                               where solution_id>$last_id and user_id not in (".$OJ_RANK_HIDDEN.") and problem_id>0 and result=4 and first_time=1 
 					       group by user_id order by solved desc limit " . strval ( $rank ) . ",$page_size) s
                                         on users.user_id=s.user_id
                                         inner join
