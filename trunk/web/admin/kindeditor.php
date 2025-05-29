@@ -60,6 +60,7 @@ if(!kindeditorSeted){
                                 allowFileManager : false,
                                 allowImageRemote: true,
                                 filterMode:false,
+				pasteType:1,
                                 cssData: 'body { font-family:"Consolas";font-size: 18px;line-height:150% }  ',
 <?php if(isset($OJ_MARKDOWN)&&$OJ_MARKDOWN)
                                 echo "designMode:false,";
