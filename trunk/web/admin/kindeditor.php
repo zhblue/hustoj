@@ -60,7 +60,7 @@ if(!kindeditorSeted){
                                 allowFileManager : false,
                                 allowImageRemote: true,
                                 filterMode:false,
-				pasteType:1,
+				pasteType:1,    // 1 纯文本粘贴 2 HTML粘贴
                                 cssData: 'body { font-family:"Consolas";font-size: 18px;line-height:150% }  ',
 <?php if(isset($OJ_MARKDOWN)&&$OJ_MARKDOWN)
                                 echo "designMode:false,";
