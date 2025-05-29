@@ -4593,8 +4593,8 @@ function _bindNewlineEvent() {
 	if (_OPERA && _V < 9) {
 		return;
 	}
-	var brSkipTagMap = _toMap('h1,h2,h3,h4,h5,h6,pre,li'),
-		pSkipTagMap = _toMap('p,h1,h2,h3,h4,h5,h6,pre,li,blockquote');
+	var brSkipTagMap = _toMap('h1,h2,h3,h4,h5,h6,pre,li,span'),
+		pSkipTagMap = _toMap('p,h1,h2,h3,h4,h5,h6,pre,li,blockquote,span');
 	function getAncestorTagName(range) {
 		var ancestor = K(range.commonAncestor());
 		while (ancestor) {
@@ -4612,6 +4612,11 @@ function _bindNewlineEvent() {
 		self.cmd.selection();
 		var tagName = getAncestorTagName(self.cmd.range);
 		if (tagName == 'marquee' || tagName == 'select') {
+			return;
+		}
+		if (newlineTag === 'p' && !pSkipTagMap[tagName]) {
+			e.preventDefault();
+			self.insertHtml('<br />' + (_IE && _V < 9 ? '' : '\u200B'));
 			return;
 		}
 		if (newlineTag === 'br' && !brSkipTagMap[tagName]) {
