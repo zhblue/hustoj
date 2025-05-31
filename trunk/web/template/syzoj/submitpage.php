@@ -743,9 +743,10 @@ function auto_submit(){
         $sql="select unix_timestamp(end_time)-unix_timestamp(now()) from contest where contest_id=?";
         $countStart=pdo_query($sql,$cid);
         if(!empty($countStart)){
-                $countStart=$countStart[0][0];
+                $countStart=intval($countStart[0][0])??0;
+                if($countStart<0) $countStart=0;
                 echo "var countDown=".$countStart.";";
-                echo "setInterval('auto_submit()',1000);";
+                echo "if(countDown>0) setInterval('auto_submit()',1000);";
         }
       }
 ?>
