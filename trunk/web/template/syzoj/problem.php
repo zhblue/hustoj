@@ -498,14 +498,14 @@ function admin_mod(){
                 let start=0;
                 let next=0;
                 let raw=$(this).html();
-                let options=['A','B','C','D'];
+                let options=['A','B','C','D','E','F','G'];
 		console.log("scanning...");
                 while(start>=0){
                         start=raw.indexOf("\n"+i+".",start);
                         if(start<0) break;
                         let end=start;
                         let type="radio"
-                        for(let j=0;j<4;j++){
+                        for(let j=0;j<options.length;j++){
                                 let option=options[j];
                                 end=raw.indexOf(option+".",start);
                                 next=raw.indexOf("\n"+(i+1)+".",start);
