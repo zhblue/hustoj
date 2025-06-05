@@ -164,7 +164,7 @@ if( isset($OJ_NOIP_KEYWORD) && $OJ_NOIP_KEYWORD){
                 // 使用$OJ_NOIP_TISHI 条件语句确定是否显示提示信息
                 if (isset($OJ_NOIP_HINT) && $OJ_NOIP_HINT) {
                     //$row['hint'] = $MSG_NOIP_NOHINT;
-                } else {
+                } else if(!(isset($_SESSION[$OJ_NAME.'_administrator'])||isset($_SESSION[$OJ_NAME.'_contest_creator']))) {
                     $row['hint'] = $MSG_NOIP_NOHINT;
                 }
         }
