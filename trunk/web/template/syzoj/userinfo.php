@@ -91,6 +91,40 @@
                             </div>
                         </div>
                     </div>
+		  <div class="row">
+                        <div class="column">
+                        <h4 class="ui top attached block header"><?php echo $MSG_CONTEST?></h4>
+                            <div class="ui bottom attached segment">
+                                <table class='striped table ui'>
+                        <?php
+                    $sql="select c.contest_id,c.title,c.start_time,rt.tried,rt.ac  from contest c
+                            right join (select contest_id,count(distinct(problem_id)) as tried, count(distinct(if(result=4,problem_id,null))) as ac from solution
+                                where user_id=? and contest_id>0
+                                        group by contest_id order by contest_id) rt on c.contest_id=rt.contest_id;";
+                                $contests=pdo_query($sql,$user);
+                                        $cnt=0;
+                                        foreach($contests as $row){
+                                                echo "<tr><td>".++$cnt."</td>";
+                                                $id=0;
+                                                for($i=0;$i<count($row)/2;$i++){
+                                                        if($id==0){
+                                                                $id=$row[$i];
+                                                                continue;
+                                                        }
+                                                        echo "<td>";
+                                                        if($i==1) echo "<a href='contestrank.php?cid=$id#".htmlentities($user)."' target=_blank>".$row[$i]."</a>";
+                                                        else echo "\t".$row[$i];
+                                                        echo "</td>";
+                                                }
+                                                echo "</tr>";
+                                        }
+                                ?>
+
+                                    </table>
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="row">
                         <div class="column">
                             <h4 class="ui top attached block header">统计</h4>
