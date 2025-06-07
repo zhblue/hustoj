@@ -403,19 +403,19 @@ function phpfm(pid){
 }
 function selectOne( num, answer){
           let editor = $("iframe")[0].contentWindow.$("#source");
-          let old=editor.text();
+          let old=editor.val();
           let key= num+".*";
           console.log(key);
           let rep=old.replace(new RegExp(key),num+" "+answer);
-          editor.text(rep);
+          editor.val(rep);
 }
 function selectMulti( num, answer){
   let editor = $("iframe")[0].contentWindow.$("#source");
-  let old=editor.text();
+  let old=editor.val();
   let key= num+".*";
   console.log(key);
   let rep=old.replace(new RegExp(key),num+" "+answer);
-  editor.text(rep);
+  editor.val(rep);
 }
 
 function db_click_modify(){
