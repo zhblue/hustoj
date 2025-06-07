@@ -109,7 +109,7 @@
 				where user_id=? and contest_id>0  
 					group by contest_id order by contest_id) rt on c.contest_id=rt.contest_id;";
 				$contests=pdo_query($sql,$user);
-					$cnt=0;
+					$total=$total_ac=$cnt=0;
 					foreach($contests as $row){
 					        echo "<tr><td>".++$cnt."</td>";
 						$id=0;
@@ -121,12 +121,20 @@
 					                echo "<td>";
 					                if($i==1) echo "<a href='contestrank.php?cid=$id#".htmlentities($user)."' target=_blank>".$row[$i]."</a>";
 							else echo "\t".$row[$i];
+							if($i==3) $total+=$row[$i];
+                                                        if($i==4) $total_ac+=$row[$i];
 					                echo "</td>";
 					        }
 					        echo "</tr>";
 					}
 				?>
-				
+				 <tr>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                        <th><?php echo $total ?></th>
+                                        <th><?php echo $total_ac ?></th>
+                                </tr>
                                     </table>
                             </div>
                         </div>
