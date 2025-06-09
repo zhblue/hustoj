@@ -80,13 +80,6 @@
               echo "</tr>";
             }
           ?>
-          
-          
-
-          <!-- <td><a href="<%= syzoj.utils.makeUrl(['contest', contest.id]) %>"><%= contest.title %> <%- tag %></a></td>
-          <td><%= syzoj.utils.formatDate(contest.start_time) %></td>
-          <td><%= syzoj.utils.formatDate(contest.end_time) %></td>
-          <td class="font-content"><%- contest.subtitle %></td> -->
       </tbody>
     </table>
 </div>
