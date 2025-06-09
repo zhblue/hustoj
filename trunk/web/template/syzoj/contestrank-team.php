@@ -28,7 +28,7 @@
 <?php
 $rank=1;
 ?>
-<center><h3>Contest Team RankList -- <?php echo $title?></h3>
+<center><h3  class="padding" >Contest Team RankList -- <?php echo $title?></h3>
 <!-- <a href="contestrank.xls.php?cid=<?php echo $cid?>" >Download</a> -->
 <?php
 if($OJ_MEMCACHE)
