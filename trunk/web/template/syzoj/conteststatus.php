@@ -1,4 +1,4 @@
-<?php $show_title="评测状态 - $OJ_NAME"; ?>
+<?php $show_title="$MSG_CONTEST_STATUS - $OJ_NAME"; ?>
 <?php include("template/$OJ_TEMPLATE/header.php");?>
 <script src="<?php echo $OJ_CDN_URL?>template/<?php echo $OJ_TEMPLATE?>/js/textFit.min.js"></script>
 <div class="padding">
