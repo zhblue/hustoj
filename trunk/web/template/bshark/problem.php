@@ -214,7 +214,7 @@
 
 	$(document).ready(function () {
 <?php if (isset($OJ_MARKDOWN) && $OJ_MARKDOWN) { ?>
-				$("div.md").each(function () {
+				$(".md").each(function () {
 					$(this).html(marked.parse($(this).html()));
 				});
 <?php } ?>
