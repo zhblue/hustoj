@@ -54,7 +54,7 @@
         require("template/".$OJ_TEMPLATE."/lostpassword2.php");
 
  }else{
-
+    if( $row['email']!=$lost_email)$error_msg="用户名与Email不匹配";
 /////////////////////////Template
    require("template/".$OJ_TEMPLATE."/lostpassword.php");
 
