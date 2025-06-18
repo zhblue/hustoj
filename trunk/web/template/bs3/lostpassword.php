@@ -26,7 +26,8 @@
       <!-- Main component for a primary marketing message or call to action -->
       <div class="jumbotron">
  <form action=lostpassword.php method=post>
-<center>
+<center><?php if(!empty($error_msg)) echo "<h1>$error_msg</h1>"?>
+
 <table width=400 algin=center>
 <tr><td width=200><?php echo $MSG_USER_ID?>:<td width=200><input name="user_id" type="text" size=20></tr>
 <tr><td><?php echo $MSG_EMAIL?>:<td><input name="email" type="text" size=20></tr>
