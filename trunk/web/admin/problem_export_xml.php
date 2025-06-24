@@ -125,23 +125,24 @@ function getSolution($pid,$lang) {
 function fixurl($img_url) {
   if(substr($img_url,0,4)=="data") return $img_url;
   $img_url = html_entity_decode($img_url,ENT_QUOTES,"UTF-8");
-
   if (substr($img_url,0,4)!="http") {
+    $img_url=str_replace("../upload/","/upload/",$img_url);
+    if($_SERVER["SERVER_PORT"]==80) $port="";
+    else $port=":".$_SERVER["SERVER_PORT"];
     if (substr($img_url,0,1)=="/") {
-      $ret = 'http://'.$_SERVER['HTTP_HOST'].':'.$_SERVER["SERVER_PORT"].$img_url;
+      $ret = 'http://'.$_SERVER['HTTP_HOST'].$port.$img_url;
     }
     else {
-      $path = dirname($_SERVER['PHP_SELF']);
-      $ret = 'http://'.$_SERVER['HTTP_HOST'].':'.$_SERVER["SERVER_PORT"].$path."/../".$img_url;
+      $path = dirname(dirname($_SERVER['PHP_SELF']));
+      $ret = 'http://'.$_SERVER['HTTP_HOST'].$port.$path.$img_url;
     }
-
   }
   else {
     $ret = $img_url;
   }
-
   return  $ret;
 }
+
 
 function image_base64_encode($img_url) {
   $img_url = fixurl($img_url);
