@@ -122,8 +122,8 @@ ln -s /usr/bin/mcs /usr/bin/gmcs
 cp /home/judge/src/install/hustoj /etc/init.d/hustoj
 update-rc.d hustoj defaults
 #systemctl enable judged
-systemctl start fail2ban
-systemctl enable fail2ban
+#systemctl start fail2ban
+#systemctl enable fail2ban
 
 PHP_INI=`find /www/ -name php.ini`
 sed -i 's/passthru,exec,system,/passthru,exec,/g'  $PHP_INI
