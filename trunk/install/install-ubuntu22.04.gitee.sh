@@ -194,7 +194,8 @@ systemctl enable nginx
 systemctl enable mariadb
 systemctl enable php$PHP_VER-fpm
 #systemctl enable judged
-
+systemctl start fail2ban
+systemctl enable fail2ban
 
 /etc/init.d/mariadb start
 mkdir /var/log/hustoj/
