@@ -1,9 +1,9 @@
 #!/bin/bash
 
-#detect and refuse to run under WSL
+#detect and run under WSL
 if [ -d /mnt/c ]; then
-    echo "WSL is NOT supported."
-    exit 1
+    echo "WSL is now supported."
+#    exit 1
 fi
 MEM=`free -m|grep Mem|awk '{print $2}'`
 
