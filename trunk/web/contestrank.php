@@ -130,8 +130,9 @@ if(isset($_SESSION[$OJ_NAME.'_'."administrator"])||
 	isset($_SESSION[$OJ_NAME.'_'."contest_creator"])
 ) {
 	$noip=false;
-}else if ($noip||contest_locked($cid,20)) {
+}else if ($noip||contest_locked($cid,20)) {   // 20 = 2^2 + 2^4 
 	$view_errors =  "<h2>$MSG_NOIP_WARNING</h2>";
+	$view_errors .= "<br>".$contest_locks[2].$contest_locks[4];  // 2^2 + 2^4 = 20
 	require("template/".$OJ_TEMPLATE."/error.php");
 	exit(0);
 }
