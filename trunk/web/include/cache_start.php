@@ -11,7 +11,7 @@
                     $tmp_ip=explode(',',$REMOTE_ADDR);
                     $ip =(htmlentities($tmp_ip[0],ENT_QUOTES,"UTF-8"));
                 }
-                $sid.=session_id().$ip;
+                $sid.=session_id().$ip.$_SESSION[$OJ_NAME.'_'.'user_id'];
         }
         if (isset($_SERVER["REQUEST_URI"])){
                 $sid.=$_SERVER["REQUEST_URI"];
