@@ -26,11 +26,14 @@ if(!empty($_SERVER['HTTP_REFERER'])){
             // 检查是否存在 cid 参数
             if (isset($queryParams['cid'])) {
                 // 返回过滤后的 cid（例如：确保是整数）
-                $sql="select contest_type from contest where contest_id=?";
+                $sql="select contest_type,end_time from contest where contest_id=?";
                 $contest_type=pdo_query($sql,intval($queryParams['cid']));
-                if(!empty($contest_type)) $contest_type=$contest_type[0][0];
-                //echo "[ $contest_type ]";
-                if($contest_type&64){
+                if(!empty($contest_type)) {
+                        $end_time=$contest_type[0][1];
+                        $contest_type=$contest_type[0][0];
+                }
+                //echo "[ $contest_type $end_time ]";
+                if(($contest_type&64)&& strtotime($end_time)<time()){
                         $view_errors="$MSG_FORBIDDEN.$MSG_UPSOLVING";
                         require("template/$OJ_TEMPLATE/error.php");
                         exit();
