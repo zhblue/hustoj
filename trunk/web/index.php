@@ -17,7 +17,7 @@ if ( isset( $OJ_ON_SITE_CONTEST_ID ) ) {
 //NOIP赛制比赛时，暂时屏蔽本月之星
 if(isset($OJ_NOIP_KEYWORD)&&$OJ_NOIP_KEYWORD){
 		                     $now =  date('Y-m-d H:i', time());
-        	                     $sql="select count(contest_id) from contest where start_time<'$now' and end_time>'$now' and ( title like '%$OJ_NOIP_KEYWORD%' or (contest_type & 20)>0 )  ";
+        	                     $sql="select count(contest_id) from contest where start_time<'$now' and end_time>'$now' and ( title like '%$OJ_NOIP_KEYWORD%' )  ";
 		                     $row=pdo_query($sql);
 		                    if(!empty($row)) $NOIP_flag=$row[0];
 				    else $NOIP_flag=false;
@@ -50,12 +50,12 @@ $view_news .= "</div>";
 
 $view_apc_info = "";
 $last_1000_id=0;
-$last_1000_id=pdo_query("select max(solution_id)-1000 from solution");
+$last_1000_id=pdo_query("select max(solution_id)-10000 from solution");
 if(!empty($last_1000_id))  $last_1000_id=$last_1000_id[0][0];
 if ($last_1000_id==NULL) $last_1000_id=0;
 
 
-$sql = "SELECT UNIX_TIMESTAMP(date(in_date))*1000 md,count(1) c FROM (select * from solution where solution_id > $last_1000_id) solution  where result<13 and solution_id > $last_1000_id group by md order by md desc limit 200";
+$sql = "SELECT date(in_date) md,count(1) c FROM (select * from solution where solution_id > $last_1000_id) solution  where result<13 and solution_id > $last_1000_id group by md order by md desc limit 200";
 $result = mysql_query_cache( $sql ); //mysql_escape_string($sql));
 $chart_data_all = array();
 //echo $sql;
@@ -64,7 +64,7 @@ foreach ( $result as $row ) {
         array_push( $chart_data_all, array( $row[ 'md' ], $row[ 'c' ] ) );
 }
 
-$sql = "SELECT UNIX_TIMESTAMP(date(in_date))*1000 md,count(1) c FROM  (select * from solution where solution_id > $last_1000_id) solution where result=4 and solution_id > $last_1000_id group by md order by md desc limit 200";
+$sql = "SELECT date(in_date) md,count(1) c FROM  (select * from solution where solution_id > $last_1000_id) solution where result=4 and solution_id > $last_1000_id group by md order by md desc limit 200";
 $result = mysql_query_cache( $sql ); //mysql_escape_string($sql));
 $chart_data_ac = array();
 //echo $sql;
