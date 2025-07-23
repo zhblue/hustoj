@@ -2,7 +2,7 @@
 
 OSRS=`lsb_release -rs`
  
-cd /home/judge/src/install || exit 1；
+cd /home/judge/src/install || exit 1
 dpkg --configure -a
 while ! apt-get install -y docker.io containerd
 do
