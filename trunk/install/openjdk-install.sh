@@ -7,7 +7,6 @@ if [ -f /etc/os-release ]; then
         debian|ubuntu)
             DISTRO="debian-ubuntu"
             ;;
-        fedទ
         fedora)
             DISTRO="fedora"
             ;;
