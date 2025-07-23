@@ -44,37 +44,49 @@
     ================================================== -->
 	<!-- Placed at the end of the document so the pages load faster -->
 	<?php include("template/$OJ_TEMPLATE/js.php");?>
-	<script language="javascript" type="text/javascript" src="<?php echo $OJ_CDN_URL?>include/jquery.flot.js"></script>
+	<script  src="<?php echo $OJ_CDN_URL.$path_fix."template/syzoj"?>/js/echarts.min.js"></script>
 	<script type="text/javascript">
-		$( function () {
-			var d1 = <?php echo json_encode($chart_data_all)?>;
-			var d2 = <?php echo json_encode($chart_data_ac)?>;
-			$.plot( $( "#submission" ), [ {
-				label: "<?php echo $MSG_SUBMIT?>",
-				data: d1,
-				lines: {
-					show: true
+			$( function () {
+			var all=<?php echo json_encode(array_column($chart_data_all,1))?> ;
+			var sub_echarts= echarts.init( $( "#submission" )[0]);
+			var maxY=Math.max(all);
+			var option = {
+			tooltip: {
+				trigger: 'axis',
+				formatter: '{b0}({a0}): {c0}<br />{b1}({a1}): {c1}'
+			},
+			legend: {
+			data: ['<?php echo $MSG_SUBMIT?>','<?php echo $MSG_AC?>' ]
+			},
+			xAxis: {
+			data: <?php echo json_encode(array_column($chart_data_ac,0))?> 
+			,
+			inverse:true
+			},
+			yAxis: [
+				{
+					type: 'value',
+					name: '<?php echo $MSG_SUBMIT?>'
 				}
-			}, {
-				label: "<?php echo $MSG_SOVLED?>",
-				data: d2,
-				bars: {
-					show: true
+			],
+			series: [
+			{
+				name: '<?php echo $MSG_SUBMIT?>',
+				type: 'bar',
+				data: all
 				}
-			} ], {
-				grid: {
-					backgroundColor: {
-						colors: [ "#fff", "#eee" ]
-					}
-				},
-				xaxis: {
-					mode: "time" //,
-						//max:(new Date()).getTime(),
-						//min:(new Date()).getTime()-100*24*3600*1000
-				}
-			} );
-		} );
-		//alert((new Date()).getTime());
-	</script>
+			,
+			{
+				name: '<?php echo $MSG_AC?>',
+				type: 'bar',
+				data: <?php echo json_encode(array_column($chart_data_ac,1))?> 
+			}]
+			};
+			sub_echarts.setOption(option);
+
+
+                } );
+                //alert((new Date()).getTime());
+        </script>
 </body>
 </html>
