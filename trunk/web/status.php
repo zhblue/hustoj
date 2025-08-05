@@ -304,7 +304,9 @@ for ($i=0; $i<$rows_cnt; $i++) {
   if(isset($row['starred']) && $row['starred'] >0 ) {
 	  $view_status[$i][1]="⭐".$view_status[$i][1]."<span title='用同名账户给hustoj项目加星，可以点亮此星' >⭐</span>";	//people who starred us ,we star them
   }
-  $view_status[$i]['nick']="<span title='".$row['group_name']."@".myLocation($row['ip'])."'>".$row['nick']."</span>";
+
+ $view_status[$i]['nick']="<span title='".$row['group_name']."@".myLocation($row['ip'])."'>".(
+          mb_strlen($row['nick'])>10?mb_substr($row['nick'],0,7)."...":$row['nick'] )."</span>";
 
   if ($row['contest_id']>0) {
     if (isset($end_time) && time() < $end_time) {
