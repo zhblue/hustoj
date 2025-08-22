@@ -81,7 +81,7 @@ if (isset($_GET['cid'])) {
 
 		//$view_problemset[$cnt][3] = $row['source'];
 
-                if ($noip||$hide_others){
+                if (($noip||$hide_others)&&!(isset($_SESSION[$OJ_NAME.'m'.$cid])||isset($_SESSION[$OJ_NAME.'_administrator']))){
                         $view_problemset[$cnt][3] = "<span class=red>?</span>";
                         $view_problemset[$cnt][4] = "<span class=red>?</span>";
                 }else{
