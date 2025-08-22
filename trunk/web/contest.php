@@ -29,6 +29,7 @@ if (isset($_GET['cid'])) {
         if(!empty($pids)) $pids=implode(",",$pids);
 	$cnt = 0;
 	$noip = (time()<$end_time) && (stripos($view_title,$OJ_NOIP_KEYWORD)!==false ||contest_locked($cid,16)  );
+	$hide_others=contest_locked($cid,8);
 	if(isset($_SESSION[$OJ_NAME.'_'."administrator"])||
 		isset($_SESSION[$OJ_NAME.'_'."m$cid"])||
 		isset($_SESSION[$OJ_NAME.'_'."source_browser"])||
@@ -80,7 +81,7 @@ if (isset($_GET['cid'])) {
 
 		//$view_problemset[$cnt][3] = $row['source'];
 
-                if ($noip){
+                if ($noip||$hide_others){
                         $view_problemset[$cnt][3] = "<span class=red>?</span>";
                         $view_problemset[$cnt][4] = "<span class=red>?</span>";
                 }else{
