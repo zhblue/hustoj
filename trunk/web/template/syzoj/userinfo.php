@@ -104,10 +104,11 @@
 					<th><?php echo $MSG_AC ?></th>
 				</tr>
 			<?php
-		    $sql="select c.contest_id,c.title,c.start_time,rt.tried,rt.ac  from contest c 
-			    right join (select contest_id,count(distinct(problem_id)) as tried, count(distinct(if(result=4,problem_id,null))) as ac from solution 
-				where user_id=? and contest_id>0  
-					group by contest_id order by contest_id) rt on c.contest_id=rt.contest_id;";
+  $sql="select c.contest_id,c.title,c.start_time,rt.tried,rt.ac  from contest c
+                            inner join (select contest_id,count(distinct(problem_id)) as tried, count(distinct(if(result=4,problem_id,null))) as ac from solution
+                                where user_id=? and contest_id>0
+ group by contest_id order by contest_id) rt on c.contest_id=rt.contest_id and  not (c.title like '%$OJ_NOIP_KEYWORD%' or  ((c.contest_type & 20) >0 and end_time>now() )) ;";
+
 				$contests=pdo_query($sql,$user);
 					$total=$total_ac=$cnt=0;
 					foreach($contests as $row){
