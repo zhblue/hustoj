@@ -12,7 +12,7 @@ if(isset($OJ_LANG)){
 <title>User List</title>
 <hr>
 <center><h3><?php echo $MSG_USER."-".$MSG_LIST?></h3></center>
-<div class=''>
+<div class='' style="overflow:auto">
 <?php
 $sql = "select COUNT('user_id') AS ids FROM `users`";
 $result = pdo_query($sql);
