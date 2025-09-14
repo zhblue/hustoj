@@ -68,7 +68,7 @@ static  $OJ_AUTO_SHOW_OFF = false;//打开题目默认开启编辑器
 static  $OJ_RANK_LOCK_PERCENT=0; //比赛封榜时间比例，例如设0.2，则5小时的比赛，最后一小时为封榜时间。
 static  $OJ_RANK_LOCK_DELAY=3600; //赛后封榜持续时间，单位秒。根据实际情况调整，在闭幕式颁奖结束后设为0即可立即解封。
 static  $OJ_SHOW_METAL=true; //榜单上是否按比例显示奖牌
-
+static  $OJ_AINO=false; //开启AI防作弊提示次
 static  $OJ_SHOW_DIFF=true; //是否显示WA的对比说明
 static  $OJ_HIDE_RIGHT_ANSWER=true; // 隐藏选择填空的正确答案
 static  $OJ_DL_1ST_WA_ONLY=false; //是否只允许下载第一个WA的测试数据(前提需开启$OJ_DOWNLOAD)
