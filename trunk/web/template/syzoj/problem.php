@@ -115,6 +115,13 @@ if(file_exists($solution_file)){
         </div>
       <?php }?>
 			
+
+<?php
+  if (
+    !isset($_SESSION[$OJ_NAME . '_' . 'administrator']) &&
+    !isset($_SESSION[$OJ_NAME . '_' . 'contest_creator']) && $OJ_AINO
+  ) {
+?>
 <textarea id="hiddenCopy" style="position:absolute; left:-9999px; top:-9999px;"></textarea>
 
 <script>
@@ -134,7 +141,7 @@ document.addEventListener('keydown', function(e) {
     hidden.select();
     document.execCommand('copy');
 
-    // 恢复原来选区
+    // Restore original selection
     selection.removeAllRanges();
     selection.addRange(selection.getRangeAt(0));
 
@@ -142,6 +149,9 @@ document.addEventListener('keydown', function(e) {
   }
 });
 </script>
+<?php
+  }
+?>
     </div>
   </div>
 
