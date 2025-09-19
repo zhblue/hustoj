@@ -61,7 +61,7 @@ do
 done
 bzip2 -d hustoj.docker.tar.bz2
 #docker load < hustoj.docker.tar
-if docker import hustoj.docker.tar hustoj 
+if docker load -i hustoj.docker.tar 
 then
     	sed -i "s/OJ_USE_DOCKER=0/OJ_USE_DOCKER=1/g" /home/judge/etc/judge.conf
 	sed -i "s/OJ_PYTHON_FREE=0/OJ_PYTHON_FREE=1/g" /home/judge/etc/judge.conf
