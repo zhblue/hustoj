@@ -253,7 +253,7 @@ class BBCode
             // successfully found ending tag
 
             // encode everything contained between here and there
-            $output = $output . '<pre>' . self::encode(substr($input, $input_ptr, $search_offset - $input_ptr)) . '</pre>';
+            $output = $output . '<pre>' . htmlentities(substr($input, $input_ptr, $search_offset - $input_ptr)) . '</pre>';
             // advance ptr (again)
             $input_ptr = $search_offset + strlen($search_match);
             // update search position
