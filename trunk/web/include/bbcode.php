@@ -253,7 +253,12 @@ class BBCode
             // successfully found ending tag
 
             // encode everything contained between here and there
-            $output = $output . '<pre>' . htmlentities(substr($input, $input_ptr, $search_offset - $input_ptr)) . '</pre>';
+            if(isset($args['lang']))
+                $output = $output . '<pre class="brush:'.htmlentities($args['lang']).'">';
+            else
+                $output = $output . '<pre class="brush:c++">';
+            $output = $output . htmlentities(substr($input, $input_ptr, $search_offset - $input_ptr)) . '</pre>';
+
             // advance ptr (again)
             $input_ptr = $search_offset + strlen($search_match);
             // update search position
