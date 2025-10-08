@@ -1,6 +1,7 @@
 用Docker进行部署可以参考下面的内容
 ==
 
+[yemaster提供的Docker打包](https://github.com/yemaster/hustoj-docker)
 
 Dockerfile
 --
