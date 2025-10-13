@@ -128,7 +128,7 @@ chmod 700 src/web/include/db_info.inc.php
 chown -R www-data:www-data src/web/
 chown www-data:www-data src/web/upload
 chown www-data:judge data
-chmod 710 -R data
+chmod 750 -R data
 if grep "client_max_body_size" /etc/nginx/nginx.conf ; then
         echo "client_max_body_size already added" ;
 else
