@@ -31,13 +31,6 @@ include_once("kindeditor.php") ;
 <hr>
 <h1>Add New problem</h1>
 <?php require_once("../include/simple_html_dom.php");
-function getPartByMark($html,$mark1,$mark2){
-   $i=mb_strpos($html,$mark1);
-   $j=mb_strpos($html,$mark2,$i+mb_strlen($mark1)+1);
-  $descriptionHTML=mb_substr($html,$i+ mb_strlen($mark1),$j-($i+ mb_strlen($mark1)));
-
-   return $descriptionHTML;
-}
 
   $url=$_POST ['url'];
 
@@ -116,4 +109,5 @@ if (count($result)==0){
 <p>
 
 </body></html>
+
 
