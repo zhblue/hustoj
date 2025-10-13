@@ -19,15 +19,7 @@ if (!(isset($_SESSION[$OJ_NAME.'_'.'administrator']))){
 include_once("kindeditor.php") ;
 ?>
 <?php require_once("../include/simple_html_dom.php");
-function getPartByMark($html,$mark1,$mark2){
-   $i=mb_strpos($html,$mark1);
-   $start=$i+mb_strlen($mark1)+1;
-   if($i>=0&&$start<=mb_strlen($html)) $j=mb_strpos($html,$mark2,$start);
-   else return $html;
-   $descriptionHTML=mb_substr($html,$i+ mb_strlen($mark1),$j-($i+ mb_strlen($mark1)));
-   echo "[$star-$j]";
-   return $descriptionHTML;
-}
+
   $url=$_POST ['url'];
   $remote_id=basename($url);  
   if (!$url) $url=$_GET['url'];
@@ -88,3 +80,4 @@ Source:<textarea name=source rows=1 cols=3><?php echo $url ?></textarea>
 <p>
 
 </body></html>
+
