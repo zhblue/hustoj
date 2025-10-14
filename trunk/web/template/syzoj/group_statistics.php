@@ -7,7 +7,7 @@
 	<select name=group_name onchange="$('form').submit()">
 		<?php
                         if(empty($group_name)) echo "<option value='' />";
-                        $groups=pdo_query("select distinct group_name from users");
+                        $groups=pdo_query("select distinct group_name from users where  defunct='N'  and expiry_date >= curdate() ");
                         $groups=array_column($groups,'group_name');
                         foreach($groups as $group){
                                 echo "<option value='".htmlentities($group)."' ". ($group==$group_name?"selected":"") ."   >$group</option>";
