@@ -73,3 +73,4 @@ RUN echo "s<<'\\\\n'; ">>`find /usr/include/c++/ -name iostream`
 RUN echo "return s; ">>`find /usr/include/c++/ -name iostream`
 RUN echo "}">>`find /usr/include/c++/ -name iostream`
 RUN echo "#endif">>`find /usr/include/c++/ -name iostream`
+RUN g++ -x c++-header `find /usr/include/ -name "stdc++.h"`
