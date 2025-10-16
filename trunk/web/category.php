@@ -30,6 +30,7 @@
 
 	}
 	$category=array_unique($category);
+    sort($category);
 	if (!$result){
 		$view_category= "<h3>No Category Now!</h3>";
 	}else{
