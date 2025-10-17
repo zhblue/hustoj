@@ -73,4 +73,5 @@ RUN echo "s<<'\\\\n'; ">>`find /usr/include/c++/ -name iostream`
 RUN echo "return s; ">>`find /usr/include/c++/ -name iostream`
 RUN echo "}">>`find /usr/include/c++/ -name iostream`
 RUN echo "#endif">>`find /usr/include/c++/ -name iostream`
+#generate gch file for faster compiling speed
 RUN g++ -x c++-header -O2 -std=c++14 `find /usr/include/ -name "stdc++.h"`
