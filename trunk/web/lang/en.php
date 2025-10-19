@@ -471,6 +471,7 @@
        $MSG_FORBIDDEN="forbidden ";
        $MSG_OTHERS="Other's ";
        $MSG_SUBNET="Subnet ";
+       $MSG_ONLY_LAST_SUBMISSION="Only the last submission will be scored";
        $MSG_SHOW_DIFF="Show Differ Output";
        $MSG_UPSOLVING="Upsolving";
   //SaaS friendly
