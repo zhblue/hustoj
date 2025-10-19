@@ -475,6 +475,7 @@
    $MSG_FORBIDDEN="禁止";
   $MSG_OTHERS="其他人";
   $MSG_SUBNET="子網";
+  $MSG_ONLY_LAST_SUBMISSION="僅以最後一次提交記分";
   $MSG_SHOW_DIFF="顯示對比輸出";
   $MSG_UPSOLVING="補題";
   //SaaS friendly
