@@ -264,7 +264,21 @@
                             <a id="" class="item active" href="<?php echo $path_fix?>conteststatistics.php?cid=<?php echo $cid?>" ><i class="eye icon"></i><span class="desktop-only"><?php echo $MSG_STATISTICS?></span></a>
                     <?php }  ?>
             <?php }  ?>
+            <?php
+                if($OJ_MENU_DROPDOWN){
+            ?>
+            <div class="ui simple dropdown item">
+                        <i class="book icon"></i><span class='desktop-only'>学习资料</span><i class="dropdown icon"></i>
+                        <div class="menu">
+            <?  } ?>
             <?php echo $sql_news_menu_result_html; ?>
+            <?php
+            if($OJ_MENU_DROPDOWN){
+                ?>
+                        </div>
+            </div>
+            <?php } ?>
+
             <div class="right menu">
                 <?php if(isset($_SESSION[$OJ_NAME.'_'.'user_id'])) { ?>
                 <a href="<?php echo $path_fix?>/userinfo.php?user=<?php echo $_SESSION[$OJ_NAME.'_'.'user_id']?>"
