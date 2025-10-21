@@ -270,7 +270,7 @@
             <div class="ui simple dropdown item">
                         <i class="book icon"></i><span class='desktop-only'>学习资料</span><i class="dropdown icon"></i>
                         <div class="menu">
-            <?  } ?>
+            <?php  } ?>
             <?php echo $sql_news_menu_result_html; ?>
             <?php
             if($OJ_MENU_DROPDOWN){
