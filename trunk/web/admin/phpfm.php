@@ -470,7 +470,7 @@ function et($tag){
     $cn['NoSel'] = '未选择文件或目录';
     $cn['SelDir'] = '在左边的目录树中选择目标目录';
     $cn['TypeDir'] = '请输入目录名';
-    $cn['TypeArq'] = '请输入文件名';
+    $cn['TypeArq'] = '请输入文件名\\n    输入文件: *.in         输出文件:*.out\\n    指定freopen所用文件名 ↴          上传源码文件名 ↴\\n                  input.name output.name            solution.name \\n    判题机设定 judge.conf \\n详见 hustoj.com ';
     $cn['TypeCmd'] = '请输入命令';
     $cn['TypeArqComp'] = '请输入文件名.扩展名将确定其压缩格式.\\n如:file.zip, file.tar, file.bzip, file.gzip';
     $cn['RemSel'] = '删除选中项';
