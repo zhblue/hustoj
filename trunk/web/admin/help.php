@@ -69,6 +69,10 @@ $delay=pdo_query($sql);
       <td><a class='btn btn-block btn-sm' href="../status.php" target="_top"><b><?php echo $MSG_SEEOJ?></b></a></td>
       <td><p><?php echo $MSG_HELP_SEEOJ?></p></td>
     </tr>
+ <tr>
+      <td><a class='btn btn-block btn-sm' href="langmask.html" target="_top"><b>Langmask Calculator </b></a></td>
+      <td><p>计算语言掩码Langmask</p></td>
+    </tr>
 
   <?php if (isset($_SESSION[$OJ_NAME.'_'.'administrator'])){?>
     <tr>
