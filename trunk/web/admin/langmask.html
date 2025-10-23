@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="zh-hans">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>langmask</title>
+    <script src="https://v2.vuejs.org/js/vue.min.js"></script>
+    <style>
+      #app {
+        font-family: "Avenir", Helvetica, Arial, sans-serif;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        text-align: center;
+        color: #2c3e50;
+        margin-top: 60px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app">
+      <input :value="langmask" disabled />
+      <template v-for="item in CodeLang">
+        <div v-bind:key="item">
+          <input type="checkbox" :id="item" :value="item" v-model="value" />
+          <label :for="item">{{item}}</label>
+        </div>
+      </template>
+    </div>
+  </body>
+  <script>
+    const CodeLang = [
+      "C",
+      "C++",
+      "Pascal",
+      "Java",
+      "Ruby",
+      "Bash",
+      "Python",
+      "PHP",
+      "Perl",
+      "C#",
+      "Obj-C",
+      "FreeBasic",
+      "Scheme",
+      "Clang",
+      "Clang++",
+      "Lua",
+      "JavaScript",
+      "Go",
+      "SQL(sqlite3)",
+      "Fortran",
+      "Matlab(Octave)",
+      "Cobol",
+      "R",
+      "Scratch3",
+      "Cangjie"
+    ];
+    /**
+     *
+     * @param {number} mask
+     * @returns {string[]}
+     */
+    function codeLangMask2Value(mask) {
+      mask = parseInt(mask, 10);
+      // 不处理长度超过 mask 的部分
+      return mask
+        .toString(2)
+        .split("")
+        .reverse()
+        .map((value, index) => {
+          if (value === "1") {
+            return "";
+          }
+          return CodeLang[index] || "";
+        })
+        .filter(it => it !== "");
+    }
+
+    /**
+     *
+     * @param {string[]} value
+     * @returns {number}
+     */
+    function codeLangValue2Mask(value) {
+      let ret = 0;
+      const len = CodeLang.length;
+      const max = 2 ** len - 1;
+      for (const it of value) {
+        const index = CodeLang.findIndex(lang => lang === it);
+        if (index >= 0) {
+          ret = ret | (1 << index);
+        }
+      }
+      return max & (ret ^ max);
+    }
+
+    new Vue({
+      el: "#app",
+      data() {
+        return {
+          value: [],
+          CodeLang
+        };
+      },
+      computed: {
+        langmask: function() {
+          return codeLangValue2Mask(this.value);
+        }
+      }
+    });
+  </script>
+</html>
