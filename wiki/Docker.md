@@ -49,7 +49,7 @@ mkdir hustoj
 cd hustoj
 wget -O Dockerfile http://dl.hustoj.com/Dockerfile.worker
 docker build . -t worker
-docker run -d -p8080:80 --name hustojcontainer worker
+docker run -d -p 8080:80 --name hustojcontainer worker
 docker ps 
 ```
 
