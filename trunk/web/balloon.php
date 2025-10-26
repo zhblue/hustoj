@@ -18,7 +18,6 @@ if(isset($_SESSION[$OJ_NAME.'_'.'balloon'])){
         $school=pdo_query("select school from users where user_id=?",$_SESSION[$OJ_NAME."_user_id"])[0][0];
         $cid=intval($_GET['cid']);
         if($cid==0) $cid=1000;
-
                 if(isset($_GET['id'])){
                         $id=intval($_GET['id']);
                         pdo_query("update balloon set status=1 where balloon_id=?",$id);
@@ -26,7 +25,6 @@ if(isset($_SESSION[$OJ_NAME.'_'.'balloon'])){
                 if(isset($_POST['clean'])){
                         pdo_query("delete from balloon where cid=? and user_id like ?",$cid,"$school%");
                 }
-
                 $sql="select * from solution where result=4 and contest_id=? and user_id like ? and solution_id not in (select sid from balloon where cid=?) order by solution_id;";
                 $result=pdo_query($sql,$cid,"$school%",$cid);
                 foreach($result as $row){
@@ -34,10 +32,8 @@ if(isset($_SESSION[$OJ_NAME.'_'.'balloon'])){
                      $sid=$row['solution_id'];
                      $pid=$row['num'];
                      $sql="select balloon_id from balloon where user_id=? and cid=? and pid=?";
-                        //echo $sql;
                      if(count(pdo_query($sql,$user_id,$cid,$pid))==0){
                         $sql="insert into balloon(user_id,sid,cid,pid,status) value(?,?,?,?,0)";
-//                      echo $sql."<br>".$user_id." ".$sid." ".$cid." ".$pid;
                         pdo_query($sql,$user_id,$sid,$cid,$pid);
                      }
                 }
@@ -80,4 +76,3 @@ if(isset($_SESSION[$OJ_NAME.'_'.'balloon'])){
  }
 /////////////////////////Template
 /////////////////////////Common foot
-?>
