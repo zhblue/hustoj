@@ -53,6 +53,8 @@ cd /home/judge/src/web/
 wget dl.hustoj.com/hello.tar.gz
 tar xzf hello.tar.gz
 chown www-data -R hello
+cd /home/judge/src/install
+bash set-nofile.sh
 clear
 reset
 
