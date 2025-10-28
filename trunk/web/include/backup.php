@@ -11,7 +11,7 @@ class DatabaseTool
         'port'     => 3306,
         'user'     => 'root',
         'password' => '',
-        'database' => 'lk2',
+        'database' => 'jol',
         'charset'  => 'utf8mb4',  // ✅ 改为 utf8mb4
         'target'   => 'sql.sql'
     ];
