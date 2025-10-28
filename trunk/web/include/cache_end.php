@@ -1,8 +1,8 @@
 <?php
  //cache foot start      
                 if(isset($cache_file)){
-                        if($OJ_MEMCACHE){
-                                if(extension_loaded('apcu')&&apcu_enabled())
+                        if(  $OJ_MEMCACHE  ||  $OJ_APCU_OK  ){
+                                if( $OJ_APCU_OK )
                                         apcu_store($cache_file,ob_get_contents(),$cache_time);
                                 else
                                         $mem->set($cache_file,ob_get_contents(),0,$cache_time);
