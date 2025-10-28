@@ -101,7 +101,7 @@ if ($zip->open($ztar, ZipArchive::CREATE | ZipArchive::OVERWRITE) === TRUE) {
 ?>
 <br><br>
 <form method="post" action="backup.php">
-    <input type="submit" name="do" value="Backup">
+    <input type="submit" name="do" value="<?php echo $MSG_BACKUP_DATABASE ?>">
 </form>
 
 <?php
