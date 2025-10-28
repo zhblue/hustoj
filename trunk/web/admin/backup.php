@@ -29,7 +29,7 @@ $config = array(
         'user' => $DB_USER,
         'password' => $DB_PASS,
         'database' => $DB_NAME,
-        'charset' => 'utf-8',
+        'charset' => 'utf8mb4',
         'target' => $target
     );
 $bak = new DatabaseTool($config);
