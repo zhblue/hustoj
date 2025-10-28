@@ -223,6 +223,7 @@ fi
 mkdir /var/log/hustoj/
 chown www-data -R /var/log/hustoj/
 cd /home/judge/src/install
+bash set-nofile.sh
 if test -f  /.dockerenv ;then
         echo "Already in docker, skip docker installation, install some compilers ... "
         apt-get intall -y flex fp-compiler openjdk-17-jdk mono-devel
