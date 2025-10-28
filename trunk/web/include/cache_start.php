@@ -1,7 +1,8 @@
 <?php
-     require_once(dirname(__FILE__)."/db_info.inc.php");
+        require_once(dirname(__FILE__)."/db_info.inc.php");
         //cache head start
         if(!isset($cache_time)) $cache_time=10;
+        $OJ_APCU_OK = ( extension_loaded('apcu') && apcu_enabled() );
         $sid=$OJ_NAME.$_SERVER["HTTP_HOST"];
         $OJ_CACHE_SHARE=(isset($OJ_CACHE_SHARE)&&$OJ_CACHE_SHARE)&&!isset($_SESSION[$OJ_NAME.'_'.'administrator']);
         if (!$OJ_CACHE_SHARE&&isset($_SESSION[$OJ_NAME.'_'.'user_id'])){
@@ -19,9 +20,9 @@
 
         $sid=md5($sid);
         $cache_file = "cache/cache_$sid.html";
-        if($OJ_MEMCACHE){
+        if($OJ_MEMCACHE||$OJ_APCU_OK ){
                     $success = false;
-                    if(extension_loaded('apcu')&&apcu_enabled()){
+                    if( $OJ_APCU_OK ){
                             $content = apcu_fetch($cache_file, $success);
                     }else{
                             $mem = new Memcache;
