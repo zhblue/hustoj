@@ -24,6 +24,7 @@ if [ "$MEM" -lt "2000" ] ; then
          fi
 else
         echo "Memory size : $MEM MB"
+        apt-get install -y memcached
 fi
 
 sed -i 's/tencentyun/aliyun/g' /etc/apt/sources.list
@@ -58,7 +59,7 @@ apt-get install -y libmysql++-dev
 apt-get install -y libmariadb-dev-compat libmariadb-dev
 PHP_VER=`apt-cache search php-fpm|grep -e '[[:digit:]]\.[[:digit:]]' -o`
 if [ "$PHP_VER" = "" ] ; then PHP_VER="8.1"; fi
-for pkg in bzip2 flex fail2ban net-tools make g++ php$PHP_VER-fpm memcached nginx php$PHP_VER-mysql php$PHP_VER-common php$PHP_VER-gd php$PHP_VER-zip php$PHP_VER-mbstring php$PHP_VER-xml php$PHP_VER-curl php$PHP_VER-intl php$PHP_VER-xmlrpc php$PHP_VER-soap php-memcache php-memcached php-yaml php-apcu tzdata
+for pkg in bzip2 flex fail2ban net-tools make g++ php$PHP_VER-fpm nginx php$PHP_VER-mysql php$PHP_VER-common php$PHP_VER-gd php$PHP_VER-zip php$PHP_VER-mbstring php$PHP_VER-xml php$PHP_VER-curl php$PHP_VER-intl php$PHP_VER-xmlrpc php$PHP_VER-soap php-memcache php-memcached php-yaml php-apcu tzdata
 do
         while ! apt-get install -y "$pkg"
         do
