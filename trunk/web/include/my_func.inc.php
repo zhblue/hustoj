@@ -224,21 +224,20 @@ function in_subnet_of_contest($ip,$contest_id){
 
 }
 function getMappedSpecial($user_id) {
-        $map=[
-            '0701' => '人智',
-            '0708' => '网工',
-            '5702' => '电科',
-            '5701' => '软工',
-            '0207' => '数技'
-        ];
-    // 遍历 map 数组
-    foreach ($map as $key => $value) {
-        // 检查 user_id 是否包含当前键
-        if (strpos($user_id, $key) !== false) {
-            return substr($user_id,0,2).$value; // 返回对应的值
-        }
+    $map = [
+        '0701' => '人智',
+        '0708' => '网工',
+        '5702' => '电科',
+        '5701' => '软工',
+        '0207' => '数技'
+    ];
+    // 取第3到第6位的四个字符（索引从0开始）
+    $keyPart = substr($user_id, 2, 4);
+    // 判断是否在映射表中
+    if (isset($map[$keyPart])) {
+        return substr($user_id, 0, 2) . $map[$keyPart];
     }
-    // 如果没有匹配的键，返回空字符串
+    // 没匹配则返回空字符串
     return '';
 }
 function aaiw($html){
@@ -662,4 +661,5 @@ function exportToExcel($filename='file', $tileArray=[], $dataArray=[],$cut=true)
         flush();
         ob_end_clean();
 }
+
 
