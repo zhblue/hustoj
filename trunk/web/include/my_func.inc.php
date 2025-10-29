@@ -299,16 +299,39 @@ function has_bad_words($words){
         return false;
 }
 function starred($user_id){
-   $stars=pdo_query("select starred from users where user_id=?",$user_id);
-   if(!empty($stars)&& $stars[0][0]>0 ) return true;
-   $stars=json_decode(curl_get("https://api.github.com/users/$user_id/starred?per_page=100"));
-   foreach( $stars as $star){
-           if($star->full_name=="zhblue/hustoj"){
-                return true;
-           }
-   }
-   return false;
+    // 查询本地缓存
+    $rows = pdo_query("SELECT starred FROM users WHERE user_id=?", $user_id);
+    if (!empty($rows) && intval($rows[0][0]) > 0) {
+        return true;
+    }
+
+    // GitHub API 请求
+    $url = "https://api.github.com/users/$user_id/starred?per_page=100";
+    $ch = curl_init($url);
+    curl_setopt_array($ch, [
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_USERAGENT => "HUSTOJ-checker",   // 必须加 User-Agent
+        CURLOPT_TIMEOUT => 10,
+    ]);
+    $response = curl_exec($ch);
+    curl_close($ch);
+
+    if ($response === false) return false;
+
+    $stars = json_decode($response);
+    if (!is_array($stars)) return false;
+
+    foreach ($stars as $star) {
+        if (isset($star->full_name) && $star->full_name === "zhblue/hustoj") {
+            // 可选：更新数据库缓存
+            pdo_query("UPDATE users SET starred=1 WHERE user_id=?", $user_id);
+            return true;
+        }
+    }
+
+    return false;
 }
+
 function create_subdomain($user_id,$template="bs3",$friendly="0"){
         $user_id=strtolower($user_id);
         global $DB_NAME,$DB_USER,$DB_PASS,$DOMAIN;
@@ -639,3 +662,4 @@ function exportToExcel($filename='file', $tileArray=[], $dataArray=[],$cut=true)
         flush();
         ob_end_clean();
 }
+
