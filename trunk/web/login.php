@@ -103,7 +103,9 @@ if($login){
 		setcookie($OJ_NAME."_check",$C_res.(strlen($C_res)*strlen($C_res))%7,$C_time);
 	}
 	echo "<script language='javascript'>\n";
-	if ($OJ_NEED_LOGIN)
+	if (isset($_SESSION[$OJ_NAME."_administrator"]))
+		echo "window.location.href='admin';\n";
+	else if ($OJ_NEED_LOGIN)
 		echo "window.location.href='index.php';\n";
 	else
 		echo "setTimeout('history.go(-2)',500);\n";
