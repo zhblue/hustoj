@@ -215,7 +215,13 @@ if(isset($tempfile)&&$tempfile!=""){
 			  exit(0);
 		}
 		$source=file_get_contents($tempfile);
-		$len = strlen($source);
+		$encoding = mb_detect_encoding($source, ['UTF-8', 'GBK', 'GB2312', 'BIG5', 'CP936'], true);
+		if(empty($encoding)) $encoding="GBK";
+		if ($encoding != 'UTF-8' ) {
+			$source = mb_convert_encoding($source, 'UTF-8', $encoding);
+		}
+
+		$len = mb_strlen($source);
 		unlink($tempfile);
 	}else{
 		$source="Main.sb3";
