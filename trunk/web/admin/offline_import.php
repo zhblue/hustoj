@@ -242,7 +242,12 @@ else {
 					if( $OJ_OFFLINE_ZIP_CCF_DIRNAME && $pdname!=$student && $pdname!=$problem){
 						$file_content.="\nThe dirname of this file is NOT qualified. Will be rated as 0 point!";
 					}
-					$len=strlen($file_content);
+					$encoding = mb_detect_encoding($file_content, ['UTF-8', 'GBK', 'GB2312', 'BIG5', 'CP936'], true);
+					if(empty($encoding)) $encoding="GBK";
+					if ($encoding != 'UTF-8' ) {
+						$file_content = mb_convert_encoding($file_content, 'UTF-8', $encoding);
+					}
+					$len = mb_strlen($file_content);
 					$sql = "INSERT INTO solution(problem_id,user_id,contest_id,num,nick,in_date,language,ip,code_length,result)
 							VALUES(?,?,?,?,?,NOW(),?,'127.0.0.1',?,14)";
 					$insert_id = pdo_query($sql, $pid,$student,$cid,$num,$student, 1 , $len);
@@ -251,7 +256,7 @@ else {
 					pdo_query($sql ,$insert_id, $file_content);
 					$sql = "INSERT INTO `source_code_user`(`solution_id`,`source`) VALUES(?,?)";
 					$ret=pdo_query($sql, $insert_id, $file_content);
-					if($ret<0){
+					if($ret<0){  //fail safe 大概率没用了，以后可能会删除
 						echo "<h3> $student - $problem</h3> - 非法字符，提交失败<br>  ";
 						echo " - 尝试转码 <br>  ";
 						$file_content=mb_convert_encoding($file_content, "utf8", "gbk");
@@ -264,9 +269,7 @@ else {
 							echo " - 转码失败,提交无效 <br>  ";
 						}else{
 							echo " - 转码成功 <br>  ";
-						
 						}
-						
 					}
 					pdo_query("UPDATE solution SET result=1 WHERE solution_id=?", $insert_id);
 					pdo_query("UPDATE problem SET submit=submit+1 WHERE problem_id=?", $pid);
