@@ -14,14 +14,25 @@ if ( isset( $OJ_ON_SITE_CONTEST_ID ) ) {
 	exit();
 }
 ///////////////////////////MAIN	
-//NOIP赛制比赛时，暂时屏蔽本月之星
- $now =  date('Y-m-d H:i', time());
-if(isset($OJ_NOIP_KEYWORD)&&$OJ_NOIP_KEYWORD){	                    
-     $sql="select count(contest_id) from contest where start_time<'$now' and end_time>'$now' and ( title like '%$OJ_NOIP_KEYWORD%' or (contest_type & 20)>0 )  ";
-	 $row=pdo_query($sql);
-	 if(!empty($row)) $NOIP_flag=$row[0];
-	 else $NOIP_flag=false;
+//NOIP赛制比赛时，本月之星，统计图不计入相关比赛提交
+$now =  date('Y-m-d H:i', time());
+$noip_contests="";
+$sql="select contest_id from contest where start_time<'$now' and end_time>'$now' and ( title like '%$OJ_NOIP_KEYWORD%' or (contest_type & 20)>0 )  ";
+$rows=pdo_query($sql);
+$NOIP_flag=0;
+//  echo "->".$sql;
+if(!empty($rows)){
+     foreach( $rows as $row ){
+             $noip_contests.=$row['contest_id'].",";
+             $NOIP_flag++;
+     }
 }
+$not_in_noip_contests="";
+if(!empty($noip_contests)) {
+     $noip_contests=rtrim($noip_contests,",");
+     $not_in_noip_contests=" and contest_id not in ( $noip_contests )";
+}
+
 $view_news = "";
 $sql = "select * "
 . "FROM `news` "
