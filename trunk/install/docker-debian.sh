@@ -43,6 +43,7 @@ else
 	while ! wget -O hustoj.docker.tar.bz2  http://dl3.hustoj.com/docker/hustoj.docker.$OSRS.tar.bz2
 	do
 		echo "Download archive image file fail , try again..."
+		sleep 5s
 	done
 	bzip2 -d hustoj.docker.tar.bz2
 	#docker load < hustoj.docker.tar
