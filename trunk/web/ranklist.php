@@ -6,21 +6,16 @@
 	require_once("./include/my_func.inc.php");
         require_once('./include/setlang.php');
         require_once('./include/memcache.php');
-        if(isset($OJ_NOIP_KEYWORD)&&$OJ_NOIP_KEYWORD){
-		$now =  date('Y-m-d H:i', time());
-        	$sql="select count(contest_id) from contest where start_time<'$now' and end_time>'$now' and title like '%$OJ_NOIP_KEYWORD%'";
-		$row=pdo_query($sql);
-		$cols=$row[0];
-		//echo $sql;
-		//echo $cols[0];
-		if($cols[0]>0) {
-			
-		      $view_errors =  "<h2> $MSG_NOIP_WARNING </h2>";
-		      require("template/".$OJ_TEMPLATE."/error.php");
-		      exit(0);
+        $now =  date('Y-m-d H:i', time());
+        $sql="select count(contest_id) from contest where start_time<'$now' and end_time>'$now' and ( title like '%$OJ_NOIP_KEYWORD%' or (contest_type & 20)>0 )  ";
+        $rows=pdo_query($sql);
+        $row=$rows[0];
+        if($row[0]>0) {
+              $view_errors =  "<h2> $MSG_NOIP_WARNING </h2>";
+              require("template/".$OJ_TEMPLATE."/error.php");
+              exit(0);
+        }
 
-		}
- 	}
         $view_title= $MSG_RANKLIST;
 	if(!isset($OJ_RANK_HIDDEN)) $OJ_RANK_HIDDEN="'admin','zhblue'";
 
@@ -143,3 +138,4 @@ require("template/".$OJ_TEMPLATE."/ranklist.php");
 if(file_exists('./include/cache_end.php'))
         require_once('./include/cache_end.php');
 ?>
+
