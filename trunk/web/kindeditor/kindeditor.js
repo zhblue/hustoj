@@ -5,7 +5,7 @@
 * @author Roddy <luolonghao@gmail.com>
 * @website http://www.kindsoft.net/
 * @licence http://www.kindsoft.net/license.php
-* @version 4.1.7 (2013-06-08)
+* @version 4.1.7 (2025-05-29)
 *******************************************************************************/
 (function (window, undefined) {
 	if (window.KindEditor) {
