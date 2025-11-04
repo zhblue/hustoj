@@ -56,12 +56,20 @@ echo "Failed after $max_attempts attempts"
 echo "Network fail, retry... you might want to make sure https://hub.docker.com/ is available"
 echo "Docker image failed, try download from temporary site ... "
 while ! wget -O hustoj.docker.tar.bz2 http://dl3.hustoj.com/docker/hustoj.docker.$OSRS.tar.bz2; do
+    echo "Download failed, trying general version ..."
+	if wget -O hustoj.docker.tar.bz2 http://dl3.hustoj.com/docker/hustoj.docker.tar.bz2; then
+        break
+    fi
     echo "Download from dl3.hustoj.com failed, trying mirror dl.hustoj.com..."
     # 尝试从镜像站点下载，如果成功则退出循环
     if wget -O hustoj.docker.tar.bz2 http://dl.hustoj.com/docker/hustoj.docker.$OSRS.tar.bz2; then
         break
     fi
     echo "Both downloads failed, trying again..."
+	if wget -O hustoj.docker.tar.bz2 http://dl.hustoj.com/docker/hustoj.docker.tar.bz2; then
+        break
+    fi
+	sleep 5s
 done
 bzip2 -d hustoj.docker.tar.bz2
 #docker load < hustoj.docker.tar
