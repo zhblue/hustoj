@@ -3675,7 +3675,7 @@ int main(int argc, char **argv)
 	if (p_id == 0)
 	{
 		time_lmt = 5;
-		mem_lmt = 256;
+		mem_lmt = 512;
 		spj = 0;
 	}
 	else
