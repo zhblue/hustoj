@@ -168,21 +168,21 @@ pats[i]=/variably modified/;
 exps[i++]="<?php echo $MSG_VARIABLY_MODIFIED; ?>";
 
 function explain(){
-	//alert("asdf");
-	var errmsg=$("#errtxt").text();
-	var expmsg="";
-	for(var i=0;i<pats.length;i++){
-	var pat=pats[i];
-	var exp=exps[i];
-	var ret=pat.exec(errmsg);
-	if(ret){
-	expmsg+=ret+":"+exp+"<br>";
-	}
-	}
-	document.getElementById("errexp").innerHTML=expmsg;
-	//alert(expmsg);
-		
-		var resultVariable = errmsg;
+        //alert("asdf");
+        var errmsg=$("#errtxt").text();
+        var expmsg="";
+        for(var i=0;i<pats.length;i++){
+        var pat=pats[i];
+        var exp=exps[i];
+        var ret=pat.exec(errmsg);
+        if(ret){
+                expmsg+=ret+":"+exp+"<br>";
+        }
+        }
+        expmsg+="AI 答疑 ...<img src='image/loader.gif'>";
+        document.getElementById("errexp").innerHTML=expmsg;
+        //alert(expmsg);
+            var resultVariable = errmsg;
                 var errorLines = [];
                 var regex = /(\w+\.<?php echo $language_ext[$lang]?>):(\d+):\d+:/g;
                 var match;
@@ -194,8 +194,18 @@ function explain(){
                         console.log("line"+line);
                         $("div .number"+line).addClass("highlighted");
                 });
+                $("#errexp").load("qwen.php?sid=<?php echo $id?>", function(response, status, xhr) {
+                        if (status === "success") {
+                                console.log("加载成功！");
+                                console.log("返回的数据:", response);
 
+                                $("#errexp").html(marked.parse($("#errexp").text()));             // html() make > to &gt;   text() keep >
+                        } else if (status === "error") {
+                                console.error("加载失败:", xhr.status, xhr.statusText);
+                        }
+                });
 }
+
 </script> 
 <script src='<?php echo $OJ_CDN_URL?>highlight/scripts/shCore.js' type='text/javascript'></script>
 <script src='<?php echo $OJ_CDN_URL?>highlight/scripts/shBrushCpp.js' type='text/javascript'></script>
@@ -209,7 +219,7 @@ function explain(){
 <script src='<?php echo $OJ_CDN_URL?>highlight/scripts/shBrushPerl.js' type='text/javascript'></script>
 <script src='<?php echo $OJ_CDN_URL?>highlight/scripts/shBrushCSharp.js' type='text/javascript'></script>
 <script src='<?php echo $OJ_CDN_URL?>highlight/scripts/shBrushVb.js' type='text/javascript'></script>
-
+<script src="<?php echo $OJ_CDN_URL.$path_fix."template/bs3/"?>marked.min.js"></script>
 <script>
 $(document).ready(function(){
 	$("#source").load("showsource2.php?id=<?php echo $id?>",function(response,status,xhr){
