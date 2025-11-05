@@ -194,7 +194,7 @@ function explain(){
                         console.log("line"+line);
                         $("div .number"+line).addClass("highlighted");
                 });
-        <?php if ( !$isAC && !str_contains($QWEN_API_KEY,"Qwen API Key" )){ ?>
+        <?php if ( !str_contains($QWEN_API_KEY,"Qwen API Key" )){ ?>
                 expmsg+="AI 答疑 ...<img src='image/loader.gif'>";
 				$("#errexp").html(expmsg);
                 $("#errexp").load("qwen.php?sid=<?php echo $id?>", function(response, status, xhr) {
