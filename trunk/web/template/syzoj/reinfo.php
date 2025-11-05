@@ -91,18 +91,22 @@ td > code {
           expmsg += ret+" : "+exp+"<br><hr />";
         }
       }
-      expmsg+="AI 答疑 ...<img src='image/loader.gif'>";
-      document.getElementById("errexp").innerHTML=expmsg;
-        $("#errexp").load("qwen.php?sid=<?php echo $id?>", function(response, status, xhr) {
-                if (status === "success") {
-                        console.log("加载成功！");
-                        console.log("返回的数据:", response);
 
-                        $("#errexp").html(marked.parse($("#errexp").text()));             // html() make > to &gt;   text() keep >
-                } else if (status === "error") {
-                        console.error("加载失败:", xhr.status, xhr.statusText);
-                }
-        });
+      document.getElementById("errexp").innerHTML=expmsg;
+      <?php if ( !$isAC && !str_contains($QWEN_API_KEY,"Qwen API Key" )){ ?>
+                expmsg+="AI 答疑 ...<img src='image/loader.gif'>";
+                $("#errexp").load("qwen.php?sid=<?php echo $id?>", function(response, status, xhr) {
+                        if (status === "success") {
+                                console.log("加载成功！");
+                                console.log("返回的数据:", response);
+
+                                $("#errexp").html(marked.parse($("#errexp").text()));             // html() make > to &gt;   text() keep >
+                        } else if (status === "error") {
+                                console.error("加载失败:", xhr.status, xhr.statusText);
+                        }
+                });
+       <?php } ?>
+
 
     }
     explain();
