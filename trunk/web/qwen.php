@@ -41,6 +41,11 @@ $headers = [
     'Authorization: Bearer '.$apiKey,
     'Content-Type: application/json'
 ];
+if(isset($_SESSION[$OJ_NAME."_source_browser"])){
+        $code_suggestion="可以给出完整代码。";        //教师版提示词
+}else{
+        $code_suggestion="不要直接给出完整代码,只给出问题原因,让我自己学习修改。";    //学生版提示词
+}
 // 设置请求体
 $data = [
     // 此处以qwen-plus为例，可按需更换模型名称。模型列表：https://help.aliyun.com/zh/model-studio/getting-started/models
@@ -48,7 +53,7 @@ $data = [
     "messages" => [
         [
             "role" => "system",
-            "content" => "你是一个编程高手，能帮我用简单清晰的中文，解释我看不懂的报错信息。如果对比中用户的输出为空，可能是没有考虑到多组输入的情况，应该使用循环处理。请尽量言简意赅，节省token消耗。"
+            "content" => "你是一个编程高手，能帮我用简单清晰的中文，解释我看不懂的报错信息。如果对比中用户的输出为空，可能是没有考虑到多组输入的情况，应该使用循环处理。$code_suggestion 请尽量言简意赅，节省token消耗。"
         ],
         [
             "role" => "user",
