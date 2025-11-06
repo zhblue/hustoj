@@ -163,133 +163,137 @@ else {
   $cid=0;
   $nextNum=0;
   if (get_extension( $_FILES ["offline"] ["name"])=="zip") {
-	    $resource = zip_open($tempfile);
-	    $save_path="";
-	    $num = 0;
-	    $pid=$title=$description=$input=$output=$sample_input=$sample_output=$hint=$source=$spj="";
-	    $type="normal";
-	    while ($dir_resource = zip_read($resource)) {
-	      if (zip_entry_open($resource,$dir_resource)) {
-		$file_name = zip_entry_name($dir_resource);
-		$file_path = substr($file_name,0,strrpos($file_name, "/"));
-		$file_size = zip_entry_filesize($dir_resource);
-		$file_content = zip_entry_read($dir_resource,$file_size);
-		if(startsWith($file_name,"data")){
-			if(dirname($file_name)=="data"){ 
-				$title=basename($file_name);
-				if($title!="data"){
-					$pid = addproblem($title,1,128, $description, $input, $output, $sample_input, $sample_output, $hint, $source, $spj, $OJ_DATA);
-					mkdir($OJ_DATA."/$pid/");
-					$problems[$title]=$pid;
-					$titles[$num]=$title;
-					$nums[$title]=$num++;
-				}
-			}else{
-				
-				if(endsWith($file_name,".in")||endsWith($file_name,".out")||endsWith($file_name,".name")){ 
-					file_put_contents($OJ_DATA."/$pid/".basename($file_name),$file_content );			
-				}else if(endsWith($file_name,".ans")){
-					file_put_contents($OJ_DATA."/$pid/".basename($file_name,".ans").".out",$file_content );			
-				}
-			
-			}	
-		}else if (startsWith($file_name,"source")){
-			$answer=basename($file_name);
-			if($answer==="source"){
-				$title= basename($_FILES ["offline"] ["name"],".zip");
-				$sql = "INSERT INTO `contest`(`title`,`start_time`,`end_time`,`private`,`langmask`,`description`,`password`,`user_id`)
-					  VALUES(?,?,?,?,?,?,?,?)";
-				  $user_id=$_SESSION[$OJ_NAME.'_'.'user_id'];
-				  $starttime=date("Y-m-d H:i");
-				  $endtime=date("Y-m-d H:i",time()+3600);
-				  $description = "Offline contest imported by ".$user_id;
-				  $cid = pdo_query($sql,$title,$starttime,$endtime,0,0,$description,"",$user_id) ;
-				  echo " $MSG_OFFLINE $MSG_CONTEST - $MSG_IMPORT $title:".$cid."<br>";
-				  $plist="";
-				    $i=0;				
-				    $sql_1 = "INSERT INTO `contest_problem`(`contest_id`,`problem_id`,`num`) VALUES (?,?,?)";
-				    for(; $i<count($problems); $i++){
-					 if($plist) $plist.=",";
-					 $plist.=intval($problems[$titles[$i]]);
-					 pdo_query($sql_1,$cid,$problems[$titles[$i]],$i);
-				    }
-				    $nextNum=$i;
-				    //echo $sql_1;
-				    $sql = "UPDATE `problem` SET defunct='N' WHERE `problem_id` IN ($plist)";
-				    pdo_query($sql) ;
-			
-			}else if(endsWith($answer,".cpp")){
-				$student=dirname($file_name);
-				$pdname=basename($student);
-				if(dirname($student)!="source") {
-					$student=dirname($student);
-				}
-				$student=basename($student);
-				$problem=basename($answer,".cpp");
-				$language=1; // cpp default
-				if( endsWith($problem,".cpp") && !$OJ_OFFLINE_ZIP_CCF_DIRNAME ) $problem=basename($problem,".cpp");
-				if(!isset($problems[$problem])){
-					$pid=hasProblem($problem);
-					if($pid>0){ 
-						$problems[$problem]=$pid;
-				    		$sql_1 = "INSERT INTO `contest_problem`(`contest_id`,`problem_id`,`num`) VALUES (?,?,?)";
-					 	pdo_query($sql_1,$cid,$pid,$nextNum);
-						$nextNum++;
-					}
-				}
-				if(isset($nums[$problem])&&isset($problems[$problem])){
-					$num=$nums[$problem];
-					$pid=$problems[$problem];
-					if( $OJ_OFFLINE_ZIP_CCF_DIRNAME && $pdname!=$student && $pdname!=$problem){
-						$file_content.="\nThe dirname of this file is NOT qualified. Will be rated as 0 point!";
-					}
-					$encoding = mb_detect_encoding($file_content, ['UTF-8', 'GBK', 'GB2312', 'BIG5', 'CP936'], true);
-					if(empty($encoding)) $encoding="GBK";
-					if ($encoding != 'UTF-8' ) {
-						$file_content = mb_convert_encoding($file_content, 'UTF-8', $encoding);
-					}
-					$len = mb_strlen($file_content);
-					$sql = "INSERT INTO solution(problem_id,user_id,contest_id,num,nick,in_date,language,ip,code_length,result)
-							VALUES(?,?,?,?,?,NOW(),?,'127.0.0.1',?,14)";
-					$insert_id = pdo_query($sql, $pid,$student,$cid,$num,$student, 1 , $len);
-					//  echo "submiting$language.....$insert_id";
-					$sql = "INSERT INTO `source_code`(`solution_id`,`source`) VALUES(?,?)";
-					pdo_query($sql ,$insert_id, $file_content);
-					$sql = "INSERT INTO `source_code_user`(`solution_id`,`source`) VALUES(?,?)";
-					$ret=pdo_query($sql, $insert_id, $file_content);
-					if($ret<0){  //fail safe 大概率没用了，以后可能会删除
-						echo "<h3> $student - $problem</h3> - 非法字符，提交失败<br>  ";
-						echo " - 尝试转码 <br>  ";
-						$file_content=mb_convert_encoding($file_content, "utf8", "gbk");
-						$sql = "INSERT INTO `source_code`(`solution_id`,`source`) VALUES(?,?)";
-						pdo_query($sql ,$insert_id, $file_content);
-						$sql = "INSERT INTO `source_code_user`(`solution_id`,`source`) VALUES(?,?)";
-						$ret=pdo_query($sql, $insert_id, $file_content);
-						if($ret<0){
-							pdo_query("delete from solution where solution_id=?",$insert_id);
-							echo " - 转码失败,提交无效 <br>  ";
-						}else{
-							echo " - 转码成功 <br>  ";
-						}
-					}
-					pdo_query("UPDATE solution SET result=1 WHERE solution_id=?", $insert_id);
-					pdo_query("UPDATE problem SET submit=submit+1 WHERE problem_id=?", $pid);
-				}
-			}
-		
-		}
+    // 使用 ZipArchive 替代旧的 zip 函数
+    $zip = new ZipArchive();
+    if ($zip->open($tempfile) === TRUE) {
+      $save_path="";
+      $num = 0;
+      $pid=$title=$description=$input=$output=$sample_input=$sample_output=$hint=$source=$spj="";
+      $type="normal";
+      
+      // 遍历 ZIP 文件中的所有条目
+      for ($i = 0; $i < $zip->numFiles; $i++) {
+        $file_name = $zip->getNameIndex($i);
+        $file_path = dirname($file_name);
+        $file_info = $zip->statIndex($i);
+        $file_size = $file_info['size'];
+        
+        // 获取文件内容
+        $file_content = $zip->getFromIndex($i);
+        
+        if(startsWith($file_name,"data")){
+          if($file_path == "data"){ 
+            $title=basename($file_name);
+            if($title!="data"){
+              $pid = addproblem($title,1,128, $description, $input, $output, $sample_input, $sample_output, $hint, $source, $spj, $OJ_DATA);
+              mkdir($OJ_DATA."/$pid/");
+              $problems[$title]=$pid;
+              $titles[$num]=$title;
+              $nums[$title]=$num++;
+            }
+          }else{
+            if(endsWith($file_name,".in")||endsWith($file_name,".out")||endsWith($file_name,".name")){ 
+              file_put_contents($OJ_DATA."/$pid/".basename($file_name),$file_content );			
+            }else if(endsWith($file_name,".ans")){
+              file_put_contents($OJ_DATA."/$pid/".basename($file_name,".ans").".out",$file_content );			
+            }
+          }	
+        }else if (startsWith($file_name,"source")){
+          $answer=basename($file_name);
+          if($answer==="source"){
+            $title= basename($_FILES ["offline"] ["name"],".zip");
+            $sql = "INSERT INTO `contest`(`title`,`start_time`,`end_time`,`private`,`langmask`,`description`,`password`,`user_id`)
+                  VALUES(?,?,?,?,?,?,?,?)";
+            $user_id=$_SESSION[$OJ_NAME.'_'.'user_id'];
+            $starttime=date("Y-m-d H:i");
+            $endtime=date("Y-m-d H:i",time()+3600);
+            $description = "Offline contest imported by ".$user_id;
+            $cid = pdo_query($sql,$title,$starttime,$endtime,0,0,$description,"",$user_id) ;
+            echo " $MSG_OFFLINE $MSG_CONTEST - $MSG_IMPORT $title:".$cid."<br>";
+            $plist="";
+            $i_inner=0;				
+            $sql_1 = "INSERT INTO `contest_problem`(`contest_id`,`problem_id`,`num`) VALUES (?,?,?)";
+            for(; $i_inner<count($problems); $i_inner++){
+              if($plist) $plist.=",";
+              $plist.=intval($problems[$titles[$i_inner]]);
+              pdo_query($sql_1,$cid,$problems[$titles[$i_inner]],$i_inner);
+            }
+            $nextNum=$i_inner;
+            //echo $sql_1;
+            $sql = "UPDATE `problem` SET defunct='N' WHERE `problem_id` IN ($plist)";
+            pdo_query($sql) ;
+          }else if(endsWith($answer,".cpp")){
+            $student=dirname($file_name);
+            $pdname=basename($student);
+            if(dirname($student)!="source") {
+              $student=dirname($student);
+            }
+            $student=basename($student);
+            $problem=basename($answer,".cpp");
+            if( endsWith($problem,".cpp") && !$OJ_OFFLINE_ZIP_CCF_DIRNAME ) $problem=basename($problem,".cpp");
+            if(!isset($problems[$problem])){
+              $pid=hasProblem($problem);
+              if($pid>0){ 
+                $problems[$problem]=$pid;
+                $sql_1 = "INSERT INTO `contest_problem`(`contest_id`,`problem_id`,`num`) VALUES (?,?,?)";
+                pdo_query($sql_1,$cid,$pid,$nextNum);
+                $nextNum++;
+              }
+            }
+            if(isset($nums[$problem])&&isset($problems[$problem])){
+              $num=$nums[$problem];
+              $pid=$problems[$problem];
+              if( $OJ_OFFLINE_ZIP_CCF_DIRNAME && $pdname!=$student && $pdname!=$problem){
+                $file_content.="\nThe dirname of this file is NOT qualified. Will be rated as 0 point!";
+              }
+              $encoding = mb_detect_encoding($file_content, ['UTF-8', 'GBK', 'GB2312', 'BIG5', 'CP936'], true);
+              if(empty($encoding)) $encoding="GBK";
+              if ($encoding != 'UTF-8' ) {
+                $file_content = mb_convert_encoding($file_content, 'UTF-8', $encoding);
+              }
+              $len = mb_strlen($file_content);
+              $sql = "INSERT INTO solution(problem_id,user_id,contest_id,num,nick,in_date,language,ip,code_length,result)
+                  VALUES(?,?,?,?,?,NOW(),?,'127.0.0.1',?,14)";
+              $insert_id = pdo_query($sql, $pid,$student,$cid,$num,$student, 1 , $len);
+              //  echo "submiting$language.....$insert_id";
+              $sql = "INSERT INTO `source_code`(`solution_id`,`source`) VALUES(?,?)";
+              pdo_query($sql ,$insert_id, $file_content);
+              $sql = "INSERT INTO `source_code_user`(`solution_id`,`source`) VALUES(?,?)";
+              $ret=pdo_query($sql, $insert_id, $file_content);
+              if($ret<0){  //fail safe 大概率没用了，以后可能会删除
+                echo "<h3> $student - $problem</h3> - 非法字符，提交失败<br>  ";
+                echo " - 尝试转码 <br>  ";
+                $file_content=mb_convert_encoding($file_content, "utf8", "gbk");
+                $sql = "INSERT INTO `source_code`(`solution_id`,`source`) VALUES(?,?)";
+                pdo_query($sql ,$insert_id, $file_content);
+                $sql = "INSERT INTO `source_code_user`(`solution_id`,`source`) VALUES(?,?)";
+                $ret=pdo_query($sql, $insert_id, $file_content);
+                if($ret<0){
+                  pdo_query("delete from solution where solution_id=?",$insert_id);
+                  echo " - 转码失败,提交无效 <br>  ";
+                }else{
+                  echo " - 转码成功 <br>  ";
+                }
+              }
+              pdo_query("UPDATE solution SET result=1 WHERE solution_id=?", $insert_id);
+              pdo_query("UPDATE problem SET submit=submit+1 WHERE problem_id=?", $pid);
+            }
+          }
+        }
 
         if (isset($OJ_UDP) && $OJ_UDP) {
            trigger_judge();
         }
-
-		zip_entry_close($dir_resource);
-	      }
-	    }
-	    zip_close($resource);
+      }
+      
+      // 关闭 ZIP 文件
+      $zip->close();
+    } else {
+      echo "无法打开ZIP文件";
+    }
 	  
-	    unlink ( $_FILES ["offline"] ["tmp_name"] );
-	    system ("rmdir $tempdir");
+    unlink ( $_FILES ["offline"] ["tmp_name"] );
+    system ("rmdir $tempdir");
  
   }else{
     	echo " zip file Only <hr> \n";
