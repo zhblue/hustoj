@@ -44,7 +44,7 @@ $headers = [
 if(isset($_SESSION[$OJ_NAME."_source_browser"])){
         $code_suggestion="可以给出完整代码。";        //教师版提示词
 }else{
-        $code_suggestion="不要直接给出完整代码,只给出问题原因,让我自己学习修改。";    //学生版提示词
+        $code_suggestion="不要直接给出完整代码,只给出问题原因,让我自己学习修改。分析我可能薄弱的知识点，问我一个提示性的相关问题。";    //学生版提示词
 }
 // 设置请求体
 $data = [
