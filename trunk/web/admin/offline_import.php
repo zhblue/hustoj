@@ -170,7 +170,7 @@ else {
 	    $type="normal";
 	    while ($dir_resource = zip_read($resource)) {
 	      if (zip_entry_open($resource,$dir_resource)) {
-		$file_name = $path.zip_entry_name($dir_resource);
+		$file_name = zip_entry_name($dir_resource);
 		$file_path = substr($file_name,0,strrpos($file_name, "/"));
 		$file_size = zip_entry_filesize($dir_resource);
 		$file_content = zip_entry_read($dir_resource,$file_size);
@@ -226,6 +226,7 @@ else {
 				}
 				$student=basename($student);
 				$problem=basename($answer,".cpp");
+				$language=1; // cpp default
 				if( endsWith($problem,".cpp") && !$OJ_OFFLINE_ZIP_CCF_DIRNAME ) $problem=basename($problem,".cpp");
 				if(!isset($problems[$problem])){
 					$pid=hasProblem($problem);
