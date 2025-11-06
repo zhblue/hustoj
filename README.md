@@ -154,7 +154,7 @@ Star us, please!
 	
 日期  | 类型 |  更新内容 | 图
 ------- | :--:  | :--: | :-------
-11-05 | 更新 | 接入Qwen3-coder-480b-a35b-instruct API , 进一步解析编译错误和运行错误。 (此功能需要阿里千问的付费服务)
+11-05 | 更新 | 接入Qwen3-coder-480b-a35b-instruct API , 进一步解析编译错误和运行错误。 (此功能需要阿里千问的付费服务)|<img width="650" alt="image" src="https://github.com/user-attachments/assets/95ca3c13-b3aa-4c3b-9a14-371fc856a0d0" />
 10-26 | 更新 | 增加比赛只按最后一次提交记分可选项，之前的提交记0分，算做测试运行。
 10-24 | 更新 | LiveCD基础发行版更新到Ubuntu24.04，podman替代docker作为判题容器。
 06-08 | 更新 | 在用户信息页增加参赛信息统计，以帮助部分培训机构满足“消课”信息的快速确认。
