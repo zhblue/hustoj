@@ -4,7 +4,7 @@ require_once("include/db_info.inc.php");
 
 $sid=intval($_GET['sid']);
 $user_id=pdo_query("select user_id from solution where solution_id=?",$sid)[0][0];
-if(!(isset($_SESSION[$OJ_NAME."_source_browser"])|| $user_id!=$_SESSION[$OJ_NAME."_user_id"] )){
+if(!(isset($_SESSION[$OJ_NAME."_source_browser"]) || $user_id==$_SESSION[$OJ_NAME."_user_id"] )){
 	echo "非法参数";
 	exit();
 }
