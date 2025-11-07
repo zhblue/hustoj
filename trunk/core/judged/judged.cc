@@ -341,7 +341,7 @@ void run_client(int runid, int clientid) {
 				sprintf(client_path,"/usr/bin/judge_client");
 		else
 				sprintf(client_path,"/home/judge/src/core/judge_client/judge_client");
-		sprintf(data_path,"%s/data",oj_home);
+		sprintf(data_path,"%s/data2",oj_home);
 		char *follow=follow_link(data_path,real_data_path,sizeof(real_data_path)-1);
 
 		sprintf(data_v,"%s:/home/judge/data",follow);
