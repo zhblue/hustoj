@@ -46,10 +46,14 @@ if(isset($_SESSION[$OJ_NAME."_source_browser"])){
 }else{
         $code_suggestion="不要直接给出完整代码,只给出问题原因,让我自己学习修改。分析我可能薄弱的知识点，问我一个提示性的相关问题。";    //学生版提示词
 }
+
+$models=array("qwen-turbo","qwen3-coder-480b-a35b-instruct","qwen3-max","qwen3-coder-30b-a3b-instruct");
+$model = $models[array_rand($models)];    // 随机白嫖一个模型
+
 // 设置请求体
 $data = [
     // 此处以qwen-plus为例，可按需更换模型名称。模型列表：https://help.aliyun.com/zh/model-studio/getting-started/models
-    "model" => "qwen3-coder-480b-a35b-instruct",
+    "model" => $model,
     "messages" => [
         [
             "role" => "system",
