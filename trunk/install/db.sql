@@ -251,6 +251,8 @@ CREATE TABLE IF NOT EXISTS `share_code` (
   PRIMARY KEY (`share_id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=1000 DEFAULT CHARSET=utf8mb4;
 
+CREATE TABLE IF NOT EXISTS solution_ai_answer ( solution_id int not null default 0, answer mediumtext ,primary key (solution_id)) charset utf8mb4;
+
 delimiter //
 	
 drop trigger if exists firstAC//
