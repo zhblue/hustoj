@@ -155,10 +155,10 @@ Star us, please!
 日期  | 类型 |  更新内容 | 图
 ------- | :--:  | :--: | :-------
 11-05 | 更新 | 接入Qwen3-coder-480b-a35b-instruct API , 进一步解析编译错误和运行错误。 (此功能需要阿里千问的付费服务)|<img width="650" alt="image" src="https://github.com/user-attachments/assets/95ca3c13-b3aa-4c3b-9a14-371fc856a0d0" /> 在db_info.inc.php中配置 $QWEN_API_KEY后可以使用。
-10-26 | 更新 | 增加比赛只按最后一次提交记分可选项，之前的提交记0分，算做测试运行。
+10-26 | 更新 | 增加比赛只按最后一次提交记分可选项，之前的提交记0分，算做测试运行。|<img width="336" height="230" alt="image" src="https://github.com/user-attachments/assets/a04400ab-8053-400d-8642-79407a1535d0" />
 10-24 | 更新 | LiveCD基础发行版更新到Ubuntu24.04，podman替代docker作为判题容器。
-06-08 | 更新 | 在用户信息页增加参赛信息统计，以帮助部分培训机构满足“消课”信息的快速确认。
-05-24 | 更新 | 增加检测是否首次AC的触发器，让本月之星排名更合理。
+06-08 | 更新 | 在用户信息页增加参赛信息统计，以帮助部分培训机构满足“消课”信息的快速确认。|<img width="996" height="609" alt="image" src="https://github.com/user-attachments/assets/4561fede-393a-4314-a331-cbcccac9c26a" />
+05-24 | 更新 | 增加检测是否首次AC的触发器，让本月之星排名更合理。|<img width="348" height="137" alt="image" src="https://github.com/user-attachments/assets/59f53842-84f3-49dc-ac6c-559b04ff5bee" />
 05-17 | 更新 | 用Wasm版本的SQLite在浏览器中执行SQL语言的测试运行，分散服务器测试运行的压力。
 05-06 | 补丁 | 修复markdown中的选择题选项控件。
 05-05 | 更新 | 比赛禁止补题选项。|![79f8dff90b22d13e8a1fd5f09fc4e96e](https://github.com/user-attachments/assets/2e99ae26-86d0-4b29-8f11-f5109a77d5c5)
