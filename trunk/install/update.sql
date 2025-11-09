@@ -32,6 +32,8 @@ alter table contest add column subnet varchar(255) not null default '' after con
 alter table online modify refer varchar(4096) DEFAULT NULL;
 alter table solution add column first_time tinyint(1) default 0 after pass_rate ;
 alter table solution add index fst(first_time);
+CREATE TABLE IF NOT EXISTS solution_ai_answer ( solution_id int not null default 0, answer mediumtext ,primary key (solution_id)) charset utf8mb4;
+
 delimiter //
 
 drop trigger if exists firstAC//
