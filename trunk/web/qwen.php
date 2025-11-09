@@ -4,7 +4,7 @@ require_once("include/db_info.inc.php");
 
 $sid=intval($_GET['sid']);
 $user_id=pdo_query("select user_id from solution where solution_id=?",$sid)[0][0];
-if(!(isset($_SESSION[$OJ_NAME."_source_browser"]) || $user_id==$_SESSION[$OJ_NAME."_user_id"] )){
+if(!(isset($_SESSION[$OJ_NAME."_source_browser"])|| $user_id==$_SESSION[$OJ_NAME."_user_id"] )){
 	echo "非法参数";
 	exit();
 }
@@ -32,6 +32,14 @@ if(!empty($result)){
 	echo "非法参数";
 	exit();
 }
+$sql="select answer from solution_ai_answer where solution_id=? ";
+$answer=pdo_query($sql,$sid);
+if(!empty($answer)){
+	echo htmlentities($answer[0][0]);
+	echo "<!-- cached answer -->";
+	exit();
+}
+
 // 设置请求的URL
 $url = 'https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions';
 // 若没有配置环境变量，请用百炼API Key将下行替换为：$apiKey = "sk-xxx";
@@ -42,18 +50,16 @@ $headers = [
     'Content-Type: application/json'
 ];
 if(isset($_SESSION[$OJ_NAME."_source_browser"])){
-        $code_suggestion="可以给出完整代码。";        //教师版提示词
+	$code_suggestion="分析我可能薄弱的知识点，问我一个提示性的相关问题。";
 }else{
-        $code_suggestion="不要直接给出完整代码,只给出问题原因,让我自己学习修改。分析我可能薄弱的知识点，问我一个提示性的相关问题。";    //学生版提示词
+	$code_suggestion="不要直接给出完整代码,只给出问题原因,让我自己学习修改。分析我可能薄弱的知识点，问我一个提示性的相关问题。";
 }
-
 $models=array("qwen-turbo","qwen3-coder-480b-a35b-instruct","qwen3-max","qwen3-coder-30b-a3b-instruct");
-$model = $models[array_rand($models)];    // 随机白嫖一个模型
-
+$model = $models[array_rand($models)];
 // 设置请求体
 $data = [
     // 此处以qwen-plus为例，可按需更换模型名称。模型列表：https://help.aliyun.com/zh/model-studio/getting-started/models
-    "model" => $model,
+    "model" => "$model",
     "messages" => [
         [
             "role" => "system",
@@ -84,6 +90,10 @@ curl_close($ch);
 // 输出响应结果
 $data=json_decode($response);
 
-echo htmlentities($data->choices[0]->message->content);
+$answer=$data->choices[0]->message->content."<br> --- $model";
+
+echo htmlentities($answer);
+$sql="insert into solution_ai_answer (solution_id,answer) values(?,?)";
+pdo_query($sql,$sid,$answer);
 
 ?>
