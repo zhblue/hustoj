@@ -1,7 +1,11 @@
 <?php
+// 这个文件用于对接阿里千问，解析编译报错和运行错误信息。
+// 需要在db_info.inc.php中配置 $QWEN_API_KEY;  
+// 登录阿里云，打开 https://bailian.console.aliyun.com/?tab=model#/api-key  创建新的API KEY
+// 注意这个功能可能会导致阿里云付费账单，
+// 访问类似 https://bailian.console.aliyun.com/?tab=model#/model-market/detail/qwen3-coder-480b-a35b-instruct
+// 关注所用模型的剩余免费额度
 require_once("include/db_info.inc.php");
-
-
 $sid=intval($_GET['sid']);
 $user_id=pdo_query("select user_id from solution where solution_id=?",$sid)[0][0];
 if(!(isset($_SESSION[$OJ_NAME."_source_browser"])|| $user_id==$_SESSION[$OJ_NAME."_user_id"] )){
