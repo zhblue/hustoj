@@ -61,7 +61,7 @@ foreach($plista as $plist){
 }
 $bible=array_unique($bible);
 if(!empty($bible)){
-	$bible=pdo_query("select problem_id,title from problem where problem_id in (".implode(",",$bible).")");
+	$bible=pdo_query("select problem_id,title from problem where problem_id in (".implode(",",$bible).")  and defunct='N' ");
         // 提取 id 列作为键
 	$keys = array_column($bible, 'problem_id');
 	// 提取 name 列作为值
