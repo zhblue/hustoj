@@ -73,7 +73,7 @@ if(isset($_GET['list'])){
  $result = pdo_query($sql,$user_ida);
 
 //  echo $sql;
-  $ptitle=pdo_query("select problem_id,title from problem where problem_id in (".$pids.")");
+  $ptitle=pdo_query("select problem_id,title from problem where problem_id in (".$pids.")  and defunct='N' ");
   // 提取 id 列作为键
 	$keys = array_column($ptitle, 'problem_id');
 
