@@ -66,18 +66,20 @@ $models=array("glm-4.5","glm-4.5-air","glm-4.5-flash","glm-4.5-airx");
 $model = $models[array_rand($models)];
 // 设置请求体
 $data = [
-    // 此处以glm-4.5为例，可按需更换模型名称。模型列表：https://bigmodel.cn/console/modelcenter/square
+    // 此处以qwen-plus为例，可按需更换模型名称。模型列表：https://help.aliyun.com/zh/model-studio/getting-started/models
     "model" => "$model",
     "messages" => [
         [
-            "role" => "assistant",
-            "content" => "我是一个编程高手，能帮你用简单清晰的中文，解释你看不懂的报错信息。如果对比中用户的输出为空，可能是没有考虑到多组输入的情况，应该使用循环处理。$code_suggestion 请尽量言简意赅，节省token消耗。"
+            "role" => "system",
+            "content" => "你是一个编程高手，能帮你用简单清晰的中文，解释看不懂的报错信息。如果对比中用户的输出为空，可能是没有考虑到多组输入的情况，应该使用循环处理。$code_suggestion 请尽量言简意赅，节省token消耗。"
         ],
         [
             "role" => "user",
             "content" => "源代码是:".$source."\n报错信息是:".$ceinfo
         ]
-    ]
+    ],
+    "stream" => false,
+    "max_tokens" => 10240
 ];
 // 初始化cURL会话
 $ch = curl_init();
