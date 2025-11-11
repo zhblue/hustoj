@@ -325,7 +325,7 @@ else{
 
 </script>
 <?php }
-require_once("../oj-footer.php");
+
 ?>
 </body>
 </html>
