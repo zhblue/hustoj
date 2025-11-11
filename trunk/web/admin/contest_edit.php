@@ -1,13 +1,3 @@
-<html>
-<head>
-  <meta http-equiv="Pragma" content="no-cache">
-  <meta http-equiv="Cache-Control" content="no-cache">
-  <meta http-equiv="Content-Language" content="zh-cn">
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-  <title>Edit Contest</title>
-</head>
-<hr>
-
 <?php 
   require_once("../include/db_info.inc.php");
   require_once("../lang/$OJ_LANG.php");
@@ -21,6 +11,15 @@
   echo "<center><h3>"."Edit-".$MSG_CONTEST."</h3></center>";
   include_once("kindeditor.php") ;
 ?>
+<html>
+<head>
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Cache-Control" content="no-cache">
+  <meta http-equiv="Content-Language" content="zh-cn">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <title>Edit Contest</title>
+</head>
+<hr>
 
 <body leftmargin="30" >
 <?php
@@ -288,4 +287,5 @@ if(isset($_POST['startdate'])){
 </script>
 </body>
 </html>
+
 
