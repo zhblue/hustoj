@@ -83,6 +83,7 @@ curl_setopt($ch, CURLOPT_POST, true);
 curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+curl_setopt($ch, CURLOPT_TIMEOUT, 30);
 // 执行cURL会话
 $response = curl_exec($ch);
 // 检查是否有错误发生
