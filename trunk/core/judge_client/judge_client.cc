@@ -864,44 +864,47 @@ void make_diff_out_simple(FILE *f1, FILE *f2,char * prefix, int c1, int c2, cons
         while(!(feof(f1)&&feof(f2))){
                 row++;
                 fprintf(diff,"|");
-                if(row==1){  
-			fprintSafe(diff,prefix);
-			if(c1=='\n'){
-				 fprintf(diff,"↩");
+                if(row==1){
+                        fprintSafe(diff,prefix);
+                        if(c1==EOF){
+                                fprintf(diff,"⛔");   // standard output ending
+                        }else if(c1=='\n'){
+                                 fprintf(diff,"↩");
                         }else{
-                          	buf1[0]=c1;     // patch buf1 with c1
+                                buf1[0]=c1;     // patch buf1 with c1
                                 if(!feof(f1)&&fgets(buf1+1,BUFFER_SIZE-2,f1)){
                                         fprintSafe(diff,buf1);
                                 }else{
-				        fprintf(diff,"%c",c1);
-				}
+                                        fprintf(diff,"%c",c1);
+                                }
                         }
                 }else if(!feof(f1)&&fgets(buf1,BUFFER_SIZE-1,f1)){
-			fprintSafe(diff,buf1);
+                        fprintSafe(diff,buf1);
                 }else{
+                        if(c1==EOF) break;
                         fprintf(diff,"⛔");   // standard output ending
-		}
+                }
                 fprintf(diff,"|");
                 if(row==1){
-			fprintSafe(diff,prefix);
-			if(c2==EOF){
-                        	   fprintf(diff,"⛔");   //Binary Code
-			}else {
-				buf2[0]=c2;  // patch buf2 with c2
-				if(!feof(f2)&&fgets(buf2+1,BUFFER_SIZE-2,f2)){
-						fprintf(diff,"`");
-						fprintSafe(diff,buf2);
-						fprintf(diff,"`");
-				}else{
-                                        if(c2=='\n'){
-                                                fprintf(diff,"`↩`");
-                                        }else{
-                                                fprintf(diff,"`%c`",c2);
-                                        }
-				}
-			}
+					fprintSafe(diff,prefix);
+					if(c2==EOF){
+		                        	   fprintf(diff,"⛔");   //Binary Code
+					}else {
+						buf2[0]=c2;  // patch buf2 with c2
+						if(!feof(f2)&&fgets(buf2+1,BUFFER_SIZE-2,f2)){
+								fprintf(diff,"`");
+								fprintSafe(diff,buf2);
+								fprintf(diff,"`");
+						}else{
+		                                        if(c2=='\n'){
+		                                                fprintf(diff,"`↩`");
+		                                        }else{
+		                                                fprintf(diff,"`%c`",c2);
+		                                        }
+						}
+					}
                 }else if(!feof(f2)&&fgets(buf2,BUFFER_SIZE-1,f2)){
-				fprintSafe(diff,buf2);
+					fprintSafe(diff,buf2);
                 }
                 fprintf(diff,"\n");
                 if(row>=5||ftell(diff)>128) break;
