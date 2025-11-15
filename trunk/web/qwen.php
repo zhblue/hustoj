@@ -89,6 +89,7 @@ $response = curl_exec($ch);
 // 检查是否有错误发生
 if (curl_errno($ch)) {
     echo 'Curl error: ' . curl_error($ch);
+	exit();   // 超时等错误发生时，不将结果入库，下次还能重试。
 }
 // 关闭cURL资源
 curl_close($ch);
