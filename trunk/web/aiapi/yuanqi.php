@@ -8,7 +8,11 @@ $apiKey = "配置你的腾讯元器智能体Token";             //配置你的�
 
 
 $sid=intval($_GET['sid']);
-$user_id=pdo_query("select user_id from solution where solution_id=?",$sid)[0][0];
+$solution=pdo_query("select user_id,problem_id from solution where solution_id=?",$sid)[0];
+$user_id=$solution[0];
+$problem_id=$solution[1];
+$problem=pdo_query("select concat(description,'输入:',input,'输出:',output,'样例输入:',sample_input,'样例输出:',sample_output,'提示:',hint) from problem where problem_id=?",$problem_id)[0][0];
+
 if(!(isset($_SESSION[$OJ_NAME."_source_browser"])|| $user_id==$_SESSION[$OJ_NAME."_user_id"] )){
 	echo "非法参数";
 	//exit();
@@ -69,7 +73,7 @@ $data = [
 	    "content" => [
 		[
 		"type" => "text",
-		"text" => "你是一个编程高手，能帮我用简单清晰的中文，解释我看不懂的报错信息。如果对比中用户的输出为空，可能是没有考虑到多组输入的情况，应该使用循环处理。".$code_suggestion."\n源代码是:".$source."\n报错信息是:".$ceinfo
+		"text" => "你是一个编程高手，能帮我用简单清晰的中文，解释我看不懂的报错信息。如果对比中用户的输出为空，可能是没有考虑到多组输入的情况，应该使用循环处理。".$code_suggestion."\n题目是: $problem \n源代码是:".$source."\n报错信息是:".$ceinfo
 		]
 	    ]
         ]
