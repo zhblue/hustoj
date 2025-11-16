@@ -1,6 +1,14 @@
 <?php
-// 调用 huggingface [ https://huggingface.co/]免费 API 的例子 , 你可能需要将这个文件改名替换原来的qwen.php
-require_once("include/db_info.inc.php");
+// 这个文件用于对接huggingface [ https://huggingface.co/]，解析编译报错和运行错误信息。
+// 需要在 db_info.inc.php 文件中配置 $OJ_AI_API_URL
+// 登录https://huggingface.co/，打开 https://huggingface.co/settings/tokens 创建新的API KEY [create new token ]
+// 注意这个功能可能会导致付费账单，
+// 访问 https://huggingface.co/settings/billing
+// 关注所用模型的剩余免费额度
+require_once("../include/db_info.inc.php");
+
+$apiKey ="hf_api_key";  // 配置你在 https://huggingface.co/settings/tokens 生成的key
+
 $sid=intval($_GET['sid']);
 $user_id=pdo_query("select user_id from solution where solution_id=?",$sid)[0][0];
 if(!(isset($_SESSION[$OJ_NAME."_source_browser"])|| $user_id==$_SESSION[$OJ_NAME."_user_id"] )){
@@ -41,9 +49,6 @@ if(!empty($answer)){
 
 // 设置请求的URL
 $url = "https://router.huggingface.co/v1/chat/completions";
-// 若没有配置环境变量，请用百炼API Key将下行替换为：$apiKey = "sk-xxx";
-// $apiKey = $QWEN_API_KEY;
-$apiKey ="hf_api_key";  // 配置你在 https://huggingface.co/settings/tokens 生成的key
 
 // 设置请求头
 $headers = [
