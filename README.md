@@ -154,6 +154,7 @@ Star us, please!
 	
 日期  | 类型 |  更新内容 | 图
 ------- | :--:  | :--: | :-------
+11-16 | 更新 | 增加aiapi目录，放入千问、Bigmodel、腾讯元宝、腾讯混元、huggingface 等模型接口文件，db_info.inc.php中的$QWEN_API_KEY去掉，换成$OJ_AI_API_URL来指定加载加载AI答疑文件路径。
 11-05 | 更新 | 接入Qwen3-coder-480b-a35b-instruct API , 进一步解析编译错误和运行错误。 (此功能需要阿里千问的付费服务)|<img width="650" alt="image" src="https://github.com/user-attachments/assets/95ca3c13-b3aa-4c3b-9a14-371fc856a0d0" /> 在db_info.inc.php中配置 $QWEN_API_KEY后可以使用。
 10-26 | 更新 | 增加比赛只按最后一次提交记分可选项，之前的提交记0分，算做测试运行。|<img width="336" height="230" alt="image" src="https://github.com/user-attachments/assets/a04400ab-8053-400d-8642-79407a1535d0" />
 10-24 | 更新 | LiveCD基础发行版更新到Ubuntu24.04，podman替代docker作为判题容器。
