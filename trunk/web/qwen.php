@@ -7,7 +7,10 @@
 // 关注所用模型的剩余免费额度
 require_once("include/db_info.inc.php");
 $sid=intval($_GET['sid']);
-$user_id=pdo_query("select user_id from solution where solution_id=?",$sid)[0][0];
+$solution=pdo_query("select user_id,problem_id from solution where solution_id=?",$sid)[0];
+$user_id=$solution[0];
+$problem_id=$solution[1];
+
 if(!(isset($_SESSION[$OJ_NAME."_source_browser"])|| $user_id==$_SESSION[$OJ_NAME."_user_id"] )){
 	echo "非法参数";
 	exit();
@@ -43,7 +46,7 @@ if(!empty($answer)){
 	echo "<!-- cached answer -->";
 	exit();
 }
-
+$problem=pdo_query("select concat(description,'输入:',input,'输出:',output,'样例输入:',sample_input,'样例输出:',sample_output,'提示:',hint) from problem where problem_id=?",$problem_id)[0][0];
 // 设置请求的URL
 $url = 'https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions';
 // 若没有配置环境变量，请用百炼API Key将下行替换为：$apiKey = "sk-xxx";
@@ -71,7 +74,7 @@ $data = [
         ],
         [
             "role" => "user",
-            "content" => "源代码是:".$source."\n报错信息是:".$ceinfo
+            "content" => "题目是:".$problem."\n 源代码是:".$source."\n报错信息是:".$ceinfo
         ]
     ]
 ];
