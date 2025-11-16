@@ -1,6 +1,6 @@
 <?php
 // 这个文件用于对接huggingface [ https://huggingface.co/]，解析编译报错和运行错误信息。
-// 需要在 db_info.inc.php 文件中配置 $OJ_AI_API_URL
+// 需要在 db_info.inc.php 中配置 $OJ_AI_API_URL 指向本文件; 
 // 登录https://huggingface.co/，打开 https://huggingface.co/settings/tokens 创建新的API KEY [create new token ]
 // 注意这个功能可能会导致付费账单，
 // 访问 https://huggingface.co/settings/billing
