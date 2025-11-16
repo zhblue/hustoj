@@ -2,8 +2,10 @@
 // 这个文件用于对接在腾讯元器自行训练的Agent      
 //  登录元器账号，访问  https://yuanqi.tencent.com/my-creation/agent
 // 需要配置助手ID 和 访问Token
+require_once("../include/db_info.inc.php");
+$apiKey = "配置你的腾讯元器智能体Token";             //配置你的腾讯元器智能体Token
 
-require_once("include/db_info.inc.php");
+
 $sid=intval($_GET['sid']);
 $user_id=pdo_query("select user_id from solution where solution_id=?",$sid)[0][0];
 if(!(isset($_SESSION[$OJ_NAME."_source_browser"])|| $user_id==$_SESSION[$OJ_NAME."_user_id"] )){
@@ -44,7 +46,7 @@ if(!empty($answer)){
 
 // 设置请求的URL
 $url = 'https://yuanqi.tencent.com/openapi/v1/agent/chat/completions';
-$apiKey = "配置你的腾讯元器智能体Token";             //配置你的腾讯元器智能体Token
+
 // 设置请求头
 $headers = [
     'Authorization: Bearer '.$apiKey,
