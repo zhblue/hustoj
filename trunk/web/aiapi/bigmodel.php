@@ -1,6 +1,6 @@
 <?php
 // 这个文件用于对接智普bigmodel.cn，解析编译报错和运行错误信息。
-// 需要在 db_info.inc.php 文件中配置 $OJ_AI_API_URL
+// 需要在db_info.inc.php中配置 $OJ_AI_API_URL指向本文件; 
 // 注册邀请 智谱 GLM Coding 超值订阅，邀你一起薅羊毛！Claude Code、Cline 等 10+ 大编程工具无缝支持，“码力”全开，越拼越爽！立即开拼，享限时惊喜价！
 //
 // 链接：https://www.bigmodel.cn/claude-code?ic=YVNXOQOZX5
