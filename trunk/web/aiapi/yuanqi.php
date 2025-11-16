@@ -1,5 +1,6 @@
 <?php
 // 这个文件用于对接在腾讯元器自行训练的Agent      
+// 需要在db_info.inc.php中配置 $OJ_AI_API_URL指向本文件;  
 //  登录元器账号，访问  https://yuanqi.tencent.com/my-creation/agent
 // 需要配置助手ID 和 访问Token
 require_once("../include/db_info.inc.php");
