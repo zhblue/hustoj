@@ -5,7 +5,7 @@
 // 注意这个功能可能会导致阿里云付费账单，
 // 访问类似 https://bailian.console.aliyun.com/?tab=model#/model-market/detail/qwen3-coder-480b-a35b-instruct
 // 关注所用模型的剩余免费额度
-require_once("include/db_info.inc.php");
+require_once("../include/db_info.inc.php");
 $sid=intval($_GET['sid']);
 $solution=pdo_query("select user_id,problem_id from solution where solution_id=?",$sid)[0];
 $user_id=$solution[0];
