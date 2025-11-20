@@ -120,7 +120,7 @@ td > code {
                   headerIds: false
                 });
                 $("#errtxt").each(function(){
-                        $(this).html(marked.parse($(this).html()));
+                        $(this).html(marked.parse($(this).text()));
                 });
                 // adding note for ```input1  ```output1 in description
                 for(let i=1;i<10;i++){
