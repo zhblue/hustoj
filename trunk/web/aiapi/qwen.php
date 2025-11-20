@@ -63,7 +63,7 @@ $headers = [
 if(isset($_SESSION[$OJ_NAME."_source_browser"])){
 	$code_suggestion="分析我可能薄弱的知识点，问我一个提示性的相关问题。";
 }else{
-	$code_suggestion="不要直接给出完整代码,只给出问题原因,让我自己学习修改。分析我可能薄弱的知识点，问我一个提示性的相关问题。";
+	$code_suggestion="不要直接给出完整代码,只给出问题原因,让我自己学习修改。分析我可能薄弱的知识点，问我一个提示性的相关问题，最后说一句鼓励或安慰的话，卖个萌。";
 }
 
 $model = $models[array_rand($models)];
