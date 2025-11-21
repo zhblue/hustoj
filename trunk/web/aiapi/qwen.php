@@ -6,6 +6,8 @@
 // 访问类似 https://bailian.console.aliyun.com/?tab=model#/model-market/detail/qwen3-coder-480b-a35b-instruct
 // 关注所用模型的剩余免费额度
 require_once("../include/db_info.inc.php");
+// 设置请求的URL
+$url = 'https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions';
 $apiKey = "设置为阿里云的API-KEY";   //https://bailian.console.aliyun.com/?tab=model#/api-key  创建新的API KEY
 $models=array("qwen-turbo","qwen3-coder-480b-a35b-instruct","qwen3-max","qwen3-coder-30b-a3b-instruct");
 
@@ -51,9 +53,8 @@ if(!empty($answer)){
 	exit();
 }
 $problem=pdo_query("select concat(description,'输入:',input,'输出:',output,'样例输入:',sample_input,'样例输出:',sample_output,'提示:',hint) from problem where problem_id=?",$problem_id)[0][0];
-// 设置请求的URL
-$url = 'https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions';
-// 若没有配置环境变量，请用百炼API Key将下行替换为：$apiKey = "sk-xxx";
+
+
 
 // 设置请求头
 $headers = [
