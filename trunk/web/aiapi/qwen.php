@@ -86,12 +86,13 @@ $data = [
 // 初始化cURL会话
 $ch = curl_init();
 // 设置cURL选项
+if(empty($domain)) $domain=$http_referer;
 curl_setopt($ch, CURLOPT_URL, $url);
 curl_setopt($ch, CURLOPT_POST, true);
 curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-curl_setopt($ch, CURLOPT_REFERER, $http_referer);
+curl_setopt($ch, CURLOPT_REFERER, $domain );
 curl_setopt($ch, CURLOPT_TIMEOUT, 60);
 // 执行cURL会话
 $response = curl_exec($ch);
