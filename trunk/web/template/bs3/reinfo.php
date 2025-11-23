@@ -154,6 +154,18 @@
           expmsg += ret+" : "+exp+"<br><hr />";
         }
       }
+       <?php if (!$isAC && isset($OJ_AI_API_URL)&&!empty($OJ_AI_API_URL)){ ?>
+                expmsg+="AI 答疑 ...<img src='image/loader.gif'>";
+                $("#errexp").html(expmsg);
+                $("#errexp").load("<?php echo $OJ_AI_API_URL?>?sid=<?php echo $id?>", function(response, status, xhr) {
+                        if (status === "success") {
+                                $("#errexp").html(marked.parse($("#errexp").text()));
+                        } else if (status === "error") {
+                                console.error("加载失败:", xhr.status, xhr.statusText);
+                        }
+                });
+       <?php } ?>
+
       document.getElementById("errexp").innerHTML=expmsg;
     }
 
