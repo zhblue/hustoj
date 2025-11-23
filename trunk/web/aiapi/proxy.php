@@ -36,17 +36,18 @@ class QwenProxy
             }
             
             // 解析JSON请求体（用于验证和日志）
-            $requestData = json_decode($requestBody, true);
+            $requestData = json_decode($requestBody);
             if (json_last_error() !== JSON_ERROR_NONE) {
                 $this->sendError('无效的JSON请求体: ' . json_last_error_msg());
                 return;
             }
-            
+            // 强制修改模型
+            //  $requestData->model="Qwen/Qwen3-Coder-480B-A35B-Instruct:novita";  // huggingface free $0.1 per month 
             // 构建转发请求头
             $headers = $this->buildForwardHeaders($contentType);
             
             // 转发到千问API
-            $response = $this->forwardToQwen($method, $headers, $requestBody);
+            $response = $this->forwardToQwen($method, $headers, $requestBody);  // json_encode($requestData)  //如果强制修改模型替换requestBody
             
             // 处理并返回响应
             $this->handleQwenResponse($response);
