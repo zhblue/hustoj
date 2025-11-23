@@ -1,7 +1,7 @@
 <?php
 /**
- * 千问API代理转发程序
- * 接收HUSTOJ的请求，添加合法API Key，转发给千问官方API
+ * openAI API 兼容模式，代理转发程序
+ * 接收HUSTOJ的请求，添加合法API Key，转发给千问官方API或Hugging face等其他提供免费token的平台
  */
 
 class QwenProxy
