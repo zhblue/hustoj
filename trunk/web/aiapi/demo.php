@@ -53,8 +53,7 @@ if(!empty($answer)){
 	exit();
 }
 $problem=pdo_query("select concat(description,'输入:',input,'输出:',output,'样例输入:',sample_input,'样例输出:',sample_output,'提示:',hint) from problem where problem_id=?",$problem_id)[0][0];
-
-
+$problem=strip_tags($problem);
 
 // 设置请求头
 $headers = [
