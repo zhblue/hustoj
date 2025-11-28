@@ -2,6 +2,7 @@
 // 启用 XSS 保护，仅对同源资源启用
 header("X-XSS-Protection: 1; mode=block; sameorigin");
 header("X-Download-Options: noopen");
+header("Referrer-Policy: same-origin");
 
 require_once(dirname(__FILE__)."/pdo.php");
 require_once(dirname(__FILE__)."/memcache.php");
