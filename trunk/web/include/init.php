@@ -3,6 +3,7 @@
 header("X-XSS-Protection: 1; mode=block; sameorigin");
 header("X-Download-Options: noopen");
 header("Referrer-Policy: same-origin");
+//header("X-Permitted-Cross-Domain-Policies: none");
 
 require_once(dirname(__FILE__)."/pdo.php");
 require_once(dirname(__FILE__)."/memcache.php");
