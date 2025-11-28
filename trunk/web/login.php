@@ -2,6 +2,7 @@
 require_once( "./include/db_info.inc.php" );
 require_once("./include/my_func.inc.php");
 require_once( './include/setlang.php' );
+if(isset($OJ_CSRF)&&$OJ_CSRF) require_once("./include/csrf_check.php");
 $use_cookie=false;
 $login=false;
 if($OJ_LONG_LOGIN&&isset($_COOKIE[$OJ_NAME."_user"])&&isset($_COOKIE[$OJ_NAME."_check"])){
