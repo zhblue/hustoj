@@ -6,6 +6,7 @@
 // 访问类似 https://bailian.console.aliyun.com/?tab=model#/model-market/detail/qwen3-coder-480b-a35b-instruct
 // 关注所用模型的剩余免费额度
 require_once("../include/db_info.inc.php");
+require_once("../include/my_func.inc.php");
 // 设置请求的URL
 $url = 'http://demo.hustoj.com/aiapi/proxy.php';
 $apiKey = "设置为阿里云的API-KEY";   //https://bailian.console.aliyun.com/?tab=model#/api-key  创建新的API KEY
