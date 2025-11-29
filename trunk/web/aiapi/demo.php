@@ -31,8 +31,8 @@ if(!empty($result)){
 	echo "非法参数";
 	exit();
 }
-$http_referer = $_SERVER['HTTP_REFERER'];
-if(str_starts_with( basename($http_referer),"reinfo"))
+$http_referer=isset($_SERVER['HTTP_REFERER'])?$_SERVER['HTTP_REFERER']:"";
+if(str_starts_with(basename($http_referer),"reinfo"))
 	$table="runtimeinfo";
 else       
 	$table="compileinfo";
