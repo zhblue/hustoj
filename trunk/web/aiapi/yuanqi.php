@@ -4,6 +4,7 @@
 //  登录元器账号，访问  https://yuanqi.tencent.com/my-creation/agent
 // 需要配置助手ID 和 访问Token
 require_once("../include/db_info.inc.php");
+require_once("../include/my_func.inc.php");
 $apiKey = "配置你的腾讯元器智能体Token";             //配置你的腾讯元器智能体Token
 
 
