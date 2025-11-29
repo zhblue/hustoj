@@ -7,6 +7,7 @@
 // 关注所用模型的剩余免费额度
 
 require_once("../include/db_info.inc.php");
+require_once("../include/my_func.inc.php");
 $apiKey ="算了么平台申请的API key";   //https://api.suanli.cn/token
 $models=array("free:Qwen3-30B-A3B");
 
