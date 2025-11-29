@@ -6,7 +6,7 @@
 // 访问 https://huggingface.co/settings/billing
 // 关注所用模型的剩余免费额度
 require_once("../include/db_info.inc.php");
-
+require_once("../include/my_func.inc.php");
 $apiKey ="hf_api_key";  // 配置你在 https://huggingface.co/settings/tokens 生成的key
 
 $sid=intval($_GET['sid']);
