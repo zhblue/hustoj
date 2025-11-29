@@ -8,7 +8,7 @@
 // 访问类似 https://console.cloud.tencent.com/hunyuan/packages
 // 关注所用模型的剩余免费额度
 require_once("../include/db_info.inc.php");
-
+require_once("../include/my_func.inc.php");
 $apiKey ="你在腾讯云生成的API-KEY填在这里 ";  //https://console.cloud.tencent.com/hunyuan/api-key
 
 $sid=intval($_GET['sid']);
