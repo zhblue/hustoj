@@ -10,7 +10,7 @@
 // 访问类似 https://bigmodel.cn/finance-center/resource-package/package-mgmt
 // 关注所用模型的剩余免费额度
 require_once("../include/db_info.inc.php");
-
+require_once("../include/my_func.inc.php");
 // 请用智普API Key将下行 $QWEN_API_KEY ;
 $apiKey = "填写你申请的api-key";
 
