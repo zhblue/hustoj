@@ -32,7 +32,7 @@ int LANG_PV[CALL_ARRAY_SIZE] = {
     #define SYS_faccessat2 439
 #endif
 int LANG_JV[CALL_ARRAY_SIZE] = {
-        0, 56, SYS_restart_syscall, SYS_exit, SYS_getegid, SYS_getgid, SYS_futex ,SYS_mprotect ,SYS_mmap ,SYS_rt_sigprocmask ,SYS_sysinfo ,SYS_clone3 ,SYS_openat ,SYS_sched_getaffinity ,SYS_madvise ,SYS_fstat ,SYS_close ,SYS_readlink ,SYS_execve ,SYS_newfstatat ,SYS_munmap ,SYS_set_robust_list ,SYS_prctl ,SYS_lseek ,SYS_write ,SYS_rseq ,SYS_gettid ,SYS_rt_sigaction ,SYS_pread64 ,SYS_clock_nanosleep ,SYS_ftruncate ,SYS_getdents64 ,SYS_unlink ,SYS_prlimit64 ,SYS_brk ,SYS_fchdir ,SYS_readlinkat ,SYS_geteuid ,SYS_access ,SYS_sched_yield ,SYS_rt_sigreturn ,SYS_flock ,SYS_getpid ,SYS_faccessat2 ,SYS_mkdir ,SYS_fcntl ,SYS_getrandom ,SYS_clock_getres ,SYS_arch_prctl ,SYS_set_tid_address ,SYS_ioctl ,SYS_socket ,SYS_connect ,SYS_uname ,SYS_getcwd ,SYS_getrusage ,SYS_getuid, SYS_exit_group, SYS_read, 0};
+        0, 33, 56, SYS_restart_syscall, SYS_exit, SYS_getegid, SYS_getgid, SYS_futex ,SYS_mprotect ,SYS_mmap ,SYS_rt_sigprocmask ,SYS_sysinfo ,SYS_clone3 ,SYS_openat ,SYS_sched_getaffinity ,SYS_madvise ,SYS_fstat ,SYS_close ,SYS_readlink ,SYS_execve ,SYS_newfstatat ,SYS_munmap ,SYS_set_robust_list ,SYS_prctl ,SYS_lseek ,SYS_write ,SYS_rseq ,SYS_gettid ,SYS_rt_sigaction ,SYS_pread64 ,SYS_clock_nanosleep ,SYS_ftruncate ,SYS_getdents64 ,SYS_unlink ,SYS_prlimit64 ,SYS_brk ,SYS_fchdir ,SYS_readlinkat ,SYS_geteuid ,SYS_access ,SYS_sched_yield ,SYS_rt_sigreturn ,SYS_flock ,SYS_getpid ,SYS_faccessat2 ,SYS_mkdir ,SYS_fcntl ,SYS_getrandom ,SYS_clock_getres ,SYS_arch_prctl ,SYS_set_tid_address ,SYS_ioctl ,SYS_socket ,SYS_connect ,SYS_uname ,SYS_getcwd ,SYS_getrusage ,SYS_getuid, SYS_exit_group, SYS_read, 0};
 
 //ruby
 int LANG_RV[CALL_ARRAY_SIZE] = {
