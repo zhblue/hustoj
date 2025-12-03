@@ -9,7 +9,7 @@ $err_str="";
 $err_cnt=0;
 $len;
 $user_id=trim($_POST['user_id']);
-$len=strlen($user_id);
+$len=mb_strlen($user_id);
 $email=trim($_POST['email']);
 $school=trim($_POST['school']);
 if(isset($OJ_VCODE)&&$OJ_VCODE)$vcode=trim($_POST['vcode']);
@@ -36,7 +36,7 @@ if (!is_valid_user_name($user_id)){
 	$err_cnt++;
 }
 $nick=trim($_POST['nick']);
-$len=strlen($nick);
+$len=mb_strlen($nick);
 if ($len>20){
 	$err_str=$err_str."$MSG_NICK $MSG_TOO_LONG !\\n";
 	$err_cnt++;
@@ -63,12 +63,12 @@ if (strlen($_POST['password'])<6){
 	$err_cnt++;
 	$err_str=$err_str."$MSG_WARNING_PASSWORD_SHORT \\n";
 }
-$len=strlen($_POST['school']);
+$len=mb_strlen($_POST['school']);
 if ($len>20){
 	$err_str=$err_str."$MSG_SCHOOL $MSG_TOO_LONG!\\n";
 	$err_cnt++;
 }
-$len=strlen($_POST['email']);
+$len=mb_strlen($_POST['email']);
 if ($len>100){
 	$err_str=$err_str."$MSG_EMAIL $MSG_TOO_LONG!\\n";
 	$err_cnt++;
@@ -176,3 +176,4 @@ if(!isset($OJ_REG_NEED_CONFIRM)||!$OJ_REG_NEED_CONFIRM){
 }
 ?>
 <script>history.go(-2);</script>
+
