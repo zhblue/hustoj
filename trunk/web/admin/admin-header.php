@@ -3,10 +3,10 @@ ini_set("memory_limit", "1024M");  //set this bigger to import big files.
 ini_set("max_execution_time", "600");
 require_once("../include/db_info.inc.php");
 require_once ("../include/my_func.inc.php");
-
-$params = json_encode($_REQUEST, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
-$logger->info($params);
-
+if(isset($OJ_LOG_ENABLED) && $OJ_LOG_ENABLED){
+	$params = json_encode($_REQUEST, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+	$logger->info($params);
+}
 ?>
 <!DOCTYPE html>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
@@ -27,4 +27,5 @@ if(file_exists("../template/$OJ_TEMPLATE/css.php")) require_once("../template/$O
 if(file_exists("../lang/$OJ_LANG.php")) require_once("../lang/$OJ_LANG.php");
 ?>
 <iframe src="../session.php" height=0px width=0px ></iframe>
+
 
