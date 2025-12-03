@@ -25,9 +25,5 @@ Disallow: /
 User-agent: Gigabot
 Disallow: /
 Crawl-delay: 120
-Disallow:/admin
-Disallow:/moodle
-Disallow:/template
-Disallow:/upload
 User-agent: *
 Disallow: /
