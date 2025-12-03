@@ -6,7 +6,7 @@ Greg Kennedy <kennedy.greg@gmail.com>, 2018
   https://github.com/greg-kennedy/php-bbcode
 This is public domain software.  Please see LICENSE for more details.
 ******************************************************************************/
-
+require_once(dirname(__FILE__)."/my_func.inc.php");
 class BBCode
 {
   // Tag aliases.  Item on left translates to item on right.
