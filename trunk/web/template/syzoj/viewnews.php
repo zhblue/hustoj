@@ -2,7 +2,7 @@
 <?php include("template/$OJ_TEMPLATE/header.php");?>
 <script src="<?php echo "template/bs3/"?>marked.min.js"></script>
 <div class="padding">
-    <h1><?php echo $news_title ?></h1>
+    <h1><?php echo htmlentities($news_title) ?></h1>
     <p style="margin-bottom: 5px; ">
         <b style="margin-right: 30px; "><i class="edit icon"></i><a class="black-link"
                 href="userinfo.php?user=<?php echo $news_writer ?>"> <?php echo $news_writer ?></a></b>
