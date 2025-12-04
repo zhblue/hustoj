@@ -48,6 +48,8 @@ $isRE = $row['result']==10;
 $isAC = $row['result']==4 ;
 $mark=$row['pass_rate']*100;
 if($isAC) $mark=100;
+if(contest_locked($contest_id,256))
+        $OJ_AI_API_URL=false;
 if((!contest_locked($contest_id,32))&&(isset($_SESSION[$OJ_NAME.'_'.'user_id']) && $row && ($row['user_id']==$_SESSION[$OJ_NAME.'_'.'user_id']))||isset($_SESSION[$OJ_NAME.'_'.'source_browser'])){
   $ok = true;
 }
@@ -115,3 +117,4 @@ if(file_exists('./include/cache_end.php')){
   require_once('./include/cache_end.php');
 }
 ?>
+
