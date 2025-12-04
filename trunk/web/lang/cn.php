@@ -494,6 +494,7 @@
   $MSG_OTHERS="查看其他人";
   $MSG_SUBNET="子网";
   $MSG_ONLY_LAST_SUBMISSION="仅以最后一次提交记分";
+  $MSG_AI_HELP="人工智能(AI)错误解析";
   $MSG_SHOW_DIFF="显示对比输出";
   $MSG_UPSOLVING="补题";
   //SaaS friendly
