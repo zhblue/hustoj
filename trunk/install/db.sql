@@ -19,7 +19,7 @@ CREATE TABLE IF NOT EXISTS `contest` (
   `private` tinyint(4) NOT NULL DEFAULT '0',
   `langmask` int NOT NULL DEFAULT '0' COMMENT 'bits for LANG to mask',
   `password` CHAR( 16 ) NOT NULL DEFAULT '',
-  `contest_type` tinyint unsigned NOT NULL DEFAULT '0',
+  `contest_type` smallint unsigned NOT NULL DEFAULT '0',
   `subnet` varchar(255) NOT NULL DEFAULT '',
   `user_id` varchar(48) NOT NULL DEFAULT 'admin',
   PRIMARY KEY (`contest_id`)
