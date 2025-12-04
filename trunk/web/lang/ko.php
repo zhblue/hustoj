@@ -481,6 +481,7 @@
     $MSG_OTHERS="other's ";
     $MSG_SUBNET="subnet ";
     $MSG_ONLY_LAST_SUBMISSION="Only the last submission will be scored";  
+	$MSG_AI_HELP="AI Help";
     $MSG_SHOW_DIFF="Show Differ Output";
        $MSG_UPSOLVING="Upsolving";
     //SaaS friendly
