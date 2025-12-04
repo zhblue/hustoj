@@ -235,8 +235,8 @@ begin
 end if;
 end;
 ";
-$tsql[54]="CREATE TABLE IF NOT EXISTS $DB_NAME.solution_ai_answer ( solution_id int not null default 0, answer mediumtext ,primary key (solution_id)) charset utf8mb4;";
-$csql[54]="select * from $DB_NAME.solution_ai_answer";
+$tsql[54]="create TABLE IF NOT EXISTS $DB_NAME.solution_ai_answer ( solution_id int not null default 0, answer mediumtext ,primary key (solution_id)) charset utf8mb4;";
+$csql[54]="alter table $DB_NAME.contest modify column contest_type smallint UNSIGNED default 0;";
 
 
 // 删除6个月以前的非正确源码，优化数据库空间。
