@@ -2,8 +2,10 @@
 $cache_time=10;
 $OJ_CACHE_SHARE=false;
 	require_once('./include/cache_start.php');
-        require_once('./include/db_info.inc.php');
+	require_once('./include/db_info.inc.php');
 	require_once('./include/setlang.php');
+	require_once('./include/my_func.inc.php');
+
 	$view_title= "Welcome To Online Judge";
 	if (!isset($_SESSION[$OJ_NAME.'_'.'user_id'])) {
 		  header("location:loginpage.php");
@@ -36,6 +38,8 @@ $id=intval($_GET['sid']);
 $sql="SELECT * FROM `solution` WHERE `solution_id`=?";
 $result=pdo_query($sql,$id);
 $row=$result[0];
+if(contest_locked($row['contest_id'],256))
+        $OJ_AI_API_URL=false;
 $lang=$row["language"];
 if ($row && $row['user_id']==$_SESSION[$OJ_NAME.'_'.'user_id']) $ok=true;
 if (isset($_SESSION[$OJ_NAME.'_'.'source_browser'])) $ok=true;
