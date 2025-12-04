@@ -154,6 +154,7 @@ Star us, please!
 	
 日期  | 类型 |  更新内容 | 图
 ------- | :--:  | :--: | :-------
+12-05 | 更新 | 增加比赛的AI辅助开关 | <img width="429" height="361" alt="image" src="https://github.com/user-attachments/assets/f8c5f3f3-bb85-45a6-ba33-323f5c93d849" />
 11-16 | 更新 | 增加aiapi目录，放入千问、Bigmodel、腾讯元宝、腾讯混元、huggingface 等模型接口文件，db_info.inc.php中的$QWEN_API_KEY去掉，换成$OJ_AI_API_URL来指定加载加载AI答疑文件路径。
 11-05 | 更新 | 接入Qwen3-coder-480b-a35b-instruct API , 进一步解析编译错误和运行错误。 (此功能需要阿里千问的付费服务)|<img width="650" alt="image" src="https://github.com/user-attachments/assets/95ca3c13-b3aa-4c3b-9a14-371fc856a0d0" /> 在qwen.php中配置 $apiKey后可以使用。
 10-26 | 更新 | 增加比赛只按最后一次提交记分可选项，之前的提交记0分，算做测试运行。|<img width="336" height="230" alt="image" src="https://github.com/user-attachments/assets/a04400ab-8053-400d-8642-79407a1535d0" />
