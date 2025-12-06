@@ -58,6 +58,7 @@ class Logger
 
     public function logging($level, $message = "", array $data = [])
     {
+        global $ip;
         $datetime = new DateTime();
         $datetime = $datetime->format($this->datetime_format);
         $user = $this->user;
@@ -68,7 +69,7 @@ class Logger
             $prefix = $prefix . "$pid ";
         }
         if ($this->user_enabled)
-            $prefix = $prefix . "[$user] ";
+            $prefix = $prefix . "[$user @ $ip] ";
         if ($this->trace_enabled)
             $prefix = $prefix . "[$trace_id] ";
         if ($this->url_enabled) {
