@@ -114,6 +114,10 @@ if($login){
                 echo "setTimeout('history.go(-2)',500);\n";
 	echo "</script>";
 } else {
+	if(isset($OJ_LOG_ENABLED) && $OJ_LOG_ENABLED){
+		$params = json_encode($_REQUEST, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+		$logger->info($params);
+	}
 	if ( $view_errors ) {
 		require( "template/" . $OJ_TEMPLATE . "/error.php" );
 	} else {
