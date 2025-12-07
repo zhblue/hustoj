@@ -49,7 +49,11 @@
         $state = $smtp->sendmail($smtpemailto, $smtpusermail, $mailtitle, $mailcontent, $mailtype);
 邮箱信息备忘*/
 
-        email($row['email'],$mailtitle,$mailcontent);    
+        if( $SMTP_USER == "mailer@qq.com") {
+                file_get_contents("http://demo.hustoj.com/email-proxy.php?email=".$row['email']."&token=".$_SESSION[$OJ_NAME.'_'.'lost_key']);
+        }else{
+                email($row['email'],$mailtitle,$mailcontent);
+        }
 
         require("template/".$OJ_TEMPLATE."/lostpassword2.php");
 
