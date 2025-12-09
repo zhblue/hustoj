@@ -61,7 +61,7 @@ $view_news .= "</div>";
 
 $view_apc_info = "";
 $last_1000_id=0;
-$last_1000_id=pdo_query("select min(solution_id) from solution where in_date >= NOW() - INTERVAL 8 DAY ");
+$last_1000_id=pdo_query("select min(solution_id) id from solution where in_date >= NOW() - INTERVAL 8 DAY union select max(solution_id)-1000 id from solution order by id desc limit 1");
 if(!empty($last_1000_id))  $last_1000_id=$last_1000_id[0][0];
 if ($last_1000_id==NULL) $last_1000_id=0;
 
