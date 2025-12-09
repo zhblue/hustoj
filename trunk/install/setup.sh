@@ -122,7 +122,7 @@ load_current_config() {
         clean_line=$(echo "$line" | sed 's/\/\/.*//' | sed 's/#.*//')
         
         # 匹配 static $VAR = value; 格式
-        if [[ "$clean_line" =~ static[[:space:]]+\\\$([A-Z_]+)[[:space:]]*=[[:space:]]*(.*)\; ]]; then
+        if [[ "$clean_line" =~ static[[:space:]]+\$([A-Z_]+)[[:space:]]*=[[:space:]]*(.*)\; ]]; then
             var_name="${BASH_REMATCH[1]}"
             raw_value="${BASH_REMATCH[2]}"
             
