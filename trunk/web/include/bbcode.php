@@ -450,6 +450,6 @@ function bbcode_to_html($input) : string
 {
   global $OJ_DIV_FILTER;
   if(isset($OJ_DIV_FILTER)&&$OJ_DIV_FILTER) $input=filterDIV($input);
-  return BBCode::bbcode_to_html(($input));    //RemoveXSS // people want to use js in news
+  return BBCode::bbcode_to_html(RemoveXSS($input));    //RemoveXSS // people want to use js in news
 }
 
