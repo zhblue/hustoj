@@ -51,6 +51,8 @@ session_set_cookie_params([
                   'httponly' => true,    // 防止JavaScript访问
                     'samesite' => 'Strict'
 ]);
+@session_start();
+
 if($OJ_SaaS_ENABLE){
 	$DOMAIN="my.hustoj.com";   //   如启用，需要替换为SaaS服务的主域名。
 	$OJ_SaaS_CONF=realpath(dirname(__FILE__)."/..")."/SaaS/".basename($_SERVER["HTTP_HOST"]).".php";
