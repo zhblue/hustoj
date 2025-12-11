@@ -4,7 +4,16 @@ header("X-XSS-Protection: 1; mode=block; sameorigin");
 header("X-Download-Options: noopen");
 header("Referrer-Policy: same-origin");
 //header("X-Permitted-Cross-Domain-Policies: none");
-
+$domain=basename($_SERVER["HTTP_HOST"]??"");
+session_set_cookie_params([
+          'lifetime' => 0,
+            'path' => '/',
+//              'domain' => $domain ,
+//                'secure' => true,      // 仅HTTPS
+                  'httponly' => true,    // 防止JavaScript访问
+                    'samesite' => 'Strict'
+]);
+@session_start();
 require_once(dirname(__FILE__)."/pdo.php");
 require_once(dirname(__FILE__)."/memcache.php");
 
@@ -42,16 +51,7 @@ if (isset($_SESSION[$OJ_NAME . '_' . 'OJ_LANG'])) {
 }
 require(dirname(__FILE__)."/../lang/$OJ_LANG.php");
 
-$domain=basename($_SERVER["HTTP_HOST"]??"");
-session_set_cookie_params([
-          'lifetime' => 0,
-            'path' => '/',
-//              'domain' => $domain ,
-//                'secure' => true,      // 仅HTTPS
-                  'httponly' => true,    // 防止JavaScript访问
-                    'samesite' => 'Strict'
-]);
-@session_start();
+
 
 if($OJ_SaaS_ENABLE){
 	$DOMAIN="my.hustoj.com";   //   如启用，需要替换为SaaS服务的主域名。
