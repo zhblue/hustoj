@@ -46,8 +46,8 @@ $domain=basename($_SERVER["HTTP_HOST"]??"");
 session_set_cookie_params([
           'lifetime' => 0,
             'path' => '/',
-              'domain' => $domain ,
-                'secure' => true,      // 仅HTTPS
+//              'domain' => $domain ,
+//                'secure' => true,      // 仅HTTPS
                   'httponly' => true,    // 防止JavaScript访问
                     'samesite' => 'Strict'
 ]);
