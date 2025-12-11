@@ -1,4 +1,4 @@
- <?php
+<?php
 if(isset($_POST['keyword']))
   $cache_time = 1;
 else
