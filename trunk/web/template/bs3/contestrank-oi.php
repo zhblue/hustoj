@@ -219,7 +219,7 @@
   					
   					$nick = $U[$i]->nick;
   					echo "<td class='text-center'>";
-							if ($nick[0]!="*")
+							if (isset($nick[0])  && $nick[0]!="*")
 								echo $rank++;
 							else
 								echo "*";
