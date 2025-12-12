@@ -196,7 +196,7 @@ $isadmin = isset($_SESSION[$OJ_NAME.'_'.'administrator']);
 </center>
 
 
-<script src="<?php echo $OJ_CDN_URL.$path_fix."include/"?>jquery-latest.js"></script>
+<script src="<?php echo $OJ_CDN_URL."/include/"?>jquery-latest.js"></script>
 <script>
 <?php if ($OJ_VCODE) { ?>
   $(document).ready(function () {
@@ -219,3 +219,4 @@ function reply(rid)
 }
 </script>
 <?php require_once("template/$OJ_TEMPLATE/discuss.php")?>
+
