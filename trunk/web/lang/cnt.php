@@ -40,7 +40,11 @@
  $MSG_Manual ="人工判題";
  $MSG_OK ="確定";
  $MSG_Explain ="輸入判定原因與提示";
- 
+ $MSG_LOCAL_JUDGING="本地判題";  // 如果有的話
+ $MSG_JUDGE_SERVER="判題伺服器";
+ $MSG_REMOTE_SERVER="遠端伺服器";
+ $MSG_CLOUD_JUDGE="雲端判題"; 
+
  //fool's day
  if (date( 'm' )== 4 &&date( 'd' )== 1 &&rand( 0 , 100 )< 5 ){
  $MSG_Accepted =" <span title=愚人節快樂>似乎好像是正確</span> ";
