@@ -57,6 +57,7 @@ static  $OJ_REG_NEED_CONFIRM=false; //新注册用户需要审核
 static  $OJ_EMAIL_CONFIRM=false; //允许邮件激活账号
 static  $OJ_EXPIRY_DAYS=365; // 手工添加账户的默认过期天数
 static  $OJ_NEED_LOGIN=false; //需要登录才能访问
+static  $OJ_LOGIN_FAIL_LIMIT=5; //5分钟内最大登录错误次数
 static  $OJ_LONG_LOGIN=false; //启用长时间登录信息保留
 static  $OJ_KEEP_TIME="30";  //登录Cookie有效时间(单位:天(day),仅在上一行为true时生效)
 static  $OJ_AUTO_SHOW_OFF = false;//打开题目默认开启编辑器
