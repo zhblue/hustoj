@@ -47,9 +47,14 @@ if(!$use_cookie){
   require_once( "./include/login-" . $OJ_LOGIN_MOD . ".php" );
   $user_id = $_POST[ 'user_id' ];
   $password = $_POST[ 'password' ];
-  if ( false ) {
-	$user_id = stripslashes( $user_id );
-	$password = stripslashes( $password );
+  $fiveMinutesAgo = date('Y-m-d H:i:s', strtotime("-5 minutes"));
+  $failed=pdo_query("SELECT
+                        (SELECT COUNT(1) FROM loginlog WHERE user_id=? AND password='login fail' AND time>=?) as user_fail,
+                        (SELECT COUNT(1) FROM loginlog WHERE ip=? AND password='login fail' AND time>=?) as ip_fail;",$user_idi,$fiveMinutesAgo,$ip,$fiveMinutesAgo);
+  if (isset($OJ_LOGIN_FAIL_LIMIT)&& ($OJ_LOGIN_FAIL_LIMIT)( $failed[0][0] > $OJ_LOGIN_FAIL_LIMIT  || $failed[0][1] > $OJ_LOGIN_FAIL_LIMIT*4 ) ) {
+        $view_errors = "Failed login too frequently!";
+        require( "template/" . $OJ_TEMPLATE . "/error.php" );
+        exit(0);
   }
   $login = check_login( $user_id, $password );
 }
@@ -114,6 +119,8 @@ if($login){
                 echo "setTimeout('history.go(-2)',500);\n";
 	echo "</script>";
 } else {
+	$sql="INSERT INTO `loginlog`(user_id,password,ip,time) VALUES(?,'login fail',?,NOW())";
+    pdo_query($sql,$user_id,$ip);
 	if(isset($OJ_LOG_ENABLED) && $OJ_LOG_ENABLED){
 		$params = json_encode($_REQUEST, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
 		$logger->info($params);
