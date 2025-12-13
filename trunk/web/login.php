@@ -50,8 +50,8 @@ if(!$use_cookie){
   $fiveMinutesAgo = date('Y-m-d H:i:s', strtotime("-5 minutes"));
   $failed=pdo_query("SELECT
                         (SELECT COUNT(1) FROM loginlog WHERE user_id=? AND password='login fail' AND time>=?) as user_fail,
-                        (SELECT COUNT(1) FROM loginlog WHERE ip=? AND password='login fail' AND time>=?) as ip_fail;",$user_idi,$fiveMinutesAgo,$ip,$fiveMinutesAgo);
-  if (isset($OJ_LOGIN_FAIL_LIMIT)&& ($OJ_LOGIN_FAIL_LIMIT)( $failed[0][0] > $OJ_LOGIN_FAIL_LIMIT  || $failed[0][1] > $OJ_LOGIN_FAIL_LIMIT*4 ) ) {
+                        (SELECT COUNT(1) FROM loginlog WHERE ip=? AND password='login fail' AND time>=?) as ip_fail;",$user_id,$fiveMinutesAgo,$ip,$fiveMinutesAgo);
+  if (isset($OJ_LOGIN_FAIL_LIMIT)&& ($OJ_LOGIN_FAIL_LIMIT>0) && ( $failed[0][0] > $OJ_LOGIN_FAIL_LIMIT  || $failed[0][1] > $OJ_LOGIN_FAIL_LIMIT*4 ) ) {
         $view_errors = "Failed login too frequently!";
         require( "template/" . $OJ_TEMPLATE . "/error.php" );
         exit(0);
