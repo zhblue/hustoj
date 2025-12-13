@@ -1,8 +1,6 @@
 <?php
-@session_start ();
-echo "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
 require_once ("../include/db_info.inc.php");
-
+echo "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
 if (!isset($OJ_LANG)) {
   $OJ_LANG = "en";
 }
