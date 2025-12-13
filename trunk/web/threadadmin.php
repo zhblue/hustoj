@@ -1,5 +1,4 @@
 <?php
-session_start();
 require_once("include/db_info.inc.php");
 require_once("discuss_func.inc.php");
 $tid = intval($_REQUEST['tid']);
@@ -64,3 +63,4 @@ if($_REQUEST['target']=='thread'){
        }
 }
 ?>
+
