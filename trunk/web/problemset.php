@@ -8,7 +8,7 @@ require_once('./include/cache_start.php');
 require_once('./include/curl.php');
 require_once('./include/memcache.php');
 require_once('./include/setlang.php');
-
+require_once("./include/set_get_key.php");
 $view_title = "Problem Set";
 
 //remember page
