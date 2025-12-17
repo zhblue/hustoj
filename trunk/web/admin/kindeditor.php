@@ -1,7 +1,7 @@
         <meta charset="utf-8" />
         <link rel="stylesheet" href="../kindeditor/themes/default/default.css" />
         <link rel="stylesheet" href="../kindeditor/plugins/code/prettify.css" />
-        <script charset="utf-8" src="../kindeditor/kindeditor.js?v=2025"></script>
+        <script charset="utf-8" src="../kindeditor/kindeditor.js?v=20251217"></script>
         <script charset="utf-8" src="../kindeditor/lang/zh_CN.js"></script>
         <script charset="utf-8" src="../kindeditor/plugins/code/prettify.js"></script>
         <script>
