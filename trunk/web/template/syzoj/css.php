@@ -27,3 +27,8 @@
 <?php if (file_exists(dirname(__FILE__)."/css/$OJ_CSS")){ ?>
 <link href="<?php echo $path_fix."template/$OJ_TEMPLATE"?>/css/<?php echo $OJ_CSS?>?v=0.1" rel="stylesheet">
 <?php } ?>
+
+<?php if (file_exists(dirname(__FILE__)."/$OJ_CSS")){ ?>
+<link href="<?php echo $path_fix."template/$OJ_TEMPLATE"?>/<?php echo $OJ_CSS?>?v=0.1" rel="stylesheet">
+<?php } ?>
+
