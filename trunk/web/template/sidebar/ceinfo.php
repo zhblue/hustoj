@@ -1,7 +1,7 @@
 <?php $show_title=$id." - $MSG_COMPILE_INFO - $OJ_NAME"; ?>
 <?php include("template/$OJ_TEMPLATE/header.php");?>
 
-<script src="template/<?php echo $OJ_TEMPLATE?>/js/textFit.min.js"></script>
+<script src="<?php echo $OJ_CDN_URL?>template/<?php echo $OJ_TEMPLATE?>/js/textFit.min.js"></script>
 <link href='<?php echo $OJ_CDN_URL?>highlight/styles/shCore.css' rel='stylesheet' type='text/css'/>
 <link href='<?php echo $OJ_CDN_URL?>highlight/styles/shThemeDefault.css' rel='stylesheet' type='text/css'/>
 <div class="padding">
@@ -168,20 +168,46 @@ pats[i]=/variably modified/;
 exps[i++]="<?php echo $MSG_VARIABLY_MODIFIED; ?>";
 
 function explain(){
-//alert("asdf");
-var errmsg=$("#errtxt").text();
-var expmsg="";
-for(var i=0;i<pats.length;i++){
-var pat=pats[i];
-var exp=exps[i];
-var ret=pat.exec(errmsg);
-if(ret){
-expmsg+=ret+":"+exp+"<br>";
+        //alert("asdf");
+        var errmsg=$("#errtxt").text();
+        var expmsg="";
+        for(var i=0;i<pats.length;i++){
+        var pat=pats[i];
+        var exp=exps[i];
+        var ret=pat.exec(errmsg);
+        if(ret){
+                expmsg+=ret+":"+exp+"<br>";
+        }
+        }
+       
+        document.getElementById("errexp").innerHTML=expmsg;
+        //alert(expmsg);
+            var resultVariable = errmsg;
+                var errorLines = [];
+                var regex = /(\w+\.<?php echo $language_ext[$lang]?>):(\d+):\d+:/g;
+                var match;
+                while ((match = regex.exec(resultVariable)) !== null) {
+                    var lineNumber = parseInt(match[2], 10);
+                    errorLines.push(lineNumber);
+                }
+                errorLines.forEach(function(line) {
+                        console.log("line"+line);
+                        $("div .number"+line).addClass("highlighted");
+                });
+         <?php if (isset($OJ_AI_API_URL)&&!empty($OJ_AI_API_URL)){ ?>
+                expmsg+="AI 答疑 ...<img src='image/loader.gif'>";
+				$("#errexp").html(expmsg);
+                $("#errexp").load("<?php echo $OJ_AI_API_URL ?>?sid=<?php echo $id?>", function(response, status, xhr) {
+                        if (status === "success") {
+                                $("#errexp").html(marked.parse($("#errexp").text()));    
+                        } else if (status === "error") {
+                                console.error("加载失败:", xhr.status, xhr.statusText);
+                        }
+                });
+        <?php } ?>
+
 }
-}
-document.getElementById("errexp").innerHTML=expmsg;
-//alert(expmsg);
-}
+
 </script> 
 <script src='<?php echo $OJ_CDN_URL?>highlight/scripts/shCore.js' type='text/javascript'></script>
 <script src='<?php echo $OJ_CDN_URL?>highlight/scripts/shBrushCpp.js' type='text/javascript'></script>
@@ -195,7 +221,7 @@ document.getElementById("errexp").innerHTML=expmsg;
 <script src='<?php echo $OJ_CDN_URL?>highlight/scripts/shBrushPerl.js' type='text/javascript'></script>
 <script src='<?php echo $OJ_CDN_URL?>highlight/scripts/shBrushCSharp.js' type='text/javascript'></script>
 <script src='<?php echo $OJ_CDN_URL?>highlight/scripts/shBrushVb.js' type='text/javascript'></script>
-
+<script src="<?php echo $OJ_CDN_URL.$path_fix."template/bs3/"?>marked.min.js"></script>
 <script>
 $(document).ready(function(){
 	$("#source").load("showsource2.php?id=<?php echo $id?>",function(response,status,xhr){
