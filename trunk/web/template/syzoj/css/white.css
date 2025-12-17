@@ -1,3 +1,48 @@
+:root {
+  --lg-bg-color: rgba(255, 255, 255, 0.55);
+  --lg-highlight: rgba(255, 255, 255, 0.75);
+  /*--lg-text: #ffffff;*/
+  --lg-red: #fb4268;
+  --lg-grey: #444739;
+}
+/* 为.padding类添加玻璃效果 */
+.padding {
+  position: relative;
+  border-radius: 3rem;
+  overflow: hidden;
+  box-shadow: 0 6px 6px rgba(0, 0, 0, 0.2), 0 0 20px rgba(0, 0, 0, 0.1);
+  color: var(--lg-text);
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 2.2);
+  padding: 2rem;
+}
+/* 玻璃效果层级 */
+.padding::before,
+.padding::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+}
+.padding::before {
+/*
+  z-index: 0;
+  backdrop-filter: blur(4px);
+  filter: url(#customLensFilter) saturate(120%) brightness(1.15);
+*/
+}
+.padding::after {
+/*  z-index: 1;
+  background: var(--lg-bg-color);
+  box-shadow: inset 1px 1px 0 var(--lg-highlight),
+    inset 0 0 5px var(--lg-highlight);
+*/
+}
+/* 确保内容在玻璃效果之上 */
+.padding > * {
+  position: relative;
+  z-index: 200;
+}
 .toprow{
    background-color:#eee;
    white-space:nowrap;
