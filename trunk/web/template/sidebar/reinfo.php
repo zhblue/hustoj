@@ -1,8 +1,8 @@
 <?php $show_title=$id." - $MSG_ERROR_INFO - $OJ_NAME"; ?>
 <?php include("template/$OJ_TEMPLATE/header.php");?>
 
-<script src="<?php echo "template/bs3/"?>marked.min.js"></script>
-<script src="template/<?php echo $OJ_TEMPLATE?>/js/textFit.min.js"></script>
+<script src="<?php echo $OJ_CDN_URL."template/bs3/"?>marked.min.js"></script>
+<script src="<?php echo $OJ_CDN_URL?>template/<?php echo $OJ_TEMPLATE?>/js/textFit.min.js"></script>
 <style>
 .single-subtask {
     box-shadow: none !important;
@@ -92,6 +92,19 @@ td > code {
         }
       }
       document.getElementById("errexp").innerHTML=expmsg;
+        
+       <?php if (!$isAC && isset($OJ_AI_API_URL)&&!empty($OJ_AI_API_URL)){ ?>
+                expmsg+="AI 答疑 ...<img src='image/loader.gif'>";
+                $("#errexp").html(expmsg);
+                $("#errexp").load("<?php echo $OJ_AI_API_URL?>?sid=<?php echo $id?>", function(response, status, xhr) {
+                        if (status === "success") {
+                                $("#errexp").html(marked.parse($("#errexp").text()));   
+                        } else if (status === "error") {
+                                console.error("加载失败:", xhr.status, xhr.statusText);
+                        }
+                });
+       <?php } ?>
+
     }
     explain();
 </script>
@@ -107,7 +120,7 @@ td > code {
                   headerIds: false
                 });
                 $("#errtxt").each(function(){
-                        $(this).html(marked.parse($(this).html()));
+                        $(this).html(marked.parse($(this).text()));
                 });
                 // adding note for ```input1  ```output1 in description
                 for(let i=1;i<10;i++){
