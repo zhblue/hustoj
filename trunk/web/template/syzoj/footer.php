@@ -40,9 +40,7 @@
 <?php if (isset($_SESSION[$OJ_NAME.'_user_id'])){ ?>
         <iframe id="sk" src="session.php" height=0px width=0px ></iframe>
 <?php } ?>
-<?php if (file_exists(dirname(__FILE__)."/css/$OJ_CSS")){ ?>
-<link href="<?php echo $path_fix."template/$OJ_TEMPLATE"?>/css/<?php echo $OJ_CSS?>" rel="stylesheet">
-<?php } ?>
+
 
 </body>
 
