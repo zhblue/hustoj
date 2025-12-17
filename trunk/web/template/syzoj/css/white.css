@@ -25,23 +25,23 @@
   pointer-events: none;
 }
 .padding::before {
-/*
-  z-index: 0;
+
+  z-index: -2;
   backdrop-filter: blur(4px);
   filter: url(#customLensFilter) saturate(120%) brightness(1.15);
-*/
+
 }
 .padding::after {
-/*  z-index: 1;
+  z-index: -1;
   background: var(--lg-bg-color);
   box-shadow: inset 1px 1px 0 var(--lg-highlight),
     inset 0 0 5px var(--lg-highlight);
-*/
+
 }
 /* 确保内容在玻璃效果之上 */
 .padding > * {
   position: relative;
-  z-index: 200;
+  z-index: 2;
 }
 .toprow{
    background-color:#eee;
