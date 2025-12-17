@@ -31,7 +31,7 @@
           echo "管理员没有配置邮件发送账户，请联系系统管理员或者老师来手工重置密码。";
           if(isset($_SESSION[$OJ_NAME."_administrator"])) 
               echo '<br> 请配置db_info.inc.php中的 $SMTP_USER 等 参数，激活邮件密码找回功能。';
-      }else{
+      }
 ?>
  <form action=lostpassword.php method=post>
 <center><?php if(!empty($error_msg)) echo "<h1>$error_msg</h1>"?>
@@ -47,7 +47,7 @@
 <center>
 </form>
         <?php 
-      }
+     
         ?>
       </div>
 
