@@ -375,12 +375,15 @@ function do_submit(){
 }
 <?php
 
-        $append_file = "$OJ_DATA/$id/append.sql";
         $appendsource="";
-        if (isset($OJ_APPENDCODE) && $OJ_APPENDCODE && file_exists($append_file)) {
-          $appendsource .= "\n".file_get_contents($append_file);
+        if(isset($id)){
+                $append_file = "$OJ_DATA/$id/append.sql";
+                if (isset($OJ_APPENDCODE) && $OJ_APPENDCODE && file_exists($append_file)) {
+                  $appendsource .= "\n".file_get_contents($append_file);
+                }
         }
         echo "var appendSQL=".json_encode($appendsource).";";
+
 
 ?>
 
