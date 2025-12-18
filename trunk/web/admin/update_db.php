@@ -238,7 +238,8 @@ end;
 $tsql[54]="create TABLE IF NOT EXISTS $DB_NAME.solution_ai_answer ( solution_id int not null default 0, answer mediumtext ,primary key (solution_id)) charset utf8mb4;";
 $csql[54]="alter table $DB_NAME.contest modify column contest_type smallint UNSIGNED default 0;";
 
-
+$tsql[55]="CREATE INDEX $DB_NAME.idx_solution_in_date ON solution(in_date);";
+$csql[55]="";
 // 删除6个月以前的非正确源码，优化数据库空间。
 // delete from source_code  where solution_id in (select solution_id from solution where result>4 and  in_date<date_sub(now(),interval 6 month) ); //
 if(isset($_POST['do'])){
