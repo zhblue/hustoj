@@ -153,7 +153,8 @@ CREATE TABLE IF NOT EXISTS `solution` (
   KEY `pid` (`problem_id`),
   KEY `res` (`result`),
   KEY `cid` (`contest_id`),
-  KEY `fst` (`first_time`)
+  KEY `fst` (`first_time`),
+  KEY `idx_solution_in_date` (`in_date`)
 ) ENGINE=MyISAM AUTO_INCREMENT=1001 DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE IF NOT EXISTS `source_code` (
