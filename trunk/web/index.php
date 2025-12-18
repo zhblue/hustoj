@@ -61,7 +61,7 @@ $view_news .= "</div>";
 
 $view_apc_info = "";
 $last_1000_id=0;
-$last_1000_id=pdo_query("select min(solution_id) id from solution where in_date >= NOW() - INTERVAL 8 DAY union select max(solution_id)-1000 id from solution order by id desc limit 1");
+$last_1000_id=mysql_query_cache("select min(solution_id) id from solution where in_date >= NOW() - INTERVAL 8 DAY union select max(solution_id)-1000 id from solution order by id desc limit 1");
 if(!empty($last_1000_id))  $last_1000_id=$last_1000_id[0][0];
 if ($last_1000_id==NULL) $last_1000_id=0;
 
@@ -86,8 +86,8 @@ $chart_data_ac = array();
 if(!empty($result))
 foreach ( $result as $row ) {
 	if(isset($ac[$row['md']])) 
-        	array_push( $chart_data_ac, array( $row[ 'md' ], $ac[$row['md']] ) );
-        else
+        array_push( $chart_data_ac, array( $row[ 'md' ], $ac[$row['md']] ) );
+    else
 		array_push( $chart_data_ac, array( $row[ 'md' ], 0 ) );
 }
 $speed=0;
