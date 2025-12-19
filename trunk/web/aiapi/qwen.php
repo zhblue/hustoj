@@ -106,8 +106,7 @@ curl_close($ch);
 // 输出响应结果
 $data=json_decode($response);
 
-$answer=$data->choices[0]->message->content."<br> --- $model  <br><a href='https://github.com/zhblue/hustoj/' target=_blank > 如果你觉得这个系统对你有帮助，请到Github来给我们加个
-Star⭐吧 </a> ";
+$answer=$data->choices[0]->message->content."<br> --- $model  <br><a href='https://github.com/zhblue/hustoj/' target=_blank > 如果你觉得这个系统对你有帮助，请到Github来给我们加个Star⭐吧 </a> ";
 
 echo htmlentities($answer);
 $sql="insert into solution_ai_answer (solution_id,answer) values(?,?)";
