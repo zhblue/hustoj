@@ -142,6 +142,7 @@
 	$MSG_TESTDATA="داده های آزمون";
 
 	//admin menu
+    $MSG_VIEW_DISABLED_USER="مشاهده کاربران غیرفعال یا در انتظار بررسی";
 	$MSG_SEEOJ="نمایش";
 	$MSG_ADD="ایجاد ";
 	$MSG_MENU="menu";
