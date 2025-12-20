@@ -158,6 +158,7 @@ $MSG_TOO_BAD="Please surf the internet in a civilized manner";
 	$MSG_TESTDATA= "سىناق مەلۇمات";
 
 	//admin menu
+    $MSG_VIEW_DISABLED_USER="بىكار قىلىنغان ياكى تەكشۈرۈشنى ساقلىغان ئىشلەتكۈچىلەرنى كۆرۈش";
 	$MSG_SEEOJ="باش بەت";
 	$MSG_ADD=" قوشۇش  ";
 	$MSG_MENU="تىزىملىك";
