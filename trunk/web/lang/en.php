@@ -149,6 +149,7 @@
 	$MSG_TESTDATA="TestData";
 	
 	//admin menu
+    $MSG_VIEW_DISABLED_USER="View disabled or pending review users";
 	$MSG_SEEOJ="SeeOJ";
 	$MSG_ADD="Add";
 	$MSG_LIST="List";
