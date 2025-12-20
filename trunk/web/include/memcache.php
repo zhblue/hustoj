@@ -47,12 +47,18 @@
                 //echo "-APCU cache-";
                 return $cache;
             }else{
-                $cache =pdo_query($sql,$args);
+	            $s_time=microtime(true);
+	            $cache =pdo_query($sql,$args);
+	            $u_time=microtime(true)-$s_time;
+	            if($u_time>$timeout) $timeout=round($u_time);
                 apcu_store($key,$cache,$timeout);
             }
         }else if (!($cache = getCache($key))) {
             $cache = false;
+			$s_time=microtime(true);
             $cache =pdo_query($sql,$args);
+			$u_time=microtime(true)-$s_time; 
+			if($u_time>$timeout) $timeout=round($u_time);
         //将数据放入memcached服务器中，如果memcached服务器没有开的话，此语句什么也不会做
         //如果开启了服务器的话，数据将会被缓存到memcached服务器中
                 if (!setCache($key, $cache, $timeout)) {
