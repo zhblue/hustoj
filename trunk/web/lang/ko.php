@@ -151,6 +151,7 @@
 	$MSG_CLICK_VIEW_HINT="힌트보기";
 
 	//admin menu
+    $MSG_VIEW_DISABLED_USER="비활성화 또는 검토 대기 사용자 보기";
 	$MSG_SEEOJ="OJ확인";
 	$MSG_ADD="등록";
 	$MSG_MENU="메뉴";
