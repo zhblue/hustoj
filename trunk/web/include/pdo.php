@@ -1,5 +1,5 @@
 <?php
-function pdo_query($sql){
+function _pdo_query($sql){
     $num_args = func_num_args();
     $args = func_get_args();       //获得传入的所有参数的数组
     $args = array_slice($args,1,--$num_args);
@@ -58,3 +58,4 @@ function pdo_query($sql){
 	return -1;
     }
 }
+require_once(dirname(__FILE__)."/memcache.php");
