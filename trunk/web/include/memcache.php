@@ -39,6 +39,7 @@
     $num_args = func_num_args();
     $args = func_get_args();       //获得传入的所有参数的数组
     $args = array_slice($args,1,--$num_args);
+	if(isset($args[0])&&is_array($args[0])) $args=$args[0];
     $key=md5($OJ_NAME.$_SERVER['HTTP_HOST']."mysql_query" . $sql.implode(" ",$args));
         if($OJ_APCU_OK){   // 如果php内置的apcu可用，优先用apcu缓存
             $apcu_success=false;
@@ -64,3 +65,14 @@
         return $cache;
     }
 
+function pdo_query($sql){
+    $num_args = func_num_args();
+    $args = func_get_args();       
+    $args = array_slice($args,1,--$num_args);
+    if(isset($args[0])&&is_array($args[0])) $args=$args[0];
+    if(str_starts_with($sql,"select")){   //所有的小写select开头全部优先读取缓存
+        return mysql_query_cache($sql,$args);
+    }else{
+        return _pdo_query($sql,$args);
+    }
+}
