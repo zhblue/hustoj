@@ -7,7 +7,7 @@
 	$MSG_STATUS="状态";
 	$MSG_RANKLIST="排名";
 	$MSG_CONTEST="竞赛&作业";
-        $MSG_RECENT_CONTEST="名校联赛";
+    $MSG_RECENT_CONTEST="名校联赛";
 	$MSG_LOGOUT="注销";
 	$MSG_LOGIN="登录";
 	$MSG_LOST_PASSWORD="忘记密码";
@@ -164,6 +164,7 @@
 	$MSG_CLICK_VIEW_HINT="点击查看剧透级题解";
 
 	//admin menu
+    $MSG_VIEW_DISABLED_USER="查看已禁用或待审核用户";
 	$MSG_SEEOJ="查看前台";
 	$MSG_ADD="添加";
 	$MSG_MENU="菜单";
