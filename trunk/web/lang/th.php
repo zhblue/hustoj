@@ -143,6 +143,7 @@ $MSG_TOO_BAD="Please surf the internet in a civilized manner";
 	$MSG_TESTDATA="ทดสอบข้อมูล";
 	
 	//admin menu
+    $MSG_VIEW_DISABLED_USER="ดูผู้ใช้ที่ถูกปิดใช้งานหรือรอการตรวจสอบ";
 	$MSG_SEEOJ="ดูเว็บ";
 	$MSG_ADD="เพิ่มโจทย์";
 	$MSG_MENU="menu";
