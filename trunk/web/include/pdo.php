@@ -1,4 +1,6 @@
 <?php
+// 这个文件和memcache.php配合使用，替换普通版本include目录下的同名文件，可以降低数据库读取压力。
+// 未经长期测试，可能有bug，如果使用后有问题，重点排查大写字母和空格开头的SELECT语句。
 function _pdo_query($sql){
     $num_args = func_num_args();
     $args = func_get_args();       //获得传入的所有参数的数组
