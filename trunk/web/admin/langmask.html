@@ -10,7 +10,7 @@
         font-family: "Avenir", Helvetica, Arial, sans-serif;
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
-        text-align: center;
+        text-align: left;
         color: #2c3e50;
         margin-top: 60px;
       }
@@ -18,7 +18,10 @@
   </head>
   <body>
     <div id="app">
-      <input :value="langmask" disabled />
+       sudo su <br>
+            cd /home/judge/src/web/include<br>
+            vim db_info.inc.php<hr>
+      $OJ_LANGMASK=<input :value="langmask" disabled />;
       <template v-for="item in CodeLang">
         <div v-bind:key="item">
           <input type="checkbox" :id="item" :value="item" v-model="value" />
