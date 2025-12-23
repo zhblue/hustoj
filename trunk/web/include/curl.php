@@ -41,7 +41,7 @@ function curl_get($url){
                 curl_setopt($curl, CURLOPT_COOKIEFILE, $remote_cookie); // use saved cookies
                 curl_setopt($curl, CURLOPT_COOKIEJAR, $remote_cookie);  // save coockies
                 curl_setopt($curl, CURLOPT_REFERER, "$url");
-                curl_setopt($curl, CURLOPT_USERAGENT, "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Safari/537.36");
+                curl_setopt($curl, CURLOPT_USERAGENT, "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36");
                 curl_setopt($curl, CURLOPT_TIMEOUT, 5);
                 curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
                 curl_setopt($curl, CURLOPT_FOLLOWLOCATION, true);
@@ -62,7 +62,7 @@ function curl_post_urlencoded($url,$form){
 	curl_setopt($curl, CURLOPT_COOKIEFILE, $remote_cookie); // use saved cookies
 	curl_setopt($curl, CURLOPT_COOKIEJAR, $remote_cookie);  // save coockies
 	curl_setopt($curl, CURLOPT_REFERER, "$url"); 
-	curl_setopt($curl, CURLOPT_USERAGENT, "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Safari/537.36"); 
+	curl_setopt($curl, CURLOPT_USERAGENT, "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36"); 
 	curl_setopt($curl, CURLOPT_HTTPHEADER, array('Expect:')); 
 	curl_setopt($curl, CURLOPT_TIMEOUT, 30);
 	curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);  // 不要打印内容
