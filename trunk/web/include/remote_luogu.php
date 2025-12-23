@@ -243,14 +243,14 @@ if(isset($_POST[$OJ_NAME.'_refer'])){
 	header("location:".$_SESSION[$OJ_NAME.'_refer']);
 	unset($_SESSION[$OJ_NAME.'_refer']);
 }else{
-	if(time()-fileatime($remote_cookie.".sub")>$remote_delay){
+	$login=is_login($remote_site);
+	if(time()-fileatime($remote_cookie.".sub")>$remote_delay && $login ){
 		touch($remote_cookie.".sub");
 		do_submit($remote_site,$remote_user);	
 	}
- 
-	//echo (htmlentities(curl_get($remote_site."/login0.php")));
-	if (!is_login($remote_site)){
-		var_dump(do_login($remote_site,$remote_user,$remote_pass));
+ 	//echo (htmlentities(curl_get($remote_site."/login0.php")));
+	if (!$login){
+		do_login($remote_site,$remote_user,$remote_pass);
 	}else{
 		echo "logined...";
 	}
