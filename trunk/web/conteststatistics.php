@@ -11,7 +11,6 @@ if (!isset($_GET['cid'])) die("No Such Contest!");
 $cid = intval($_GET['cid']);
 if (isset($OJ_NO_CONTEST_WATCHER) && $OJ_NO_CONTEST_WATCHER) require_once("contest-check.php");
 
-// 查询比赛信息，检查比赛是否已经开始
 $sql = "SELECT title,end_time,start_time,contest_type FROM `contest` WHERE `contest_id`=? AND `start_time`<NOW()";
 $result = mysql_query_cache($sql, $cid);
 $num = count($result);
@@ -25,8 +24,6 @@ $title = $row[0];
 $contest_type = $row['contest_type'];
 $end_time = strtotime($row[1]);
 $start_time = strtotime($row[2]);
-
-// 检查是否为NOIP类型比赛并设置相应限制
 $noip = (time() < $end_time) && ((stripos($title, $OJ_NOIP_KEYWORD) !== false) || (($contest_type & 20) > 0));
 if (isset($_SESSION[$OJ_NAME . '_' . "administrator"]) ||
     isset($_SESSION[$OJ_NAME . '_' . "m$cid"]) ||
@@ -41,14 +38,12 @@ if ($noip) {
 
 $view_title = "Contest Statistics";
 
-// 获取比赛题目数量
 $sql = "SELECT count(`num`) FROM `contest_problem` WHERE `contest_id`=?";
 $result = mysql_query_cache($sql, $cid);
 $row = $result[0];
 $pid_cnt = intval($row[0]);
 
 
-// 统计比赛提交结果数据
 $sql = "SELECT `result`,`num`,`language` FROM `solution` WHERE `contest_id`=? and num>=0";
 $result = mysql_query_cache($sql, $cid);
 $R = array();
@@ -86,15 +81,12 @@ foreach ($result as $row) {
 
 $res = 3600;
 
-// 获取比赛时间间隔用于图表显示
 $sql = "SELECT (UNIX_TIMESTAMP(end_time)-UNIX_TIMESTAMP(start_time))/100 FROM contest WHERE contest_id=? ";
 $result = mysql_query_cache($sql, $cid);
 $view_userstat = array();
 if ($row = $result[0]) {
     $res = $row[0];
 }
-
-// 获取所有提交的时间分布数据
 $sql = "SELECT floor(UNIX_TIMESTAMP((in_date))/$res)*$res*1000 md,count(1) c FROM `solution` where  `contest_id`=?  group by md order by md desc ";
 $result = mysql_query_cache($sql, $cid);
 $chart_data_all = array();
@@ -103,7 +95,6 @@ foreach ($result as $row) {
     $chart_data_all[$row['md']] = $row['c'];
 }
 
-// 获取AC提交的时间分布数据
 $sql = "SELECT floor(UNIX_TIMESTAMP((in_date))/$res)*$res*1000 md,count(1) c FROM `solution` where  `contest_id`=? and result=4 group by md order by md desc ";
 $result = mysql_query_cache($sql, $cid);//mysql_escape_string($sql));
 $chart_data_ac = array();
@@ -113,7 +104,7 @@ foreach ($result as $row) {
     $chart_data_ac[$row['md']] = $row['c'];
 }
 
-// 计算比赛排名锁定时间
+
 if (!isset($OJ_RANK_LOCK_PERCENT)) $OJ_RANK_LOCK_PERCENT = 0;
 $lock = $end_time - ($end_time - $start_time) * $OJ_RANK_LOCK_PERCENT;
 
@@ -129,4 +120,4 @@ require("template/" . $OJ_TEMPLATE . "/conteststatistics.php");
 /////////////////////////Common foot
 if (file_exists('./include/cache_end.php'))
     require_once('./include/cache_end.php');
-
+?>

@@ -27,7 +27,6 @@ $result = pdo_query($sql, $solution_id);
 if (!empty($result)) {
     $row = $result[0];
     $contest_id = $row['contest_id'];
-    // 检查是否允许查看详细错误信息的条件
     if (isset($_GET['tr']) && ($row['problem_id'] == 0 || ($row['problem_id'] > 0 && $OJ_SHOW_DIFF && !contest_locked($contest_id, 16))) &&
         (isset($_SESSION[$OJ_NAME . '_' . 'user_id']) && $_SESSION[$OJ_NAME . '_' . 'user_id'] == $row['user_id'])) {
 
@@ -37,7 +36,6 @@ if (!empty($result)) {
             $sql = "SELECT `error` FROM `compileinfo` WHERE `solution_id`=?";
         } else {
             $spj = pdo_query("select spj from problem where problem_id=?", $row['problem_id']);
-            // 检查是否为特殊评判且隐藏正确答案
             if (!empty($spj) && $spj[0][0] == 2 && $OJ_HIDE_RIGHT_ANSWER) {
                 echo $MSG_WARNING_ACCESS_DENIED;
                 exit();
@@ -50,7 +48,6 @@ if (!empty($result)) {
         $row = $result[0];
 
         if ($row) {
-            // 根据错误信息内容返回特定错误代码或显示错误详情
             if (strpos($row['error'], "judge") !== false) echo "error1";
             else if (strpos($row['error'], "php") !== false) echo "error2";
             else if (strpos($row['error'], "PASS") !== false) echo "error3";
@@ -60,13 +57,11 @@ if (!empty($result)) {
         }
         //echo $sql.$res;
     } else {
-        // 处理不同类型的查询请求
         if (isset($_GET['q']) && "user_id" == $_GET['q']) {
             echo $row['user_id'] . "[" . $row['nick'] . "]";      // ajax onmouseover show who was copycated or shared the code to him
         } else if ((isset($OJ_PUBLIC_STATUS) && $OJ_PUBLIC_STATUS) || (isset($_SESSION[$OJ_NAME . '_' . 'user_id']) && $_SESSION[$OJ_NAME . '_' . 'user_id'] == $row['user_id']) || isset($_SESSION[$OJ_NAME . '_' . 'source_browser'])) {
             $contest_id = $row['contest_id'];
 
-            // 检查比赛是否为NOIP类型或特殊类型，限制访问
             if ($contest_id > 0 && $row['problem_id'] > 0) {
                 $result = pdo_query("select title,contest_type from contest where contest_id=?", $contest_id);
                 $contest_title = $result[0]['title'];
@@ -80,7 +75,6 @@ if (!empty($result)) {
             if (isset($_GET['t']) && "json" == $_GET['t']) {
                 echo json_encode($row);
             } else {
-                // 根据用户权限返回不同的结果信息
                 if (isset($_SESSION[$OJ_NAME . '_' . 'administrator']))
                     echo $row['result'] . "," . $row['memory'] . " KB," . $row['time'] . " ms," . $row['judger'] . "," . ($row['pass_rate'] * 100) . "," . $row['user_id'];
                 else
@@ -95,3 +89,5 @@ if (!empty($result)) {
     echo $solution_id;
     echo "0, 0, 0,unknown,0";
 }
+
+?>

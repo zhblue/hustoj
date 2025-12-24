@@ -509,3 +509,4 @@ if (!$test_run && !isset($_GET['ajax'])) {
         <script>window.parent.setTimeout("fresh_result('<?php echo $insert_id; ?>')", 1000);</script><?php
     }
 }
+?>

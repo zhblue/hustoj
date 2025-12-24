@@ -7,7 +7,6 @@ require_once('./include/my_func.inc.php');
 require_once('./include/setlang.php');
 if (!isset($OJ_FRIENDLY_LEVEL)) $OJ_FRIENDLY_LEVEL = 0;
 
-// 检查考试或现场比赛期间是否允许发送邮件
 if (
     $OJ_FRIENDLY_LEVEL < 2
     && (
@@ -20,7 +19,6 @@ if (
     require("template/" . $OJ_TEMPLATE . "/error.php");
     exit ();
 }
-// 检查邮件功能是否启用
 if (isset($OJ_MAIL) && !$OJ_MAIL) {
     header("Content-type: text/html; charset=utf-8");
     $view_errors = $MSG_NO_MAIL_HERE;
@@ -37,7 +35,6 @@ if (isset($_GET['title'])) {
     $title = htmlentities($_GET['title'], ENT_QUOTES, "UTF-8");
 }
 
-// 检查用户是否已登录
 if (!isset($_SESSION[$OJ_NAME . '_' . 'user_id'])) {
     $view_errors = "<a href=loginpage.php>$MSG_Login</a>";
     require("template/" . $OJ_TEMPLATE . "/error.php");
@@ -54,76 +51,58 @@ if (isset($OJ_LANG)) {
 echo "<title>$MSG_MAIL</title>";
 
 
-// 查看邮件功能：根据邮件ID获取邮件内容
+//view mail
 $view_content = false;
 if (isset($_GET['vid'])) {
     $vid = intval($_GET['vid']);
     $sql = "SELECT * FROM `mail` WHERE `mail_id`=?
 								and (to_user=? or from_user=?)";
     $result = pdo_query($sql, $vid, $_SESSION[$OJ_NAME . '_' . 'user_id'], $_SESSION[$OJ_NAME . '_' . 'user_id']);
+    $row = $result[0];
+    $from_user = $row['from_user'];
+    $to_user = $row['to_user'];
+    $view_title = $row['title'];
+    $view_content = $row['content'];
 
-    if ($result && count($result) > 0) {
-        $row = $result[0];
-        $from_user = $row['from_user'];
-        $to_user = $row['to_user'];
-        $view_title = $row['title'];
-        $view_content = $row['content'];
 
-        $sql = "update `mail` set new_mail=0 WHERE `mail_id`=?";
-        pdo_query($sql, $vid);
-    } else {
-        // 邮件不存在或无权限访问
-        header("Content-type: text/html; charset=utf-8");
-        $view_errors = $MSG_NO_SUCH_MAIL;
-        require("template/" . $OJ_TEMPLATE . "/error.php");
-        exit();
-    }
+    $sql = "update `mail` set new_mail=0 WHERE `mail_id`=?";
+    pdo_query($sql, $vid);
+
 }
-// 发送邮件功能：处理POST请求发送邮件
+//send mail page
 //send mail
 if (isset($_POST['to_user'])) {
-    $to_user = trim($_POST['to_user']);
-    $title = trim($_POST['title']);
-    $content = trim($_POST['content']);
+    $to_user = $_POST ['to_user'];
+    $title = $_POST ['title'];
+    $content = $_POST ['content'];
     $from_user = $_SESSION[$OJ_NAME . '_' . 'user_id'];
-
     if (false) {
         $to_user = stripslashes($to_user);
         $title = stripslashes($title);
         $content = stripslashes($content);
     }
     $title = RemoveXSS($title);
-    $content = RemoveXSS($content);
 
-    // 验证输入
-    if (empty($to_user) || empty($title) || empty($content)) {
-        $view_errors = $MSG_PLEASE_INPUT_REQUIRED_FIELDS;
-        require("template/" . $OJ_TEMPLATE . "/error.php");
-        exit();
-    }
-
-    // 检查发送者和接收者是否为管理员或代码审查员
-    $sql = "select user_id from privilege where (rightstr='source_browser' or rightstr='administrator') and user_id=?";
-    $from_res = pdo_query($sql, $from_user);
-    $to_res = pdo_query($sql, $to_user);
-
-    if (($from_res && count($from_res) < 1) && ($to_res && count($to_res) < 1)) {
+    $sql = "select 1 from privilege where (rightstr='source_browser' or rightstr='administrator') and (user_id=? or user_id=? )";
+    $res = pdo_query($sql, $from_user, $to_user);
+    if ($res && count($res) < 1) {
+        //$view_title= "Mail can only send to or from a Code Reviewer!";
         $view_errors = $MSG_MAIL_CAN_ONLY_BETWEEN_TEACHER_AND_STUDENT;
         require("template/" . $OJ_TEMPLATE . "/error.php");
         exit ();
     } else {
-        $sql = "insert into mail(to_user,from_user,title,content,in_date)
+        if ($res)
+            $sql = "insert into mail(to_user,from_user,title,content,in_date)
 						values(?,?,?,?,now())";
 
-        $result = pdo_query($sql, $to_user, $from_user, $title, $content);
-        if (!$result) {
+        if (!pdo_query($sql, $to_user, $from_user, $title, $content)) {
             $view_title = "Not Mailed!";
         } else {
             $view_title = "Mailed!";
         }
     }
 }
-// 获取邮件列表：查询当前用户的收件和发件记录
+//list mail
 $sql = "SELECT * FROM `mail` WHERE to_user=? or from_user=?
 					order by mail_id desc";
 $result = pdo_query($sql, $_SESSION[$OJ_NAME . '_' . 'user_id'], $_SESSION[$OJ_NAME . '_' . 'user_id']);
@@ -144,4 +123,5 @@ require("template/" . $OJ_TEMPLATE . "/mail.php");
 /////////////////////////Common foot
 if (file_exists('./include/cache_end.php'))
     require_once('./include/cache_end.php');
+?>
 

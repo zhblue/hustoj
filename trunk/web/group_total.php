@@ -12,13 +12,6 @@ if (isset($OJ_ON_SITE_CONTEST_ID)) {
     header("location:contest.php?cid=" . $OJ_ON_SITE_CONTEST_ID);
     exit();
 }
-
-/**
- * 提取输入字符串中所有的[plist]标签块
- * 
- * @param string $inputString 包含plist标签的输入字符串
- * @return array 匹配到的所有plist标签块数组
- */
 function extractPlistBlocks($inputString)
 {
     // 定义正则表达式模式
@@ -30,12 +23,6 @@ function extractPlistBlocks($inputString)
     return $matches[0];
 }
 
-/**
- * 从plist标签块中提取名称和列表数据
- * 
- * @param string $inputString 包含单个plist标签的字符串
- * @return array|null 包含name和list的数组，如果未匹配到则返回null
- */
 function extractPlistData($inputString)
 {
     // 定义正则表达式模式
@@ -53,7 +40,6 @@ function extractPlistData($inputString)
     return null;
 }
 
-// 查询包含plist标签的新闻内容
 $sql = "select content from news where content like '%[plist=%' and defunct='N' ";
 // 示例输入字符串
 $news = array_column(pdo_query($sql), 'content');
@@ -91,7 +77,6 @@ if (!empty($bible)) {
 ///////////////////////////MAIN	
 //NOIP赛制比赛时，移除相关题目
 
-// 获取NOIP赛制比赛中的题目异常列表
 $exceptions = array();
 if (isset($OJ_NOIP_KEYWORD) && $OJ_NOIP_KEYWORD && !isset($_SESSION[$OJ_NAME . "_administrator"])) {  // 管理员不受限
     $now = date('Y-m-d H:i', time());

@@ -18,10 +18,7 @@ if (isset($OJ_LANG)) {
     require_once("./lang/$OJ_LANG.php");
 }
 
-/**
- * 处理比赛相关逻辑，验证比赛访问权限和时间限制
- * 检查比赛是否存在、是否私有、是否需要密码验证、是否在有效时间内
- */
+
 if (isset($_GET['cid'])) {
     $cid = intval($_GET['cid']);
     $view_cid = $cid;
@@ -114,10 +111,6 @@ if (isset($_GET['cid'])) {
     }
 }
 
-/**
- * 管理员功能：为用户设置IP地址
- * 验证管理员权限并执行IP地址设置操作
- */
 $result2 = "";
 if ((isset($_SESSION[$OJ_NAME . '_' . 'administrator']) || isset($_SESSION[$OJ_NAME . '_' . 'contest_creator'])) && isset($_POST['do'])) {
 
@@ -141,3 +134,4 @@ if (isset($_GET['cid']))
 /////////////////////////Common foot
 if (file_exists('./include/cache_end.php'))
     require_once('./include/cache_end.php');
+?>

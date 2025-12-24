@@ -1,23 +1,8 @@
 <?php
 require_once("discuss_func.inc.php");
-
-/**
- * 获取讨论主题详情并显示讨论内容页面
- * 该脚本处理讨论主题的显示，包括主题信息和回复内容
- * 支持管理员和普通用户的权限控制
- */
-
-/**
- * 获取主题ID和竞赛ID参数
- */
 $tid = intval($_REQUEST['tid']);
 if (isset($_GET['cid']))
     $cid = intval($_GET['cid']);
-
-/**
- * 查询主题信息
- * 从topic表和contest_problem表中获取主题的标题、竞赛ID、问题ID、状态和置顶级别
- */
 $sql = "SELECT t.`title`, `cid`, `pid`, `status`, `top_level` FROM `topic` t LEFT JOIN contest_problem cp on cp.problem_id=t.pid   WHERE `tid`=? AND `status`<=1";
 $result = pdo_query($sql, $tid);
 $rows_cnt = count($result);
@@ -26,10 +11,6 @@ $row = $result[0];
 if ($row['cid'] > 0)
     $cid = $row['cid'];
 
-/**
- * 处理问题ID映射
- * 如果主题关联了竞赛和问题，则从contest_problem表中获取问题编号并转换为字母
- */
 if ($row['pid'] > 0 && $row['cid'] > 0) {
     $pid = pdo_query("SELECT num FROM contest_problem WHERE problem_id=? AND contest_id=?", $row['pid'], $row['cid'])[0][0];
     $pid = $PID[$pid];
@@ -41,11 +22,7 @@ $problemid = $row['pid'];
 $titles = $row['title'];
 $toplevels = $row['top_level'];
 
-/**
- * 检查用户是否为管理员
- */
 $isadmin = isset($_SESSION[$OJ_NAME . '_' . 'administrator']);
-
 ?>
 <center>
     <table style='width:80%;' table class='table table-hover'>
@@ -59,10 +36,6 @@ $isadmin = isset($_SESSION[$OJ_NAME . '_' . 'administrator']);
         </thead>
         <tbody>
         <?php
-        /**
-         * 查询并显示主题的回复内容
-         * 获取指定主题ID的回复，按回复ID排序，限制30条记录
-         */
         $sql = "SELECT `rid`, `author_id`, `time`, `content`, `status` FROM `reply` WHERE `topic_id`=? AND `status`<=1 ORDER BY `rid` LIMIT 30";
         $result = pdo_query($sql, $tid);
         $rows_cnt = count($result);
@@ -235,11 +208,6 @@ $isadmin = isset($_SESSION[$OJ_NAME . '_' . 'administrator']);
         return this.replace(/^\s+|\s+$/g, "");
     }
 
-    /**
-     * 回复功能函数
-     * 将选中的回复内容添加到回复文本框中
-     * @param rid 回复ID
-     */
     function reply(rid) {
         var origin = $("#post" + rid).text();
         //console.log(origin);
@@ -250,3 +218,4 @@ $isadmin = isset($_SESSION[$OJ_NAME . '_' . 'administrator']);
     }
 </script>
 <?php require_once("template/$OJ_TEMPLATE/discuss.php") ?>
+

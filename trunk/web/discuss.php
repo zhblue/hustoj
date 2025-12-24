@@ -23,9 +23,9 @@ echo "<title>$MSG_BBS</title>";
                     if ($cid != 0) {
                         $query .= "&cid=$cid";
                         $PAL = pdo_query("SELECT num FROM contest_problem WHERE contest_id=? AND problem_id=?", $cid, $pid)[0][0];
-                        echo " &gt;&gt; <a href=\"discuss.php" . $query . "\">Problem " . $PID[$PAL] . "</a>";
+                        echo " >> <a href=\"discuss.php" . $query . "\">Problem " . $PID[$PAL] . "</a>";
                     } else {
-                        echo " &gt;&gt; <a href=\"discuss.php" . $query . "\">Problem " . $pid . "</a>";
+                        echo " >> <a href=\"discuss.php" . $query . "\">Problem " . $pid . "</a>";
                     }
                 }
                 ?>
@@ -40,13 +40,12 @@ echo "<title>$MSG_BBS</title>";
         <?php } ?>
 
         <?php
-        // 构建查询话题列表的SQL语句，根据是否为比赛模式选择不同的查询结构
-        $sql = "SELECT `tid`, `title`, `top_level`, [t](file://C:\Users\Administrator\IdeaProjects\hustoj\web\robots.txt).`status`, `cid`, `pid`, CONVERT(MIN(`r`.`time`),DATE) `posttime`, MAX(`r`.`time`) `lastupdate`, [t](file://C:\Users\Administrator\IdeaProjects\hustoj\web\robots.txt).`author_id`, COUNT(`rid`) `count` FROM `topic` t LEFT JOIN `reply` r on t.tid=r.topic_id WHERE [t](file://C:\Users\Administrator\IdeaProjects\hustoj\web\robots.txt).`status`!=2";
+        $sql = "SELECT `tid`, `title`, `top_level`, `t`.`status`, `cid`, `pid`, CONVERT(MIN(`r`.`time`),DATE) `posttime`, MAX(`r`.`time`) `lastupdate`, `t`.`author_id`, COUNT(`rid`) `count` FROM `topic` t LEFT JOIN `reply` r on t.tid=r.topic_id WHERE `t`.`status`!=2";
 
         if (isset($_REQUEST['cid'])) {
             $cid = intval($_REQUEST['cid']);
 
-            $sql = "SELECT `tid`, t.`title`, `top_level`, [t](file://C:\Users\Administrator\IdeaProjects\hustoj\web\robots.txt).`status`, `cid`, `pid`, CONVERT(MIN(`r`.`time`),DATE) `posttime`, MAX(`r`.`time`) `lastupdate`, [t](file://C:\Users\Administrator\IdeaProjects\hustoj\web\robots.txt).`author_id`, COUNT(`rid`) `count`,cp.num FROM `topic` t LEFT JOIN `reply` r on t.tid=r.topic_id LEFT JOIN contest_problem cp on t.pid=cp.problem_id and cp.contest_id=$cid WHERE [t](file://C:\Users\Administrator\IdeaProjects\hustoj\web\robots.txt).`status`!=2";
+            $sql = "SELECT `tid`, t.`title`, `top_level`, `t`.`status`, `cid`, `pid`, CONVERT(MIN(`r`.`time`),DATE) `posttime`, MAX(`r`.`time`) `lastupdate`, `t`.`author_id`, COUNT(`rid`) `count`,cp.num FROM `topic` t LEFT JOIN `reply` r on t.tid=r.topic_id LEFT JOIN contest_problem cp on t.pid=cp.problem_id and cp.contest_id=$cid WHERE `t`.`status`!=2";
             //echo $sql;
         }
 
@@ -194,4 +193,3 @@ echo "<title>$MSG_BBS</title>";
 </center>
 
 <?php require_once("template/$OJ_TEMPLATE/discuss.php") ?>
-

@@ -16,14 +16,6 @@ if (!isset($_GET['sid'])) {
     require_once("oj-footer.php");
     exit(0);
 }
-
-/**
- * 验证字符串是否有效的函数
- * 用于判断是否允许查看运行时错误信息
- * 
- * @param string $str2 待验证的字符串
- * @return bool 如果字符串有效返回true，否则返回false
- */
 function is_valid($str2)
 {
     global $_SESSION, $OJ_NAME, $OJ_FRIENDLY_LEVEL;
@@ -123,4 +115,5 @@ if (!isset($_SESSION[$OJ_NAME . '_' . 'source_browser']) && $OJ_SHOW_DIFF == fal
 if (file_exists('./include/cache_end.php')) {
     require_once('./include/cache_end.php');
 }
+?>
 

@@ -1,29 +1,11 @@
 <?php
-/**
- * 排名列表页面
- * 显示用户排名信息，包括解题数、提交数、通过率等统计信息
- * 支持按不同时间范围（日/周/月/年）和用户组进行筛选
- */
-
-/**
- * 全局配置变量
- */
-$OJ_CACHE_SHARE = false;  // 是否共享缓存
-$cache_time = 30;         // 缓存时间设置
-
-/**
- * 引入必要的包含文件
- */
-require_once('./include/cache_start.php');   // 缓存开始配置
-require_once('./include/db_info.inc.php');   // 数据库连接信息
-require_once("./include/my_func.inc.php");   // 自定义函数库
-require_once('./include/setlang.php');       // 语言设置
-require_once('./include/memcache.php');      // 内存缓存配置
-
-/**
- * 检查当前是否有NOIP相关竞赛正在进行
- * 如果有NOIP关键词匹配或特定类型竞赛，显示警告信息并退出
- */
+$OJ_CACHE_SHARE = false;
+$cache_time = 30;
+require_once('./include/cache_start.php');
+require_once('./include/db_info.inc.php');
+require_once("./include/my_func.inc.php");
+require_once('./include/setlang.php');
+require_once('./include/memcache.php');
 $now = date('Y-m-d H:i', time());
 $sql = "select count(contest_id) from contest where start_time<'$now' and end_time>'$now' and ( title like '%$OJ_NOIP_KEYWORD%' or (contest_type & 20)>0 )  ";
 $rows = pdo_query($sql);
@@ -34,16 +16,9 @@ if ($row[0] > 0) {
     exit(0);
 }
 
-/**
- * 设置页面标题和隐藏用户配置
- */
 $view_title = $MSG_RANKLIST;
 if (!isset($OJ_RANK_HIDDEN)) $OJ_RANK_HIDDEN = "'admin','zhblue'";
 
-/**
- * 处理时间范围参数
- * 支持日(d)、周(w)、月(m)、年(y)四种时间范围筛选
- */
 $scope = "";
 if (isset($_GET['scope']))
     $scope = $_GET['scope'];
@@ -51,11 +26,6 @@ if ($scope != "" && $scope != 'd' && $scope != 'w' && $scope != 'm')
     $scope = 'y';
 $where = "";
 $param = array();
-
-/**
- * 构建用户查询条件
- * 支持按用户名前缀和用户组名称进行筛选
- */
 if (isset($_GET['prefix'])) {
     $prefix = $_GET['prefix'];
     $where = "where user_id like ? and user_id not in (" . $OJ_RANK_HIDDEN . ") and defunct='N' ";
@@ -68,19 +38,14 @@ if (isset($_GET['group_name']) && !empty($_GET['group_name'])) {
     $where .= "and group_name like ? ";
     array_push($param, $group_name . '%');
 }
-
-/**
- * 获取总用户数量
- */
 $rank = 0;
+
 $sql = "SELECT count(1) as `mycount` FROM `users` where defunct='N' ";
 $result = mysql_query_cache($sql);
 $row = $result[0];
 $view_total = $row['mycount'];
 
-/**
- * 处理分页参数
- */
+
 if (isset($_GET ['start']))
     $rank = intval($_GET ['start']);
 
@@ -92,10 +57,6 @@ $page_size = 50;
 if ($rank < 0)
     $rank = 0;
 
-/**
- * 根据时间范围参数构建不同的查询SQL
- * 如果设置了时间范围，则查询指定时间范围内的用户统计数据
- */
 $sql = "SELECT `user_id`,`nick`,`solved`,`submit`,group_name,starred FROM `users` $where ORDER BY `solved` DESC,submit,reg_time  LIMIT  " . strval($rank) . ",$page_size";
 
 if ($scope) {
@@ -134,9 +95,7 @@ if ($scope) {
 //                      echo $sql;
 }
 
-/**
- * 执行查询并获取结果
- */
+
 if (!empty($param)) {
     $result = pdo_query($sql, $param);
 } else {
@@ -144,11 +103,6 @@ if (!empty($param)) {
 }
 if ($result) $rows_cnt = count($result);
 else $rows_cnt = 0;
-
-/**
- * 构建排名数据数组
- * 包括排名、用户名、昵称、用户组、解题数、提交数、通过率等信息
- */
 $view_rank = array();
 $i = 0;
 for ($i = 0; $i < $rows_cnt; $i++) {
@@ -179,5 +133,6 @@ require("template/" . $OJ_TEMPLATE . "/ranklist.php");
 /////////////////////////Common foot
 if (file_exists('./include/cache_end.php'))
     require_once('./include/cache_end.php');
+?>
 
 

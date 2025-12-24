@@ -18,11 +18,11 @@ $user_id = $_SESSION[$OJ_NAME . '_' . 'user_id'];
 
 /**
  * 存储用户分享的代码
- * @param $title 代码标题
- * @param $code 代码内容
- * @param $user_id 用户ID
- * @param $language 编程语言
- * @return mixed 返回插入结果
+ * @param $title
+ * @param $code
+ * @param $user_id
+ * @param $language
+ * @return mixed
  */
 function saveShareCode($title, $code, $language, $user_id)
 {
@@ -33,9 +33,9 @@ function saveShareCode($title, $code, $language, $user_id)
 
 /**
  * 查询某一sid 的详情
- * @param $OJ_MEMCACHE 是否使用缓存
- * @param $sid 分享代码ID
- * @return mixed 返回查询结果
+ * @param $OJ_MEMCACHE
+ * @param $sid
+ * @return mixed
  */
 function getShareCodeBySid($OJ_MEMCACHE, $sid)
 {
@@ -51,9 +51,9 @@ function getShareCodeBySid($OJ_MEMCACHE, $sid)
 
 /**
  * 验证某个share_id 的 代码 是不是某个用户的
- * @param $sid 分享代码ID
- * @param $user_id 用户ID
- * @return bool 返回是否为代码所有者
+ * @param $sid
+ * @param $user_id
+ * @return bool
  */
 function checkCodeOwner($sid, $user_id)
 {
@@ -68,8 +68,8 @@ function checkCodeOwner($sid, $user_id)
 
 /**
  * 删除某一个sid的代码
- * @param $sid 分享代码ID
- * @param $user_id 用户ID
+ * @param $sid
+ * @param $user_id
  */
 function deleteShareCodeBySid($sid, $user_id)
 {
@@ -79,11 +79,11 @@ function deleteShareCodeBySid($sid, $user_id)
 
 /**
  * 更新某一sid 的代码
- * @param $sid 分享代码ID
- * @param $code 代码内容
- * @param $language 编程语言
- * @param $user_id 用户ID
- * @return mixed 返回更新结果
+ * @param $sid
+ * @param $code
+ * @param $language
+ * @param $user_id
+ * @return mixed
  */
 function updateShareCodeBySid($sid, $title, $code, $language, $user_id)
 {
@@ -164,7 +164,7 @@ if (isset($_GET['sid'])) {
 // 存储提交代码，包括新提交以及修改提交
 if (isset($_POST['code'])) {
     if (!isset($_SESSION[$OJ_NAME . '_' . 'user_id'])) {
-        $view_errors = "<a href=loginpage.php>$MSG_Login</a";
+        $view_errors = "<a href=loginpage.php>$MSG_Login</a>";
         require("template/" . $OJ_TEMPLATE . "/error.php");
     } else {
         header('Content-Type:application/json');
@@ -251,4 +251,6 @@ if (isset($_GET['type']) && $_GET['type'] == 'json') {
 /////////////////////////Common foot
 if (file_exists('./include/cache_end.php'))
     require_once('./include/cache_end.php');
+?>
+
 

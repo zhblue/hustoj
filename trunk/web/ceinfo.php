@@ -12,22 +12,12 @@ if (!isset($_SESSION[$OJ_NAME . '_' . 'user_id'])) {
     exit(0);
 }
 require_once("./include/const.inc.php");
-
-// 检查是否提供了解决方案ID参数，如果没有则显示错误页面
 if (!isset($_GET['sid'])) {
     $view_errors = "No such code!\n";
     require("template/" . $OJ_TEMPLATE . "/error.php");
     exit(0);
 
 }
-
-/**
- * 验证字符串是否有效
- * 通过计算数字字符与总字符数的比例来判断
- * 
- * @param string $str2 待验证的字符串
- * @return bool 如果有效返回true，否则返回false
- */
 function is_valid($str2)
 {
     $n = strlen($str2);
@@ -39,7 +29,6 @@ function is_valid($str2)
     return $n / $m > 3;
 }
 
-// 检查用户登录状态，未登录则显示访问被拒绝错误
 if (!isset($_SESSION[$OJ_NAME . '_' . 'user_id'])) {
     $view_errors = $MSG_WARNING_ACCESS_DENIED;
     require("template/" . $OJ_TEMPLATE . "/error.php");
@@ -48,28 +37,19 @@ if (!isset($_SESSION[$OJ_NAME . '_' . 'user_id'])) {
 
 $ok = false;
 $id = intval($_GET['sid']);
-
-// 查询解决方案信息
 $sql = "SELECT * FROM `solution` WHERE `solution_id`=?";
 $result = pdo_query($sql, $id);
 $row = $result[0];
-
-// 检查竞赛是否被锁定
 if (contest_locked($row['contest_id'], 256))
     $OJ_AI_API_URL = false;
 $lang = $row["language"];
-
-// 检查用户权限：用户是解决方案的所有者或具有源码浏览权限
 if ($row && $row['user_id'] == $_SESSION[$OJ_NAME . '_' . 'user_id']) $ok = true;
 if (isset($_SESSION[$OJ_NAME . '_' . 'source_browser'])) $ok = true;
 $view_reinfo = "";
-
-// 如果有权限查看编译错误信息
 if ($ok == true) {
     if ($row['user_id'] != $_SESSION[$OJ_NAME . '_' . 'user_id'])
         $view_mail_link = "<a href='mail.php?to_user={$row['user_id']}&title=$MSG_SUBMIT $id'>Mail the auther</a>";
 
-    // 查询编译错误信息
     $sql = "SELECT `error` FROM `compileinfo` WHERE `solution_id`=?";
     $result = pdo_query($sql, $id);
     $row = $result[0];
@@ -79,7 +59,6 @@ if ($ok == true) {
 
 } else {
 
-    // 无权限访问，显示错误页面
     $view_errors = $MSG_WARNING_ACCESS_DENIED;
     require("template/" . $OJ_TEMPLATE . "/error.php");
     exit(0);
@@ -91,4 +70,5 @@ require("template/" . $OJ_TEMPLATE . "/ceinfo.php");
 /////////////////////////Common foot
 if (file_exists('./include/cache_end.php'))
     require_once('./include/cache_end.php');
+?>
 

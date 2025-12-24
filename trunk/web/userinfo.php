@@ -16,12 +16,6 @@ if (!is_valid_user_name($user)) {
 }
 $iplocation = new IpLocation();
 
-/**
- * 从输入字符串中提取所有plist块
- * 
- * @param string $inputString 输入的字符串
- * @return array 包含所有匹配的plist块的数组
- */
 function extractPlistBlocks($inputString)
 {
     // 定义正则表达式模式
@@ -33,12 +27,6 @@ function extractPlistBlocks($inputString)
     return $matches[0];
 }
 
-/**
- * 从plist块中提取数据
- * 
- * @param string $inputString 包含plist标签的字符串
- * @return array|null 包含name和list的数组，如果没有匹配则返回null
- */
 function extractPlistData($inputString)
 {
     // 定义正则表达式模式
@@ -56,7 +44,6 @@ function extractPlistData($inputString)
     return null;
 }
 
-// 查询包含plist标签的新闻内容
 $sql = "select content from news where content like '%[plist=%' and defunct='N' ";
 // 示例输入字符串
 $news = array_column(mysql_query_cache($sql), 'content');
@@ -146,7 +133,7 @@ $row = $result[0];
 $AC = $row['ac'];
 
 // count submission
-$sql = "select count(DISTINCT problem_id) as [Submit](file://C:\Users\Administrator\IdeaProjects\hustoj\web\template\bs3\scrollboard.js#L141-L163) FROM `solution` WHERE `user_id`=? and  problem_id>0  $not_in_noip ";
+$sql = "select count(DISTINCT problem_id) as `Submit` FROM `solution` WHERE `user_id`=? and  problem_id>0  $not_in_noip ";
 $result = mysql_query_cache($sql, $user);
 $row = $result[0];
 $Submit = $row['Submit'];
@@ -205,3 +192,5 @@ require("template/" . $OJ_TEMPLATE . "/userinfo.php");
 /////////////////////////Common foot
 if (file_exists('./include/cache_end.php'))
     require_once('./include/cache_end.php');
+?>
+

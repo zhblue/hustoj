@@ -13,15 +13,11 @@ $result = false;
 ///////////////////////////MAIN	
 
 $view_category = "";
-
-// 查询数据库中所有未废弃的问题的来源信息，并限制返回5000条记录
 $sql = "select distinct source "
     . "FROM `problem` where defunct='N' order by source "
     . "LIMIT 5000";
 $result = mysql_query_cache($sql);//mysql_escape_string($sql));
 $category = array();
-
-// 遍历查询结果，将每个问题的来源按空格分割，并处理URL格式的来源
 foreach ($result as $row) {
     $cate = explode(" ", $row['source']);
     foreach ($cate as $cat) {
@@ -35,8 +31,6 @@ foreach ($result as $row) {
 }
 $category = array_unique($category);
 sort($category);
-
-// 根据查询结果生成分类标签显示内容
 if (!$result) {
     $view_category = "<h3>No Category Now!</h3>";
 } else {
@@ -58,4 +52,4 @@ require("template/" . $OJ_TEMPLATE . "/category.php");
 /////////////////////////Common foot
 if (file_exists('./include/cache_end.php'))
     require_once('./include/cache_end.php');
-
+?>

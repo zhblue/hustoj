@@ -18,10 +18,7 @@ if (isset($OJ_LANG)) {
     require_once("./lang/$OJ_LANG.php");
 }
 
-/**
- * 处理比赛相关页面的逻辑
- * 验证比赛ID、检查比赛权限、验证比赛密码、处理比赛状态
- */
+
 if (isset($_GET['cid'])) {
     $cid = intval($_GET['cid']);
     $view_cid = $cid;
@@ -69,7 +66,6 @@ if (isset($_GET['cid'])) {
         $view_end_time = $row['end_time'];
         $user_id = $row['user_id'];
 
-        // 检查用户权限，只有管理员或比赛创建者可以访问
         if (!(isset($_SESSION[$OJ_NAME . '_' . 'administrator']) || $user_id == $_SESSION[$OJ_NAME . '_user_id'])) {
             $view_errors = "<center>";
             $view_errors .= "<h3>$MSG_CONTEST_ID : $view_cid - $view_title</h3>";
@@ -84,7 +80,6 @@ if (isset($_GET['cid'])) {
         }
     }
 
-    // 处理比赛访问权限不足的情况，显示错误页面和密码输入表单
     if (!$contest_ok) {
         $view_errors = "<center>";
         $view_errors .= "<h3>$MSG_CONTEST_ID : $view_cid - $view_title</h3>";
@@ -121,14 +116,12 @@ if (isset($_GET['cid'])) {
 if (isset($_GET['cid'])) {
     $contest_id = intval($_GET['cid']);
 
-    // 查询同一IP提交多个解决方案的可疑用户
     $sql = "select * from (select count(distinct user_id) c,ip from solution where contest_id=? group by ip) suspect inner join (select distinct ip, user_id, in_date from solution where contest_id=? ) u on suspect.ip=u.ip and suspect.c>1 order by c desc, u.ip, in_date, user_id";
 
     $result1 = pdo_query($sql, $contest_id, $contest_id);
 
     $start = pdo_query("select start_time from contest where contest_id=?", $contest_id)[0][0];
     $end = pdo_query("select end_time from contest where contest_id=?", $contest_id)[0][0];
-    // 查询同一用户在比赛期间使用多个IP登录的可疑情况
     $sql = "select * from (select count(distinct ip) c,user_id from loginlog where time>=? and time<=? group by user_id) suspect inner join (select distinct user_id from solution where contest_id=? ) u on suspect.user_id=u.user_id and suspect.c>1 inner join (select distinct ip, user_id, time from loginlog where time>=? and time<=? ) ips on ips.user_id=u.user_id order by c desc, u.user_id, ips.time, ip";
 
     $result2 = pdo_query($sql, $start, $end, $contest_id, $start, $end);
@@ -141,4 +134,4 @@ if (isset($_GET['cid']))
 /////////////////////////Common foot
 if (file_exists('./include/cache_end.php'))
     require_once('./include/cache_end.php');
-
+?>

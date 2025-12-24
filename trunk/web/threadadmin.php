@@ -22,8 +22,8 @@ if ($_REQUEST['target'] == 'reply') {
             err_msg("<a href=\"../loginpage.php\">Please Login First</a>");
         } else {
             $sql .= " AND author_id=?";
-            pdo_query($sql, $stat, $rid, $_SESSION[$OJ_NAME . '_' . 'user_id']);
         }
+        pdo_query($sql, $stat, $rid, $_SESSION[$OJ_NAME . '_' . 'user_id']);
     } else {
         // echo "$sql";
         pdo_query($sql, $stat, $rid);

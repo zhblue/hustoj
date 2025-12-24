@@ -9,8 +9,6 @@ $title = "";
 require_once("./include/const.inc.php");
 require_once("./include/my_func.inc.php");
 require_once("./include/memcache.php");
-
-// 检查用户权限，只有管理员、比赛创建者、题目编辑者或密码设置者才能访问
 if (!(isset($_SESSION[$OJ_NAME . '_' . 'administrator']) || isset($_SESSION[$OJ_NAME . '_' . 'contest_creator']) || isset($_SESSION[$OJ_NAME . '_' . 'problem_editor']) || isset($_SESSION[$OJ_NAME . '_' . 'password_setter']))) {
     echo "<a href='../loginpage.php'>Please Login First!</a>";
     exit(1);
@@ -19,8 +17,8 @@ if (!(isset($_SESSION[$OJ_NAME . '_' . 'administrator']) || isset($_SESSION[$OJ_
 /**
  * 获得该比赛的提交记录
  * @param $OJ_MEMCACHE
- * @param $cid 比赛ID
- * @return mixed 提交记录数组
+ * @param $cid
+ * @return mixed
  */
 function getSubmitByCid($OJ_MEMCACHE, $cid)
 {
@@ -32,8 +30,8 @@ function getSubmitByCid($OJ_MEMCACHE, $cid)
 /**
  * 获得提交过该比赛的账号
  * @param $OJ_MEMCACHE
- * @param $cid 比赛ID
- * @return mixed 参赛队伍列表
+ * @param $cid
+ * @return mixed
  */
 function getTeamByCid($OJ_MEMCACHE, $cid)
 {
@@ -45,8 +43,8 @@ function getTeamByCid($OJ_MEMCACHE, $cid)
 /**
  * 获得题目ID与 比赛中序号的Map
  * @param $OJ_MEMCACHE
- * @param $cid 比赛ID
- * @return array 题目ID到字母序号的映射数组
+ * @param $cid
+ * @return array
  */
 function getProblemMapByCid($OJ_MEMCACHE, $cid)
 {
@@ -64,8 +62,8 @@ function getProblemMapByCid($OJ_MEMCACHE, $cid)
 /*****************************  工具 *******************************/
 /**
  * 前端界面的判题结果与oj不同，所以需要转换
- * @param $result 原始判题结果
- * @return int 转换后的判题结果ID
+ * @param $result
+ * @return int
  */
 function changeResult($result)
 {
@@ -103,9 +101,8 @@ function changeResult($result)
 
 /**
  * 转换一条提交记录成json
- * @param $submit 提交记录
- * @param $problemMap 题目映射表
- * @return array 转换后的数组
+ * @param $submit
+ * @param $problemMap
  */
 function submit2Array($submit, $problemMap)
 {
@@ -121,8 +118,7 @@ function submit2Array($submit, $problemMap)
 
 /**
  * 转换一个队伍信息成json
- * @param $team 队伍信息
- * @return array 转换后的数组
+ * @param $team
  */
 function team2Array($team)
 {
@@ -274,3 +270,7 @@ require("template/" . $OJ_TEMPLATE . "/contestrank3.php");
 /////////////////////////Common foot
 if (file_exists('./include/cache_end.php'))
     require_once('./include/cache_end.php');
+?>
+
+
+

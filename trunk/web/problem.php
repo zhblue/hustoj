@@ -1,62 +1,35 @@
 <?php
-/**
- * 在线评测系统问题页面处理脚本
- * 处理问题查看请求，支持练习模式和比赛模式两种访问方式
- * 验证用户权限，检查问题可用性，并渲染问题页面
- */
-
-/**
- * 缓存时间设置（秒）
- * @var int
- */
 $cache_time = 10;
-
-/**
- * 缓存共享开关
- * @var bool
- */
 $OJ_CACHE_SHARE = false;
 
-// 引入系统必需的配置文件和函数库
 require_once('./include/cache_start.php');
 require_once('./include/db_info.inc.php');
 require_once('./include/bbcode.php');
 require_once('./include/const.inc.php');
 require_once('./include/my_func.inc.php');
 require_once('./include/setlang.php');
-
-// 根据语言设置加载对应的语言文件
 if (isset($OJ_LANG)) {
     require_once("./lang/$OJ_LANG.php");
 }
 
-// 获取当前时间，格式为 Y-m-d H:i
 $now = date("Y-m-d H:i", time());
 
-// 处理比赛ID参数
 if (isset($_GET['cid']))
     $ucid = "&cid=" . intval($_GET['cid']);
 else
     $ucid = "";
 
-/**
- * 问题访问模式标识
- * @var bool $pr_flag 练习模式标识
- * @var bool $co_flag 比赛模式标识
- */
 $pr_flag = false;
 $co_flag = false;
 
-// 根据请求参数判断访问模式：练习模式或比赛模式
 if (isset($_GET['id'])) {
-    // 练习模式：直接通过问题ID访问
+    //practice
     $id = intval($_GET['id']);
+    //require("oj-header.php");
 
-    // 查询问题是否被比赛使用
     $sql = "select c.contest_id,c.title from contest c inner join contest_problem cp on c.contest_id=cp.contest_id and cp.problem_id=?  WHERE ( c.`end_time`>'$now' and c.defunct='N' ) or c.`private`='1' ";
     $used_in_contests = pdo_query($sql, $id);
 
-    // 根据用户权限和系统设置构建查询语句
     if (isset($_SESSION[$OJ_NAME . '_' . 'administrator']) || isset($_SESSION[$OJ_NAME . '_' . 'problem_verifiter']) || isset($_SESSION[$OJ_NAME . '_' . 'contest_creator']) || isset($_SESSION[$OJ_NAME . '_' . 'problem_editor']))
         $sql = "SELECT * FROM `problem` WHERE `problem_id`=?";
     else if ($OJ_FREE_PRACTICE)
@@ -74,12 +47,10 @@ if (isset($_GET['id'])) {
     $pr_flag = true;
     $result = pdo_query($sql, $id);
 } else if (isset($_GET['cid']) && isset($_GET['pid'])) {
-    // 比赛模式：通过比赛ID和题目编号访问
+    //contest
     $cid = intval($_GET['cid']);
     $pid = intval($_GET['pid']);
     require_once("contest-check.php");
-    
-    // 根据用户权限构建比赛查询语句
     if (isset($_SESSION[$OJ_NAME . '_' . 'administrator']) || isset($_SESSION[$OJ_NAME . '_' . 'contest_creator']) || isset($_SESSION[$OJ_NAME . '_' . 'problem_editor']))
         $sql = "SELECT langmask,private,defunct FROM `contest` WHERE `contest_id`=?";
     else
@@ -87,8 +58,6 @@ if (isset($_GET['id'])) {
 
     $result = pdo_query($sql, $cid);
     $rows_cnt = empty($result) ? 0 : count($result);
-    
-    // 检查比赛是否存在
     if (empty($result) && !$OJ_FREE_PRACTICE && !isset($_SESSION[$OJ_NAME . '_administrator']) && !isset($_SESSION[$OJ_NAME . "_c" . $cid])) {
         $view_errors = "<title>$MSG_CONTEST</title><h2>No such Contest!</h2>";
         require("template/" . $OJ_TEMPLATE . "/error.php");
@@ -98,7 +67,6 @@ if (isset($_GET['id'])) {
     $row = ($result[0]);
     $contest_ok = true;
 
-    // 检查比赛访问权限
     if ($row[1] && !isset($_SESSION[$OJ_NAME . '_' . 'c' . $cid]))
         $contest_ok = false;
 
@@ -112,12 +80,14 @@ if (isset($_GET['id'])) {
     $langmask = $row[0];
 
     if (!$contest_ok) {
-        // 比赛未开始或无权限访问
+        //not started
         $view_errors = "No such Contest!";
         require("template/" . $OJ_TEMPLATE . "/error.php");
         exit(0);
     } else {
-        // 比赛已开始，获取题目信息
+        //started
+//	$sql = "SELECT * FROM `problem` WHERE `defunct`='N' AND `problem_id`=(  // <- defunct problem not in list
+//	$sql = "SELECT * FROM `problem` WHERE `problem_id`=(    // <-- defunct problem in list for contest but, not in list for practice
         $sql = "SELECT * FROM `problem` WHERE `problem_id`=(
 			SELECT `problem_id` FROM `contest_problem` WHERE `contest_id`=? AND `num`=?
 		)";
@@ -126,7 +96,7 @@ if (isset($_GET['id'])) {
         $id = $result[0]['problem_id'];
     }
 
-    // 检查比赛公开性
+    //public
     if (!$contest_ok) {
         $view_errors = "Not Invited!";
         require("template/" . $OJ_TEMPLATE . "/error.php");
@@ -135,13 +105,11 @@ if (isset($_GET['id'])) {
 
     $co_flag = true;
 } else {
-    // 无效的请求参数
     $view_errors = "<title>$MSG_NO_SUCH_PROBLEM</title><h2>$MSG_NO_SUCH_PROBLEM</h2>";
     require("template/" . $OJ_TEMPLATE . "/error.php");
     exit(0);
 }
 
-// 处理查询结果
 if (count($result) != 1) {
     $view_errors = "";
 
@@ -175,8 +143,6 @@ if (count($result) != 1) {
     $row = $result[0];
     $view_title = $row['title'];
 }
-
-// 检查NOIP模式比赛中的题目显示限制
 $flag = false;
 if (isset($OJ_NOIP_KEYWORD) && $OJ_NOIP_KEYWORD) {
     //检查当前题目是不是在NOIP模式比赛中，如果是则不显示AC数量 2020.7.11 by ivan_zhou
@@ -185,8 +151,6 @@ if (isset($OJ_NOIP_KEYWORD) && $OJ_NOIP_KEYWORD) {
     $rrs = pdo_query($sql, $id, $now, $now, "%$OJ_NOIP_KEYWORD%");
     $flag = !empty($rrs);
 }
-
-// 根据NOIP模式或题目锁定状态隐藏提交和通过数量
 if ($flag || problem_locked($id, 28)) {
     $row['accepted'] = '<font color="red"> ? </font>';
     $row['submit'] = '<font color="red"> ? </font>';
@@ -199,7 +163,6 @@ if ($flag || problem_locked($id, 28)) {
     }
 }
 
-// 读取题目输出文件名
 $solution_file = "$OJ_DATA/$id/output.name";
 
 if (file_exists($solution_file)) {
@@ -216,4 +179,4 @@ require("template/" . $OJ_TEMPLATE . "/problem.php");
 /////////////////////////Common foot
 if (file_exists('./include/cache_end.php'))
     require_once('./include/cache_end.php');
-
+?>

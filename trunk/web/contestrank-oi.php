@@ -11,20 +11,16 @@ require_once("./include/const.inc.php");
 require_once("./include/my_func.inc.php");
 require_once("./include/memcache.php");
 
-/**
- * 竞赛用户成绩统计类
- * 用于记录和计算竞赛中用户的解题情况、时间、错误次数等信息
- */
 class TM
 {
-    var $solved = 0;      // 已解决题目数量
-    var $time = 0;        // 总用时
-    var $p_wa_num;        // 每道题的错误提交次数
-    var $p_ac_sec;        // 每道题的通过时间
-    var $p_pass_rate;     // 每道题的通过率
-    var $user_id;         // 用户ID
-    var $nick;            // 用户昵称
-    var $total;           // 总分
+    var $solved = 0;
+    var $time = 0;
+    var $p_wa_num;
+    var $p_ac_sec;
+    var $p_pass_rate;
+    var $user_id;
+    var $nick;
+    var $total;
 
     function __construct()
     {
@@ -36,15 +32,6 @@ class TM
         $this->total = 0;
     }
 
-    /**
-     * 添加题目提交记录
-     * 根据提交结果更新用户的解题统计信息
-     *
-     * @param int $pid 题目编号
-     * @param int $sec 通过时间（秒）
-     * @param float $res 通过率
-     * @param int $result 提交结果（4表示通过）
-     */
     function Add($pid, $sec, $res, $result)
     {
 //              echo "Add $pid $sec $res<br>";
@@ -87,14 +74,6 @@ class TM
     }
 }
 
-/**
- * 排序比较函数
- * 用于对竞赛用户进行排名比较，按总分、解题数、用时排序
- *
- * @param TM $A 用户A对象
- * @param TM $B 用户B对象
- * @return bool 比较结果
- */
 function s_cmp($A, $B)
 {
 //      echo "Cmp....<br>";
@@ -107,11 +86,10 @@ function s_cmp($A, $B)
     }
 }
 
-// 获取竞赛ID并验证竞赛是否存在
-if (!isset($_GET['cid']) || !is_numeric($_GET['cid'])) die("No Such Contest!");
+// contest start time
+if (!isset($_GET['cid'])) die("No Such Contest!");
 $cid = intval($_GET['cid']);
 
-// 查询竞赛基本信息
 $sql = "SELECT `start_time`,`title`,`end_time` FROM `contest` WHERE `contest_id`=?";
 $result = mysql_query_cache($sql, $cid);
 if ($result) $rows_cnt = count($result);
@@ -130,7 +108,7 @@ if ($rows_cnt > 0) {
     $end_time = strtotime($row['end_time']);
     $title = $row['title'];
     $view_title = $title;
-    if (isset($_GET['down']) && $_GET['down'] === '1') {
+    if (isset($_GET['down'])) {
         header("Content-type:   application/excel");
         $ftitle = rawurlencode(preg_replace('/\.|\\\|\\/|\:|\*|\?|\"|\<|\>|\|/', '', str_replace(' ', '', $title)));
         header("content-disposition:   attachment;   filename=contest" . $cid . "_" . $ftitle . ".xls");
@@ -143,14 +121,11 @@ if ($start_time == 0) {
     exit(0);
 }
 
-// 检查竞赛是否已经开始
 if ($start_time > time()) {
     $view_errors = "$MSG_CONTEST $MSG_Contest_Pending!";
     require("template/" . $OJ_TEMPLATE . "/error.php");
     exit(0);
 }
-
-// 检查竞赛是否被锁定或需要特殊权限
 $noip = (time() < $end_time) && (stripos($title, $OJ_NOIP_KEYWORD) !== false);
 if (isset($_SESSION[$OJ_NAME . '_' . "administrator"]) ||
     isset($_SESSION[$OJ_NAME . '_' . "m$cid"]) ||
@@ -163,8 +138,6 @@ if (isset($_SESSION[$OJ_NAME . '_' . "administrator"]) ||
     require("template/" . $OJ_TEMPLATE . "/error.php");
     exit(0);
 }
-
-// 计算排名锁定时间
 if (!isset($OJ_RANK_LOCK_PERCENT))
     $OJ_RANK_LOCK_PERCENT = 1;
 $lock = $end_time - ($end_time - $start_time) * $OJ_RANK_LOCK_PERCENT;
@@ -176,47 +149,42 @@ if (time() > $view_lock_time && time() < $end_time + $OJ_RANK_LOCK_DELAY) {
     $locked_msg = "The board has been locked.";
 }
 
-// 获取竞赛题目数量
 $sql = "SELECT count(1) as pbc FROM `contest_problem` WHERE `contest_id`=?";
 $result = mysql_query_cache($sql, $cid);
 if ($result) $rows_cnt = count($result);
 else $rows_cnt = 0;
 
-if ($result && isset($result[0])) {
-    $row = $result[0];
-    $pid_cnt = intval($row['pbc']);
-} else {
-    $pid_cnt = 0;
-}
+$row = $result[0];
+
+$pid_cnt = intval($row['pbc']);
 
 require("./include/contest_solutions.php");
 
-// 统计用户提交记录并生成排名
 $user_cnt = 0;
 $user_name = '';
 $U = array();
-if (isset($result) && is_array($result)) {
-    foreach ($result as $row) {
-        $n_user = $row['user_id'];
-        if (strcmp($user_name, $n_user)) {
-            $user_cnt++;
-            $U[$user_cnt] = new TM();
-            $U[$user_cnt]->user_id = $row['user_id'];
-            $U[$user_cnt]->nick = $row['nick'];
-            $user_name = $n_user;
-        }
-        if ($row['result'] != 4 && $row['pass_rate'] >= 0.95) $row['pass_rate'] = 0.95;
-        if ($row['result'] == 4 && !(isset($OJ_CONTEST_TOTAL_100) && $OJ_CONTEST_TOTAL_100))
-            $row['pass_rate'] = 1.0;
-        if (time() < $end_time + $OJ_RANK_LOCK_DELAY && $lock < strtotime($row['in_date']))
-            $U[$user_cnt]->Add($row['num'], strtotime($row['in_date']) - $start_time, 0, 0);
-        else
-            $U[$user_cnt]->Add($row['num'], strtotime($row['in_date']) - $start_time, $row['pass_rate'], $row['result']);
+for ($i = 0; $i < $rows_cnt; $i++) {
+    $row = $result[$i];
+    $n_user = $row['user_id'];
+    if (strcmp($user_name, $n_user)) {
+        $user_cnt++;
+        $U[$user_cnt] = new TM();
+        $U[$user_cnt]->user_id = $row['user_id'];
+        $U[$user_cnt]->nick = $row['nick'];
+        $user_name = $n_user;
     }
+    if ($row['result'] != 4 && $row['pass_rate'] >= 0.95) $row['pass_rate'] = 0.95;
+    if ($row['result'] == 4 && !(isset($OJ_CONTEST_TOTAL_100) && $OJ_CONTEST_TOTAL_100))
+        $row['pass_rate'] = 1.0;
+    if (time() < $end_time + $OJ_RANK_LOCK_DELAY && $lock < strtotime($row['in_date']))
+        $U[$user_cnt]->Add($row['num'], strtotime($row['in_date']) - $start_time, 0, 0);
+    else
+        $U[$user_cnt]->Add($row['num'], strtotime($row['in_date']) - $start_time, $row['pass_rate'], $row['result']);
+
 }
 usort($U, "s_cmp");
 
-// 获取一血信息
+////firstblood
 $first_blood = array();
 for ($i = 0; $i < $pid_cnt; $i++) {
     $first_blood[$i] = "";
@@ -231,16 +199,12 @@ else $rows_cnt = 0;
 foreach ($fb as $row) {
     $first_blood[$row['num']] = $row['user_id'];
 }
-
-// 获取未提交用户列表
 $absentList = mysql_query_cache("select user_id,nick from users where user_id in (select user_id from privilege where rightstr='c$cid' and user_id not in (select distinct user_id from solution where contest_id=?))", $cid);
-if ($absentList && is_array($absentList)) {
-    foreach ($absentList as $row) {
-        $user_cnt++;
-        $U[$user_cnt] = new TM();
-        $U[$user_cnt]->user_id = $row['user_id'];
-        $U[$user_cnt]->nick = $row['nick'];
-    }
+foreach ($absentList as $row) {
+    $U[$user_cnt] = new TM();
+    $U[$user_cnt]->user_id = $row['user_id'];
+    $U[$user_cnt]->nick = $row['nick'];
+    $user_cnt++;
 }
 
 
@@ -249,3 +213,5 @@ require("template/" . $OJ_TEMPLATE . "/contestrank-oi.php");
 /////////////////////////Common foot
 if (file_exists('./include/cache_end.php'))
     require_once('./include/cache_end.php');
+?>
+

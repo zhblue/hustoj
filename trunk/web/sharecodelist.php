@@ -13,12 +13,6 @@ $user_id = $_SESSION[$OJ_NAME . '_' . 'user_id'];
 
 
 /************************  数据库  *******************************/
-/**
- * 根据用户ID获取分享代码列表（分页）
- * 
- * @param string $user_id 用户ID
- * @return array 分享代码列表数组，包含share_id、title、language、share_time字段
- */
 function getShareCodeListByPage($user_id)
 {
     $sql = "SELECT `share_id`, `title`, `language`, `share_time` FROM share_code WHERE `user_id` = ? ORDER BY share_time DESC";
@@ -67,4 +61,4 @@ if (!isset($_SESSION[$OJ_NAME . '_' . 'user_id'])) {
 /////////////////////////Common foot
 if (file_exists('./include/cache_end.php'))
     require_once('./include/cache_end.php');
-
+?>

@@ -8,14 +8,6 @@ require_once("include/db_info.inc.php");
 require_once("include/my_func.inc.php");
 $OJ_NAME .= "_service_";
 ini_set("display_errors", "Off");  //set this to "On" for debugging  ,especially when no reason blank shows up.
-
-/**
- * 用户登录验证函数
- * 验证拥有service_port权限的账号才能登陆接口
- * 
- * @param object $m 包含用户登录信息的对象，包含user_id和password属性
- * @return array 返回登录结果数组，成功返回["login" => "ok"]，失败返回["login" => "fail"]
- */
 function login($m)
 {
     // 拥有service_port权限的账号才能登陆接口
@@ -37,13 +29,6 @@ function login($m)
     return array("login" => "fail");
 }
 
-/**
- * 提交代码解决方案函数
- * 将用户提交的代码保存到数据库并触发评测
- * 
- * @param object $m 包含提交信息的对象，包含problem_id、language、source等属性
- * @return array 返回提交结果数组，成功返回包含solution_id的数组，失败返回包含错误信息的数组
- */
 function submit($m)
 {
     global $ip, $OJ_NAME, $_SESSION;
@@ -69,13 +54,6 @@ function submit($m)
     }
 }
 
-/**
- * 查询解决方案状态函数
- * 根据solution_id查询解决方案的详细信息
- * 
- * @param object $m 包含查询信息的对象，包含solution_id属性
- * @return array 返回查询结果数组，包含解决方案信息或错误信息
- */
 function query($m)
 {
     global $ip, $OJ_NAME, $_SESSION;
@@ -93,13 +71,6 @@ function query($m)
     }
 }
 
-/**
- * 查询编译错误信息函数
- * 根据solution_id查询编译错误的详细信息
- * 
- * @param object $m 包含查询信息的对象，包含solution_id属性
- * @return array 返回编译错误信息数组或错误信息
- */
 function ce($m)
 {
     global $ip, $OJ_NAME, $_SESSION;
@@ -120,13 +91,6 @@ function ce($m)
         return array("error" => "internal error ", "debug" => $m);
 }
 
-/**
- * 查询运行时错误信息函数
- * 根据solution_id查询运行时错误的详细信息
- * 
- * @param object $m 包含查询信息的对象，包含solution_id属性
- * @return array 返回运行时错误信息数组或错误信息
- */
 function re($m)
 {
     global $ip, $OJ_NAME, $_SESSION;
@@ -148,7 +112,6 @@ function re($m)
         return array("error" => "internal error ", "debug" => $m);
 }
 
-// 处理POST请求，根据action参数执行相应的操作
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['m'])) $m = $_POST['m'];
     else $m = file_get_contents('php://input');   // accept both x-www-form-urlencoded and raw-json-encoded-post
@@ -251,4 +214,3 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </form>
     <?php
 }
-

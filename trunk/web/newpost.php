@@ -1,17 +1,14 @@
 <?php
 require_once("discuss_func.inc.php");
 echo "<title>HUST Online Judge WebBoard >> New Thread</title>";
-// 检查用户是否已登录，未登录则重定向到登录页面
 if (!isset($_SESSION[$OJ_NAME . '_' . 'user_id'])) {
     echo "<script>location.replace('loginpage.php')</script>";
     exit(0);
 }
-// 获取并验证问题ID参数
 if (isset($_GET['pid']))
     $pid = intval($_GET['pid']);
 else
     $pid = "";
-// 获取并验证竞赛ID参数，如果是竞赛中的问题则转换为竞赛中的题目编号
 if (isset($_GET['cid'])) {
     $cid = intval($_GET['cid']);
     if ($pid > 0) {
@@ -86,11 +83,9 @@ if (isset($_GET['cid'])) {
 <script src="<?php echo $OJ_CDN_URL . $path_fix . "include/" ?>jquery-latest.js"></script>
 <script>
     <?php if ($OJ_VCODE) { ?>
-    // 页面加载完成后刷新验证码图片
     $(document).ready(function () {
         $("#vcode-img").attr("src", "vcode.php?" + Math.random());
     })
     <?php } ?>
 </script>
 <?php require_once("template/$OJ_TEMPLATE/discuss.php") ?>
-

@@ -12,22 +12,15 @@ $view_title = $MSG_CONTEST . $MSG_RANKLIST;
 
 $title = "";
 
-/**
- * TM类用于存储和管理用户在比赛中的提交统计信息
- * 包括解题数量、总时间、错误提交次数、通过时间等
- */
 class TM
 {
-    var $solved = 0;      // 解题数量
-    var $time = 0;        // 总时间（包含罚时）
-    var $p_wa_num;        // 每道题的错误提交次数数组
-    var $p_ac_sec;        // 每道题的通过时间数组
-    var $user_id;         // 用户ID
-    var $nick;            // 用户昵称
+    var $solved = 0;
+    var $time = 0;
+    var $p_wa_num;
+    var $p_ac_sec;
+    var $user_id;
+    var $nick;
 
-    /**
-     * TM类的构造函数，初始化用户统计信息
-     */
     function TM()
     {
         $this->solved = 0;
@@ -36,12 +29,6 @@ class TM
         $this->p_ac_sec = array();
     }
 
-    /**
-     * 添加一次提交记录到用户统计中
-     * @param int $pid 题目ID
-     * @param int $sec 提交时间（相对于比赛开始的秒数）
-     * @param int $res 提交结果（4表示AC，其他表示错误）
-     */
     function Add($pid, $sec, $res)
     {
         global $OJ_CE_PENALTY;
@@ -54,7 +41,7 @@ class TM
         if ($res != 4) {
             //$this->p_ac_sec[$pid]=0;
             if (isset($OJ_CE_PENALTY) && !$OJ_CE_PENALTY && $res == 11)
-                return;  // ACM WF punish no ce 
+                return;  // ACM WF punish no ce
 
             if (isset($this->p_wa_num[$pid])) {
                 $this->p_wa_num[$pid]++;
@@ -75,12 +62,6 @@ class TM
     }
 }
 
-/**
- * 排序比较函数，用于对用户按解题数量和时间进行排序
- * @param TM $A 第一个用户对象
- * @param TM $B 第二个用户对象
- * @return bool 返回比较结果，解题多的在前，解题相同时间少的在前
- */
 function s_cmp($A, $B)
 {
     //echo "Cmp....<br>";
@@ -96,14 +77,12 @@ if (!isset($_GET['cid']))
 
 $cid = intval($_GET['cid']);
 
-// 获取比赛题目列表
 $pida = array();
 $result = mysql_query_cache("select num,problem_id from contest_problem where contest_id=? order by num", $cid);
 foreach ($result as $row) {
     $pida[$row['num']] = $row['problem_id'];
 }
 
-// 获取比赛基本信息
 $sql = "SELECT `start_time`,`title`,`end_time` FROM `contest` WHERE `contest_id`=?";
 $result = mysql_query_cache($sql, $cid);
 
@@ -137,14 +116,12 @@ if (!$OJ_MEMCACHE)
         exit(0);
     }
 
-// 检查比赛是否已经开始
 if ($start_time > time()) {
     $view_errors = "$MSG_CONTEST $MSG_Contest_Pending!";
     require("template/" . $OJ_TEMPLATE . "/error.php");
     exit(0);
 }
 
-// 检查比赛是否为NOIP类型并进行相应权限验证
 $noip = (time() < $end_time) && (stripos($title, $OJ_NOIP_KEYWORD) !== false);
 if (isset($_SESSION[$OJ_NAME . '_' . "administrator"]) ||
     isset($_SESSION[$OJ_NAME . '_' . "m$cid"]) ||
@@ -159,7 +136,6 @@ if (isset($_SESSION[$OJ_NAME . '_' . "administrator"]) ||
     exit(0);
 }
 
-// 计算排名锁定时间
 if (!isset($OJ_RANK_LOCK_PERCENT))
     $OJ_RANK_LOCK_PERCENT = 0;
 
@@ -173,7 +149,7 @@ if (time() > $view_lock_time && time() < $end_time + $OJ_RANK_LOCK_DELAY) {
     $locked_msg = "The board has been locked.";
 }
 
-// 获取比赛题目数量
+
 $sql = "SELECT count(1) as pbc FROM `contest_problem` WHERE `contest_id`=?";
 $result = mysql_query_cache($sql, $cid);
 
@@ -193,7 +169,6 @@ $pid_cnt = intval($row['pbc']);
 
 //require("./include/contest_solutions.php");
 if (!isset($OJ_RANK_HIDDEN)) $OJ_RANK_HIDDEN = "'admin','zhblue'";
-// 查询比赛期间的提交记录
 $sql = "SELECT
         user_id,nick,solution.result,solution.num,solution.in_date,solution.pass_rate,solution.problem_id
                 FROM
@@ -232,7 +207,6 @@ for ($i = 0; $i < $rows_cnt; $i++) {
         $U[$user_cnt]->Add($row['problem_id'], strtotime($row['in_date']) - $start_time, intval($row['result']));
 }
 
-// 对用户进行排序
 usort($U, "s_cmp");
 
 ////firstblood
@@ -241,7 +215,6 @@ for ($i = 0; $i < $pid_cnt; $i++) {
     $first_blood[$i] = "";
 }
 
-// 获取每道题的首杀信息
 $sql = "select s.problem_id,s.user_id from solution s ,
 (select problem_id,min(solution_id) minId from solution where  unix_timestamp(in_date)>=" . $start_time . " and  problem_id in (" . implode(",", $pida) . ")  and user_id not in ( $OJ_RANK_HIDDEN ) and result=4 GROUP BY problem_id ) c where s.solution_id = c.minId";
 $fb = mysql_query_cache($sql);
@@ -257,3 +230,4 @@ require("template/" . $OJ_TEMPLATE . "/contestrank4.php");
 /////////////////////////Common foot
 if (file_exists('./include/cache_end.php'))
     require_once('./include/cache_end.php');
+?>

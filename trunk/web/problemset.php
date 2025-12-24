@@ -1,18 +1,7 @@
 <?php
-/**
- * 题目集页面处理脚本
- * 负责显示题目列表，支持分页、搜索、筛选等功能
- */
-
-/**
- * 缓存配置
- */
 $OJ_CACHE_SHARE = false;
 $cache_time = 10;
 
-/**
- * 引入必要的包含文件
- */
 require_once('./include/db_info.inc.php');
 require_once('./include/const.inc.php');
 require_once('./include/cache_start.php');
@@ -22,11 +11,7 @@ require_once('./include/setlang.php');
 require_once("./include/set_get_key.php");
 $view_title = "Problem Set";
 
-/**
- * 记住用户当前页面位置
- * 如果用户已登录且未进行搜索操作，则将当前页面保存到用户表中
- * 否则从用户表中读取上次访问的页面位置
- */
+//remember page
 $page = "1";
 if (isset($_GET['page'])) {
     $page = intval($_GET['page']);
@@ -49,11 +34,7 @@ if (isset($_GET['page'])) {
 }
 //end of remember page
 
-/**
- * 页面设置
- * 根据GET参数设置过滤条件、排序方式和分页限制
- * 支持搜索模式、列表模式和普通模式
- */
+//Page Setting
 $page_cnt = 50;  //50 problems per page
 
 $postfix = "";
@@ -84,10 +65,8 @@ if (isset($_GET['search']) && trim($_GET['search']) != "") {
     $limit_sql = " LIMIT " . ($page - 1) * $page_cnt . "," . $page_cnt;
 }
 
-/**
- * 获取用户提交记录
- * 查询当前登录用户的题目提交结果，用于标记题目状态（已通过/未通过/未尝试）
- */
+//all submit
+//all acc
 $sub_arr = array();
 $acc_arr = array();
 if (isset($_SESSION[$OJ_NAME . '_' . 'user_id'])) {
@@ -99,11 +78,7 @@ if (isset($_SESSION[$OJ_NAME . '_' . 'user_id'])) {
     }
 }
 
-/**
- * 题目页面导航权限控制
- * 根据用户角色和系统设置决定显示哪些题目
- * 管理员可查看所有题目，普通用户只能查看非竞赛期间的题目
- */
+// Problem Page Navigator
 //if($OJ_SAE) $first=1;
 if (isset($_SESSION[$OJ_NAME . '_' . 'administrator'])) {  //all problems
     //$limit = $limit_sql;
@@ -123,7 +98,7 @@ if (isset($_SESSION[$OJ_NAME . '_' . 'administrator'])) {  //all problems
 pdo_query("SET sort_buffer_size = 1024*1024");   // Out of sort memory, consider increasing server sort buffer size
 $sql = "select `problem_id`,`title`,`source`,`submit`,`accepted`,defunct FROM problem A WHERE $filter_sql $order_by $limit_sql ";
 $count_sql = "select count(1) from problem where  $filter_sql ";
-
+//echo htmlentities( $sql);
 if (isset($_GET['search']) && trim($_GET['search']) != "") {
     $total = pdo_query($count_sql, $search, $search);
     $cnt = $total[0][0] / $page_cnt;
@@ -137,11 +112,6 @@ if (isset($_GET['search']) && trim($_GET['search']) != "") {
 
 $view_total_page = ceil($cnt * 1.0);
 
-/**
- * 构建题目列表视图数据
- * 遍历查询结果，为每个题目生成显示所需的数据结构
- * 包括题目ID、标题、来源、通过数、提交数等信息
- */
 $cnt = 0;
 $view_problemset = array();
 $i = 0;
@@ -188,20 +158,11 @@ foreach ($result as $row) {
     $view_problemset[$i][5] = "<div class='center'><a href='status.php?problem_id=" . $row['problem_id'] . "'>" . $row['submit'] . "</a></div>";
     $i++;
 }
-
-/**
- * 根据请求类型选择模板
- * 如果是AJAX请求则使用bs3模板，否则使用默认模板
- */
 if (isset($_GET['ajax'])) {
     require("template/bs3/problemset.php");
 } else {
     require("template/" . $OJ_TEMPLATE . "/problemset.php");
 }
-
-/**
- * 结束缓存处理
- */
 if (file_exists('./include/cache_end.php'))
     require_once('./include/cache_end.php');
-
+?>

@@ -20,3 +20,4 @@ if (isset($_GET['tid']) && !isset($_GET['cid'])) {
 
 }
 ob_start();
+?>

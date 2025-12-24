@@ -1,9 +1,4 @@
 <?php
-/**
- * 源代码查看页面
- * 该页面用于显示指定提交ID的源代码，包含权限验证、比赛时间检查等功能
- */
-
 $cache_time = 10;
 $OJ_CACHE_SHARE = false;
 require_once('./include/cache_start.php');
@@ -12,15 +7,11 @@ require_once('./include/setlang.php');
 require_once("./include/const.inc.php");
 require_once("./include/my_func.inc.php");
 $view_title = "Source Code";
-
-// 检查是否提供了提交ID参数
 if (!isset($_GET['id'])) {
     $view_errors = "No such code!\n";
     require("template/" . $OJ_TEMPLATE . "/error.php");
     exit(0);
 }
-
-// 获取提交ID并查询提交信息
 $ok = false;
 $id = intval($_GET['id']);
 $sql = "SELECT * FROM `solution` WHERE `solution_id`=?";
@@ -35,8 +26,6 @@ $smemory = $row['memory'];
 $sproblem_id = $row['problem_id'];
 $view_user_id = $suser_id = $row['user_id'];
 $contest_id = intval($row['contest_id']);
-
-// 检查用户权限和比赛时间限制
 $need_check_using = true;
 if (!(isset($_SESSION[$OJ_NAME . "_source_browser"]) || isset($_SESSION[$OJ_NAME . "_administrator"]))) {
     if ($contest_id > 0) {
@@ -83,7 +72,7 @@ if (!(isset($_SESSION[$OJ_NAME . "_source_browser"]) || isset($_SESSION[$OJ_NAME
     }
 }
 
-// 检查考试模式下的权限限制
+
 if (isset($OJ_EXAM_CONTEST_ID)) {
     if ($contest_id < $OJ_EXAM_CONTEST_ID && !isset($_SESSION[$OJ_NAME . '_' . 'source_browser'])) {
         $view_errors = "<center>";
@@ -97,7 +86,6 @@ if (isset($OJ_EXAM_CONTEST_ID)) {
     }
 }
 
-// 检查自动分享设置
 if (isset($OJ_AUTO_SHARE) && $OJ_AUTO_SHARE && isset($_SESSION[$OJ_NAME . '_' . 'user_id'])) {
     $sql = "SELECT 1 FROM solution where 
 			result=4 and problem_id=$sproblem_id and user_id=?";
@@ -105,7 +93,7 @@ if (isset($OJ_AUTO_SHARE) && $OJ_AUTO_SHARE && isset($_SESSION[$OJ_NAME . '_' . 
     if (count($rrs) > 0) $ok = true;
 }
 
-// 检查用户是否有查看此问题解决方案的权限
+//check whether user has the right of view solutions of this problem
 //echo "checking...";
 if (isset($_SESSION[$OJ_NAME . '_' . 's' . $sproblem_id])) {
     $ok = true;
@@ -121,15 +109,10 @@ if (isset($_SESSION[$OJ_NAME . '_' . 's' . $sproblem_id])) {
     }
 
 }
-
-// 设置默认源代码显示内容
 $view_source = "No source code available!";
-
-// 检查用户权限：用户是否为代码所有者或具有源代码浏览器权限
 if (isset($_SESSION[$OJ_NAME . '_' . 'user_id']) && $row && $owner == $_SESSION[$OJ_NAME . '_' . 'user_id']) $ok = true;
 if (isset($_SESSION[$OJ_NAME . '_' . 'source_browser'])) $ok = true;
 
-// 查询并获取源代码内容
 $sql = "SELECT `source` FROM `source_code_user` WHERE `solution_id`=?";
 $result = pdo_query($sql, $id);
 $row = $result[0];
@@ -141,4 +124,5 @@ require("template/" . $OJ_TEMPLATE . "/showsource.php");
 /////////////////////////Common foot
 if (file_exists('./include/cache_end.php'))
     require_once('./include/cache_end.php');
+?>
 

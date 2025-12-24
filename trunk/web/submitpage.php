@@ -241,3 +241,4 @@ if ($row[0] > 10) {
 /////////////////////////Template
 require("template/" . $OJ_TEMPLATE . "/submitpage.php");
 /////////////////////////Common foot
+?>

@@ -2,14 +2,6 @@
 require_once("./include/db_info.inc.php");
 require_once('./include/setlang.php');
 
-/**
- * 权限刷新和用户验证脚本
- * 
- * 该脚本用于检查用户登录状态，并根据用户权限更新会话信息
- * 如果用户已登录，则查询并刷新用户的权限信息
- * 如果用户未登录，则跳转到登录页面
- */
-
 // 当前user_id
 $user_id = $_SESSION[$OJ_NAME . '_' . 'user_id'];
 
@@ -30,7 +22,6 @@ if (!empty($user_id)) {
             $_SESSION[$OJ_NAME . '_' . $row['rightstr']] = true;
         }
     }
-    // VIP用户特殊权限处理：VIP用户可以访问所有标记为[VIP]的比赛
     if (isset($_SESSION[$OJ_NAME . '_vip'])) {  // VIP mark can access all [VIP] marked contest
         $sql = "select contest_id from contest where title like '%[VIP]%'";
         $result = pdo_query($sql);
@@ -50,5 +41,4 @@ if (!empty($user_id)) {
     </script>
     <?php
 }
-
 

@@ -9,13 +9,6 @@ ob_clean();
  *  2011-07-15
  ****************************************/
 /* $len 为随机字符串长度，$type为类型，a为字符数字，c为字符,n为数字， 已经去除可能误导的字符 */
-/**
- * 生成指定长度和类型的随机字符串
- * 
- * @param int $len 随机字符串长度，默认为4
- * @param string $type 字符串类型，'a'为字母数字混合，'c'为纯字母，'n'为纯数字
- * @return string 生成的随机字符串
- */
 function get_rand_string($len = 4, $type = "n")
 {
     if ($len < 0) $len = 4;
@@ -42,8 +35,6 @@ header("Pramga: no-cache");
 $imgtype = 'gif';
 $len = 4;
 $vcodetype = 'n';
-
-// 根据会话状态调整验证码复杂度
 if (isset($_SESSION[$OJ_NAME . '_' . "vfail"]) && $_SESSION[$OJ_NAME . '_' . "vfail"]) {
     $len = 8;
     $vcodetype = 'c';
@@ -51,8 +42,7 @@ if (isset($_SESSION[$OJ_NAME . '_' . "vfail"]) && $_SESSION[$OJ_NAME . '_' . "vf
 }
 $width = 15 * $len;
 $height = 24;
-
-// 生成随机字符串并写入SESSION
+/* 生成随机字符串并写入SESSION */
 $vcode = get_rand_string($len, $vcodetype);
 $_SESSION[$OJ_NAME . '_' . 'vcode'] = $vcode;
 header("Content-type: image/" . $imgtype);
@@ -66,26 +56,22 @@ if ($imgtype != 'gif' && function_exists('imagecreatetruecolor')) {
 $r = mt_rand(0, 255);
 $g = mt_rand(0, 255);
 $b = mt_rand(0, 255);
-
-// 生成背景颜色
+/* 生成背景颜色 */
 $backColor = ImageColorAllocate($im, $r, $g, $b);
-
-// 生成边框颜色
+/* 生成边框颜色 */
 $borderColor = ImageColorAllocate($im, 0, 0, 0);
-
-// 生成干扰点颜色
+/* 生成干扰点颜色 */
 $pointColor = ImageColorAllocate($im, mt_rand(0, 255), mt_rand(0, 255), mt_rand(0, 255));
 
-// 背景位置
+/* 背景位置 */
 imagefilledrectangle($im, 0, 0, $width - 1, $height - 1, $backColor);
-
-// 边框位置
+/* 边框位置 */
 imagerectangle($im, 0, 0, $width - 1, $height - 1, $borderColor);
 
-// 字符串颜色(背景反色)
+/* 字符串颜色(背景反色) */
 $stringColor = ImageColorAllocate($im, 255 - $r, 255 - $g, 255 - $b);
 
-// 产生干扰点
+/* 产生干扰点 */
 $pointNumber = mt_rand($len * 25, $len * 50);
 for ($i = 0; $i <= $pointNumber; $i++) {
     $pointX = mt_rand(2, $width - 2);
@@ -97,3 +83,4 @@ imagettftext($im, 15, 0, 4, 20, $stringColor, "include/Vera.ttf", $vcode);
 $image_out = 'Image' . $imgtype;
 $image_out($im);
 @ImageDestroy($im);
+?>

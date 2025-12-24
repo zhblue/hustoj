@@ -7,18 +7,13 @@ require_once('./include/setlang.php');
 $view_title = "Source Code";
 
 require_once("./include/const.inc.php");
-
-// 检查是否提供了代码ID参数，如果没有则显示错误信息并退出
 if (!isset($_GET['id'])) {
     $view_errors = "No such code!\n";
     require("template/" . $OJ_TEMPLATE . "/error.php");
     exit(0);
 }
-
 $ok = false;
 $id = strval(intval($_GET['id']));
-
-// 查询解决方案表获取提交信息
 $sql = "SELECT * FROM `solution` WHERE `solution_id`=?";
 $result = pdo_query($sql, $id);
 $row = $result[0];
@@ -32,7 +27,6 @@ $sproblem_id = $row['problem_id'];
 $view_user_id = $suser_id = $row['user_id'];
 $contest_id = $row['contest_id'];
 
-// 检查用户权限，对于非管理员或源码浏览器用户，需要验证是否可以查看源码
 if (!(isset($_SESSION[$OJ_NAME . "_source_browser"]) || isset($_SESSION[$OJ_NAME . "_administrator"]))) {
     if ($contest_id > 0) {
         $sql = "select start_time,end_time from contest where contest_id=?";
@@ -77,7 +71,7 @@ if (!(isset($_SESSION[$OJ_NAME . "_source_browser"]) || isset($_SESSION[$OJ_NAME
     }
 }
 
-// 检查考试模式下是否允许查看源码
+
 if (isset($OJ_EXAM_CONTEST_ID)) {
     if ($contest_id < $OJ_EXAM_CONTEST_ID && !isset($_SESSION[$OJ_NAME . '_' . 'source_browser'])) {
         $view_errors = "<center>";
@@ -91,7 +85,6 @@ if (isset($OJ_EXAM_CONTEST_ID)) {
     }
 }
 
-// 检查自动分享设置，如果开启则检查用户是否已通过该题目
 if (isset($OJ_AUTO_SHARE) && $OJ_AUTO_SHARE && isset($_SESSION[$OJ_NAME . '_' . 'user_id'])) {
     $sql = "SELECT 1 FROM solution where 
 			result=4 and problem_id=$sproblem_id and user_id=?";
@@ -99,14 +92,10 @@ if (isset($OJ_AUTO_SHARE) && $OJ_AUTO_SHARE && isset($_SESSION[$OJ_NAME . '_' . 
     $ok = (count($rrs) > 0);
 
 }
-
 $view_source = "No source code available!";
-
-// 检查用户是否有权限查看源码：用户是代码所有者或具有源码浏览器权限
 if (isset($_SESSION[$OJ_NAME . '_' . 'user_id']) && $row && $owner == $_SESSION[$OJ_NAME . '_' . 'user_id']) $ok = true;
 if (isset($_SESSION[$OJ_NAME . '_' . 'source_browser'])) $ok = true;
 
-// 查询并获取源码内容
 $sql = "SELECT `source` FROM `source_code_user` WHERE `solution_id`=?";
 $result = pdo_query($sql, $id);
 $row = $result[0];
@@ -118,4 +107,5 @@ require("template/" . $OJ_TEMPLATE . "/showsource2.php");
 /////////////////////////Common foot
 if (file_exists('./include/cache_end.php'))
     require_once('./include/cache_end.php');
+?>
 

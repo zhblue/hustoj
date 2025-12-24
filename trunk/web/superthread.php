@@ -99,6 +99,8 @@ $isadmin = isset($_SESSION[$OJ_NAME . '_' . 'administrator']);
             </form>
         <?php }
         ?>
+
 </center>
 </div>
+
 <?php require_once("template/$OJ_TEMPLATE/discuss.php") ?>

@@ -12,22 +12,16 @@ if (isset($OJ_LANG)) {
 require_once("./include/const.inc.php");
 require_once("./include/my_func.inc.php");
 
-/**
- * 竞赛参与者类，用于记录和计算竞赛中用户的解题情况和成绩
- */
 class TM
 {
-    var $solved = 0;      // 解决的问题数量
-    var $time = 0;        // 总用时（包括惩罚时间）
-    var $p_wa_num;        // 每个问题的错误提交次数数组
-    var $p_ac_sec;        // 每个问题的正确提交时间数组
-    var $user_id;         // 用户ID
-    var $nick;            // 用户昵称
-    var $mark = 0;        // 用户得分
+    var $solved = 0;
+    var $time = 0;
+    var $p_wa_num;
+    var $p_ac_sec;
+    var $user_id;
+    var $nick;
+    var $mark = 0;
 
-    /**
-     * 构造函数，初始化用户数据
-     */
     function TM()
     {
         $this->solved = 0;
@@ -36,15 +30,6 @@ class TM
         $this->p_ac_sec = array();
     }
 
-    /**
-     * 添加解题记录到用户数据中
-     * @param int $pid 问题ID
-     * @param int $sec 解题用时（秒）
-     * @param int $res 解题结果（状态码）
-     * @param int $mark_base 基础分数
-     * @param int $mark_per_problem 每题增加的分数
-     * @param int $mark_per_punish 每次惩罚减少的分数
-     */
     function Add($pid, $sec, $res, $mark_base, $mark_per_problem, $mark_per_punish)
     {
         global $OJ_CE_PENALTY;
@@ -79,12 +64,6 @@ class TM
     }
 }
 
-/**
- * 比较两个TM对象的函数，用于排序
- * @param TM $A 第一个TM对象
- * @param TM $B 第二个TM对象
- * @return bool 排序比较结果
- */
 function s_cmp($A, $B)
 {
 //	echo "Cmp....<br>";
@@ -92,13 +71,6 @@ function s_cmp($A, $B)
     else return $A->time > $B->time;
 }
 
-/**
- * 计算正态分布的概率密度值
- * @param float $x 自变量值
- * @param float $u 均值
- * @param float $s 标准差
- * @return float 正态分布概率密度值
- */
 function normalDistribution($x, $u, $s)
 {
 
@@ -109,14 +81,6 @@ function normalDistribution($x, $u, $s)
 
 }
 
-/**
- * 根据正态分布为用户分配分数
- * @param array $users 用户数组
- * @param int $start 分数起始值
- * @param int $end 分数结束值
- * @param int $s 分布参数
- * @return int 处理的用户数量
- */
 function getMark($users, $start, $end, $s)
 {
     $accum = 0;
@@ -160,13 +124,11 @@ function getMark($users, $start, $end, $s)
 }
 
 
-// 检查是否提供了竞赛ID参数
+// contest start time
 if (!isset($_GET['cid'])) die("No Such Contest!");
 $cid = intval($_GET['cid']);
 if (isset($OJ_NO_CONTEST_WATCHER) && $OJ_NO_CONTEST_WATCHER) require_once("contest-check.php");
 //require_once("contest-header.php");
-
-// 查询竞赛信息
 $sql = "SELECT `start_time`,`title`,`end_time` FROM `contest` WHERE `contest_id`=?";
 $result = mysql_query_cache($sql, $cid);
 $rows_cnt = count($result);
@@ -183,21 +145,17 @@ if ($rows_cnt > 0) {
 
 }
 
-// 检查竞赛是否存在
 if ($start_time == 0) {
     echo "No Such Contest";
     //require_once("oj-footer.php");
     exit(0);
 }
 
-// 检查竞赛是否已经开始
 if ($start_time > time()) {
     echo "Contest Not Started!";
     //require_once("oj-footer.php");
     exit(0);
 }
-
-// 检查竞赛是否为NOIP类型并进行相应权限验证
 $noip = (time() < $end_time) && (stripos($title, $OJ_NOIP_KEYWORD) !== false);
 if (isset($_SESSION[$OJ_NAME . '_' . "administrator"]) ||
     isset($_SESSION[$OJ_NAME . '_' . "m$cid"]) ||
@@ -211,12 +169,9 @@ if (isset($_SESSION[$OJ_NAME . '_' . "administrator"]) ||
     require("template/" . $OJ_TEMPLATE . "/error.php");
     exit(0);
 }
-
-// 设置竞赛排名锁定时间
 if (!isset($OJ_RANK_LOCK_PERCENT)) $OJ_RANK_LOCK_PERCENT = 0;
 $lock = $end_time - ($end_time - $start_time) * $OJ_RANK_LOCK_PERCENT;
 
-// 获取竞赛题目数量并设置分数参数
 $sql = "SELECT count(1) FROM `contest_problem` WHERE `contest_id`=?";
 $result = mysql_query_cache($sql, $cid);
 $row = $result[0];
@@ -229,7 +184,6 @@ if ($pid_cnt == 1) {
 }
 $mark_per_punish = $mark_per_problem / 5;
 
-// 查询竞赛解决方案数据
 $sql = "select
         user_id,nick,solution.result,solution.num,solution.in_date
                         from solution where solution.contest_id=? and num>=0 and problem_id>0
@@ -257,10 +211,7 @@ foreach ($result as $row) {
         $U[$user_cnt]->Add($row['num'], strtotime($row['in_date']) - $start_time, intval($row['result']), $mark_base, $mark_per_problem, $mark_per_punish);
 }
 
-// 对用户进行排序
 usort($U, "s_cmp");
-
-// 获取未参加竞赛的用户列表
 $absentList = mysql_query_cache("select user_id,nick from users where user_id in (select user_id from privilege where rightstr='c$cid' and user_id not in (select distinct user_id from solution where contest_id=?))", $cid);
 foreach ($absentList as $row) {
     $U[$user_cnt] = new TM();
@@ -269,7 +220,6 @@ foreach ($absentList as $row) {
     $user_cnt++;
 }
 
-// 生成并输出竞赛排名表格
 $rank = 1;
 //echo "<style> td{font-size:14} </style>";
 //echo "<title>Contest RankList -- $title</title>";
@@ -319,3 +269,6 @@ for ($i = 0; $i < $user_cnt; $i++) {
     echo "</tr>";
 }
 echo "</table>";
+
+?>
+

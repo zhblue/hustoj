@@ -4,11 +4,6 @@ require_once("include/db_info.inc.php"); // 导入基本配置和数据库操作
 require_once('include/const.inc.php');   // 导入需要的一些可选常量
 require_once('include/my_func.inc.php'); // 导入自定义的一些可选函数
 require_once('include/curl.php'); // 导入与爬虫有关的一些可选函数
-
-/**
- * 获取当前时间并检查用户登录状态，为已登录用户生成待办题目列表和进行中的比赛信息
- * 该函数处理用户未登录时的重定向，并查询数据库获取用户未通过的题目和当前进行的比赛
- */
 $now = date('Y-m-d H:i', time());
 if (isset($_SESSION[$OJ_NAME . '_user_id'])) {  //如果用户已经登录
     $user_id = $_SESSION[$OJ_NAME . '_user_id'];
@@ -18,11 +13,9 @@ if (isset($_SESSION[$OJ_NAME . '_user_id'])) {  //如果用户已经登录
     if (isset($_SESSION[$OJ_NAME . '_' . 'user_id'])) {
         $sql = "SELECT problem_id, MIN(result) AS result FROM solution WHERE user_id=? and result>=4 GROUP BY problem_id ";
         $result = pdo_query($sql, $_SESSION[$OJ_NAME . '_' . 'user_id']);
-        if($result !== false) {
-            foreach ($result as $row) {
-                $sub_arr[$row['problem_id']] = true;
-                if ($row['result'] == 4) $acc_arr[$row['problem_id']] = true;
-            }
+        foreach ($result as $row) {
+            $sub_arr[$row['problem_id']] = true;
+            if ($row['result'] == 4) $acc_arr[$row['problem_id']] = true;
         }
     }
     $noip_problems = array_merge(...mysql_query_cache("select problem_id from contest c left join contest_problem cp on start_time<'$now' and end_time>'$now' and (c.title like ? or (c.contest_type & 20) >0) and c.contest_id=cp.contest_id", "%$OJ_NOIP_KEYWORD%"));
@@ -32,11 +25,6 @@ if (isset($_SESSION[$OJ_NAME . '_user_id'])) {  //如果用户已经登录
     require("template/" . $OJ_TEMPLATE . "/error.php");
     exit(0);
 }
-
-/**
- * 查询用户已提交但未通过的题目，并排除NOIP相关题目
- * 构建题目列表的显示数据，包括题目状态、ID、标题、分类标签等信息
- */
 $sql = "select * from problem p inner join (
  			select distinct problem_id,contest_id from solution where result!=4 and user_id=? and problem_id not in 
     				(select distinct problem_id from solution where result=4 and user_id=?)
@@ -65,9 +53,9 @@ foreach ($result as $row) {
         }
         array_push($category, trim($cat));
     }
-    $view_problemset[$i][1] = "<div fd='problem_id' class='center'>" . htmlspecialchars($row['problem_id']) . "</div>";
-    $view_problemset[$i][2] = "<div class='left'><a href='problem.php?id=" . intval($row['problem_id']) . "'>" . htmlspecialchars($row['title']) . "</a></div>";;
-    $view_problemset[$i][3] = "<div pid='" . intval($row['problem_id']) . "' fd='source' class='center'>";
+    $view_problemset[$i][1] = "<div fd='problem_id' class='center'>" . $row['problem_id'] . "</div>";
+    $view_problemset[$i][2] = "<div class='left'><a href='problem.php?id=" . $row['problem_id'] . "'>" . $row['title'] . "</a></div>";;
+    $view_problemset[$i][3] = "<div pid='" . $row['problem_id'] . "' fd='source' class='center'>";
 
     foreach ($category as $cat) {
         if (trim($cat) == "" || trim($cat) == "&nbsp")
@@ -76,28 +64,21 @@ foreach ($result as $row) {
         $label_theme = $color_theme[$hash_num % count($color_theme)];   //$color_theme 在 const.inc.php 里
         if ($label_theme == "")
             $label_theme = "default";
-        $view_problemset[$i][3] .= "<a title='" . htmlspecialchars($cat, ENT_QUOTES, 'UTF-8') . "' class='label label-$label_theme' style='display: inline-block;' href='problemset.php?search=" . urlencode($cat) . "'>" . htmlspecialchars(mb_substr($cat, 0, 10, 'utf8')) . "</a>&nbsp;";
+        $view_problemset[$i][3] .= "<a title='" . htmlentities($cat, ENT_QUOTES, 'UTF-8') . "' class='label label-$label_theme' style='display: inline-block;' href='problemset.php?search=" . htmlentities(urlencode($cat), ENT_QUOTES, 'UTF-8') . "'>" . mb_substr($cat, 0, 10, 'utf8') . "</a>&nbsp;";
     }
 
     $view_problemset[$i][3] .= "</div >";
-    $view_problemset[$i][4] = "<div class='center'><a href='status.php?problem_id=" . intval($row['problem_id']) . "&jresult=4'>" . intval($row['accepted']) . "</a></div>";
-    $view_problemset[$i][5] = "<div class='center'><a href='status.php?problem_id=" . intval($row['problem_id']) . "'>" . intval($row['submit']) . "</a></div>";
+    $view_problemset[$i][4] = "<div class='center'><a href='status.php?problem_id=" . $row['problem_id'] . "&jresult=4'>" . $row['accepted'] . "</a></div>";
+    $view_problemset[$i][5] = "<div class='center'><a href='status.php?problem_id=" . $row['problem_id'] . "'>" . $row['submit'] . "</a></div>";
     $i++;
 }
-
-/**
- * 获取用户参与的比赛信息和权限设置
- * 查询用户有提交记录的比赛和权限，并构建当前进行中的比赛列表
- */
 $mycontests = $wheremy = "";
 
 if (isset($_SESSION[$OJ_NAME . '_user_id'])) {
     $sql = "select distinct contest_id from solution where contest_id>0 and user_id=?";
     $result = pdo_query($sql, $_SESSION[$OJ_NAME . '_user_id']);  //有提交记录的比赛
-    if($result !== false) {
-        foreach ($result as $row) {
-            $mycontests .= "," . $row[0];
-        }
+    foreach ($result as $row) {
+        $mycontests .= "," . $row[0];
     }
     $len = mb_strlen($OJ_NAME . '_');
     $user_id = $_SESSION[$OJ_NAME . '_' . 'user_id'];
@@ -106,22 +87,18 @@ if (isset($_SESSION[$OJ_NAME . '_user_id'])) {
         $sql = "SELECT * FROM `privilege` WHERE `user_id`=?";
         $result = pdo_query($sql, $user_id);
         // 刷新各种权限
-        if($result !== false) {
-            foreach ($result as $row) {
-                if (isset($row['valuestr'])) {
-                    $_SESSION[$OJ_NAME . '_' . $row['rightstr']] = $row['valuestr'];
-                } else {
-                    $_SESSION[$OJ_NAME . '_' . $row['rightstr']] = true;
-                }
+        foreach ($result as $row) {
+            if (isset($row['valuestr'])) {
+                $_SESSION[$OJ_NAME . '_' . $row['rightstr']] = $row['valuestr'];
+            } else {
+                $_SESSION[$OJ_NAME . '_' . $row['rightstr']] = true;
             }
         }
         if (isset($_SESSION[$OJ_NAME . '_vip'])) {  // VIP mark can access all [VIP] marked contest
             $sql = "select contest_id from contest where title like '%[VIP]%'";
             $result = pdo_query($sql);
-            if($result !== false) {
-                foreach ($result as $row) {
-                    $_SESSION[$OJ_NAME . '_c' . $row['contest_id']] = true;
-                }
+            foreach ($result as $row) {
+                $_SESSION[$OJ_NAME . '_c' . $row['contest_id']] = true;
             }
         };
     }
@@ -145,24 +122,25 @@ $sql = "SELECT *  FROM contest WHERE contest.defunct='N' $wheremy  ORDER BY cont
 //echo htmlentities($sql);
 $result = pdo_query($sql);
 $view_contest = array();
-$j = 0; // 使用不同的索引变量避免冲突
 foreach ($result as $row) {
-    $view_contest[$j][0] = intval($row['contest_id']);
-    $title = trim($row['title']) == "" ? $MSG_CONTEST . $row['contest_id'] : $row['title'];
-    $view_contest[$j][1] = "<a href='contest.php?cid=" . intval($row['contest_id']) . "'>" . htmlspecialchars($title) . "</a>";
+    $view_contest[$i][0] = $row['contest_id'];
+    if (trim($row['title']) == "")
+        $row['title'] = $MSG_CONTEST . $row['contest_id'];
+    $view_contest[$i][1] = "<a href='contest.php?cid=" . $row['contest_id'] . "'>" . $row['title'] . "</a>";
     $start_time = strtotime($row['start_time']);
     $end_time = strtotime($row['end_time']);
     $now = time();
     $length = $end_time - $start_time;
     $left = $end_time - $now;
-    $view_contest[$j][2] = htmlspecialchars($row['start_time']) . "&nbsp;";
-    $view_contest[$j][2] .= "<span class=text-danger>$MSG_LeftTime</span>" . " " . intval($left / 60) . "$MSG_MINUTES</span>";
+    $view_contest[$i][2] = $row['start_time'] . "&nbsp;";
+    $view_contest[$i][2] .= "<span class=text-danger>$MSG_LeftTime</span>" . " " . intval($left / 60) . "$MSG_MINUTES</span>";
     $private = intval($row['private']);
     if ($private == 0)
-        $view_contest[$j][3] = "<span class=text-primary>$MSG_Public</span>";
+        $view_contest[$i][4] = "<span class=text-primary>$MSG_Public</span>";
     else
-        $view_contest[$j][4] = "<span class=text-danger>$MSG_Private</span>";
-    $view_contest[$j][5] = htmlspecialchars($row['user_id']);
-    $j++;
+        $view_contest[$i][5] = "<span class=text-danger>$MSG_Private</span>";
+    $view_contest[$i][6] = $row['user_id'];
+    $i++;
 }
 require("template/" . $OJ_TEMPLATE . "/" . basename(__FILE__));
+
