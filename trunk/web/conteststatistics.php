@@ -12,7 +12,7 @@ $cid=intval($_GET['cid']);
 if(isset($OJ_NO_CONTEST_WATCHER)&&$OJ_NO_CONTEST_WATCHER) require_once("contest-check.php");
 
 $sql="SELECT title,end_time,start_time,contest_type FROM `contest` WHERE `contest_id`=? AND `start_time`<NOW()";
-$result=pdo_query($sql,$cid);
+$result=mysql_query_cache($sql,$cid);
 $num=count($result);
 if ($num==0){
 	$view_errors = "$MSG_CONTEST $MSG_Contest_Pending!";
@@ -39,13 +39,13 @@ if($noip){
 $view_title= "Contest Statistics";
 
 $sql="SELECT count(`num`) FROM `contest_problem` WHERE `contest_id`=?";
-$result=pdo_query($sql,$cid);
+$result=mysql_query_cache($sql,$cid);
  $row=$result[0];
 $pid_cnt=intval($row[0]);
 
 
 $sql="SELECT `result`,`num`,`language` FROM `solution` WHERE `contest_id`=? and num>=0"; 
-$result=pdo_query($sql,$cid);
+$result=mysql_query_cache($sql,$cid);
 $R=array();
  foreach($result as $row){
 	$res=intval($row['result'])-4;
@@ -82,13 +82,13 @@ $R=array();
 $res=3600;
 
 $sql="SELECT (UNIX_TIMESTAMP(end_time)-UNIX_TIMESTAMP(start_time))/100 FROM contest WHERE contest_id=? ";
-        $result=pdo_query($sql,$cid);
+        $result=mysql_query_cache($sql,$cid);
         $view_userstat=array();
         if( $row=$result[0]){
               $res=$row[0];
         }
 $sql=   "SELECT floor(UNIX_TIMESTAMP((in_date))/$res)*$res*1000 md,count(1) c FROM `solution` where  `contest_id`=?  group by md order by md desc ";
-        $result=pdo_query($sql,$cid);
+        $result=mysql_query_cache($sql,$cid);
         $chart_data_all= array();
 //echo $sql;
     foreach($result as $row){
@@ -96,7 +96,7 @@ $sql=   "SELECT floor(UNIX_TIMESTAMP((in_date))/$res)*$res*1000 md,count(1) c FR
     }
    
 $sql=   "SELECT floor(UNIX_TIMESTAMP((in_date))/$res)*$res*1000 md,count(1) c FROM `solution` where  `contest_id`=? and result=4 group by md order by md desc ";
-        $result=pdo_query($sql,$cid);//mysql_escape_string($sql));
+        $result=mysql_query_cache($sql,$cid);//mysql_escape_string($sql));
         $chart_data_ac= array();
 //echo $sql;
    
