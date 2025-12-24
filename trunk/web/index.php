@@ -18,7 +18,7 @@ if (isset($OJ_ON_SITE_CONTEST_ID)) {
 // NOIP赛制比赛时，本月之星，统计图不计入相关比赛提交
 $now = date('Y-m-d H:i', time());
 $noip_contests = "";
-$OJ_NOIP_KEYWORD = isset($OJ_NOIP_KEYWORD) ? mysql_real_escape_string($OJ_NOIP_KEYWORD) : '';
+$OJ_NOIP_KEYWORD = isset($OJ_NOIP_KEYWORD) ? basename($OJ_NOIP_KEYWORD) : '';
 $sql = "select contest_id from contest where start_time<'$now' and end_time>'$now' and ( title like '%$OJ_NOIP_KEYWORD%' or (contest_type & 20)>0 )  ";
 $rows = pdo_query($sql);
 $NOIP_flag = 0;
@@ -39,7 +39,7 @@ if (!empty($noip_contests)) {
 $view_news = "";
 $sql = "select * "
     . "FROM `news` "
-    . "WHERE `defunct`!='Y' AND `title`!='faqs." . (isset($OJ_LANG) ? mysql_real_escape_string($OJ_LANG) : '') . "'"
+    . "WHERE `defunct`!='Y' AND `title`!='faqs." . (isset($OJ_LANG) ? basename($OJ_LANG) : '') . "'"
     . "ORDER BY `importance` ASC,`time` DESC "
     . "LIMIT 50";
 $view_news .= "<div class='panel panel-default' style='width:80%;margin:0 auto;'>";
