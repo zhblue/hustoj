@@ -73,16 +73,21 @@ if(isset($_SERVER["HTTP_USER_AGENT"])){  // 360 or IE use bs3 instead
         $OJ_TEMPLATE="bs3";
 }
 
-$ip = ($_SERVER['REMOTE_ADDR']??"");
-if( isset($_SERVER['HTTP_X_FORWARDED_FOR'] )&&!empty( trim( $_SERVER['HTTP_X_FORWARDED_FOR'] ) ) ){
-    $REMOTE_ADDR = $_SERVER['HTTP_X_FORWARDED_FOR'];
-    $tmp_ip=explode(',',$REMOTE_ADDR);
-    $ip =(htmlentities($tmp_ip[0],ENT_QUOTES,"UTF-8"));
-} else if(isset($_SERVER['HTTP_X_REAL_IP'])&& !empty( trim( $_SERVER['HTTP_X_REAL_IP'] ) ) ){
-    $REMOTE_ADDR = $_SERVER['HTTP_X_REAL_IP'];
-    $tmp_ip=explode(',',$REMOTE_ADDR);
-    $ip =(htmlentities($tmp_ip[0],ENT_QUOTES,"UTF-8"));
+$ip = '';
+if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
+    $ip = $_SERVER['HTTP_CLIENT_IP'];
+} else if (!empty($_SERVER['REMOTE_ADDR'])) {
+    $ip = $_SERVER['REMOTE_ADDR'];
 }
+if (isset($_SERVER['HTTP_X_FORWARDED_FOR']) && !empty(trim($_SERVER['HTTP_X_FORWARDED_FOR']))) {
+    $forwardedIps = explode(',', $_SERVER['HTTP_X_FORWARDED_FOR']);
+    $ip = trim($forwardedIps[0]);
+} else if (isset($_SERVER['HTTP_X_REAL_IP']) && !empty(trim($_SERVER['HTTP_X_REAL_IP']))) {
+    $ip = trim($_SERVER['HTTP_X_REAL_IP']);
+}
+// 验证IP格式
+$ip = filter_var($ip, FILTER_VALIDATE_IP) ? $ip : '0.0.0.0';
+
 if(isset($OJ_LIP_URL) && isset($_COOKIE['lip']) ){
 	 $ip=long2ip(intval($_COOKIE['lip']));
 }

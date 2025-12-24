@@ -9,9 +9,9 @@ $title = "";
 require_once("./include/const.inc.php");
 require_once("./include/my_func.inc.php");
 require_once("./include/memcache.php");
-if (!(isset($_SESSION[$OJ_NAME.'_'.'administrator'])||isset($_SESSION[$OJ_NAME.'_'.'contest_creator'])||isset($_SESSION[$OJ_NAME.'_'.'problem_editor'])||isset($_SESSION[$OJ_NAME.'_'.'password_setter']))){
-	echo "<a href='../loginpage.php'>Please Login First!</a>";
-	exit(1);
+if (!(isset($_SESSION[$OJ_NAME . '_' . 'administrator']) || isset($_SESSION[$OJ_NAME . '_' . 'contest_creator']) || isset($_SESSION[$OJ_NAME . '_' . 'problem_editor']) || isset($_SESSION[$OJ_NAME . '_' . 'password_setter']))) {
+    echo "<a href='../loginpage.php'>Please Login First!</a>";
+    exit(1);
 }
 /************************  数据库  *******************************/
 /**
@@ -20,9 +20,10 @@ if (!(isset($_SESSION[$OJ_NAME.'_'.'administrator'])||isset($_SESSION[$OJ_NAME.'
  * @param $cid
  * @return mixed
  */
-function getSubmitByCid($OJ_MEMCACHE,$cid){
-	$sql = "SELECT `solution_id`,`user_id`,`problem_id`,`in_date`,`result` FROM solution WHERE `contest_id`= ? and num>=0 and problem_id>0";
-	$subList = mysql_query_cache($sql, $cid);
+function getSubmitByCid($OJ_MEMCACHE, $cid)
+{
+    $sql = "SELECT `solution_id`,`user_id`,`problem_id`,`in_date`,`result` FROM solution WHERE `contest_id`= ? and num>=0 and problem_id>0";
+    $subList = mysql_query_cache($sql, $cid);
     return $subList;
 }
 
@@ -32,9 +33,10 @@ function getSubmitByCid($OJ_MEMCACHE,$cid){
  * @param $cid
  * @return mixed
  */
-function getTeamByCid($OJ_MEMCACHE,$cid){
-	$sql = "SELECT a.user_id,nick FROM (SELECT distinct user_id FROM solution WHERE contest_id = ?)AS a INNER JOIN users WHERE users.user_id = a.user_id";
-	$teamList = mysql_query_cache($sql, $cid);  
+function getTeamByCid($OJ_MEMCACHE, $cid)
+{
+    $sql = "SELECT a.user_id,nick FROM (SELECT distinct user_id FROM solution WHERE contest_id = ?)AS a INNER JOIN users WHERE users.user_id = a.user_id";
+    $teamList = mysql_query_cache($sql, $cid);
     return $teamList;
 }
 
@@ -44,13 +46,14 @@ function getTeamByCid($OJ_MEMCACHE,$cid){
  * @param $cid
  * @return array
  */
-function getProblemMapByCid($OJ_MEMCACHE,$cid) {
-	$sql = "SELECT `problem_id`,`num` FROM contest_problem WHERE `contest_id` = ?";
-	$proList = mysql_query_cache($sql, $cid);
+function getProblemMapByCid($OJ_MEMCACHE, $cid)
+{
+    $sql = "SELECT `problem_id`,`num` FROM contest_problem WHERE `contest_id` = ?";
+    $proList = mysql_query_cache($sql, $cid);
     $arr = array();
-    for($i=0;$i<count($proList);$i++) {
+    for ($i = 0; $i < count($proList); $i++) {
         $row = $proList[$i];
-        $arr[$row['problem_id']] = chr(65+$row['num']);
+        $arr[$row['problem_id']] = chr(65 + $row['num']);
     }
     //print_r($arr);
     return $arr;
@@ -62,17 +65,36 @@ function getProblemMapByCid($OJ_MEMCACHE,$cid) {
  * @param $result
  * @return int
  */
-function changeResult($result){
-    switch($result) {
-        case 4 : $resultID = 0;break;
-        case 5 : $resultID = 1;break;
-        case 6 : $resultID = 4;break;
-        case 7 : $resultID = 2;break;
-        case 8 : $resultID = 3;break;
-        case 9 : $resultID = 6;break;
-        case 10 : $resultID = 5;break;
-        case 11 : $resultID = 7;break;
-        default : $resultID = -1;break;
+function changeResult($result)
+{
+    switch ($result) {
+        case 4 :
+            $resultID = 0;
+            break;
+        case 5 :
+            $resultID = 1;
+            break;
+        case 6 :
+            $resultID = 4;
+            break;
+        case 7 :
+            $resultID = 2;
+            break;
+        case 8 :
+            $resultID = 3;
+            break;
+        case 9 :
+            $resultID = 6;
+            break;
+        case 10 :
+            $resultID = 5;
+            break;
+        case 11 :
+            $resultID = 7;
+            break;
+        default :
+            $resultID = -1;
+            break;
     }
     return $resultID;
 }
@@ -82,7 +104,8 @@ function changeResult($result){
  * @param $submit
  * @param $problemMap
  */
-function submit2Array($submit,$problemMap){
+function submit2Array($submit, $problemMap)
+{
     //`solution_id`,`user_id`,`problem_id`,`in_date`,`result`
     $arr = array();
     $arr["submitID"] = $submit["solution_id"];
@@ -97,7 +120,8 @@ function submit2Array($submit,$problemMap){
  * 转换一个队伍信息成json
  * @param $team
  */
-function team2Array($team) {
+function team2Array($team)
+{
     // a.user_id,nick
     $arr = array();
     $arr["userID"] = $team["user_id"];
@@ -106,7 +130,6 @@ function team2Array($team) {
     $arr["official"] = 1;
     return $arr;
 }
-
 
 
 // 请求未带参数
@@ -118,7 +141,7 @@ if (!isset($_GET['cid'])) {
 
 // contest_id
 $cid = intval($_GET['cid']);
-if(isset($OJ_NO_CONTEST_WATCHER)&&$OJ_NO_CONTEST_WATCHER) require_once("contest-check.php");
+if (isset($OJ_NO_CONTEST_WATCHER) && $OJ_NO_CONTEST_WATCHER) require_once("contest-check.php");
 
 // 非管理员不能访问
 /*if (!isset($_SESSION[$OJ_NAME.'_'.'administrator'])) {
@@ -127,15 +150,15 @@ if(isset($OJ_NO_CONTEST_WATCHER)&&$OJ_NO_CONTEST_WATCHER) require_once("contest-
     exit();
 }
 */
-if(isset($_GET['lock_percent'])){
-   $OJ_RANK_LOCK_PERCENT=floatval($_GET['lock_percent']);
-   $_SESSION[$OJ_NAME."_lock_percent"]=$OJ_RANK_LOCK_PERCENT;
+if (isset($_GET['lock_percent'])) {
+    $OJ_RANK_LOCK_PERCENT = floatval($_GET['lock_percent']);
+    $_SESSION[$OJ_NAME . "_lock_percent"] = $OJ_RANK_LOCK_PERCENT;
 }
-if(isset($_SESSION[$OJ_NAME."_lock_percent"])){
-   $OJ_RANK_LOCK_PERCENT=$_SESSION[$OJ_NAME."_lock_percent"];
+if (isset($_SESSION[$OJ_NAME . "_lock_percent"])) {
+    $OJ_RANK_LOCK_PERCENT = $_SESSION[$OJ_NAME . "_lock_percent"];
 }
 // 不封榜，就不能滚榜
-if (!isset($OJ_RANK_LOCK_PERCENT)||$OJ_RANK_LOCK_PERCENT==0) {
+if (!isset($OJ_RANK_LOCK_PERCENT) || $OJ_RANK_LOCK_PERCENT == 0) {
     $view_errors = "The Ranking is Unlocked";
     require("template/" . $OJ_TEMPLATE . "/error.php");
     exit(0);
@@ -150,7 +173,7 @@ $result = mysql_query_cache($sql, $cid);
 // 统计查询到的个数
 if ($result) {
     $rows_cnt = count($result);
-}else {
+} else {
     $rows_cnt = 0;
 }
 
@@ -190,59 +213,59 @@ if ($end_time > time()) {
     exit(0);
 }
 
-$noip = (time()<$end_time) && (stripos($title,$OJ_NOIP_KEYWORD)!==false);
-if(isset($_SESSION[$OJ_NAME.'_'."administrator"])||
-	isset($_SESSION[$OJ_NAME.'_'."m$cid"])||
-	isset($_SESSION[$OJ_NAME.'_'."source_browser"])||
-	isset($_SESSION[$OJ_NAME.'_'."contest_creator"])
-   ){ 
-	$noip=false;
-}else if($noip||contest_locked($cid,20)){
-	$view_errors =  "<h2>$MSG_NOIP_WARNING</h2>";
-	require("template/".$OJ_TEMPLATE."/error.php");
-	exit(0);
+$noip = (time() < $end_time) && (stripos($title, $OJ_NOIP_KEYWORD) !== false);
+if (isset($_SESSION[$OJ_NAME . '_' . "administrator"]) ||
+    isset($_SESSION[$OJ_NAME . '_' . "m$cid"]) ||
+    isset($_SESSION[$OJ_NAME . '_' . "source_browser"]) ||
+    isset($_SESSION[$OJ_NAME . '_' . "contest_creator"])
+) {
+    $noip = false;
+} else if ($noip || contest_locked($cid, 20)) {
+    $view_errors = "<h2>$MSG_NOIP_WARNING</h2>";
+    require("template/" . $OJ_TEMPLATE . "/error.php");
+    exit(0);
 }
 // json 请求时
-if (isset($_GET['type'])&&$_GET['type']=='json') {
+if (isset($_GET['type']) && $_GET['type'] == 'json') {
     header('Content-Type:application/json');
 
-    if(isset($_GET['list'])&&$_GET['list']=='submit'){
+    if (isset($_GET['list']) && $_GET['list'] == 'submit') {
 
-        $subList = getSubmitByCid($OJ_MEMCACHE,$cid);
-		$problemMap = getProblemMapByCid($OJ_MEMCACHE,$cid);
+        $subList = getSubmitByCid($OJ_MEMCACHE, $cid);
+        $problemMap = getProblemMapByCid($OJ_MEMCACHE, $cid);
 
-		$arr = array();
-		for($i=0;$i<count($subList);$i++){
-		    $arr[$i] = submit2Array($subList[$i],$problemMap);
-		}
-		echo json_encode($arr);
+        $arr = array();
+        for ($i = 0; $i < count($subList); $i++) {
+            $arr[$i] = submit2Array($subList[$i], $problemMap);
+        }
+        echo json_encode($arr);
 
-	    }else if(isset($_GET['list'])&&$_GET['list']=='team'){
-		$teamList = getTeamByCid($OJ_MEMCACHE,$cid);
-		$arr = array();
-		for($i=0;$i<count($teamList);$i++){
-		    $arr[$i] = team2Array($teamList[$i]);
-		}
-		echo json_encode($arr);
-	    }
-	    exit(0);
-	}
+    } else if (isset($_GET['list']) && $_GET['list'] == 'team') {
+        $teamList = getTeamByCid($OJ_MEMCACHE, $cid);
+        $arr = array();
+        for ($i = 0; $i < count($teamList); $i++) {
+            $arr[$i] = team2Array($teamList[$i]);
+        }
+        echo json_encode($arr);
+    }
+    exit(0);
+}
 
-	//普通请求时
-	$lock = $end_time - ($end_time - $start_time) * $OJ_RANK_LOCK_PERCENT;
-	$start_time_str = date("Y-m-d H:i:s",$start_time);
-	$lock_time_str = date("Y-m-d H:i:s",$lock);
-$problem_num = mysql_query_cache("select count(distinct problem_id ) from contest_problem where contest_id=?",$cid)[0][0];
-if($OJ_ON_SITE_TEAM_TOTAL!=0)
- $team_num=$OJ_ON_SITE_TEAM_TOTAL;
+//普通请求时
+$lock = $end_time - ($end_time - $start_time) * $OJ_RANK_LOCK_PERCENT;
+$start_time_str = date("Y-m-d H:i:s", $start_time);
+$lock_time_str = date("Y-m-d H:i:s", $lock);
+$problem_num = mysql_query_cache("select count(distinct problem_id ) from contest_problem where contest_id=?", $cid)[0][0];
+if ($OJ_ON_SITE_TEAM_TOTAL != 0)
+    $team_num = $OJ_ON_SITE_TEAM_TOTAL;
 else
- $team_num=mysql_query_cache("select count(distinct user_id ) from solution where contest_id=?",$cid)[0][0];
-$gold_num=intval($team_num*0.05);
-$silver_num=intval($team_num*0.15);
-$bronze_num=intval($team_num*0.20);
+    $team_num = mysql_query_cache("select count(distinct user_id ) from solution where contest_id=?", $cid)[0][0];
+$gold_num = intval($team_num * 0.05);
+$silver_num = intval($team_num * 0.15);
+$bronze_num = intval($team_num * 0.20);
 
 /////////////////////////Template
-require("template/".$OJ_TEMPLATE."/contestrank3.php");
+require("template/" . $OJ_TEMPLATE . "/contestrank3.php");
 
 /////////////////////////Common foot
 if (file_exists('./include/cache_end.php'))
