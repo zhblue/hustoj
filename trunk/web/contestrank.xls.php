@@ -122,7 +122,7 @@ $cid=intval($_GET['cid']);
 if(isset($OJ_NO_CONTEST_WATCHER)&&$OJ_NO_CONTEST_WATCHER) require_once("contest-check.php");
 //require_once("contest-header.php");
 $sql="SELECT `start_time`,`title`,`end_time` FROM `contest` WHERE `contest_id`=?";
-$result=pdo_query($sql,$cid) ;
+$result=mysql_query_cache($sql,$cid) ;
 $rows_cnt=count($result);
 $start_time=0;
 $end_time=0;
@@ -164,7 +164,7 @@ if(!isset($OJ_RANK_LOCK_PERCENT)) $OJ_RANK_LOCK_PERCENT=0;
 $lock=$end_time-($end_time-$start_time)*$OJ_RANK_LOCK_PERCENT;
 
 $sql="SELECT count(1) FROM `contest_problem` WHERE `contest_id`=?";
-$result=pdo_query($sql,$cid);
+$result=mysql_query_cache($sql,$cid);
  $row=$result[0];
 $pid_cnt=intval($row[0]);
 if($pid_cnt==1) {
@@ -181,7 +181,7 @@ $mark_per_punish=$mark_per_problem/5;
         ORDER BY user_id,solution_id";
 
 //echo $sql;
-$result=pdo_query($sql,$cid);
+$result=mysql_query_cache($sql,$cid);
 $user_cnt=0;
 $user_name='';
 $U=array();
@@ -203,7 +203,7 @@ $U=array();
 }
 
 usort($U,"s_cmp");
-$absentList=pdo_query("select user_id,nick from users where user_id in (select user_id from privilege where rightstr='c$cid' and user_id not in (select distinct user_id from solution where contest_id=?))",$cid);
+$absentList=mysql_query_cache("select user_id,nick from users where user_id in (select user_id from privilege where rightstr='c$cid' and user_id not in (select distinct user_id from solution where contest_id=?))",$cid);
 foreach ($absentList as $row){
          $U[$user_cnt]=new TM();
          $U[$user_cnt]->user_id=$row['user_id'];
@@ -262,3 +262,4 @@ for ($i=0;$i<$user_cnt;$i++){
 echo "</table>";
 
 ?>
+
