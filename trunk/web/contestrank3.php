@@ -21,13 +21,8 @@ if (!(isset($_SESSION[$OJ_NAME.'_'.'administrator'])||isset($_SESSION[$OJ_NAME.'
  * @return mixed
  */
 function getSubmitByCid($OJ_MEMCACHE,$cid){
-    if ($OJ_MEMCACHE) {
-        $sql = "SELECT `solution_id`,`user_id`,`problem_id`,`in_date`,`result` FROM solution WHERE `contest_id`='$cid' and num>=0 and problem_id>0";
-        $subList = mysql_query_cache($sql);
-    } else {
-        $sql = "SELECT `solution_id`,`user_id`,`problem_id`,`in_date`,`result` FROM solution WHERE `contest_id`= ? and num>=0 and problem_id>0";
-        $subList = pdo_query($sql, $cid);
-    }
+	$sql = "SELECT `solution_id`,`user_id`,`problem_id`,`in_date`,`result` FROM solution WHERE `contest_id`= ? and num>=0 and problem_id>0";
+	$subList = mysql_query_cache($sql, $cid);
     return $subList;
 }
 
@@ -38,13 +33,8 @@ function getSubmitByCid($OJ_MEMCACHE,$cid){
  * @return mixed
  */
 function getTeamByCid($OJ_MEMCACHE,$cid){
-    if ($OJ_MEMCACHE) {
-        $sql = "SELECT a.user_id,nick FROM (SELECT distinct user_id FROM solution WHERE contest_id = '$cid')AS a INNER JOIN users WHERE users.user_id = a.user_id";
-        $teamList = mysql_query_cache($sql);
-    } else {
-        $sql = "SELECT a.user_id,nick FROM (SELECT distinct user_id FROM solution WHERE contest_id = ?)AS a INNER JOIN users WHERE users.user_id = a.user_id";
-        $teamList = pdo_query($sql, $cid);
-    }
+	$sql = "SELECT a.user_id,nick FROM (SELECT distinct user_id FROM solution WHERE contest_id = ?)AS a INNER JOIN users WHERE users.user_id = a.user_id";
+	$teamList = mysql_query_cache($sql, $cid);  
     return $teamList;
 }
 
@@ -55,13 +45,8 @@ function getTeamByCid($OJ_MEMCACHE,$cid){
  * @return array
  */
 function getProblemMapByCid($OJ_MEMCACHE,$cid) {
-    if ($OJ_MEMCACHE) {
-        $sql = "SELECT `problem_id`,`num` FROM contest_problem WHERE `contest_id` = '$cid'";
-        $proList = mysql_query_cache($sql);
-    } else {
-        $sql = "SELECT `problem_id`,`num` FROM contest_problem WHERE `contest_id` = ?";
-        $proList = pdo_query($sql, $cid);
-    }
+	$sql = "SELECT `problem_id`,`num` FROM contest_problem WHERE `contest_id` = ?";
+	$proList = mysql_query_cache($sql, $cid);
     $arr = array();
     for($i=0;$i<count($proList);$i++) {
         $row = $proList[$i];
@@ -157,13 +142,10 @@ if (!isset($OJ_RANK_LOCK_PERCENT)||$OJ_RANK_LOCK_PERCENT==0) {
 }
 
 //  查询比赛是否存在
-if ($OJ_MEMCACHE) {
-    $sql = "SELECT `start_time`,`title`,`end_time` FROM `contest` WHERE `contest_id`='$cid'";
-    $result = mysql_query_cache($sql);
-} else {
-    $sql = "SELECT `start_time`,`title`,`end_time` FROM `contest` WHERE `contest_id`=?";
-    $result = pdo_query($sql, $cid);
-}
+
+$sql = "SELECT `start_time`,`title`,`end_time` FROM `contest` WHERE `contest_id`=?";
+$result = mysql_query_cache($sql, $cid);
+
 
 // 统计查询到的个数
 if ($result) {
@@ -250,11 +232,11 @@ if (isset($_GET['type'])&&$_GET['type']=='json') {
 	$lock = $end_time - ($end_time - $start_time) * $OJ_RANK_LOCK_PERCENT;
 	$start_time_str = date("Y-m-d H:i:s",$start_time);
 	$lock_time_str = date("Y-m-d H:i:s",$lock);
-$problem_num = pdo_query("select count(distinct problem_id ) from contest_problem where contest_id=?",$cid)[0][0];
+$problem_num = mysql_query_cache("select count(distinct problem_id ) from contest_problem where contest_id=?",$cid)[0][0];
 if($OJ_ON_SITE_TEAM_TOTAL!=0)
  $team_num=$OJ_ON_SITE_TEAM_TOTAL;
 else
- $team_num=pdo_query("select count(distinct user_id ) from solution where contest_id=?",$cid)[0][0];
+ $team_num=mysql_query_cache("select count(distinct user_id ) from solution where contest_id=?",$cid)[0][0];
 $gold_num=intval($team_num*0.05);
 $silver_num=intval($team_num*0.15);
 $bronze_num=intval($team_num*0.20);
@@ -266,5 +248,6 @@ require("template/".$OJ_TEMPLATE."/contestrank3.php");
 if (file_exists('./include/cache_end.php'))
     require_once('./include/cache_end.php');
 ?>
+
 
 
