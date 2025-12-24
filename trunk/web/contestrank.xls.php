@@ -13,18 +13,21 @@ require_once("./include/const.inc.php");
 require_once("./include/my_func.inc.php");
 
 /**
- * 竞赛用户类，用于记录用户在竞赛中的解题情况和成绩
+ * 竞赛参与者类，用于记录和计算竞赛中用户的解题情况和成绩
  */
 class TM
 {
     var $solved = 0;      // 解决的问题数量
-    var $time = 0;        // 总用时
-    var $p_wa_num;        // 每个问题的错误提交次数
-    var $p_ac_sec;        // 每个问题的通过时间
+    var $time = 0;        // 总用时（包括惩罚时间）
+    var $p_wa_num;        // 每个问题的错误提交次数数组
+    var $p_ac_sec;        // 每个问题的正确提交时间数组
     var $user_id;         // 用户ID
     var $nick;            // 用户昵称
     var $mark = 0;        // 用户得分
 
+    /**
+     * 构造函数，初始化用户数据
+     */
     function TM()
     {
         $this->solved = 0;
@@ -34,13 +37,13 @@ class TM
     }
 
     /**
-     * 添加用户提交记录
+     * 添加解题记录到用户数据中
      * @param int $pid 问题ID
-     * @param int $sec 提交时间（秒）
-     * @param int $res 提交结果
-     * @param float $mark_base 基础分数
-     * @param float $mark_per_problem 每题分数
-     * @param float $mark_per_punish 惩罚分数
+     * @param int $sec 解题用时（秒）
+     * @param int $res 解题结果（状态码）
+     * @param int $mark_base 基础分数
+     * @param int $mark_per_problem 每题增加的分数
+     * @param int $mark_per_punish 每次惩罚减少的分数
      */
     function Add($pid, $sec, $res, $mark_base, $mark_per_problem, $mark_per_punish)
     {
@@ -51,7 +54,7 @@ class TM
             return;
         if ($res != 4) {
             //$this->p_ac_sec[$pid]=0;
-            if (isset($OJ_CE_PENALTY) && !$OJ_CE_PENALTY && $res == 11) return;  // ACM WF punish no ce 
+            if (isset($OJ_CE_PENALTY) && !$OJ_CE_PENALTY && $res == 11) return;  // ACM WF punish no ce
             if (isset($this->p_wa_num[$pid])) {
                 $this->p_wa_num[$pid]++;
             } else {
@@ -77,10 +80,10 @@ class TM
 }
 
 /**
- * 排序比较函数，按解题数降序，用时升序
- * @param object $A 用户对象A
- * @param object $B 用户对象B
- * @return bool 比较结果
+ * 比较两个TM对象的函数，用于排序
+ * @param TM $A 第一个TM对象
+ * @param TM $B 第二个TM对象
+ * @return bool 排序比较结果
  */
 function s_cmp($A, $B)
 {
@@ -90,8 +93,8 @@ function s_cmp($A, $B)
 }
 
 /**
- * 计算正态分布值
- * @param float $x 自变量
+ * 计算正态分布的概率密度值
+ * @param float $x 自变量值
  * @param float $u 均值
  * @param float $s 标准差
  * @return float 正态分布概率密度值
@@ -111,7 +114,7 @@ function normalDistribution($x, $u, $s)
  * @param array $users 用户数组
  * @param int $start 分数起始值
  * @param int $end 分数结束值
- * @param float $s 分布参数
+ * @param int $s 分布参数
  * @return int 处理的用户数量
  */
 function getMark($users, $start, $end, $s)
@@ -157,13 +160,13 @@ function getMark($users, $start, $end, $s)
 }
 
 
-// contest start time
+// 检查是否提供了竞赛ID参数
 if (!isset($_GET['cid'])) die("No Such Contest!");
 $cid = intval($_GET['cid']);
 if (isset($OJ_NO_CONTEST_WATCHER) && $OJ_NO_CONTEST_WATCHER) require_once("contest-check.php");
 //require_once("contest-header.php");
 
-// 获取竞赛信息
+// 查询竞赛信息
 $sql = "SELECT `start_time`,`title`,`end_time` FROM `contest` WHERE `contest_id`=?";
 $result = mysql_query_cache($sql, $cid);
 $rows_cnt = count($result);
@@ -180,19 +183,21 @@ if ($rows_cnt > 0) {
 
 }
 
+// 检查竞赛是否存在
 if ($start_time == 0) {
     echo "No Such Contest";
     //require_once("oj-footer.php");
     exit(0);
 }
 
+// 检查竞赛是否已经开始
 if ($start_time > time()) {
     echo "Contest Not Started!";
     //require_once("oj-footer.php");
     exit(0);
 }
 
-// 检查是否为NOIP竞赛并进行权限验证
+// 检查竞赛是否为NOIP类型并进行相应权限验证
 $noip = (time() < $end_time) && (stripos($title, $OJ_NOIP_KEYWORD) !== false);
 if (isset($_SESSION[$OJ_NAME . '_' . "administrator"]) ||
     isset($_SESSION[$OJ_NAME . '_' . "m$cid"]) ||
@@ -207,11 +212,11 @@ if (isset($_SESSION[$OJ_NAME . '_' . "administrator"]) ||
     exit(0);
 }
 
-// 设置竞赛锁定时间
+// 设置竞赛排名锁定时间
 if (!isset($OJ_RANK_LOCK_PERCENT)) $OJ_RANK_LOCK_PERCENT = 0;
 $lock = $end_time - ($end_time - $start_time) * $OJ_RANK_LOCK_PERCENT;
 
-// 获取竞赛题目数量并计算分数参数
+// 获取竞赛题目数量并设置分数参数
 $sql = "SELECT count(1) FROM `contest_problem` WHERE `contest_id`=?";
 $result = mysql_query_cache($sql, $cid);
 $row = $result[0];
@@ -224,7 +229,7 @@ if ($pid_cnt == 1) {
 }
 $mark_per_punish = $mark_per_problem / 5;
 
-// 查询竞赛提交记录
+// 查询竞赛解决方案数据
 $sql = "select
         user_id,nick,solution.result,solution.num,solution.in_date
                         from solution where solution.contest_id=? and num>=0 and problem_id>0
@@ -252,6 +257,7 @@ foreach ($result as $row) {
         $U[$user_cnt]->Add($row['num'], strtotime($row['in_date']) - $start_time, intval($row['result']), $mark_base, $mark_per_problem, $mark_per_punish);
 }
 
+// 对用户进行排序
 usort($U, "s_cmp");
 
 // 获取未参加竞赛的用户列表
@@ -263,6 +269,7 @@ foreach ($absentList as $row) {
     $user_cnt++;
 }
 
+// 生成并输出竞赛排名表格
 $rank = 1;
 //echo "<style> td{font-size:14} </style>";
 //echo "<title>Contest RankList -- $title</title>";
@@ -271,15 +278,12 @@ echo "<table border=1><tr><td>Rank<td>User<td>Nick<td>Solved<td>Mark<td>Penalty"
 for ($i = 0; $i < $pid_cnt; $i++)
     echo "<td>$PID[$i]";
 echo "</tr>";
-
-// 为用户分配分数
 getMark($U, $mark_start, $mark_end, $mark_sigma);
 
-// 输出排名表
 for ($i = 0; $i < $user_cnt; $i++) {
     if ($i & 1) echo "<tr class=oddrow align=center>";
     else echo "<tr class=evenrow align=center>";
-    // don't count rank while nick start with * 
+    // don't count rank while nick start with *
     if ($U[$i]->nick[0] == '*') {
         echo "<td>*";
     } else {
