@@ -11,7 +11,7 @@
         //print $cid;
         //check contest valid
         $sql = "SELECT * FROM `contest` WHERE `contest_id`=?";
-        $result = pdo_query($sql,$cid);
+        $result = mysql_query_cache($sql,$cid);
         $rows_cnt = count($result);
 
         if($rows_cnt>0){
@@ -52,7 +52,7 @@
                 if ($row['private'] && !isset($_SESSION[$OJ_NAME.'_'.'c'.$cid])){
 
                       $sql = "SELECT count(*) FROM `privilege` WHERE `user_id`=? AND `rightstr`=?";
-                      $result = pdo_query($sql, $user_id, "c$cid");
+                      $result = mysql_query_cache($sql, $user_id, "c$cid");
                       $row = $result[0];
                       $ccnt = intval($row[0]);
                       if($ccnt>0){
@@ -91,7 +91,7 @@
                 if($contest_limit_minutes==0) $contest_limit_minutes=120;
                 //echo "<!-- $contest_limit_minutes mins -->";
                 $user_id=$_SESSION[$OJ_NAME."_user_id"];
-                $first_login_contest=pdo_query("select time from loginlog where user_id=? and password=?",$user_id,"c".$cid);
+                $first_login_contest=mysql_query_cache("select time from loginlog where user_id=? and password=?",$user_id,"c".$cid);
                 if(empty($first_login_contest)){
                         //echo "<!-- 首次访问  -->";
                                 $ip = ($_SERVER['REMOTE_ADDR']);
@@ -105,7 +105,7 @@
                                     $ip =(htmlentities($tmp_ip[0],ENT_QUOTES,"UTF-8"));
                                 }
                                 $sql="INSERT INTO `loginlog`(user_id,password,ip,time) VALUES(?,?,?,NOW())";
-                                pdo_query($sql,$user_id,"c".$cid,$ip);
+                                mysql_query_cache($sql,$user_id,"c".$cid,$ip);
                          $first_login_contest=time();
                 }else{
                         $first_login_contest=strtotime($first_login_contest[0][0]);
