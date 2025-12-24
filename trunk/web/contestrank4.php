@@ -76,28 +76,19 @@ if (!isset($_GET['cid']))
 $cid = intval($_GET['cid']);
 
 $pida=array();
-$result=pdo_query("select num,problem_id from contest_problem where contest_id=? order by num",$cid);
+$result=mysql_query_cache("select num,problem_id from contest_problem where contest_id=? order by num",$cid);
 foreach($result as $row){
    $pida[$row['num']]=$row['problem_id'];
 }
-if ($OJ_MEMCACHE) {
-	$sql = "SELECT `start_time`,`title`,`end_time` FROM `contest` WHERE `contest_id`=$cid";
-	$result = mysql_query_cache($sql);
 
-	if ($result)
-		$rows_cnt = count($result);
-	else
-		$rows_cnt = 0;
-}
-else {
-	$sql = "SELECT `start_time`,`title`,`end_time` FROM `contest` WHERE `contest_id`=?";
-	$result = pdo_query($sql,$cid);
+$sql = "SELECT `start_time`,`title`,`end_time` FROM `contest` WHERE `contest_id`=?";
+$result = mysql_query_cache($sql,$cid);
 
-	if($result)
-		$rows_cnt = count($result);
-	else
-		$rows_cnt = 0;
-}
+if($result)
+	$rows_cnt = count($result);
+else
+	$rows_cnt = 0;
+
 
 $start_time = 0;
 $end_time = 0;
@@ -155,24 +146,15 @@ if (time()>$view_lock_time && time()<$end_time+$OJ_RANK_LOCK_DELAY) {
 	$locked_msg = "The board has been locked.";
 }
 
-if ($OJ_MEMCACHE) {
-	$sql = "SELECT count(1) as pbc FROM `contest_problem` WHERE `contest_id`='$cid'";
-	$result = mysql_query_cache($sql);
-	
-	if ($result)
-		$rows_cnt = count($result);
-	else
-		$rows_cnt = 0;
-}
-else {
+
 	$sql = "SELECT count(1) as pbc FROM `contest_problem` WHERE `contest_id`=?";
-	$result = pdo_query($sql,$cid);
+	$result = mysql_query_cache($sql,$cid);
 
 	if ($result)
 		$rows_cnt = count($result);
 	else
 		$rows_cnt = 0;
-}
+
 
 if ($OJ_MEMCACHE)
 	$row = $result[0];
@@ -190,11 +172,9 @@ $sql="SELECT
                    solution where unix_timestamp(in_date)>=".$start_time." and  problem_id in (".implode(",",$pida).")  and user_id not in ( $OJ_RANK_HIDDEN )
         ORDER BY user_id,solution_id";
 //echo $sql;
-if($OJ_MEMCACHE){
+
         $result = mysql_query_cache($sql);
-}else{
-        $result = pdo_query($sql);
-}
+
         if($result) $rows_cnt=count($result);
         else $rows_cnt=0;
 
@@ -232,19 +212,12 @@ for ($i=0; $i<$pid_cnt; $i++) {
 	$first_blood[$i] = "";
 }
 
-if($OJ_MEMCACHE){
-        $sql="select s.problem_id,s.user_id from solution s ,
-        (select problem_id,min(solution_id) minId from solution where  unix_timestamp(in_date)>=".$start_time." and  problem_id in (".implode(",",$pida).")  and user_id not in ( $OJ_RANK_HIDDEN ) and result=4 GROUP BY problem_id ) c where s.solution_id = c.minId";
-        $fb = mysql_query_cache($sql);
-        if($fb) $rows_cnt=count($fb);
-        else $rows_cnt=0;
-}else{
-        $sql="select s.problem_id,s.user_id from solution s ,
-        (select problem_id,min(solution_id) minId from solution where  unix_timestamp(in_date)>=".$start_time." and  problem_id in (".implode(",",$pida).")  and user_id not in ( $OJ_RANK_HIDDEN ) and result=4 GROUP BY problem_id ) c where s.solution_id = c.minId";
-        $fb = pdo_query($sql);
-        if($fb) $rows_cnt=count($fb);
-        else $rows_cnt=0;
-}
+$sql="select s.problem_id,s.user_id from solution s ,
+(select problem_id,min(solution_id) minId from solution where  unix_timestamp(in_date)>=".$start_time." and  problem_id in (".implode(",",$pida).")  and user_id not in ( $OJ_RANK_HIDDEN ) and result=4 GROUP BY problem_id ) c where s.solution_id = c.minId";
+$fb = mysql_query_cache($sql);
+if($fb) $rows_cnt=count($fb);
+else $rows_cnt=0;
+
 foreach ($fb as $row){
          $first_blood[$row['problem_id']]=$row['user_id'];
 }
