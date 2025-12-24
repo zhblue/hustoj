@@ -138,30 +138,16 @@ if (time()>$view_lock_time && time()<$end_time+$OJ_RANK_LOCK_DELAY) {
 	$locked_msg = "The board has been locked.";
 }
 
-if ($OJ_MEMCACHE) {
-	$sql = "SELECT count(1) as pbc FROM `contest_problem` WHERE `contest_id`='$cid'";
-	
-	$result = mysql_query_cache($sql);
-	
-	if ($result)
-		$rows_cnt = count($result);
-	else
-		$rows_cnt = 0;
-}
-else {
+
 	$sql = "SELECT count(1) as pbc FROM `contest_problem` WHERE `contest_id`=?";
-	$result = pdo_query($sql,$cid);
+	$result = mysql_query_cache($sql,$cid);
 
 	if ($result)
 		$rows_cnt = count($result);
 	else
 		$rows_cnt = 0;
-}
 
-if ($OJ_MEMCACHE)
-	$row = $result[0];
-else
-	$row = $result[0];
+$row = $result[0];
 
 //$row=$result[0];
 $pid_cnt = intval($row['pbc']);
@@ -201,34 +187,24 @@ for ($i=0; $i<$pid_cnt; $i++) {
 	$first_blood[$i] = "";
 }
 
-if ($OJ_MEMCACHE) {
-	$sql = "select s.num,s.user_id from solution s ,
-	(select num,min(solution_id) minId from solution where contest_id=$cid and result=4 GROUP BY num ) c where s.solution_id = c.minId";
-	$fb = mysql_query_cache($sql);
 
-	if ($fb)
-		$rows_cnt = count($fb);
-	else
-		$rows_cnt = 0;
-}
-else {
-	$sql = "select s.num,s.user_id from solution s ,
-	(select num,min(solution_id) minId from solution where contest_id=? and result=4 GROUP BY num ) c where s.solution_id = c.minId";
-	$fb = pdo_query($sql,$cid);
+$sql = "select s.num,s.user_id from solution s ,
+(select num,min(solution_id) minId from solution where contest_id=? and result=4 GROUP BY num ) c where s.solution_id = c.minId";
+$fb = mysql_query_cache($sql,$cid);
 
-	if ($fb)
-		$rows_cnt = count($fb);
-	else
-		$rows_cnt = 0;
-}
+if ($fb)
+	$rows_cnt = count($fb);
+else
+	$rows_cnt = 0;
+
 
 for ($i=0; $i<$rows_cnt; $i++) {
 	$row = $fb[$i];
 	$first_blood[$row['num']] = $row['user_id'];
 }
 
-$absent=pdo_query("select user_id from privilege where rightstr='c$cid' and user_id not in (select distinct user_id from solution where contest_id=?)",$cid);
-$absentList=pdo_query("select user_id,nick from users where user_id in (select user_id from privilege where rightstr='c$cid' and user_id not in (select distinct user_id from solution where contest_id=?))",$cid);
+$absent=mysql_query_cache("select user_id from privilege where rightstr='c$cid' and user_id not in (select distinct user_id from solution where contest_id=?)",$cid);
+$absentList=mysql_query_cache("select user_id,nick from users where user_id in (select user_id from privilege where rightstr='c$cid' and user_id not in (select distinct user_id from solution where contest_id=?))",$cid);
 foreach ($absentList as $row){
          $U[$user_cnt]=new TM();
          $U[$user_cnt]->user_id=$row['user_id'];
