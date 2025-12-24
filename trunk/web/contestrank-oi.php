@@ -83,19 +83,10 @@ function s_cmp($A,$B){
 if (!isset($_GET['cid'])) die("No Such Contest!");
 $cid=intval($_GET['cid']);
 
-
-if($OJ_MEMCACHE){
-		$sql="SELECT `start_time`,`title`,`end_time` FROM `contest` WHERE `contest_id`='$cid'";
-        $result = mysql_query_cache($sql);
-        if($result) $rows_cnt=count($result);
-        else $rows_cnt=0;
-}else{
-		$sql="SELECT `start_time`,`title`,`end_time` FROM `contest` WHERE `contest_id`=?";
-        $result = pdo_query($sql,$cid);
-        if($result) $rows_cnt=count($result);
-        else $rows_cnt=0;
-}
-
+$sql="SELECT `start_time`,`title`,`end_time` FROM `contest` WHERE `contest_id`=?";
+$result = mysql_query_cache($sql,$cid);
+if($result) $rows_cnt=count($result);
+else $rows_cnt=0;
 
 $start_time=0;
 $end_time=0;
@@ -151,30 +142,16 @@ if (time() > $view_lock_time && time() < $end_time + $OJ_RANK_LOCK_DELAY) {
     $locked_msg = "The board has been locked.";
 }
 
-if($OJ_MEMCACHE){
-		$sql="SELECT count(1) as pbc FROM `contest_problem` WHERE `contest_id`='$cid'";
-        $result = mysql_query_cache($sql);
-        if($result) $rows_cnt=count($result);
-        else $rows_cnt=0;
-}else{
-		$sql="SELECT count(1) as pbc FROM `contest_problem` WHERE `contest_id`=?";
-        $result = pdo_query($sql,$cid);
-        if($result) $rows_cnt=count($result);
-        else $rows_cnt=0;
-}
+$sql="SELECT count(1) as pbc FROM `contest_problem` WHERE `contest_id`=?";
+$result = mysql_query_cache($sql,$cid);
+if($result) $rows_cnt=count($result);
+else $rows_cnt=0;
 
-if($OJ_MEMCACHE)
-        $row=$result[0];
-else
-         $row=$result[0];
+$row=$result[0];
 
-// $row=$result[0];
 $pid_cnt=intval($row['pbc']);
 
-
 require("./include/contest_solutions.php");
-//echo $sql;
-//$result=pdo_query($sql);
 
 $user_cnt=0;
 $user_name='';
@@ -206,23 +183,16 @@ for($i=0;$i<$pid_cnt;$i++){
       $first_blood[$i]="";
 }
 
-if($OJ_MEMCACHE){
-	$sql="select s.num,s.user_id from solution s ,
-        (select num,min(solution_id) minId from solution where contest_id=$cid and result=4 GROUP BY num ) c where s.solution_id = c.minId";
-        $fb = mysql_query_cache($sql);
-        if($fb) $rows_cnt=count($fb);
-        else $rows_cnt=0;
-}else{
-	$sql="select s.num,s.user_id from solution s ,
-        (select num,min(solution_id) minId from solution where contest_id=? and result=4 GROUP BY num ) c where s.solution_id = c.minId";
-        $fb = pdo_query($sql,$cid);
-        if($fb) $rows_cnt=count($fb);
-        else $rows_cnt=0;
-}
+$sql="select s.num,s.user_id from solution s ,
+(select num,min(solution_id) minId from solution where contest_id=? and result=4 GROUP BY num ) c where s.solution_id = c.minId";
+$fb = mysql_query_cache($sql,$cid);
+if($fb) $rows_cnt=count($fb);
+else $rows_cnt=0;
+
 foreach ($fb as $row){
          $first_blood[$row['num']]=$row['user_id'];
 }
-$absentList=pdo_query("select user_id,nick from users where user_id in (select user_id from privilege where rightstr='c$cid' and user_id not in (select distinct user_id from solution where contest_id=?))",$cid);
+$absentList=mysql_query_cache("select user_id,nick from users where user_id in (select user_id from privilege where rightstr='c$cid' and user_id not in (select distinct user_id from solution where contest_id=?))",$cid);
 foreach ($absentList as $row){
          $U[$user_cnt]=new TM();
          $U[$user_cnt]->user_id=$row['user_id'];
@@ -238,3 +208,4 @@ require("template/".$OJ_TEMPLATE."/contestrank-oi.php");
 if(file_exists('./include/cache_end.php'))
         require_once('./include/cache_end.php');
 ?>
+
