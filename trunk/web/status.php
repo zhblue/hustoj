@@ -25,6 +25,7 @@ $lock_time = date("Y-m-d H:i:s", time());
 
 $sql = "WHERE problem_id>0 ";
 
+// 处理竞赛ID参数，构建SQL查询条件
 if (isset($_GET['cid'])) {
     $cid = intval($_GET['cid']);
     $sql = $sql . " AND `contest_id`='$cid' and num>=0 ";
@@ -77,9 +78,8 @@ if (isset($_GET['cid'])) {
         $lock = false;
     }
 
-    //require_once("contest-header.php");
 } else {
-    //require_once("oj-header.php");
+    // 根据用户权限设置不同的SQL查询条件
     if (isset($_SESSION[$OJ_NAME . '_' . 'administrator'])      // 管理员
             || isset($_SESSION[$OJ_NAME . '_' . 'source_browser'])   //代码审查员
             || (isset($_SESSION[$OJ_NAME . '_' . 'user_id']) && (isset($_GET['user_id']) && $_GET['user_id'] == $_SESSION[$OJ_NAME . '_' . 'user_id']))  // 普通用户查询自己的
@@ -97,14 +97,14 @@ if (isset($_GET['cid'])) {
 $start_first = true;
 $order_str = " ORDER BY `solution_id` DESC ";
 
-// check the top arg
+// 检查top参数并添加到SQL查询
 if (isset($_GET['top'])) {
     $top = strval(intval($_GET['top']));
     if ($top != -1)
         $sql = $sql . "AND `solution_id`<='" . $top . "' ";
 }
 
-// check the problem arg
+// 检查problem_id参数并添加到SQL查询
 $problem_id = "";
 if (isset($_GET['problem_id']) && $_GET['problem_id'] != "") {
     if (isset($_GET['cid'])) {
@@ -125,7 +125,7 @@ if (isset($_GET['problem_id']) && $_GET['problem_id'] != "") {
 
 $param = array();
 
-// check the user_id arg
+// 检查user_id参数并添加到SQL查询
 $user_id = "";
 //    echo "[".(($contest_type&8)>0)."]";
 if ((isset($OJ_ON_SITE_CONTEST_ID) && $OJ_ON_SITE_CONTEST_ID > 0 && !isset($_SESSION[$OJ_NAME . '_' . 'administrator']))
@@ -152,6 +152,7 @@ if (isset($_GET['user_id'])) {
     }
 }
 
+// 检查language参数并添加到SQL查询
 if (isset($_GET['language'])) {
     $language = intval($_GET['language']);
     if ($language > count($language_ext) || $language < 0)
@@ -165,7 +166,7 @@ if (isset($_GET['language'])) {
     $language = -1;
 }
 
-
+// 检查jresult参数并添加到SQL查询
 if (isset($_GET['jresult'])) {
     $result = intval($_GET['jresult']);
     if ($result != -1 && !$lock) {
@@ -502,3 +503,4 @@ if ($need_refresh_remote && isset($OJ_REMOTE_JUDGE) && $OJ_REMOTE_JUDGE && (time
 /////////////////////////Common foot
 if (file_exists('./include/cache_end.php'))
     require_once('./include/cache_end.php');
+
