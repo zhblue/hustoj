@@ -9,6 +9,15 @@ else
 if ($cid < 0) $cid = -$cid;
 $view_cid = $cid;
 //print $cid;
+
+/**
+ * 验证比赛是否有效并检查用户权限
+ * 获取比赛基本信息，验证比赛状态、权限、时间等条件
+ * 处理比赛密码验证、IP子网限制、私人比赛权限等
+ * 支持个人限时赛功能，限制用户答题时间
+ * 根据验证结果决定是否允许用户访问比赛
+ */
+
 //check contest valid
 $sql = "SELECT * FROM `contest` WHERE `contest_id`=?";
 $result = mysql_query_cache($sql, $cid);
@@ -33,11 +42,14 @@ if (isset($_POST['password']))
 if (false) {
     $password = stripslashes($password);
 }
+
+// 检查IP是否在比赛允许的子网范围内
 if (!in_subnet_of_contest($ip, $cid)) {
     $contest_ok = false;
     $view_description = "Not in $MSG_SUBNET $subnet";
 }
 
+// 检查比赛是否存在或是否已关闭（非管理员无法访问已关闭比赛）
 if ($rows_cnt == 0 || ($row['defunct'] == 'Y' && !isset($_SESSION[$OJ_NAME . '_administrator']))) {
     $view_title = "比赛已经关闭!";
     $contest_ok = false;
@@ -48,6 +60,7 @@ if ($rows_cnt == 0 || ($row['defunct'] == 'Y' && !isset($_SESSION[$OJ_NAME . '_a
     if ($password != "" && $password == $row['password'])
         $_SESSION[$OJ_NAME . '_' . 'c' . $cid] = true;
 
+    // 检查私人比赛权限
     if ($row['private'] && !isset($_SESSION[$OJ_NAME . '_' . 'c' . $cid])) {
 
         $sql = "SELECT count(*) FROM `privilege` WHERE `user_id`=? AND `rightstr`=?";
@@ -64,12 +77,15 @@ if ($rows_cnt == 0 || ($row['defunct'] == 'Y' && !isset($_SESSION[$OJ_NAME . '_a
 //              if($row['defunct']=='Y')  //defunct problem not in contest/exam list
 //                      $contest_ok = false;
 
+    // 管理员和比赛创建者拥有特殊权限
     if (isset($_SESSION[$OJ_NAME . '_' . 'administrator']) || isset($_SESSION[$OJ_NAME . '_' . 'contest_creator']))
         $contest_ok = true;
 
+    // 判断比赛是否已经结束
     if ($unixnow > $end_time) $contest_is_over = true;    // 已经结束的比赛，按练习方式提交
     else $contest_is_over = false;
 
+    // 检查比赛是否还未开始，未开始则显示错误页面
     if (!isset($_SESSION[$OJ_NAME . '_' . 'administrator']) && $unixnow < $start_time) {
         $view_errors = "<center>";
         $view_errors .= "<h3>$MSG_CONTEST_ID : $view_cid - $view_title</h3>";
@@ -83,6 +99,8 @@ if ($rows_cnt == 0 || ($row['defunct'] == 'Y' && !isset($_SESSION[$OJ_NAME . '_a
         exit(0);
     }
 }
+
+// 处理个人限时赛功能
 if (!isset($OJ_CONTEST_LIMIT_KEYWORD)) $OJ_CONTEST_LIMIT_KEYWORD = "限时";
 if ($contest_ok && str_contains($view_description, $OJ_CONTEST_LIMIT_KEYWORD) && isset($_SESSION[$OJ_NAME . "_user_id"])) {
     //echo "<!-- 个人限时赛  -->";
@@ -127,7 +145,7 @@ if ($contest_ok && str_contains($view_description, $OJ_CONTEST_LIMIT_KEYWORD) &&
 
 };
 
-
+// 如果比赛验证失败，显示错误页面和密码输入表单
 if (!$contest_ok) {
     $view_errors = "<center>";
     $view_errors .= "<h3>$MSG_CONTEST_ID : $view_cid - $view_title</h3>";
@@ -158,3 +176,4 @@ if (!$contest_ok) {
     require("template/" . $OJ_TEMPLATE . "/error.php");
     exit(0);
 }
+
