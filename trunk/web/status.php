@@ -77,9 +77,7 @@ if (isset($_GET['cid'])) {
         $lock = false;
     }
 
-    //require_once("contest-header.php");
 } else {
-    //require_once("oj-header.php");
     if (isset($_SESSION[$OJ_NAME . '_' . 'administrator'])      // 管理员
             || isset($_SESSION[$OJ_NAME . '_' . 'source_browser'])   //代码审查员
             || (isset($_SESSION[$OJ_NAME . '_' . 'user_id']) && (isset($_GET['user_id']) && $_GET['user_id'] == $_SESSION[$OJ_NAME . '_' . 'user_id']))  // 普通用户查询自己的
