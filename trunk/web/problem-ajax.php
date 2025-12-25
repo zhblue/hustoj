@@ -10,29 +10,22 @@ require_once('./include/setlang.php');
 require_once("./include/const.inc.php");
 require_once("./include/memcache.php");
 
-$view_title = "$MSG_STATUS";
 $pid = 0;
 // check the top arg
 
 if (isset($_GET['pid'])) {
     $pid = intval($_GET['pid']);
 }
-if ($OJ_MEMCACHE) {
-    $sql = "select user_id from privilege where rightstr='p$pid'  LIMIT 1";
-    $result = mysql_query_cache($sql);
 
-} else {
-    $sql = "select user_id from privilege where rightstr=?  LIMIT 1";
-    $result = pdo_query($sql, "p" . $pid);
+// 查询特权表中指定pid的用户信息
+$sql = "select user_id from privilege where rightstr=?  LIMIT 1";
+$result = mysql_query_cache($sql, "p" . $pid);
 
-}
 
 if ($result) {
     $row = $result[0];
-    echo "<a href='userinfo.php?user=" . htmlentities($row['user_id'], ENT_QUOTES, 'utf-8') . "'>" . htmlentities($row['user_id'], ENT_QUOTES, 'utf-8') . "</a>";
+    echo "<a href='userinfo.php?user=" . htmlentities($row['user_id']) . "'>" . htmlentities($row['user_id']) . "</a>";
 } else {
     echo "$MSG_IMPORTED";
 }
 
-
-?>

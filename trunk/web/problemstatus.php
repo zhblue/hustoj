@@ -1,5 +1,12 @@
 <?php
+/**
+ * 页面缓存时间设置，单位为秒
+ */
 $cache_time = 30;
+
+/**
+ * 是否共享缓存的开关变量
+ */
 $OJ_CACHE_SHARE = false;
 
 require_once('./include/cache_start.php');
@@ -10,7 +17,7 @@ $view_title = "$OJ_NAME";
 
 require_once("./include/const.inc.php");
 
-
+// 获取问题ID和页面参数
 if (isset($_GET['id']))
     $id = intval($_GET['id']);
 
@@ -21,6 +28,9 @@ else
 ?>
 
 <?php
+/**
+ * 检查是否存在NOIP关键词限制，如果有正在进行的相关比赛则显示警告信息
+ */
 if (isset($OJ_NOIP_KEYWORD) && $OJ_NOIP_KEYWORD) {
     $now = date('Y-m-d H:i', time());
     $sql = "select count(contest_id) from contest where start_time<'$now' and end_time>'$now' and title like '%$OJ_NOIP_KEYWORD%'";
@@ -35,6 +45,9 @@ if (isset($OJ_NOIP_KEYWORD) && $OJ_NOIP_KEYWORD) {
 
 $view_problem = array();
 
+/**
+ * 统计问题的提交数据，包括总提交数、提交用户数、AC用户数等
+ */
 // total submit
 $sql = "SELECT count(*) FROM solution WHERE problem_id=?";
 $result = pdo_query($sql, $id);
@@ -63,6 +76,9 @@ $view_problem[2][1] = $row[0];
 
 //for ($i=4;$i<12;$i++){
 $i = 3;
+/**
+ * 统计各种评测结果的提交数量
+ */
 $sql = "SELECT result, count(1) FROM solution WHERE problem_id=? AND result>=4 GROUP BY result ORDER BY result";
 $result = pdo_query($sql, $id);
 
@@ -82,6 +98,9 @@ foreach ($result as $row) {
 ?>
 
 <?php
+/**
+ * 计算分页范围并获取当前页的数据
+ */
 $pagemin = 0;
 $pagemax = intval(($acuser - 1) / 20);
 
@@ -97,13 +116,16 @@ $sz = 20;
 if ($start + $sz > $acuser)
     $sz = $acuser - $start;
 
-//check whether the problem in a contest
-
+/**
+ * 检查问题是否在进行中的比赛中
+ */
 $sql = "SELECT 1 FROM `contest_problem` WHERE `problem_id`=$id AND `contest_id` IN (SELECT `contest_id` FROM `contest` WHERE `start_time`<? AND `end_time`>?)";
 $rrs = pdo_query($sql, $now, $now);
 $flag = count($rrs) == 0;
 
-// check whether the problem is ACed by user
+/**
+ * 检查当前用户是否已通过该问题
+ */
 $AC = false;
 if (isset($OJ_AUTO_SHARE) && $OJ_AUTO_SHARE && isset($_SESSION[$OJ_NAME . '_' . 'user_id'])) {
     $sql = "SELECT 1 FROM solution WHERE result=4 AND problem_id=? AND user_id=?";
@@ -111,8 +133,9 @@ if (isset($OJ_AUTO_SHARE) && $OJ_AUTO_SHARE && isset($_SESSION[$OJ_NAME . '_' . 
     $AC = (intval(count($rrs)) > 0);
 }
 
-//check whether user has the right of view solutions of this problem
-//echo "checking...";
+/**
+ * 检查用户是否有查看该问题解法的权限
+ */
 if (isset($_SESSION[$OJ_NAME . '_' . 'user_id'])) {
     if (isset($_SESSION[$OJ_NAME . '_' . 's' . $id])) {
         $AC = true;
@@ -129,6 +152,9 @@ if (isset($_SESSION[$OJ_NAME . '_' . 'user_id'])) {
     }
 }
 
+/**
+ * 查询AC该问题的用户解决方案，按时间和内存等综合评分排序
+ */
 $sql = "SELECT * FROM (
   SELECT COUNT(*) att, user_id, min(10000000000000000000 + time*100000000000 + memory*100000 + code_length) score
   FROM solution
@@ -153,6 +179,9 @@ $j = 0;
 $last_user_id = '';
 $i = $start + 1;
 
+/**
+ * 处理查询结果，构建解决方案列表
+ */
 foreach ($result as $row) {
     if ($row['user_id'] == $last_user_id)
         continue;
@@ -200,6 +229,9 @@ foreach ($result as $row) {
 }
 
 
+/**
+ * 获取相关推荐问题列表
+ */
 $view_recommand = array();
 
 if (isset($_GET['id'])) {

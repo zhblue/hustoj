@@ -1,7 +1,21 @@
 <?php
-$OJ_CACHE_SHARE = false;
-$cache_time = 10;
+/**
+ * 问题集页面处理脚本
+ *
+ * 该脚本负责处理在线评测系统的问题集页面，包括分页、搜索、权限控制等功能
+ * 显示问题列表，记录用户访问页面，处理问题搜索和筛选
+ */
 
+/**
+ * 全局配置变量
+ */
+$OJ_CACHE_SHARE = false;  // 是否共享缓存
+$cache_time = 10;         // 缓存时间设置
+
+/**
+ * 引入必要的包含文件
+ * 包括数据库连接、常量定义、缓存、cURL、Memcache、语言设置等功能模块
+ */
 require_once('./include/db_info.inc.php');
 require_once('./include/const.inc.php');
 require_once('./include/cache_start.php');
@@ -9,9 +23,18 @@ require_once('./include/curl.php');
 require_once('./include/memcache.php');
 require_once('./include/setlang.php');
 require_once("./include/set_get_key.php");
+
+/**
+ * 页面标题设置
+ */
 $view_title = "Problem Set";
 
-//remember page
+/**
+ * 记住用户访问页面功能
+ *
+ * 根据GET参数或用户会话记录用户的当前页面位置
+ * 管理员和普通用户有不同的页面记忆逻辑
+ */
 $page = "1";
 if (isset($_GET['page'])) {
     $page = intval($_GET['page']);
@@ -34,7 +57,12 @@ if (isset($_GET['page'])) {
 }
 //end of remember page
 
-//Page Setting
+/**
+ * 分页设置模块
+ *
+ * 根据不同的请求参数（搜索、列表、普通浏览）设置不同的过滤条件和排序方式
+ * 支持按标题和来源搜索、按指定问题列表显示、普通分页浏览
+ */
 $page_cnt = 50;  //50 problems per page
 
 $postfix = "";
@@ -65,8 +93,12 @@ if (isset($_GET['search']) && trim($_GET['search']) != "") {
     $limit_sql = " LIMIT " . ($page - 1) * $page_cnt . "," . $page_cnt;
 }
 
-//all submit
-//all acc
+/**
+ * 用户提交状态统计
+ *
+ * 获取当前登录用户的提交记录，统计已提交和已通过的问题
+ * 用于在问题列表中标记用户对该问题的完成状态
+ */
 $sub_arr = array();
 $acc_arr = array();
 if (isset($_SESSION[$OJ_NAME . '_' . 'user_id'])) {
@@ -78,7 +110,12 @@ if (isset($_SESSION[$OJ_NAME . '_' . 'user_id'])) {
     }
 }
 
-// Problem Page Navigator
+/**
+ * 问题页面导航权限控制
+ *
+ * 根据用户权限（管理员、普通用户、自由练习模式）设置不同的问题过滤条件
+ * 管理员可查看所有问题，普通用户不能查看竞赛期间的问题
+ */
 //if($OJ_SAE) $first=1;
 if (isset($_SESSION[$OJ_NAME . '_' . 'administrator'])) {  //all problems
     //$limit = $limit_sql;
@@ -95,6 +132,13 @@ if (isset($_SESSION[$OJ_NAME . '_' . 'administrator'])) {  //all problems
         ") ";
 }
 // End Page Setting
+
+/**
+ * 数据库查询执行
+ *
+ * 执行问题列表查询，根据搜索条件使用不同的查询方式
+ * 统计总页数，获取当前页的问题数据
+ */
 pdo_query("SET sort_buffer_size = 1024*1024");   // Out of sort memory, consider increasing server sort buffer size
 $sql = "select `problem_id`,`title`,`source`,`submit`,`accepted`,defunct FROM problem A WHERE $filter_sql $order_by $limit_sql ";
 $count_sql = "select count(1) from problem where  $filter_sql ";
@@ -112,6 +156,12 @@ if (isset($_GET['search']) && trim($_GET['search']) != "") {
 
 $view_total_page = ceil($cnt * 1.0);
 
+/**
+ * 问题列表数据处理
+ *
+ * 遍历查询结果，构建问题列表显示数据
+ * 处理问题完成状态标记、问题来源分类、链接生成等
+ */
 $cnt = 0;
 $view_problemset = array();
 $i = 0;
@@ -158,11 +208,23 @@ foreach ($result as $row) {
     $view_problemset[$i][5] = "<div class='center'><a href='status.php?problem_id=" . $row['problem_id'] . "'>" . $row['submit'] . "</a></div>";
     $i++;
 }
+
+/**
+ * 模板渲染
+ *
+ * 根据请求类型（AJAX或普通请求）选择不同的模板文件
+ * 输出最终的问题列表页面
+ */
 if (isset($_GET['ajax'])) {
     require("template/bs3/problemset.php");
 } else {
     require("template/" . $OJ_TEMPLATE . "/problemset.php");
 }
+
+/**
+ * 缓存结束处理
+ *
+ * 如果存在缓存结束文件则执行缓存处理
+ */
 if (file_exists('./include/cache_end.php'))
     require_once('./include/cache_end.php');
-?>
