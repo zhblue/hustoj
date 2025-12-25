@@ -1,5 +1,6 @@
 <?php
 function pdo_query($sql){
+    $query_start_time=microtime(true);
     $num_args = func_num_args();
     $args = func_get_args();       //获得传入的所有参数的数组
     $args = array_slice($args,1,--$num_args);
@@ -39,6 +40,12 @@ function pdo_query($sql){
 	    }
 	    //print($sql);
 	    $sth->closeCursor();
+        $query_used_time=microtime(true)-$query_start_time;
+        if($query_used_time>3) {
+            global $logger;
+            $logger->warn("slow SQL of [$query_used_time] sec : $sql \n
+                    in page [".$_SERVER['REQUEST_URI']."]");
+        }
 	    return $result;
     }catch(PDOException $e){
 //	    echo "<span class=red>".$e->getMessage()."</span>";    // open this line to debug SQL fail problems 
