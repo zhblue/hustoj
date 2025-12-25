@@ -1,40 +1,79 @@
 <?php
+/**
+ * 根据是否有关键词POST请求设置缓存时间
+ * 有关键词时缓存时间短，无关键词时缓存时间长
+ */
 if (isset($_POST['keyword']))
     $cache_time = 1;
 else
     $cache_time = 10;
 
+/**
+ * 设置缓存共享标志，当前设置为false
+ * 注释掉的代码原本用于在cid或my参数存在时禁用缓存
+ */
 $OJ_CACHE_SHARE = false;//!(isset($_GET['cid'])||isset($_GET['my']));
+
+/**
+ * 包含必要的系统文件
+ * 包括缓存、数据库、内存缓存、自定义函数、常量和语言设置
+ */
 require_once('./include/cache_start.php');
 require_once('./include/db_info.inc.php');
 require_once('./include/memcache.php');
 require_once('./include/my_func.inc.php');
 require_once('./include/const.inc.php');
 require_once('./include/setlang.php');
+
+/**
+ * 设置页面标题为竞赛标题
+ */
 $view_title = $MSG_CONTEST;
 
+/**
+ * 获取当前时间戳
+ */
 $now = time();
 
+/**
+ * 处理竞赛详情页面
+ * 当存在cid参数时，显示特定竞赛的问题列表
+ */
 if (isset($_GET['cid'])) {
 
     require_once("contest-check.php");
 
-    //$sql = "SELECT * FROM (SELECT `problem`.`title` AS `title`,`problem`.`problem_id` AS `pid`,source AS source, contest_problem.num as pnum FROM `contest_problem`,`problem` WHERE `contest_problem`.`problem_id`=`problem`.`problem_id` AND `contest_problem`.`contest_id`=? ORDER BY `contest_problem`.`num`) problem LEFT JOIN (SELECT problem_id pid1,count(distinct(user_id)) accepted FROM solution WHERE result=4 AND contest_id=? GROUP BY pid1) p1 ON problem.pid=p1.pid1 LEFT JOIN (SELECT problem_id pid2,count(1) submit FROM solution WHERE contest_id=? GROUP BY pid2) p2 ON problem.pid=p2.pid2 ORDER BY pnum";//AND `problem`.`defunct`='N'
-
-    //$result = pdo_query($sql,$cid,$cid,$cid);
+    /**
+     * 查询竞赛相关问题信息
+     * 使用内连接获取问题标题、ID、来源和竞赛问题编号
+     */
     $sql = "select p.title,p.problem_id,p.source,cp.num as pnum,cp.c_accepted accepted,cp.c_submit submit from problem p inner join contest_problem cp on p.problem_id = cp.problem_id and cp.contest_id=$cid order by cp.num";
     $result = mysql_query_cache($sql);
     $view_problemset = array();
     $pids = array_column($result, 'problem_id');
     if (!empty($pids)) $pids = implode(",", $pids);
     $cnt = 0;
+
+    /**
+     * 判断是否为NOIP竞赛或竞赛是否锁定
+     * 检查竞赛是否在进行中且包含NOIP关键词或被锁定
+     */
     $noip = (time() < $end_time) && (stripos($view_title, $OJ_NOIP_KEYWORD) !== false || contest_locked($cid, 16));
     $hide_others = contest_locked($cid, 8);
+
+    /**
+     * 管理员、竞赛管理员、源码浏览器或竞赛创建者不受NOIP限制
+     */
     if (isset($_SESSION[$OJ_NAME . '_' . "administrator"]) ||
         isset($_SESSION[$OJ_NAME . '_' . "m$cid"]) ||
         isset($_SESSION[$OJ_NAME . '_' . "source_browser"]) ||
         isset($_SESSION[$OJ_NAME . '_' . "contest_creator"])
     ) $noip = false;
+
+    /**
+     * 遍历结果集，构建问题列表
+     * 根据竞赛状态和用户权限设置问题显示内容
+     */
     foreach ($result as $row) {
         $view_problemset[$cnt][0] = "";
         if (isset($_SESSION[$OJ_NAME . '_' . 'user_id'])) {
@@ -50,11 +89,11 @@ if (isset($_GET['cid'])) {
             $view_problemset[$cnt][0] = "";
 
 
-        if ($now < $end_time) { //during contest/exam time
+        if ($now < $end_time) { //竞赛进行中
             $view_problemset[$cnt][1] = "<a href='problem.php?cid=$cid&pid=$cnt'>" . $PID[$cnt] . "</a>";
             $view_problemset[$cnt][2] = "<a href='problem.php?cid=$cid&pid=$cnt'>" . $row['title'] . "</a>";
-        } else {               //over contest time
-            //check the problem will be use remained contest/exam
+        } else {               //竞赛结束
+            //检查问题是否会在其他竞赛中使用
             $tpid = intval($row['problem_id']);
             $sql = "SELECT `problem_id` FROM `problem` WHERE `problem_id`=? AND `problem_id` IN (
 				SELECT `problem_id` FROM `contest_problem` WHERE `contest_id` IN (
@@ -65,8 +104,8 @@ if (isset($_GET['cid'])) {
             $tresult = pdo_query($sql, $tpid);
 
             if (intval($tresult) != 0 && !isset($_SESSION[$OJ_NAME . '_' . "m$cid"])) {
-                //if the problem will be use remained contes/exam don't show to other teachers and students
-                $view_problemset[$cnt][1] = $PID[$cnt]; //hide the title after contest
+                //如果问题将在其他私有竞赛中使用，不向其他教师和学生显示
+                $view_problemset[$cnt][1] = $PID[$cnt]; //竞赛结束后隐藏标题
                 $view_problemset[$cnt][2] = '--using in another private contest--';
             } else {
                 $view_problemset[$cnt][1] = "<a href='problem.php?id=" . $row['problem_id'] . "'>" . $PID[$cnt] . "</a>";
@@ -79,6 +118,10 @@ if (isset($_GET['cid'])) {
 
         //$view_problemset[$cnt][3] = $row['source'];
 
+        /**
+         * 根据NOIP或隐藏设置决定是否显示接受和提交数量
+         * 管理员不受限制
+         */
         if (($noip || $hide_others) && !(isset($_SESSION[$OJ_NAME . 'm' . $cid]) || isset($_SESSION[$OJ_NAME . '_administrator']))) {
             $view_problemset[$cnt][3] = "<span class=red>?</span>";
             $view_problemset[$cnt][4] = "<span class=red>?</span>";
@@ -91,6 +134,10 @@ if (isset($_GET['cid'])) {
         $cnt++;
     }
 } else {
+    /**
+     * 处理竞赛列表页面
+     * 当不存在cid参数时，显示竞赛列表
+     */
     $page = 1;
     if (isset($_GET['page']))
         $page = intval($_GET['page']);
@@ -113,6 +160,11 @@ if (isset($_GET['cid'])) {
     //echo "$keyword";
     $mycontests = "";
     $wheremy = "";
+
+    /**
+     * 获取当前用户参与的竞赛列表
+     * 用于显示"我的竞赛"功能
+     */
     if (isset($_SESSION[$OJ_NAME . '_user_id'])) {
         $sql = "select distinct contest_id from solution where contest_id>0 and user_id=?";
         $result = pdo_query($sql, $_SESSION[$OJ_NAME . '_user_id']);
@@ -179,6 +231,10 @@ if (isset($_GET['cid'])) {
     $view_contest = array();
     $i = 0;
 
+    /**
+     * 遍历竞赛结果，构建竞赛列表
+     * 根据竞赛状态（已结束、待开始、进行中）设置不同的显示内容
+     */
     foreach ($result as $row) {
         $view_contest[$i][0] = $row['contest_id'];
 
@@ -194,15 +250,15 @@ if (isset($_GET['cid'])) {
         $left = $end_time - $now;
 
         if ($end_time <= $now) {
-            //past
+            //已结束
             $view_contest[$i][2] = "<span class=text-muted>$MSG_Ended</span>" . " " . "<span class=text-muted>" . $row['end_time'] . "</span>";
 
         } else if ($now < $start_time) {
-            //pending
+            //待开始
             $view_contest[$i][2] = "<span class=text-success>$MSG_Start</span>" . " " . $row['start_time'] . "&nbsp;";
             $view_contest[$i][2] .= "<span class=text-success>$MSG_TotalTime</span>" . " " . formatTimeLength($length);
         } else {
-            //running
+            //进行中
             $view_contest[$i][2] = "<span class=text-danger>$MSG_Running</span>" . " " . $row['start_time'] . "&nbsp;";
             $view_contest[$i][2] .= "<span class=text-danger>$MSG_LeftTime</span>" . " " . formatTimeLength($left) . "</span>";
         }
@@ -220,11 +276,18 @@ if (isset($_GET['cid'])) {
 }
 
 /////////////////////////Template
+/**
+ * 根据参数加载相应的模板文件
+ * 有cid参数时加载竞赛模板，否则加载竞赛集模板
+ */
 if (isset($_GET['cid']))
     require("template/" . $OJ_TEMPLATE . "/contest.php");
 else
     require("template/" . $OJ_TEMPLATE . "/contestset.php");
 /////////////////////////Common foot
+/**
+ * 包含缓存结束文件（如果存在）
+ */
 if (file_exists('./include/cache_end.php'))
     require_once('./include/cache_end.php');
 ?>
