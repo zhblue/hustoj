@@ -12,12 +12,20 @@ $view_title = "Welcome To Online Judge";
 $result = false;
 ///////////////////////////MAIN	
 
+/**
+ * 获取题目分类信息并生成分类标签显示
+ * 从problem表中获取所有有效的题目来源(source)，处理后生成带颜色标签的分类显示
+ */
 $view_category = "";
 $sql = "select distinct source "
     . "FROM `problem` where defunct='N' order by source "
     . "LIMIT 5000";
 $result = mysql_query_cache($sql);//mysql_escape_string($sql));
 $category = array();
+
+/**
+ * 遍历查询结果，将每个题目的source字段按空格分割，并处理URL类型的分类
+ */
 foreach ($result as $row) {
     $cate = explode(" ", $row['source']);
     foreach ($cate as $cat) {
@@ -31,6 +39,11 @@ foreach ($result as $row) {
 }
 $category = array_unique($category);
 sort($category);
+
+/**
+ * 根据查询结果生成分类标签HTML内容
+ * 如果没有分类数据则显示提示信息，否则生成带颜色主题的分类标签链接
+ */
 if (!$result) {
     $view_category = "<h3>No Category Now!</h3>";
 } else {
@@ -52,4 +65,4 @@ require("template/" . $OJ_TEMPLATE . "/category.php");
 /////////////////////////Common foot
 if (file_exists('./include/cache_end.php'))
     require_once('./include/cache_end.php');
-?>
+
