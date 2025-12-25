@@ -46,7 +46,7 @@ if (isset($OJ_PRINTER) && $OJ_PRINTER) {
             $view_printer[$i][1] = $row['user_id'];
             if ($row['status'] == 1) $view_printer[$i][2] = "$MSG_PRINT_DONE";
             else $view_printer[$i][2] = "$MSG_PRINT_PENDING";
-            $view_printer[$i][3] = "<a href='printer_view.php?id=" . $row['printer_id'] . "' target='_self'>$MSG_PRINTER";
+            $view_printer[$i][3] = "<a href='printer_view.php?id=" . $row['printer_id'] . "' target='_self'>$MSG_PRINTER</a>";
 
             $i++;
         }
