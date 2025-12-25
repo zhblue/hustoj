@@ -1,6 +1,7 @@
 <?php
         require_once(dirname(__FILE__)."/db_info.inc.php");
         //cache head start
+        $page_start_time=microtime(true);
         if(!isset($cache_time)) $cache_time=10;
         $OJ_APCU_OK = ( extension_loaded('apcu') && apcu_enabled() );
         $sid=$OJ_NAME.$_SERVER["HTTP_HOST"];
