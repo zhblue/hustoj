@@ -216,7 +216,13 @@ if (!isset($OJ_REG_NEED_CONFIRM) || !$OJ_REG_NEED_CONFIRM) {
         $_SESSION[$OJ_NAME . '_' . 'sub'] = array();
         if ($OJ_SaaS_ENABLE && $domain == $DOMAIN) header("location:modifypage.php#MyOJ");
     }
+}else{
+    ?>
+<script>
+    alert("<?php echo "$MSG_SYSTEM $MSG_Pending $MSG_ADMIN / $MSG_EMAIL $MSG_ACTIVE_YOUR_ACCOUNT";?>");
+    history.go(-2);
+</script>
+   <?php
 }
-?>
-<script>history.go(-2);</script>
+
 
