@@ -12,15 +12,18 @@ if (isset($OJ_LANG)) {
 require_once("./include/const.inc.php");
 require_once("./include/my_func.inc.php");
 
+/**
+ * 竞赛选手类，用于记录和计算选手的解题情况、时间和分数
+ */
 class TM
 {
-    var $solved = 0;
-    var $time = 0;
-    var $p_wa_num;
-    var $p_ac_sec;
-    var $user_id;
-    var $nick;
-    var $mark = 0;
+    var $solved = 0;      // 解决的问题数量
+    var $time = 0;        // 总用时
+    var $p_wa_num;        // 每个问题的错误提交次数
+    var $p_ac_sec;        // 每个问题的通过时间
+    var $user_id;         // 用户ID
+    var $nick;            // 用户昵称
+    var $mark = 0;        // 得分
 
     function TM()
     {
@@ -30,6 +33,15 @@ class TM
         $this->p_ac_sec = array();
     }
 
+    /**
+     * 添加一次提交记录
+     * @param int $pid 问题ID
+     * @param int $sec 提交时间（秒）
+     * @param int $res 提交结果
+     * @param int $mark_base 基础分数
+     * @param int $mark_per_problem 每题分数
+     * @param int $mark_per_punish 惩罚分数
+     */
     function Add($pid, $sec, $res, $mark_base, $mark_per_problem, $mark_per_punish)
     {
         global $OJ_CE_PENALTY;
@@ -64,6 +76,12 @@ class TM
     }
 }
 
+/**
+ * 比较函数，用于排序选手
+ * @param object $A 选手A
+ * @param object $B 选手B
+ * @return bool 排序结果
+ */
 function s_cmp($A, $B)
 {
 //	echo "Cmp....<br>";
@@ -71,6 +89,13 @@ function s_cmp($A, $B)
     else return $A->time > $B->time;
 }
 
+/**
+ * 计算正态分布值
+ * @param float $x 输入值
+ * @param float $u 均值
+ * @param float $s 标准差
+ * @return float 正态分布概率密度值
+ */
 function normalDistribution($x, $u, $s)
 {
 
@@ -81,6 +106,14 @@ function normalDistribution($x, $u, $s)
 
 }
 
+/**
+ * 根据正态分布为用户分配分数
+ * @param array $users 用户数组
+ * @param int $start 分数起始值
+ * @param int $end 分数结束值
+ * @param int $s 分布参数
+ * @return int 返回用户数量
+ */
 function getMark($users, $start, $end, $s)
 {
     $accum = 0;
@@ -129,6 +162,7 @@ if (!isset($_GET['cid'])) die("No Such Contest!");
 $cid = intval($_GET['cid']);
 if (isset($OJ_NO_CONTEST_WATCHER) && $OJ_NO_CONTEST_WATCHER) require_once("contest-check.php");
 
+// 获取竞赛信息
 $sql = "SELECT `start_time`,`title`,`end_time` FROM `contest` WHERE `contest_id`=?";
 $result = mysql_query_cache($sql, $cid);
 $rows_cnt = count($result);
@@ -172,6 +206,7 @@ if (isset($_SESSION[$OJ_NAME . '_' . "administrator"]) ||
 if (!isset($OJ_RANK_LOCK_PERCENT)) $OJ_RANK_LOCK_PERCENT = 0;
 $lock = $end_time - ($end_time - $start_time) * $OJ_RANK_LOCK_PERCENT;
 
+// 获取竞赛题目数量并设置分数参数
 $sql = "SELECT count(1) FROM `contest_problem` WHERE `contest_id`=?";
 $result = mysql_query_cache($sql, $cid);
 $row = $result[0];
@@ -184,6 +219,7 @@ if ($pid_cnt == 1) {
 }
 $mark_per_punish = $mark_per_problem / 5;
 
+// 获取竞赛提交记录
 $sql = "select
         user_id,nick,solution.result,solution.num,solution.in_date
                         from solution where solution.contest_id=? and num>=0 and problem_id>0
@@ -212,6 +248,7 @@ foreach ($result as $row) {
 }
 
 usort($U, "s_cmp");
+// 获取未提交的用户列表
 $absentList = mysql_query_cache("select user_id,nick from users where user_id in (select user_id from privilege where rightstr='c$cid' and user_id not in (select distinct user_id from solution where contest_id=?))", $cid);
 foreach ($absentList as $row) {
     $U[$user_cnt] = new TM();
@@ -269,6 +306,4 @@ for ($i = 0; $i < $user_cnt; $i++) {
     echo "</tr>";
 }
 echo "</table>";
-
-?>
 
