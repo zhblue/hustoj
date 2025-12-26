@@ -79,29 +79,30 @@ foreach ($result as $row) {
 }
 
 
-$res = 3600;
-
-$sql = "SELECT (UNIX_TIMESTAMP(end_time)-UNIX_TIMESTAMP(start_time))/100 FROM contest WHERE contest_id=? ";
-$result = mysql_query_cache($sql, $cid);
-$view_userstat = array();
-if ($row = $result[0]) {
-    $res = $row[0];
-}
-$sql = "SELECT floor(UNIX_TIMESTAMP((in_date))/$res)*$res*1000 md,count(1) c FROM `solution` where  `contest_id`=?  group by md order by md desc ";
+$sql = "SELECT date(in_date) md,count(1) c FROM (select * from solution where `contest_id`=? and result<13 and problem_id>0 and  result>=4 ) solution group by md order by md desc limit 1000";
 $result = mysql_query_cache($sql, $cid);
 $chart_data_all = array();
 //echo $sql;
-foreach ($result as $row) {
-    $chart_data_all[$row['md']] = $row['c'];
-}
+if (!empty($result))
+    foreach ($result as $row) {
+        array_push($chart_data_all, array($row['md'], $row['c']));
+    }
 
-$sql = "SELECT floor(UNIX_TIMESTAMP((in_date))/$res)*$res*1000 md,count(1) c FROM `solution` where  `contest_id`=? and result=4 group by md order by md desc ";
-$result = mysql_query_cache($sql, $cid);//mysql_escape_string($sql));
+$sql = "SELECT date(in_date) md,count(1) c FROM  (select * from solution where `contest_id`=?  and result=4 and problem_id>0) solution group by md order by md desc limit 1000";
+$result2 = mysql_query_cache($sql, $cid);
+$ac = array();
+foreach ($result2 as $row) {
+    $ac[$row['md']] = $row['c'];
+}
 $chart_data_ac = array();
 //echo $sql;
-
-foreach ($result as $row) {
-    $chart_data_ac[$row['md']] = $row['c'];
+if (!empty($result)){
+    foreach ($result as $row) {
+        if (isset($ac[$row['md']]))
+            array_push($chart_data_ac, array($row['md'], $ac[$row['md']]));
+        else
+            array_push($chart_data_ac, array($row['md'], 0));
+    }
 }
 
 
