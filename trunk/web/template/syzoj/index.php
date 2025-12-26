@@ -3,8 +3,6 @@
 <head>
 
 <link rel="stylesheet" href="<?php echo "template/$OJ_TEMPLATE";?>/css/slide.css">
-
-<script  src="<?php echo $OJ_CDN_URL.$path_fix."template/$OJ_TEMPLATE"?>/js/echarts.min.js"></script>
 </head>
 <div class="padding">
     <div class="ui three column grid">
@@ -238,8 +236,8 @@ $view_month_rank=mysql_query_cache("select user_id,nick,count(distinct(problem_i
         carousel.addEventListener('mouseenter', () => clearInterval(autoPlayInterval));
         carousel.addEventListener('mouseleave', () => autoPlayInterval = setInterval(nextSlide, 5000));
     </script>
- <?php } ?>   
-  <script language="javascript" type="text/javascript" src="<?php echo $OJ_CDN_URL?>include/jquery.flot.js"></script>
+ <?php } ?>
+<script  src="<?php echo $OJ_CDN_URL.$path_fix."template/$OJ_TEMPLATE"?>/js/echarts.min.js"></script>
         <script type="text/javascript">
 			$( function () {
 			var all=<?php echo json_encode(array_column($chart_data_all,1))?> ;
