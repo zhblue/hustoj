@@ -1,4 +1,10 @@
 <?php
+/*
+ * 滚榜工具
+ * 仅限管理员或比赛组织者使用
+ * 需要缓存、lock percent设定，锁定多少滚多少。
+ * example: contestrank3.php?cid=10000&lock_percent=0.5
+ */
 $OJ_CACHE_SHARE = true;
 $cache_time = 10;
 require_once('./include/cache_start.php');

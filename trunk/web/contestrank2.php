@@ -1,4 +1,10 @@
 <?php
+/*
+ * 滚榜工具
+ * 仅限管理员或比赛组织者使用
+ * 需要缓存、lock percent设定，锁定多少滚多少。
+ * example: contestrank2.php?cid=10000&lock_percent=0.5
+ */
 $OJ_CACHE_SHARE = true;
 $cache_time = 10;
 require_once('./include/cache_start.php');
@@ -10,15 +16,22 @@ require_once("./include/const.inc.php");
 require_once("./include/my_func.inc.php");
 require_once("./include/memcache.php");
 
+/**
+ * 比赛用户信息类
+ * 用于存储比赛中的用户解题统计信息
+ */
 class TM
 {
-    var $solved = 0;
-    var $time = 0;
-    var $p_wa_num;
-    var $p_ac_sec;
-    var $user_id;
-    var $nick;
+    var $solved = 0;      // 解决的问题数量
+    var $time = 0;        // 总用时（包括罚时）
+    var $p_wa_num;        // 每个问题的错误提交次数
+    var $p_ac_sec;        // 每个问题的AC时间
+    var $user_id;         // 用户ID
+    var $nick;            // 用户昵称
 
+    /**
+     * 构造函数，初始化用户统计信息
+     */
     function TM()
     {
         $this->solved = 0;
@@ -27,6 +40,12 @@ class TM
         $this->p_ac_sec = array();
     }
 
+    /**
+     * 添加提交记录到用户统计
+     * @param int $pid 问题ID
+     * @param int $sec 提交时间（相对于比赛开始的秒数）
+     * @param int $res 提交结果（4表示AC，其他表示错误）
+     */
     function Add($pid, $sec, $res)
     {
 //              echo "Add $pid $sec $res<br>";
@@ -51,6 +70,13 @@ class TM
     }
 }
 
+/**
+ * 比赛排名比较函数
+ * 按解题数降序，用时升序排序
+ * @param object $A 用户A对象
+ * @param object $B 用户B对象
+ * @return bool 排序结果
+ */
 function s_cmp($A, $B)
 {
 //      echo "Cmp....<br>";
@@ -62,12 +88,11 @@ function s_cmp($A, $B)
 if (!isset($_GET['cid'])) die("No Such Contest!");
 $cid = intval($_GET['cid']);
 
-
+// 查询比赛基本信息
 $sql = "SELECT `start_time`,`title`,`end_time` FROM `contest` WHERE `contest_id`=?";
 $result = mysql_query_cache($sql, $cid);
 if ($result) $rows_cnt = count($result);
 else $rows_cnt = 0;
-
 
 $start_time = 0;
 $end_time = 0;
@@ -90,11 +115,14 @@ if (!$OJ_MEMCACHE)
         exit(0);
     }
 
+// 检查比赛是否已经开始
 if ($start_time > time()) {
     $view_errors = "$MSG_CONTEST $MSG_Contest_Pending!";
     require("template/" . $OJ_TEMPLATE . "/error.php");
     exit(0);
 }
+
+// 检查用户权限和比赛锁定状态
 $noip = (time() < $end_time) && (stripos($title, $OJ_NOIP_KEYWORD) !== false);
 if (isset($_SESSION[$OJ_NAME . '_' . "administrator"]) ||
     isset($_SESSION[$OJ_NAME . '_' . "m$cid"]) ||
@@ -108,9 +136,12 @@ if (isset($_SESSION[$OJ_NAME . '_' . "administrator"]) ||
     require("template/" . $OJ_TEMPLATE . "/error.php");
     exit(0);
 }
+
+// 计算锁定时间点
 if (!isset($OJ_RANK_LOCK_PERCENT)) $OJ_RANK_LOCK_PERCENT = 0;
 $lock = $end_time - ($end_time - $start_time) * $OJ_RANK_LOCK_PERCENT;
 
+// 获取比赛题目数量
 $sql = "SELECT count(1) as pbc FROM `contest_problem` WHERE `contest_id`=?";
 $result = mysql_query_cache($sql, $cid);
 if ($result) $rows_cnt = count($result);
@@ -121,6 +152,7 @@ $pid_cnt = intval($row['pbc']);
 
 require("./include/contest_solutions.php");
 
+// 处理用户提交数据，构建排名统计
 $user_cnt = 0;
 $user_name = '';
 $U = array();
@@ -148,6 +180,7 @@ if (!$OJ_MEMCACHE)
     usort($U, "s_cmp");
 
 ////firstblood
+// 统计首杀信息
 $first_blood = array();
 for ($i = 0; $i < $pid_cnt; $i++) {
     $first_blood[$i] = "";
