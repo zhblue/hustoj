@@ -35,7 +35,7 @@ if (!empty($noip_contests)) {
 }
 
 // syzoj/sidebar 有自己的新闻查询逻辑，放在了template里面
-if(!($OJ_TEMPLATE=="syzoj" || $OJ_TEMPLATE!="sidebar")) {
+if(!($OJ_TEMPLATE=="syzoj" || $OJ_TEMPLATE=="sidebar")) {
     $view_news = "";
     $sql = "select * FROM `news` "
         . "WHERE `defunct`!='Y' AND `title`!='faqs.$OJ_LANG'"
