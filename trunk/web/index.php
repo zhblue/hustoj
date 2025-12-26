@@ -34,18 +34,16 @@ if (!empty($noip_contests)) {
     $not_in_noip_contests = " and contest_id not in ( $noip_contests )";
 }
 
-// 根据模板类型决定是否显示新闻
-if($OJ_TEMPLATE!="syzoj") {
+// syzoj/sidebar 有自己的新闻查询逻辑，放在了template里面
+if(!($OJ_TEMPLATE=="syzoj" || $OJ_TEMPLATE!="sidebar")) {
     $view_news = "";
-    $sql = "select * "
-        . "FROM `news` "
+    $sql = "select * FROM `news` "
         . "WHERE `defunct`!='Y' AND `title`!='faqs.$OJ_LANG'"
         . "ORDER BY `importance` ASC,`time` DESC "
         . "LIMIT 50";
     $view_news .= "<div class='panel panel-default' style='width:80%;margin:0 auto;'>";
     $view_news .= "<div class='panel-heading'><h3>" . $MSG_NEWS . "<h3></div>";
     $view_news .= "<div class='panel-body'>";
-
     $result = mysql_query_cache($sql); //mysql_escape_string($sql));
     if (!$result) {
         $view_news .= "";
@@ -56,7 +54,6 @@ if($OJ_TEMPLATE!="syzoj") {
             $view_news .= "<div class='panel-body'>" . bbcode_to_html($row['content']) . "</div>";
             $view_news .= "</div>";
         }
-
     }
     $view_news .= "</div>";
     $view_news .= "<div class='panel-footer'></div>";
