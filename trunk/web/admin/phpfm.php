@@ -3702,7 +3702,7 @@ subtask的题目中也可以有不跟其他数据绑定的，认为是自己一�
                     $file_out[$file_count] = array();
                     $file_out[$file_count][] = "
                         <tr ID=\"entry$ind\" class=\"entryUnselected\" onmouseover=\"selectEntry(this, 'over');\" onmousedown=\"selectEntry(this, 'click');\">
-                        <td><nobr><a href=\"JavaScript:download('".addslashes($file)."')\">$file</a> <span style='font-size:12px;color:blue'>".tips($file)."</span></nobr></td>";
+                        <td><nobr>&nbsp;&nbsp;<a href=\"JavaScript:download('".addslashes($file)."')\">$file</a> <span style='font-size:12px;color:blue'>".tips($file)."</span></nobr></td>";
                     $file_out[$file_count][] = "<td>".$dir_entry["p"]."</td>";
                     if ($islinux) {
                         $file_out[$file_count][] = "<td><nobr>".$dir_entry["u"]."</nobr></td>";
