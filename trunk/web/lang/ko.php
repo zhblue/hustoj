@@ -1,5 +1,5 @@
 <?php
-	//oj-header.php
+	//header.php
 	$MSG_FAQ="자주묻는질문";
 	$MSG_BBS="묻고답하기";
 	$MSG_HOME="처음화면";
