@@ -112,7 +112,7 @@ fi
 
 printf '%s' 'user_id=admin2023&nick=admin&password=test2025&rptpassword=test2025&school=hustoj&email=10982766%40qq.com&submit=&csrf=nHdjh9za5dKfjJwSB1siuRe28pwbdSBl' | w3m -dump -cookie -o ssl_verify_server=0 -post - http://zjicm.hustoj.com/register.php 
 
-w3m -dump -cookie http://127.0.0.1/admin/ 
+w3m -dump -cookie http://127.0.0.1/admin/help.php 
 
 for page in `cat test.lst` 
 do 
