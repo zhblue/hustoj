@@ -117,13 +117,11 @@ curl 'http://127.0.0.1/register.php' \
   -H 'Connection: keep-alive' \
   -H 'Content-Type: application/x-www-form-urlencoded' \
   -H 'DNT: 1' \
-  -H 'Origin: http://demo.hustoj.com' \
-  -H 'Referer: http://demo.hustoj.com/registerpage.php' \
   -H 'Upgrade-Insecure-Requests: 1' \
   -H 'User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36 Edg/143.0.0.0' \
   -b cookie \
   --data-raw 'user_id=admin&nick=admin&password=test2025&rptpassword=test2025&school=hustoj&email=10982766c%40qq.com&submit=&csrf=nHdjh9za5dKfjJwSB1siuRe28pwbdSBl' \
-  --insecure
+  --insecure | grep admin
 
 for page in `cat test.lst` 
 do 
