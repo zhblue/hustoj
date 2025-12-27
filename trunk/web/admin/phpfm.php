@@ -1,6 +1,7 @@
 <?php
 //a:9:{s:4:"lang";s:2:"en";s:9:"auth_pass";s:32:"d41d8cd98f00b204e9800998ecf8427e";s:8:"quota_mb";i:0;s:17:"upload_ext_filter";a:0:{}s:19:"download_ext_filter";a:0:{}s:15:"error_reporting";i:1;s:7:"fm_root";s:0:"";s:17:"cookie_cache_time";i:2592000;s:7:"version";s:5:"0.9.8";}
 require_once("../include/db_info.inc.php");
+require_once("../include/my_func.inc.php");
 if (!(isset($_SESSION[$OJ_NAME.'_'.'administrator'])
       ||isset($_SESSION[$OJ_NAME.'_'.'problem_editor'])
      )){
@@ -183,15 +184,15 @@ if (!(isset($_SESSION[$OJ_NAME.'_'.'administrator'])
     }
     if(isset($_GET['generate'])){
             //echo "Generate out in $current_dir......";
+	    //make out files
             chdir($current_dir);
-            if(file_exists($current_dir."/Main.c")){
-                if(!$OJ_SaaS_ENABLE)system("/home/judge/src/install/gcc.sh $current_dir");
-                if(!system("/home/judge/src/install/makeout.sh Main"))
-                        echo "makeout fail:<br>chgrp -R www-data ".getcwd();
-            }else if(file_exists($current_dir."/Main.cc")){
-                if(!$OJ_SaaS_ENABLE)system("/home/judge/src/install/g++.sh $current_dir");
-                if(!system("/home/judge/src/install/makeout.sh Main"))
-                        echo "makeout fail:<br>chgrp -R www-data to ".getcwd();
+	    $user_id=$_SESSION[$OJ_NAME.'_user_id'];
+	    $nick=$_SESSION[$OJ_NAME.'_nick'];
+            if(file_exists($current_dir."/Main.c") || file_exists($current_dir."/Main.cc") ){
+    		$sql = "INSERT INTO solution(problem_id,user_id,nick,in_date,language,ip,code_length,result) VALUES(?,?,?,NOW(),?,?,?,1)";
+    		$insert_id = pdo_query($sql, -$pid, $user_id, $nick, 0 , $ip, 0 );
+		echo "$pid pending".$insert_id;
+           	trigger_judge($insert_id);     // moved to my_func.inc.php
             }else{
                 echo "未找到Main.c或Main.cc,自动生成9组空文件。";
                 for($i=1;$i<10;$i++){
