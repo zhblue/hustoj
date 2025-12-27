@@ -58,7 +58,7 @@ PHP_VER=`apt-cache search php-fpm|grep -e '[[:digit:]]\.[[:digit:]]' -o`
 NBUFF=512
 if [ "$PHP_VER" = "" ] ; then PHP_VER="8.1"; fi
 
-for pkg in sudo w3m net-tools make g++ memcached php$PHP_VER-fpm nginx mysql-server php-memcache php-memcached php$PHP_VER-mysql php$PHP_VER-common php$PHP_VER-gd php$PHP_VER-zip php$PHP_VER-mbstring php$PHP_VER-xml php$PHP_VER-curl php$PHP_VER-intl php$PHP_VER-xmlrpc php$PHP_VER-soap php-yaml tzdata
+for pkg in sudo w3m curl net-tools make g++ memcached php$PHP_VER-fpm nginx mysql-server php-memcache php-memcached php$PHP_VER-mysql php$PHP_VER-common php$PHP_VER-gd php$PHP_VER-zip php$PHP_VER-mbstring php$PHP_VER-xml php$PHP_VER-curl php$PHP_VER-intl php$PHP_VER-xmlrpc php$PHP_VER-soap php-yaml tzdata
 do
 	while ! apt-get install -y "$pkg" 
 	do
