@@ -471,7 +471,7 @@ function et($tag){
     $cn['NoSel'] = '未选择文件或目录';
     $cn['SelDir'] = '在左边的目录树中选择目标目录';
     $cn['TypeDir'] = '请输入目录名';
-    $cn['TypeArq'] = '请输入文件名\\n    输入文件: *.in         输出文件:*.out\\n    指定freopen所用文件名 ↴          上传源码文件名 ↴\\n                  input.name output.name            solution.name \\n    判题机设定 judge.conf \\n详见 hustoj.com ';
+    $cn['TypeArq'] = '请输入文件名\\n    输入文件: *.in         输出文件:*.out\\n    指定freopen所用文件名 ↴          上传源码文件名 ↴\\n                  input.name output.name            solution.name \\n    判题机设定:judge.conf \\n    测试输入生成器:Gen.py    \\n    标程:Main.c/Main.cc\\n详见 hustoj.com ';
     $cn['TypeCmd'] = '请输入命令';
     $cn['TypeArqComp'] = '请输入文件名.扩展名将确定其压缩格式.\\n如:file.zip, file.tar, file.bzip, file.gzip';
     $cn['RemSel'] = '删除选中项';
@@ -3051,6 +3051,73 @@ function getmicrotime(){
    list($usec, $sec) = explode(" ", microtime());
    return ((float)$usec + (float)$sec);
 }
+
+function tips($filename) {
+    // 统一处理大小写（部分匹配不区分大小写）
+    $lower = strtolower($filename);
+
+    // 特定文件名匹配（不区分大小写）
+    if ($lower === 'main.c') {
+        return '标准C程序';
+    } elseif ($lower === 'main.cc') {
+        return '标准C++程序';
+    } elseif ($lower === 'gen.py') {
+        return '测试输入数据生成器Python脚本';
+    } elseif ($lower === 'solution.name') {
+        return '强制上传文件方式提交答案，内含规定文件名';
+    } elseif ($lower === 'input.name') {
+        return '强制文件方式输入，内含规定文件名';
+    } elseif ($lower === 'output.name') {
+        return '强制文件方式输出，内含规定文件名';
+    } elseif ($lower === 'judge.conf') {
+        return '定制化判题参数，参考hustoj.com';
+    }
+
+    // 匹配 .in / .out 结尾且包含 [数字] 的情况
+    if (preg_match('/\.(in|out)$/i', $filename, $ext_matches)) {
+        if (preg_match('/\[([0-9]+)\]/', $filename, $score_matches)) {
+            $score = intval($score_matches[1]);
+            return "分值{$score}";
+        }
+    }
+
+    // 匹配 template.*、prepend.*、append.*
+    $patterns = [
+        '/^template\.([a-z0-9_]+)$/i' => '答案模版',
+        '/^prepend\.([a-z0-9_]+)$/i'  => '前继附加源码',
+        '/^append\.([a-z0-9_]+)$/i'   => '后继附加源码'
+    ];
+
+    foreach ($patterns as $pattern => $suffix) {
+        if (preg_match($pattern, $filename, $matches)) {
+            $lang = $matches[1];
+            // 语言后缀转为中文习惯的“语言”描述（可选美化）
+            // 例如：py → Python，cpp → C++，c → C，java → Java 等
+            $langMap = [
+                'c' => 'C',
+                'cpp' => 'C++',
+                'cc' => 'C++',
+                'cxx' => 'C++',
+                'py' => 'Python',
+                'java' => 'Java',
+                'js' => 'JavaScript',
+                'go' => 'Go',
+                'rs' => 'Rust',
+                'cs' => 'C#',
+                'php' => 'PHP',
+                'rb' => 'Ruby',
+                'scala' => 'Scala',
+                'kt' => 'Kotlin'
+            ];
+            $langName = $langMap[strtolower($lang)] ?? $lang;
+            return "{$langName}语言{$suffix}";
+        }
+    }
+
+    // 未匹配任何规则，返回空或默认提示
+    return '';
+}
+
 function dir_list_form() {
     global $fm_current_root,$current_dir,$quota_mb,$resolveIDs,$order_dir_list_by,$islinux,$cmd_name,$ip,$path_info,$fm_color;
     $ti = getmicrotime();
@@ -3635,7 +3702,7 @@ subtask的题目中也可以有不跟其他数据绑定的，认为是自己一�
                     $file_out[$file_count] = array();
                     $file_out[$file_count][] = "
                         <tr ID=\"entry$ind\" class=\"entryUnselected\" onmouseover=\"selectEntry(this, 'over');\" onmousedown=\"selectEntry(this, 'click');\">
-                        <td><nobr><a href=\"JavaScript:download('".addslashes($file)."')\">$file</a></nobr></td>";
+                        <td><nobr><a href=\"JavaScript:download('".addslashes($file)."')\">$file</a> <span style='font-size:12px;color:blue'>".tips($file)."</span></nobr></td>";
                     $file_out[$file_count][] = "<td>".$dir_entry["p"]."</td>";
                     if ($islinux) {
                         $file_out[$file_count][] = "<td><nobr>".$dir_entry["u"]."</nobr></td>";
