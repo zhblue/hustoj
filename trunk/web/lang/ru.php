@@ -1,5 +1,5 @@
 <?php
- //oj-header.php
+ //header.php
  $MSG_FAQ = " Часто задаваемые вопросы ";
  $MSG_BBS = " доска обсуждений ";
  $MSG_HOME = " дом ";
