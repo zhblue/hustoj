@@ -3528,7 +3528,7 @@ function dir_list_form() {
             } else if (arg == 2){
                 document.form_action.cmd_arg.value = prompt('".et('TypeArq').".');
             } else if (arg == 21){
-                document.form_action.cmd_arg.value = prompt('".et('IOFilename').".');
+                document.form_action.cmd_arg.value = prompt('".et('IOFilename').",不含扩展名,比如 tree');
             } else if (arg == 22){
                 document.form_action.cmd_arg.value = prompt('".et('SolutionFilename').".');
             } else if (arg == 71){
