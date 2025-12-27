@@ -3467,7 +3467,7 @@ function dir_list_form() {
         }
         function rename(arg){
             var nome = '';
-            if (nome = prompt('".uppercase(et('Ren'))." \\' '+arg+' \\' ".et('To')." ...')) document.location.href='".addslashes($path_info["basename"])."?frame=3&action=3&current_dir=".addslashes($current_dir)."&old_name='+escape(arg)+'&new_name='+escape(nome);
+            if (nome = prompt('".uppercase(et('Ren'))." \\' '+arg+' \\' ".et('To')." ...',arg)) document.location.href='".addslashes($path_info["basename"])."?frame=3&action=3&current_dir=".addslashes($current_dir)."&old_name='+escape(arg)+'&new_name='+escape(nome);
         }
         function set_dir_dest(arg){
             document.form_action.dir_dest.value=arg;
@@ -3619,10 +3619,10 @@ function dir_list_form() {
             <td bgcolor=\"#DDDDDD\" colspan=50><nobr>
             <input type=button onclick=\"test_prompt(2)\" value=\"".et('CreateArq')."\">
 	    <input type=button onclick=\"upload()\" value=\"".et('Upload')."\">";
-	if(!$OJ_SaaS_ENABLE)$out.="<input class='btn-success' type=button onclick=\"generate()\" value=\"".et('GenerateOut')."\">";
-	$out.="<input type=button class='btn-warning' onclick=\"ans2out()\" value=\"".et('Ans2out')."\">";
-	$out.="<input type=button class='btn-primary' onclick=\"test_prompt(21)\" value=\"".et('IOFilename')."\">";
-	$out.="<input type=button class='btn-danger' onclick=\"test_prompt(22)\" value=\"".et('SolutionFilename')."\">";
+	if(!$OJ_SaaS_ENABLE)$out.="<input class='btn-success' type=button onclick=\"generate()\" value=\"".et('GenerateOut')."\" title='自己不会写可以找AI帮忙'>";
+	$out.="<input type=button class='btn-warning' onclick=\"ans2out()\" value=\"".et('Ans2out')."\" title='自动给数字补0排序 + ans改out' >";
+	$out.="<input type=button class='btn-primary' onclick=\"test_prompt(21)\" value=\"".et('IOFilename')."\" title='CCF的比赛每个题目有个英文名'>";
+	$out.="<input type=button class='btn-danger' onclick=\"test_prompt(22)\" value=\"".et('SolutionFilename')."\" title='CCF比赛要求的类似tree.cpp这种'>";
 	if(isset($_GET['pid'])){
                 $pid=intval($_GET['pid']);
                 $_SESSION[$OJ_NAME."_PID"]=$pid;
