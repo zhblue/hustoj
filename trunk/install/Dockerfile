@@ -76,3 +76,4 @@ RUN echo "#endif">>`find /usr/include/c++/ -name iostream`
 #generate gch file for faster compiling speed
 RUN g++ -x c++-header -O2 -std=c++14 `find /usr/include/ -name "stdc++.h"`
 RUN gcc -x c-header -O2 -std=c99 /usr/include/stdio.h
+COPY makeout.sh /usr/bin/
