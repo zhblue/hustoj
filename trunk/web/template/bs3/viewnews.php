@@ -67,6 +67,13 @@
             "background-color": "#9e9e9ea1",
             "text-align": "center"
         });
+        $(".panel.panel-success.panel-heading.panel-title").each(function(){
+            let pname=$(this).attr("control");
+            console.log(pname);
+            $(this).click(function(){
+                    $("#"+pname).toggle();
+            });
+        });
   });
 </script>
   </body>
