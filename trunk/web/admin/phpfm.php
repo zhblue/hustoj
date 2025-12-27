@@ -188,7 +188,7 @@ if (!(isset($_SESSION[$OJ_NAME.'_'.'administrator'])
             chdir($current_dir);
 	    $user_id=$_SESSION[$OJ_NAME.'_user_id'];
 	    $nick=$_SESSION[$OJ_NAME.'_nick'];
-            if(file_exists($current_dir."/Main.c") || file_exists($current_dir."/Main.cc") ){
+            if(file_exists($current_dir."/Gen.py")  || file_exists($current_dir."/Main.c") || file_exists($current_dir."/Main.cc") ){
     		$sql = "INSERT INTO solution(problem_id,user_id,nick,in_date,language,ip,code_length,result) VALUES(?,?,?,NOW(),?,?,?,1)";
     		$insert_id = pdo_query($sql, -$pid, $user_id, $nick, 0 , $ip, 0 );
 		echo "$pid pending".$insert_id;
@@ -523,7 +523,7 @@ function et($tag){
     $cn['Seconds'] = '秒';
     $cn['ErrorReport'] = '错误报告';
     $cn['Random-data'] = '随机测试数据生成器';
-    $cn['GenerateOut'] = '用标程Main.c/Main.cc覆盖生成Out文件';
+    $cn['GenerateOut'] = '用Gen.py+Main.c生成测试数据';
     $cn['Ans2out'] = '自动修订文件名';
     $cn['IOFilename'] = '指定输入输出文件名';
     $cn['SolutionFilename'] = '指定NOIP提交代码文件名';
@@ -2776,6 +2776,7 @@ function html_header($header=""){
     //-->
     </script>
     $header
+    <link rel='stylesheet' href='../template/bs3/bootstrap.min.css'>
     </head>
     <script language=\"Javascript\" type=\"text/javascript\">
     <!--
@@ -3551,10 +3552,10 @@ function dir_list_form() {
             <td bgcolor=\"#DDDDDD\" colspan=50><nobr>
             <input type=button onclick=\"test_prompt(2)\" value=\"".et('CreateArq')."\">
 	    <input type=button onclick=\"upload()\" value=\"".et('Upload')."\">";
-	if(!$OJ_SaaS_ENABLE)$out.="<input type=button onclick=\"generate()\" value=\"".et('GenerateOut')."\">";
-	$out.="<input type=button onclick=\"ans2out()\" value=\"".et('Ans2out')."\">";
-	$out.="<input type=button onclick=\"test_prompt(21)\" value=\"".et('IOFilename')."\">";
-	$out.="<input type=button onclick=\"test_prompt(22)\" value=\"".et('SolutionFilename')."\">";
+	if(!$OJ_SaaS_ENABLE)$out.="<input class='btn-success' type=button onclick=\"generate()\" value=\"".et('GenerateOut')."\">";
+	$out.="<input type=button class='btn-warning' onclick=\"ans2out()\" value=\"".et('Ans2out')."\">";
+	$out.="<input type=button class='btn-primary' onclick=\"test_prompt(21)\" value=\"".et('IOFilename')."\">";
+	$out.="<input type=button class='btn-danger' onclick=\"test_prompt(22)\" value=\"".et('SolutionFilename')."\">";
 	if(isset($_GET['pid'])){
                 $pid=intval($_GET['pid']);
                 $_SESSION[$OJ_NAME."_PID"]=$pid;
@@ -3563,8 +3564,8 @@ function dir_list_form() {
         }
         $title=pdo_query('select title from problem where problem_id=?',$pid)[0][0];
         $out.="<b></b>
-            <a class='btn' href='https://muzea-demo.github.io/random-data/' target='_blank'>".et('Random-data')."</a>
-            <b><a href='../problem.php?id=$pid' target='_self'><font color=blue>$title </font></a></b>
+            <a class='btn btn-info' href='https://muzea-demo.github.io/random-data/' target='_blank'>".et('Random-data')."</a>
+            <b><a class='btn' href='../problem.php?id=$pid' target='_self'><font color=blue>$title </font></a></b>
             </nobr>";
         $uplink = "";
 
