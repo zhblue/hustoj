@@ -3625,6 +3625,68 @@ int same_subtask(char * last,char * cur){
     }	
     return last[i]==cur[i];
 }
+int make_out(int solution_id,int p_id,int lang,char * work_dir,double time_lmt,int &usedtime,int mem_lmt,char * userfile,char * infile,char *outfile,int &topmemory,int spj,int &PEflg,int &ACflg){
+	int ret=0;
+	if(p_id>=0) return 1;
+	p_id=-p_id;
+	init_syscalls_limits(lang);
+	sprintf(work_dir,"%s/data/%d/",oj_home,p_id);
+	pid_t pidApp = fork();
+	if (pidApp == 0){
+		if(chdir(work_dir)){
+			printf("fail to chdir %s",work_dir);
+		       	exit(-3);
+		}
+		while (setgid(33) != 0)
+			sleep(1);
+		while (setuid(33) != 0)
+			sleep(1);
+		while (setresuid(33, 33, 33) != 0)
+			sleep(1);
+		execute_cmd("/bin/bash %s/src/install/makeout.sh Main", oj_home);
+	}else{
+		watch_solution(pidApp, infile, ACflg, spj, userfile, outfile,
+					   solution_id, lang, topmemory, mem_lmt, usedtime, time_lmt,
+					   p_id, PEflg, work_dir);
+		execute_cmd("chown www-data:judge %s/*.out", work_dir);
+	}
+	if(DEBUG) printf("make out files for problem %d \n",p_id);
+	update_solution(solution_id, OJ_TR, usedtime, topmemory >> 10, 0, 0, 0);
+	return ret;
+}
+int test_run(int solution_id,int p_id,int lang,char * work_dir,double time_lmt,int &usedtime,int mem_lmt,char * userfile,char * infile,char *outfile,int &topmemory,int spj,int &PEflg,int &ACflg){
+	int ret=0;
+	get_custominput(solution_id, work_dir);
+	init_syscalls_limits(lang);
+	pid_t pidApp = fork();
+
+	if (pidApp == 0)
+	{
+		run_solution(lang, work_dir, time_lmt, usedtime, mem_lmt,(char *)"data.in",p_id);
+	}
+	else
+	{
+		watch_solution(pidApp, infile, ACflg, spj, userfile, outfile,
+					   solution_id, lang, topmemory, mem_lmt, usedtime, time_lmt,
+					   p_id, PEflg, work_dir);
+	}
+	if(DEBUG) printf("custom running result:%d PEflg:%d\n",ACflg,PEflg);
+	if (ACflg == OJ_RE||( lang!=LANG_CJ  && get_file_size("error.out")>0))
+	{
+		if (DEBUG)
+			printf("add RE info of %d..... \n", solution_id);
+		addreinfo(solution_id);
+		ret=1;
+	}
+	else
+	{
+		addcustomout(solution_id);
+		ret=2;
+	}
+	update_solution(solution_id, OJ_TR, usedtime, topmemory >> 10, 0, 0, 0);
+	clean_workdir(work_dir);
+	return ret;
+}
 int main(int argc, char **argv)
 {
 
@@ -3637,6 +3699,13 @@ int main(int argc, char **argv)
 	double time_lmt;
 	char time_space_table[BUFFER_SIZE*100];
 	int time_space_index=0;
+	int ACflg, PEflg;
+	ACflg = PEflg = OJ_AC;
+	int usedtime = 0, topmemory = 0;
+	char fullpath[BUFFER_SIZE];
+	char infile[BUFFER_SIZE/10];
+	char outfile[BUFFER_SIZE/10];
+	char userfile[BUFFER_SIZE/10];
         umask(0077);
 	init_parameters(argc, argv, solution_id, runner_id);
 
@@ -3674,8 +3743,9 @@ int main(int argc, char **argv)
 		if(!system("/bin/ln -s ../cookie ./")) printf("cookie link fail \n");
 	get_solution_info(solution_id, p_id, user_id, lang,cid);
 	//get the limit
+	sprintf(fullpath, "%s/data/%d", oj_home, p_id); // the fullpath of data dir
 
-	if (p_id == 0)
+	if (p_id <= 0)
 	{
 		time_lmt = 5;
 		mem_lmt = 512;
@@ -3713,6 +3783,12 @@ int main(int argc, char **argv)
 	if (DEBUG)
 		printf("time: %g mem: %d\n", time_lmt, mem_lmt);
 
+	if (p_id < 0)
+	{ //custom input running
+		printf("making test output ...\n");
+		make_out(solution_id,p_id,lang, work_dir, time_lmt, usedtime, mem_lmt, userfile,infile,outfile,topmemory,spj,PEflg,ACflg);
+		exit(0);
+	}
 	// compile
 	//      printf("%s\n",cmd);
 	// set the result to compiling
@@ -3742,11 +3818,6 @@ int main(int argc, char **argv)
 	}
 	//exit(0);
 	// run
-	char fullpath[BUFFER_SIZE];
-	char infile[BUFFER_SIZE/10];
-	char outfile[BUFFER_SIZE/10];
-	char userfile[BUFFER_SIZE/10];
-	sprintf(fullpath, "%s/data/%d", oj_home, p_id); // the fullpath of data dir
 
 	// open DIRs
 	//DIR *dp;
@@ -3793,10 +3864,7 @@ int main(int argc, char **argv)
 	
 */
 
-	int ACflg, PEflg;
-	ACflg = PEflg = OJ_AC;
 	int namelen;
-	int usedtime = 0, topmemory = 0;
 	if (lang == LANG_BASH){
 			execute_cmd("busybox dos2unix Main.sh", work_dir);
 	}
@@ -3837,33 +3905,7 @@ int main(int argc, char **argv)
 	if (p_id == 0)
 	{ //custom input running
 		printf("running a custom input...\n");
-		get_custominput(solution_id, work_dir);
-		init_syscalls_limits(lang);
-		pid_t pidApp = fork();
-
-		if (pidApp == 0)
-		{
-			run_solution(lang, work_dir, time_lmt, usedtime, mem_lmt,(char *)"data.in",p_id);
-		}
-		else
-		{
-			watch_solution(pidApp, infile, ACflg, spj, userfile, outfile,
-						   solution_id, lang, topmemory, mem_lmt, usedtime, time_lmt,
-						   p_id, PEflg, work_dir);
-		}
-		if(DEBUG) printf("custom running result:%d PEflg:%d\n",ACflg,PEflg);
-		if (ACflg == OJ_RE||( lang!=LANG_CJ  && get_file_size("error.out")>0))
-		{
-			if (DEBUG)
-				printf("add RE info of %d..... \n", solution_id);
-			addreinfo(solution_id);
-		}
-		else
-		{
-			addcustomout(solution_id);
-		}
-		update_solution(solution_id, OJ_TR, usedtime, topmemory >> 10, 0, 0, 0);
-		clean_workdir(work_dir);
+		test_run(solution_id,p_id,lang, work_dir, time_lmt, usedtime, mem_lmt, userfile,infile,outfile,topmemory,spj,PEflg,ACflg);
 		exit(0);
 	}
 /*	
