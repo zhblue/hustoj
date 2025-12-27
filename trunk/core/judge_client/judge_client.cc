@@ -3643,7 +3643,7 @@ int make_out(int solution_id,int p_id,int lang,char * work_dir,double time_lmt,i
 			sleep(1);
 		while (setresuid(33, 33, 33) != 0)
 			sleep(1);
-		execute_cmd("/bin/bash %s/src/install/makeout.sh Main", oj_home);
+		execute_cmd("/bin/bash /usr/bin/makeout.sh Main");
 	}else{
 		watch_solution(pidApp, infile, ACflg, spj, userfile, outfile,
 					   solution_id, lang, topmemory, mem_lmt, usedtime, time_lmt,
