@@ -1,5 +1,5 @@
 <?php
- //oj-header.php
+ //header.php
  $MSG_FAQ ="常見問答";
  $MSG_BBS ="討論版";
  $MSG_HOME ="首頁";
