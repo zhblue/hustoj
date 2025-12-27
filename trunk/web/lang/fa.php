@@ -1,5 +1,5 @@
 <?php
-	//oj-header.php
+	//header.php
 	$MSG_FAQ="F.A.Qs";
 	$MSG_BBS="برد";
 	$MSG_HOME="خانه";
