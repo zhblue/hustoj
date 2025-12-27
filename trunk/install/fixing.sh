@@ -23,6 +23,7 @@ if [ `whoami` = "root" ];then
 		   sed -i "s/DB_PASS[[:space:]]*=[[:space:]]*\"root\"/DB_PASS=\"$PASSWORD\"/g" new/web/include/db_info.inc.php
 	fi
 	cp -a src/web/upload/* new/web/upload/
+	cp -a src/web/image/* new/web/image/
 	mv src "old.$DATE"
  	echo "Your old files are moved to old.$DATE , find them if you need ."
 	mv new src
