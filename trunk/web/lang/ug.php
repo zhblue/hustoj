@@ -1,5 +1,5 @@
 <?php
-	//oj-header.php
+	//header.php
 	$MSG_FAQ="چۈشەنچە & سوئال";
 	$MSG_BBS="تور بەت";
 	$MSG_HOME="باش بەت";
