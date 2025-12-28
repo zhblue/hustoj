@@ -72,7 +72,9 @@ if (!(isset($_SESSION[$OJ_NAME.'_'.'administrator'])
 		echo "Error renaming file: $file<br>";
 		}
 	}
+	$emp=true;
 	foreach ($files as $file) {
+		$emp=false;
 		// 检查文件是否是.in文件
 		if (str_ends_with($file, '.in') === false ) {
 		    continue;
@@ -194,11 +196,9 @@ if (!(isset($_SESSION[$OJ_NAME.'_'.'administrator'])
 		echo "$pid pending".$insert_id;
            	trigger_judge($insert_id);     // moved to my_func.inc.php
             }else{
-                echo "未找到Main.c或Main.cc,自动生成9组空文件。";
-                for($i=1;$i<10;$i++){
-                        touch("test_$i.in");
-                        touch("test_$i.out");
-                }
+                echo "未找到Main.c或Main.cc,自动生成空文件Gen.py和Main.c。";
+                touch("Gen.py");
+                touch("Main.c");
             }
     }
     if(isset($_GET['ans2out'])){
@@ -4255,8 +4255,9 @@ function edit_file_form(){
     <tr><th colspan=2>".$filename."</th></tr>
     <tr><td colspan=2><textarea id='file_data' name='file_data' style='width:1000px;height:500px;'>".html_encode($file_data)."</textarea></td></tr>
     <tr><td>";
-	if(str_ends_with($filename,".in") || $filename=="Gen.py" || $filename=="Main.c" || $filename == "Main.cc" ) echo "<input id='ai_bt' type=button value='AI一下' onclick='ai_gen(\"".$filename."\")' >";
-     echo "<input type=button value=\"".et('Refresh')."\" onclick=\"document.edit_form_refresh.submit()\"></td><td align=right><input type=button value=\"".et('SaveFile')."\" onclick=\"go_save()\"></td></tr>
+	if(str_ends_with($filename,".in") || $filename=="Gen.py" || $filename=="Main.c" || $filename == "Main.cc" ) 
+		echo "<input id='ai_bt' class='btn btn-primary' type=button value='AI一下' onclick='ai_gen(\"".$filename."\")' >";
+     echo "<input type=button value=\"".et('Refresh')."\" class='btn btn-danger' onclick=\"document.edit_form_refresh.submit()\"></td><td align=right><input type=button value=\"".et('SaveFile')."\" onclick=\"go_save()\" class='btn btn-success'></td></tr>
     </form>
     <form name=\"edit_form_refresh\" action=\"".$path_info["basename"]."\" method=\"post\">
     <input type=hidden name=action value=\"7\">
