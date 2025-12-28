@@ -3637,13 +3637,76 @@ int make_out(int solution_id,int p_id,int lang,char * work_dir,double time_lmt,i
 			printf("fail to chdir %s",work_dir);
 		       	exit(-3);
 		}
+		unshare(CLONE_NEWNET);
+		ptrace(PTRACE_TRACEME, 0, NULL, NULL);
 		while (setgid(33) != 0)
 			sleep(1);
 		while (setuid(33) != 0)
 			sleep(1);
 		while (setresuid(33, 33, 33) != 0)
 			sleep(1);
-		execute_cmd("/bin/bash /usr/bin/makeout.sh Main");
+		struct rlimit LIM; // time limit, file limit& memory limit
+		// time limit
+		if (time_limit_to_total)
+			LIM.rlim_cur = ceil(time_lmt / cpu_compensation - usedtime / 1000.0f) + 1;
+		else
+			LIM.rlim_cur = ceil(time_lmt / cpu_compensation) + 1 ;
+		LIM.rlim_max = LIM.rlim_cur + 1 ;
+		//if(DEBUG) printf("LIM_CPU=%d",(int)(LIM.rlim_cur));
+		setrlimit(RLIMIT_CPU, &LIM);
+		alarm(0);
+	//	if ( num_of_test >0 ){
+	//		if(num_of_test * time_lmt / cpu_compensation>1)
+	//			alarm( num_of_test * time_lmt / cpu_compensation);
+	//		else
+	//			alarm(1);
+	//	}else{
+			if(time_lmt / cpu_compensation>1)
+				alarm( ceil(time_lmt / cpu_compensation)+1);
+			else
+				alarm(1);
+	//	}
+		// file limit
+		LIM.rlim_max = STD_F_LIM + STD_MB;
+		LIM.rlim_cur = STD_F_LIM;
+		setrlimit(RLIMIT_FSIZE, &LIM);
+		// proc limit
+		switch (lang)
+		{
+		case LANG_GO:
+		case LANG_CSHARP: //C#
+		case LANG_JAVA: //java
+		case LANG_R:
+		case LANG_SB3:
+			LIM.rlim_cur = LIM.rlim_max = 880;
+			break;
+		case LANG_RUBY: //ruby
+		case LANG_PYTHON:  //python
+		case LANG_SCHEME:
+		case LANG_JS:
+		case LANG_CJ:
+		case LANG_MATLAB:
+			LIM.rlim_cur = LIM.rlim_max = 200;
+			break;
+		case LANG_BASH: //bash
+			LIM.rlim_cur = LIM.rlim_max = 3;
+			break;
+		default:
+			LIM.rlim_cur = LIM.rlim_max = 1;
+		}
+
+		setrlimit(RLIMIT_NPROC, &LIM);
+
+		// set the stack
+		LIM.rlim_cur = STD_MB << 8;
+		LIM.rlim_max = STD_MB << 8;
+		setrlimit(RLIMIT_STACK, &LIM);
+		// set the memory
+		LIM.rlim_cur = STD_MB * mem_lmt / 2 * 3;
+		LIM.rlim_max = STD_MB * mem_lmt * 2;
+		if (lang < LANG_JAVA || lang == LANG_OBJC || lang == LANG_CLANG || lang == LANG_CLANGPP || lang == LANG_GO)
+			setrlimit(RLIMIT_AS, &LIM);
+		execute_cmd("/bin/bash /usr/bin/makeout.sh Main", oj_home);
 	}else{
 		watch_solution(pidApp, infile, ACflg, spj, userfile, outfile,
 					   solution_id, lang, topmemory, mem_lmt, usedtime, time_lmt,

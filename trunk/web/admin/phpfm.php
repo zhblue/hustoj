@@ -72,7 +72,9 @@ if (!(isset($_SESSION[$OJ_NAME.'_'.'administrator'])
 		echo "Error renaming file: $file<br>";
 		}
 	}
+	$emp=true;
 	foreach ($files as $file) {
+		$emp=false;
 		// 检查文件是否是.in文件
 		if (str_ends_with($file, '.in') === false ) {
 		    continue;
@@ -190,15 +192,13 @@ if (!(isset($_SESSION[$OJ_NAME.'_'.'administrator'])
 	    $nick=$_SESSION[$OJ_NAME.'_nick'];
             if(file_exists($current_dir."/Gen.py")  || file_exists($current_dir."/Main.c") || file_exists($current_dir."/Main.cc") ){
     		$sql = "INSERT INTO solution(problem_id,user_id,nick,in_date,language,ip,code_length,result) VALUES(?,?,?,NOW(),?,?,?,1)";
-    		$insert_id = pdo_query($sql, -$pid, $user_id, $nick, 0 , $ip, 0 );
+    		$insert_id = pdo_query($sql, -$pid, $user_id, $nick, 6 , $ip, 0 );
 		echo "$pid pending".$insert_id;
            	trigger_judge($insert_id);     // moved to my_func.inc.php
             }else{
-                echo "未找到Main.c或Main.cc,自动生成9组空文件。";
-                for($i=1;$i<10;$i++){
-                        touch("test_$i.in");
-                        touch("test_$i.out");
-                }
+                echo "未找到Main.c或Main.cc,自动生成空文件Gen.py和Main.c。";
+                touch("Gen.py");
+                touch("Main.c");
             }
     }
     if(isset($_GET['ans2out'])){
@@ -423,7 +423,7 @@ function et($tag){
     $cn['And'] = '和';
     $cn['Enter'] = '进入';
     $cn['Send'] = '发送';
-    $cn['Refresh'] = '刷新';
+    $cn['Refresh'] = '刷新/取消修改';
     $cn['SaveConfig'] = '保存配置';
     $cn['SavePass'] = '保存密码';
     $cn['SaveFile'] = '保存文件';
@@ -2778,6 +2778,7 @@ function html_header($header=""){
     $header
     <link rel='stylesheet' href='../template/bs3/bootstrap.min.css'>
     </head>
+    <script src='../include/jquery-latest.js'></script>
     <script language=\"Javascript\" type=\"text/javascript\">
     <!--
         var W = screen.width;
@@ -4232,7 +4233,7 @@ function view(){
 	}
 }
 function edit_file_form(){
-    global $current_dir,$filename,$file_data,$save_file,$path_info;
+    global $current_dir,$filename,$file_data,$save_file,$path_info,$OJ_AI_API_URL,$pid;
     $filename=remove_special_chars($filename);
    // echo "[$filename]";
     $file = $current_dir.$filename;
@@ -4252,8 +4253,11 @@ function edit_file_form(){
     <input type=hidden name=current_dir value=\"$current_dir\">
     <input type=hidden name=filename value=\"$filename\">
     <tr><th colspan=2>".$filename."</th></tr>
-    <tr><td colspan=2><textarea name=file_data style='width:1000px;height:500px;'>".html_encode($file_data)."</textarea></td></tr>
-    <tr><td><input type=button value=\"".et('Refresh')."\" onclick=\"document.edit_form_refresh.submit()\"></td><td align=right><input type=button value=\"".et('SaveFile')."\" onclick=\"go_save()\"></td></tr>
+    <tr><td colspan=2><textarea id='file_data' name='file_data' style='width:1000px;height:500px;'>".html_encode($file_data)."</textarea></td></tr>
+    <tr><td>";
+	if(str_ends_with($filename,".in") || $filename=="Gen.py" || $filename=="Main.c" || $filename == "Main.cc" ) 
+		echo "<input id='ai_bt' class='btn btn-primary' type=button value='AI一下' onclick='ai_gen(\"".$filename."\")' >";
+     echo "<input type=button value=\"".et('Refresh')."\" class='btn btn-danger' onclick=\"document.edit_form_refresh.submit()\"></td><td align=right><input type=button value=\"".et('SaveFile')."\" onclick=\"go_save()\" class='btn btn-success'></td></tr>
     </form>
     <form name=\"edit_form_refresh\" action=\"".$path_info["basename"]."\" method=\"post\">
     <input type=hidden name=action value=\"7\">
@@ -4262,6 +4266,24 @@ function edit_file_form(){
     </form>
     </table>
     <script language=\"Javascript\" type=\"text/javascript\">
+	function ai_gen(filename){
+		    let oldval=$('#ai_bt').val();
+		    $('#ai_bt').val('AI思考中...请稍候...');
+		    $('#ai_bt').prop('disabled', true);;
+		    $.ajax({
+			url: '../$OJ_AI_API_URL', 
+			type: 'GET',
+			data: { pid: '$pid', filename: filename },
+			success: function(data) {
+			    $('#file_data').val(data); // 假设 #file_data 是 div
+		    	    $('#ai_bt').prop('disabled', false);;
+			    $('#ai_bt').val(oldval);
+			},
+			error: function() {
+			    $('#ai_bt').val('获取数据失败');
+			}
+		    });
+	}
     <!--
         window.moveTo((window.screen.width-1024)/2,((window.screen.height-728)/2)-20);
         function go_save(){";
