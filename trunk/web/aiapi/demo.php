@@ -12,7 +12,7 @@ $apiKey = "设置为阿里云的API-KEY";   //https://bailian.console.aliyun.com
 $models=array("qwen-turbo","qwen3-coder-480b-a35b-instruct","qwen3-max","qwen3-coder-30b-a3b-instruct");
 
 $http_referer =parse_url( $_SERVER['HTTP_REFERER'])['path'];
-if(str_starts_with( basename($http_referer),"phpfm.php")){
+if((isset($_SESSION[$OJ_NAME.'_administrator'])|| isset($_SESSION[$OJ_NAME.'_problem_editor']) ) && str_starts_with( basename($http_referer),"phpfm.php")){
 	$table=false;
 	$pid=$_GET['pid'];
 	$gen_name=$_GET['filename'];
