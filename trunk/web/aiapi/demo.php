@@ -18,7 +18,7 @@ if((isset($_SESSION[$OJ_NAME.'_administrator'])|| isset($_SESSION[$OJ_NAME.'_pro
 	$gen_name=$_GET['filename'];
 	if($gen_name=="Gen.py"){
 		$prompt_sys="你是一个Python代码生成器。严格遵循以下规则：
-		1. 只输出Python代码，不输出任何其他文本
+		1. 只输出Python代码，不输出任何其他文本，特别是不要输出markdown标记
 		2. 不要以```python或```开头或结尾
 		3. 不要添加\"这是一个...\"、\"以下是...\"等解释性文字
 		4. 直接以import、def、class或注释开始代码
