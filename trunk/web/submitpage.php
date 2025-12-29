@@ -229,11 +229,11 @@ if (!$view_src) {
 	if(($view_src=="") && isset($_SESSION[$OJ_NAME.'_administrator']) && file_exists("$OJ_DATA/$problem_id/Main.c")){
 			//管理员自动加载可能的c标程
 			$view_src = file_get_contents( "$OJ_DATA/$problem_id/Main.c" );
-		    $lastlang = 0;
+		    $lastlang = intval($_COOKIE['lastlang']);
 	}else if(($view_src=="") && isset($_SESSION[$OJ_NAME.'_administrator']) && file_exists("$OJ_DATA/$problem_id/Main.cc")){
 			//管理员自动加载可能的c++标程
 			$view_src = file_get_contents( "$OJ_DATA/$problem_id/Main.cc" );
-		    $lastlang = 1;
+		    $lastlang = intval($_COOKIE['lastlang']);
 	}
 
 }
