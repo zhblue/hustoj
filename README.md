@@ -154,6 +154,7 @@ Star us, please!
 	
 日期  | 类型 |  更新内容 | 图
 ------- | :--:  | :--: | :-------
+12-30 | 更新 | 增加了新的人工智能造数据、标程工具 |
 12-09 | 更新 | 增加一个命令行配置工具setup.sh | <img width="390" height="278" alt="image" src="https://github.com/user-attachments/assets/1a1ac6a8-4dc0-4a41-99d5-01d0ece016cb" />
 12-05 | 更新 | 增加比赛的AI辅助开关 | <img width="429" height="361" alt="image" src="https://github.com/user-attachments/assets/f8c5f3f3-bb85-45a6-ba33-323f5c93d849" />
 11-16 | 更新 | 增加aiapi目录，放入千问、Bigmodel、腾讯元宝、腾讯混元、huggingface 等模型接口文件，db_info.inc.php中的$QWEN_API_KEY去掉，换成$OJ_AI_API_URL来指定加载加载AI答疑文件路径。
