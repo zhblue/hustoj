@@ -3709,7 +3709,7 @@ subtask的题目中也可以有不跟其他数据绑定的，认为是自己一�
                         $file_out[$file_count][] = "<td><nobr>".$dir_entry["u"]."</nobr></td>";
                         $file_out[$file_count][] = "<td><nobr>".$dir_entry["g"]."</nobr></td>";
                     }
-                    $file_out[$file_count][] = "<td><nobr>".($dir_entry["sizet"]=='0 bytes'?"<span class='btn-danger'>空文件</span>":$dir_entry["sizet"])."</nobr></td>";
+                    $file_out[$file_count][] = "<td><nobr>".($dir_entry["sizet"]=='0 bytes'?"<span class='label label-danger'>空文件</span>":$dir_entry["sizet"])."</nobr></td>";
                     $file_out[$file_count][] = "<td><nobr>".$dir_entry["datet"]."</nobr></td>";
                     $file_out[$file_count][] = "<td>".$dir_entry["extt"]."</td>";
                     // Opções de arquivo
