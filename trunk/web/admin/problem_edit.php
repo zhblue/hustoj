@@ -103,7 +103,7 @@ include_once("kindeditor.php") ;
 
       <div align=center>
         <?php require_once("../include/set_post_key.php");?>
-        <input type=submit value='<?php echo $MSG_SAVE?>' name=submit>
+        <input class="btn btn-success" type=submit value='<?php echo $MSG_SAVE?>' name=submit>
       </div>
     </form>
 
@@ -284,3 +284,4 @@ include_once("kindeditor.php") ;
     ?>
 </body>
 </html>
+
