@@ -221,6 +221,7 @@ static char cc_opt[BUFFER_SIZE/10];
 static char cc_std[BUFFER_SIZE/10];
 static char cpp_std[BUFFER_SIZE/10];
 static int auto_result = OJ_AC ;
+static int www_uid= OJ_AC ;
 
 int num_of_test = 0;
 //static int sleep_tmp;
@@ -570,6 +571,7 @@ void load_conf(const char * judge_path ,int sys ){
 				read_int(buf, "OJ_COMPILE_CHROOT", &compile_chroot);
 				read_int(buf, "OJ_USE_DOCKER",&use_docker);
 				read_int(buf, "OJ_PYTHON_FREE", &python_free);
+				read_int(buf, "OJ_WWW_UID",&www_uid);
 			}
 			read_int(buf, "OJ_JAVA_TIME_BONUS", &java_time_bonus);
 			read_int(buf, "OJ_JAVA_MEMORY_BONUS", &java_memory_bonus);
@@ -3639,11 +3641,11 @@ int make_out(int solution_id,int p_id,int lang,char * work_dir,double time_lmt,i
 		}
 		unshare(CLONE_NEWNET);
 		ptrace(PTRACE_TRACEME, 0, NULL, NULL);
-		while (setgid(33) != 0)
+		while (setgid(www_uid) != 0)
 			sleep(1);
-		while (setuid(33) != 0)
+		while (setuid(www_uid) != 0)
 			sleep(1);
-		while (setresuid(33, 33, 33) != 0)
+		while (setresuid(www_uid, www_uid, www_uid) != 0)
 			sleep(1);
 		struct rlimit LIM; // time limit, file limit& memory limit
 		// time limit
