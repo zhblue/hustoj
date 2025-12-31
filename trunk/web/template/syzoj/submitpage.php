@@ -761,7 +761,6 @@ function removeCodeBlockMarkers(str) {
     if (!str || typeof str !== 'string') {
         return str || '';
     }
-
     // 将字符串按行分割
     const lines = str.split('\n');
     const resultLines = [];
@@ -769,24 +768,19 @@ function removeCodeBlockMarkers(str) {
     for (let i = 0; i < lines.length; i++) {
         const line = lines[i];
         const trimmedLine = line.trim();
-
         // 如果是第一行且包含```Python，跳过不添加到结果中
         if (i === 0 && (trimmedLine === '```Python' || trimmedLine.startsWith('```'))) {
             continue; // 跳过首行标记
         }
-
         // 如果是最后一行且是```，跳过不添加到结果中
         if (i === lines.length - 1 && trimmedLine === '```') {
             continue; // 跳过末尾标记
         }
-
         // 否则将行添加到结果中
         resultLines.push(line);
     }
-
     // 重新组合字符串
     const result = resultLines.join('\n');
-
     // 如果移除标记后结果为空，返回空字符串
     return result;
 }
@@ -796,17 +790,18 @@ function removeCodeBlockMarkers(str) {
 		    $('#ai_bt').prop('disabled', true);;
 		    $.ajax({
 		    	url: '<?php echo $OJ_AI_API_URL?>', 
-			type: 'GET',
-			data: { pid: '<?php echo $id?>', filename: filename },
-			success: function(data) {
-				 if(typeof(editor) != "undefined")
-                                        editor.setValue(removeCodeBlockMarkers(data)); // 假设 #file_data 是 div
-		    	    $('#ai_bt').prop('disabled', false);;
-			    $('#ai_bt').val(oldval);
-			},
-			error: function() {
-			    $('#ai_bt').val('获取数据失败');
-			}
+				type: 'GET',
+				data: { pid: '<?php echo $id?>', filename: filename },
+				success: function(data) {
+					 if(typeof(editor) != "undefined")
+	                                        editor.setValue(removeCodeBlockMarkers(data)); // 假设 #file_data 是 div
+			    	$('#ai_bt').prop('disabled', false);
+				    $('#ai_bt').val("再来一次");
+				},
+				error: function() {
+				    $('#ai_bt').val('获取数据失败');
+					$('#ai_bt').prop('disabled', false);
+				}
 		    });
 	}
 		    
