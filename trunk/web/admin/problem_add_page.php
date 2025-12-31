@@ -33,7 +33,8 @@
         <label for="preview-toggle">题目预览</label>
     </div>
           <?php echo "<h3>".$MSG_TITLE."</h3>"?>
-          <input class="input input-large" style="width:100%;" type=text name='title' > <input type=submit value='<?php echo $MSG_SAVE?>' name=submit> 
+          <input class="input input-large" style="width:100%;" type=text name='title' id='title' > <input type=submit value='<?php echo $MSG_SAVE?>' name=submit> 
+	  <input class='btn btn-primary' id='ai_bt' type=button value='AI一下' onclick='ai_gen()' >
 	</p>
         <p align=left>
           <?php echo $MSG_Time_Limit?>
@@ -154,7 +155,7 @@
 	let memory=$("input[name=memory_limit]").val();
 	preview.find("span.ui.label").eq(1).html("<?php echo $MSG_Memory_Limit ?>："+memory);
 	
-	let description=$("textarea").eq(1).val();
+	let description=$("textarea").eq(0).val();
 	preview.find("#description").html(description);
 	preview.find("#description .md").each(function(){
 		if($("#previewFrame")[0] != undefined) $("#previewFrame")[0].contentWindow.MathJax.typeset();
@@ -217,6 +218,67 @@ function untransform() {
     $("input").off('keyup', sync);
     $("textarea").off('keyup', sync);
 }
+function removeCodeBlockMarkers(str) {
+    // 如果字符串为空，直接返回
+    if (!str || typeof str !== 'string') {
+        return str || '';
+    }
+
+    // 将字符串按行分割
+    const lines = str.split('\n');
+    const resultLines = [];
+    // 遍历每一行
+    for (let i = 0; i < lines.length; i++) {
+        const line = lines[i];
+        const trimmedLine = line.trim();
+
+        // 如果是第一行且包含```Python，跳过不添加到结果中
+        if (i === 0 && (trimmedLine === '```Python' || trimmedLine.startsWith('```'))) {
+            continue; // 跳过首行标记
+        }
+
+        // 如果是最后一行且是```，跳过不添加到结果中
+        if (i === lines.length - 1 && trimmedLine === '```') {
+            continue; // 跳过末尾标记
+        }
+
+        // 否则将行添加到结果中
+        resultLines.push(line);
+    }
+
+    // 重新组合字符串
+    const result = resultLines.join('\n');
+
+    // 如果移除标记后结果为空，返回空字符串
+    return result;
+}
+	function ai_gen(filename){
+		    let oldval=$('#ai_bt').val();
+		    $('#ai_bt').val('AI思考中...请稍候...');
+		    $('#ai_bt').prop('disabled', true);;
+		    let title=$('#title').val();
+		    $.ajax({
+		    	url: '../<?php echo $OJ_AI_API_URL?>', 
+			type: 'GET',
+			data: { title: title },
+			success: function(data) {
+			    console.log(title);
+			    let description="<span class='md'>"+removeCodeBlockMarkers(data)+"</span>";
+			    let preview=$("#previewFrame").contents();
+                            $("textarea").eq(0).val(description); // 假设 #file_data 是 div
+                            $("textarea").eq(2).val(""); //
+                            $("textarea").eq(3).val(''); //
+                            $("textarea").eq(10).val(''); //
+			    window.setTimeout('sync()',1000);
+		    	    $('#ai_bt').prop('disabled', false);;
+			    $('#ai_bt').val(oldval);
+			},
+			error: function() {
+			    $('#ai_bt').val('获取数据失败');
+		    	    $('#ai_bt').prop('disabled', false);;
+			}
+		    });
+	}
 
 </script>
 </body>
