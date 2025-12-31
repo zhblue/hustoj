@@ -221,7 +221,7 @@ static char cc_opt[BUFFER_SIZE/10];
 static char cc_std[BUFFER_SIZE/10];
 static char cpp_std[BUFFER_SIZE/10];
 static int auto_result = OJ_AC ;
-static int www_uid= OJ_AC ;
+static int www_uid= 33 ;  // www-data in ubuntu , might overwrite for BT.cn
 
 int num_of_test = 0;
 //static int sleep_tmp;
