@@ -218,40 +218,7 @@ function untransform() {
     $("input").off('keyup', sync);
     $("textarea").off('keyup', sync);
 }
-function removeCodeBlockMarkers(str) {
-    // 如果字符串为空，直接返回
-    if (!str || typeof str !== 'string') {
-        return str || '';
-    }
 
-    // 将字符串按行分割
-    const lines = str.split('\n');
-    const resultLines = [];
-    // 遍历每一行
-    for (let i = 0; i < lines.length; i++) {
-        const line = lines[i];
-        const trimmedLine = line.trim();
-
-        // 如果是第一行且包含```Python，跳过不添加到结果中
-        if (i === 0 && (trimmedLine === '```Python' || trimmedLine.startsWith('```'))) {
-            continue; // 跳过首行标记
-        }
-
-        // 如果是最后一行且是```，跳过不添加到结果中
-        if (i === lines.length - 1 && trimmedLine === '```') {
-            continue; // 跳过末尾标记
-        }
-
-        // 否则将行添加到结果中
-        resultLines.push(line);
-    }
-
-    // 重新组合字符串
-    const result = resultLines.join('\n');
-
-    // 如果移除标记后结果为空，返回空字符串
-    return result;
-}
 	function ai_gen(filename){
 		    let oldval=$('#ai_bt').val();
 		    $('#ai_bt').val('AI思考中...请稍候...');
@@ -263,7 +230,7 @@ function removeCodeBlockMarkers(str) {
 			data: { title: title },
 			success: function(data) {
 			    console.log(title);
-			    let description="<span class='md'>"+removeCodeBlockMarkers(data)+"</span>";
+			    let description="<span class='md'>"+(data)+"</span>";
 			    let preview=$("#previewFrame").contents();
                             $("textarea").eq(0).val(description); // 假设 #file_data 是 div
                             $("textarea").eq(2).val(""); //
