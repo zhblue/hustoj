@@ -1,4 +1,5 @@
 <?php
+//ini_set("display_errors", "On");  //set this to "On" for debugging  ,especially when no reason blank shows up.
 // 这个文件用于对接阿里千问，解析编译报错和运行错误信息。
 // 需要在db_info.inc.php中配置 $OJ_AI_API_URL指向本文件; 
 // 登录阿里云，打开 https://bailian.console.aliyun.com/?tab=model#/api-key  创建新的API KEY
@@ -6,12 +7,13 @@
 // 访问类似 https://bailian.console.aliyun.com/?tab=model#/model-market/detail/qwen3-coder-480b-a35b-instruct
 // 关注所用模型的剩余免费额度
 require_once("../include/db_info.inc.php");
+require_once("../include/my_func.inc.php");
 // 设置请求的URL
 $url = 'http://demo.hustoj.com/aiapi/proxy.php';
 $apiKey = "设置为阿里云的API-KEY";   //https://bailian.console.aliyun.com/?tab=model#/api-key  创建新的API KEY
 $models=array("qwen-turbo","qwen3-coder-480b-a35b-instruct","qwen3-max","qwen3-coder-30b-a3b-instruct");
 
-$http_referer =parse_url( $_SERVER['HTTP_REFERER'])['path'];
+$http_referer =basename(parse_url( $_SERVER['HTTP_REFERER'])['path']);
 if((isset($_SESSION[$OJ_NAME.'_administrator'])|| isset($_SESSION[$OJ_NAME.'_problem_editor']) ) ){
        if(str_starts_with( basename($http_referer),"phpfm.php")|| str_starts_with( basename($http_referer),"submitpage.php") ){
 	$table=false;
@@ -152,10 +154,11 @@ text
 [可选解题思路提示] ";
 	$prompt_user="题目是:".htmlentities($title);
        }
-}else{
-       	if(str_starts_with( basename($http_referer),"reinfo.php")){
+}
+if( basename($http_referer)=="reinfo.php" ||  basename($http_referer)=="ceinfo.php"){
+       	if( basename($http_referer)=="reinfo.php"){
 		$table="runtimeinfo";
-	}else if(str_starts_with( basename($http_referer),"ceinfo.php")){
+	}else if( basename($http_referer)=="ceinfo.php"){
 		$table="compileinfo";
 	}
 
