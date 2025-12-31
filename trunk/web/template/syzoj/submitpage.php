@@ -80,6 +80,9 @@ echo"<option value=$i ".( $lastlang==$i?"selected":"").">
 <input class="btn btn-success" title="WAF gives you reset ? try this." type=button value="Encoded <?php echo $MSG_SUBMIT?>"  onclick="encoded_submit();">
 <input type=hidden id="encoded_submit_mark" name="reverse2" value="reverse"/>
 <?php }?>
+<?php if (isset($_SESSION[$OJ_NAME.'_administrator'])){?>
+<input class="btn btn-danger" title="AI everythin..." type=button value="AI一下"  onclick="ai_gen('Main.c');" id='ai_bt'>
+<?php }?>
 <!--选择题状态-->
 <?php if ($spj>1 || !$OJ_TEST_RUN ){?>
 <span class="btn" id=result><?php echo $MSG_STATUS?></span>	
@@ -376,14 +379,13 @@ function do_submit(){
 <?php
 
         $appendsource="";
-        if(isset($id)){
+		if(isset($id)){
                 $append_file = "$OJ_DATA/$id/append.sql";
                 if (isset($OJ_APPENDCODE) && $OJ_APPENDCODE && file_exists($append_file)) {
                   $appendsource .= "\n".file_get_contents($append_file);
                 }
         }
         echo "var appendSQL=".json_encode($appendsource).";";
-
 
 ?>
 
@@ -753,6 +755,56 @@ function auto_submit(){
         }
       }
 ?>
+
+function removeCodeBlockMarkers(str) {
+    // 如果字符串为空，直接返回
+    if (!str || typeof str !== 'string') {
+        return str || '';
+    }
+    // 将字符串按行分割
+    const lines = str.split('\n');
+    const resultLines = [];
+    // 遍历每一行
+    for (let i = 0; i < lines.length; i++) {
+        const line = lines[i];
+        const trimmedLine = line.trim();
+        // 如果是第一行且包含```Python，跳过不添加到结果中
+        if (i === 0 && (trimmedLine === '```Python' || trimmedLine.startsWith('```'))) {
+            continue; // 跳过首行标记
+        }
+        // 如果是最后一行且是```，跳过不添加到结果中
+        if (i === lines.length - 1 && trimmedLine === '```') {
+            continue; // 跳过末尾标记
+        }
+        // 否则将行添加到结果中
+        resultLines.push(line);
+    }
+    // 重新组合字符串
+    const result = resultLines.join('\n');
+    // 如果移除标记后结果为空，返回空字符串
+    return result;
+}
+	function ai_gen(filename){
+		    let oldval=$('#ai_bt').val();
+		    $('#ai_bt').val('AI思考中...请稍候...');
+		    $('#ai_bt').prop('disabled', true);;
+		    $.ajax({
+		    	url: '<?php echo $OJ_AI_API_URL?>', 
+				type: 'GET',
+				data: { pid: '<?php echo $id?>', filename: filename },
+				success: function(data) {
+					 if(typeof(editor) != "undefined")
+	                                        editor.setValue(removeCodeBlockMarkers(data)); // 假设 #file_data 是 div
+			    	$('#ai_bt').prop('disabled', false);
+				    $('#ai_bt').val("再来一次");
+				},
+				error: function() {
+				    $('#ai_bt').val('获取数据失败');
+					$('#ai_bt').prop('disabled', false);
+				}
+		    });
+	}
+		    
 </script>
 
   </body>
