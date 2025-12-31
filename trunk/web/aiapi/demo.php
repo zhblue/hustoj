@@ -47,7 +47,9 @@ if((isset($_SESSION[$OJ_NAME.'_administrator'])|| isset($_SESSION[$OJ_NAME.'_pro
 	$prompt_user="题目是:".$problem ;
        }else if(basename($http_referer)=="problem_add_page.php"){
 	       $title=$_GET['title'];
-	       $prompt_sys="以user给出的题目为题，创作一道小学生级别的NOIP编程题
+	       $prompt_sys="1. 你是一个经验丰富的ICPC NOIP 出题人
+2. 出题的时候不输出‘好的，遵照您的要求’这种开头，直接'#题目背景'开始
+3. 以用户给出的题目为题，创作一道小学生级别的NOIP编程题
 
 创作要素要求
 1. 逻辑背景设计
