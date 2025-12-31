@@ -270,12 +270,12 @@ function removeCodeBlockMarkers(str) {
                             $("textarea").eq(3).val(''); //
                             $("textarea").eq(10).val(''); //
 			    window.setTimeout('sync()',1000);
-		    	    $('#ai_bt').prop('disabled', false);;
-			    $('#ai_bt').val(oldval);
+		    	    $('#ai_bt').prop('disabled', false);
+			        $('#ai_bt').val("再来一次");
 			},
 			error: function() {
 			    $('#ai_bt').val('获取数据失败');
-		    	    $('#ai_bt').prop('disabled', false);;
+		    	$('#ai_bt').prop('disabled', false);
 			}
 		    });
 	}
