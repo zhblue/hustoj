@@ -33,7 +33,8 @@
         <label for="preview-toggle">题目预览</label>
     </div>
           <?php echo "<h3>".$MSG_TITLE."</h3>"?>
-          <input class="input input-large" style="width:100%;" type=text name='title' id='title' > <input type=submit value='<?php echo $MSG_SAVE?>' name=submit> 
+          <input class="input input-large" style="width:100%;" type=text name='title' id='title' > 
+		<input class="btn btn-success" type=submit value='<?php echo $MSG_SAVE?>' name=submit> 
 	  <input class='btn btn-primary' id='ai_bt' type=button value='AI一下' onclick='ai_gen()' >
 	</p>
         <p align=left>
