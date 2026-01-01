@@ -36,6 +36,7 @@
           <input class="input input-large" style="width:100%;" type=text name='title' id='title' > 
 		<input class="btn btn-success" type=submit value='<?php echo $MSG_SAVE?>' name=submit> 
 	  <input class='btn btn-primary' id='ai_bt' type=button value='AI一下' onclick='ai_gen()' >
+		<input class='btn btn-danger'  type=reset value='<?php echo $MSG_RESET?>' >
 	</p>
         <p align=left>
           <?php echo $MSG_Time_Limit?>
