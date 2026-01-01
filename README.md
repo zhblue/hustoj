@@ -154,7 +154,7 @@ Star us, please!
 	
 日期  | 类型 |  更新内容 | 图
 ------- | :--:  | :--: | :-------
-01-01 | 更新 | 允许AI辅助造题，纯鼠标点击的造题模式。
+01-01 | 更新 | 允许AI辅助造题，纯鼠标点击的造题模式。|<img width="623" height="531" alt="image" src="https://github.com/user-attachments/assets/b6d4d937-142b-4068-b0b4-e06f0841492f" />
 
 </details>
 
@@ -163,7 +163,7 @@ Star us, please!
 	
 日期  | 类型 |  更新内容 | 图
 ------- | :--:  | :--: | :-------
-12-30 | 更新 | 增加了新的人工智能造数据、标程工具 |
+12-30 | 更新 | 增加了新的人工智能造数据、标程工具 |<img width="1084" height="175" alt="image" src="https://github.com/user-attachments/assets/615146fb-fee6-4c49-88c7-f27359d103e9" />
 12-09 | 更新 | 增加一个命令行配置工具setup.sh | <img width="390" height="278" alt="image" src="https://github.com/user-attachments/assets/1a1ac6a8-4dc0-4a41-99d5-01d0ece016cb" />
 12-05 | 更新 | 增加比赛的AI辅助开关 | <img width="429" height="361" alt="image" src="https://github.com/user-attachments/assets/f8c5f3f3-bb85-45a6-ba33-323f5c93d849" />
 11-16 | 更新 | 增加aiapi目录，放入千问、Bigmodel、腾讯元宝、腾讯混元、huggingface 等模型接口文件，db_info.inc.php中的$QWEN_API_KEY去掉，换成$OJ_AI_API_URL来指定加载加载AI答疑文件路径。
