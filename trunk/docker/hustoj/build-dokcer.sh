@@ -11,3 +11,8 @@ docker rm -f /hustoj-dev
 docker run -d -it --privileged --name hustoj-dev -p 80:80 -v /home/test/:/data hustoj-dev
 #docker run -d -it --name hustoj-dev -p 80:80 hustoj-dev
 docker exec -i -t hustoj-dev /bin/bash
+
+SELECT user, host FROM mysql.user;
+CREATE USER 'hustoj'@'localhost' IDENTIFIED BY 'hustoj';
+CREATE USER 'hustoj'@'%' IDENTIFIED BY 'hustoj';
+FLUSH PRIVILEGES;
