@@ -11,6 +11,8 @@ require_once("../include/my_func.inc.php");
 $url = 'https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions';
 $apiKey = "设置为阿里云的API-KEY";   //https://bailian.console.aliyun.com/?tab=model#/api-key  创建新的API KEY
 $models=array("qwen-turbo");  //,"qwen3-coder-480b-a35b-instruct","qwen3-max","qwen3-coder-30b-a3b-instruct"
+
+$temperature=0.8;
 $http_referer =basename(parse_url( $_SERVER['HTTP_REFERER'])['path']);
 if((isset($_SESSION[$OJ_NAME.'_administrator'])|| isset($_SESSION[$OJ_NAME.'_problem_editor']) ) ){
        if(str_starts_with( basename($http_referer),"phpfm.php")|| str_starts_with( basename($http_referer),"submitpage.php") ){
@@ -47,6 +49,22 @@ if((isset($_SESSION[$OJ_NAME.'_administrator'])|| isset($_SESSION[$OJ_NAME.'_pro
 	$prompt_user="题目是:".$problem ;
        }else if(basename($http_referer)=="problem_add_page.php"){
 	       $title=$_GET['title'];
+		    if($title==""){
+                       $prompt_sys="请创作一个天马行空、富有诗意或超现实意境的标题，具体要求如下：
+
+1. 核心形式：一个简短的名词短语。
+2. 核心手法：将两个看似无关的具象名词（或概念）进行诗意联结。
+3. 字数限制：中文10字以内，英文3-5个单词为佳。
+4. 效果要求：无需解释，但需激发强烈的好奇心与故事画面感。
+5. 从古诗、词、成语、名著、神话、小说、卡通、漫画、修仙、短剧、网络梗中寻找灵感，可以直接用一句古诗、或者替换古诗中的名词为现代词汇
+6. 不要说什么抱歉之类的话，我只需要一个简短的标题。
+示例参考：鲸鱼背上的古书店、液态时钟、云朵收银机。
+
+现在，请根据以上规则生成一个新的标题。";
+                       $prompt_user="今天是".date("Y-m-d H:i:s").",找找最新的热点新闻，最近的节日、历史上的今天，给你一个随机数".rand()."，帮我想一个标题吧，不要多余的解释，就一个标题。";
+				       $temperature=1.2;
+               }else{
+
 	       $prompt_sys="1. 你是一个经验丰富的ICPC NOIP 出题人
 2. 出题的时候不输出‘好的，遵照您的要求’这种开头，直接'#题目背景'开始
 3. 以用户给出的题目为题，创作一道小学生级别的NOIP编程题
@@ -151,6 +169,7 @@ text
 ## 提示
 [可选解题思路提示] ";
 	$prompt_user="题目是:".htmlentities($title);
+			}
        }
 }
 if( basename($http_referer)=="reinfo.php" ||  basename($http_referer)=="ceinfo.php"){
@@ -216,6 +235,7 @@ $model = $models[array_rand($models)];
 $data = [
     // 此处以qwen-plus为例，可按需更换模型名称。模型列表：https://help.aliyun.com/zh/model-studio/getting-started/models
     "model" => "$model",
+	"temperature" => "$temperature",
     "messages" => [
         [
             "role" => "system",
@@ -256,88 +276,4 @@ if($table){
 }else{
 	echo ($data->choices[0]->message->content);	
 
-}
-?>
-		echo "非法参数";
-		exit();
-	}
-	$sql="SELECT `source` FROM `source_code_user` WHERE `solution_id`=?";
-	$result=pdo_query($sql,$sid);
-	if(!empty($result)){
-		$row=$result[0];
-		$source=$row[0];
-	}else{
-		echo "非法参数";
-		exit();
-	}
-	$sql="SELECT `error` FROM `$table` WHERE `solution_id`=?";
-	$result=pdo_query($sql,$sid);
-	if(!empty($result)){
-		$row=$result[0];
-		$ceinfo=$row[0];
-	}else{
-		echo "非法参数";
-		exit();
-	}
-	$sql="select answer from solution_ai_answer where solution_id=? ";
-	$answer=pdo_query($sql,$sid);
-	if(!empty($answer)){
-		echo htmlentities($answer[0][0]);
-		echo "<!-- cached answer -->";
-		exit();
-	}
-	$problem=pdo_query("select concat(description,'输入:',input,'输出:',output,'样例输入:',sample_input,'样例输出:',sample_output,'提示:',hint) from problem where problem_id=?",$problem_id)[0][0];
-	$prompt_user="题目是:".$problem."\n 源代码是:".$source."\n报错信息是:".$ceinfo;
-
-}
-
-// 设置请求头
-$headers = [
-    'Authorization: Bearer '.$apiKey,
-    'Content-Type: application/json'
-];
-$model = $models[array_rand($models)];
-// 设置请求体
-$data = [
-    // 此处以qwen-plus为例，可按需更换模型名称。模型列表：https://help.aliyun.com/zh/model-studio/getting-started/models
-    "model" => "$model",
-    "messages" => [
-        [
-            "role" => "system",
-	    "content" => $prompt_sys
- 	],
-        [
-            "role" => "user",
-	    "content" => $prompt_user 
-	]
-    ]
-];
-// 初始化cURL会话
-$ch = curl_init();
-// 设置cURL选项
-curl_setopt($ch, CURLOPT_URL, $url);
-curl_setopt($ch, CURLOPT_POST, true);
-curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
-curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-curl_setopt($ch, CURLOPT_REFERER, $domain );
-curl_setopt($ch, CURLOPT_TIMEOUT, 60);
-// 执行cURL会话
-$response = curl_exec($ch);
-// 检查是否有错误发生
-if (curl_errno($ch)) {
-    echo 'Curl error: ' . curl_error($ch);
-	exit();   // 超时等错误发生时，不将结果入库，下次还能重试。
-}
-// 关闭cURL资源
-curl_close($ch);
-// 输出响应结果
-$data=json_decode($response);
-if($table){
-	$answer=$data->choices[0]->message->content."<br> --- $model  <br><a href='https://github.com/zhblue/hustoj/' target=_blank > 如果你觉得这个系统对你有帮助，请到Github来给我们加个Star⭐吧 </a> ";
-	echo htmlentities($answer);
-	$sql="insert into solution_ai_answer (solution_id,answer) values(?,?)";
-	pdo_query($sql,$sid,$answer);
-}else{
-	echo ($data->choices[0]->message->content);	
 }
