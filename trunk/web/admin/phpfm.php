@@ -191,10 +191,11 @@ if (!(isset($_SESSION[$OJ_NAME.'_'.'administrator'])
 	    $user_id=$_SESSION[$OJ_NAME.'_user_id'];
 	    $nick=$_SESSION[$OJ_NAME.'_nick'];
             if(file_exists($current_dir."/Gen.py")  || file_exists($current_dir."/Main.c") || file_exists($current_dir."/Main.cc") ){
-    		$sql = "INSERT INTO solution(problem_id,user_id,nick,in_date,language,ip,code_length,result) VALUES(?,?,?,NOW(),?,?,?,1)";
-    		$insert_id = pdo_query($sql, -$pid, $user_id, $nick, 6 , $ip, 0 );
-		echo "$pid pending".$insert_id;
-           	trigger_judge($insert_id);     // moved to my_func.inc.php
+	    		$sql = "INSERT INTO solution(problem_id,user_id,nick,in_date,language,ip,code_length,result) VALUES(?,?,?,NOW(),?,?,?,1)";
+	    		$insert_id = pdo_query($sql, -$pid, $user_id, $nick, 6 , $ip, 0 );
+				echo "$pid pending".$insert_id."<img src='../image/loader.gif'>";
+	            echo "<script>window.setTimeout('resolveIDs()',5000);</script>";    
+	           	trigger_judge($insert_id);     // moved to my_func.inc.php
             }else{
                 echo "未找到Main.c或Main.cc,自动生成空文件Gen.py和Main.c。";
                 touch("Gen.py");
