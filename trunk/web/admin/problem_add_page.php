@@ -231,15 +231,19 @@ function untransform() {
 			data: { title: title },
 			success: function(data) {
 			    console.log(title);
-			    let description="<span class='md'>"+(data)+"</span>";
-			    let preview=$("#previewFrame").contents();
-                            $("textarea").eq(0).val(description); // 假设 #file_data 是 div
-                            $("textarea").eq(2).val(""); //
-                            $("textarea").eq(3).val(''); //
-                            $("textarea").eq(10).val(''); //
-			    window.setTimeout('sync()',1000);
-		    	    $('#ai_bt').prop('disabled', false);
-			        $('#ai_bt').val("再来一次");
+				if(title==""){
+						$('#title').val(data);
+				}else{
+						let description="<span class='md'>"+(data)+"</span>";
+						let preview=$("#previewFrame").contents();
+						$("textarea").eq(0).val(description); // 假设 #file_data 是 div
+						$("textarea").eq(2).val(""); //
+						$("textarea").eq(3).val(''); //
+						$("textarea").eq(10).val(''); //
+				}
+				window.setTimeout('sync()',1000);
+				$('#ai_bt').prop('disabled', false);;
+				$('#ai_bt').val('AI一下');
 			},
 			error: function() {
 			    $('#ai_bt').val('获取数据失败');
