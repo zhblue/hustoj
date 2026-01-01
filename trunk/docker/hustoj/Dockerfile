@@ -1,5 +1,6 @@
-FROM ubuntu:trusty-20171117
-#COPY ./sources.list /etc/apt/sources.list
+FROM ubuntu:24.04
+# COPY ./sources.list /etc/apt/sources.list  
+# /etc/apt/sources.list
 #FROM debian:jessie-slim
 
 RUN set -ex \
@@ -7,12 +8,12 @@ RUN set -ex \
 	&& apt-get install -y \
 		git \
 		make flex g++ libmysqlclient-dev libmysql++-dev \
-		php5-fpm php5-mysql php5-gd \
-		php5-memcache memcached \
+		php8.3-fpm php8.3-mysql php8.3-gd php8.3-mbstring php8.3-xml php8.3-zip \
+		php8.3-memcache memcached \
 		nginx \
 		fp-compiler \
-		openjdk-7-jdk \
-		clang \
+		#openjdk-7-jdk \
+		#clang \
 	#&& apt-get remove --purge git
 	&& rm -rf /var/lib/apt/lists/* 
 	
@@ -24,7 +25,7 @@ RUN set -ex \
 	
 RUN set -ex \
 	&& /usr/sbin/useradd -m -u 1536 judge \
-	&& cd / && git clone https://github.com/zhblue/hustoj.git \	
+	&& cd / && git clone https://git.wuxiaoyang.top/shiningrise/hustoj.git \	
 	&& mv /hustoj/trunk /home/judge/src \
 	&& rm -R /hustoj 
 	
@@ -46,15 +47,19 @@ RUN set -ex \
 	&& chown www-data src/web/upload data   \
 	&& sed -i "s:include /etc/nginx/mime.types;:client_max_body_size    80m;\n\tinclude /etc/nginx/mime.types;:g" /etc/nginx/nginx.conf   \
 	&& chown -R mysql:mysql /var/lib/mysql \
-	&& sed -i "s:root /usr/share/nginx/html;:root /home/judge/src/web;:g" /etc/nginx/sites-enabled/default   \
+	&& sed -i "s:root /var/www/html;:root /home/judge/src/web;:g" /etc/nginx/sites-enabled/default   \
 	&& sed -i "s:index index.html:index index.php:g" /etc/nginx/sites-enabled/default   \
 	&& sed -i "s:#location ~ \\\.php\\$:location ~ \\\.php\\$:g" /etc/nginx/sites-enabled/default   \
 	&& sed -i "s:#\tfastcgi_split_path_info:\tfastcgi_split_path_info:g" /etc/nginx/sites-enabled/default   \
 	&& sed -i "s:#\tfastcgi_pass unix:\tfastcgi_pass unix:g" /etc/nginx/sites-enabled/default   \
+	&& sed -i "s:php7.4-fpm:php8.3-fpm:g" /etc/nginx/sites-enabled/default   \
 	&& sed -i "s:#\tfastcgi_index:\tfastcgi_index:g" /etc/nginx/sites-enabled/default   \
 	&& sed -i "s:#\tinclude fastcgi_params;:\tinclude fastcgi_params;\n\t}:g" /etc/nginx/sites-enabled/default   \
-	&& sed -i "s/post_max_size = 8M/post_max_size = 80M/g" /etc/php5/fpm/php.ini     \
-	&& sed -i "s/upload_max_filesize = 2M/upload_max_filesize = 80M/g" /etc/php5/fpm/php.ini   
+	&& sed -i "s:#\tinclude snippets/fastcgi-php.conf;:\tinclude snippets/fastcgi-php.conf;:g" /etc/nginx/sites-enabled/default   \
+	&& sed -i 's/\t#}/\t}/g' /etc/nginx/sites-enabled/default \
+	&& sed -i 's/#location/location/g' /etc/nginx/sites-enabled/default \
+	&& sed -i "s/post_max_size = 8M/post_max_size = 80M/g" /etc/php/8.3/fpm/php.ini     \
+	&& sed -i "s/upload_max_filesize = 2M/upload_max_filesize = 80M/g" /etc/php/8.3/fpm/php.ini
 
 RUN set -ex \
 	&& cd /home/judge/src/core/judged \
@@ -74,8 +79,8 @@ RUN set -ex \
 	&& USER=`cat /etc/mysql/debian.cnf |grep user|head -1|awk  '{print $3}'` \
 	&& PASSWORD=`cat /etc/mysql/debian.cnf |grep password|head -1|awk  '{print $3}'` \
 	&& mysql -h localhost -u$USER -p$PASSWORD< /home/judge/src/install/db.sql \
-	&& echo "insert into jol.privilege values('admin','administrator','N');"|mysql -h localhost -u$USER -p$PASSWORD \
-	&& service mysql stop
+	&& echo "insert into jol.privilege values('admin','administrator','true','N');"|mysql -h localhost -u$USER -p$PASSWORD \
+	&& service mysql stop 
 	
 	
 RUN chmod +x /home/judge/src/core/make.sh
