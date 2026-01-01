@@ -55,7 +55,7 @@ chmod -R 755 /home/judge/src/web/
 chown -R mysql:mysql /data/mysql/
 usermod -d /var/lib/mysql -m mysql
 
-service mysql start
+service mariadb start
 /usr/bin/judged
 service php8.3-fpm start
 service nginx start

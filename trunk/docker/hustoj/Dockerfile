@@ -7,7 +7,8 @@ RUN set -ex \
 	&& apt-get update \
 	&& apt-get install -y \
 		git \
-		make flex g++ libmysqlclient-dev libmysql++-dev \
+		make flex g++  \
+		libmariadb-dev-compat libmariadb-dev \
 		php8.3-fpm php8.3-mysql php8.3-gd php8.3-mbstring php8.3-xml php8.3-zip \
 		php8.3-memcache memcached \
 		nginx \
@@ -18,9 +19,9 @@ RUN set -ex \
 	&& rm -rf /var/lib/apt/lists/* 
 	
 RUN set -ex \
-	&& echo 'mysql-server-5.5 mysql-server/root_password password ""' | debconf-set-selections \
-	&& echo 'mysql-server-5.5 mysql-server/root_password_again password ""' |debconf-set-selections \
-	&& apt-get update && apt-get install -y mysql-server \
+	&& echo 'mariadb-server mysql-server/root_password password ""' | debconf-set-selections \
+	&& echo 'mariadb-server mysql-server/root_password_again password ""' |debconf-set-selections \
+	&& apt-get update && apt-get install -y mariadb-server \
 	&& rm -rf /var/lib/apt/lists/*
 	
 RUN set -ex \
@@ -30,8 +31,8 @@ RUN set -ex \
 	&& rm -R /hustoj 
 	
 RUN set -ex \
-	&& USER=`cat /etc/mysql/debian.cnf |grep user|head -1|awk  '{print $3}'` \
-	&& PASSWORD=`cat /etc/mysql/debian.cnf |grep password|head -1|awk  '{print $3}'` \
+	&& USER=hustoj \
+	&& PASSWORD=hustoj \
 	&& CPU=`grep "cpu cores" /proc/cpuinfo |head -1|awk '{print $4}'`   \	
 	&& cd /home/judge/                  \
 	&& mkdir etc data log   \
@@ -73,14 +74,21 @@ RUN set -ex \
 	&& cd /home/judge/ 
 
 RUN set -ex \
+	&& USER=hustoj \
+	&& PASSWORD=hustoj \
 	&& chown -R mysql:mysql /var/lib/mysql  \
-	&& service mysql restart \
-	&& service mysql status \
-	&& USER=`cat /etc/mysql/debian.cnf |grep user|head -1|awk  '{print $3}'` \
-	&& PASSWORD=`cat /etc/mysql/debian.cnf |grep password|head -1|awk  '{print $3}'` \
-	&& mysql -h localhost -u$USER -p$PASSWORD< /home/judge/src/install/db.sql \
-	&& echo "insert into jol.privilege values('admin','administrator','true','N');"|mysql -h localhost -u$USER -p$PASSWORD \
-	&& service mysql stop 
+	&& sed -i 's/^bind-address\s*=\s*127.0.0.1/bind-address = 0.0.0.0/' /etc/mysql/mariadb.conf.d/50-server.cnf \
+	&& service mariadb restart \
+	&& sleep 5 \
+	&& service mariadb status \
+	&& mysql -e "CREATE DATABASE IF NOT EXISTS jol;" \
+	&& mysql -e "CREATE USER IF NOT EXISTS '$USER'@'%' IDENTIFIED BY \"$PASSWORD\";" \
+	&& mysql -e "CREATE USER IF NOT EXISTS '$USER'@'localhost' IDENTIFIED BY \"$PASSWORD\";" \
+	&& mysql -e "GRANT ALL PRIVILEGES ON jol.* TO '$USER'@'%';" \
+	&& mysql -e "FLUSH PRIVILEGES;" \
+	&& mysql -h localhost -u$USER -p"$PASSWORD" < /home/judge/src/install/db.sql \
+	&& mysql -h localhost -u$USER -p"$PASSWORD" -e "INSERT INTO jol.privilege VALUES('admin','administrator','true','N');" \
+	&& service mariadb stop 
 	
 	
 RUN chmod +x /home/judge/src/core/make.sh
