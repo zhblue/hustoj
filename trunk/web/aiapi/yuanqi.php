@@ -5,6 +5,7 @@
 // 需要配置助手ID 和 访问Token
 require_once("../include/db_info.inc.php");
 require_once("../include/my_func.inc.php");
+$url = 'https://yuanqi.tencent.com/openapi/v1/agent/chat/completions';   // 设置请求的URL
 $apiKey = "配置你的腾讯元器智能体Token";             //配置你的腾讯元器智能体Token
 
 
@@ -50,8 +51,7 @@ if(!empty($answer)){
 	exit();
 }
 
-// 设置请求的URL
-$url = 'https://yuanqi.tencent.com/openapi/v1/agent/chat/completions';
+
 
 // 设置请求头
 $headers = [
