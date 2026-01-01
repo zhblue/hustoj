@@ -3,16 +3,18 @@
  * openAI API 兼容模式，代理转发程序
  * 接收HUSTOJ的请求，添加合法API Key，转发给千问官方API或Hugging face等其他提供免费token的平台
  */
-
+require_once("../include/db_info.inc.php");
 class QwenProxy
 {
-    private $targetUrl = 'https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions';
-    private $apiKey;
+    private $targetUrl = 'https://api.xiaomimimo.com/v1/chat/completions';    // 小米家的mimo 免费用到1.20
+    private $apiKey = "创建新的API KEY"; //创建新的API KEY
+    private $model="mimo-v2-flash";
     private $timeout = 30;
+    private $requestBody="";
+    private $response=""; 
     
-    public function __construct($apiKey)
-    {
-        $this->apiKey = $apiKey;
+    public function __construct(){
+     
     }
     
     /**
@@ -20,15 +22,16 @@ class QwenProxy
      */
     public function handleProxyRequest()
     {
+	    global $ip;
         try {
             // 记录原始请求信息（用于调试）
             $this->logRequest();
-            
+            $key=$_SERVER['AUTHORIZATION']??"";
+	    if(!empty($key)&&!str_contains($key,"设置为阿里云的API-KEY")) $apiKey= ltrim($key, 'Bearer ');
             // 获取原始请求的方法和内容
             $method = $_SERVER['REQUEST_METHOD'];
             $contentType = $_SERVER['CONTENT_TYPE'] ?? 'application/json';
             $requestBody = file_get_contents('php://input');
-            
             // 验证请求体
             if (empty($requestBody)) {
                 $this->sendError('请求体为空');
@@ -41,16 +44,16 @@ class QwenProxy
                 $this->sendError('无效的JSON请求体: ' . json_last_error_msg());
                 return;
             }
-            // 强制修改模型
-            //  $requestData->model="Qwen/Qwen3-Coder-480B-A35B-Instruct:novita";  // huggingface free $0.1 per month 
+            $requestData->model = $model ;  // 如果没有给出模型，覆盖默认模型 
             // 构建转发请求头
             $headers = $this->buildForwardHeaders($contentType);
-            
+	    $requestBody=json_encode($requestData,JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT); 
             // 转发到千问API
-            $response = $this->forwardToQwen($method, $headers, $requestBody);  // json_encode($requestData)  //如果强制修改模型替换requestBody
+            $response = $this->forwardToQwen($method, $headers, $requestBody);
             
             // 处理并返回响应
             $this->handleQwenResponse($response);
+	    pdo_query("insert into ai_proxy_log(ip,request,response,referer) values(?,?,?,?)",$ip,$requestBody,$response['content'],$_SERVER['HTTP_REFERER']);
             
         } catch (Exception $e) {
             $this->sendError('代理处理错误: ' . $e->getMessage());
@@ -235,22 +238,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
     exit();
 }
 
-// 设置API Key - 从环境变量或配置文件中读取
-$apiKey = getenv('QWEN_API_KEY');
-if (!$apiKey) {
-    // 如果没有环境变量，可以在这里直接设置
-    $apiKey = "您的合法千问API-KEY";
-}
-
-if (empty($apiKey)) {
-    http_response_code(500);
-    header('Content-Type: application/json');
-    echo json_encode(['error' => '代理配置错误: 缺少API Key']);
-    exit();
-}
-
 // 创建代理实例并处理请求
-$proxy = new QwenProxy($apiKey);
+$proxy = new QwenProxy();
 $proxy->handleProxyRequest();
-
-?>
