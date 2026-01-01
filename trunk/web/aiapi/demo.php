@@ -12,6 +12,7 @@ require_once("../include/my_func.inc.php");
 $url = 'http://demo.hustoj.com/aiapi/proxy.php';
 $apiKey = "设置为阿里云的API-KEY";   //https://bailian.console.aliyun.com/?tab=model#/api-key  创建新的API KEY
 $models=array("qwen-turbo","qwen3-coder-480b-a35b-instruct","qwen3-max","qwen3-coder-30b-a3b-instruct");
+$temperature=0.8;
 
 $http_referer =basename(parse_url( $_SERVER['HTTP_REFERER'])['path']);
 if((isset($_SESSION[$OJ_NAME.'_administrator'])|| isset($_SESSION[$OJ_NAME.'_problem_editor']) ) ){
@@ -57,11 +58,12 @@ if((isset($_SESSION[$OJ_NAME.'_administrator'])|| isset($_SESSION[$OJ_NAME.'_pro
 3. 字数限制：中文10字以内，英文3-5个单词为佳。
 4. 效果要求：无需解释，但需激发强烈的好奇心与故事画面感。
 5. 从古诗、词、成语、名著、神话、小说中寻找灵感，可以直接用一句古诗、或者替换古诗中的名词为现代词汇
-
+6. 不要说什么抱歉之类的话，我只需要一个简短的标题。
 示例参考：鲸鱼背上的古书店、液态时钟、云朵收银机。
 
 现在，请根据以上规则生成一个新的标题。";
                        $prompt_user="今天是".date("Y-m-d H:i:s").",找找最新的热点新闻，最近的节日、历史上的今天，给你一个随机数".rand()."，帮我想一个标题吧，不要多余的解释，就一个标题。";
+				       $temperature=1.2;
                }else{
 
 	       $prompt_sys="1. 你是一个经验丰富的ICPC NOIP 出题人
@@ -234,6 +236,7 @@ $model = $models[array_rand($models)];
 $data = [
     // 此处以qwen-plus为例，可按需更换模型名称。模型列表：https://help.aliyun.com/zh/model-studio/getting-started/models
     "model" => "$model",
+	"temperature" => "$temperature",
     "messages" => [
         [
             "role" => "system",
