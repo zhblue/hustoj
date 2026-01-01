@@ -26,6 +26,7 @@ if((isset($_SESSION[$OJ_NAME.'_administrator'])|| isset($_SESSION[$OJ_NAME.'_pro
 		3. 不要添加\"这是一个...\"、\"以下是...\"等解释性文字
 		4. 直接以import、def、class或注释开始代码
 		5. 确保代码是完整且可执行的
+		6. 严格按照题目要求的范围、难度比例来生成数据
 		现在，写一个Python程序，给下面的题目生成测试输入数据,要求生成10个.in文件，分别命名为test_01.in ~ test_10.in，数据量、数据难度依次增加。";
 	}else if($gen_name=="Main.c" || $gen_name=="Main.cc"){
 		$prompt_sys="你是一个C语言代码生成器。严格遵循以下规则：
