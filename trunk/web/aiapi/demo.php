@@ -49,6 +49,21 @@ if((isset($_SESSION[$OJ_NAME.'_administrator'])|| isset($_SESSION[$OJ_NAME.'_pro
 	$prompt_user="题目是:".$problem ;
        }else if(basename($http_referer)=="problem_add_page.php"){
 	       $title=$_GET['title'];
+		    if($title==""){
+                       $prompt_sys="请创作一个天马行空、富有诗意或超现实意境的标题，具体要求如下：
+
+1. 核心形式：一个简短的名词短语。
+2. 核心手法：将两个看似无关的具象名词（或概念）进行诗意联结。
+3. 字数限制：中文10字以内，英文3-5个单词为佳。
+4. 效果要求：无需解释，但需激发强烈的好奇心与故事画面感。
+5. 可套用公式：[巨大或抽象事物A] + 的 + [日常或微小事物B] 或 [属性A] + 的 + [名词B]。
+
+示例参考：鲸鱼背上的古书店、液态时钟、云朵收银机。
+
+现在，请根据以上规则生成一个新的标题。";
+                       $prompt_user="帮我想一个标题吧，不要多余的解释，就一个标题。";
+               }else{
+
 	       $prompt_sys="1. 你是一个经验丰富的ICPC NOIP 出题人
 2. 出题的时候不输出‘好的，遵照您的要求’这种开头，直接'#题目背景'开始
 3. 以用户给出的题目为题，创作一道小学生级别的NOIP编程题
@@ -153,6 +168,7 @@ text
 ## 提示
 [可选解题思路提示] ";
 	$prompt_user="题目是:".htmlentities($title);
+			}
        }
 }
 if( basename($http_referer)=="reinfo.php" ||  basename($http_referer)=="ceinfo.php"){
