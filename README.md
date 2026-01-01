@@ -150,6 +150,15 @@ Star us, please!
 ## 更新日志
 
 <details open>
+<summary><b>2026年</b></summary>
+	
+日期  | 类型 |  更新内容 | 图
+------- | :--:  | :--: | :-------
+01-01 | 更新 | 允许AI辅助造题，纯鼠标点击的造题模式。
+
+</details>
+
+<details>
 <summary><b>2025年</b></summary>
 	
 日期  | 类型 |  更新内容 | 图
