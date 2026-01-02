@@ -4,6 +4,8 @@ FROM ubuntu:24.04
 #FROM debian:jessie-slim
 
 RUN set -ex \
+	&& echo 'mariadb-server mysql-server/root_password password ""' | debconf-set-selections \
+	&& echo 'mariadb-server mysql-server/root_password_again password ""' |debconf-set-selections \
 	&& apt-get update \
 	&& apt-get install -y \
 		git \
@@ -13,16 +15,11 @@ RUN set -ex \
 		php8.3-memcache memcached \
 		nginx \
 		fp-compiler \
+		mariadb-server \
 		#openjdk-7-jdk \
 		#clang \
 	#&& apt-get remove --purge git
 	&& rm -rf /var/lib/apt/lists/* 
-	
-RUN set -ex \
-	&& echo 'mariadb-server mysql-server/root_password password ""' | debconf-set-selections \
-	&& echo 'mariadb-server mysql-server/root_password_again password ""' |debconf-set-selections \
-	&& apt-get update && apt-get install -y mariadb-server \
-	&& rm -rf /var/lib/apt/lists/*
 	
 RUN set -ex \
 	&& /usr/sbin/useradd -m -u 1536 judge \
