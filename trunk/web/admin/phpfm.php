@@ -3445,7 +3445,7 @@ function dir_list_form() {
             var w = 1150;
             var h = 768;
             // if(confirm('".uppercase(et('Edit'))." \\' '+arg+' \\' ?'))
-            window.open('".addslashes($path_info["basename"])."?action=7&current_dir=".addslashes($current_dir)."&filename='+escape(arg), '', 'width='+w+',height='+h+',fullscreen=no,scrollbars=no,resizable=yes,status=no,toolbar=no,menubar=no,location=no');
+            window.open('".addslashes($path_info["basename"])."?action=7&current_dir=".basename($current_dir)."&filename='+escape(arg), '', 'width='+w+',height='+h+',fullscreen=no,scrollbars=no,resizable=yes,status=no,toolbar=no,menubar=no,location=no');
         }
         function config(){
             var w = 650;
