@@ -215,6 +215,7 @@ if (!isset($OJ_REG_NEED_CONFIRM) || !$OJ_REG_NEED_CONFIRM) {
         $_SESSION[$OJ_NAME . '_' . 'ac'] = array();
         $_SESSION[$OJ_NAME . '_' . 'sub'] = array();
         if ($OJ_SaaS_ENABLE && $domain == $DOMAIN) header("location:modifypage.php#MyOJ");
+         else header("location:index.php");
     }
 }else{
     ?>
@@ -224,5 +225,6 @@ if (!isset($OJ_REG_NEED_CONFIRM) || !$OJ_REG_NEED_CONFIRM) {
 </script>
    <?php
 }
+
 
 
