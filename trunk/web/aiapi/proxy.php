@@ -44,7 +44,7 @@ class QwenProxy
                 $this->sendError('无效的JSON请求体: ' . json_last_error_msg());
                 return;
             }
-            $requestData->model = $model ;  // 如果没有给出模型，覆盖默认模型 
+            $requestData->model = $this->model ;  // 覆盖默认模型 
             // 构建转发请求头
             $headers = $this->buildForwardHeaders($contentType);
 	    $requestBody=json_encode($requestData,JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT); 
