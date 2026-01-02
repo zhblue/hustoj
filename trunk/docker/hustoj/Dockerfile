@@ -29,7 +29,7 @@ RUN set -ex \
 	
 RUN set -ex \
 	&& USER=hustoj \
-	&& PASSWORD=hustoj \
+	&& PASSWORD=`tr -cd '[:alnum:]' < /dev/urandom | fold -w30 | head -n1` \
 	&& CPU=`grep "cpu cores" /proc/cpuinfo |head -1|awk '{print $4}'`   \	
 	&& cd /home/judge/                  \
 	&& mkdir etc data log   \
@@ -57,22 +57,8 @@ RUN set -ex \
 	&& sed -i 's/\t#}/\t}/g' /etc/nginx/sites-enabled/default \
 	&& sed -i 's/#location/location/g' /etc/nginx/sites-enabled/default \
 	&& sed -i "s/post_max_size = 8M/post_max_size = 80M/g" /etc/php/8.3/fpm/php.ini     \
-	&& sed -i "s/upload_max_filesize = 2M/upload_max_filesize = 80M/g" /etc/php/8.3/fpm/php.ini
-
-RUN set -ex \
-	&& cd /home/judge/src/core/judged \
-    && make \
-    && chmod +x judged \
-    && cp judged /usr/bin \
-    && cd ../judge_client \
-    && make \
-    && chmod +x judge_client \
-    && cp judge_client /usr/bin \
-	&& cd /home/judge/ 
-
-RUN set -ex \
-	&& USER=hustoj \
-	&& PASSWORD=hustoj \
+	&& sed -i "s/upload_max_filesize = 2M/upload_max_filesize = 80M/g" /etc/php/8.3/fpm/php.ini \
+	# mariadb配置
 	&& chown -R mysql:mysql /var/lib/mysql  \
 	&& sed -i 's/^bind-address\s*=\s*127.0.0.1/bind-address = 0.0.0.0/' /etc/mysql/mariadb.conf.d/50-server.cnf \
 	&& service mariadb restart \
@@ -83,10 +69,21 @@ RUN set -ex \
 	&& mysql -e "CREATE USER IF NOT EXISTS '$USER'@'localhost' IDENTIFIED BY \"$PASSWORD\";" \
 	&& mysql -e "GRANT ALL PRIVILEGES ON jol.* TO '$USER'@'%';" \
 	&& mysql -e "FLUSH PRIVILEGES;" \
+	&& service mariadb restart \
 	&& mysql -h localhost -u$USER -p"$PASSWORD" < /home/judge/src/install/db.sql \
 	&& mysql -h localhost -u$USER -p"$PASSWORD" -e "INSERT INTO jol.privilege VALUES('admin','administrator','true','N');" \
 	&& service mariadb stop 
-	
+
+RUN set -ex \
+	&& cd /home/judge/src/core/judged \
+    && make \
+    && chmod +x judged \
+    && cp judged /usr/bin \
+    && cd ../judge_client \
+    && make \
+    && chmod +x judge_client \
+    && cp judge_client /usr/bin \
+	&& cd /home/judge/
 	
 RUN chmod +x /home/judge/src/core/make.sh
 RUN cd /home/judge/src/core/ && ./make.sh
