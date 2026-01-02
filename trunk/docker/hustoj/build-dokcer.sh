@@ -16,3 +16,6 @@ SELECT user, host FROM mysql.user;
 CREATE USER 'hustoj'@'localhost' IDENTIFIED BY 'hustoj';
 CREATE USER 'hustoj'@'%' IDENTIFIED BY 'hustoj';
 FLUSH PRIVILEGES;
+
+docker build -f Dockerfile -t hustoj-dev  ./
+docker build -f Dockerfile --no-cache -t hustoj-dev  ./
