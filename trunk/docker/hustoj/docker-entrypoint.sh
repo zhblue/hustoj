@@ -42,11 +42,6 @@ chgrp -R www-data /data/judge.conf
 chmod 770 -R /data/db_info.inc.php
 chgrp -R www-data /data/db_info.inc.php
 
-# 1. 创建www-data组
-groupadd -r www-data
-# 2. 创建www-data用户（并加入组）
-useradd -r -g www-data -s /sbin/nologin www-data
-
 chmod o+x /home/ /home/judge/ /home/judge/src/
 chown -R www-data:www-data /home/judge/src/web/
 chmod -R 755 /home/judge/src/web/
