@@ -11,10 +11,10 @@ RUN set -ex \
 		git \
 		make flex g++  \
 		libmariadb-dev-compat libmariadb-dev \
-		php8.3-fpm php8.3-mysql php8.3-gd php8.3-mbstring php8.3-xml php8.3-zip \
+		php8.3-fpm php8.3-mysql php8.3-gd php8.3-mbstring php8.3-xml php8.3-zip php8.3-curl\
 		php8.3-memcache memcached \
 		nginx \
-		fp-compiler \
+		#fp-compiler \
 		mariadb-server \
 		#openjdk-7-jdk \
 		#clang \
