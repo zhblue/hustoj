@@ -3822,10 +3822,10 @@ subtask的题目中也可以有不跟其他数据绑定的，认为是自己一�
         } else {
             $out .= "
             <tr>
-            <td bgcolor=\"#DDDDDD\" width=\"1%\">$uplink<td bgcolor=\"#DDDDDD\" colspan=50><nobr><a href=\"".$path_info["basename"]."?frame=3&current_dir=$current_dir\">$current_dir</a></nobr>
+            <td bgcolor=\"#DDDDDD\" width=\"1%\"><td bgcolor=\"#DDDDDD\" colspan=50><nobr><a href=\"".$path_info["basename"]."?frame=3&current_dir=".basename($current_dir)."\">".basename($current_dir)."</a></nobr>
             <tr><td bgcolor=\"#DDDDDD\" colspan=50>".et('EmptyDir').".</tr>";
         }
-    } else $out .= "<tr><td><font color=red>".et('IOError').".<br>$current_dir</font>";
+    } else $out .= "<tr><td><font color=red>".et('IOError').".<br>".basename($current_dir)."</font>";
     $out .= "</table>";
     echo $out;
 }
