@@ -23,7 +23,7 @@ RUN set -ex \
 	
 RUN set -ex \
 	&& /usr/sbin/useradd -m -u 1536 judge \
-	&& cd / && git clone https://git.wuxiaoyang.top/shiningrise/hustoj.git \	
+	&& cd / && git clone https://github.com/zhblue/hustoj.git \	
 	&& mv /hustoj/trunk /home/judge/src \
 	&& rm -R /hustoj 
 	
