@@ -55,7 +55,7 @@ service mariadb start
 service php8.3-fpm start
 service nginx start
 
-/bin/bash  
-exit 0 
-
+# /bin/bash  
+# exit 0 
+tail -f /dev/null  # 无限循环，保持容器存活，无需 TTY
 
