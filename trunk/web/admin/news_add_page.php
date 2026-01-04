@@ -45,7 +45,10 @@ if(isset($_POST['pid'])){
   <form method=POST action=news_add.php>
     <p align=left>
       <label class="col control-label"><?php echo $MSG_TITLE?></label>
-      <input type=text name=title size=71 value='<?php echo isset($title)?$title."-Copy":""?>'>
+	  <input class="input input-large" style="width:100%;" size=71 value='<?php echo isset($title)?$title."-Copy":""?>' type=text name='title' id='title' > 
+	  <input type=submit class='btn btn-success' value='<?php echo $MSG_SAVE?>' name=submit> 
+	  <input class='btn btn-primary' id='ai_bt' type=button value='AI一下' onclick='ai_gen()' >
+	  <input class='btn btn-danger'  type=reset value='<?php echo $MSG_RESET?>' onclick='setTimeout("ai_gen()",500);' >
     </p>
     <p align=left>
       <label class="col control-label"><?php echo $MSG_NEWS_MENU?>
@@ -65,3 +68,33 @@ if(isset($_POST['pid'])){
     <?php require_once("../include/set_post_key.php");?>
   </form>
 </div>
+<script>
+
+	function ai_gen(filename){
+		    let oldval=$('#ai_bt').val();
+		    $('#ai_bt').val('AI思考中...请稍候...');
+		    $('#ai_bt').prop('disabled', true);;
+		    let title=$('#title').val();
+		    $.ajax({
+		    	url: '../<?php echo $OJ_AI_API_URL?>', 
+			type: 'GET',
+			data: { title: title },
+			success: function(data) {
+			    console.log(title);
+			    if(title==""){
+				    $('#title').val(data);
+			    }else{
+				    let description="<span class='md'>"+(data)+"</span>";
+				    let preview=$("#previewFrame").contents();
+				    $("textarea").eq(0).val(description); // 假设 #file_data 是 div
+			    }
+		    	    $('#ai_bt').prop('disabled', false);;
+			    $('#ai_bt').val('AI一下');
+			},
+			error: function() {
+			    $('#ai_bt').val('获取数据失败');
+		    	    $('#ai_bt').prop('disabled', false);;
+			}
+		    });
+	}
+</script>
