@@ -4261,7 +4261,7 @@ function edit_file_form(){
     <tr><th colspan=2>".$filename."</th></tr>
     <tr><td colspan=2><textarea id='file_data' name='file_data' style='width:1000px;height:500px;'>".html_encode($file_data)."</textarea></td></tr>
     <tr><td>";
-	if(str_ends_with($filename,".in") || $filename=="Gen.py" || $filename=="Main.c" || $filename == "Main.cc" ) 
+	if(str_ends_with($filename,".in") || $filename=="Gen.py" || str_starts_with($filename,"Main.")  ) 
 		echo "<input id='ai_bt' class='btn btn-primary' type=button value='AI一下' onclick='ai_gen(\"".$filename."\")' >";
      echo "<input type=button value=\"".et('Refresh')."\" class='btn btn-danger' onclick=\"document.edit_form_refresh.submit()\"></td><td align=right><input type=button value=\"".et('SaveFile')."\" onclick=\"go_save()\" class='btn btn-success'></td></tr>
     </form>
