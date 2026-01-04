@@ -269,4 +269,3 @@ if($table){
 	echo ($data->choices[0]->message->content);	
 
 }
-?>
