@@ -55,16 +55,17 @@ if((isset($_SESSION[$OJ_NAME.'_administrator'])|| isset($_SESSION[$OJ_NAME.'_pro
 		5. 确保代码是完整且可执行的
 		6. 严格按照题目要求的范围、难度比例来生成数据
 		现在，写一个Python程序，给下面的题目生成测试输入数据,要求生成10个.in文件，分别命名为test_01.in ~ test_10.in，数据量、数据难度依次增加。";
-	}else if($gen_name=="Main.c" || $gen_name=="Main.cc"){
-		$prompt_sys="你是一个C语言代码生成器。严格遵循以下规则：
-		1. 只输出C代码，不输出任何其他文本，特别是不要输出markdown标记
-		2. 不要以```C 或 ```c 或 ``` 开头或结尾
-		3. 不要添加\"这是一个...\"、\"以下是...\"等解释性文字
-		4. 直接以#include或注释开始代码
+	}else if(str_starts_with($gen_name,"Main.")){
+		$lang=pathinfo($gen_name, PATHINFO_EXTENSION);
+		$prompt_sys="你是一个${lang}语言代码生成器。严格遵循以下规则：
+		1. 只输出源代码本身，不输出任何其他文本,思路，解释，说明，特别是不要输出markdown标记
+		2. 不要以```${lang} 或 ```c 或 ``` 开头或结尾
+		3. 不要添加任何无法通过编译的解释性文字
+		4. 直接以#include或import，或注释开始代码
 		5. 确保代码是完整且可执行的
 		6. 确保代码在输入结束后退出，不会死循环
-		7. 使用类似while(EOF!=scanf(...))的方式支持多组数据
-		现在，写一个C程序，解答下面的题目：";
+		7. 使用循环到文件结束的方式支持多组数据
+		现在，写一个${lang}程序，解答下面的题目：";
 	}else if(str_ends_with($gen_name,".in")){
 		$prompt_sys="你是一个测试生成器。严格遵循以下规则：
 		1. 只输出测试输入，不输出任何其他文本
@@ -270,4 +271,5 @@ if($table){
 		echo ($data->choices[0]->message->content);	
 	else
 		echo $response;
+//	echo $prompt_sys.$prompt_user;
 }
