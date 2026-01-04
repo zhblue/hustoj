@@ -11,4 +11,5 @@ require_once("../include/my_func.inc.php");
 $url = 'https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions';
 $apiKey = "设置为阿里云的API-KEY";   //https://bailian.console.aliyun.com/?tab=model#/api-key  创建新的API KEY
 $models=array("qwen-turbo");  //,"qwen3-coder-480b-a35b-instruct","qwen3-max","qwen3-coder-30b-a3b-instruct"
+$temperature=0.8;
 require_once(dirname(__FILE__)."/common.php");
