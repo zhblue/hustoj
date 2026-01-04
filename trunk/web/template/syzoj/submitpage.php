@@ -81,7 +81,7 @@ echo"<option value=$i ".( $lastlang==$i?"selected":"").">
 <input type=hidden id="encoded_submit_mark" name="reverse2" value="reverse"/>
 <?php }?>
 <?php if (isset($_SESSION[$OJ_NAME.'_administrator'])){?>
-<input class="btn btn-danger" title="AI everythin..." type=button value="AI一下"  onclick="ai_gen('Main.c');" id='ai_bt'>
+<input class="btn btn-danger" title="AI everythin..." type=button value="AI一下"  onclick="ai_gen('Main.'+$('#language option:selected').text().trim());" id='ai_bt'>
 <?php }?>
 <!--选择题状态-->
 <?php if ($spj>1 || !$OJ_TEST_RUN ){?>
