@@ -191,11 +191,11 @@ if (!(isset($_SESSION[$OJ_NAME.'_'.'administrator'])
 	    $user_id=$_SESSION[$OJ_NAME.'_user_id'];
 	    $nick=$_SESSION[$OJ_NAME.'_nick'];
             if(file_exists($current_dir."/Gen.py")  || file_exists($current_dir."/Main.c") || file_exists($current_dir."/Main.cc") ){
-	    		$sql = "INSERT INTO solution(problem_id,user_id,nick,in_date,language,ip,code_length,result) VALUES(?,?,?,NOW(),?,?,?,1)";
-	    		$insert_id = pdo_query($sql, -$pid, $user_id, $nick, 6 , $ip, 0 );
-				echo "$pid pending".$insert_id."<img src='../image/loader.gif'>";
-	            echo "<script>window.setTimeout('resolveIDs()',5000);</script>";    
-	           	trigger_judge($insert_id);     // moved to my_func.inc.php
+    		$sql = "INSERT INTO solution(problem_id,user_id,nick,in_date,language,ip,code_length,result) VALUES(?,?,?,NOW(),?,?,?,1)";
+    		$insert_id = pdo_query($sql, -$pid, $user_id, $nick, 6 , $ip, 0 );
+		echo "$pid pending".$insert_id."<img src='../image/loader.gif'>";
+		echo "<script>window.setTimeout('resolveIDs()',5000);</script>";
+           	trigger_judge($insert_id);     // moved to my_func.inc.php
             }else{
                 echo "未找到Main.c或Main.cc,自动生成空文件Gen.py和Main.c。";
                 touch("Gen.py");
@@ -2870,7 +2870,7 @@ function reloadframe($ref,$frame_number,$Plus=""){
     echo "
     <script language=\"Javascript\" type=\"text/javascript\">
     <!--
-        ".$ref.".frame".$frame_number.".location.href='".$path_info["basename"]."?frame=".$frame_number."&current_dir=".$current_dir.$Plus."';
+        ".$ref.".frame".$frame_number.".location.href='".$path_info["basename"]."?frame=".$frame_number."&current_dir=".basename($current_dir).$Plus."';
     //-->
     </script>
     ";
@@ -3213,8 +3213,13 @@ function dir_list_form() {
             	document.location.href='".addslashes($path_info["basename"])."?frame=3&ans2out=1&current_dir=".addslashes($current_dir)."';
             }
         }
+        function confirm_ai() {
+	    if(confirm('当前目录为空，是否生成占位文件以使用AI生成数据？\\n Generate Empty Files for AI  ?')){
+            	document.location.href='".addslashes($path_info["basename"])."?frame=3&generate=1&current_dir=".addslashes($current_dir)."';
+            }
+        }
         function generate() {
-	    if(confirm('将覆盖所有.out文件，请三思而行！\\n Are you sure about overwrite all .out files ?')){
+	    if(confirm('如果目录不为空,将覆盖所有.out文件，请三思而行！\\n Are you sure about overwrite all .out files ?')){
             	document.location.href='".addslashes($path_info["basename"])."?frame=3&generate=1&current_dir=".addslashes($current_dir)."';
             }
         }
@@ -3823,7 +3828,7 @@ subtask的题目中也可以有不跟其他数据绑定的，认为是自己一�
             $out .= "
             <tr>
             <td bgcolor=\"#DDDDDD\" width=\"1%\"><td bgcolor=\"#DDDDDD\" colspan=50><nobr><a href=\"".$path_info["basename"]."?frame=3&current_dir=".basename($current_dir)."\">".basename($current_dir)."</a></nobr>
-            <tr><td bgcolor=\"#DDDDDD\" colspan=50>".et('EmptyDir').".</tr>";
+            <tr><td bgcolor=\"#DDDDDD\" colspan=50>".et('EmptyDir').".</tr><script>window.setTimeout('confirm_ai()',2000)</script>";
         }
     } else $out .= "<tr><td><font color=red>".et('IOError').".<br>".basename($current_dir)."</font>";
     $out .= "</table>";

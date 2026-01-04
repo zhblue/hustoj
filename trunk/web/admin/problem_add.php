@@ -128,4 +128,5 @@ function phpfm(pid){
     }
   });
 }
+window.setTimeout("phpfm(<?php echo $pid?>);",3000);
 </script>
