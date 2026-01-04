@@ -4336,7 +4336,9 @@ function removeCodeBlockMarkers(str) {
     }
     echo "
         }
-    //-->
+	";
+if($file_data=="" && ($filename=="Gen.py" || str_starts_with($filename,"Main."))) echo "window.setTimeout('ai_gen(\"".$filename."\")',1000);";
+	echo " //-->
     </script>
     </body>\n</html>";
 }
