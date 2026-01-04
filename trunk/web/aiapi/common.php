@@ -238,7 +238,7 @@ $data = [
     ]
 ];
 if(isset($temperature)) 
-	$data["temperature"] = "$temperature";
+	$data["temperature"] = $temperature;
 // 初始化cURL会话
 $ch = curl_init();
 // 设置cURL选项
@@ -266,6 +266,8 @@ if($table){
 	$sql="insert into solution_ai_answer (solution_id,answer) values(?,?)";
 	pdo_query($sql,$sid,$answer);
 }else{
-	echo ($data->choices[0]->message->content);	
-
+	if(isset($data->choices[0]->message->content))
+		echo ($data->choices[0]->message->content);	
+	else
+		echo $response;
 }
