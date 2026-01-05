@@ -1,4 +1,4 @@
-<?php $show_title="$MSG_NEWS - $OJ_NAME"; ?>
+ <?php $show_title="$MSG_NEWS - $OJ_NAME"; ?>
 <?php include("template/$OJ_TEMPLATE/header.php");?>
 <script src="<?php echo "template/bs3/"?>marked.min.js"></script>
 <div class="padding">
@@ -19,7 +19,7 @@
                   async: true,
                   pedantic: false,
                   gfm: true,
-                  mangle: false,
+                  mangle: false,  
                   headerIds: false
                 });
                 $(".md").each(function(){
@@ -55,4 +55,20 @@
 
   });
 </script>
+<?php if (isset($OJ_MATHJAX)&&$OJ_MATHJAX){?>
+    <!--以下为了加载公式的使用而既加入-->
+<script>
+  MathJax = {
+    tex: {inlineMath: [['$', '$'], ['\\(', '\\)']]}
+  };
+</script>
+
+<script id="MathJax-script" async src="template/bs3/tex-chtml.js"></script>
+<style>
+.jumbotron1{
+  font-size: 18px;
+}
+</style>
+
+<?php } ?>
 <?php include("template/$OJ_TEMPLATE/footer.php");?>
