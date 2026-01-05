@@ -114,7 +114,7 @@ $sql = "INSERT INTO `privilege` (`user_id`,`rightstr`) VALUES(?,?)";
 pdo_query($sql, $_SESSION[$OJ_NAME.'_'.'user_id'], "p$pid");
 $_SESSION[$OJ_NAME.'_'."p$pid"] = true;
   
-echo "&nbsp;&nbsp;- <a href='javascript:phpfm($pid);'>Add more TestData now!</a>";
+echo "&nbsp;&nbsp;- <a href='javascript:phpfm($pid);'>$MSG_ADD $MSG_DATA</a>";
 /*  */
 ?>
 
@@ -130,3 +130,4 @@ function phpfm(pid){
 }
 window.setTimeout("phpfm(<?php echo $pid?>);",3000);
 </script>
+
