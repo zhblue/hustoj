@@ -205,6 +205,7 @@ if (!isset($OJ_REG_NEED_CONFIRM) || !$OJ_REG_NEED_CONFIRM) {
     $rows_cnt = count($result);
     if ($rows_cnt == 1) {
         $_SESSION[$OJ_NAME . '_' . 'user_id'] = $user_id;
+        $_SESSION[$OJ_NAME . '_' . 'nick'] = $nick;
         $sql = "SELECT `rightstr` FROM `privilege` WHERE `user_id`=?";
         //echo $sql."<br />";
         $result = pdo_query($sql, $_SESSION[$OJ_NAME . '_' . 'user_id']);
@@ -225,6 +226,7 @@ if (!isset($OJ_REG_NEED_CONFIRM) || !$OJ_REG_NEED_CONFIRM) {
 </script>
    <?php
 }
+
 
 
 
