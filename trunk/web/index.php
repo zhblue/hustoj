@@ -33,6 +33,20 @@ if (!empty($noip_contests)) {
     $noip_contests = rtrim($noip_contests, ",");
     $not_in_noip_contests = " and contest_id not in ( $noip_contests )";
 }
+//新闻翻页
+$sql = "SELECT COUNT('news_id') AS ids FROM `news` where `defunct`!='Y' AND `title`!='faqs.$OJ_LANG' ";
+$result = pdo_query($sql);
+$row = $result[0];
+$ids = intval($row['ids']);
+$idsperpage = 15;
+$pages = intval(ceil($ids/$idsperpage));
+if(isset($_GET['page'])){ $page = intval($_GET['page']);}
+else{ $page = 1;}
+$pagesperframe = 5;
+$frame = intval(ceil($page/$pagesperframe));
+$spage = ($frame-1)*$pagesperframe+1;
+$epage = min($spage+$pagesperframe-1, $pages);
+$sid = ($page-1)*$idsperpage;
 
 // syzoj/sidebar 有自己的新闻查询逻辑，放在了template里面
 if(!($OJ_TEMPLATE=="syzoj" || $OJ_TEMPLATE=="sidebar")) {
