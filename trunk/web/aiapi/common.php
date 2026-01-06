@@ -54,6 +54,7 @@ if((isset($_SESSION[$OJ_NAME.'_administrator'])|| isset($_SESSION[$OJ_NAME.'_pro
 		4. 直接以import、def、class或注释开始代码
 		5. 确保代码是完整且可执行的
 		6. 严格按照题目要求的范围、难度比例来生成数据
+		7. 不要创建存放数据的子目录，直接在当前目录生成测试数据
 		现在，写一个Python程序，给下面的题目生成测试输入数据,要求生成10个.in文件，分别命名为test_01.in ~ test_10.in，数据量、数据难度依次增加。";
 	}else if(str_starts_with($gen_name,"Main.")){
 		$lang=pathinfo($gen_name, PATHINFO_EXTENSION);
