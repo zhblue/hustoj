@@ -276,8 +276,8 @@ curl_close($ch);
 // 输出响应结果
 $data=json_decode($response);
 if($table){
-	$answer=$data->choices[0]->message->content."<br> --- $model  <br><a href='https://github.com/zhblue/hustoj/' target=_blank > 如果你觉得这个系统对你有帮助，请到Github来给我们加个Star⭐吧 </a> ";
-	echo htmlentities($answer);
+	$answer=htmlenties($data->choices[0]->message->content)."<br> --- $model  <br><a href='https://github.com/zhblue/hustoj/' target=_blank > 如果你觉得这个系统对你有帮助，请到Github来给我们加个Star⭐吧 </a> ";
+	echo $answer;
 	$sql="insert into solution_ai_answer (solution_id,answer) values(?,?)";
 	pdo_query($sql,$sid,$answer);
 }else{
