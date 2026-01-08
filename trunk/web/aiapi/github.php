@@ -9,6 +9,7 @@
 // 访问类似 https://docs.github.com/zh/github-models/use-github-models/prototyping-with-ai-models#rate-limits
 // 关注所用模型的速率限制
 require_once("../include/db_info.inc.php");
+require_once("../include/my_func.inc.php");
 // 设置请求的URL
 $url = 'https://models.github.ai/inference/chat/completions';
 $apiKey = "申请你自己的github api key 填写到这里";   //  https://github.com/settings/personal-access-tokens/new  创建新的API KEY
