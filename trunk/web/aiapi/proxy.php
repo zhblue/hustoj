@@ -4,6 +4,7 @@
  * 接收HUSTOJ的请求，添加合法API Key，转发给千问官方API或Hugging face等其他提供免费token的平台
  */
 require_once("../include/db_info.inc.php");
+require_once("../include/my_func.inc.php");
 class QwenProxy
 {
     private $targetUrl = 'https://api.xiaomimimo.com/v1/chat/completions';    // 小米家的mimo 免费用到1.20
