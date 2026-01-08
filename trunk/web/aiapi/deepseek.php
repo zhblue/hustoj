@@ -6,6 +6,7 @@
 // 访问类似 https://platform.deepseek.com/usage
 // 关注所用账户的剩余额度
 require_once("../include/db_info.inc.php");
+require_once("../include/my_func.inc.php");
 // 设置请求的URL
 $url = 'https://api.deepseek.com/chat/completions';
 $apiKey = "sk-你自己申请的api-key";   // https://platform.deepseek.com/api_keys  创建新的API KEY
