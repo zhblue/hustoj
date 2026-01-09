@@ -129,6 +129,20 @@ echo"<option value=$i ".( $lastlang==$i?"selected":"").">
     margin: 0;
     background: border-box;
 }
+        #reinfo {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        #reinfo div {
+            border-radius: 4px;
+            padding: 1px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+            transition: all 0.15s;
+            cursor: default;
+        }
         </style>
          <div class="row">
             <div class="column" style="display: flex;">
@@ -161,10 +175,10 @@ echo"<option value=$i ".( $lastlang==$i?"selected":"").">
     
     </div>
 
-
+	<span id='reinfo' style="display:none"></span>
           <textarea style="
           width:100%;background-color: white;
-          " cols=10 rows=5 id="out" name="out" disabled="true" placeholder='<?php echo htmlentities($view_sample_output,ENT_QUOTES,'UTF-8')?>' ></textarea>    
+          " cols=30 rows=5 id="out" name="out" disabled="true" placeholder='<?php echo htmlentities($view_sample_output,ENT_QUOTES,'UTF-8')?>' ></textarea>    
      </div>
 <?php } ?>
 <?php if (isset($OJ_TEST_RUN)&&$OJ_TEST_RUN && $spj<=1 && !$solution_name  ){?>
@@ -199,70 +213,168 @@ foreach($judge_result as $result){
     echo "'$result',";
 }
 ?>''];
+function removeContentBeforeSeparator(text) {
+    // 查找分隔符 "--|--|--|--|--" 的位置
+    const separator = "filename|size|result|memory|time";
+    const separatorIndex = text.indexOf(separator);
 
+    // 如果找到了分隔符
+    if (separatorIndex !== -1) {
+        // 计算分隔符结束的位置
+        const separatorEndIndex = separatorIndex ;
+
+        // 删除分隔符及其之前的所有内容，返回剩余部分
+        return text.substring(separatorEndIndex);
+    }
+
+    // 如果没有找到分隔符，返回原始字符串
+    return text;
+}
+function parseToCompactCards(data) {
+	console.log(data);
+	data=removeContentBeforeSeparator(data);
+	const lines = data.trim().split('\n');
+	const headers = lines[0].split('|');
+	const dataLines = lines.slice(2);
+	
+	const resultContainer = $('#reinfo');
+	resultContainer.empty();
+	resultContainer.show();
+	
+	// 统计结果
+	let acCount = 0, waCount = 0, reCount = 0;
+	
+	dataLines.forEach(line => {
+	    if (line.trim() === '') return;
+	    
+	    const values = line.split('|');
+	    const item = {};
+	    
+	    headers.forEach((header, index) => {
+		item[header] = values[index] || '';
+	    });
+	    
+	    // 确定结果类型
+	    const resultType = item.result.split('/')[0];
+	    let resultClass = 'warning'; // 默认
+	    
+	    if (resultType === 'AC') {
+		resultClass = 'success';
+	    } else if (resultType === 'PE') {
+		resultClass = 'info';
+		reCount++;
+	    } else if (resultType === 'WA') {
+		resultClass = 'danger';
+		reCount++;
+	    } else {
+		acCount++;
+	    }
+	    
+	    // 创建紧凑卡片
+	    const $card = $(`
+		<div class="label label-${resultClass}" title="${item.filename}">
+		    <span class="filename">${item.filename}</span>
+		    <span class="size">${item.size} B</span><br>
+		    <span class="result">${item.result}</span><br>
+			<span class="stat-item">
+			    <span class="stat-label">内存:</span>
+			    <span class="stat-value">${item.memory}</span>
+			</span><br>
+			<span class="stat-item">
+			    <span class="stat-label">时间:</span>
+			    <span class="stat-value">${item.time}</span>
+			</span>
+		</div>
+	    `);
+	    
+	    resultContainer.append($card);
+	});
+	
+	// 更新统计信息
+	const totalCount = acCount + waCount + reCount;
+	const passRate = totalCount > 0 ? ((acCount / totalCount) * 100).toFixed(1) : 0;
+	
+	$('#statsSummary').html(`
+	    <div class="stats-item">总计: <span class="stats-value">${totalCount}</span></div>
+	    <div class="stats-item">通过率: <span class="stats-value">${passRate}%</span></div>
+	    <div class="stats-item">AC: <span class="stats-value ac-count">${acCount}</span></div>
+	    <div class="stats-item">WA: <span class="stats-value wa-count">${waCount}</span></div>
+	    <div class="stats-item">RE: <span class="stats-value re-count">${reCount}</span></div>
+	`);
+}
 function print_result(solution_id) {
-    var sid = solution_id;
+var sid = solution_id;
 
-    $.ajax({
-        url: "status-ajax.php",
-        type: "GET",
-        data: { tr: 1, solution_id: solution_id },
-        success: function(data) {
-            $("#out").val(data);
-            var resultVariable = data;
-             if (myVariable == 11) {
-                var errorLines = [];
+$.ajax({
+url: "status-ajax.php",
+type: "GET",
+data: { tr: 1, solution_id: solution_id },
+success: function(data) {
+    $("#out").val(data);
+     console.log(jresult);
+    var resultVariable = data;
+     if (jresult== 11) {
+	$("#out").show();
+	var errorLines = [];
 
-                var regex = /(\w+\.<?php echo $language_ext[$lastlang]?>):(\d+):\d+:/g;
-                var match;
-                while ((match = regex.exec(resultVariable)) !== null) {
-                    var lineNumber = parseInt(match[2], 10);
-                    errorLines.push(lineNumber);
-                }
-                
-                errorLines.forEach(function(line) {
-                    var Range = ace.require("ace/range").Range;
-                    var range = new Range(line - 1, 0, line - 1, Infinity);
-                    editor.getSession().addMarker(range, "ace_error_marker", "fullLine", false);
-                });
-            }
-        },
-        error: function(xhr, status, error) {
-            console.error("Error fetching data: ", error);
-        }
-    });
+	var regex = /(\w+\.<?php echo $language_ext[$lastlang]?>):(\d+):\d+:/g;
+	var match;
+	while ((match = regex.exec(resultVariable)) !== null) {
+	    var lineNumber = parseInt(match[2], 10);
+	    errorLines.push(lineNumber);
+	}
+	
+	errorLines.forEach(function(line) {
+	    var Range = ace.require("ace/range").Range;
+	    var range = new Range(line - 1, 0, line - 1, Infinity);
+	    editor.getSession().addMarker(range, "ace_error_marker", "fullLine", false);
+	});
+     }else if(jresult==13){
+	$("#reinfo").hide();
+	$("#out").show();
+     }else{
+	$("#out").hide();
+	$("#reinfo").show();
+	parseToCompactCards(data);	
+     }
+     
+},
+error: function(xhr, status, error) {
+    console.error("Error fetching data: ", error);
+}
+});
 }
 function fancy(td){
-        $("body",parent.document).append("<div id='bannerFancy' style='position:absolute;top:0px;left:0px;width:100%;z-index:3' class='ui main container'></div><audio autoplay=\"autoplay\" preload=\"auto\" src=\"<?php echo $OJ_FANCY_MP3 ?>\"> </audio>");
-        window.setTimeout("$(\"#bannerFancy\",parent.document).html(\"<iframe border=0 src='fancy.php' width='100%' height='800px'></iframe>\");",500);
-        window.setTimeout("$(\"#bannerFancy\",parent.document).remove();",10000);
+$("body",parent.document).append("<div id='bannerFancy' style='position:absolute;top:0px;left:0px;width:100%;z-index:3' class='ui main container'></div><audio autoplay=\"autoplay\" preload=\"auto\" src=\"<?php echo $OJ_FANCY_MP3 ?>\"> </audio>");
+window.setTimeout("$(\"#bannerFancy\",parent.document).html(\"<iframe border=0 src='fancy.php' width='100%' height='800px'></iframe>\");",500);
+window.setTimeout("$(\"#bannerFancy\",parent.document).remove();",10000);
 }
 function fresh_result(solution_id)
 {
-	var tb=window.document.getElementById('result');
-	if(solution_id==undefined){
-		tb.innerHTML="Vcode Error!";		
-		if($("#vcode")!=null) $("#vcode").click();
-		return ;
-	}
-	
-	sid=parseInt(solution_id);
-        if(sid<=0){
-                tb.innerHTML="<?php echo  str_replace("10",$OJ_SUBMIT_COOLDOWN_TIME,$MSG_BREAK_TIME) ?>";
-                if($("#vcode")!=null) $("#vcode").click();
-                return ;
-        }
+var tb=window.document.getElementById('result');
+if(solution_id==undefined){
+	tb.innerHTML="Vcode Error!";		
+	if($("#vcode")!=null) $("#vcode").click();
+	return ;
+}
 
-	var xmlhttp;
-	if (window.XMLHttpRequest)
-	{// code for IE7+, Firefox, Chrome, Opera, Safari
-	xmlhttp=new XMLHttpRequest();
-	}
-	else
-	{// code for IE6, IE5
-	xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
-	}
-	xmlhttp.onreadystatechange=function()
+sid=parseInt(solution_id);
+if(sid<=0){
+	tb.innerHTML="<?php echo  str_replace("10",$OJ_SUBMIT_COOLDOWN_TIME,$MSG_BREAK_TIME) ?>";
+	if($("#vcode")!=null) $("#vcode").click();
+	return ;
+}
+
+var xmlhttp;
+if (window.XMLHttpRequest)
+{// code for IE7+, Firefox, Chrome, Opera, Safari
+xmlhttp=new XMLHttpRequest();
+}
+else
+{// code for IE6, IE5
+xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+}
+xmlhttp.onreadystatechange=function()
 	{
 		if (xmlhttp.readyState==4 && xmlhttp.status==200)
 		{
@@ -277,7 +389,7 @@ function fresh_result(solution_id)
 			// alert(judge_result[r]);
 			var loader="<img width=18 src=image/loader.gif>";
 			var tag="span";
-			window.myVariable = ra[0];
+			window.jresult = ra[0];
 			if(ra[0]<4) tag="span disabled=true";
 			else tag="a";
 			{
