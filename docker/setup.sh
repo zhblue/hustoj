@@ -110,7 +110,7 @@ if ps -C memcached; then
     sed -i 's/static  $OJ_MEMCACHE=false;/static  $OJ_MEMCACHE=true;/g' /home/judge/src/web/include/db_info.inc.php
 fi
 
-printf '%s' 'user_id=admin&nick=admin&password=test2025&rptpassword=test2025&school=hustoj&email=10982766%40qq.com&submit=&csrf=nHdjh9za5dKfjJwSB1siuRe28pwbdSBl' | w3m -dump -cookie -o ssl_verify_server=0 -post - http://zjicm.hustoj.com/register.php 
+printf '%s' 'user_id=admin&nick=admin&password=test2025&rptpassword=test2025&school=hustoj&email=10982766%40qq.com&submit=OK' | w3m -dump -cookie -o ssl_verify_server=0 -post - http://zjicm.hustoj.com/register.php 
 
 w3m -dump -cookie http://127.0.0.1/admin/help.php 
 
