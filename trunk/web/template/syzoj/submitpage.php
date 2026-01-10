@@ -108,7 +108,7 @@ echo"<option value=$i ".( $lastlang==$i?"selected":"").">
                         else
                                 $height="500px";
                 ?>
-                <pre style="width:90%;height:<?php echo $height?>" cols=180 rows=16 id="source"><?php echo htmlentities($view_src,ENT_QUOTES,"UTF-8")?></pre>
+                <pre style="width:99%;height:<?php echo $height?>" cols=180 rows=16 id="source"><?php echo htmlentities($view_src,ENT_QUOTES,"UTF-8")?></pre>
                 <input type=hidden id="hide_source" name="source" value=""/>
 
         <?php }else{ ?>
@@ -180,7 +180,11 @@ echo"<option value=$i ".( $lastlang==$i?"selected":"").">
           width:100%;background-color: white;
           " cols=30 rows=5 id="out" name="out" disabled="true" placeholder='<?php echo htmlentities($view_sample_output,ENT_QUOTES,'UTF-8')?>' ></textarea>    
      </div>
-<?php } ?>
+<?php }else{  ?>
+   <div style="margin-left: 5px; width: 95%; padding: 14px; flex-direction: column;">
+	<span id='reinfo' style="display:none"></span>
+   </div>
+<?php }	 ?>
 <?php if (isset($OJ_TEST_RUN)&&$OJ_TEST_RUN && $spj<=1 && !$solution_name  ){?>
         <!--运行按钮-->
             <input style="
