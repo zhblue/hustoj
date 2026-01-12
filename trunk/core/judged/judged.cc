@@ -374,6 +374,7 @@ int executesql(const char * sql) {
 		if (DEBUG)
 			write_log("%s", mysql_error(conn));
 		sleep(2);
+        mysql_close(conn);	
 		conn = NULL;
 		return 1;
 	} else
