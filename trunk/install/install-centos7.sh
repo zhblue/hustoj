@@ -38,7 +38,7 @@ tar xzf hustoj.tar.gz
 
 #svn co https://github.com/zhblue/hustoj/trunk/trunk/ src
 cd src/install
-while ! wget -O hustoj.docker.tar.bz2  http://dl3.hustoj.com/docker/hustoj.docker.tar.gz
+while ! wget -O hustoj.docker.tar.bz2  http://dl.hustoj.com/docker/hustoj.docker.tar.gz
 do
   		echo "Download archive image file fail , try again..."
 done
