@@ -38,11 +38,11 @@ tar xzf hustoj.tar.gz
 
 #svn co https://github.com/zhblue/hustoj/trunk/trunk/ src
 cd src/install
-while ! wget -O hustoj.docker.tar.bz2  http://dl.hustoj.com/docker/hustoj.docker.tar.gz
+while ! wget -O hustoj.docker.tar.bz2  http://dl.hustoj.com/docker/hustoj.docker.tar.bz2
 do
   		echo "Download archive image file fail , try again..."
 done
-gzip -d hustoj.docker.tar.gz
+bzip2 -d hustoj.docker.tar.bz2
 docker import hustoj.docker.tar hustoj
 rm hustoj.docker.tar.gz
 mysql -h localhost -uroot < db.sql
