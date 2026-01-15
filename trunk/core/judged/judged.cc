@@ -97,7 +97,7 @@ static char docker_path[BUFFER_SIZE];
 static char php_path[BUFFER_SIZE];
 static int internal_client = 1;
 static int oj_dedicated=0;
-static int www_uid= 0;
+static int www_uid= 33;
 
 static bool STOP = false;
 static int DEBUG = 0;
@@ -350,10 +350,7 @@ void run_php_cron(char * work_dir){
 		LIM.rlim_cur = LIM.rlim_max = STD_MB *256 ;
 		setrlimit(RLIMIT_FSIZE, &LIM);
 		// proc limit
-
-		LIM.rlim_cur = LIM.rlim_max = 3;
-		LIM.rlim_cur = LIM.rlim_max = 1;
-
+		LIM.rlim_cur = LIM.rlim_max = 60;
 		setrlimit(RLIMIT_NPROC, &LIM);
 
 		// set the stack
