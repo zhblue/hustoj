@@ -4262,7 +4262,7 @@ function edit_file_form(){
     <tr><td colspan=2><textarea id='file_data' name='file_data' style='width:1000px;height:500px;'>".html_encode($file_data)."</textarea></td></tr>
     <tr><td>";
 	if(str_ends_with($filename,".in") || $filename=="Gen.py" || str_starts_with($filename,"Main.")  ) 
-		echo "<input id='ai_bt' class='btn btn-primary' type=button value='AI一下' onclick='ai_gen(\"".$filename."\")' >*AI生成的代码请人工确认后再执行,如果无法按预期执行请重新生成*";
+		echo "<input id='ai_bt' class='btn btn-primary' type=button value='AI一下' onclick='ai_gen(\"".$filename."\")' >";
      echo "<input type=button value=\"".et('Refresh')."\" class='btn btn-danger' onclick=\"document.edit_form_refresh.submit()\"></td><td align=right><input type=button value=\"".et('SaveFile')."\" onclick=\"go_save()\" class='btn btn-success'></td></tr>
     </form>
     <form name=\"edit_form_refresh\" action=\"".$path_info["basename"]."\" method=\"post\">
@@ -4306,6 +4306,32 @@ function removeCodeBlockMarkers(str) {
     // 如果移除标记后结果为空，返回空字符串
     return result;
 }
+function fill_data(data){
+    $('#file_data').val(removeCodeBlockMarkers(data)); // 假设 #file_data 是 div
+    $('#ai_bt').prop('disabled', false);;
+    $('#ai_bt').val(oldval);
+}
+function pull_result(id){
+	console.log(id);
+    $.ajax({
+	url: '../aiapi/ajax.php', 
+	type: 'GET',
+	data: { id: id },
+	success: function(data) {
+		if(data=='waiting'){
+			window.setTimeout('pull_result('+id+')',2000);
+		}else{
+			fill_data(data);
+		    $('#ai_bt').val('再来一次');
+		    $('#ai_bt').prop('disabled', false);
+		}
+	},
+	error: function() {
+	    $('#ai_bt').val('获取数据失败');
+	    $('#ai_bt').prop('disabled', false);
+	}
+    });
+}
 	function ai_gen(filename){
 		    let oldval=$('#ai_bt').val();
 		    $('#ai_bt').val('AI思考中...请稍候...');
@@ -4315,9 +4341,8 @@ function removeCodeBlockMarkers(str) {
 			type: 'GET',
 			data: { pid: '$pid', filename: filename },
 			success: function(data) {
-			    $('#file_data').val(removeCodeBlockMarkers(data)); // 假设 #file_data 是 div
-		    	    $('#ai_bt').prop('disabled', false);;
-			    $('#ai_bt').val(oldval);
+				if(parseInt(data)>0)
+					window.setTimeout('pull_result('+data+')',2000);
 			},
 			error: function() {
 			    $('#ai_bt').val('获取数据失败');
