@@ -59,7 +59,8 @@
 #define OJ_RE 10
 #define OJ_CE 11
 #define OJ_CO 12
-static char lock_file[BUFFER_SIZE+32]=LOCKFILE;
+static char judged_lock_file[BUFFER_SIZE+32]=LOCKFILE;
+static char php_lock_file[BUFFER_SIZE+32]=LOCKFILE;
 static char host_name[BUFFER_SIZE];
 static char user_name[BUFFER_SIZE];
 static char password[BUFFER_SIZE];
@@ -289,10 +290,47 @@ char * follow_link(char * path,char * buffer,int max_size){
     return buffer;
 
 }
+int lockfile(int fd) {
+	struct flock fl;
+	fl.l_type = F_WRLCK;
+	fl.l_start = 0;
+	fl.l_whence = SEEK_SET;
+	fl.l_len = 0;
+	return (fcntl(fd, F_SETLK, &fl));
+}
+
+int already_running(char * lock_file) {
+	int fd;
+	char buf[16];
+	fd = open(lock_file, O_RDWR | O_CREAT, LOCKMODE);
+	if (fd < 0) {
+		syslog(LOG_ERR | LOG_DAEMON, "can't open %s: %s", LOCKFILE,
+				strerror(errno));
+		exit(1);
+	}
+	if (lockfile(fd) < 0) {
+		if (errno == EACCES || errno == EAGAIN) {
+			close(fd);
+			return 1;
+		}
+		syslog(LOG_ERR | LOG_DAEMON, "can't lock %s: %s", LOCKFILE,
+				strerror(errno));
+		exit(1);
+	}
+	ftruncate(fd, 0);
+	sprintf(buf, "%d", getpid());
+	write(fd, buf, strlen(buf) + 1);
+	return (0);
+}
 void run_php_cron(char * work_dir){
 	int mem_lmt=256;
 	pid_t pidApp = fork();
 	if (pidApp == 0){
+		sprintf(php_lock_file,"%s/cron.pid",work_dir);
+		if(already_running(php_lock_file)){
+			printf("already_running %s",work_dir);
+		       	exit(-4);
+		}
 		if(chdir(work_dir)){
 			printf("fail to chdir %s",work_dir);
 		       	exit(-3);
@@ -737,38 +775,6 @@ int work() {
 	return retcnt;
 }
 
-int lockfile(int fd) {
-	struct flock fl;
-	fl.l_type = F_WRLCK;
-	fl.l_start = 0;
-	fl.l_whence = SEEK_SET;
-	fl.l_len = 0;
-	return (fcntl(fd, F_SETLK, &fl));
-}
-
-int already_running() {
-	int fd;
-	char buf[16];
-	fd = open(lock_file, O_RDWR | O_CREAT, LOCKMODE);
-	if (fd < 0) {
-		syslog(LOG_ERR | LOG_DAEMON, "can't open %s: %s", LOCKFILE,
-				strerror(errno));
-		exit(1);
-	}
-	if (lockfile(fd) < 0) {
-		if (errno == EACCES || errno == EAGAIN) {
-			close(fd);
-			return 1;
-		}
-		syslog(LOG_ERR | LOG_DAEMON, "can't lock %s: %s", LOCKFILE,
-				strerror(errno));
-		exit(1);
-	}
-	ftruncate(fd, 0);
-	sprintf(buf, "%d", getpid());
-	write(fd, buf, strlen(buf) + 1);
-	return (0);
-}
 int daemon_init(void)
 
 {
@@ -824,10 +830,10 @@ int main(int argc, char** argv) {
 		strcpy(oj_home, "/home/judge");
 	chdir(oj_home);    // change the dir
 	
-	sprintf(lock_file,"%s/etc/judge.pid",oj_home);
+	sprintf(judged_lock_file,"%s/etc/judge.pid",oj_home);
 	if (!DEBUG)
 		daemon_init();
-	if ( already_running()) {
+	if ( already_running(judged_lock_file)) {
 		syslog(LOG_ERR | LOG_DAEMON,
 				"This daemon program is already running!\n");
 		printf("%s already has one judged on it!\n",oj_home);
