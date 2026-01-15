@@ -3713,7 +3713,7 @@ int make_out(int solution_id,int p_id,int lang,char * work_dir,double time_lmt,i
 		watch_solution(pidApp, infile, ACflg, spj, userfile, outfile,
 					   solution_id, lang, topmemory, mem_lmt, usedtime, time_lmt,
 					   p_id, PEflg, work_dir);
-		execute_cmd("chown www-data:judge %s/*.out", work_dir);
+		execute_cmd("chgrp judge %s/*.out", work_dir);
 	}
 	if(DEBUG) printf("make out files for problem %d \n",p_id);
 	update_solution(solution_id, OJ_TR, usedtime, topmemory >> 10, 0, 0, 0);
