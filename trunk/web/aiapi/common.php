@@ -2,44 +2,37 @@
 
 $http_referer =basename(parse_url( $_SERVER['HTTP_REFERER'])['path']);
 if((isset($_SESSION[$OJ_NAME.'_administrator'])|| isset($_SESSION[$OJ_NAME.'_problem_editor']) ) ){
-	    $role="带出过多名信奥赛金牌选手的资深教练";
-		$keyword="信奥教学";
+	    $role="有20年Linux运维经验的网络工程师";
+		$keyword="Linux运维";
 		if( basename($http_referer)=="news_add_page.php"){
 			$title=$_GET['title'];
 			$prompt_sys="角色设定 (Persona)
-你是一位拥有10年教学经验、$role。你熟悉很多不同的算法，可以轻易的想出一个有趣的题目或者根据已有的题目写一篇公众号。
-可选的某种算法：
-第一层：通用基础与核心语法
-编程语言基础 (C++ STL, Java, Python)
-基础语法与模拟
-时间与空间复杂度分析
-第二层：基础算法与数据结构 (信奥省选/NOIP & ICPC铜-银牌核心)
-枚举、模拟、贪心
-排序、二分查找、三分查找
-递归、分治
-基础数据结构：数组、链表、栈、队列、(有序)集合/映射、优先队列(堆)、并查集、树状数组、线段树、哈希表、字符串（KMP、字典树）
-基础动态规划：线性DP、背包DP、区间DP、状态压缩DP
-基础图论：图的存储（邻接表、矩阵）、DFS、BFS、拓扑排序、最短路（Dijkstra, Bellman-Ford, SPFA, Floyd）、最小生成树（Prim, Kruskal）、连通分量
-基础数学：数论（质数筛法、GCD、同余）、组合数学（排列组合、卡特兰数）、简单博弈论、高精度计算
-第三层：进阶算法与技巧 (信奥国赛/NOI & ICPC银-金牌关键)
-搜索优化：迭代加深、双向BFS、启发式搜索（A*）、剪枝
-数据结构进阶：可持久化数据结构、树链剖分、平衡树（Treap, Splay）、ST表、莫队算法、块状链表、跳表
-动态规划进阶：树形DP、数位DP、状压DP优化、斜率优化、四边形不等式优化、概率DP
-图论进阶：网络流（最大流、最小割、费用流）、强连通分量、双连通分量、割点与桥、二分图匹配（匈牙利算法、Hopcroft-Karp）、差分约束系统、2-SAT问题、LCA（最近公共祖先）
-数学进阶：扩展欧几里得算法、中国剩余定理、莫比乌斯反演、快速傅里叶变换（FFT）、多项式、线性代数（矩阵快速幂、高斯消元）、概率与期望、群论基础（Burnside引理）
-计算几何：点、线、多边形的基本运算，凸包，旋转卡壳，扫描线，半平面交
-第四层：专题与高级内容 (NOI/ICPC决赛 & 顶级竞赛)
-字符串算法：后缀数组、后缀自动机、回文树（Palindromic Tree）
-动态规划：插头DP、动态DP
-图论：最大团、最小树形图、支配树
-数学：生成函数、组合设计、拟阵、线性规划
-其他：博弈论（SG函数）、随机化算法、近似算法、启发式算法
+你是一位拥有10年教学经验、$role。你熟悉很多不同的实用技巧，可以轻易的想出一个有趣的题目或者根据已有的题目写一篇公众号。
+# Role
+你是一位拥有10年以上实战经验的 Linux 高级运维架构师与技术博主。你精通内核调优、自动化运维、云原生架构及安全加固。
+
+# Task
+你的任务是根据用户的要求，构思并提供若干个高质量、具有实战意义的 Linux 运维文章主题。
+
+# Constraints
+1. 深度与广度结合：主题需涵盖从基础命令技巧、复杂排错案例、生产环境优化到前沿的 DevSecOps 实践。
+2. 随机性与多样性：每次生成的主题应跨越不同的技术维度（网络、磁盘I/O、容器化、Shell脚本、监控告警等）。
+3. 风格要求：标题要专业且具有吸引力（类似于技术社区的精品帖），并附带简短的内容大纲。
+4. 禁止空洞：避免生成“Linux 基础入门”这种过于宽泛的主题，必须聚焦于具体的痛点或进阶场景。
+
 ";
 		if($title==""){
-			$prompt_sys.="你是个熟悉各类算法的工程师，可以想出一些有趣的标题。你言简意赅，只做非常简练的回答，不做任何解释。这个标题不会包含任何的markdown标记";
-			$prompt_user="帮我想一个$keyword的吸引人的标题,随机挑选一个$keyword学习主题，不局限于某种算法，只要一个标题，不要多余的解释，只要标题，不要超过20个字" ;
+			$prompt_sys.="你可以想出一些有趣的标题。你言简意赅，只做非常简练的回答，不做任何解释。这个标题不会包含任何的markdown标记,长度不要超过30字符";
+			$prompt_user="想一个$keyword的吸引人的标题,随机挑选一个$keyword学习主题，不局限于某种算法，只要一个标题，不要多余的解释，只要标题，不要超过20个字" ;
 		}else{
-			$prompt_user="帮我写一篇$keyword公众号文，题目是:".$title ."，不要多余的解释,不要'好的，这是你要的....'，我需要直接复制粘贴到公众号后台中使用,所以只需要文章本身，从$title\n--开始";
+			$prompt_sys.="
+# Output Format
+请按以下格式输出：
+### [主题标题]
+- **核心技术栈**：(例如: eBPF, Prometheus, Ansible)
+- **目标读者**：(初级/中级/高级运维)
+- **内容要点**：(3-4个核心知识点)";
+			$prompt_user="写一篇$keyword公众号文，题目是:".$title ."，不要多余的解释,不要'好的，这是你要的....'，我需要直接复制粘贴到公众号后台中使用,所以只需要文章本身，从$title\n--开始";
 
 		}
 	}else if(str_starts_with( basename($http_referer),"phpfm.php")|| str_starts_with( basename($http_referer),"submitpage.php") ){
@@ -66,6 +59,7 @@ if((isset($_SESSION[$OJ_NAME.'_administrator'])|| isset($_SESSION[$OJ_NAME.'_pro
 		5. 确保代码是完整且可执行的
 		6. 确保代码在输入结束后退出，不会死循环
 		7. 使用循环到文件结束的方式支持多组数据
+		8. 确保样例能通过
 		现在，写一个${lang}程序，解答下面的题目：";
 	}else if(str_ends_with($gen_name,".in")){
 		$prompt_sys="你是一个测试生成器。严格遵循以下规则：
@@ -104,10 +98,9 @@ if((isset($_SESSION[$OJ_NAME.'_administrator'])|| isset($_SESSION[$OJ_NAME.'_pro
 问题直观：题目描述能让小学生直接理解要解决的问题
 
 5. 难度控制标准
-知识点：仅使用小学1-6年级数学知识
-算法：基础循环、条件判断、简单数组
+知识点：仅使用小学到初中数学知识
 复杂度：O(n)或O(n²)可接受解法
-代码量：目标解≈20-50行代码
+代码量：目标解≈50-100行代码
 
 6. 验证要求
 样例能手工验证
@@ -140,7 +133,7 @@ if((isset($_SESSION[$OJ_NAME.'_administrator'])|| isset($_SESSION[$OJ_NAME.'_pro
 - 不要使用markdown的#标题格式
 - 确保JSON格式正确可解析
 - 每个字段只输出一次内容
-- 公式可以用单个美元符号的mathjax语法,每个用于标注mathjax格式公式的美元符号前后需加空格。 
+- 公式可以用单个美元符号的mathjax语法,每个用于标注mathjax格式公式的美元符号前后需加空格。
 
 9. 提示是最后一项内容，之后不要再重复输出题目
 10. 公式可以用mathjax语法 用一个美元符号做为mathjax 标记
@@ -171,7 +164,6 @@ if((isset($_SESSION[$OJ_NAME.'_administrator'])|| isset($_SESSION[$OJ_NAME.'_pro
 图论：最大团、最小树形图、支配树
 数学：生成函数、组合设计、拟阵、线性规划
 其他：博弈论（SG函数）、随机化算法、近似算法、启发式算法
-
 ";
         $prompt_user="题目信息**只输出一次**，题目是:".htmlentities($title);
 
@@ -231,11 +223,6 @@ if( basename($http_referer)=="reinfo.php" ||  basename($http_referer)=="ceinfo.p
 
 }
 
-// 设置请求头
-$headers = [
-    'Authorization: Bearer '.$apiKey,
-    'Content-Type: application/json'
-];
 $model = $models[array_rand($models)];
 // 设置请求体
 $data = [
@@ -253,37 +240,10 @@ $data = [
     ]
 ];
 if(isset($temperature)) 
-	$data["temperature"] = $temperature;
-// 初始化cURL会话
-$ch = curl_init();
-// 设置cURL选项
-curl_setopt($ch, CURLOPT_URL, $url);
-curl_setopt($ch, CURLOPT_POST, true);
-curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
-curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-curl_setopt($ch, CURLOPT_REFERER, $domain );
-curl_setopt($ch, CURLOPT_TIMEOUT, 60);
-// 执行cURL会话
-$response = curl_exec($ch);
-// 检查是否有错误发生
-if (curl_errno($ch)) {
-    echo 'Curl error: ' . curl_error($ch);
-	exit();   // 超时等错误发生时，不将结果入库，下次还能重试。
-}
-// 关闭cURL资源
-curl_close($ch);
-// 输出响应结果
-$data=json_decode($response);
-if($table){
-	$answer=htmlentities($data->choices[0]->message->content)."<br> --- $model  <br><a href='https://github.com/zhblue/hustoj/' target=_blank > 如果你觉得这个系统对你有帮助，请到Github来给我们加个Star⭐吧 </a> ";
-	echo $answer;
-	$sql="insert into solution_ai_answer (solution_id,answer) values(?,?)";
-	pdo_query($sql,$sid,$answer);
-}else{
-	if(isset($data->choices[0]->message->content))
-		echo ($data->choices[0]->message->content);	
-	else
-		echo $response;
-//	echo $prompt_sys.$prompt_user;
-}
+	$data["temperature"] = $temperature;   
+$sql="insert into openai_task_queue (user_id,task_type,solution_id,request_body,status,create_date,update_date) values(?,?,?,?,0,now(),now())";
+if(!isset($sid)) $sid=0;
+$insert_id=pdo_query($sql,$_SESSION[$OJ_NAME.'_user_id'],basename($http_referer),$sid,json_encode($data));
+echo $insert_id;
+trigger_judge($insert_id);     // moved to my_func.inc.php
+
