@@ -61,4 +61,3 @@ $temperature=0.8;
 			}
 		}
 	}
-	sleep(1);
