@@ -885,6 +885,10 @@ int main(int argc, char** argv) {
 		}
 		turbo_mode2();
 		
+		if (ONCE && access(php_cron, R_OK ) != -1){
+			if(DEBUG) printf("Run PHP Cron job: %s\n", php_cron);
+			run_php_cron(php_path);
+		}
 		if(ONCE && j==0) break;
                 if(n==0){
 			printf("workcnt:%d\n",workcnt);
@@ -897,7 +901,7 @@ int main(int argc, char** argv) {
 					}
 				}
                         	if(DEBUG) printf("udp job ... \n");
-
+				waitpid(-1, NULL, WNOHANG);     // wait 4 one child exit
 			}else{
                         	sleep(sleep_time);
                         	if(DEBUG) printf("sleeping ... %ds \n",sleep_time);
