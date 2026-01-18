@@ -285,7 +285,11 @@ for ($i = 0; $i < $user_cnt; $i++) {
     if (strpos($_SERVER['HTTP_USER_AGENT'], 'MSIE')) {
         $U[$i]->nick = iconv("utf8", "gbk", $U[$i]->nick);
     }
-    echo "<td>" . $U[$i]->nick . "</td>";
+    $nick = $row['nick'];
+    if (preg_match('/^[=+-@]/', $nick)) {
+    $nick = "'" . $nick;
+    }
+    echo "<td>" . htmlspecialchars($nick). "</td>";
     echo "<td>$usolved</td>";
     echo "<td>";
     if ($usolved == 0) $U[$i]->mark = 0;
@@ -306,4 +310,5 @@ for ($i = 0; $i < $user_cnt; $i++) {
     echo "</tr>";
 }
 echo "</table>";
+
 
