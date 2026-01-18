@@ -119,7 +119,11 @@
 
                         $view_rank[$i][0]= $rank;
                         $view_rank[$i][1]=  $row['user_id'];
-                        $view_rank[$i][2]=  htmlentities ( $row['nick'] ,ENT_QUOTES,"UTF-8");
+					    $nick = $row['nick'];
+						if (preg_match('/^[=+-@]/', $nick)) {
+							$nick = "'" . $nick;
+						}
+                        $view_rank[$i][2]=  htmlentities ( $nick ,ENT_QUOTES,"UTF-8");
                         $view_rank[$i][3]=  $row['solved'];
                         $view_rank[$i][4]=   $row['submit'];
 
