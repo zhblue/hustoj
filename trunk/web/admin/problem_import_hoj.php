@@ -120,7 +120,7 @@ else {
     while ($dir_resource = zip_read($resource)) {
       if (zip_entry_open($resource,$dir_resource)) {
         $file_name = $path.zip_entry_name($dir_resource);
-		$file_name=str_replace('../', '', $file_name);
+		$file_name = getSafeZipPath($tempdir,$file_name);
         $file_path = substr($file_name,0,strrpos($file_name, "/"));
         if (!is_dir($file_name)) {
           $file_size = zip_entry_filesize($dir_resource);
@@ -147,7 +147,7 @@ else {
     while ($dir_resource = zip_read($resource)) {
       if (zip_entry_open($resource,$dir_resource)) {
         $file_name = $path.zip_entry_name($dir_resource);
-		$file_name=str_replace('../', '', $file_name);
+		$file_name = getSafeZipPath($tempdir,$file_name);
         $file_path = substr($file_name,0,strrpos($file_name, "/"));
         if (!is_dir($file_name)) {
           $file_size = zip_entry_filesize($dir_resource);
