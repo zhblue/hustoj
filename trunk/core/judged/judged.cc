@@ -354,8 +354,8 @@ void run_php_cron(char * work_dir){
 		setrlimit(RLIMIT_NPROC, &LIM);
 
 		// set the stack
-		LIM.rlim_cur = STD_MB << 8;
-		LIM.rlim_max = STD_MB << 8;
+		LIM.rlim_cur = STD_MB << 3;
+		LIM.rlim_max = STD_MB << 4;
 		setrlimit(RLIMIT_STACK, &LIM);
 		// set the memory
 		LIM.rlim_cur = STD_MB * mem_lmt / 2 * 3;
