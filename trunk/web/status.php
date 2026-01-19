@@ -490,16 +490,6 @@ if (isset($_GET['cid']))
 else
     require("template/" . $OJ_TEMPLATE . "/status.php");
 
-
-//触发Remote judge模块
-$remote_delay = 5;   //最小轮询周期，单位秒
-if ($need_refresh_remote && isset($OJ_REMOTE_JUDGE) && $OJ_REMOTE_JUDGE && (time() - fileatime("remote.php") > $remote_delay)) {
-    touch("remote.php");
-    ?>
-    <iframe src='remote.php' width=0 height=0></iframe>
-    <?php
-}
-
 /////////////////////////Common foot
 if (file_exists('./include/cache_end.php'))
     require_once('./include/cache_end.php');
