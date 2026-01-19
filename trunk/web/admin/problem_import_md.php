@@ -1,7 +1,7 @@
 <?php
 ini_set("display_errors", "Off");  //set this to "On" for debugging  ,especially when no reason blank shows up.
 require_once ("admin-header.php");
-//require_once("../include/check_post_key.php");
+require_once("../include/check_post_key.php");
 
 if (!(isset($_SESSION[$OJ_NAME.'_'.'administrator'])||isset($_SESSION[$OJ_NAME.'_problem_importer'])  )) {
   echo "<a href='../loginpage.php'>Please Login First!</a>";
