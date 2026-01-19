@@ -72,7 +72,7 @@
         <input class='form-control' type=file name=fps>
         <button class='btn btn-success btn-sm' type=submit>Upload to HUSTOJ</button>
       </div>
-      <?php require_once("../include/set_post_key.php");?>
+      <?php require("../include/set_post_key.php");?>
     </form>
 	  <hr>
 -  QDUOJ - json - zip<br>应该是真的QDUOJ，未严格测试，感谢[温十六中]吴晓阳提供例子文件<br>
@@ -81,7 +81,7 @@
         <input class='form-control' type=file name=fps>
         <button class='btn btn-info btn-sm' type=submit>Upload to HUSTOJ</button>
       </div>
-      <?php require_once("../include/set_post_key.php");?>
+      <?php require("../include/set_post_key.php");?>
     </form> <hr>
     - SYZOJ - zip<br><br>
     <form class='form-inline' action='problem_import_syzoj.php' method=post enctype="multipart/form-data">
@@ -89,7 +89,7 @@
         <input class='form-control' type=file name=fps>
         <button class='btn btn-warning btn-sm' type=submit>Upload to HUSTOJ</button>
       </div>
-      <?php require_once("../include/set_post_key.php");?>
+      <?php require("../include/set_post_key.php");?>
     </form> <hr>
     - HydroOJ - zip<br><br>
     <form class='form-inline' action='problem_import_hydro.php' method=post enctype="multipart/form-data">
@@ -97,7 +97,7 @@
         <input class='form-control' type=file name=fps>
         <button class='btn btn-danger btn-sm' type=submit>Upload to HUSTOJ</button>
       </div>
-      <?php require_once("../include/set_post_key.php");?>
+      <?php require("../include/set_post_key.php");?>
     </form> <hr>
     - HOJ - zip<br><br>
     <form class='form-inline' action='problem_import_hoj.php' method=post enctype="multipart/form-data">
@@ -105,7 +105,7 @@
         <input class='form-control' type=file name=fps>
         <button class='btn btn-info btn-sm' type=submit>Upload to HUSTOJ</button>
       </div>
-      <?php require_once("../include/set_post_key.php");?>
+      <?php require("../include/set_post_key.php");?>
     </form>
     - TYVJ - zip<br><br>
     <form class='form-inline' action='problem_import_tyvj.php' method=post enctype="multipart/form-data">
@@ -113,7 +113,7 @@
         <input class='form-control' type=file name=fps>
         <button class='btn btn-primary btn-sm' type=submit>Upload to HUSTOJ</button>
       </div>
-      <?php require_once("../include/set_post_key.php");?>
+      <?php require("../include/set_post_key.php");?>
     </form>
    - Markdown - zip<br>zip压缩的.md文件，首行为标题<br>
     <form class='form-inline' action='problem_import_md.php' method=post enctype="multipart/form-data">
@@ -121,7 +121,7 @@
         <input class='form-control' type=file name=fps>
         <button class='btn btn-warning btn-sm' type=submit>Upload to HUSTOJ</button>
       </div>
-      <?php require_once("../include/set_post_key.php");?>
+      <?php require("../include/set_post_key.php");?>
     </form>
 
     <?php } ?>
@@ -143,3 +143,4 @@
 
 </body>
 </html>
+

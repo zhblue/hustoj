@@ -18,6 +18,36 @@ if (!function_exists('mb_trim')) {
 	    return preg_replace('/^['.$trim_chars.']*(?U)(.*)['.$trim_chars.']*$/u', '\\1',$string);
 	}
 }
+function getSafeZipPath($baseDir, $entryName) {
+    // 1. 统一分隔符，防止 Windows/Unix 混合攻击
+    $entryName = str_replace(['\\', '/'], DIRECTORY_SEPARATOR, $entryName);
+
+    // 2. 拆分路径并过滤掉 "." 和空值，处理 ".."
+    $parts = explode(DIRECTORY_SEPARATOR, $entryName);
+    $safeParts = [];
+    foreach ($parts as $part) {
+        if ($part === '.' || $part === '') continue;
+        if ($part === '..') {
+            array_pop($safeParts); // 向上跳一级
+        } else {
+            $safeParts[] = $part;
+        }
+    }
+    
+    // 3. 重新组合
+    $safeRelativePath = implode(DIRECTORY_SEPARATOR, $safeParts);
+    
+    // 4. 计算最终绝对路径
+    $realBase = realpath($baseDir);
+    $finalPath = $realBase . DIRECTORY_SEPARATOR . $safeRelativePath;
+
+    // 5. 关键安全检查：最终路径必须依然以 baseDir 开头
+    if (strpos($finalPath, $realBase) !== 0) {
+        throw new Exception("检测到路径遍历攻击: $entryName");
+    }
+
+    return $finalPath;
+}
 function myLocation($ip){
         $locations=array(
                         array(ip2long("10.1.48.1"),ip2long("10.1.48.54"),"X504A"),
@@ -661,6 +691,7 @@ function exportToExcel($filename='file', $tileArray=[], $dataArray=[],$cut=true)
         flush();
         ob_end_clean();
 }
+
 
 
 

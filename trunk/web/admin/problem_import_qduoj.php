@@ -1,6 +1,6 @@
 <?php
 require_once ("admin-header.php");
-//require_once("../include/check_post_key.php");
+require_once("../include/check_post_key.php");
 
 if (!(isset($_SESSION[$OJ_NAME.'_'.'administrator'])||isset($_SESSION[$OJ_NAME.'_problem_importer'])  )) {
   echo "<a href='../loginpage.php'>Please Login First!</a>";
@@ -119,6 +119,7 @@ else {
     while ($dir_resource = zip_read($resource)) {
       if (zip_entry_open($resource,$dir_resource)) {
         $file_name = $path.zip_entry_name($dir_resource);
+		$file_name = getSafeZipPath($tempdir,$file_name);
         $file_path = substr($file_name,0,strrpos($file_name, "/"));
         if (!is_dir($file_name)) {
           $file_size = zip_entry_filesize($dir_resource);
@@ -144,6 +145,7 @@ else {
     while ($dir_resource = zip_read($resource)) {
       if (zip_entry_open($resource,$dir_resource)) {
         $file_name = $path.zip_entry_name($dir_resource);
+		$file_name = getSafeZipPath($tempdir,$file_name);
         $file_path = substr($file_name,0,strrpos($file_name, "/"));
         if (!is_dir($file_name)) {
           $file_size = zip_entry_filesize($dir_resource);
