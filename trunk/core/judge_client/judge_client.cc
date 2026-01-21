@@ -2114,7 +2114,7 @@ void prepare_files(char *filename, int namelen, char *infile, int &p_id,
  	if (access(noip_file_name, R_OK ) != -1){
 		if(DEBUG) printf("NOIP filename:%s\n",noip_file_name);
 		FILE * fpname=fopen(noip_file_name,"r");
-		if(fscanf(fpname,"%s",noip_file_name)){
+		if (fscanf(fpname, "%s", noip_file_name) == 1){
 		    execute_cmd("/bin/cp '%s' %s/%s", infile, work_dir,basename(noip_file_name));   // 如果存在input.name则复制测试数据
 		     execute_cmd("/usr/bin/chown judge %s/%s", work_dir,basename(noip_file_name));   // 修改属主
 		    if(DEBUG) printf("NOIP filename:%s\n",noip_file_name);
@@ -2131,12 +2131,12 @@ void prepare_files(char *filename, int namelen, char *infile, int &p_id,
 	if(DEBUG) printf("NOIP filename:%s\n",noip_file_name);
 	FILE * fpname = fopen(noip_file_name, "r");
 	if (fpname != NULL){
-		if (fscanf(fpname, "%s", noip_file_name) == 1) {
+		if (fscanf(fpname, "%s", noip_file_name) == 1){
 		    if(DEBUG) printf("NOIP filename:%s\n",noip_file_name);
 		    if(!strstr("noip_file_name","//")){
                             sprintf(userfile, "%s/run%d/%s", oj_home, runner_id,basename(noip_file_name));
                             execute_cmd("rm %s",userfile);
-                    }
+        }
 		}
 		fclose(fpname);
 	}else{
