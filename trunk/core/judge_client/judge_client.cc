@@ -2129,8 +2129,8 @@ void prepare_files(char *filename, int namelen, char *infile, int &p_id,
 
 	sprintf(noip_file_name,"%s/data/%d/output.name",oj_home,p_id);
 	if(DEBUG) printf("NOIP filename:%s\n",noip_file_name);
- 	if (access(noip_file_name, R_OK ) != -1){	
-		FILE * fpname=fopen(noip_file_name,"r");
+	FILE * fpname = fopen(noip_file_name, "r");
+	if (fpname != NULL){
 		if(fscanf(fpname,"%s",noip_file_name)){
 		    if(DEBUG) printf("NOIP filename:%s\n",noip_file_name);
 		    if(!strstr("noip_file_name","//")){
