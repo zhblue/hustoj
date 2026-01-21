@@ -13,6 +13,8 @@ $url = 'http://demo.hustoj.com/aiapi/proxy.php';   // 千问是：'https://dashs
 $apiKey = "设置为阿里云的API-KEY";   //https://bailian.console.aliyun.com/?tab=model#/api-key  创建新的API KEY
 $models=array("qwen-turbo","qwen3-coder-480b-a35b-instruct","qwen3-max","qwen3-coder-30b-a3b-instruct");
 $temperature=0.8;
+$did=0;
+do{
 	$sql="select * from openai_task_queue where status=0 ";
 	$tasks=pdo_query($sql);
 
@@ -59,5 +61,7 @@ $temperature=0.8;
 
 			}else{
 			}
+			$did++;
 		}
 	}
+}while($did>0);
