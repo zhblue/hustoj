@@ -2131,7 +2131,7 @@ void prepare_files(char *filename, int namelen, char *infile, int &p_id,
 	if(DEBUG) printf("NOIP filename:%s\n",noip_file_name);
 	FILE * fpname = fopen(noip_file_name, "r");
 	if (fpname != NULL){
-		if(fscanf(fpname,"%s",noip_file_name)){
+		if (fscanf(fpname, "%s", noip_file_name) == 1) {
 		    if(DEBUG) printf("NOIP filename:%s\n",noip_file_name);
 		    if(!strstr("noip_file_name","//")){
                             sprintf(userfile, "%s/run%d/%s", oj_home, runner_id,basename(noip_file_name));
