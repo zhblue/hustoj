@@ -220,7 +220,171 @@ function untransform() {
     $("input").off('keyup', sync);
     $("textarea").off('keyup', sync);
 }
+function fill_data( data ){
 
+   let title=$('#title').val();
+	    console.log(title);
+		if(title==""){
+				$('#title').val(data);
+		}else{
+		    // 尝试以JSON格式解析AI输出内容
+		    let parsedData = null;
+		    
+		    // 先检查是否是分隔符格式
+		    if(data.indexOf('###TITLE###') !== -1){
+			console.log("检测到分隔符格式");
+			let sections = data.split('###');
+			parsedData = {};
+			
+			for(let i = 0; i < sections.length; i++){
+			    let section = sections[i].trim();
+			    if(section.startsWith('TITLE###')){
+				parsedData.title = section.replace('TITLE###', '').trim();
+			    } else if(section.startsWith('DESCRIPTION###')){
+				parsedData.description = section.replace('DESCRIPTION###', '').trim();
+			    } else if(section.startsWith('INPUT###')){
+				parsedData.input = section.replace('INPUT###', '').trim();
+			    } else if(section.startsWith('OUTPUT###')){
+				parsedData.output = section.replace('OUTPUT###', '').trim();
+			    } else if(section.startsWith('SAMPLE_INPUT###')){
+				parsedData.sample_input = section.replace('SAMPLE_INPUT###', '').trim();
+			    } else if(section.startsWith('SAMPLE_OUTPUT###')){
+				parsedData.sample_output = section.replace('SAMPLE_OUTPUT###', '').trim();
+			    } else if(section.startsWith('HINT###')){
+				parsedData.hint = section.replace('HINT###', '').trim();
+			    }
+			}
+		    } else {
+			// 尝试解析JSON
+			try {
+			    console.log("尝试解析JSON格式");
+			    parsedData = JSON.parse(data);
+			    console.log("JSON解析成功");
+			} catch(e) {
+			    console.log("JSON解析失败,使用旧格式");
+			    // 如果解析失败,按旧格式处理
+			    let description = "<span class='md'>" + data + "</span>";
+			    $("textarea[name='description']").val(description);
+			    parsedData = null;
+			}
+		    }
+		    
+		    // 如果成功解析出结构化数据,填充表单
+		    if(parsedData && typeof parsedData === 'object') {
+			console.log("=== 解析后的数据 ===");
+			console.log(parsedData);
+			
+			// 填充到对应的表单字段
+			if(parsedData.title) {
+			    $('#title').val(parsedData.title);
+			    console.log("填充title:", parsedData.title);
+			}
+			
+			// 处理description - 需要特殊处理kindeditor
+			if(parsedData.description) {
+			    let descContent = "<span class='md'>" + parsedData.description + "</span>";
+			    // 先尝试设置textarea的值
+			    $("textarea[name='description']").val(descContent);
+			    // 如果有kindeditor实例,也设置它的值
+			    try {
+				if(typeof KindEditor !== 'undefined') {
+				    let editor = KindEditor.instances[0]; // 第一个编辑器是description
+				    if(editor) {
+					editor.html(descContent);
+					console.log("通过KindEditor设置description成功");
+				    }
+				}
+			    } catch(e) {
+				console.log("KindEditor设置失败,已使用textarea方式:", e);
+			    }
+			    console.log("填充description");
+			}
+			
+			// 处理input - 也是kindeditor
+			if(parsedData.input) {
+			    let inputContent = "<span class='md'>" + parsedData.input + "</span>";
+			    $("textarea[name='input']").val(inputContent);
+			    try {
+				if(typeof KindEditor !== 'undefined') {
+				    let editor = KindEditor.instances[1]; // 第二个编辑器是input
+				    if(editor) {
+					editor.html(inputContent);
+				    }
+				}
+			    } catch(e) {
+				console.log("KindEditor input设置失败:", e);
+			    }
+			    console.log("填充input");
+			}
+			
+			// 处理output - 也是kindeditor
+			if(parsedData.output) {
+			    let outputContent = "<span class='md'>" + parsedData.output + "</span>";
+			    $("textarea[name='output']").val(outputContent);
+			    try {
+				if(typeof KindEditor !== 'undefined') {
+				    let editor = KindEditor.instances[2]; // 第三个编辑器是output
+				    if(editor) {
+					editor.html(outputContent);
+				    }
+				}
+			    } catch(e) {
+				console.log("KindEditor output设置失败:", e);
+			    }
+			    console.log("填充output");
+			}
+			
+			if(parsedData.sample_input) {
+			    $("textarea[name='sample_input']").val(parsedData.sample_input);
+			    console.log("填充sample_input");
+			}
+			if(parsedData.sample_output) {
+			    $("textarea[name='sample_output']").val(parsedData.sample_output);
+			    console.log("填充sample_output");
+			}
+			
+			// 处理hint - 也是kindeditor
+			if(parsedData.hint) {
+			    let hintContent = "<span class='md'>" + parsedData.hint + "</span>";
+			    $("textarea[name='hint']").val(hintContent);
+			    try {
+				if(typeof KindEditor !== 'undefined') {
+				    let editor = KindEditor.instances[3]; // 第四个编辑器是hint
+				    if(editor) {
+					editor.html(hintContent);
+				    }
+				}
+			    } catch(e) {
+				console.log("KindEditor hint设置失败:", e);
+			    }
+			    console.log("填充hint");
+			}
+		     }
+
+   	}
+	window.setTimeout('sync()',1000);
+	$('#ai_bt').prop('disabled', false);;
+	$('#ai_bt').val('AI一下');
+}
+function pull_result(id){
+	console.log(id);
+    $.ajax({
+	url: '../aiapi/ajax.php', 
+	type: 'GET',
+	data: { id: id },
+	success: function(data) {
+		if(data=="waiting"){
+			window.setTimeout('pull_result('+id+')',1000);
+		}else{
+			fill_data(data);
+		}
+	},
+	error: function() {
+	    $('#ai_bt').val('获取数据失败');
+	$('#ai_bt').prop('disabled', false);
+	}
+    });
+}
 	function ai_gen(filename){
 		    let oldval=$('#ai_bt').val();
 		    $('#ai_bt').val('AI思考中...请稍候...');
@@ -231,148 +395,8 @@ function untransform() {
 			type: 'GET',
 			data: { title: title },
 			success: function(data) {
-			    console.log(title);
-				if(title==""){
-						$('#title').val(data);
-				}else{
-				    // 尝试以JSON格式解析AI输出内容
-                    let parsedData = null;
-                    
-                    // 先检查是否是分隔符格式
-                    if(data.indexOf('###TITLE###') !== -1){
-                        console.log("检测到分隔符格式");
-                        let sections = data.split('###');
-                        parsedData = {};
-                        
-                        for(let i = 0; i < sections.length; i++){
-                            let section = sections[i].trim();
-                            if(section.startsWith('TITLE###')){
-                                parsedData.title = section.replace('TITLE###', '').trim();
-                            } else if(section.startsWith('DESCRIPTION###')){
-                                parsedData.description = section.replace('DESCRIPTION###', '').trim();
-                            } else if(section.startsWith('INPUT###')){
-                                parsedData.input = section.replace('INPUT###', '').trim();
-                            } else if(section.startsWith('OUTPUT###')){
-                                parsedData.output = section.replace('OUTPUT###', '').trim();
-                            } else if(section.startsWith('SAMPLE_INPUT###')){
-                                parsedData.sample_input = section.replace('SAMPLE_INPUT###', '').trim();
-                            } else if(section.startsWith('SAMPLE_OUTPUT###')){
-                                parsedData.sample_output = section.replace('SAMPLE_OUTPUT###', '').trim();
-                            } else if(section.startsWith('HINT###')){
-                                parsedData.hint = section.replace('HINT###', '').trim();
-                            }
-                        }
-                    } else {
-                        // 尝试解析JSON
-                        try {
-                            console.log("尝试解析JSON格式");
-                            parsedData = JSON.parse(data);
-                            console.log("JSON解析成功");
-                        } catch(e) {
-                            console.log("JSON解析失败,使用旧格式");
-                            // 如果解析失败,按旧格式处理
-                            let description = "<span class='md'>" + data + "</span>";
-                            $("textarea[name='description']").val(description);
-                            parsedData = null;
-                        }
-                    }
-                    
-                    // 如果成功解析出结构化数据,填充表单
-                    if(parsedData && typeof parsedData === 'object') {
-                        console.log("=== 解析后的数据 ===");
-                        console.log(parsedData);
-                        
-                        // 填充到对应的表单字段
-                        if(parsedData.title) {
-                            $('#title').val(parsedData.title);
-                            console.log("填充title:", parsedData.title);
-                        }
-                        
-                        // 处理description - 需要特殊处理kindeditor
-                        if(parsedData.description) {
-                            let descContent = "<span class='md'>" + parsedData.description + "</span>";
-                            // 先尝试设置textarea的值
-                            $("textarea[name='description']").val(descContent);
-                            // 如果有kindeditor实例,也设置它的值
-                            try {
-                                if(typeof KindEditor !== 'undefined') {
-                                    let editor = KindEditor.instances[0]; // 第一个编辑器是description
-                                    if(editor) {
-                                        editor.html(descContent);
-                                        console.log("通过KindEditor设置description成功");
-                                    }
-                                }
-                            } catch(e) {
-                                console.log("KindEditor设置失败,已使用textarea方式:", e);
-                            }
-                            console.log("填充description");
-                        }
-                        
-                        // 处理input - 也是kindeditor
-                        if(parsedData.input) {
-                            let inputContent = "<span class='md'>" + parsedData.input + "</span>";
-                            $("textarea[name='input']").val(inputContent);
-                            try {
-                                if(typeof KindEditor !== 'undefined') {
-                                    let editor = KindEditor.instances[1]; // 第二个编辑器是input
-                                    if(editor) {
-                                        editor.html(inputContent);
-                                    }
-                                }
-                            } catch(e) {
-                                console.log("KindEditor input设置失败:", e);
-                            }
-                            console.log("填充input");
-                        }
-                        
-                        // 处理output - 也是kindeditor
-                        if(parsedData.output) {
-                            let outputContent = "<span class='md'>" + parsedData.output + "</span>";
-                            $("textarea[name='output']").val(outputContent);
-                            try {
-                                if(typeof KindEditor !== 'undefined') {
-                                    let editor = KindEditor.instances[2]; // 第三个编辑器是output
-                                    if(editor) {
-                                        editor.html(outputContent);
-                                    }
-                                }
-                            } catch(e) {
-                                console.log("KindEditor output设置失败:", e);
-                            }
-                            console.log("填充output");
-                        }
-                        
-                        if(parsedData.sample_input) {
-                            $("textarea[name='sample_input']").val(parsedData.sample_input);
-                            console.log("填充sample_input");
-                        }
-                        if(parsedData.sample_output) {
-                            $("textarea[name='sample_output']").val(parsedData.sample_output);
-                            console.log("填充sample_output");
-                        }
-                        
-                        // 处理hint - 也是kindeditor
-                        if(parsedData.hint) {
-                            let hintContent = "<span class='md'>" + parsedData.hint + "</span>";
-                            $("textarea[name='hint']").val(hintContent);
-                            try {
-                                if(typeof KindEditor !== 'undefined') {
-                                    let editor = KindEditor.instances[3]; // 第四个编辑器是hint
-                                    if(editor) {
-                                        editor.html(hintContent);
-                                    }
-                                }
-                            } catch(e) {
-                                console.log("KindEditor hint设置失败:", e);
-                            }
-                            console.log("填充hint");
-                        }
-                    }
-
-				}
-				window.setTimeout('sync()',1000);
-				$('#ai_bt').prop('disabled', false);;
-				$('#ai_bt').val('AI一下');
+				if(parseInt(data)>0)
+					window.setTimeout('pull_result('+data+')',1000);
 			},
 			error: function() {
 			    $('#ai_bt').val('获取数据失败');

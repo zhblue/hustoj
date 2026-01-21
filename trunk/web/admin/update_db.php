@@ -239,7 +239,21 @@ $tsql[54]="create TABLE IF NOT EXISTS $DB_NAME.solution_ai_answer ( solution_id 
 $csql[54]="alter table $DB_NAME.contest modify column contest_type smallint UNSIGNED default 0;";
 
 $tsql[55]="CREATE INDEX $DB_NAME.idx_solution_in_date ON solution(in_date);";
-$csql[55]="";
+$csql[55]="CREATE TABLE $DB_NAME.openai_task_queue (
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT COMMENT '自增主键',
+  `user_id` varchar(40) NOT NULL DEFAULT '',
+  `task_type` varchar(24) NOT NULL DEFAULT '',
+  `solution_id` bigint DEFAULT '0',
+  `request_body` mediumtext NOT NULL COMMENT '请求参数(JSON格式字符串)',
+  `status` tinyint NOT NULL DEFAULT '0' COMMENT '状态：0:待处理, 1:处理中, 2:已完成, 3:失败',
+  `response_body` mediumtext COMMENT '返回结果',
+  `error_message` text COMMENT '错误信息',
+  `create_date` datetime NOT NULL COMMENT '创建时间',
+  `update_date` datetime NOT NULL COMMENT '最后更新时间',
+  PRIMARY KEY (`id`),
+  KEY `idx_status_create` (`status`,`create_date`),
+  KEY `idx_user_status` (`user_id`,`status`)
+) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='异步任务队列-MyISAM版'; ";
 // 删除6个月以前的非正确源码，优化数据库空间。
 // delete from source_code  where solution_id in (select solution_id from solution where result>4 and  in_date<date_sub(now(),interval 6 month) ); //
 if(isset($_POST['do'])){

@@ -2136,7 +2136,7 @@ void prepare_files(char *filename, int namelen, char *infile, int &p_id,
 		    if(!strstr("noip_file_name","//")){
                             sprintf(userfile, "%s/run%d/%s", oj_home, runner_id,basename(noip_file_name));
                             execute_cmd("rm %s",userfile);
-                    }
+        }
 		}
 		fclose(fpname);
 	}else{
