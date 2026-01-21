@@ -17,7 +17,8 @@ if (!isset($_SESSION[$OJ_NAME . '_' . 'user_id'])) {
 require_once "include/memcache.php";
 require_once "include/const.inc.php";
 
-$now = strftime("%Y-%m-%d %H:%M", time());
+$now = date("Y-m-d H:i:s");
+
 $user_id = $_SESSION[$OJ_NAME . '_' . 'user_id'];
 $language = intval($_POST['language']);
 
