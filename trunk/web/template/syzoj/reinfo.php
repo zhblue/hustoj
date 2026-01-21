@@ -80,6 +80,31 @@ td > code {
     pats[10]=/non-zero return/;
     exps[10]="<?php echo $MSG_NON_ZERO_RETURN ?>";
 
+function fill_data(data){
+    $("#errexp").html(data);    
+    $("#errexp").html(marked.parse($("#errexp").text()));    
+}
+function pull_result(id){
+	console.log(id);
+    $.ajax({
+	url: '../aiapi/ajax.php', 
+	type: 'GET',
+	data: { id: id },
+	success: function(data) {
+		if(data=='waiting'){
+			window.setTimeout('pull_result('+id+')',2000);
+		}else{
+			fill_data(data);
+		    $('#ai_bt').val('再来一次');
+		    $('#ai_bt').prop('disabled', false);
+		}
+	},
+	error: function() {
+	    $('#ai_bt').val('获取数据失败');
+	    $('#ai_bt').prop('disabled', false);
+	}
+    });
+}
     function explain(){
       var errmsg = $("#errtxt").text();
       var expmsg = "";
@@ -96,13 +121,20 @@ td > code {
        <?php if (!$isAC && isset($OJ_AI_API_URL)&&!empty($OJ_AI_API_URL)){ ?>
                 expmsg+="AI 答疑 ...<img src='image/loader.gif'>";
                 $("#errexp").html(expmsg);
-                $("#errexp").load("<?php echo $OJ_AI_API_URL?>?sid=<?php echo $id?>", function(response, status, xhr) {
-                        if (status === "success") {
-                                $("#errexp").html(marked.parse($("#errexp").text()));   
-                        } else if (status === "error") {
-                                console.error("加载失败:", xhr.status, xhr.statusText);
-                        }
-                });
+		    $.ajax({
+			url: '<?php echo $OJ_AI_API_URL ?>?sid=<?php echo $id?>', 
+			type: 'GET',
+			success: function(data) {
+				if(parseInt(data)>0)
+					window.setTimeout('pull_result('+data+')',2000);
+				else{
+					fill_data(data);		
+				}
+			},
+			error: function() {
+			    console.log('获取数据失败');
+			}
+		    });
        <?php } ?>
 
     }

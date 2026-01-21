@@ -59,7 +59,8 @@
 #define OJ_RE 10
 #define OJ_CE 11
 #define OJ_CO 12
-static char lock_file[BUFFER_SIZE+32]=LOCKFILE;
+static char judged_lock_file[BUFFER_SIZE+32]=LOCKFILE;
+static char php_lock_file[BUFFER_SIZE+32]=LOCKFILE;
 static char host_name[BUFFER_SIZE];
 static char user_name[BUFFER_SIZE];
 static char password[BUFFER_SIZE];
@@ -93,8 +94,10 @@ static char oj_redisqname[BUFFER_SIZE];
 static int turbo_mode = 0;
 static int use_docker = 0;
 static char docker_path[BUFFER_SIZE];
+static char php_path[BUFFER_SIZE];
 static int internal_client = 1;
 static int oj_dedicated=0;
+static int www_uid= 33;
 
 static bool STOP = false;
 static int DEBUG = 0;
@@ -106,7 +109,7 @@ static MYSQL_ROW row;
 //static FILE *fp_log;
 static char query[BUFFER_SIZE*4];
 #endif
-void wait_udp_msg(int fd)
+int wait_udp_msg(int fd)
 {
     char buf[BUFFER_SIZE];  //......1024..
     socklen_t len;
@@ -118,14 +121,14 @@ void wait_udp_msg(int fd)
         if(count == -1)
         {
             printf("recieve data fail!\n");
-            return;
+            return 0;
         }
         printf("udp client:%s\n",buf);  //..client......
         memset(buf, 0, BUFFER_SIZE);
 //        sprintf(buf, "I have recieved %d bytes data!\n", count);  //..client
 //        printf("server:%s\n",buf);  //..........
 //        sendto(fd, buf, BUFF_LEN, 0, (struct sockaddr*)&clent_addr, len);  //.....client......clent_addr.....
-
+	return count;
 }
 
 void call_for_exit(int s) {
@@ -209,6 +212,7 @@ void init_judge_conf() {
 	strcpy(oj_lang_set, "0,1,3,6");
 	strcpy(oj_udpserver, "127.0.0.1");
 	strcpy(docker_path, "/usr/bin/docker");
+	strcpy(php_path, "src/web");
 	fp = fopen("./etc/judge.conf", "r");
 	if (fp != NULL) {
 		while (fgets(buf, BUFFER_SIZE - 1, fp)) {
@@ -247,6 +251,9 @@ void init_judge_conf() {
                         read_int(buf, "OJ_INTERNAL_CLIENT", &internal_client);
 			
                         read_buf(buf, "OJ_DOCKER_PATH", docker_path);
+                        read_buf(buf, "OJ_PHP_PATH", php_path);
+
+			read_int(buf, "OJ_WWW_UID",&www_uid);
 
 
 		}
@@ -282,6 +289,82 @@ char * follow_link(char * path,char * buffer,int max_size){
         printf("Path is a soft link to: %s\n", buffer);
     return buffer;
 
+}
+int lockfile(int fd) {
+	struct flock fl;
+	fl.l_type = F_WRLCK;
+	fl.l_start = 0;
+	fl.l_whence = SEEK_SET;
+	fl.l_len = 0;
+	return (fcntl(fd, F_SETLK, &fl));
+}
+
+int already_running(char * lock_file) {
+	int fd;
+	char buf[16];
+	fd = open(lock_file, O_RDWR | O_CREAT, LOCKMODE);
+	if (fd < 0) {
+		syslog(LOG_ERR | LOG_DAEMON, "can't open %s: %s", LOCKFILE,
+				strerror(errno));
+		exit(1);
+	}
+	if (lockfile(fd) < 0) {
+		if (errno == EACCES || errno == EAGAIN) {
+			close(fd);
+			return 1;
+		}
+		syslog(LOG_ERR | LOG_DAEMON, "can't lock %s: %s", LOCKFILE,
+				strerror(errno));
+		exit(1);
+	}
+	ftruncate(fd, 0);
+	sprintf(buf, "%d", getpid());
+	write(fd, buf, strlen(buf) + 1);
+	return (0);
+}
+void run_php_cron(char * work_dir){
+	int mem_lmt=256;
+	pid_t pidApp = fork();
+	if (pidApp == 0){
+		sprintf(php_lock_file,"%s/cron.pid",work_dir);
+		if(already_running(php_lock_file)){
+			printf("already_running %s",work_dir);
+		       	exit(-4);
+		}
+		if(chdir(work_dir)){
+			printf("fail to chdir %s",work_dir);
+		       	exit(-3);
+		}
+		while (setgid(www_uid) != 0)
+			sleep(1);
+		while (setuid(www_uid) != 0)
+			sleep(1);
+		while (setresuid(www_uid, www_uid, www_uid) != 0)
+			sleep(1);
+		struct rlimit LIM; // time limit, file limit& memory limit
+		// time limit
+		LIM.rlim_max = LIM.rlim_cur = 120 ;
+		//if(DEBUG) printf("LIM_CPU=%d",(int)(LIM.rlim_cur));
+		setrlimit(RLIMIT_CPU, &LIM);
+		// file limit
+		LIM.rlim_cur = LIM.rlim_max = STD_MB *256 ;
+		setrlimit(RLIMIT_FSIZE, &LIM);
+		// proc limit
+		LIM.rlim_cur = LIM.rlim_max = 60;
+		setrlimit(RLIMIT_NPROC, &LIM);
+
+		// set the stack
+		LIM.rlim_cur = STD_MB << 3;
+		LIM.rlim_max = STD_MB << 4;
+		setrlimit(RLIMIT_STACK, &LIM);
+		// set the memory
+		LIM.rlim_cur = STD_MB * mem_lmt / 2 * 3;
+		LIM.rlim_max = STD_MB * mem_lmt * 2;
+		setrlimit(RLIMIT_AS, &LIM);
+		execl("/usr/bin/php", "/usr/bin/php","cron.php", (char *) NULL);
+	}else{
+		waitpid(-1, NULL, WNOHANG);     // wait 4 one child exit
+	}
 }
 void run_client(int runid, int clientid) {
 	char buf[BUFFER_SIZE], runidstr[BUFFER_SIZE];
@@ -374,7 +457,7 @@ int executesql(const char * sql) {
 		if (DEBUG)
 			write_log("%s", mysql_error(conn));
 		sleep(2);
-        mysql_close(conn);	
+		mysql_close(conn);
 		conn = NULL;
 		return 1;
 	} else
@@ -689,38 +772,6 @@ int work() {
 	return retcnt;
 }
 
-int lockfile(int fd) {
-	struct flock fl;
-	fl.l_type = F_WRLCK;
-	fl.l_start = 0;
-	fl.l_whence = SEEK_SET;
-	fl.l_len = 0;
-	return (fcntl(fd, F_SETLK, &fl));
-}
-
-int already_running() {
-	int fd;
-	char buf[16];
-	fd = open(lock_file, O_RDWR | O_CREAT, LOCKMODE);
-	if (fd < 0) {
-		syslog(LOG_ERR | LOG_DAEMON, "can't open %s: %s", LOCKFILE,
-				strerror(errno));
-		exit(1);
-	}
-	if (lockfile(fd) < 0) {
-		if (errno == EACCES || errno == EAGAIN) {
-			close(fd);
-			return 1;
-		}
-		syslog(LOG_ERR | LOG_DAEMON, "can't lock %s: %s", LOCKFILE,
-				strerror(errno));
-		exit(1);
-	}
-	ftruncate(fd, 0);
-	sprintf(buf, "%d", getpid());
-	write(fd, buf, strlen(buf) + 1);
-	return (0);
-}
 int daemon_init(void)
 
 {
@@ -767,6 +818,7 @@ void turbo_mode2(){
 }
 int main(int argc, char** argv) {
 	int oj_udp_ret=0;
+	char php_cron[BUFFER_SIZE*3];
 	DEBUG = (argc > 2);
 	ONCE = (argc > 3);
 	if (argc > 1)
@@ -774,11 +826,11 @@ int main(int argc, char** argv) {
 	else
 		strcpy(oj_home, "/home/judge");
 	chdir(oj_home);    // change the dir
-
-	sprintf(lock_file,"%s/etc/judge.pid",oj_home);
+	
+	sprintf(judged_lock_file,"%s/etc/judge.pid",oj_home);
 	if (!DEBUG)
 		daemon_init();
-	if ( already_running()) {
+	if ( already_running(judged_lock_file)) {
 		syslog(LOG_ERR | LOG_DAEMON,
 				"This daemon program is already running!\n");
 		printf("%s already has one judged on it!\n",oj_home);
@@ -790,6 +842,7 @@ int main(int argc, char** argv) {
 //	final_sleep.tv_sec=0;
 //	final_sleep.tv_nsec=500000000;
 	init_judge_conf();	// set the database info
+	sprintf(php_cron,"%s/%s/cron.php",oj_home,php_path);
 	if(oj_udp){
 		oj_udp_fd = socket(AF_INET, SOCK_DGRAM, 0);
 		if(oj_udp_fd<0) 
@@ -834,14 +887,24 @@ int main(int argc, char** argv) {
 			if(ONCE && j==0) break;
 		}
 		turbo_mode2();
+		
+		if (ONCE && access(php_cron, R_OK ) != -1){
+			if(DEBUG) printf("Run PHP Cron job: %s\n", php_cron);
+			run_php_cron(php_path);
+		}
 		if(ONCE && j==0) break;
                 if(n==0){
 			printf("workcnt:%d\n",workcnt);
 			if(oj_udp&&oj_udp_ret==0){
 				if(STOP) return 1;
-				wait_udp_msg(oj_udp_fd);
+				if(wait_udp_msg(oj_udp_fd)){
+					if (access(php_cron, R_OK ) != -1){
+						if(DEBUG) printf("Run PHP Cron job: %s\n", php_cron);
+						run_php_cron(php_path);
+					}
+				}
                         	if(DEBUG) printf("udp job ... \n");
-
+				waitpid(-1, NULL, WNOHANG);     // wait 4 one child exit
 			}else{
                         	sleep(sleep_time);
                         	if(DEBUG) printf("sleeping ... %ds \n",sleep_time);
