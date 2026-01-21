@@ -1,4 +1,12 @@
 function reinfo(){
+	function escapeHtml(str) {
+		return String(str)
+			.replace(/&/g, "&amp;")
+			.replace(/</g, "&lt;")
+			.replace(/>/g, "&gt;")
+			.replace(/"/g, "&quot;")
+			.replace(/'/g, "&#39;");
+	}
 	var pats=new Array();
 	var exps=new Array();
 	pats[0]=/A Not allowed system call.* /;
@@ -30,7 +38,7 @@ function reinfo(){
 	var exp=exps[i];
 	var ret=pat.exec(errmsg);
 	if(ret){
-	expmsg+=ret+":"+exp+"<br><hr />";
+	expmsg+=escapeHtml(ret)+":"+exp+"<br><hr />";
 	}
 	}
 	document.getElementById("errexp").innerHTML=expmsg;
