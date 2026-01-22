@@ -154,6 +154,7 @@ Star us, please!
 	
 日期  | 类型 |  更新内容 | 图
 ------- | :--:  | :--: | :-------
+01-22 | 更新 | 修改AI调用为异步模式运行，不再影响php-fpm的进程池。
 01-01 | 更新 | 允许AI辅助造题，纯鼠标点击的造题模式。|<img width="623" height="531" alt="image" src="https://github.com/user-attachments/assets/b6d4d937-142b-4068-b0b4-e06f0841492f" />
 
 </details>
