@@ -363,7 +363,7 @@ void run_php_cron(char * work_dir){
 		setrlimit(RLIMIT_AS, &LIM);
 		execl("/usr/bin/php", "/usr/bin/php","cron.php", (char *) NULL);
 	}else{
-		waitpid(-1, NULL, WNOHANG);     // wait 4 one child exit
+		waitpid(pidApp, NULL, WNOHANG);     // wait 4 one child exit
 	}
 }
 void run_client(int runid, int clientid) {
@@ -903,8 +903,7 @@ int main(int argc, char** argv) {
 						run_php_cron(php_path);
 					}
 				}
-                        	if(DEBUG) printf("udp job ... \n");
-				waitpid(-1, NULL, WNOHANG);     // wait 4 one child exit
+                if(DEBUG) printf("udp job ... \n");
 			}else{
                         	sleep(sleep_time);
                         	if(DEBUG) printf("sleeping ... %ds \n",sleep_time);
