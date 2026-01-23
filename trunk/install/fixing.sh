@@ -36,7 +36,7 @@ if [ `whoami` = "root" ];then
         cd /home/judge
 	#不要合并，必须重新进入，否则执行的update.sql是老版本，没有更新
 	cd src/install
-	bash mysql.sh  <  update.sql
+	echo "source update.sql" | bash mysql.sh   
         cd ../..
 	chown $WWW:$WWW -R src
 	chown $WWW:judge -R data
