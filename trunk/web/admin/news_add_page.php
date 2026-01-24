@@ -31,7 +31,7 @@ if(isset($_POST['pid'])){
 	    $plist = $i;
 	}
 	
-  $plist = trim($_POST['hlist']);
+  if(isset($_POST['hlist']))$plist = trim($_POST['hlist']);
   $pieces = explode(",",$plist );
   $pieces = array_unique($pieces);
   if($pieces[0]=="") unset($pieces[0]);
