@@ -4113,10 +4113,11 @@ int main(int argc, char **argv)
 			}else{
 				if(same_subtask(last_name,dirp->d_name)){ //相同子任务，初次失败
 					if(minus_mark>=0) get_mark-=minus_mark;  //扣除任务内积分
+				}else{
+					if(DEBUG)printf("1 spj_mark: %.2f mark: %.2f get_mark: %.2f\n",spj_mark,mark,get_mark);
+					get_mark+=mark*spj_mark;	
+					pass_rate+=spj_mark;
 				}
-				if(DEBUG)printf("1 spj_mark: %.2f mark: %.2f get_mark: %.2f\n",spj_mark,mark,get_mark);
-				get_mark+=mark*spj_mark;	
-				pass_rate+=spj_mark;
 				if(DEBUG)printf("2 spj_mark: %.2f mark: %.2f get_mark: %.2f\n",spj_mark,mark,get_mark);
 				minus_mark= -1 ;                          //当前任务失败，标记
 			}

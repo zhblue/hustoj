@@ -253,7 +253,7 @@ $csql[55]="CREATE TABLE $DB_NAME.openai_task_queue (
   PRIMARY KEY (`id`),
   KEY `idx_status_create` (`status`,`create_date`),
   KEY `idx_user_status` (`user_id`,`status`)
-) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='异步任务队列-MyISAM版'; ";
+) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COMMENT='异步任务队列-MyISAM版'; ";
 // 删除6个月以前的非正确源码，优化数据库空间。
 // delete from source_code  where solution_id in (select solution_id from solution where result>4 and  in_date<date_sub(now(),interval 6 month) ); //
 if(isset($_POST['do'])){

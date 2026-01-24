@@ -49,7 +49,7 @@ CREATE TABLE `openai_task_queue` (
   PRIMARY KEY (`id`),
   KEY `idx_status_create` (`status`,`create_date`),
   KEY `idx_user_status` (`user_id`,`status`)
-) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='异步任务队列-MyISAM版';
+) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COMMENT='异步任务队列-MyISAM版';
  
 delimiter //
 

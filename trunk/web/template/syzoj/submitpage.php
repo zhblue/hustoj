@@ -142,6 +142,7 @@ echo"<option value=$i ".( $lastlang==$i?"selected":"").">
             box-shadow: 0 1px 3px rgba(0,0,0,0.08);
             transition: all 0.15s;
             cursor: default;
+	    opacity: 0.95;
         }
         </style>
          <div class="row">
@@ -155,9 +156,7 @@ echo"<option value=$i ".( $lastlang==$i?"selected":"").">
     flex-direction: column;">
         <div style="  
         display: flex;
-   
     border-radius: 8px;
-    
     background-color: rgb(255,255,255,0.4);" id="language_span"><?php echo $MSG_Input?></div>
          <textarea style="width:100%" cols=40 rows=5 id="input_text" name="input_text" ><?php echo $view_sample_input?></textarea>
     </div>
@@ -189,7 +188,7 @@ echo"<option value=$i ".( $lastlang==$i?"selected":"").">
         <!--运行按钮-->
             <input style="
              margin-top: 30px;
-            margin-left: 0 auto;
+            margin-left: 15px ;
             width: 7%;background-color: #22ba46a3;border-color: #00fff470;height: 130px;
             " id="TestRun" class="btn btn-info" type=button value="<?php echo $MSG_TR?>" onclick=do_test_run();>
             
@@ -903,16 +902,26 @@ function removeCodeBlockMarkers(str) {
 	function ai_gen(filename){
 		    let oldval=$('#ai_bt').val();
 		    $('#ai_bt').val('AI思考中...请稍候...');
-		    $('#ai_bt').prop('disabled', true);;
+		    $('#ai_bt').prop('disabled', true);
+		    $.ajax({
+			url: '<?php echo $OJ_AI_API_URL ?>?sid=<?php echo $id?>', 
+			type: 'GET',
+			success: function(data) {
+			},
+			error: function() {
+			    console.log('获取数据失败');
+			}
+		    });
 		    $.ajax({
 		    	url: '<?php echo $OJ_AI_API_URL?>', 
 				type: 'GET',
 				data: { pid: '<?php echo $id?>', filename: filename },
 				success: function(data) {
-					 if(typeof(editor) != "undefined")
-	                                        editor.setValue(removeCodeBlockMarkers(data)); // 假设 #file_data 是 div
-			    	$('#ai_bt').prop('disabled', false);
-				    $('#ai_bt').val("再来一次");
+					if(parseInt(data)>0)
+						window.setTimeout('pull_result('+data+')',1000);
+					else{
+						fill_data(data);		
+					}
 				},
 				error: function() {
 				    $('#ai_bt').val('获取数据失败');
@@ -920,6 +929,33 @@ function removeCodeBlockMarkers(str) {
 				}
 		    });
 	}
+function fill_data(data){
+	if(typeof(editor) != "undefined")
+		editor.setValue(removeCodeBlockMarkers(data)); // 假设 #file_data 是 div
+	$('#ai_bt').prop('disabled', false);
+	$('#ai_bt').val("再来一次");
+}
+function pull_result(id){
+	console.log(id);
+    $.ajax({
+	url: '../aiapi/ajax.php', 
+	type: 'GET',
+	data: { id: id },
+	success: function(data) {
+		if(data=='waiting'){
+			window.setTimeout('pull_result('+id+')',1000);
+		}else{
+			fill_data(data);
+		    $('#ai_bt').val('再来一次');
+		    $('#ai_bt').prop('disabled', false);
+		}
+	},
+	error: function() {
+	    $('#ai_bt').val('获取数据失败');
+	    $('#ai_bt').prop('disabled', false);
+	}
+    });
+}
 		    
 </script>
 
