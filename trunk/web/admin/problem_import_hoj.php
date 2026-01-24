@@ -114,65 +114,47 @@ else {
   $tempfile = $_FILES ["fps"] ["tmp_name"];
   if (get_extension( $_FILES ["fps"] ["name"])=="zip") {
     echo "&nbsp;&nbsp;- zip file, only HOJ exported file is supported";
-    $resource = zip_open($tempfile);
-
-    $i = 1;
-    while ($dir_resource = zip_read($resource)) {
-      if (zip_entry_open($resource,$dir_resource)) {
-        $file_name = $path.zip_entry_name($dir_resource);
-		$file_name = getSafeZipPath($tempdir,$file_name);
-        $file_path = substr($file_name,0,strrpos($file_name, "/"));
-        if (!is_dir($file_name)) {
-          $file_size = zip_entry_filesize($dir_resource);
-          $file_content = zip_entry_read($dir_resource,$file_size);
-	  //echo "$file_name"."<br>";
-	  if(get_extension($file_name)=="json")
-	  {
-//		  import_json($file_content);
-	  }else{
-	  	//echo "$file_name"."<br>";
-		mkdir($tempdir."/".dirname($file_name));
-		file_put_contents($tempdir."/".$file_name,$file_content);
-	  }
-	}else{
-	  echo $file_name;
-	}
-       zip_entry_close($dir_resource);
-      }
+    $resource = new ZipArchive;
+    if ($resource->open($tempfile) === TRUE) {
+        for ($i = 0; $i < $resource->numFiles; $i++) {
+            $file_name = $resource->getNameIndex($i);
+            $file_name = getSafeZipPath($tempdir,$file_name);
+            $file_path = substr($file_name,0,strrpos($file_name, "/"));
+            if (substr($file_name, -1) != "/") {
+                $file_content = $resource->getFromIndex($i);
+                if(get_extension($file_name)=="json") {
+                    // import_json($file_content);
+                } else {
+                    if(!file_exists($tempdir."/".dirname($file_name))) mkdir($tempdir."/".dirname($file_name),0755,true);
+                    file_put_contents($tempdir."/".$file_name,$file_content);
+                }
+            } else {
+                echo $file_name;
+            }
+        }
+        $cmds=array();
+        for ($i = 0; $i < $resource->numFiles; $i++) {
+            $file_name = $resource->getNameIndex($i);
+            $file_name = getSafeZipPath($tempdir,$file_name);
+            $file_path = substr($file_name,0,strrpos($file_name, "/"));
+            if (substr($file_name, -1) != "/") {
+                $file_content = $resource->getFromIndex($i);
+                if(get_extension($file_name)=="json") {
+                    $pid=import_json($file_content);
+                    mkdir("$OJ_DATA/$pid");
+                    $data_dir=basename($file_name,".json");
+                    array_push ($cmds,"mv $tempdir/$data_dir/* $OJ_DATA/$pid/");
+                    array_push ($cmds,"rmdir $tempdir/$data_dir/");
+                } else {
+                    if(!file_exists($tempdir."/".dirname($file_name))) mkdir($tempdir."/".dirname($file_name),0755,true);
+                    file_put_contents($tempdir."/".$file_name,$file_content);
+                }
+            } else {
+                echo $file_name;
+            }
+        }
+        $resource->close();
     }
-    zip_close($resource);
-    $resource = zip_open($tempfile);
-    $cmds=array();
-    $i = 1;
-    while ($dir_resource = zip_read($resource)) {
-      if (zip_entry_open($resource,$dir_resource)) {
-        $file_name = $path.zip_entry_name($dir_resource);
-		$file_name = getSafeZipPath($tempdir,$file_name);
-        $file_path = substr($file_name,0,strrpos($file_name, "/"));
-        if (!is_dir($file_name)) {
-          $file_size = zip_entry_filesize($dir_resource);
-          $file_content = zip_entry_read($dir_resource,$file_size);
-	  if(get_extension($file_name)=="json")
-	  {
-		  $pid=import_json($file_content);
-		 // $dir=$tempdir."/".basename($file_name,".json");
-		  mkdir("$OJ_DATA/$pid");
-		  $data_dir=basename($file_name,".json");
-		  array_push ($cmds,"mv $tempdir/$data_dir/* $OJ_DATA/$pid/");
-		  array_push ($cmds,"rmdir $tempdir/$data_dir/");
-		  $i++;
-	  }else{
-	  	//echo "$file_name"."<br>";
-		mkdir($tempdir."/".dirname($file_name),0755,true);
-		file_put_contents($tempdir."/".$file_name,$file_content);
-	  }
-	}else{
-	  echo $file_name;
-	}
-       zip_entry_close($dir_resource);
-      }
-    }
-    zip_close($resource);
     unlink ( $_FILES ["fps"] ["tmp_name"] );
     foreach($cmds as $cmd){
 //	echo $cmd."<br>";
