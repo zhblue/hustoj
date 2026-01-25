@@ -97,8 +97,8 @@ include_once("kindeditor.php") ;
         <textarea name=source style="width:100%;" rows=1><?php echo htmlentities($row['source'],ENT_QUOTES,"UTF-8")?></textarea><br>
 
         <?php echo "<h4>".$MSG_REMOTE_OJ."</h4>"?>
-        <input name=remote_oj value='<?php echo htmlentities($row['remote_oj'],ENT_QUOTES,"UTF-8")?>' placeholder='<?php echo $MSG_HELP_LOCAL_EMPTY ?>' >
-        <input name=remote_id value='<?php echo htmlentities($row['remote_id'],ENT_QUOTES,"UTF-8")?>' placeholder='<?php echo $MSG_HELP_LOCAL_EMPTY ?>' ><br>
+        <input name=remote_oj value='<?php echo htmlentities((string)$row['remote_oj'],ENT_QUOTES,"UTF-8")?>' placeholder='<?php echo $MSG_HELP_LOCAL_EMPTY ?>' >
+        <input name=remote_id value='<?php echo htmlentities((string)$row['remote_id'],ENT_QUOTES,"UTF-8")?>' placeholder='<?php echo $MSG_HELP_LOCAL_EMPTY ?>' ><br>
       </p>
 
       <div align=center>
@@ -263,21 +263,27 @@ include_once("kindeditor.php") ;
 
       if ($sample_input && file_exists($basedir."/sample.in")) {
         //mkdir($basedir);
-        $fp = fopen($basedir."/sample.in","w");
-        fputs($fp,preg_replace("(\r\n)","\n",$sample_input));
-        fclose($fp);
+        $fp = @fopen($basedir."/sample.in","w");
+        if($fp){
+            fputs($fp,preg_replace("(\r\n)","\n",$sample_input));
+            fclose($fp);
+        }
 
-        $fp = fopen($basedir."/sample.out","w");
-        fputs($fp,preg_replace("(\r\n)","\n",$sample_output));
-        fclose($fp);
+        $fp = @fopen($basedir."/sample.out","w");
+        if($fp){
+            fputs($fp,preg_replace("(\r\n)","\n",$sample_output));
+            fclose($fp);
+        }
       }
 
       $spj = intval($spj);
 
       $sql = "UPDATE `problem` SET `title`=?,`time_limit`=?,`memory_limit`=?, `description`=?,`input`=?,`output`=?,`sample_input`=?,`sample_output`=?,`hint`=?,`source`=?,`spj`=?,remote_oj=?,remote_id=?,`in_date`=NOW() WHERE `problem_id`=?";
 
+      //echo "SQL: " . $sql . "<br>";
+      //echo "Params: remote_oj=[$remote_oj] (" . strlen($remote_oj) . "), remote_id=[$remote_id] (" . strlen($remote_id) . ")<br>"; 
       @pdo_query($sql,$title,$time_limit,$memory_limit,$description,$input,$output,$sample_input,$sample_output,$hint,$source,$spj,$remote_oj,$remote_id,$id);
-
+  
       echo "Edit OK!<br>";
       echo "<a href='../problem.php?id=$id'>See The Problem!</a>";
     }
