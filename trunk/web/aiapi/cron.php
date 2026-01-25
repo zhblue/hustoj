@@ -24,7 +24,7 @@ do{
 	    'Content-Type: application/json'
 	];
 	$model = $models[array_rand($models)];
-
+    $did=0;
 	foreach($tasks as $task){
 		$data=$task['request_body'];
 		if(pdo_query("update openai_task_queue set status=1 where id=? and status=0 ",$task['id'])){
