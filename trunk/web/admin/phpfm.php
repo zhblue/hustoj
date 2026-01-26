@@ -197,9 +197,9 @@ if (!(isset($_SESSION[$OJ_NAME.'_'.'administrator'])
 		echo "<script>window.setTimeout('resolveIDs()',5000);</script>";
            	trigger_judge($insert_id);     // moved to my_func.inc.php
             }else{
-                echo "未找到Main.c或Main.cc,自动生成空文件Gen.py和Main.c。";
+                echo "未找到Main.c或Main.cc,自动生成空文件Gen.py和Main.cc。";
                 touch("Gen.py");
-                touch("Main.c");
+                touch("Main.cc");
             }
     }
     if(isset($_GET['ans2out'])){
