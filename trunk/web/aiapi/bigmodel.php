@@ -17,4 +17,5 @@ $apiKey = "填写你申请的api-key";
 $models=array("glm-4.5","glm-4.5-air","glm-4.5-flash","glm-4.5-airx");
 
 //$temperature=0.8;
-require_once(dirname(__FILE__)."/common.php");
+if(count(get_included_files())==11)
+    require_once(dirname(__FILE__)."/common.php");
