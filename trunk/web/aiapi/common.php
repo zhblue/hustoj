@@ -70,7 +70,7 @@ if((isset($_SESSION[$OJ_NAME.'_administrator'])|| isset($_SESSION[$OJ_NAME.'_pro
 			$prompt_sys="你是一位经验丰富的信奥教练，帮我给出这个题目的算法分类, 请用空格分割不同的分类名称，给出至少一个分类名，不要输出其他内容，例如:
 高精度 动态规划 背包问题 数论 几何 贪心";
 			$problem=pdo_query("select concat(description,'输入:',input,'输出:',output,'样例输入:',sample_input,'样例输出:',sample_output,'提示:',hint) from problem where problem_id=?",$pid)[0][0];
-			$prompt_user="题目是:".$problem."\n ";
+			$prompt_user="题目是:".$problem."\n , 请帮我写个极简分类，不要解释，只要分类";
 		}
        }else if(basename($http_referer)=="problem_add_page.php"){
 	       $title=$_GET['title'];
