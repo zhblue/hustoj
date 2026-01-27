@@ -1,5 +1,5 @@
 <?php
-ini_set("display_errors", "On");  //set this to "On" for debugging  ,especially when no reason blank shows up.
+//ini_set("display_errors", "On");  //set this to "On" for debugging  ,especially when no reason blank shows up.
 require("admin-header.php");
 require_once("../include/set_get_key.php");
 require_once('../include/const.inc.php');
