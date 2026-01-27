@@ -1,6 +1,4 @@
-update contest set start_time='2000-01-01 00:00:00' where start_time<'1000-01-01 00:00:00';
-update contest set end_time='2099-01-01 00:00:00' where end_time<'1000-01-01 00:00:00';
-alter TABLE `contest` ADD `user_id` CHAR( 48 ) NOT NULL DEFAULT 'admin' AFTER `password` ;
+
 update contest c inner JOIN (SELECT * FROM privilege WHERE rightstr LIKE 'm%') p ON concat('m',contest_id)=rightstr set c.user_id=p.user_id;
 alter TABLE `contest_problem` ADD `c_accepted` INT NOT NULL DEFAULT '0' AFTER `num` ,ADD `c_submit` INT NOT NULL DEFAULT '0' AFTER `c_accepted` ;
 update contest_problem cp inner join (select count(1) submit,contest_id cid,num from solution where contest_id>0 group by contest_id,num) sb on cp.contest_id=sb.cid and cp.num=sb.num set cp.c_submit=sb.submit;update contest_problem cp inner join (select count(1) ac,contest_id cid,num from solution where contest_id>0 and result=4 group by contest_id,num) sb on cp.contest_id=sb.cid and cp.num=sb.num set cp.c_accepted =sb.ac;
