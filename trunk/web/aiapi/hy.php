@@ -13,5 +13,5 @@ $url = "https://api.hunyuan.cloud.tencent.com/v1/chat/completions";
 $apiKey ="你在腾讯云生成的API-KEY填在这里 ";  //https://console.cloud.tencent.com/hunyuan/api-key
 $models=array("hunyuan-turbos-latest");
 
-if(count(get_included_files())==11)
+if(basename(get_included_files()[0])!="cron.php")
   require_once(dirname(__FILE__)."/common.php");
