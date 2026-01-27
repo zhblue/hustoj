@@ -1,4 +1,5 @@
 <?php
+ini_set("display_errors", "On");  //set this to "On" for debugging  ,especially when no reason blank shows up.
 require("admin-header.php");
 require_once("../include/set_get_key.php");
 require_once('../include/const.inc.php');
@@ -137,8 +138,9 @@ echo "</select>";
 			if ($label_theme=="") $label_theme = "default";
 			$view .= "<a title='".htmlentities($cat,ENT_QUOTES,'UTF-8')."' class='label label-$label_theme' style='display: inline-block;' href='problem_list.php?keyword=".htmlentities(urlencode($cat),ENT_QUOTES,'UTF-8')."'>".mb_substr($cat,0,10,'utf8')."</a>&nbsp;";
 		}
-		echo "<div class=\"show_tag_controled\" style=\"float: right; \">";		
+		echo "<div id='source_".$row['problem_id']."' class=\"show_tag_controled\" style=\"float: right; \">";		
     	echo $view;		
+		echo "<span class='label label-primary' onclick=ai_gen(this,".$row['problem_id'].") > AI+ </span>";
 		echo "</div></td>";
 		
         if(isset($_SESSION[$OJ_NAME.'_'.'administrator'])||isset($_SESSION[$OJ_NAME.'_'.'problem_editor'])){
@@ -146,7 +148,7 @@ echo "</select>";
             echo "<td><a href=problem_df_change.php?id=".$row['problem_id']."&getkey=".$_SESSION[$OJ_NAME.'_'.'getkey'].">".($row['defunct']=="N"?"<span titlc='click to reserve it' class=green>$MSG_AVAILABLE</span>":"<span class=red title='click to be available'>$MSG_RESERVED</span>")."</a><td>";
 		    if(isset($_SESSION[$OJ_NAME.'_'.'administrator']) || isset($_SESSION[$OJ_NAME.'_'."p".$row['problem_id']]) ){
 			    ?>
-			            <a href=# onclick='javascript:if(confirm(<?php echo json_encode($MSG_DELETE."[".htmlentities($row['title'],ENT_QUOTES,"UTF-8")."]?")?>))
+			             <a href=# onclick='javascript:if(confirm(<?php echo json_encode($MSG_DELETE."[".htmlentities($row['title'],ENT_QUOTES,"UTF-8")."]?")?>)) 
 					     location.href="problem_del.php?id=<?php echo $row['problem_id']?>&getkey=<?php echo $_SESSION[$OJ_NAME.'_'.'getkey']?>"'>
 						<?php echo $MSG_DELETE ?>
 			              </a>
@@ -274,6 +276,64 @@ $(document).ready(function(){
 	});
 
 });
+	function fill_data(pid,data){
+		if(data.indexOf('请求过于频繁')>-1){
+			$("#source_"+pid).text(data);		
+			return ;
+		}
+		console.log(pid+":"+data);	
+		    let ns=data;
+		    $.ajax({
+		    	url: 'ajax.php', 
+			type: 'POST',
+			data: { m:'problem_add_source' , pid:pid , ns:data },
+			success: function(data) {
+				console.log(data);
+				if(parseInt(data)>0){
+					$("#source_"+pid).html("<span class='label label-info'>"+ns+"</span>");		
+				}
+			},
+			error: function() {
+				console.log("分类添加失败");
+			}
+		    });
+		
+	}
+	function pull_result(pid,id){
+		console.log(id);
+	    $.ajax({
+		url: '../aiapi/ajax.php', 
+		type: 'GET',
+		data: { id: id },
+		success: function(data) {
+			if(data=="waiting"){
+				window.setTimeout('pull_result('+pid+','+id+')',1000);
+			}else{
+				fill_data(pid,data);
+			}
+		},
+		error: function() {
+		    	    console.log('获取数据失败');
+		}
+	    });
+	}
+	function ai_gen(btn,pid){
+		    let oldval=$(btn).text();
+		    $(btn).text('AI思考中...请稍候...');
+		    $.ajax({
+		    	url: '../<?php echo $OJ_AI_API_URL?>', 
+			type: 'GET',
+			data: { pid : pid },
+			success: function(data) {
+				if(parseInt(data)>0)
+					window.setTimeout('pull_result('+pid+','+data+')',1000);
+			},
+			error: function() {
+		    	    $(btn).text('获取数据失败');
+			}
+		    });
+	}
+
 </script>
 </div>
 
