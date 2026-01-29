@@ -104,6 +104,7 @@ echo "</select>";
       <input type=submit name='enable' value='<?php echo $MSG_AVAILABLE ?>' onclick='$("form").attr("action","problem_df_change.php")'>
       <input type=submit name='disable' value='<?php echo $MSG_RESERVED ?>' onclick='$("form").attr("action","problem_df_change.php")'>
       <input type=submit name='plist' value='<?php echo $MSG_NEW_PROBLEM_LIST?>' onclick='$("form").attr("action","news_add_page.php")'>
+      <?php if (isset($_SESSION[$OJ_NAME."_administrator"])) { ?><span class='btn btn-primary' onclick='$(".ai.label.label-primary").click();'>AI-category</span> <?php } ?>
       </td>
     </tr>
     <?php    
@@ -140,7 +141,7 @@ echo "</select>";
 		}
 		echo "<div id='source_".$row['problem_id']."' class=\"show_tag_controled\" style=\"float: right; \">";		
     	echo $view;		
-		echo "<span class='label label-primary' onclick=ai_gen(this,".$row['problem_id'].") > AI+ </span>";
+	if(count($cate)<3) echo "<span class='ai label label-primary' onclick=ai_gen(this,".$row['problem_id'].") > AI+ </span>";
 		echo "</div></td>";
 		
         if(isset($_SESSION[$OJ_NAME.'_'.'administrator'])||isset($_SESSION[$OJ_NAME.'_'.'problem_editor'])){
@@ -299,6 +300,7 @@ $(document).ready(function(){
 		    });
 		
 	}
+	var sleep=10;
 	function pull_result(pid,id){
 		console.log(id);
 	    $.ajax({
@@ -307,9 +309,10 @@ $(document).ready(function(){
 		data: { id: id },
 		success: function(data) {
 			if(data=="waiting"){
-				window.setTimeout('pull_result('+pid+','+id+')',1000);
+				window.setTimeout('pull_result('+pid+','+id+')',1000*Math.sqrt(sleep++));
 			}else{
 				fill_data(pid,data);
+				sleep=1;
 			}
 		},
 		error: function() {
@@ -326,7 +329,7 @@ $(document).ready(function(){
 			data: { pid : pid },
 			success: function(data) {
 				if(parseInt(data)>0)
-					window.setTimeout('pull_result('+pid+','+data+')',1000);
+					window.setTimeout('pull_result('+pid+','+data+')',1000*Math.sqrt(sleep++));
 			},
 			error: function() {
 		    	    $(btn).text('获取数据失败');
