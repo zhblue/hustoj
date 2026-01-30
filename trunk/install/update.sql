@@ -12,6 +12,7 @@ CREATE TABLE `openai_task_queue` (
   `user_id` varchar(40) NOT NULL DEFAULT '',
   `task_type` varchar(24) NOT NULL DEFAULT '',
   `solution_id` bigint DEFAULT '0',
+  `problem_id` bigint not null default 0,
   `request_body` mediumtext NOT NULL COMMENT '请求参数(JSON格式字符串)',
   `status` tinyint NOT NULL DEFAULT '0' COMMENT '状态：0:待处理, 1:处理中, 2:已完成, 3:失败',
   `response_body` mediumtext COMMENT '返回结果',
@@ -22,7 +23,8 @@ CREATE TABLE `openai_task_queue` (
   KEY `idx_status_create` (`status`,`create_date`),
   KEY `idx_user_status` (`user_id`,`status`)
 ) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COMMENT='异步任务队列-MyISAM版';
- 
+alter table openai_task_queue add column problem_id bigint not null default 0  after solution_id;
+
 delimiter //
 
 drop trigger if exists firstAC//
