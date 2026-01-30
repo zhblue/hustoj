@@ -138,7 +138,7 @@ echo "</select>";
         echo "</td>";
         echo "<td>".$row['accepted']."</td>";
         echo "<td>".$row['in_date']."</td>";
-		echo "<td onDblClick='modify_source(".$row['problem_id'].")' >";//分类
+		echo "<td onDblClick='modify_source(".$row['problem_id'].")' style='cursor: pointer;' >";//分类
 		
 		$category = array();
 	    $cate = explode(" ",$row['source']);
