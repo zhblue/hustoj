@@ -244,6 +244,7 @@ $csql[55]="CREATE TABLE $DB_NAME.openai_task_queue (
   `user_id` varchar(40) NOT NULL DEFAULT '',
   `task_type` varchar(24) NOT NULL DEFAULT '',
   `solution_id` bigint DEFAULT '0',
+  `problem_id` bigint not null default 0 ,
   `request_body` mediumtext NOT NULL COMMENT '请求参数(JSON格式字符串)',
   `status` tinyint NOT NULL DEFAULT '0' COMMENT '状态：0:待处理, 1:处理中, 2:已完成, 3:失败',
   `response_body` mediumtext COMMENT '返回结果',
@@ -254,9 +255,12 @@ $csql[55]="CREATE TABLE $DB_NAME.openai_task_queue (
   KEY `idx_status_create` (`status`,`create_date`),
   KEY `idx_user_status` (`user_id`,`status`)
 ) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COMMENT='异步任务队列-MyISAM版'; ";
+$tsql[56]="alter table $DB_NAME.openai_task_queue add column problem_id bigint not null default 0  after solution_id;";
+$csql[56]="";
+
 // 删除6个月以前的非正确源码，优化数据库空间。
 // delete from source_code  where solution_id in (select solution_id from solution where result>4 and  in_date<date_sub(now(),interval 6 month) ); //
-if(isset($_POST['do'])){
+if(isset($_POST['do'])){  
 	require_once("../include/check_post_key.php");
 	echo "Executing...<br>";
 	set_time_limit(60);
