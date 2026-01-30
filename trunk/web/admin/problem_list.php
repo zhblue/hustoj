@@ -341,10 +341,10 @@ function modify_source(pid){
 		    $.ajax({
 		    	url: 'ajax.php', 
 			type: 'POST',
-			data: { m:'problem_add_source' , pid:pid , ns:data },
+			data: { m:'problem_add_source' , pid:pid , ns:ns},
 			success: function(data) {
 				console.log(data);
-				if(parseInt(data)>0){
+				if(parseInt(data)>=0){
 					$("#source_"+pid).html("<span class='label label-info'>"+ns+"</span>");		
 				}
 			},
