@@ -1,21 +1,35 @@
 <?php
-//ini_set("display_errors", "On");  //set this to "On" for debugging  ,especially when no reason blank shows up.
+ini_set("display_errors", "On");  //set this to "On" for debugging  ,especially when no reason blank shows up.
 // 这个文件用于对接阿里千问，解析编译报错和运行错误信息。
 // 需要在db_info.inc.php中配置 $OJ_AI_API_URL指向本文件; 
 // 登录阿里云，打开 https://bailian.console.aliyun.com/?tab=model#/api-key  创建新的API KEY
 // 注意这个功能可能会导致阿里云付费账单，
 // 访问类似 https://bailian.console.aliyun.com/?tab=model#/model-market/detail/qwen3-coder-480b-a35b-instruct
 // 关注所用模型的剩余免费额度
+// 如果不是 CLI 环境，则直接退出
+if (php_sapi_name() !== 'cli') {
+    // 可以输出错误信息（可选）
+    echo "This script can only be run from command line.\n";
+    exit(1); // 非零退出码表示错误
+}
 require_once("../include/db_info.inc.php");
 require_once("../include/my_func.inc.php");
 // 设置请求的URL
-// $url = 'http://demo.hustoj.com/aiapi/proxy.php';   // 千问是：'https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions';
-// $apiKey = "设置为阿里云的API-KEY";   //https://bailian.console.aliyun.com/?tab=model#/api-key  创建新的API KEY
-// $models=array("qwen-turbo","qwen3-coder-480b-a35b-instruct","qwen3-max","qwen3-coder-30b-a3b-instruct");
-
 require_once(dirname(dirname(__FILE__))."/".$OJ_AI_API_URL);
 
-$temperature=0.8;
+function uniqueSource($str) {
+    // 用正则分割字符串，支持多个连续空格
+    $arr = preg_split('/\s+/', trim($str));
+
+    // 去除数组中的重复项
+    $uniqueArr = array_unique($arr);
+
+    // 重新拼接为空格分割的字符串
+    $result = implode(' ', $uniqueArr);
+
+    return $result;
+}
+
 $did=0;
 do{
 	$sql="select * from openai_task_queue where status=0 ";
@@ -27,7 +41,8 @@ do{
 	    'Content-Type: application/json'
 	];
 	$model = $models[array_rand($models)];
-    $did=0;
+
+	$did=0;
 	foreach($tasks as $task){
 		$data=$task['request_body'];
 		if(pdo_query("update openai_task_queue set status=1 where id=? and status=0 ",$task['id'])){
@@ -55,16 +70,26 @@ do{
 			echo ($response);
 			echo "\n\n";
 			pdo_query("update openai_task_queue set response_body=?,status=2 where id=?",$response,$task['id']);
-
-			if($task['solution_id']>0){
-				$data=json_decode($response);
+			$data=json_decode($response);
+			if($task['solution_id']>0){ // 异步的错误解析
 				$answer=$data->choices[0]->message->content."<br> --- $model  <br><a href='https://github.com/zhblue/hustoj/' target=_blank > 如果你觉得这个系统对你有帮助，请到Github来给我们加个Star⭐吧 </a> ";
 				$sql="insert into solution_ai_answer (solution_id,answer) values(?,?)";
 				pdo_query($sql,$task['solution_id'],$answer);
 
-			}else{
+			}else if ($task['problem_id']>0 && ($task['task_type']=="problem_list.php")){  // 批量生成题目分类
+				echo $task['problem_id']. " ".  $task['task_type']." ".$task['solution_id']." ".$task['task_type']."\n";
+				$answer=$data->choices[0]->message->content;
+				$pid=$task['problem_id'];
+				$new_source=$answer;	
+				$old_source=pdo_query("select source from problem where problem_id=?",$pid)[0][0];
+				echo "old_source:".$old_source."\n";
+				$new_source=uniqueSource($new_source." ".$old_source);
+				$sql= "update problem set source=? where problem_id=?";		
+				echo "new_source:".$new_source."\n";
+				echo ($sql."[".$new_source.",".$pid."]");
+				pdo_query($sql,$new_source,$pid);
 			}
-			$did++;
+		$did++;
 		}
 	}
 }while($did>0);

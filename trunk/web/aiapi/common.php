@@ -37,7 +37,7 @@ if((isset($_SESSION[$OJ_NAME.'_administrator'])|| isset($_SESSION[$OJ_NAME.'_pro
 		}
 	}else if(str_starts_with( basename($http_referer),"phpfm.php")|| str_starts_with( basename($http_referer),"submitpage.php") ){
 	$table=false;
-	$pid=$_GET['pid'];
+	$pid=intval($_GET['pid']);
 	$gen_name=$_GET['filename'];
 	if($gen_name=="Gen.py"){
                 $prompt_sys=file_get_contents(dirname(__FILE__)."/genpy.md");
@@ -70,7 +70,7 @@ if((isset($_SESSION[$OJ_NAME.'_administrator'])|| isset($_SESSION[$OJ_NAME.'_pro
 			$prompt_sys="你是一位经验丰富的信奥教练，帮我给出这个题目的算法分类, 请用空格分割不同的分类名称，给出至少一个分类名，不要输出其他内容，例如:
 高精度 动态规划 背包问题 数论 几何 贪心";
 			$problem=pdo_query("select concat(description,'输入:',input,'输出:',output,'样例输入:',sample_input,'样例输出:',sample_output,'提示:',hint) from problem where problem_id=?",$pid)[0][0];
-			$prompt_user="题目是:".$problem."\n , 请帮我写个极简分类，不要解释，只要分类";
+			$prompt_user="题目是:".$problem."\n , 请帮我写个极简分类，不要解释，只要分类，数量不超过4个";
 		}
        }else if(basename($http_referer)=="problem_add_page.php"){
 	       $title=$_GET['title'];
@@ -131,7 +131,6 @@ if( basename($http_referer)=="reinfo.php" ||  basename($http_referer)=="ceinfo.p
 	$answer=pdo_query($sql,$sid);
 	if(!empty($answer)){
 		echo htmlentities($answer[0][0]);
-		echo "<!-- cached answer -->";
 		exit();
 	}
 	$problem=pdo_query("select concat(description,'输入:',input,'输出:',output,'样例输入:',sample_input,'样例输出:',sample_output,'提示:',hint) from problem where problem_id=?",$problem_id)[0][0];
@@ -157,9 +156,10 @@ $data = [
 ];
 if(isset($temperature)) 
 	$data["temperature"] = $temperature;   
-$sql="insert into openai_task_queue (user_id,task_type,solution_id,request_body,status,create_date,update_date) values(?,?,?,?,0,now(),now())";
+$sql="insert into openai_task_queue (user_id,task_type,solution_id,problem_id,request_body,status,create_date,update_date) values(?,?,?,?,?,0,now(),now())";
 if(!isset($sid)) $sid=0;
-$insert_id=pdo_query($sql,$_SESSION[$OJ_NAME.'_user_id'],basename($http_referer),$sid,json_encode($data));
+if(!isset($pid)) $pid=0;  // alter table openai_task_queue add column problem_id bigint not null default 0 after solution_id;
+$insert_id=pdo_query($sql,$_SESSION[$OJ_NAME.'_user_id'],basename($http_referer),$sid,$pid,json_encode($data));
 echo $insert_id;
 trigger_judge($insert_id);     // moved to my_func.inc.php
 
