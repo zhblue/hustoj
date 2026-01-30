@@ -1,11 +1,5 @@
 <?php
 ini_set("display_errors", "On");  //set this to "On" for debugging  ,especially when no reason blank shows up.
-// 这个文件用于对接阿里千问，解析编译报错和运行错误信息。
-// 需要在db_info.inc.php中配置 $OJ_AI_API_URL指向本文件; 
-// 登录阿里云，打开 https://bailian.console.aliyun.com/?tab=model#/api-key  创建新的API KEY
-// 注意这个功能可能会导致阿里云付费账单，
-// 访问类似 https://bailian.console.aliyun.com/?tab=model#/model-market/detail/qwen3-coder-480b-a35b-instruct
-// 关注所用模型的剩余免费额度
 // 如果不是 CLI 环境，则直接退出
 if (php_sapi_name() !== 'cli') {
     // 可以输出错误信息（可选）
