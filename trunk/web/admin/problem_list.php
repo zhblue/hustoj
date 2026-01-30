@@ -37,7 +37,7 @@ $pages = intval(ceil($ids/$idsperpage));
 if(isset($_GET['page'])){ $page = intval($_GET['page']);}
 else{ $page = 1;}
 
-$pagesperframe = 5;
+$pagesperframe = 25;
 $frame = intval(ceil($page/$pagesperframe));
 
 $spage = ($frame-1)*$pagesperframe+1;
@@ -62,6 +62,26 @@ if(isset($_GET['keyword']) && $_GET['keyword']!=""){
   <input type="text" name=keyword value="<?php if(isset($_GET['keyword']))echo htmlentities($_GET['keyword'],ENT_QUOTES,"utf-8")?>" class="form-control search-query" placeholder="<?php echo $MSG_PROBLEM_ID.', '.$MSG_TITLE.', '.$MSG_Description.', '.$MSG_SOURCE?>">
   <button type="submit" class="form-control"><?php echo $MSG_SEARCH?></button>
 </form>
+
+<?php
+if(!(isset($_GET['keyword']) && $_GET['keyword']!=""))
+{
+  echo "<div style='display:inline;'>";
+  echo "<nav class='center'>";
+  echo "<ul class='pagination pagination-sm'>";
+  echo "<li class='page-item'><a href='problem_list.php?page=".(strval(1))."'>&lt;&lt;</a></li>";
+  echo "<li class='page-item'><a href='problem_list.php?page=".($page==1?strval(1):strval($page-1))."'>&lt;</a></li>";
+  for($i=$spage; $i<=$epage; $i++){
+    echo "<li class='".($page==$i?"active ":"")."page-item'><a title='go to page' href='problem_list.php?page=".$i."'>".$i."</a></li>";
+  }
+  echo "<li class='page-item'><a href='problem_list.php?page=".($page==$pages?strval($page):strval($page+1))."'>&gt;</a></li>";
+  echo "<li class='page-item'><a href='problem_list.php?page=".(strval($pages))."'>&gt;&gt;</a></li>";
+  echo "</ul>";
+  echo "</nav>";
+  echo "</div>";
+}
+?>
+
 </center>
 
 <?php
@@ -118,7 +138,7 @@ echo "</select>";
         echo "</td>";
         echo "<td>".$row['accepted']."</td>";
         echo "<td>".$row['in_date']."</td>";
-		echo "<td>";//分类
+		echo "<td onDblClick='modify_source(".$row['problem_id'].")' >";//分类
 		
 		$category = array();
 	    $cate = explode(" ",$row['source']);
@@ -277,6 +297,40 @@ $(document).ready(function(){
 	});
 
 });
+function removeAIEnd(str) {
+  // 先去掉前后空格
+  str = str.trim();
+
+  // 检查是否以"AI+"结尾
+  if (str.endsWith("AI+")) {
+    // 删除结尾的"AI+"
+    str = str.slice(0, -3);
+  }
+
+  // 再次去掉前后空格（因为删除后可能留下空格）
+  return str.trim();
+}
+function modify_source(pid){
+	//alert(pid);
+	let view=$("#source_"+pid);
+	let old=removeAIEnd(view.text());
+	let html="<input id='new_source_"+pid+"' type=text value='"+old+"' >";
+	view.html(html);
+	$('#new_source_'+pid).on("blur change",function (){
+		let ns=($(this).val());
+		    $.ajax({
+		    	url: 'ajax.php', 
+			type: 'POST',
+			data: { m:'problem_set_source' , pid:pid , ns:ns},
+			success: function(data) {
+				$("#source_"+pid).html("<span class='label label-info'>"+ns+"</span>");		
+			},
+			error: function() {
+				console.log("分类添加失败");
+			}
+		    });
+	});
+}
 	function fill_data(pid,data){
 		if(data.indexOf('请求过于频繁')>-1){
 			$("#source_"+pid).text(data);		

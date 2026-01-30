@@ -19,6 +19,12 @@ function try_ajax($tb,$fd,$pr){
 }
 if($_SERVER['REQUEST_METHOD']=="POST"){
 	$m=$_POST["m"];	
+	if($m=="problem_set_source" && ( isset($_SESSION[$OJ_NAME.'_administrator']) || isset($_SESSION[$OJ_NAME.'_problem_editor']) || isset($_SESSION[$OJ_NAME.'_tag_adder']) ) ){
+		$pid=intval($_POST['pid']);
+		$new_source=($_POST['ns']);	
+		$sql= "update problem set source=? where problem_id=?";		
+		echo pdo_query($sql,$new_source,$pid);
+	}
 	if($m=="problem_add_source" && ( isset($_SESSION[$OJ_NAME.'_administrator']) || isset($_SESSION[$OJ_NAME.'_problem_editor']) || isset($_SESSION[$OJ_NAME.'_tag_adder']) ) ){
 		$pid=intval($_POST['pid']);
 		$new_source=($_POST['ns']);	
