@@ -36,7 +36,7 @@ if($_SERVER['REQUEST_METHOD']=="POST"){
 		$new_source=uniqueSource($_POST['ns']);	
 		$sql= "update problem set source=? where problem_id=?";		
 		echo pdo_query($sql,$new_source,$pid);
-		echo $sql." [".$new_source."]";
+		//echo $sql." [".$new_source."]";
 	}
 	if($m=="problem_add_source" && ( isset($_SESSION[$OJ_NAME.'_administrator']) || isset($_SESSION[$OJ_NAME.'_problem_editor']) || isset($_SESSION[$OJ_NAME.'_tag_adder']) ) ){
 		$pid=intval($_POST['pid']);
@@ -106,3 +106,4 @@ if($_SERVER['REQUEST_METHOD']=="POST"){
 	}
 
 }
+
