@@ -904,15 +904,6 @@ function removeCodeBlockMarkers(str) {
 		    $('#ai_bt').val('AI思考中...请稍候...');
 		    $('#ai_bt').prop('disabled', true);
 		    $.ajax({
-			url: '<?php echo $OJ_AI_API_URL ?>?sid=<?php echo $id?>', 
-			type: 'GET',
-			success: function(data) {
-			},
-			error: function() {
-			    console.log('获取数据失败');
-			}
-		    });
-		    $.ajax({
 		    	url: '<?php echo $OJ_AI_API_URL?>', 
 				type: 'GET',
 				data: { pid: '<?php echo $id?>', filename: filename },
