@@ -160,7 +160,14 @@ if(basename($_SERVER['PHP_SELF'])!=="cron.php"){
 	$sql="insert into openai_task_queue (user_id,task_type,solution_id,problem_id,request_body,status,create_date,update_date) values(?,?,?,?,?,0,now(),now())";
 	if(!isset($sid)) $sid=0;
 	if(!isset($pid)) $pid=0;  // alter table openai_task_queue add column problem_id bigint not null default 0 after solution_id;
-	$insert_id=pdo_query($sql,$_SESSION[$OJ_NAME.'_user_id'],basename($http_referer),$sid,$pid,json_encode($data));
-	echo $insert_id;
-	trigger_judge($insert_id);     // moved to my_func.inc.php
+
+	$check_sql="SELECT id FROM openai_task_queue WHERE user_id=? AND task_type=? AND solution_id=? AND problem_id=? AND status IN (0,1) AND update_date > DATE_SUB(NOW(), INTERVAL 10 MINUTE)";
+	$check_result=pdo_query($check_sql,$_SESSION[$OJ_NAME.'_user_id'],basename($http_referer),$sid,$pid);
+	if($check_result[0][0] > 0){
+			echo $check_result[0][0];  // 重复的请求直接返回id
+	}else{
+			$insert_id=pdo_query($sql,$_SESSION[$OJ_NAME.'_user_id'],basename($http_referer),$sid,$pid,json_encode($data));
+			echo $insert_id;
+	}
+	trigger_judge($insert_id);
 }
