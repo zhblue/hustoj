@@ -97,11 +97,9 @@ function getAttribute($Node, $TagName,$attribute) {
 
 function hasRemoteProblem($remote_oj,$remote_id) {
   if($remote_oj=="" || $remote_id=="")return false;	
-  $md5 = md5($title);
   $sql = "SELECT 1 FROM problem WHERE remote_oj=? and remote_id=?";  
   $result = pdo_query($sql,$remote_oj,$remote_id);
-  $rows_cnt = count($result);		
-  //echo "row->$rows_cnt";			
+  $rows_cnt = count($result);					
   return ($rows_cnt>0);
 }
 function hasProblem($title) {
