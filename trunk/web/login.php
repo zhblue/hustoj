@@ -118,11 +118,7 @@ if ($login) {
     else
         echo "setTimeout('history.go(-2)',500);\n";
     echo "</script>";
-    $sql="INSERT INTO `loginlog`(user_id,password,ip,time) VALUES(?,'login ok',?,NOW())";
-    pdo_query($sql,$user_id,$ip);
 } else {
-    $sql = "INSERT INTO `loginlog`(user_id,password,ip,time) VALUES(?,'login fail',?,NOW())";
-    pdo_query($sql, $user_id, $ip);
     if (isset($OJ_LOG_ENABLED) && $OJ_LOG_ENABLED) {
         $params = json_encode($_REQUEST, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
         $logger->info($params);
@@ -136,4 +132,5 @@ if ($login) {
         echo "</script>";
     }
 }
-?>
+$sql="INSERT INTO `loginlog`(user_id,password,ip,time) VALUES(?,'login ok',?,NOW())";
+pdo_query($sql,$user_id,$ip);
