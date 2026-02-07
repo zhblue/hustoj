@@ -118,6 +118,8 @@ if ($login) {
     else
         echo "setTimeout('history.go(-2)',500);\n";
     echo "</script>";
+    $sql="INSERT INTO `loginlog`(user_id,password,ip,time) VALUES(?,'login ok',?,NOW())";
+    pdo_query($sql,$user_id,$ip);
 } else {
     $sql = "INSERT INTO `loginlog`(user_id,password,ip,time) VALUES(?,'login fail',?,NOW())";
     pdo_query($sql, $user_id, $ip);
