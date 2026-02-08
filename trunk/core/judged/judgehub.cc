@@ -56,6 +56,7 @@ void wait_udp_msg(int fd)
     char cnf[BUFFER_SIZE<<2];  //......1024..
     socklen_t len;
     int count;
+    long diff;
     struct sockaddr_in clent_addr;  //clent_addr............
         memset(buf, 0, BUFFER_SIZE);
         len = sizeof(clent_addr);
@@ -77,7 +78,7 @@ void wait_udp_msg(int fd)
                 gettimeofday(&now,NULL);
                 printf(" now_time:%ld\n",now.tv_sec);
                 printf("cnf_mtime:%ld\n",cnfstat.st_mtime);
-                long diff = now.tv_sec - cnfstat.st_mtime;
+                diff = now.tv_sec - cnfstat.st_mtime;
 //                if(labs(diff) > ONE_YEAR_SECONDS ) return;
                 if(fork()==0){
                         printf("Running judged on : %s\n",oj_home);
