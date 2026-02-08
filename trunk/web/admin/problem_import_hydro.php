@@ -268,6 +268,12 @@ if ($_FILES["fps"]["error"] > 0) {
                 }
 
                 file_put_contents($OJ_DATA . "/$pid/" . $dataname, $file_content);
+            } elseif (strpos($file_path, "std") !== false && basename($file_name) != "std") {
+                $dataname = basename($file_name);
+		if ($dataname=="main.cpp") $dataname="Main.cc";
+                if (endsWith($dataname, ".cpp")||endsWith($dataname, ".cc")||endsWith($dataname, ".py")) {
+			file_put_contents($OJ_DATA . "/$pid/" . $dataname, $file_content);
+		}
             } elseif (strpos($file_path, "additional_file") !== false && basename($file_name) != "additional_file") {
                 $ext = strtolower(get_extension($file_name));
 
