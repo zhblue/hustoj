@@ -83,6 +83,9 @@ void wait_udp_msg(int fd)
                 if(fork()==0){
                         printf("Running judged on : %s\n",oj_home);
                         execl("/usr/bin/judged", "/usr/bin/judged", oj_home,"debug","4", (char *) NULL);
+                        // 如果执行到这里，说明 execl 失败了
+                        perror("execl failed");
+                        _exit(EXIT_FAILURE); // 必须立即退出，防止污染父进程逻辑
                         //exit(system(cmd));
                 }else{
                         waitpid(-1, NULL, WNOHANG);
