@@ -19,6 +19,7 @@ if (!isset($_GET['sid'])) {
 function is_valid($str2)
 {
     global $_SESSION, $OJ_NAME, $OJ_FRIENDLY_LEVEL;
+    if ($str2 === null) return false;
     if (isset($_SESSION[$OJ_NAME . '_' . 'source_browser'])) return true;
     //return true; // 如果希望能让任何人都查看对比和RE,放开行首注释，并设定$OJ_SHOW_DIFF=true; if you fail to view diff , try remove the // at beginning of this line.
     if ($OJ_FRIENDLY_LEVEL > 3) return true;
@@ -79,16 +80,18 @@ if (($ok && $OJ_FRIENDLY_LEVEL > 2) ||
     $sql = "SELECT `error` FROM `runtimeinfo` WHERE `solution_id`=?";
     $result = pdo_query($sql, $id);
 
+    $error_info = null;
     if (isset($result[0])) {
-        $row = $result[0];
-        $view_reinfo = htmlentities(str_replace("\n\r", "\n", $row['error']), ENT_QUOTES, "UTF-8");
+        $row_runtime = $result[0];
+        $error_info = $row_runtime['error'];
+        $view_reinfo = htmlentities(str_replace("\n\r", "\n", $error_info ?? ""), ENT_QUOTES, "UTF-8");
     }
 
-    if (strpos($row['error'], "judge/") !== false && !isset($_SESSION[$OJ_NAME . "_administrator"])) $view_reinfo = "潜在的数组或指针越界，请检查代码。";
-    else if (strpos($row['error'], "php") !== false) $view_reinfo = "error2";
-    else if (strpos($row['error'], "PASS") !== false) $view_reinfo = "error3";
-    else if ($OJ_SHOW_DIFF && $row && ($ok || $isRE) && ($OJ_TEST_RUN || is_valid($row['error']) || $ok)) {
-        $view_reinfo = htmlentities(str_replace("\n\r", "\n", $row['error']), ENT_QUOTES, "UTF-8");
+    if ($error_info !== null && strpos($error_info, "judge/") !== false && !isset($_SESSION[$OJ_NAME . "_administrator"])) $view_reinfo = "潜在的数组或指针越界，请检查代码。";
+    else if ($error_info !== null && strpos($error_info, "php") !== false) $view_reinfo = "error2";
+    else if ($error_info !== null && strpos($error_info, "PASS") !== false) $view_reinfo = "error3";
+    else if ($OJ_SHOW_DIFF && $row && ($ok || $isRE) && ($OJ_TEST_RUN || is_valid($error_info) || $ok)) {
+        $view_reinfo = htmlentities(str_replace("\n\r", "\n", $error_info ?? ""), ENT_QUOTES, "UTF-8");
 
         $view_reinfo .= "<br>$MSG_MARK:$mark";
 
