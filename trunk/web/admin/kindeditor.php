@@ -1,4 +1,4 @@
-        <meta charset="utf-8" />
+<meta charset="utf-8" />
         <link rel="stylesheet" href="../kindeditor/themes/default/default.css" />
         <link rel="stylesheet" href="../kindeditor/plugins/code/prettify.css" />
         <script charset="utf-8" src="../kindeditor/kindeditor.js?v=20251217"></script>
