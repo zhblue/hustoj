@@ -12,5 +12,5 @@ $apiKey ="hf_api_key";  // 配置你在 https://huggingface.co/settings/tokens �
 $models=array("Qwen/Qwen3-Coder-480B-A35B-Instruct:novita");
 
 $temperature=0.8;
-
-require_once(dirname(__FILE__)."/common.php");
+if(basename(get_included_files()[0])!="cron.php")
+  require_once(dirname(__FILE__)."/common.php");

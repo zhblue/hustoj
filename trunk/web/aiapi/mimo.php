@@ -12,4 +12,5 @@ $url = 'https://api.xiaomimimo.com/v1/chat/completions';
 $apiKey = "sk-申请你自己的apikey";   //https://platform.xiaomimimo.com/#/console/api-keys  创建新的API KEY
 $models=array("mimo-v2-flash");
 $temperature=0.8;
-require_once(dirname(__FILE__)."/common.php");
+if(basename(get_included_files()[0])!="cron.php")
+  require_once(dirname(__FILE__)."/common.php");

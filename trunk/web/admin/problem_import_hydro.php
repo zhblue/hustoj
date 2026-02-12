@@ -140,7 +140,8 @@ if ($_FILES["fps"]["error"] > 0) {
             die("Could not open ZIP archive.");
         }
 
-        $save_path = "";
+	$save_path=dirname(dirname(__FILE__))."/upload/$domain/".date("YmdHis")."/";
+	$new_path="/upload/$domain/".date("YmdHis")."/";
         $i = 1;
         $pid = $title = $description = $input = $output = $sample_input = $sample_output = $hint = $source = $spj = "";
         $type = "normal";
@@ -181,7 +182,7 @@ if ($_FILES["fps"]["error"] > 0) {
                 $description = preg_replace('/{{ select\(\d+\) }}/', "", $description);
 
                 if ($save_path) {
-                    $description = str_replace("file://", $save_path . "/", $description);
+                    $description = str_replace("file://", $new_path . "/", $description);
                 }
 
                 $spj = 0;
@@ -267,6 +268,12 @@ if ($_FILES["fps"]["error"] > 0) {
                 }
 
                 file_put_contents($OJ_DATA . "/$pid/" . $dataname, $file_content);
+            } elseif (strpos($file_path, "std") !== false && basename($file_name) != "std") {
+                $dataname = basename($file_name);
+		if ($dataname=="main.cpp") $dataname="Main.cc";
+                if (endsWith($dataname, ".cpp")||endsWith($dataname, ".cc")||endsWith($dataname, ".py")) {
+			file_put_contents($OJ_DATA . "/$pid/" . $dataname, $file_content);
+		}
             } elseif (strpos($file_path, "additional_file") !== false && basename($file_name) != "additional_file") {
                 $ext = strtolower(get_extension($file_name));
 
@@ -277,17 +284,12 @@ if ($_FILES["fps"]["error"] > 0) {
                 $new_file_name = basename($file_name);
                 $newpath = $save_path . "/" . $new_file_name;
 
-                if ($OJ_SAE) {
-                    $newpath = "saestor://web" . $newpath;
-                } else {
-                    $newpath = ".." . $newpath;
-                }
-
                 if (!file_exists(dirname($newpath))) {
                     mkdir(dirname($newpath), 0750, true);
                 }
-
+//		echo "additional:$newpath <br>";
                 file_put_contents($newpath, $file_content);
+
             }
         }
 

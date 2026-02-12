@@ -15,4 +15,5 @@ $url = 'https://models.github.ai/inference/chat/completions';
 $apiKey = "申请你自己的github api key 填写到这里";   //  https://github.com/settings/personal-access-tokens/new  创建新的API KEY
 $models=array("openai/gpt-4.1");
 $temperature=0.8;
-require_once(dirname(__FILE__)."/common.php");
+if(basename(get_included_files()[0])!="cron.php")
+  require_once(dirname(__FILE__)."/common.php");

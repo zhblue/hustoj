@@ -11,4 +11,5 @@ $url = "https://api.suanli.cn/v1/chat/completions";  // 设置请求的URL
 $apiKey ="算了么平台申请的API key";   //https://api.suanli.cn/token
 $models=array("free:Qwen3-30B-A3B");
 $temperature=0.8;
-require_once(dirname(__FILE__)."/common.php");
+if(basename(get_included_files()[0])!="cron.php")
+  require_once(dirname(__FILE__)."/common.php");

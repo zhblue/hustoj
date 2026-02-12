@@ -24,7 +24,7 @@
   <div class="container">
     <br><br>
     - Export Problem XML<br><br>
-    <form class="form-inline" action="problem_export_xml.php" method=post>
+    <form class="form-inline" action="problem_export_xml.php" method="post"  onsubmit="setTimeout('location.reload()',3000)" >
       <div class="form-group">
         <label>1) Continuous Problem IDs:</label>
         <input class="form-control" name="start" type="text" placeholder="1001">
@@ -68,3 +68,4 @@
 
 </body>
 </html>
+

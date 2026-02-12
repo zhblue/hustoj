@@ -80,9 +80,16 @@ td > code {
     pats[10]=/non-zero return/;
     exps[10]="<?php echo $MSG_NON_ZERO_RETURN ?>";
 
+  MathJax = {
+    tex: {inlineMath: [['$', '$'], ['\\(', '\\)']]}
+  };
 function fill_data(data){
     $("#errexp").html(data);    
     $("#errexp").html(marked.parse($("#errexp").text()));    
+    const target = document.getElementById('errexp');
+	MathJax.typesetPromise([target]).then(() => {
+	  console.log('局部渲染完成！');
+	}).catch((err) => console.log('渲染出错:', err));
 }
 function pull_result(id){
 	console.log(id);
@@ -141,6 +148,7 @@ function pull_result(id){
     explain();
 </script>
 <script src="<?php echo $OJ_CDN_URL.$path_fix."template/bs3/"?>marked.min.js"></script>
+<script id="MathJax-script" async src="template/bs3/tex-chtml.js"></script>
 <script>
     $(document).ready(function(){
                 marked.use({

@@ -38,6 +38,7 @@
 
 #define BUFFER_SIZE 1024
 
+#define ONE_YEAR_SECONDS  (31536000L)
 
 static char oj_udpserver[BUFFER_SIZE]="127.0.0.1";
 static int  oj_udpport=2008;
@@ -51,13 +52,15 @@ void wait_udp_msg(int fd)
     char buf[BUFFER_SIZE];  //......1024..
     char dir[BUFFER_SIZE];  //......1024..
     char cmd[BUFFER_SIZE<<2];  //......1024..
+    char oj_home[BUFFER_SIZE<<2];  //......1024..
     char cnf[BUFFER_SIZE<<2];  //......1024..
     socklen_t len;
     int count;
+    long diff;
     struct sockaddr_in clent_addr;  //clent_addr............
         memset(buf, 0, BUFFER_SIZE);
         len = sizeof(clent_addr);
-        count = recvfrom(fd, buf, BUFFER_SIZE, 0, (struct sockaddr*)&clent_addr, &len);  //recvfrom.......                   
+        count = recvfrom(fd, buf, BUFFER_SIZE, 0, (struct sockaddr*)&clent_addr, &len);  //recvfrom.......
         if(count == -1)
         {
             printf("recieve data fail!\n");
@@ -65,7 +68,7 @@ void wait_udp_msg(int fd)
         }
         printf("task msg:%s\n",buf);  //..client......
         sscanf(buf,"%s\n",dir);
-        sprintf(cmd,"judged %s/%s/ debug 4",oj_hub_base,dir);  //..client......
+        sprintf(oj_home,"%s/%s/",oj_hub_base,dir);  //..client......
         sprintf(cnf,"%s/%s/etc/judge.conf",oj_hub_base,dir);
         struct stat cnfstat;
         if(stat(cnf,&cnfstat)){
@@ -75,9 +78,15 @@ void wait_udp_msg(int fd)
                 gettimeofday(&now,NULL);
                 printf(" now_time:%ld\n",now.tv_sec);
                 printf("cnf_mtime:%ld\n",cnfstat.st_mtime);
+                diff = now.tv_sec - cnfstat.st_mtime;
+//                if(labs(diff) > ONE_YEAR_SECONDS ) return;
                 if(fork()==0){
-                        printf("%s\n",cmd);
-                        exit(system(cmd));
+                        printf("Running judged on : %s\n",oj_home);
+                        execl("/usr/bin/judged", "/usr/bin/judged", oj_home,"debug","4", (char *) NULL);
+                        // 如果执行到这里，说明 execl 失败了
+                        perror("execl failed");
+                        _exit(EXIT_FAILURE); // 必须立即退出，防止污染父进程逻辑
+                        //exit(system(cmd));
                 }else{
                         waitpid(-1, NULL, WNOHANG);
                 }

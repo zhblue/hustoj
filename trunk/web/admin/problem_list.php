@@ -1,4 +1,5 @@
 <?php
+//ini_set("display_errors", "On");  //set this to "On" for debugging  ,especially when no reason blank shows up.
 require("admin-header.php");
 require_once("../include/set_get_key.php");
 require_once('../include/const.inc.php');
@@ -36,7 +37,7 @@ $pages = intval(ceil($ids/$idsperpage));
 if(isset($_GET['page'])){ $page = intval($_GET['page']);}
 else{ $page = 1;}
 
-$pagesperframe = 5;
+$pagesperframe = 25;
 $frame = intval(ceil($page/$pagesperframe));
 
 $spage = ($frame-1)*$pagesperframe+1;
@@ -61,6 +62,26 @@ if(isset($_GET['keyword']) && $_GET['keyword']!=""){
   <input type="text" name=keyword value="<?php if(isset($_GET['keyword']))echo htmlentities($_GET['keyword'],ENT_QUOTES,"utf-8")?>" class="form-control search-query" placeholder="<?php echo $MSG_PROBLEM_ID.', '.$MSG_TITLE.', '.$MSG_Description.', '.$MSG_SOURCE?>">
   <button type="submit" class="form-control"><?php echo $MSG_SEARCH?></button>
 </form>
+
+<?php
+if(!(isset($_GET['keyword']) && $_GET['keyword']!=""))
+{
+  echo "<div style='display:inline;'>";
+  echo "<nav class='center'>";
+  echo "<ul class='pagination pagination-sm'>";
+  echo "<li class='page-item'><a href='problem_list.php?page=".(strval(1))."'>&lt;&lt;</a></li>";
+  echo "<li class='page-item'><a href='problem_list.php?page=".($page==1?strval(1):strval($page-1))."'>&lt;</a></li>";
+  for($i=$spage; $i<=$epage; $i++){
+    echo "<li class='".($page==$i?"active ":"")."page-item'><a title='go to page' href='problem_list.php?page=".$i."'>".$i."</a></li>";
+  }
+  echo "<li class='page-item'><a href='problem_list.php?page=".($page==$pages?strval($page):strval($page+1))."'>&gt;</a></li>";
+  echo "<li class='page-item'><a href='problem_list.php?page=".(strval($pages))."'>&gt;&gt;</a></li>";
+  echo "</ul>";
+  echo "</nav>";
+  echo "</div>";
+}
+?>
+
 </center>
 
 <?php
@@ -103,6 +124,7 @@ echo "</select>";
       <input type=submit name='enable' value='<?php echo $MSG_AVAILABLE ?>' onclick='$("form").attr("action","problem_df_change.php")'>
       <input type=submit name='disable' value='<?php echo $MSG_RESERVED ?>' onclick='$("form").attr("action","problem_df_change.php")'>
       <input type=submit name='plist' value='<?php echo $MSG_NEW_PROBLEM_LIST?>' onclick='$("form").attr("action","news_add_page.php")'>
+      <?php if (isset($_SESSION[$OJ_NAME."_administrator"])) { ?><span class='btn btn-primary' onclick='$(".ai.label.label-primary").click();'>AI-category</span> <?php } ?>
       </td>
     </tr>
     <?php    
@@ -116,7 +138,7 @@ echo "</select>";
         echo "</td>";
         echo "<td>".$row['accepted']."</td>";
         echo "<td>".$row['in_date']."</td>";
-		echo "<td>";//分类
+		echo "<td onDblClick='modify_source(".$row['problem_id'].")' style='cursor: pointer;' >";//分类
 		
 		$category = array();
 	    $cate = explode(" ",$row['source']);
@@ -137,8 +159,9 @@ echo "</select>";
 			if ($label_theme=="") $label_theme = "default";
 			$view .= "<a title='".htmlentities($cat,ENT_QUOTES,'UTF-8')."' class='label label-$label_theme' style='display: inline-block;' href='problem_list.php?keyword=".htmlentities(urlencode($cat),ENT_QUOTES,'UTF-8')."'>".mb_substr($cat,0,10,'utf8')."</a>&nbsp;";
 		}
-		echo "<div class=\"show_tag_controled\" style=\"float: right; \">";		
+		echo "<div id='source_".$row['problem_id']."' class=\"show_tag_controled\" style=\"float: right; \">";		
     	echo $view;		
+	if(count($cate)<3) echo "<span class='ai label label-primary' onclick=ai_gen(this,".$row['problem_id'].") > AI+ </span>";
 		echo "</div></td>";
 		
         if(isset($_SESSION[$OJ_NAME.'_'.'administrator'])||isset($_SESSION[$OJ_NAME.'_'.'problem_editor'])){
@@ -146,7 +169,7 @@ echo "</select>";
             echo "<td><a href=problem_df_change.php?id=".$row['problem_id']."&getkey=".$_SESSION[$OJ_NAME.'_'.'getkey'].">".($row['defunct']=="N"?"<span titlc='click to reserve it' class=green>$MSG_AVAILABLE</span>":"<span class=red title='click to be available'>$MSG_RESERVED</span>")."</a><td>";
 		    if(isset($_SESSION[$OJ_NAME.'_'.'administrator']) || isset($_SESSION[$OJ_NAME.'_'."p".$row['problem_id']]) ){
 			    ?>
-			            <a href=# onclick='javascript:if(confirm(<?php echo json_encode($MSG_DELETE."[".htmlentities($row['title'],ENT_QUOTES,"UTF-8")."]?")?>))
+			             <a href=# onclick='javascript:if(confirm(<?php echo json_encode($MSG_DELETE."[".htmlentities($row['title'],ENT_QUOTES,"UTF-8")."]?")?>)) 
 					     location.href="problem_del.php?id=<?php echo $row['problem_id']?>&getkey=<?php echo $_SESSION[$OJ_NAME.'_'.'getkey']?>"'>
 						<?php echo $MSG_DELETE ?>
 			              </a>
@@ -274,6 +297,100 @@ $(document).ready(function(){
 	});
 
 });
+function removeAIEnd(str) {
+  // 先去掉前后空格
+  str = str.trim();
+
+  // 检查是否以"AI+"结尾
+  if (str.endsWith("AI+")) {
+    // 删除结尾的"AI+"
+    str = str.slice(0, -3);
+  }
+
+  // 再次去掉前后空格（因为删除后可能留下空格）
+  return str.trim();
+}
+function modify_source(pid){
+	//alert(pid);
+	let view=$("#source_"+pid);
+	let old=removeAIEnd(view.text());
+	let html="<input id='new_source_"+pid+"' type=text value='"+old+"' >";
+	view.html(html);
+	$('#new_source_'+pid).on("blur change",function (){
+		let ns=($(this).val());
+		    $.ajax({
+		    	url: 'ajax.php', 
+			type: 'POST',
+			data: { m:'problem_set_source' , pid:pid , ns:ns},
+			success: function(data) {
+				$("#source_"+pid).html("<span class='label label-info'>"+ns+"</span>");		
+			},
+			error: function() {
+				console.log("分类添加失败");
+			}
+		    });
+	});
+}
+	function fill_data(pid,data){
+		if(data.indexOf('请求过于频繁')>-1){
+			$("#source_"+pid).text(data);		
+			return ;
+		}
+		console.log(pid+":"+data);	
+		    let ns=data;
+		    $.ajax({
+		    	url: 'ajax.php', 
+			type: 'POST',
+			data: { m:'problem_add_source' , pid:pid , ns:ns},
+			success: function(data) {
+				console.log(data);
+				if(parseInt(data)>=0){
+					$("#source_"+pid).html("<span class='label label-info'>"+ns+"</span>");		
+				}
+			},
+			error: function() {
+				console.log("分类添加失败");
+			}
+		    });
+		
+	}
+	var sleep=10;
+	function pull_result(pid,id){
+		console.log(id);
+	    $.ajax({
+		url: '../aiapi/ajax.php', 
+		type: 'GET',
+		data: { id: id },
+		success: function(data) {
+			if(data=="waiting"){
+				window.setTimeout('pull_result('+pid+','+id+')',1000*Math.sqrt(sleep++));
+			}else{
+				fill_data(pid,data);
+				sleep=1;
+			}
+		},
+		error: function() {
+		    	    console.log('获取数据失败');
+		}
+	    });
+	}
+	function ai_gen(btn,pid){
+		    let oldval=$(btn).text();
+		    $(btn).text('AI思考中...请稍候...');
+		    $.ajax({
+		    	url: '../<?php echo $OJ_AI_API_URL?>', 
+			type: 'GET',
+			data: { pid : pid },
+			success: function(data) {
+				if(parseInt(data)>0)
+					window.setTimeout('pull_result('+pid+','+data+')',1000*Math.sqrt(sleep++));
+			},
+			error: function() {
+		    	    $(btn).text('获取数据失败');
+			}
+		    });
+	}
+
 </script>
 </div>
 

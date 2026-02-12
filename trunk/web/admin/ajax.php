@@ -17,13 +17,35 @@ function try_ajax($tb,$fd,$pr){
                 echo pdo_query($sql,$new_value,$data_id);
         }
 }
+function uniqueSource($str) {
+    // 用正则分割字符串，支持多个连续空格
+    $arr = preg_split('/\s+/', trim($str));
+
+    // 去除数组中的重复项
+    $uniqueArr = array_unique($arr);
+
+    // 重新拼接为空格分割的字符串
+    $result = implode(' ', $uniqueArr);
+
+    return $result;
+}
 if($_SERVER['REQUEST_METHOD']=="POST"){
 	$m=$_POST["m"];	
+	if($m=="problem_set_source" && ( isset($_SESSION[$OJ_NAME.'_administrator']) || isset($_SESSION[$OJ_NAME.'_problem_editor']) || isset($_SESSION[$OJ_NAME.'_tag_adder']) ) ){
+		$pid=intval($_POST['pid']);
+		$new_source=uniqueSource($_POST['ns']);	
+		$sql= "update problem set source=? where problem_id=?";		
+		echo pdo_query($sql,$new_source,$pid);
+		//echo $sql." [".$new_source."]";
+	}
 	if($m=="problem_add_source" && ( isset($_SESSION[$OJ_NAME.'_administrator']) || isset($_SESSION[$OJ_NAME.'_problem_editor']) || isset($_SESSION[$OJ_NAME.'_tag_adder']) ) ){
 		$pid=intval($_POST['pid']);
 		$new_source=($_POST['ns']);	
-		$sql= "update problem set source=concat(source,' ',?) where problem_id=?";		
+		$old_source=pdo_query("select source from problem where problem_id=?",$pid)[0][0];
+		$new_source=uniqueSource($new_source." ".$old_source);
+		$sql= "update problem set source=? where problem_id=?";		
 		echo pdo_query($sql,$new_source,$pid);
+		//echo $sql;
 	}
 	if($m=="problem_update_time" && ( isset($_SESSION[$OJ_NAME.'_administrator']) || isset($_SESSION[$OJ_NAME.'_problem_editor']) ) ){
 		$pid=intval($_POST['pid']);
@@ -84,3 +106,4 @@ if($_SERVER['REQUEST_METHOD']=="POST"){
 	}
 
 }
+

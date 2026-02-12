@@ -11,4 +11,5 @@ require_once("../include/my_func.inc.php");
 $url = 'https://api.deepseek.com/chat/completions';
 $apiKey = "sk-你自己申请的api-key";   // https://platform.deepseek.com/api_keys  创建新的API KEY
 $models=array("deepseek-chat");
-require_once(dirname(__FILE__)."/common.php");
+if(basename(get_included_files()[0])!="cron.php")
+  require_once(dirname(__FILE__)."/common.php");
