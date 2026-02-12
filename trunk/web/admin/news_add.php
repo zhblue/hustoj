@@ -1,4 +1,5 @@
 <?php
+ob_start();
 require_once ("admin-header.php");
 require_once("../include/check_post_key.php");
 if(!(isset($_SESSION[$OJ_NAME.'_'.'administrator']))){
@@ -12,7 +13,7 @@ require_once("../include/my_func.inc.php");
 //contest_id
 $title = $_POST['title'];
 $content = $_POST['content'];
-$showInMenu = $_POST['showInMenu'];
+$showInMenu = isset($_POST['showInMenu']) ? $_POST['showInMenu'] : "";
 $menu = $showInMenu == "on" ? 1 : 0;
 
 $user_id = $_SESSION[$OJ_NAME.'_'.'user_id'];
@@ -30,5 +31,5 @@ pdo_query($sql,$user_id,$title,$content,$menu);
 $sessionDataKey = $OJ_NAME.'_'."_MENU_NEWS_CACHE";
 unset($_SESSION[$sessionDataKey]);
 
-echo "<script>window.location.href=\"news_list.php\";</script>";
+echo "<script>alert('保存成功！');window.location.href=\"news_list.php\";</script>";
 ?>
