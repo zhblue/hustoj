@@ -57,9 +57,9 @@ if(isset($_POST['pid'])){
       </label>
     </p>
     <p align=left>
-      <textarea class=kindeditor name=content rows=41 >
-        <?php echo isset($content)?$content:""?>
-      </textarea>
+      <textarea class=kindeditor name=content rows=41 ><?php 
+		echo isset($content)?$content:""
+	  ?></textarea>
     </p>
     <p>
       <center>
