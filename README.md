@@ -493,16 +493,18 @@ sudo bash install.sh
 或2:[卸载阿里云盾](#卸载阿里云盾)。**
 
 	
-### 校园网安装
+### 内网安装
 
-近期 `Github` 的 SVN 访问缓慢，可以到  [Releases](https://github.com/zhblue/hustoj/releases) 中下载 `tar.gz` 版本，然后用 `install` 目录下的 `*-bytgz.sh` 脚本安装。
-
-但是注意这样安装的实例，将来升级时只能手工升级。
-
-以 `Ubuntu 18.04` 为例：下载好 [Releases](https://github.com/zhblue/hustoj/releases) 中的 `Source code(tar.gz)`，然后准备好 `install-ubuntu18-bytgz.sh`
+军政网、教育网等，限制服务器访问外网的用户，请先安装标准版Ubuntu24.04 LTS Desktop，然后下载 
+```
+http://dl.hustoj.com/hustoj-offline.tar.gz
+``` 
+用U盘等方式复制到服务器中。
 
 ```bash
-sudo bash install-ubuntu18-bytgz.sh 19.06.04.tar.gz
+tar xzf hustoj-offline.tar.gz
+cd hustoj-offline
+sudo bash install.sh
 ```
 ### 基于 Ubuntu 22.04+宝塔 安装
 	
