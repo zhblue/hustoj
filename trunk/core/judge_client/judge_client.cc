@@ -3474,9 +3474,9 @@ int get_sim(int solution_id, int lang, int pid, int &sim_s_id)
         pf = fopen("sim", "r");
         if (!sim){
                 execute_cmd("/bin/mkdir ../data/%d/ac/ 2>/dev/null", pid);
-                execute_cmd("/bin/chown www-data ../data/%d/ac/ 2>/dev/null", pid);
+                execute_cmd("/bin/chown %d ../data/%d/ac/ 2>/dev/null", www_uid, pid);
                 execute_cmd("/bin/cp %s ../data/%d/ac/%d.%s 2>/dev/null", src_pth, pid, solution_id,lang_ext[lang]);
-                execute_cmd("/bin/chown www-data ../data/%d/ac/%d.%s 2>/dev/null", pid, solution_id,lang_ext[lang]);
+                execute_cmd("/bin/chown %d ../data/%d/ac/%d.%s 2>/dev/null",www_uid, pid, solution_id,lang_ext[lang]);
  		 //c cpp will
                 if (lang == 0)
                         execute_cmd("/bin/ln ../data/%d/ac/%d.%s ../data/%d/ac/%d.%s 2>/dev/null", pid,
