@@ -5,11 +5,11 @@
     global $memcache;
     if ($OJ_MEMCACHE){
 	$memcache = new Memcache;
-	if($OJ_SAE){
-				$memcache=memcache_init();
-	}else{
-				$memcache->connect($OJ_MEMSERVER,  $OJ_MEMPORT);
-	}
+		if($OJ_SAE){
+					$memcache=memcache_init();
+		}else{
+					@$memcache->connect($OJ_MEMSERVER,  $OJ_MEMPORT);
+		}
     }
 
     //下面两个函数首先都会判断是否有使用memcache，如果有使用，就会调用memcached的set/get命令来保存和获取数据
