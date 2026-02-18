@@ -95,7 +95,7 @@ fi
 ln -s /usr/bin/mcs /usr/bin/gmcs
 
 cd /home/judge/src/install/
-sed -i "s/ubuntu:22.04/debian12.2/g" Dockerfile
+sed -i "s/ubuntu:22.04/debian13/g" Dockerfile
 sed -i "s/libmysqlclient-dev/default-libmysqlclient-dev/" Dockerfile
 sed -i "s/openjdk-17-jdk/gcc/" Dockerfile
 
