@@ -77,7 +77,7 @@ if(basename($_SERVER['PHP_SELF'])!=="cron.php"){
 		       $title=$_GET['title'];
 			    if($title==""){
 			       $prompt_sys=file_get_contents(dirname(__FILE__)."/title.md");
-			       $prompt_user="今天是".date("Y-m-d H:i:s").",找找最新的热点新闻，最近的节日、历史上的今天，给你一个随机数".rand()."，帮我想一个标题吧，不要多余的解释，就一个标题。";
+			       $prompt_user="今天是".date("Y-m-d H:i:s").",找找最新的热点新闻，最近的节日、历史上的今天，可以参考一些唐诗宋词、股票简称、动漫剧情、网络热梗，给你一个随机数".rand()."，帮我想一个标题吧，不要多余的解释，就一个标题。";
 			      if(isset($temperature)) $temperature=1.2;
 		       }else{
 
