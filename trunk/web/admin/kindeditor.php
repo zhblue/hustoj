@@ -1,13 +1,10 @@
-<meta charset="utf-8" />
         <link rel="stylesheet" href="../kindeditor/themes/default/default.css" />
         <link rel="stylesheet" href="../kindeditor/plugins/code/prettify.css" />
         <script charset="utf-8" src="../kindeditor/kindeditor.js?v=20251217"></script>
         <script charset="utf-8" src="../kindeditor/lang/zh_CN.js"></script>
         <script charset="utf-8" src="../kindeditor/plugins/code/prettify.js"></script>
         <script>
-var kindeditorSeted=false;
-if(!kindeditorSeted){
-	function upload(file,editor1){
+function upload(file,editor1){
 	
 	    var formData = new FormData();	
 	    if(file.name=="image.png")
@@ -49,8 +46,11 @@ if(!kindeditorSeted){
 	    });
 	}
 
+var kindeditorSeted=false;
+if(!kindeditorSeted){
 
-        $(document).ready(window.setTimeout(function (){
+
+        $(document).ready(function (){
                 KindEditor.ready(function(K) {
                         let editor1 = K.create('textarea[class="kindeditor"]', {
                                 width : '100%',
@@ -117,7 +117,7 @@ if(!kindeditorSeted){
                         });
                         prettyPrint();
                 });
-        }),100);
+        });
          kindeditorSeted=true;
 }
 
