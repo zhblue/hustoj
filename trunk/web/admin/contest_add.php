@@ -10,7 +10,7 @@ if(!(isset($_SESSION[$OJ_NAME.'_'.'administrator'])||isset($_SESSION[$OJ_NAME.'_
     exit(1);
   }
   echo "<center><h3>".$MSG_CONTEST."-".$MSG_ADD."</h3></center>";
-  include_once("kindeditor.php") ;
+  
 ?>
 
 <body leftmargin="30" >
