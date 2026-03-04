@@ -42,7 +42,7 @@ do{
 		if(pdo_query("update openai_task_queue set status=1 where id=? and status=0 ",$task['id'])){
 			// 初始化cURL会话
 			$ch = curl_init();
-			if(!isset($timeout)) $timeout=60;
+			if(!isset($timeout)) $timeout=600;
 			// 设置cURL选项
 			curl_setopt($ch, CURLOPT_URL, $url);
 			curl_setopt($ch, CURLOPT_POST, true);
@@ -56,6 +56,7 @@ do{
 			// 检查是否有错误发生
 			if (curl_errno($ch)) {
 			    echo 'Curl error: ' . curl_error($ch);
+				pdo_query("update openai_task_queue set status=0 where id=? and status=1 ",$task['id'])
 				exit();   // 超时等错误发生时，不将结果入库，下次还能重试。
 			}
 			// 关闭cURL资源
