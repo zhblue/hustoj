@@ -13,8 +13,8 @@ include_once("kindeditor.php");
 ?>
 
 <?php
-if(isset($_GET['cid'])){
-  $cid = intval($_GET['cid']);
+if(isset($_GET['id'])){
+  $cid = intval($_GET['id']);
   $sql = "SELECT * FROM news WHERE `news_id`=?";
   $result = pdo_query($sql,$cid);
   $row = $result[0];
