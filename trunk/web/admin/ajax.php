@@ -7,6 +7,7 @@ if(!(isset($_SESSION[$OJ_NAME.'_administrator'])||isset($_SESSION[$OJ_NAME.'_pro
 }
 function try_ajax($tb,$fd,$pr){
 	global $OJ_NAME,$_SESSION,$_POST;
+	if(!isset($_POST["m"])) return;
 	$m=$_POST["m"];	
 	if($m==$tb."_update_".$fd  && ( isset($_SESSION[$OJ_NAME.'_'.$pr]) )){
                 $new_value=$_POST[$fd];
@@ -110,6 +111,7 @@ if($_SERVER['REQUEST_METHOD']=="POST"){
 	}
 
 }
+
 
 
 
