@@ -29,7 +29,7 @@ if(isset($_POST['pid'])){
 	  if($plist)
 	    $plist.=','.intval($i);
 	  else
-	    $plist = $i;
+	    $plist = intval($i);
 	}
 	
   if(isset($_POST['hlist']))$plist = trim($_POST['hlist']);
