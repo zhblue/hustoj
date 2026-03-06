@@ -17,7 +17,7 @@ if(isset($OJ_LANG)){
 <div class='padding'>
 
 <?php
-if(isset($_POST['do'])){	
+if(isset($_POST['do']) && (!empty($_POST['user_id'])) && (!empty($_POST['passwd']))){	
 	require_once("../include/check_post_key.php");
 	require_once("../include/my_func.inc.php");
 	
