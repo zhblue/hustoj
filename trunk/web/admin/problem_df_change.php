@@ -21,7 +21,7 @@ if(isset($_POST['pid'])&&!empty($_POST['pid'])) {
           if($plist)
             $plist.=','.intval($i);
           else
-            $plist = $i;
+            $plist = intval($i);
         }
 }
 
@@ -56,3 +56,4 @@ if(isset($_POST['enable'])&&$plist){
 ?>
 
 <script language=javascript>history.go(-1);</script>
+
