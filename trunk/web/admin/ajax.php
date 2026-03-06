@@ -9,11 +9,15 @@ function try_ajax($tb,$fd,$pr){
 	global $OJ_NAME,$_SESSION,$_POST;
 	$m=$_POST["m"];	
 	if($m==$tb."_update_".$fd  && ( isset($_SESSION[$OJ_NAME.'_'.$pr]) )){
-                $data_id=$_POST[$tb.'_id'];
                 $new_value=$_POST[$fd];
-		if($tb=="user") $tb_name="users";
-		else $tb_name=$tb;
-                $sql="update ".$tb_name." set `".$fd."`=? where ".$tb."_id=?";
+				if($tb=="user"){ 
+					$tb_name="users";
+					$data_id=$_POST[$tb.'_id'];
+				}else{
+					$tb_name=$tb;
+					$data_id=intval($_POST[$tb.'_id']);
+				}
+                $sql="update `".$tb_name."` set `".$fd."`=? where `".$tb."_id`=?";
                 echo pdo_query($sql,$new_value,$data_id);
         }
 }
@@ -106,5 +110,6 @@ if($_SERVER['REQUEST_METHOD']=="POST"){
 	}
 
 }
+
 
 
