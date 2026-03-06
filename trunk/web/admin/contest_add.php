@@ -141,9 +141,9 @@ else{
     sort($_POST['pid']);
     foreach($_POST['pid'] as $i){       
       if($plist)
-      $plist.=','.intval($i);
+      	$plist.=','.intval($i);
       else
-        $plist=$i;
+        $plist=intval($i);
     }
   $plist = trim($_POST['hlist']);
   $pieces = explode(",",$plist );
