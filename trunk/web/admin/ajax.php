@@ -97,7 +97,7 @@ if($_SERVER['REQUEST_METHOD']=="POST"){
         try_ajax("problem","memory_limit","administrator");
 
 	if($m=="get_user_list_of_contest"  && ( isset($_SESSION[$OJ_NAME.'_administrator'])||isset($_SESSION[$OJ_NAME.'_contest_creator']) )){
-			$contest_id=$_POST['contest_id'];
+			$contest_id=intval($_POST['contest_id']);
 			$sql= "select distinct user_id from privilege where rightstr=? ";
 			$users=pdo_query($sql,"c".$contest_id);
 			foreach($users as $user){
@@ -106,4 +106,5 @@ if($_SERVER['REQUEST_METHOD']=="POST"){
 	}
 
 }
+
 
