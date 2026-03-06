@@ -300,7 +300,8 @@ else {
 
     <?php
     $pid = $row['problem_id'];
-    for ($lang=0; $lang<count($language_ext); $lang++) {
+    $total_lang = isset($language_ext)?count($language_ext):2;
+    for ($lang=0; $lang< $total_lang ; $lang++) {
       $solution = getSolution($pid,$lang);
 
       if ($solution->language)
