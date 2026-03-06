@@ -56,7 +56,7 @@ do{
 			// 检查是否有错误发生
 			if (curl_errno($ch)) {
 			    echo 'Curl error: ' . curl_error($ch);
-				pdo_query("update openai_task_queue set status=0 where id=? and status=1 ",$task['id'])
+				pdo_query("update openai_task_queue set status=0 where id=? and status=1 ",$task['id']);
 				exit();   // 超时等错误发生时，不将结果入库，下次还能重试。
 			}
 			// 关闭cURL资源
