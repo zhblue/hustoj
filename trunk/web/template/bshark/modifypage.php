@@ -29,7 +29,7 @@
                             </label>
                             <input class="form-control"
                                 placeholder="请<?php echo $MSG_Input; ?><?php echo $MSG_USER_ID; ?>" disabled="disabled"
-                                type="text" value="<?php echo $_SESSION[$OJ_NAME . '_' . 'user_id'] ?>">
+                                type="text" value="<?php echo htmlentities($_SESSION[$OJ_NAME . '_' . 'user_id']) ?>">
                         </div>
                         <?php require_once('./include/set_post_key.php'); ?>
                         <div class="field">
