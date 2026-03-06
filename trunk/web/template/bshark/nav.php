@@ -130,11 +130,11 @@ if (
                 ?>
                 <div class="ui dropdown item">
                     <?php $if_new_mail = count(pdo_query('select * from `mail` where `to_user`=? and `new_mail`=1', $_SESSION[$OJ_NAME . '_' . 'user_id'])) > 0 ? 1 : 0; ?>
-                    <?php echo $_SESSION[$OJ_NAME . '_' . 'user_id']; ?>
+                    <?php echo htmlentities($_SESSION[$OJ_NAME . '_' . 'user_id'];) ?>
                     <i class="dropdown icon"></i>
                     <div class="menu">
                         <a class="item"
-                            href="<?php echo $path_fix ?>userinfo.php?user=<?php echo $_SESSION[$OJ_NAME . '_' . 'user_id']; ?>">
+                            href="<?php echo $path_fix ?>userinfo.php?user=<?php echo htmlentities($_SESSION[$OJ_NAME . '_' . 'user_id']); ?>">
                             <?php echo $MSG_USERINFO; ?>
                         </a>
                         <a class="item" href="<?php echo $path_fix ?>modifypage.php">
@@ -277,9 +277,9 @@ if (
                     <div class="item">
                         <i class="angle left icon"></i>
                         <?php $if_new_mail = count(pdo_query('select * from `mail` where `to_user`=? and `new_mail`=1', $_SESSION[$OJ_NAME . '_' . 'user_id'])) > 0 ? 1 : 0; ?>
-                        <?php echo $_SESSION[$OJ_NAME . '_' . 'user_id']; ?>
+                        <?php echo htmlentities($_SESSION[$OJ_NAME . '_' . 'user_id']); ?>
                         <div class="menu">
-                            <a class="item" href="./userinfo.php?user=<?php echo $_SESSION[$OJ_NAME . '_' . 'user_id']; ?>">
+                            <a class="item" href="./userinfo.php?user=<?php echo htmlentities($_SESSION[$OJ_NAME . '_' . 'user_id']); ?>">
                                 <?php echo $MSG_USERINFO; ?>
                             </a>
                             <a class="item" href="./modifypage.php">
@@ -317,3 +317,4 @@ if (
     </div>
 </div>
 </div>
+
