@@ -79,7 +79,7 @@ void wait_udp_msg(int fd)
                 printf(" now_time:%ld\n",now.tv_sec);
                 printf("cnf_mtime:%ld\n",cnfstat.st_mtime);
                 diff = now.tv_sec - cnfstat.st_mtime;
-//                if(labs(diff) > ONE_YEAR_SECONDS ) return;
+//                if((diff) > ONE_YEAR_SECONDS ) return;
                 if(fork()==0){
                         printf("Running judged on : %s\n",oj_home);
                         execl("/usr/bin/judged", "/usr/bin/judged", oj_home,"debug","4", (char *) NULL);
