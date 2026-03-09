@@ -903,7 +903,7 @@ function checkAndMarkIndentationInstant() {
             formatWarnings.push({
                 row: i,
                 column: 0,
-                text: `缩减不规范：此处期望 ${expectedSpaces} 个空格(或 ${currentLineExpected} 个Tab)，目前有 ${actualSpaces} 个`,
+                text: `缩进不规范：此处期望 ${expectedSpaces} 个空格(或 ${currentLineExpected} 个Tab)，目前有 ${actualSpaces} 个`,
                 type: "warning" 
             });
         }
