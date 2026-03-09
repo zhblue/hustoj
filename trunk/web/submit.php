@@ -119,14 +119,14 @@ if (isset($_POST['id'])) {
         $langmask = $row['langmask'];
         $title = $row['title'];
 
-
         if ($isprivate == 1 && !isset($_SESSION[$OJ_NAME . '_' . 'c' . $cid])) {
-            $sql = "SELECT count(*) FROM `privilege` WHERE `user_id`=? AND `rightstr`=?";
-            $result = pdo_query($sql, $user_id, "c$cid");
-
-            $row = $result[0];
-            $ccnt = intval($row[0]);
-
+            $sql = "SELECT count(*) FROM `privilege` WHERE `user_id`=? AND (`rightstr`=? OR `rightstr`=?)";
+            $result = pdo_query($sql, $user_id, "c$cid", "m$cid");
+        
+            // 1. 先尝试从数据库结果中提取计数，若查询失败则默认为 0
+            $ccnt = (!empty($result)) ? intval($result[0][0]) : 0;
+        
+            // 2. 统一判定：既没有比赛权限，也不是管理员
             if ($ccnt == 0 && !isset($_SESSION[$OJ_NAME . '_' . 'administrator'])) {
                 $view_errors = $MSG_NOT_INVITED . "\n";
                 require "template/" . $OJ_TEMPLATE . "/error.php";
