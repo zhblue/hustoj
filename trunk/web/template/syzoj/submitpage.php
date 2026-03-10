@@ -847,95 +847,107 @@ function formatCode() {
   cleanCStyle(session.getValue());
 }
 
-
+// 使用 PHP 判断，如果开启了缩进检测，才绑定 change 事件
+<?php if (isset($OJ_SUOJIN) && $OJ_SUOJIN == true): ?>
 editor.getSession().on('change', function() {
-    checkAndMarkIndentationInstant();
+    // 建议增加一个防抖，避免高频输入时卡顿
+    if (this.indentTimer) clearTimeout(this.indentTimer);
+    this.indentTimer = setTimeout(checkAndMarkIndentationInstant, 300);
 });
+<?php endif; ?>
 
+// 下方是核心检测逻辑，只要上方没绑定事件，这个函数就不会运行，不占用浏览器性能
 function checkAndMarkIndentationInstant() {
     let session = editor.getSession();
     
-    // 只检测 C/C++/Java 等使用大括号的语言
+    // 1. 只检测 C/C++/Java 等使用大括号的语言
     let mode = session.getMode().$id || "";
     if (mode.indexOf("c_cpp") === -1 && mode.indexOf("java") === -1) {
         return; 
     }
 
     let lines = session.getDocument().getAllLines();
-    let expectedIndentLevel = 0;      // 由大括号决定的基础期望层级
-    let expectExtraIndent = false;    // 用于处理没有大括号的 if/for 嵌套
-    let formatWarnings = [];          // 收集警告
+    let expectedIndentLevel = 0;      // 基础期望层级
+    let expectExtraIndent = false;    // 处理无大括号的 if/for
+    let formatWarnings = [];
 
     for (let i = 0; i < lines.length; i++) {
         let line = lines[i];
         let trimmed = line.trim();
 
-        // 忽略空行、单行注释和预处理指令 (如 #include)
-        if (trimmed.length === 0 || trimmed.startsWith("//") || trimmed.startsWith("#")) {
+        // --- 核心优化：利用 Ace Token 过滤注释 ---
+        let tokens = session.getTokens(i);
+        // 判断这一行是否主要是注释，或者是否处于多行注释中
+        let isCommentLine = tokens.length > 0 && tokens.every(t => t.type.indexOf("comment") !== -1);
+        let hasBlockComment = tokens.some(t => t.type.indexOf("comment.block") !== -1);
+
+        // 如果是纯注释行，或者该行包含块注释（/* */），跳过缩进检查和括号计数
+        if (isCommentLine || hasBlockComment || trimmed.length === 0 || trimmed.startsWith("#")) {
+            // 如果这一行仅仅是单行注释 //，我们需要保留当前的 expectedIndentLevel 进入下一行
+            // 但不更新大括号计数
             continue; 
         }
 
-        // 1. 计算当前行【应该】有多少层缩进
+        // 2. 计算当前行【应该】有多少层缩进
         let currentLineExpected = expectedIndentLevel;
         if (expectExtraIndent) {
-            currentLineExpected += 1; // 受到上一行无括号 if/for 的影响，加深一层
+            currentLineExpected += 1;
         }
 
-        // 如果当前行以 } 开头，它本身应该与配对的 { 对齐，所以退回一层
+        // 如果当前行以 } 开头，退回一层对齐
         if (trimmed.startsWith("}")) {
             currentLineExpected = Math.max(0, expectedIndentLevel - 1);
         }
 
-        // 2. 计算当前行【实际】的等效空格数 (1个 Tab = 4个空格)
+        // 3. 计算【实际】空格数 (1个 Tab = 4个空格)
         let leadingWhitespace = line.match(/^[\s\t]*/)[0];
         let actualSpaces = 0;
         for (let j = 0; j < leadingWhitespace.length; j++) {
-            if (leadingWhitespace[j] === '\t') {
-                actualSpaces += 4;
-            } else if (leadingWhitespace[j] === ' ') {
-                actualSpaces += 1;
-            }
+            actualSpaces += (leadingWhitespace[j] === '\t') ? 4 : 1;
         }
 
-        // 3. 严格判定：实际空格数必须等于 期望层级 * 4，多一个少一个都不行！
+        // 4. 判定并记录警告
         let expectedSpaces = currentLineExpected * 4;
         if (actualSpaces !== expectedSpaces) {
             formatWarnings.push({
                 row: i,
                 column: 0,
-                text: `缩进不规范：此处期望 ${expectedSpaces} 个空格(或 ${currentLineExpected} 个Tab)，目前有 ${actualSpaces} 个`,
+                text: `缩进不规范：此处期望 ${expectedSpaces} 个空格，目前有 ${actualSpaces} 个`,
                 type: "warning" 
             });
         }
 
-        // 4. 为下一行更新基础层级（大括号统计）
-        let openBraces = (line.match(/\{/g) || []).length;
-        let closeBraces = (line.match(/\}/g) || []).length;
+        // 5. 更新下一行的基础层级
+        // 过滤掉字符串中的括号，只统计代码中的括号
+        let openBraces = 0;
+        let closeBraces = 0;
+        tokens.forEach(t => {
+            if (t.type.indexOf("comment") === -1 && t.type.indexOf("string") === -1) {
+                openBraces += (t.value.match(/\{/g) || []).length;
+                closeBraces += (t.value.match(/\}/g) || []).length;
+            }
+        });
+
         expectedIndentLevel += (openBraces - closeBraces);
         expectedIndentLevel = Math.max(0, expectedIndentLevel); 
 
-        // 5. 探测并标记单行无大括号的 if/for/while/else 嵌套
+        // 6. 探测无大括号的 if/for/while/else
         if (openBraces === 0 && closeBraces === 0) {
-            // 如果这一行是 for(...) 或者 if(...) 并且没有写 {
             if ((trimmed.startsWith("if") || trimmed.startsWith("for") || trimmed.startsWith("while")) && trimmed.endsWith(")")) {
                 expectExtraIndent = true;
-            } 
-            // 如果这一行是 else 并且没有写 {
-            else if (trimmed === "else") {
+            } else if (trimmed === "else") {
                 expectExtraIndent = true;
-            } 
-            // 如果是普通的一行代码结束了，取消额外缩进要求
-            else {
+            } else {
                 expectExtraIndent = false; 
             }
         } else {
-            // 只要出现了大括号，缩进规则就交给 expectedIndentLevel 接管
             expectExtraIndent = false; 
         }
     }
 
-    // 渲染黄色的警告提示，保留系统的红叉报错
-    let existingErrors = session.getAnnotations().filter(a => a.type === "error");
+    // 7. 渲染警告，保留系统错误
+    let currentAnnotations = session.getAnnotations();
+    let existingErrors = currentAnnotations.filter(a => a.type === "error");
     session.setAnnotations(existingErrors.concat(formatWarnings));
 }
 
