@@ -1,8 +1,28 @@
 <?php $show_title="$MSG_HOME - $OJ_NAME"; ?>
 <?php include("template/$OJ_TEMPLATE/header.php");?>
+<head>
+
+<link rel="stylesheet" href="<?php echo "template/$OJ_TEMPLATE";?>/css/slide.css">
+</head>
 <div class="padding">
     <div class="ui three column grid">
         <div class="eleven wide column">
+            <?php if(file_exists("image/slide1.jpg")){ ?>
+            <h4 class="ui top attached block header" style='margin-top: 10px;'><i class="th icon"></i><?php echo $OJ_NAME ?></h4>
+            <div class="ui bottom attached center aligned segment carousel">
+                <div class="carousel-arrow left" onclick="prevSlide()">&lt;</div> <!-- 左箭头 -->
+                <?php for($i=1;file_exists("image/slide$i.jpg");$i++){ ?>
+                <div class="carousel-slide <?php if($i==1) echo "active";?>" style="background-image: url('image/slide<?php echo $i ?>.jpg')"></div>
+                <?php } ?>
+                <div class="carousel-arrow right" onclick="nextSlide()">&gt;</div> <!-- 右箭头 -->
+                <div class="carousel-dots">
+                    <span class="carousel-dot active" data-index="0"></span>
+                    <span class="carousel-dot" data-index="1"></span>
+                    <span class="carousel-dot" data-index="2"></span>
+                </div>
+            </div>
+            <?php } ?>
+
             <h4 class="ui top attached block header"><i class="ui info icon"></i><?php echo $MSG_NEWS;?></h4>
             <div class="ui bottom attached segment">
                 <table class="ui very basic table">
@@ -14,7 +34,7 @@
                     </thead>
                     <tbody>
                         <?php
-                        $sql_news = "select * FROM `news` WHERE `defunct`!='Y' AND `title`!='faqs.cn' ORDER BY `importance` ASC,`time` DESC LIMIT 10";
+                        $sql_news = "select * FROM `news` WHERE `defunct`!='Y' AND `title`!='faqs.cn' ORDER BY `importance` desc,`time` DESC LIMIT 10";
                         $result_news = mysql_query_cache( $sql_news );
                         if ( $result_news ) {
                             foreach ( $result_news as $row ) {
@@ -30,11 +50,29 @@
                     </tbody>
                 </table>
             </div>
+			<?php
+if(isset($pages) && $pages>1 ){
+  echo "<div style='display:inline;'>";
+  echo "<nav class='center'>";
+  echo "<ul class='pagination pagination-sm'>";
+  echo "<li class='page-item'><a href='index.php?page=".(strval(1))."'>&lt;&lt;</a></li>";
+  echo "<li class='page-item'><a href='index.php?page=".($page==1?strval(1):strval($page-1))."'>&lt;</a></li>";
+  for($i=$spage; $i<=$epage; $i++){
+    echo "<li class='".($page==$i?"active ":"")."page-item'><a title='go to page' href='index.php?page=".$i."'>".$i."</a></li>";
+  }
+  echo "<li class='page-item'><a href='index.php?page=".($page==$pages?strval($page):strval($page+1))."'>&gt;</a></li>";
+  echo "<li class='page-item'><a href='index.php?page=".(strval($pages))."'>&gt;&gt;</a></li>";
+  echo "</ul>";
+  echo "</nav>";
+  echo "</div>";
+}
+?>
+
 <?php
 /* 本月之星  */
 $month_id=mysql_query_cache("select solution_id from solution where  in_date<date_add(curdate(),interval -day(curdate())+1 DAY) order by solution_id desc limit 1;");
 if(!empty( $month_id) && isset($month_id[0][0]) ) $month_id=$month_id[0][0];else $month_id=0;
-if($NOIP_flag[0]==0)$view_month_rank=mysql_query_cache("select user_id,nick,count(distinct(problem_id)) ac from solution where solution_id>$month_id and problem_id>0  and user_id not in (".$OJ_RANK_HIDDEN.")  and result=4 group by user_id,nick order by ac desc limit 10");
+$view_month_rank=mysql_query_cache("select user_id,nick,count(distinct(problem_id)) ac from solution where solution_id>$month_id and problem_id>0  $not_in_noip_contests and user_id not in (".$OJ_RANK_HIDDEN.")  and result=4 and first_time=1 group by user_id,nick order by ac desc limit 10");
             if ( !empty($view_month_rank) ) {
         ?>
             <h4 class="ui top attached block header"><i class="ui star icon"></i><?php echo "本月之星"?></h4>
@@ -44,7 +82,7 @@ if($NOIP_flag[0]==0)$view_month_rank=mysql_query_cache("select user_id,nick,coun
         <?php
                             foreach ( $view_month_rank as $row ) {
                                     echo "<tr>".
-                                            "<td><a target='_blank' href='userinfo.php?user=".htmlentities($row[0],ENT_QUOTES,"UTF-8")."'>".htmlentities($row[0],ENT_QUOTES,"UTF-8")."</a></td>".
+                                            "<td><a target='_blank' href='userinfo.php?user=".htmlentities($row[0],ENT_QUOTES,"UTF-8")."'>⭐".htmlentities($row[0],ENT_QUOTES,"UTF-8")."⭐</a></td>".
                                             "<td>".($row[1])."</td>".
                                             "<td>".($row[2])."</td>".
                                             "</tr>";
@@ -96,9 +134,9 @@ if($NOIP_flag[0]==0)$view_month_rank=mysql_query_cache("select user_id,nick,coun
                         </tr>
                     </thead>
                     <tbody>
-                   <?php
+                    <?php
                         // 未解之谜
-		$noip_problems=array_merge(...mysql_query_cache("select problem_id from contest c left join contest_problem cp on start_time<'$now' and end_time>'$now' and c.title like ? and c.contest_id=cp.contest_id","%$OJ_NOIP_KEYWORD%"));
+		$noip_problems=array_merge(...mysql_query_cache("select problem_id from contest c left join contest_problem cp on start_time<'$now' and end_time>'$now' and  (c.title like ? or (c.contest_type & 20) >0) and c.contest_id=cp.contest_id","%$OJ_NOIP_KEYWORD%"));
 		$noip_problems=array_unique($noip_problems);
                          if(isset($_SESSION[$OJ_NAME."_user_id"])) $user_id=$_SESSION[$OJ_NAME."_user_id"]; else $user_id='guest';
                         $sql_problems = "select p.problem_id,title,max_in_date from (select problem_id,min(result) best,max(in_date) max_in_date from solution
@@ -115,6 +153,7 @@ if($NOIP_flag[0]==0)$view_month_rank=mysql_query_cache("select user_id,nick,coun
                                     ."<td>".substr($row["max_in_date"],5,5)."</td>"."</tr>";
                             }
                         }
+
                     ?>
                     </tbody>
                 </table>
@@ -161,8 +200,62 @@ if($NOIP_flag[0]==0)$view_month_rank=mysql_query_cache("select user_id,nick,coun
     </div>
 </div>
 <?php include("template/$OJ_TEMPLATE/footer.php");?>
+<?php if(file_exists("image/slide1.jpg")){ ?>
+    <script>
+        const slides = document.querySelectorAll('.carousel-slide');
+        const dots = document.querySelectorAll('.carousel-dot');
+        let currentIndex = 0;
+        let autoPlayInterval;
 
-  <script  src="<?php echo $OJ_CDN_URL.$path_fix."template/syzoj"?>/js/echarts.min.js"></script>
+        function showSlide(index) {
+            slides.forEach((slide, i) => {
+                if (i === index) {
+                    slide.classList.add('active');
+                } else {
+                    slide.classList.remove('active');
+                }
+            });
+            dots.forEach((dot, i) => {
+                if (i === index) {
+                    dot.classList.add('active');
+                } else {
+                    dot.classList.remove('active');
+                }
+            });
+        }
+
+        function nextSlide() {
+            currentIndex = (currentIndex + 1) % slides.length;
+            showSlide(currentIndex);
+        }
+
+        function prevSlide() {
+            currentIndex = (currentIndex - 1 + slides.length) % slides.length;
+            showSlide(currentIndex);
+        }
+
+        // 自动播放，调整为 5 秒切换一次
+        autoPlayInterval = setInterval(nextSlide, 5000); 
+
+        dots.forEach(dot => {
+            dot.addEventListener('click', () => {
+                const targetIndex = parseInt(dot.dataset.index);
+                if (targetIndex!== currentIndex) {
+                    currentIndex = targetIndex;
+                    showSlide(currentIndex);
+                    clearInterval(autoPlayInterval);
+                    autoPlayInterval = setInterval(nextSlide, 5000);
+                }
+            });
+        });
+
+        // 鼠标悬停暂停自动播放
+        const carousel = document.querySelector('.carousel');
+        carousel.addEventListener('mouseenter', () => clearInterval(autoPlayInterval));
+        carousel.addEventListener('mouseleave', () => autoPlayInterval = setInterval(nextSlide, 5000));
+    </script>
+ <?php } ?>
+<script  src="<?php echo $OJ_CDN_URL.$path_fix."template/$OJ_TEMPLATE"?>/js/echarts.min.js"></script>
         <script type="text/javascript">
 			$( function () {
 			var all=<?php echo json_encode(array_column($chart_data_all,1))?> ;

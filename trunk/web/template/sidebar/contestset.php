@@ -12,10 +12,10 @@
                 <?php
                 if(isset($_GET['my'])){
                 
-                echo '<a  class="ui button"  href="contest.php" >'.$MSG_VIEW_ALL_CONTESTS .'</a>';
+                echo '<a  class="ui button primary"  href="contest.php" >'.$MSG_VIEW_ALL_CONTESTS .'</a>';
                 }else{
                 
-                echo '<a  class="ui button"  href="contest.php?my" >显示我的作业比赛</a>';
+                echo '<a  class="ui button red"  href="contest.php?my" >'.$MSG_VIEW_MY_CONTESTS .'</a>';
                 };
                 ?>
               </div>
@@ -80,13 +80,6 @@
               echo "</tr>";
             }
           ?>
-          
-          
-
-          <!-- <td><a href="<%= syzoj.utils.makeUrl(['contest', contest.id]) %>"><%= contest.title %> <%- tag %></a></td>
-          <td><%= syzoj.utils.formatDate(contest.start_time) %></td>
-          <td><%= syzoj.utils.formatDate(contest.end_time) %></td>
-          <td class="font-content"><%- contest.subtitle %></td> -->
       </tbody>
     </table>
 </div>

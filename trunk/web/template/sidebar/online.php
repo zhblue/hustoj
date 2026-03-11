@@ -34,7 +34,7 @@
 		<tr>
 			<td><?php $l = $location->getlocation($u['ip']);
                                 echo $u['ip'].'<br />';
-                                if(!empty($l))  echo $l;
+                                echo $l??"";
                             ?>
                         </td>
 			<td><?php echo $u['uri']?></td>

@@ -24,7 +24,7 @@
                   mangle: false,
                   headerIds: false
                 });
-                $(".md").each(function(){
+                $("pre").each(function(){
                         $(this).html(marked.parse($(this).text()));
                 });
                 // adding note for ```input1  ```output1 in description

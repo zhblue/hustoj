@@ -1,3 +1,4 @@
+
 <?php $show_title="$MSG_SUBMIT - $OJ_NAME"; ?>
 <?php include("template/$OJ_TEMPLATE/header.php");?>
 
@@ -5,6 +6,7 @@
 #source {
     width: 80%;
     height: 600px;
+    background-color:rgb(255,225,225,0.5);
 }
 
 .ace-chrome .ace_marker-layer .ace_active-line{   /*当前行*/
@@ -16,6 +18,16 @@
     line-height: 1.2;
 
 }
+<?php if (time() < strtotime('2025-3-31')) { ?>
+body{
+        background: url("http://m.hustoj.com:8090/bg/nz.gif") 0% 0% / 100% no-repeat;
+}
+<?php } ?>
+ /* 定义错误行的样式 */
+  .ace_error_marker {
+    position: absolute;
+    background-color: rgba(255, 0, 0, 0.3); /* 红色半透明背景 */
+  }
   </style>
     
 <center>
@@ -43,6 +55,8 @@ Problem <span class=blue><b><?php echo chr($pid+ord('A'))?></b></span> of Contes
 $lang_count=count($language_ext);
 if(isset($_GET['langmask']))
 	$langmask=$_GET['langmask'];
+else
+	$langmask=$OJ_LANGMASK;
 $langmask|=$OJ_LANGMASK;
 
 $lang=(~((int)$langmask))&((1<<($lang_count))-1);
@@ -60,10 +74,14 @@ echo"<option value=$i ".( $lastlang==$i?"selected":"").">
 <?php echo $MSG_VCODE?>:
 <input name="vcode" size=4 type=text autocomplete=off ><img id="vcode" alt="click to change" src="vcode.php" onclick="this.src='vcode.php?'+Math.random()">
 <?php }?>
-<button  id="Submit" type="button" class="ui primary icon button"  onclick="do_submit();"><?php echo $MSG_SUBMIT?></button>
+<button  id="Submit" type="button" class="ui primary icon button"  onclick="do_submit();"><?php echo $MSG_SUBMIT?></button> 
+<label id="countDown" ></label>
 <?php if (isset($OJ_ENCODE_SUBMIT)&&$OJ_ENCODE_SUBMIT){?>
 <input class="btn btn-success" title="WAF gives you reset ? try this." type=button value="Encoded <?php echo $MSG_SUBMIT?>"  onclick="encoded_submit();">
 <input type=hidden id="encoded_submit_mark" name="reverse2" value="reverse"/>
+<?php }?>
+<?php if (isset($_SESSION[$OJ_NAME.'_administrator'])){?>
+<input class="btn btn-danger" title="AI everythin..." type=button value="AI一下"  onclick="ai_gen('Main.'+$('#language option:selected').text().trim());" id='ai_bt'>
 <?php }?>
 <!--选择题状态-->
 <?php if ($spj>1 || !$OJ_TEST_RUN ){?>
@@ -90,7 +108,7 @@ echo"<option value=$i ".( $lastlang==$i?"selected":"").">
                         else
                                 $height="500px";
                 ?>
-                <pre style="width:90%;height:<?php echo $height?>" cols=180 rows=16 id="source"><?php echo htmlentities($view_src,ENT_QUOTES,"UTF-8")?></pre>
+                <pre style="width:99%;height:<?php echo $height?>" cols=180 rows=16 id="source"><?php echo htmlentities($view_src,ENT_QUOTES,"UTF-8")?></pre>
                 <input type=hidden id="hide_source" name="source" value=""/>
 
         <?php }else{ ?>
@@ -111,6 +129,21 @@ echo"<option value=$i ".( $lastlang==$i?"selected":"").">
     margin: 0;
     background: border-box;
 }
+        #reinfo {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        #reinfo div {
+            border-radius: 4px;
+            padding: 1px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+            transition: all 0.15s;
+            cursor: default;
+	    opacity: 0.95;
+        }
         </style>
          <div class="row">
             <div class="column" style="display: flex;">
@@ -123,9 +156,7 @@ echo"<option value=$i ".( $lastlang==$i?"selected":"").">
     flex-direction: column;">
         <div style="  
         display: flex;
-   
     border-radius: 8px;
-    
     background-color: rgb(255,255,255,0.4);" id="language_span"><?php echo $MSG_Input?></div>
          <textarea style="width:100%" cols=40 rows=5 id="input_text" name="input_text" ><?php echo $view_sample_input?></textarea>
     </div>
@@ -143,17 +174,21 @@ echo"<option value=$i ".( $lastlang==$i?"selected":"").">
     
     </div>
 
-
+	<span id='reinfo' style="display:none"></span>
           <textarea style="
           width:100%;background-color: white;
-          " cols=10 rows=5 id="out" name="out" disabled="true" placeholder='<?php echo htmlentities($view_sample_output,ENT_QUOTES,'UTF-8')?>' ></textarea>    
+          " cols=30 rows=5 id="out" name="out" disabled="true" placeholder='<?php echo htmlentities($view_sample_output,ENT_QUOTES,'UTF-8')?>' ></textarea>    
      </div>
-<?php } ?>
+<?php }else{  ?>
+   <div style="margin-left: 5px; width: 95%; padding: 14px; flex-direction: column;">
+	<span id='reinfo' style="display:none"></span>
+   </div>
+<?php }	 ?>
 <?php if (isset($OJ_TEST_RUN)&&$OJ_TEST_RUN && $spj<=1 && !$solution_name  ){?>
         <!--运行按钮-->
             <input style="
              margin-top: 30px;
-            margin-left: 0 auto;
+            margin-left: 15px ;
             width: 7%;background-color: #22ba46a3;border-color: #00fff470;height: 130px;
             " id="TestRun" class="btn btn-info" type=button value="<?php echo $MSG_TR?>" onclick=do_test_run();>
             
@@ -171,7 +206,7 @@ echo"<option value=$i ".( $lastlang==$i?"selected":"").">
 <?php }?> 
 </form>
 </center>
-
+<script type="module" src="<?php echo $OJ_CDN_URL?>sqlite/sqlite3.js"></script>
 <script>
 var sid=0;
 var i=0;
@@ -181,46 +216,174 @@ foreach($judge_result as $result){
     echo "'$result',";
 }
 ?>''];
-function print_result(solution_id){
-	sid=solution_id;
-	$("#out").load("status-ajax.php?tr=1&solution_id="+solution_id);
+function removeContentBeforeSeparator(text) {
+    // 查找分隔符 "--|--|--|--|--" 的位置
+    const separator = "filename|size|result|memory|time";
+    const separatorIndex = text.indexOf(separator);
+
+    // 如果找到了分隔符
+    if (separatorIndex !== -1) {
+        // 计算分隔符结束的位置
+        const separatorEndIndex = separatorIndex ;
+
+        // 删除分隔符及其之前的所有内容，返回剩余部分
+        return text.substring(separatorEndIndex);
+    }
+
+    // 如果没有找到分隔符，返回原始字符串
+    return text;
+}
+function parseToCompactCards(data) {
+	console.log(data);
+	data=removeContentBeforeSeparator(data);
+	const lines = data.trim().split('\n');
+	const headers = lines[0].split('|');
+	const dataLines = lines.slice(2);
+	
+	const resultContainer = $('#reinfo');
+	resultContainer.empty();
+	resultContainer.show();
+	
+	// 统计结果
+	let acCount = 0, waCount = 0, reCount = 0;
+	
+	dataLines.forEach(line => {
+	    if (line.trim() === '') return;
+	    
+	    const values = line.split('|');
+	    const item = {};
+	    
+	    headers.forEach((header, index) => {
+		item[header] = values[index] || '';
+	    });
+	    
+	    // 确定结果类型
+	    const resultType = item.result.split('/')[0];
+	    let resultClass = 'warning'; // 默认
+	    
+	    if (resultType === 'AC') {
+		resultClass = 'success';
+	    } else if (resultType === 'PE') {
+		resultClass = 'info';
+		reCount++;
+	    } else if (resultType === 'WA') {
+		resultClass = 'danger';
+		reCount++;
+	    } else {
+		acCount++;
+	    }
+	    
+	    // 创建紧凑卡片
+	    const $card = $(`
+		<div class="label label-${resultClass}" title="${item.filename}">
+		    <span class="filename">${item.filename}</span>
+		    <span class="size">${item.size} B</span><br>
+		    <span class="result">${item.result}</span><br>
+			<span class="stat-item">
+			    <span class="stat-label">内存:</span>
+			    <span class="stat-value">${item.memory}</span>
+			</span><br>
+			<span class="stat-item">
+			    <span class="stat-label">时间:</span>
+			    <span class="stat-value">${item.time}</span>
+			</span>
+		</div>
+	    `);
+	    
+	    resultContainer.append($card);
+	});
+	
+	// 更新统计信息
+	const totalCount = acCount + waCount + reCount;
+	const passRate = totalCount > 0 ? ((acCount / totalCount) * 100).toFixed(1) : 0;
+	
+	$('#statsSummary').html(`
+	    <div class="stats-item">总计: <span class="stats-value">${totalCount}</span></div>
+	    <div class="stats-item">通过率: <span class="stats-value">${passRate}%</span></div>
+	    <div class="stats-item">AC: <span class="stats-value ac-count">${acCount}</span></div>
+	    <div class="stats-item">WA: <span class="stats-value wa-count">${waCount}</span></div>
+	    <div class="stats-item">RE: <span class="stats-value re-count">${reCount}</span></div>
+	`);
+}
+function print_result(solution_id) {
+var sid = solution_id;
+
+$.ajax({
+url: "status-ajax.php",
+type: "GET",
+data: { tr: 1, solution_id: solution_id },
+success: function(data) {
+    $("#out").val(data);
+     console.log(jresult);
+    var resultVariable = data;
+     if (jresult== 11) {
+	$("#out").show();
+	var errorLines = [];
+
+	var regex = /(\w+\.<?php echo $language_ext[$lastlang]?>):(\d+):\d+:/g;
+	var match;
+	while ((match = regex.exec(resultVariable)) !== null) {
+	    var lineNumber = parseInt(match[2], 10);
+	    errorLines.push(lineNumber);
+	}
+	
+	errorLines.forEach(function(line) {
+	    var Range = ace.require("ace/range").Range;
+	    var range = new Range(line - 1, 0, line - 1, Infinity);
+	    editor.getSession().addMarker(range, "ace_error_marker", "fullLine", false);
+	});
+     }else if(jresult==13){
+	$("#reinfo").hide();
+	$("#out").show();
+     }else{
+	$("#out").hide();
+	$("#reinfo").show();
+	parseToCompactCards(data);	
+     }
+     
+},
+error: function(xhr, status, error) {
+    console.error("Error fetching data: ", error);
+}
+});
 }
 function fancy(td){
-        $("body",parent.document).append("<div id='bannerFancy' style='position:absolute;top:0px;left:0px;width:100%;z-index:3' class='ui main container'></div><audio autoplay=\"autoplay\" preload=\"auto\" src=\"<?php echo $OJ_FANCY_MP3 ?>\"> </audio>");
-        window.setTimeout("$(\"#bannerFancy\",parent.document).html(\"<iframe border=0 src='fancy.php' width='100%' height='800px'></iframe>\");",500);
-        window.setTimeout("$(\"#bannerFancy\",parent.document).remove();",10000);
+$("body",parent.document).append("<div id='bannerFancy' style='position:absolute;top:0px;left:0px;width:100%;z-index:3' class='ui main container'></div><audio autoplay=\"autoplay\" preload=\"auto\" src=\"<?php echo $OJ_FANCY_MP3 ?>\"> </audio>");
+window.setTimeout("$(\"#bannerFancy\",parent.document).html(\"<iframe border=0 src='fancy.php' width='100%' height='800px'></iframe>\");",500);
+window.setTimeout("$(\"#bannerFancy\",parent.document).remove();",10000);
 }
 function fresh_result(solution_id)
 {
-	var tb=window.document.getElementById('result');
-	if(solution_id==undefined){
-		tb.innerHTML="Vcode Error!";		
-		if($("#vcode")!=null) $("#vcode").click();
-		return ;
-	}
-	
-	sid=parseInt(solution_id);
-        if(sid<=0){
-                tb.innerHTML="<?php echo  str_replace("10",$OJ_SUBMIT_COOLDOWN_TIME,$MSG_BREAK_TIME) ?>";
-                if($("#vcode")!=null) $("#vcode").click();
-                return ;
-        }
+var tb=window.document.getElementById('result');
+if(solution_id==undefined){
+	tb.innerHTML="Vcode Error!";		
+	if($("#vcode")!=null) $("#vcode").click();
+	return ;
+}
 
-	var xmlhttp;
-	if (window.XMLHttpRequest)
-	{// code for IE7+, Firefox, Chrome, Opera, Safari
-	xmlhttp=new XMLHttpRequest();
-	}
-	else
-	{// code for IE6, IE5
-	xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
-	}
-	xmlhttp.onreadystatechange=function()
+sid=parseInt(solution_id);
+if(sid<=0){
+	tb.innerHTML="<?php echo  str_replace("10",$OJ_SUBMIT_COOLDOWN_TIME,$MSG_BREAK_TIME) ?>";
+	if($("#vcode")!=null) $("#vcode").click();
+	return ;
+}
+
+var xmlhttp;
+if (window.XMLHttpRequest)
+{// code for IE7+, Firefox, Chrome, Opera, Safari
+xmlhttp=new XMLHttpRequest();
+}
+else
+{// code for IE6, IE5
+xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+}
+xmlhttp.onreadystatechange=function()
 	{
 		if (xmlhttp.readyState==4 && xmlhttp.status==200)
 		{
 			var r=xmlhttp.responseText;
 			if(r=="<?php echo $OJ_NOIP_KEYWORD?>") {
+				alert("<?php echo $MSG_SUBMIT.$MSG_SUCCESS.$contest_locks[4]?>");
 				tb.innerHTML="<?php echo $contest_locks[4]?>";
 				return;
 			}
@@ -229,6 +392,7 @@ function fresh_result(solution_id)
 			// alert(judge_result[r]);
 			var loader="<img width=18 src=image/loader.gif>";
 			var tag="span";
+			window.jresult = ra[0];
 			if(ra[0]<4) tag="span disabled=true";
 			else tag="a";
 			{
@@ -327,6 +491,57 @@ function do_submit(){
 <?php }?>
 
 }
+<?php
+
+        $appendsource="";
+		if(isset($id)){
+                $append_file = "$OJ_DATA/$id/append.sql";
+                if (isset($OJ_APPENDCODE) && $OJ_APPENDCODE && file_exists($append_file)) {
+                  $appendsource .= "\n".file_get_contents($append_file);
+                }
+        }
+        echo "var appendSQL=".json_encode($appendsource).";";
+
+?>
+
+function startSQL (sqlite3,input_sql,user_sql){
+ // log('Running SQLite3 version', sqlite3.version.libVersion);
+  const db = new sqlite3.oo1.DB('/mydb.sqlite3', 'ct');
+ // log('Created transient database', db.filename);
+
+  try {
+   // log('Creating a table...');
+    try{
+            db.exec(input_sql);
+    }finally{};
+   // log('Query data with exec()...');
+    db.exec({
+      sql: user_sql+appendSQL,
+      callback: (row) => {
+        $("#out").val($("#out").val()+(row.join("|")+"\n"));
+        console.log(row);
+      },
+    });
+  } finally {
+    db.close();
+  }
+};
+
+function runSQL(input,sql){
+//      log('Loading and initializing SQLite3 module...');
+        sqlite3InitModule().then((sqlite3) => {
+//        log('Done initializing. Running demo...');
+          try {
+            $("#out").val("");
+            startSQL(sqlite3,input,sql);
+          } catch (err) {
+            console.log(err.name, err.message);
+          }
+        });
+
+}
+
+
 var handler_interval;
 function do_test_run(){
 	if( handler_interval) window.clearInterval( handler_interval);
@@ -337,6 +552,12 @@ function do_test_run(){
 		source=editor.getValue();
         	$("#hide_source").val(source);
 	}
+        let lang=$("#language").val();
+        if(lang==18){
+                console.log("Using Wasm SQLite");
+                runSQL($("#input_text").val(),source);
+                return;
+        }
 	if(source.length<10) return alert("too short!");
 	if(tb!=null)tb.innerHTML=loader;
 
@@ -442,6 +663,18 @@ function loadFromBlockly(){
 	// theme: "ace/theme/ambiance",   // Black theme
         fontSize: "18px"
     });
+    
+editor.getSession().on("change", function() {
+   
+    var markers = editor.getSession().getMarkers(false);
+    for (var id in markers) {
+        if (markers[id].clazz === "ace_error_marker") {
+            editor.getSession().removeMarker(id);
+        }
+    }
+});
+
+
    reloadtemplate($("#language").val()); 
    function autoSave(){
         var mark="<?php echo isset($id)?'problem_id':'cid';?>";
@@ -614,10 +847,210 @@ function formatCode() {
   cleanCStyle(session.getValue());
 }
 
+// 使用 PHP 判断，如果开启了缩进检测，才绑定 change 事件
+<?php if (isset($OJ_SUOJIN) && $OJ_SUOJIN == true): ?>
+editor.getSession().on('change', function() {
+    // 建议增加一个防抖，避免高频输入时卡顿
+    if (this.indentTimer) clearTimeout(this.indentTimer);
+    this.indentTimer = setTimeout(checkAndMarkIndentationInstant, 300);
+});
+<?php endif; ?>
 
+// 下方是核心检测逻辑，只要上方没绑定事件，这个函数就不会运行，不占用浏览器性能
+function checkAndMarkIndentationInstant() {
+    let session = editor.getSession();
+    
+    // 1. 只检测 C/C++/Java 等使用大括号的语言
+    let mode = session.getMode().$id || "";
+    if (mode.indexOf("c_cpp") === -1 && mode.indexOf("java") === -1) {
+        return; 
+    }
+
+    let lines = session.getDocument().getAllLines();
+    let expectedIndentLevel = 0;      // 基础期望层级
+    let expectExtraIndent = false;    // 处理无大括号的 if/for
+    let formatWarnings = [];
+
+    for (let i = 0; i < lines.length; i++) {
+        let line = lines[i];
+        let trimmed = line.trim();
+
+        // --- 核心优化：利用 Ace Token 过滤注释 ---
+        let tokens = session.getTokens(i);
+        // 判断这一行是否主要是注释，或者是否处于多行注释中
+        let isCommentLine = tokens.length > 0 && tokens.every(t => t.type.indexOf("comment") !== -1);
+        let hasBlockComment = tokens.some(t => t.type.indexOf("comment.block") !== -1);
+
+        // 如果是纯注释行，或者该行包含块注释（/* */），跳过缩进检查和括号计数
+        if (isCommentLine || hasBlockComment || trimmed.length === 0 || trimmed.startsWith("#")) {
+            // 如果这一行仅仅是单行注释 //，我们需要保留当前的 expectedIndentLevel 进入下一行
+            // 但不更新大括号计数
+            continue; 
+        }
+
+        // 2. 计算当前行【应该】有多少层缩进
+        let currentLineExpected = expectedIndentLevel;
+        if (expectExtraIndent) {
+            currentLineExpected += 1;
+        }
+
+        // 如果当前行以 } 开头，退回一层对齐
+        if (trimmed.startsWith("}")) {
+            currentLineExpected = Math.max(0, expectedIndentLevel - 1);
+        }
+
+        // 3. 计算【实际】空格数 (1个 Tab = 4个空格)
+        let leadingWhitespace = line.match(/^[\s\t]*/)[0];
+        let actualSpaces = 0;
+        for (let j = 0; j < leadingWhitespace.length; j++) {
+            actualSpaces += (leadingWhitespace[j] === '\t') ? 4 : 1;
+        }
+
+        // 4. 判定并记录警告
+        let expectedSpaces = currentLineExpected * 4;
+        if (actualSpaces !== expectedSpaces) {
+            formatWarnings.push({
+                row: i,
+                column: 0,
+                text: `缩进不规范：此处期望 ${expectedSpaces} 个空格，目前有 ${actualSpaces} 个`,
+                type: "warning" 
+            });
+        }
+
+        // 5. 更新下一行的基础层级
+        // 过滤掉字符串中的括号，只统计代码中的括号
+        let openBraces = 0;
+        let closeBraces = 0;
+        tokens.forEach(t => {
+            if (t.type.indexOf("comment") === -1 && t.type.indexOf("string") === -1) {
+                openBraces += (t.value.match(/\{/g) || []).length;
+                closeBraces += (t.value.match(/\}/g) || []).length;
+            }
+        });
+
+        expectedIndentLevel += (openBraces - closeBraces);
+        expectedIndentLevel = Math.max(0, expectedIndentLevel); 
+
+        // 6. 探测无大括号的 if/for/while/else
+        if (openBraces === 0 && closeBraces === 0) {
+            if ((trimmed.startsWith("if") || trimmed.startsWith("for") || trimmed.startsWith("while")) && trimmed.endsWith(")")) {
+                expectExtraIndent = true;
+            } else if (trimmed === "else") {
+                expectExtraIndent = true;
+            } else {
+                expectExtraIndent = false; 
+            }
+        } else {
+            expectExtraIndent = false; 
+        }
+    }
+
+    // 7. 渲染警告，保留系统错误
+    let currentAnnotations = session.getAnnotations();
+    let existingErrors = currentAnnotations.filter(a => a.type === "error");
+    session.setAnnotations(existingErrors.concat(formatWarnings));
+}
 
 </script>
 <?php }?>
+<script>
+function auto_submit(){
+        if(countDown>0){
+                countDown--;
+                $("#countDown").text("<?php echo $MSG_LeftTime?>"+countDown+"<?php echo $MSG_SECONDS?>");
+        }
+
+}
+<?php if(isset($cid)&&$cid>0){
+        $sql="select unix_timestamp(end_time)-unix_timestamp(now()) from contest where contest_id=?";
+        $countStart=pdo_query($sql,$cid);
+        if(!empty($countStart)){
+                $countStart=intval($countStart[0][0])??0;
+                if($countStart<0) $countStart=0;
+                echo "var countDown=".$countStart.";";
+                echo "if(countDown>0) setInterval('auto_submit()',1000);";
+        }
+      }
+?>
+
+function removeCodeBlockMarkers(str) {
+    // 如果字符串为空，直接返回
+    if (!str || typeof str !== 'string') {
+        return str || '';
+    }
+    // 将字符串按行分割
+    const lines = str.split('\n');
+    const resultLines = [];
+    // 遍历每一行
+    for (let i = 0; i < lines.length; i++) {
+        const line = lines[i];
+        const trimmedLine = line.trim();
+        // 如果是第一行且包含```Python，跳过不添加到结果中
+        if (i === 0 && (trimmedLine === '```Python' || trimmedLine.startsWith('```'))) {
+            continue; // 跳过首行标记
+        }
+        // 如果是最后一行且是```，跳过不添加到结果中
+        if (i === lines.length - 1 && trimmedLine === '```') {
+            continue; // 跳过末尾标记
+        }
+        // 否则将行添加到结果中
+        resultLines.push(line);
+    }
+    // 重新组合字符串
+    const result = resultLines.join('\n');
+    // 如果移除标记后结果为空，返回空字符串
+    return result;
+}
+	function ai_gen(filename){
+		    let oldval=$('#ai_bt').val();
+		    $('#ai_bt').val('AI思考中...请稍候...');
+		    $('#ai_bt').prop('disabled', true);
+		    $.ajax({
+		    	url: '<?php echo $OJ_AI_API_URL?>', 
+				type: 'GET',
+				data: { pid: '<?php echo $id?>', filename: filename },
+				success: function(data) {
+					if(parseInt(data)>0)
+						window.setTimeout('pull_result('+data+')',1000);
+					else{
+						fill_data(data);		
+					}
+				},
+				error: function() {
+				    $('#ai_bt').val('获取数据失败');
+					$('#ai_bt').prop('disabled', false);
+				}
+		    });
+	}
+function fill_data(data){
+	if(typeof(editor) != "undefined")
+		editor.setValue(removeCodeBlockMarkers(data)); // 假设 #file_data 是 div
+	$('#ai_bt').prop('disabled', false);
+	$('#ai_bt').val("再来一次");
+}
+function pull_result(id){
+	console.log(id);
+    $.ajax({
+	url: '../aiapi/ajax.php', 
+	type: 'GET',
+	data: { id: id },
+	success: function(data) {
+		if(data=='waiting'){
+			window.setTimeout('pull_result('+id+')',1000);
+		}else{
+			fill_data(data);
+		    $('#ai_bt').val('再来一次');
+		    $('#ai_bt').prop('disabled', false);
+		}
+	},
+	error: function() {
+	    $('#ai_bt').val('获取数据失败');
+	    $('#ai_bt').prop('disabled', false);
+	}
+    });
+}
+		    
+</script>
 
   </body>
 </html>
