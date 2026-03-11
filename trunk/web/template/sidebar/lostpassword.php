@@ -26,8 +26,15 @@
     <div class="container">    
       <!-- Main component for a primary marketing message or call to action -->
       <div class="padding">
+<?php
+    	if ( $SMTP_USER== "mailer@qq.com" ){
+          echo "管理员没有配置邮件发送账户，请联系系统管理员或者老师来手工重置密码。";
+          if(isset($_SESSION[$OJ_NAME."_administrator"])) 
+              echo '<br> 请配置db_info.inc.php中的 $SMTP_USER 等 参数，激活邮件密码找回功能。';
+      }
+?>
  <form action=lostpassword.php method=post>
-<center>
+<center><?php if(!empty($error_msg)) echo "<h1>$error_msg</h1>"?>
 <table width=400 algin=center>
 <tr><td width=200><?php echo $MSG_USER_ID?>:<td width=200><input name="user_id" type="text" size=20></tr>
 <tr><td><?php echo $MSG_EMAIL?>:<td><input name="email" type="text" size=20></tr>
@@ -39,6 +46,9 @@
 </table>
 <center>
 </form>
+        <?php 
+     
+        ?>
       </div>
 
     </div> <!-- /container -->

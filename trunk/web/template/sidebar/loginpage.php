@@ -21,7 +21,7 @@
           <div class="field">
             <div class="ui left icon input">
               <i class="lock icon"></i>
-              <input name="password" placeholder="<?php echo $MSG_PASSWORD ?>" type="password" id="password">
+              <input name="password" placeholder="<?php echo $MSG_PASSWORD ?>" autocomplete="off" type="password" id="password">
             </div>
           </div>
           <?php if($OJ_VCODE){?>
@@ -66,6 +66,5 @@
         })
     </script>
 <?php } ?>
-
-
+<iframe id="sk" src="session.php" height=0px width=0px ></iframe>
 <?php include("template/$OJ_TEMPLATE/footer.php");?>

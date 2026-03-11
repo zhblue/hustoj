@@ -2,6 +2,7 @@
    background-color:#79a3d5;
    white-space:nowrap;
 }
+
 .dropdown-menu,.navbar-default{
    background-color:#79a3d5;
    background-repeat: repeat-x;
@@ -25,9 +26,9 @@
 body {
    padding: 50px;
    background-image:url('https://api.paugram.com/wallpaper/');
-   background-attachment: fixed;
-   background-repeat: no-repeat;
-   background-size: cover;
+background-attachment: fixed;
+background-repeat: no-repeat;
+background-size: cover;
 }
 .navbar{
     position: fixed;
@@ -56,17 +57,9 @@ body {
 .btn-success{
     background-color:#33cc99;
 }
-.panel-default{
-   padding: 5px;
-   background-image: url(../../image/background.jpg);
-   border: 1px solid #eee;
-   margin-top:50px;
-}
-.container .jumbotron{
-   padding: 5px;
-   background-image: url(../../image/background.jpg);
-   border: 1px solid #eee;
-   margin-top:50px;
+.jumbotron{
+    color:#000;
+    background-color:#ddd;
 }
 .btn-danger{
     background-color:#d3406d;
