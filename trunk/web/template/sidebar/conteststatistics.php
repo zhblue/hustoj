@@ -239,41 +239,52 @@
 		);
 	</script>
 
-	<script language="javascript" type="text/javascript" src="include/jquery.flot.js"></script>
-	<script type="text/javascript">
-		$(function () {
-			var d1 = [];
-			var d2 = [];
-			<?php
-			foreach($chart_data_all as $k=>$d){
-				?>
-				d1.push([<?php echo $k?>, <?php echo $d?>]);
-			<?php }?>
-			<?php
-			foreach($chart_data_ac as $k=>$d){
-				?>
-				d2.push([<?php echo $k?>, <?php echo $d?>]);
-			<?php }?>
-//var d2 = [[0, 3], [4, 8], [8, 5], [9, 13]];
-// a null signifies separate line segments
-var d3 = [[0, 12], [7, 12], null, [7, 2.5], [12, 2.5]];
-$.plot($("#submission"), [
-	{label:"<?php echo $MSG_SUBMIT?>",data:d1,lines: { show: true }},
-	{label:"<?php echo $MSG_SOVLED?>",data:d2,bars:{show:true}} ],{
-		xaxis: {
-			mode: "time"
-//, max:(new Date()).getTime()
-//,min:(new Date()).getTime()-100*24*3600*1000
-},
-grid: {
-	backgroundColor: { colors: ["#fff", "#333"] }
-}
-});
-});
-//alert((new Date()).getTime());
-</script>
+    <script  src="<?php echo $OJ_CDN_URL.$path_fix."template/$OJ_TEMPLATE"?>/js/echarts.min.js"></script>
+    <script type="text/javascript">
+        $( function () {
+            var all=<?php echo json_encode(array_column($chart_data_all,1))?> ;
+            var sub_echarts= echarts.init( $( "#submission" )[0]);
+            var maxY=Math.max(all);
+            var option = {
+                tooltip: {
+                    trigger: 'axis',
+                    formatter: '{b0}({a0}): {c0}<br />{b1}({a1}): {c1}'
+                },
+                legend: {
+                    data: ['<?php echo $MSG_SUBMIT?>','<?php echo $MSG_AC?>' ]
+                },
+                xAxis: {
+                    data: <?php echo json_encode(array_column($chart_data_ac,0))?>
+                    ,
+                    inverse:true
+                },
+                yAxis: [
+                    {
+                        type: 'value',
+                        name: '<?php echo $MSG_SUBMIT?>'
+                    }
+                ],
+                series: [
+                    {
+                        name: '<?php echo $MSG_SUBMIT?>',
+                        type: 'bar',
+                        data: all
+                    }
+                    ,
+                    {
+                        name: '<?php echo $MSG_AC?>',
+                        type: 'bar',
+                        data: <?php echo json_encode(array_column($chart_data_ac,1))?>
+                    }]
+            };
+            sub_echarts.setOption(option);
 
-<script>
+
+        } );
+        //alert((new Date()).getTime());
+    </script>
+
+    <script>
 	var diff = new Date("<?php echo date("Y/m/d H:i:s")?>").getTime()-new Date().getTime();
 	//alert(diff);
 	function clock() {
