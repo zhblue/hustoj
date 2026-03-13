@@ -164,7 +164,8 @@ if ($_FILES["fps"]["error"] > 0) {
                 if (!in_array($title, $inserted)) {
                     $pid = addproblem($title, 1, 128, $description, $input, $output, $sample_input, $sample_output, $hint, $source, $spj, $OJ_DATA);
                     mkdir($OJ_DATA . "/$pid/");
-                    array_push($inserted, $title);
+                    echo htmlentities( basename(dirname($file_name))  ."$title- yaml <br>");
+                    array_push($inserted, basename(dirname($file_name)));
 
                     $sql = "INSERT INTO `privilege` (`user_id`,`rightstr`) VALUES(?,?)";
                     pdo_query($sql, $_SESSION[$OJ_NAME . '_' . 'user_id'], "p$pid");
@@ -186,19 +187,19 @@ if ($_FILES["fps"]["error"] > 0) {
                 }
 
                 $spj = 0;
-                if ($title != "" && !in_array($title, $inserted) && !hasProblem($title)) {
+                if ($title != "" && !in_array( basename(dirname($file_name)) , $inserted) && !hasProblem($title)) {
                     $pid = addproblem($title, 1, 128, $description, $input, $output, $sample_input, $sample_output, $hint, $source, $spj, $OJ_DATA);
-                    echo htmlentities("$description");
+                    echo htmlentities( basename(dirname($file_name))  ."$description - md ");
                     mkdir($OJ_DATA . "/$pid/");
-                    array_push($inserted, $title);
+                    array_push($inserted, basename(dirname($file_name)));
 
                     $sql = "INSERT INTO `privilege` (`user_id`,`rightstr`) VALUES(?,?)";
                     pdo_query($sql, $_SESSION[$OJ_NAME . '_' . 'user_id'], "p$pid");
                     $_SESSION[$OJ_NAME . '_' . "p$pid"] = true;
                 } else {
-                    $sql = "UPDATE problem SET description=? WHERE problem_id=?";
-                    pdo_query($sql, $description, $pid);
-                    echo "skipped $title";
+                   // $sql = "UPDATE problem SET description=? WHERE problem_id=?";
+                   // pdo_query($sql, $description, $pid);
+                   //  echo "update $pid to $title <br>";
                 }
 
                 echo "PID:<a href='../problem.php?id=$pid'>" . htmlentities($title, ENT_QUOTES, "UTF-8") . "</a>";
