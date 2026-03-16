@@ -153,7 +153,8 @@ if(basename($_SERVER['PHP_SELF'])!=="cron.php"){
 		    "role" => "user",
 		    "content" => $prompt_user 
 		]
-	    ]
+	    ],
+		"enable_thinking": false
 	];
 	if(isset($temperature)) 
 		$data["temperature"] = $temperature;   
