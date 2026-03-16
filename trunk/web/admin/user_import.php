@@ -19,6 +19,7 @@ function get_extension($file) {
 }
 function import_user($filename) {
     global $OJ_EXPIRY_DAYS,$MSG_EXPIRY_DATE;
+	if(!isset($OJ_EXPIRY_DAYS)) $OJ_EXPIRY_DAYS=365;
     $check=false;
     $expire=false;
     if (($h = fopen("{$filename}", "r")) !== FALSE) {
