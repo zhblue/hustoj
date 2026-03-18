@@ -96,7 +96,7 @@
 
 </style>
 
-    <script src="<?php echo "$OJ_CDN_URL/include/"?>jquery-latest.js"></script>
+    <script src="<?php echo "$OJ_CDN_URL/template/syzoj/js/"?>jquery.min.js"></script>
 
 <!-- Scripts -->
 <script>
