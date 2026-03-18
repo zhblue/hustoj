@@ -24,7 +24,7 @@ div[class*=ace_br] {
 
 </style>
 <script src="<?php echo $OJ_CDN_URL.$path_fix."template/$OJ_TEMPLATE/"?>clipboard.min.js"></script>
-<script src="<?php echo $OJ_CDN_URL.$path_fix."template/bs3/"?>marked.min.js"></script>
+<script src="<?php echo $OJ_CDN_URL.$path_fix."template/syzoj/js"?>marked.min.js"></script>
 <script src="<?php echo $OJ_CDN_URL.$path_fix."template/syzoj/js/"?>markdown-it.min.js"></script>
 <link href='<?php echo $OJ_CDN_URL?>highlight/styles/shCore.css' rel='stylesheet' type='text/css'/>
 <link href='<?php echo $OJ_CDN_URL?>highlight/styles/shThemeDefault.css' rel='stylesheet' type='text/css'/>
@@ -696,7 +696,7 @@ $(document).ready(function () {
   };
 </script>
 
-<script id="MathJax-script" async src="template/syzoj/tex-chtml.js"></script>
+<script id="MathJax-script" async src="template/syzoj/js/tex-chtml.js"></script>
 <style>
 .jumbotron1{
   font-size: 18px;
