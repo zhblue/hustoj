@@ -696,7 +696,7 @@ $(document).ready(function () {
   };
 </script>
 
-<script id="MathJax-script" async src="template/bs3/tex-chtml.js"></script>
+<script id="MathJax-script" async src="template/syzoj/tex-chtml.js"></script>
 <style>
 .jumbotron1{
   font-size: 18px;
