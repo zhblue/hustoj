@@ -1,6 +1,6 @@
 <?php
 require_once ("admin-header.php");
-//require_once("../include/check_post_key.php");
+require_once("../include/check_post_key.php");
 
 if (!(isset($_SESSION[$OJ_NAME.'_'.'administrator'])||isset($_SESSION[$OJ_NAME.'_problem_importer'])  )) {
   echo "<a href='../loginpage.php'>Please Login First!</a>";
@@ -14,13 +14,17 @@ if (isset($OJ_LANG)) {
 require_once ("../include/const.inc.php");
 require_once ("../include/problem.php");
 function replaceLT($string) {
-    $pattern = '/(\\$.*?)(<)(.*?\\$)/';
-    $replacement = '$1 \\\\lt $3';
+    // 正则表达式匹配两个美元符号包裹的内容
+    $pattern = '/(\$.*?)(<)(.*?\$)/';
+    // 替换小于号为\lt
+    $replacement = '$1 \\lt $3';
+
+    // 使用preg_replace进行替换
     $ret= preg_replace($pattern, $replacement, $string);
     if (strlen($string)==strlen($ret))
     	return $ret;
     else
-    	return preg_replace($pattern, $replacement, $ret);
+    	return preg_replace($pattern, $replacement, $ret);    //递归到不再发生变化
 }
 
 ?>
@@ -49,6 +53,7 @@ function strip($Node, $TagName) {
   $len=mb_strlen($TagName);
   $i=mb_strpos($Node,"<".$TagName.">");
   $j=mb_strpos($Node,"</".$TagName.">");
+
   return mb_substr($Node,$i+$len+2,$j-($i+$len+2));
 }
 function get_extension($file) {
@@ -61,10 +66,12 @@ function getAttribute($Node, $TagName,$attribute) {
 }
 
 function hasProblem($title) {
+  //return false;	
   $md5 = md5($title);
   $sql = "SELECT 1 FROM problem WHERE md5(title)=?";  
   $result = pdo_query($sql, $md5);
   $rows_cnt = count($result);		
+  //echo "row->$rows_cnt";			
   return ($rows_cnt>0);
 }
 
@@ -92,6 +99,7 @@ function import_dir($json) {
 
     $time_limit = floatval($qduoj_problem->{'problem'}->{'timeLimit'});
     $unit = "ms";
+    //echo $unit;
 
     if ($unit=='ms')
       $time_limit /= 1000;
@@ -107,10 +115,12 @@ function import_dir($json) {
     $output = $qduoj_problem->{'problem'}->{'output'};
     $sample_input = strip($qduoj_problem->{'problem'}->{'examples'},"input");
     $sample_output = strip($qduoj_problem->{'problem'}->{'examples'},"output");
+//    echo $sample_input."<br>";
+//    echo $sample_output;
     $hint = $qduoj_problem->{'problem'}->{'hint'};
     $source = $qduoj_problem->{'problem'}->{'source'};				
     $spj=0;
-
+    
     $pid = addproblem($title, $time_limit, $memory_limit, $description, $input, $output, $sample_input, $sample_output, $hint, $source, $spj, $OJ_DATA);
     return $pid;
 }
@@ -154,14 +164,13 @@ if ($_FILES["fps"]["error"] > 0) {
                 if (!in_array($title, $inserted)) {
                     $pid = addproblem($title, 1, 128, $description, $input, $output, $sample_input, $sample_output, $hint, $source, $spj, $OJ_DATA);
                     mkdir($OJ_DATA . "/$pid/");
-                    echo htmlentities(basename(dirname($file_name)) . "$title- yaml <br>");
+                    echo htmlentities( basename(dirname($file_name))  ."$title- yaml" )."<br>";
                     array_push($inserted, basename(dirname($file_name)));
 
                     $sql = "INSERT INTO `privilege` (`user_id`,`rightstr`) VALUES(?,?)";
                     pdo_query($sql, $_SESSION[$OJ_NAME . '_' . 'user_id'], "p$pid");
                     $_SESSION[$OJ_NAME . '_' . "p$pid"] = true;
                 }
-
             } elseif (basename($file_name) == "problem_zh.md" || basename($file_name) == "problem.md") {
                 $file_content = replaceLT($file_content);
 
@@ -178,25 +187,22 @@ if ($_FILES["fps"]["error"] > 0) {
                 }
 
                 $spj = 0;
-
-                // ★ 修复：problem.yaml 已建好题目，直接 UPDATE description
-                if ($title != "" && $pid > 0) {
-                    $sql = "UPDATE problem SET description=? WHERE problem_id=?";
-                    pdo_query($sql, $description, $pid);
-                    echo htmlentities(basename(dirname($file_name)) . " - md updated, pid=$pid <br>");
-                } elseif ($title != "" && !hasProblem($title)) {
-                    // 兜底：yaml 未处理时才新建
+                if ($title != "" && !in_array( basename(dirname($file_name)) , $inserted) && !hasProblem($title)) {
                     $pid = addproblem($title, 1, 128, $description, $input, $output, $sample_input, $sample_output, $hint, $source, $spj, $OJ_DATA);
-                    echo htmlentities(basename(dirname($file_name)) . "$description - md <br>");
+                    echo htmlentities( basename(dirname($file_name))  ."$description - md ");
                     mkdir($OJ_DATA . "/$pid/");
                     array_push($inserted, basename(dirname($file_name)));
 
                     $sql = "INSERT INTO `privilege` (`user_id`,`rightstr`) VALUES(?,?)";
                     pdo_query($sql, $_SESSION[$OJ_NAME . '_' . 'user_id'], "p$pid");
                     $_SESSION[$OJ_NAME . '_' . "p$pid"] = true;
+                    echo "new PID:<a href='../problem.php?id=$pid'>" . htmlentities($title, ENT_QUOTES, "UTF-8") . "</a>";
+                } else if(in_array( basename(dirname($file_name)) , $inserted)) {
+                    $sql = "UPDATE problem SET description=? WHERE problem_id=?";
+                    pdo_query($sql, $description, $pid);
+                     echo "update $pid to $title <br>";
+                	echo " update PID:<a href='../problem.php?id=$pid'>" . htmlentities($title, ENT_QUOTES, "UTF-8") . "</a>";
                 }
-
-                echo "PID:<a href='../problem.php?id=$pid'>" . htmlentities($title, ENT_QUOTES, "UTF-8") . "</a>";
 
             } elseif (basename($file_name) == "config.yaml") {
                 $hydrop = yaml_parse($file_content);
@@ -251,8 +257,8 @@ if ($_FILES["fps"]["error"] > 0) {
                 $dataname = basename($file_name);
 
                 if (endsWith($dataname, ".txt")) {
-                    $dataname = preg_replace('/input([0-9]*).txt/i', '\1.in', $dataname);
-                    $dataname = preg_replace('/output([0-9]*).txt/i', '\1.out', $dataname);
+                    $dataname = preg_replace('/input([0-9]*).txt/i', '\\1.in', $dataname);
+                    $dataname = preg_replace('/output([0-9]*).txt/i', '\\1.out', $dataname);
                 } elseif (endsWith($dataname, "put")) {
                     $dataname = substr($dataname, 0, -3);
                 } elseif (endsWith($dataname, ".ans")) {
@@ -283,7 +289,9 @@ if ($_FILES["fps"]["error"] > 0) {
                 if (!file_exists(dirname($newpath))) {
                     mkdir(dirname($newpath), 0750, true);
                 }
+//		echo "additional:$newpath <br>";
                 file_put_contents($newpath, $file_content);
+
             }
         }
 
@@ -294,3 +302,4 @@ if ($_FILES["fps"]["error"] > 0) {
         echo ($tempfile);
     }
 }
+
