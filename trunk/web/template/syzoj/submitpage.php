@@ -1023,10 +1023,13 @@ function removeCodeBlockMarkers(str) {
 		    });
 	}
 function fill_data(data){
-	if(typeof(editor) != "undefined")
-		editor.setValue(removeCodeBlockMarkers(data)); // 假设 #file_data 是 div
-	$('#ai_bt').prop('disabled', false);
-	$('#ai_bt').val("再来一次");
+        data=data.replace(/<think>[\s\S]*?<\/think>/g, '');
+        if(typeof(editor) != "undefined")
+                editor.setValue(removeCodeBlockMarkers(data.trim())); // 假设 #file_data 是 div
+        else
+                $("#source").val(data.trim());
+        $('#ai_bt').prop('disabled', false);
+        $('#ai_bt').val("再来一次");
 }
 function pull_result(id){
 	console.log(id);
