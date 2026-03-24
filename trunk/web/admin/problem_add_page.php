@@ -221,7 +221,7 @@ function untransform() {
     $("textarea").off('keyup', sync);
 }
 function fill_data( data ){
-
+   data=data.replace(/<think>[\s\S]*?<\/think>/g, '');
    let title=$('#title').val();
 	    console.log(title);
 		if(title==""){
@@ -265,7 +265,8 @@ function fill_data( data ){
 			    // 如果解析失败,按旧格式处理
 			    let description = "<span class='md'>" + data + "</span>";
 			    $("textarea[name='description']").val(description);
-			    parsedData = null;
+			    //parsedData = null;
+			    parsedData.description = description.trim();
 			}
 		    }
 		    
