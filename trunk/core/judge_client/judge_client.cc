@@ -274,7 +274,7 @@ int already_running() {
 /* 打印 ARM64 寄存器值，用于调试系统调用追踪。 */
 void print_arm_regs(long long unsigned int *d){
 	for(int i=0;i<32;i++){
-		printf("[%d]:%llu ",i,d[i]%CALL_ARRAY_SIZE);
+		printf("[%d]:%lld ",i,d[i]%CALL_ARRAY_SIZE);
 	}
 	printf("\n");
 }
@@ -1538,8 +1538,10 @@ void umount(char *work_dir)  //清理可能存在的热加载目录
 	execute_cmd("/bin/umount -l %s/usr 2>/dev/null", work_dir);
 	execute_cmd("/bin/umount -l usr dev");
 	execute_cmd("/bin/umount -l lib lib64");
-	execute_cmd("/bin/rmdir %s/* ", work_dir);
-	execute_cmd("/bin/rmdir %s/log/* ", work_dir);
+	if (work_dir != NULL && strlen(work_dir) > 0 && strchr(work_dir, ' ') == NULL) {
+		execute_cmd("/bin/rmdir %s/* ", work_dir);
+		execute_cmd("/bin/rmdir %s/log/* ", work_dir);
+	}
 }
 /* 编译指定语言的提交代码（Main.ext）。成功返回0，失败返回编译错误大小。 */
 int compile(int lang, char *work_dir)
@@ -2200,15 +2202,19 @@ void prepare_files(char *filename, int namelen, char *infile, int &p_id,
 	if (fpname != NULL){
 		if (fscanf(fpname, "%s", noip_file_name) == 1){
 		    if(DEBUG) printf("NOIP filename:%s\n",noip_file_name);
-		    if(!strstr("noip_file_name","//")){
+		    if(!strstr(noip_file_name,"//")){
                             sprintf(userfile, "%s/run%d/%s", oj_home, runner_id,basename(noip_file_name));
-                            execute_cmd("rm %s",userfile);
+                            if (strlen(userfile) > 0 && strchr(userfile, ' ') == NULL) {
+                                execute_cmd("rm %s",userfile);
+                            }
         }
 		}
 		fclose(fpname);
 	}else{
 		sprintf(userfile, "%s/run%d/user.out", oj_home, runner_id);
-		execute_cmd("rm %s",userfile);
+		if (strlen(userfile) > 0 && strchr(userfile, ' ') == NULL) {
+			execute_cmd("rm %s",userfile);
+		}
 	}
 }
 // 以下 copy_开头的函数均为准备相应语言的chroot环境，复制动态链接库等，如果使用的系统不是Ubuntu则路径有所区别，可以用ldd/find查看实际位置。
@@ -3507,6 +3513,9 @@ void watch_solution(pid_t pidApp, char *infile, int &ACflg, int spj,
 void clean_workdir(char *work_dir)
 {
 	umount(work_dir);
+	if (work_dir == NULL || strlen(work_dir) == 0 || strchr(work_dir, ' ') != NULL) {
+		return;
+	}
 	if (DEBUG)
 	{
 		execute_cmd("/bin/rmdir %s/log/* 2>/dev/null", work_dir);
