@@ -263,7 +263,7 @@ int already_running() {
 			return 1;
 		}
 		
-		if(DEBUG)printf("%s lock fail.\n",lock_file);
+		if(DEBUG)printf("%s lock fail.\n", lock_file);
 		exit(1);
 	}
 	if(ftruncate(fd, 0)) printf("close file fail 0 \n");
@@ -274,7 +274,7 @@ int already_running() {
 /* 打印 ARM64 寄存器值，用于调试系统调用追踪。 */
 void print_arm_regs(long long unsigned int *d){
 	for(int i=0;i<32;i++){
-		printf("[%d]:%lld ",i,d[i]%CALL_ARRAY_SIZE);
+		printf("[%d]:%llu ", i , d[i]%CALL_ARRAY_SIZE);
 	}
 	printf("\n");
 }
