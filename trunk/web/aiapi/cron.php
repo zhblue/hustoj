@@ -70,7 +70,7 @@ do{
 				curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
 				curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 				curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-				curl_setopt($ch, CURLOPT_REFERER, $OJ_NAME );
+				curl_setopt($ch, CURLOPT_REFERER, 'http://127.0.0.1:18789/'. $OJ_NAME);
 				curl_setopt($ch, CURLOPT_TIMEOUT, $timeout);
 				// 执行cURL会话
 				$response = curl_exec($ch);
