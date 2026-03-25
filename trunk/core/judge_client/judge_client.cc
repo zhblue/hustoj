@@ -2207,7 +2207,13 @@ void prepare_files(char *filename, int namelen, char *infile, int &p_id,
                             if (strlen(userfile) > 0 && strchr(userfile, ' ') == NULL) {
                                 execute_cmd("rm %s",userfile);
                             }
-        }
+                    }else{
+                            /* Rejected NOIP output.name contains "//", fall back to default userfile */
+                            sprintf(userfile, "%s/run%d/user.out", oj_home, runner_id);
+                            if (strlen(userfile) > 0 && strchr(userfile, ' ') == NULL) {
+                                execute_cmd("rm %s",userfile);
+                            }
+                    }
 		}
 		fclose(fpname);
 	}else{
