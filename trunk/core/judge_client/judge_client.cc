@@ -3516,12 +3516,42 @@ void watch_solution(pid_t pidApp, char *infile, int &ACflg, int spj,
 }
 
 /* 卸载 chroot 挂载并将 work_dir 中的所有文件移到 log 子目录。 */
+
+/* 检查 work_dir 是否安全可用于 shell 命令和卸载操作。 */
+static int is_safe_workdir(const char *work_dir)
+{
+	if (work_dir == NULL || work_dir[0] == '\0')
+	{
+		return 0;
+	}
+
+	const unsigned char *p = (const unsigned char *)work_dir;
+	while (*p)
+	{
+		unsigned char c = *p;
+		/* 禁止空白字符和常见的 shell 特殊字符，避免命令注入。 */
+		if (isspace(c) ||
+			c == ';' || c == '|' || c == '&' ||
+			c == '`' || c == '$' || c == '>' ||
+			c == '<' || c == '"' || c == '\'' ||
+			c == '\\')
+		{
+			return 0;
+		}
+		p++;
+	}
+	return 1;
+}
+
 void clean_workdir(char *work_dir)
 {
-	umount(work_dir);
-	if (work_dir == NULL || strlen(work_dir) == 0 || strchr(work_dir, ' ') != NULL) {
+	/* 先验证 work_dir，避免将不安全/非法路径传给 umount 或 shell。 */
+	if (!is_safe_workdir(work_dir))
+	{
 		return;
 	}
+
+	umount(work_dir);
 	if (DEBUG)
 	{
 		execute_cmd("/bin/rmdir %s/log/* 2>/dev/null", work_dir);
