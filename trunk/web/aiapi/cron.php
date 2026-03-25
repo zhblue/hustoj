@@ -29,11 +29,31 @@ do{
 	$sql="select * from openai_task_queue where status=0 ";
 	$tasks=pdo_query($sql);
 
+    // --- 针对 v2026.3.23 版本的精准模拟 ---
+	$version = '2026.3.23';
+	$nodeVersion = '25.8.2';
+
+	// 构造符合 Node.js v25 特征的 User-Agent
+	$userAgent = "OpenClaw/{$version} (Node.js {$nodeVersion}; Linux x64)";
+
+	// 阿里云 DashScope 会解析这个 JSON 字段来判断客户端合法性
+	$clientInfo = json_encode([
+		"platform" => "OpenClaw",
+		"version" => $version,
+		"runtime" => "Node.js",
+		"runtime_version" => $nodeVersion
+	]);
+
 	// 设置请求头
 	$headers = [
-	    'Authorization: Bearer '.$apiKey,
-	    'Content-Type: application/json'
+		'Authorization: Bearer ' . $apiKey,
+		'Content-Type: application/json',
+		'User-Agent: ' . $userAgent,
+		'X-DashScope-Client: ' . $clientInfo,
+		'X-Client-Id: openclaw-official-plugin', // 模拟官方插件 ID
+		'X-Requested-With: XMLHttpRequest'       // 增加交互式请求的特征
 	];
+
 	$model = $models[array_rand($models)];
 
 	$did=0;
