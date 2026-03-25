@@ -1529,19 +1529,16 @@ void update_problem(int pid,int cid) {
 /* 卸载 work_dir 下的所有绑定挂载（usr、proc、dev）并清理。 */
 void umount(char *work_dir)  //清理可能存在的热加载目录
 {
+	if (work_dir == NULL || strlen(work_dir) == 0 || strchr(work_dir, ' ') != NULL) return;
 	if(chdir(work_dir)) exit(-1);
 	execute_cmd("/bin/umount -l %s/usr 2>/dev/null", work_dir);
-	if(strlen(work_dir)>0){
-		execute_cmd("/bin/umount -l %s/proc 2>/dev/null", work_dir);
-	}
+	execute_cmd("/bin/umount -l %s/proc 2>/dev/null", work_dir);
 	execute_cmd("/bin/umount -l %s/dev 2>/dev/null", work_dir);
 	execute_cmd("/bin/umount -l %s/usr 2>/dev/null", work_dir);
 	execute_cmd("/bin/umount -l usr dev");
 	execute_cmd("/bin/umount -l lib lib64");
-	if (work_dir != NULL && strlen(work_dir) > 0 && strchr(work_dir, ' ') == NULL) {
-		execute_cmd("/bin/rmdir %s/* ", work_dir);
-		execute_cmd("/bin/rmdir %s/log/* ", work_dir);
-	}
+	execute_cmd("/bin/rmdir %s/* ", work_dir);
+	execute_cmd("/bin/rmdir %s/log/* ", work_dir);
 }
 /* 编译指定语言的提交代码（Main.ext）。成功返回0，失败返回编译错误大小。 */
 int compile(int lang, char *work_dir)
