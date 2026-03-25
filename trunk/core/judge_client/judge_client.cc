@@ -263,7 +263,7 @@ int already_running() {
 			return 1;
 		}
 		
-		if(DEBUG)printf("%s lock fail.\n",lock_file);
+		if(DEBUG)printf("%s lock fail.\n", lock_file);
 		exit(1);
 	}
 	if(ftruncate(fd, 0)) printf("close file fail 0 \n");
@@ -274,7 +274,7 @@ int already_running() {
 /* 打印 ARM64 寄存器值，用于调试系统调用追踪。 */
 void print_arm_regs(long long unsigned int *d){
 	for(int i=0;i<32;i++){
-		printf("[%d]:%llu ",i,d[i]%CALL_ARRAY_SIZE);
+		printf("[%d]:%llu ", i , d[i]%CALL_ARRAY_SIZE);
 	}
 	printf("\n");
 }
@@ -1529,11 +1529,10 @@ void update_problem(int pid,int cid) {
 /* 卸载 work_dir 下的所有绑定挂载（usr、proc、dev）并清理。 */
 void umount(char *work_dir)  //清理可能存在的热加载目录
 {
+	if (work_dir == NULL || strlen(work_dir) == 0 || strchr(work_dir, ' ') != NULL) return;
 	if(chdir(work_dir)) exit(-1);
 	execute_cmd("/bin/umount -l %s/usr 2>/dev/null", work_dir);
-	if(strlen(work_dir)>0){
-		execute_cmd("/bin/umount -l %s/proc 2>/dev/null", work_dir);
-	}
+	execute_cmd("/bin/umount -l %s/proc 2>/dev/null", work_dir);
 	execute_cmd("/bin/umount -l %s/dev 2>/dev/null", work_dir);
 	execute_cmd("/bin/umount -l %s/usr 2>/dev/null", work_dir);
 	execute_cmd("/bin/umount -l usr dev");
@@ -2200,15 +2199,25 @@ void prepare_files(char *filename, int namelen, char *infile, int &p_id,
 	if (fpname != NULL){
 		if (fscanf(fpname, "%s", noip_file_name) == 1){
 		    if(DEBUG) printf("NOIP filename:%s\n",noip_file_name);
-		    if(!strstr("noip_file_name","//")){
+		    if(!strstr(noip_file_name,"//")){
                             sprintf(userfile, "%s/run%d/%s", oj_home, runner_id,basename(noip_file_name));
-                            execute_cmd("rm %s",userfile);
-        }
+                            if (strlen(userfile) > 0 && strchr(userfile, ' ') == NULL) {
+                                execute_cmd("rm %s",userfile);
+                            }
+                    }else{
+                            /* Rejected NOIP output.name contains "//", fall back to default userfile */
+                            sprintf(userfile, "%s/run%d/user.out", oj_home, runner_id);
+                            if (strlen(userfile) > 0 && strchr(userfile, ' ') == NULL) {
+                                execute_cmd("rm %s",userfile);
+                            }
+                    }
 		}
 		fclose(fpname);
 	}else{
 		sprintf(userfile, "%s/run%d/user.out", oj_home, runner_id);
-		execute_cmd("rm %s",userfile);
+		if (strlen(userfile) > 0 && strchr(userfile, ' ') == NULL) {
+			execute_cmd("rm %s",userfile);
+		}
 	}
 }
 // 以下 copy_开头的函数均为准备相应语言的chroot环境，复制动态链接库等，如果使用的系统不是Ubuntu则路径有所区别，可以用ldd/find查看实际位置。
@@ -3504,8 +3513,41 @@ void watch_solution(pid_t pidApp, char *infile, int &ACflg, int spj,
 }
 
 /* 卸载 chroot 挂载并将 work_dir 中的所有文件移到 log 子目录。 */
+
+/* 检查 work_dir 是否安全可用于 shell 命令和卸载操作。 */
+static int is_safe_workdir(const char *work_dir)
+{
+	if (work_dir == NULL || work_dir[0] == '\0')
+	{
+		return 0;
+	}
+
+	const unsigned char *p = (const unsigned char *)work_dir;
+	while (*p)
+	{
+		unsigned char c = *p;
+		/* 禁止空白字符和常见的 shell 特殊字符，避免命令注入。 */
+		if (isspace(c) ||
+			c == ';' || c == '|' || c == '&' ||
+			c == '`' || c == '$' || c == '>' ||
+			c == '<' || c == '"' || c == '\'' ||
+			c == '\\')
+		{
+			return 0;
+		}
+		p++;
+	}
+	return 1;
+}
+
 void clean_workdir(char *work_dir)
 {
+	/* 先验证 work_dir，避免将不安全/非法路径传给 umount 或 shell。 */
+	if (!is_safe_workdir(work_dir))
+	{
+		return;
+	}
+
 	umount(work_dir);
 	if (DEBUG)
 	{
