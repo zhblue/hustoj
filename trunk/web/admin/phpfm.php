@@ -3053,7 +3053,17 @@ function getmicrotime(){
    list($usec, $sec) = explode(" ", microtime());
    return ((float)$usec + (float)$sec);
 }
-
+function getSubtaskName($filename) {
+        // 统计点号在多字节字符串中出现的总次数
+    $dotCount = mb_substr_count($filename, '.');
+    // 只有点号数量 >= 2 时才处理
+    if ($dotCount >= 2) {
+        $dotPosition = mb_strpos($filename, '.');
+        return "&nbsp;&nbsp;&nbsp;子任务:".mb_substr($filename, 0, $dotPosition);
+    }
+    // 否则返回空字符串
+    return '';
+}
 function tips($filename) {
     // 统一处理大小写（部分匹配不区分大小写）
     $lower = strtolower($filename);
@@ -3079,7 +3089,7 @@ function tips($filename) {
     if (preg_match('/\.(in|out)$/i', $filename, $ext_matches)) {
         if (preg_match('/\[([0-9]+)\]/', $filename, $score_matches)) {
             $score = intval($score_matches[1]);
-            return "分值{$score}";
+            return ($ext_matches[1]=="in"?"&nbsp;&nbsp;&nbsp;":"")."分值{$score} ".getSubtaskName($filename);
         }
     }
 
