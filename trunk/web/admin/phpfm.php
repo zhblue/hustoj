@@ -3090,7 +3090,9 @@ function tips($filename) {
         if (preg_match('/\[([0-9]+)\]/', $filename, $score_matches)) {
             $score = intval($score_matches[1]);
             return ($ext_matches[1]=="in"?"&nbsp;&nbsp;&nbsp;":"")."分值{$score} ".getSubtaskName($filename);
-        }
+        }else{
+			return ($ext_matches[1]=="in"?"&nbsp;&nbsp;&nbsp;":"").getSubtaskName($filename);
+		}
     }
 
     // 匹配 template.*、prepend.*、append.*
