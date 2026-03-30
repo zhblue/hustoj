@@ -146,10 +146,11 @@ else{
         $plist=intval($i);
     }
   $plist = trim($_POST['hlist']);
-  $pieces = explode(",",$plist );
+  $pieces = explode(",",$plist);
   $pieces = array_unique($pieces);
   if($pieces[0]=="") unset($pieces[0]);
-  $plist=implode(",",$pieces);
+  // 安全修复：每个ID元素强制intval，防止SQL注入
+  $plist = implode(",", array_map('intval', $pieces));
 
   }else if(isset($_GET['spid'])){
     //require_once("../include/check_get_key.php");

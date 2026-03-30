@@ -26,11 +26,14 @@ if(isset($_POST['pid'])&&!empty($_POST['pid'])) {
 }
 
 //echo "===".$plist;
-  if(isset($_POST['hlist']))$plist = trim($_POST['hlist']);
-  $pieces = explode(",",$plist );
-  $pieces = array_unique($pieces);
-  if($pieces[0]=="")unset($pieces[0]);
-  $plist=implode(",",$pieces);
+  if(isset($_POST['hlist'])){
+    $plist = trim($_POST['hlist']);
+    $pieces = explode(",",$plist);
+    $pieces = array_unique($pieces);
+    if($pieces[0]=="")unset($pieces[0]);
+    // 安全修复：每个ID元素强制intval，防止SQL注入
+    $plist = implode(",", array_map('intval', $pieces));
+  }
 
 if(isset($_POST['enable'])&&$plist){
   $sql = "UPDATE `problem` SET defunct='N' WHERE `problem_id` IN ($plist)";           
