@@ -691,7 +691,7 @@ editor.getSession().on("change", function() {
    	$("#source").css("height",window.innerHeight-180);  
 	if($("#vcode")!=undefined) $("#vcode").click();
 	if(!!localStorage){
-		let key="<?php echo $_SESSION[$OJ_NAME.'_user_id']?>source:"+location.href;
+		let key="<?php echo htmlentities($_SESSION[$OJ_NAME.'_user_id'])?>source:"+location.href;
 		let saved=localStorage.getItem(key);
 		   if(saved!=null&&saved!=""&&saved.length>editor.getValue().length){
                         //let load=confirm("发现自动保存的源码，是否加载？（仅有一次机会）");
