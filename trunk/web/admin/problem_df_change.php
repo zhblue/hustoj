@@ -28,11 +28,14 @@ if(isset($_POST['pid'])&&!empty($_POST['pid'])) {
 //echo "===".$plist;
   if(isset($_POST['hlist'])){
     $plist = trim($_POST['hlist']);
-    $pieces = explode(",",$plist);
+    $pieces = explode(",", $plist);
     $pieces = array_unique($pieces);
-    if($pieces[0]=="")unset($pieces[0]);
-    // 安全修复：每个ID元素强制intval，防止SQL注入
-    $plist = implode(",", array_map('intval', $pieces));
+    if (isset($pieces[0]) && $pieces[0] === "") unset($pieces[0]);
+    // 安全修复：每个ID元素强制intval，并过滤掉非正整数，防止SQL注入及意外的0
+    $intPieces = array_map('intval', $pieces);
+    $intPieces = array_filter($intPieces, function ($v) { return $v > 0; });
+    $intPieces = array_values($intPieces);
+    $plist = $intPieces ? implode(",", $intPieces) : "";
   }
 
 if(isset($_POST['enable'])&&$plist){
