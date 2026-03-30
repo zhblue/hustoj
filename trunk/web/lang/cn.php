@@ -130,6 +130,8 @@
 	$MSG_SCHOOL="学校";
         $MSG_GROUP_NAME="班级/小组";
 	$MSG_EMAIL="电子邮件";
+	$MSG_CANNOT_EMPTY="不能为空";
+	$MSG_WRONG_FORMAT="格式错误";
 	$MSG_REG_INFO="设置注册信息";
 	$MSG_VCODE="验证码";
         $MSG_ACTIVE_YOUR_ACCOUNT="激活账号";

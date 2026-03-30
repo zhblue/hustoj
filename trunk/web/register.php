@@ -90,9 +90,20 @@ if ($len > 20) {
     $err_cnt++;
 }
 
+// 验证邮箱是否为空
+if ($email === '') {
+    $err_str = $err_str . "$MSG_EMAIL $MSG_CANNOT_EMPTY!\\n";
+    $err_cnt++;
+}
+
+// 验证邮箱格式是否合法
+if ($email !== '' && !filter_var($email, FILTER_VALIDATE_EMAIL)) {
+    $err_str = $err_str . "$MSG_EMAIL $MSG_WRONG_FORMAT!\\n";
+    $err_cnt++;
+}
+
 // 验证邮箱长度
-$len = mb_strlen($_POST['email']);
-if ($len > 100) {
+if (mb_strlen($email) > 100) {
     $err_str = $err_str . "$MSG_EMAIL $MSG_TOO_LONG!\\n";
     $err_cnt++;
 }

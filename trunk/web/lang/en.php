@@ -115,6 +115,8 @@
 	$MSG_SCHOOL="School";
         $MSG_GROUP_NAME="Group";
 	$MSG_EMAIL="Email";
+	$MSG_CANNOT_EMPTY="cannot be empty";
+	$MSG_WRONG_FORMAT="format is invalid";
 	$MSG_REG_INFO="Register Information";
 	$MSG_VCODE="Verify Code";
         $MSG_ACTIVE_YOUR_ACCOUNT="Active Your Account ";
