@@ -498,4 +498,4 @@
     $MSG_FRIENDLY_L7="Enable discus";
     $MSG_FRIENDLY_L8="Allow download test data";
     $MSG_FRIENDLY_L9="Allow guest to submit";
-
+	$MSG_HELP_BACKUP_DATABASE="데이터베이스, 테스트 데이터 및 이미지를 문제 0 디렉토리로 백업";

@@ -489,3 +489,6 @@
   $MSG_FRIENDLY_L7="Enable discus";
   $MSG_FRIENDLY_L8="Allow download test data";
   $MSG_FRIENDLY_L9="Allow guest to submit";
+	$MSG_HELP_BACKUP_DATABASE="Backup database, test data and images to problem 0 directory";
+	$MSG_HELP_USER_IMPORT="Import users";
+	$MSG_REMOTE_OJ="Remote OJ";
