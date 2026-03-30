@@ -330,7 +330,7 @@
 			var mark = "<?php echo isset($id) ? 'problem_id' : 'cid'; ?>";
 			var problem_id = $("#" + mark).val();
 			if (!!localStorage) {
-				let key = "<?php echo $_SESSION[$OJ_NAME . '_user_id'] ?>source:" + location.href;
+				let key = "<?php echo htmlentities($_SESSION[$OJ_NAME . '_user_id'], ENT_QUOTES, 'UTF-8') ?>source:" + location.href;
 				if (typeof (editor) != "undefined")
 					$("#hide_source").val(editor.getValue());
 				localStorage.setItem(key, $("#hide_source").val());
@@ -339,7 +339,7 @@
 		}
 		$(document).ready(function () {
 			if (!!localStorage) {
-				let key = "<?php echo $_SESSION[$OJ_NAME . '_user_id'] ?>source:" + location.href;
+				let key = "<?php echo htmlentities($_SESSION[$OJ_NAME . '_user_id'], ENT_QUOTES, 'UTF-8') ?>source:" + location.href;
 				let saved = localStorage.getItem(key);
 				if (saved != null && saved != "" && saved != editor.getValue()) {
 					Swal.fire({

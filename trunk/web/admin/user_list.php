@@ -104,14 +104,14 @@ if(isset($_GET['keyword']) && $_GET['keyword']!=""){
 
         echo "<td>".($row['defunct']=="N"?"<span class=green >$MSG_NORMAL</span>":"<span class=red>$MSG_DELETED</span>")."</td>";
       if(isset($_SESSION[$OJ_NAME.'_'.'administrator']) && $row['user_id']!=$_SESSION[$OJ_NAME."_user_id"]){
-        echo "<td><a href=user_df_change.php?cid=".$row['user_id']."&getkey=".$_SESSION[$OJ_NAME.'_'.'getkey'].">".
+        echo "<td><a href=user_df_change.php?cid=".$row['user_id']."&getkey=".htmlentities($_SESSION[$OJ_NAME.'_'.'getkey'], ENT_QUOTES, 'UTF-8').">".
            ($row['defunct']=="N"?"<span class='label label-danger' title='$MSG_CLICK_TO_DELETE'>$MSG_CLICK_TO_DELETE</span>":"<span class='label label-success' title='$MSG_CLICK_TO_RECOVER'>$MSG_CLICK_TO_RECOVER</span>")
             ."</a></td>";
       }else{
       	   echo "<td>&nbsp;</td>";
       }
-        echo "<td><a class='label label-warning' href=changepass.php?uid=".$row['user_id']."&getkey=".$_SESSION[$OJ_NAME.'_'.'getkey'].">".$MSG_RESET."</a></td>";
-        echo "<td><a class='label label-success' href=privilege_add.php?uid=".$row['user_id']."&getkey=".$_SESSION[$OJ_NAME.'_'.'getkey'].">".$MSG_ADD."</a></td>";
+        echo "<td><a class='label label-warning' href=changepass.php?uid=".$row['user_id']."&getkey=".htmlentities($_SESSION[$OJ_NAME.'_'.'getkey'], ENT_QUOTES, 'UTF-8').">".$MSG_RESET."</a></td>";
+        echo "<td><a class='label label-success' href=privilege_add.php?uid=".$row['user_id']."&getkey=".htmlentities($_SESSION[$OJ_NAME.'_'.'getkey'], ENT_QUOTES, 'UTF-8').">".$MSG_ADD."</a></td>";
       echo "</tr>";
     } ?>
   </table>

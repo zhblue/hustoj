@@ -38,7 +38,7 @@
 
                 <?php if (isset($_SESSION[$OJ_NAME.'_'.'administrator']) || isset($_SESSION[$OJ_NAME.'_'.'contest_creator']) || isset($_SESSION[$OJ_NAME.'_'.'problem_editor'])) { ?>
                     <?php require_once("include/set_get_key.php"); ?>
-                     <a class='mdui-btn mdui-ripple mdui-color-green-600' href="admin/problem_edit.php?id=<?php echo $id; ?>&getkey=<?php echo $_SESSION[$OJ_NAME.'_'.'getkey']; ?>">编辑</a>
+                     <a class='mdui-btn mdui-ripple mdui-color-green-600' href="admin/problem_edit.php?id=<?php echo $id; ?>&getkey=<?php echo htmlentities($_SESSION[$OJ_NAME.'_'.'getkey'], ENT_QUOTES, 'UTF-8'); ?>">编辑</a>
                     <a class='mdui-btn mdui-ripple mdui-color-green-600' href="javascript:phpfm(<?php echo $row['problem_id']; ?>)">测试数据</a>
                     <div class="mdui-dialog" id="testdata-dialog" style="min-height: 600px; min-width: 1000px;">
                         <b class="mdui-float-left mdui-p-y-2 mdui-p-x-3">文件管理器</b>

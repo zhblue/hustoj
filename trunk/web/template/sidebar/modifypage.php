@@ -7,7 +7,7 @@
           <form action="modify.php" method="post" role="form" class="ui form">
                 <div class="field">
                     <label for="username"><?php echo $MSG_USER_ID?></label>
-                    <input class="form-control" placeholder="<?php echo $MSG_Input.$MSG_USER_ID?>"  disabled="disabled" type="text" value="<?php echo $_SESSION[$OJ_NAME.'_'.'user_id']?>">
+                    <input class="form-control" placeholder="<?php echo $MSG_Input.$MSG_USER_ID?>"  disabled="disabled" type="text" value="<?php echo htmlentities($_SESSION[$OJ_NAME.'_'.'user_id'], ENT_QUOTES, 'UTF-8')?>">
                 </div>
                 <?php require_once('./include/set_post_key.php');?>
                 <div class="field">

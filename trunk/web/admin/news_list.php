@@ -75,7 +75,7 @@ if(isset($_GET['keyword']) && $_GET['keyword']!=""){
         echo "<td>".$row['news_id']."</td>";
         echo "<td><a href='news_edit.php?id=".$row['news_id']."'>".htmlentities($row['title']==""?"Empty":$row['title'])."</a>"."</td>";
         echo "<td>".$row['time']."</td>";
-        echo "<td><a href=news_df_change.php?id=".$row['news_id']."&getkey=".$_SESSION[$OJ_NAME.'_'.'getkey'].">".($row['defunct']=="N"?"<span class=green>On</span>":"<span class=red>Off</span>")."</a>"."</td>";
+        echo "<td><a href=news_df_change.php?id=".$row['news_id']."&getkey=".htmlentities($_SESSION[$OJ_NAME.'_'.'getkey'], ENT_QUOTES, 'UTF-8').">".($row['defunct']=="N"?"<span class=green>On</span>":"<span class=red>Off</span>")."</a>"."</td>";
         echo "<td><a href=news_add_page.php?cid=".$row['news_id'].">Copy</a></td>";
         echo "<td fd='importance'>" . ($row['importance']). "</td>";
         echo "<td fd='menu'>" . ($row['menu'] == 1 ? "YES" : "NO") . "</td>";

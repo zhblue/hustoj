@@ -154,7 +154,7 @@
         } ?>
         ''];
         var oj_mark= <?php echo "'$OJ_MARK'";?>;
-        var user_id="<?php if (isset($_SESSION[$OJ_NAME."_user_id"])&& $OJ_FANCY_RESULT ) echo $_SESSION[$OJ_NAME."_user_id"]; ?>";
+        var user_id="<?php if (isset($_SESSION[$OJ_NAME."_user_id"])&& $OJ_FANCY_RESULT ) echo htmlentities($_SESSION[$OJ_NAME."_user_id"], ENT_QUOTES, 'UTF-8'); ?>";
         var fancy_mp3="<?php if (isset($_SESSION[$OJ_NAME."_user_id"]) && $OJ_FANCY_RESULT ) echo $OJ_FANCY_MP3; ?>";
 </script>
         <script src="template/<?php echo $OJ_TEMPLATE?>/auto_refresh.js?v=0.52" ></script>

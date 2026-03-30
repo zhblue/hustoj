@@ -26,7 +26,7 @@
                             style="width: calc(100% - 50px); display: inline-block; margin-left: 45px;">
                             <label class="mdui-textfield-label">用户名</label>
                             <input class="mdui-textfield-input" id="user_id"
-                                value="<?php echo $_SESSION[$OJ_NAME.'_'.'user_id']?>" type="text" disabled />
+                                value="<?php echo htmlentities($_SESSION[$OJ_NAME.'_'.'user_id'], ENT_QUOTES, 'UTF-8')?>" type="text" disabled />
                         </div>
                     </div>
                     <?php require_once('./include/set_post_key.php');?>
