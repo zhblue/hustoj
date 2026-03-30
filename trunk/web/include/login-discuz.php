@@ -7,7 +7,7 @@
 		$discuz_db="discuz";
 
 		$ret=false;
-		pdo_query("set names utf8");
+		pdo_query("set names utf8mb4");
 		// 安全修复：使用参数化查询防止 SQL 注入
 		$sql="select password,salt,username from ".$discuz_db.".uc_members where username=?";
 		$result=pdo_query($sql, $user_id);
