@@ -43,8 +43,9 @@ if (false) {
 }
  $description ='<link href="https://dn-menci.qbox.me/libreoj/libs/KaTeX/katex.min.css" rel="stylesheet">'. $description ;
 //echo "->".$OJ_DATA."<-"; 
-$pid=addproblem ( $title, $time_limit, $memory_limit, $description, $input, $output, $sample_input, $sample_output, $hint, $source, $spj, $OJ_DATA );
-$basedir = "$OJ_DATA/$pid";
+$pid=intval(addproblem ( $title, $time_limit, $memory_limit, $description, $input, $output, $sample_input, $sample_output, $hint, $source, $spj, $OJ_DATA ));
+$basedir = realpath("$OJ_DATA/$pid");
+if (strpos($basedir, realpath($OJ_DATA)) !== 0) die("Invalid path");
 mkdir ( $basedir );
 if(strlen($sample_output)&&!strlen($sample_input)) $sample_input="0";
 if(strlen($sample_input)) mkdata($pid,"sample.in",$sample_input,$OJ_DATA);
