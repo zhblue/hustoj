@@ -1,5 +1,5 @@
 <?php
-ini_set("display_errors", "On");  //set this to "On" for debugging  ,especially when no reason blank shows up.
+ini_set("display_errors", "Off");  // 生产环境应关闭调试
 // 如果不是 CLI 环境，则直接退出
 if (php_sapi_name() !== 'cli') {
     // 可以输出错误信息（可选）

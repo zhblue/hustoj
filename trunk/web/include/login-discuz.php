@@ -12,9 +12,19 @@
 		$sql="select password,salt,username from ".$discuz_db.".uc_members where username=?";
 		$result=pdo_query($sql, $user_id);
 		$row = $result[0];
-		if($row && $row['password']==md5(md5($password).$row['salt'])){
-				$_SESSION[$OJ_NAME.'_'.'user_id']=$row['username'];
-				$ret=$_SESSION[$OJ_NAME.'_'.'user_id'];
+		if($discuz_conn){
+			mysql_select_db($discuz_db,$discuz_conn);
+			$result=pdo_query($sql, $user_id);
+		
+			if($row['password']==md5(md5($password).$row['salt'])){
+
+					$_SESSION[$OJ_NAME.'_'.'user_id']=$row['username'];
+					$ret=$_SESSION[$OJ_NAME.'_'.'user_id'];
+				//	$sql="insert into jol.users(user_id,ip,nick,school) values('".$_SESSION[$OJ_NAME.'_'.'user_id']."','','','') on DUPLICATE KEY UPDATE nick='".$row['username']."'";
+				//	pdo_query($sql);
+					
+			}
+
 		}
 				
 		return $ret; 
