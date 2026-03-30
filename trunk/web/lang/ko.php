@@ -17,8 +17,8 @@
 	$MSG_STANDING="순위";
 	$MSG_STATISTICS="통계";
 	$MSG_USERINFO="회원정보";
-	$MSG_MAIL="E-mail";
-    $MSG_TODO="ToDo";
+	$MSG_MAIL="이메일";
+    $MSG_TODO="할 일";
 	
 	//status.php
 	$MSG_Pending="채점 대기중";
@@ -60,10 +60,10 @@
 	$MSG_SUBMIT_TIME="제출시간";
 
 	//problemstatistics.php
-	$MSG_PD="PD";
-	$MSG_PR="PR";
-	$MSG_CI="CI";
-	$MSG_RJ="RJ";
+	$MSG_PD="대기";
+	$MSG_PR="재채점 대기";
+	$MSG_CI="컴파일 중";
+	$MSG_RJ="실행 및 채점 중";
 	$MSG_AC="AC";
 	$MSG_PE="PE";
 	$MSG_WA="WA";
@@ -72,9 +72,9 @@
 	$MSG_OLE="OLE";
 	$MSG_RE="RE";
 	$MSG_CE="CE";
-	$MSG_CO="CO";
-	$MSG_TR="TR";
-	$MSG_MC="MC";
+	$MSG_CO="컴파일 성공";
+	$MSG_TR="테스트 실행";
+	$MSG_MC="채점 확인 대기";
 	$MSG_RESET="초기화";
 
 	//problemset.php
@@ -116,7 +116,7 @@
 	$MSG_REPEAT_PASSWORD="비밀번호 확인";
 	$MSG_SCHOOL="소속/학교";
     $MSG_GROUP_NAME="그룹";
-	$MSG_EMAIL="E-mail";
+	$MSG_EMAIL="이메일";
 
 	$MSG_CANNOT_EMPTY="비어 있을 수 없습니다";
 	$MSG_WRONG_FORMAT="형식이 올바르지 않습니다";
@@ -182,11 +182,11 @@
 	$MSG_PRIVILEGE_TYPE="권한 종류";
 	$MSG_NEWS_MENU="메뉴 보기";
 	$MSG_LAST_LOGIN="최근 로그인";
-	$MSG_OFFLINE_ZIP_IMPORT="Import a offline contest ZIP file, which using the following structure: ";
-    $MSG_OFFLINE="Offline";
-    $MSG_EXPIRY_DATE="Expiry Date";
-    $MSG_CLICK_TO_DELETE="Click to delete";
-    $MSG_CLICK_TO_RECOVER="Click to recover";
+	$MSG_OFFLINE_ZIP_IMPORT="다음 구조를 사용하는 오프라인 대회 ZIP 파일 가져오기: ";
+    $MSG_OFFLINE="오프라인";
+    $MSG_EXPIRY_DATE="만료일";
+    $MSG_CLICK_TO_DELETE="클릭하여 삭제";
+    $MSG_CLICK_TO_RECOVER="클릭하여 복구";
 
 	//contest.php
 	$MSG_PRIVATE_WARNING="대회에 참가할 수 있는 권한이 없습니다.";
@@ -200,7 +200,7 @@
 	$MSG_START_TIME="시작 시간";
 	$MSG_END_TIME="종료 시간";
 	$MSG_VIEW_ALL_CONTESTS="모든 대회 보기";
-	$MSG_VIEW_MY_CONTESTS="My Contests Only";
+	$MSG_VIEW_MY_CONTESTS="내 대회만 보기";
 	$MSG_CONTEST_ID="대회ID";
 	$MSG_CONTEST_NAME="대회 이름";
 	$MSG_CONTEST_STATUS="대회 상태";
@@ -242,8 +242,8 @@
 	$MSG_LOAD_TEMPLATE_CONFIRM="다시 작성하시겠습니까?\\n 작성했던 코드가 모두 삭제됩니다!";
 	$MSG_NO_MAIL_HERE="이 채점시스템은 메일을 지원하지 않습니다.";  
 
-	$MSG_BLOCKLY_OPEN="Blockly"; 
-	$MSG_BLOCKLY_TEST="Blockly 테스트 실행"; 
+	$MSG_BLOCKLY_OPEN="블록리"; 
+	$MSG_BLOCKLY_TEST="블록리 테스트 실행"; 
 	$MSG_MY_SUBMISSIONS="채점기록"; 
 	$MSG_MY_CONTESTS="대회기록"; 
 	$MSG_Creator="만든사람";
@@ -265,7 +265,7 @@
 	$MSG_PASS_RATE="통과율";
 	$MSG_SHOW_TAGS="태그 보기";
 	$MSG_SHOW_ALL_TAGS="모든 태그";
-    $MSG_TABLE_TRANSPOSE="Table Transpose";
+    $MSG_TABLE_TRANSPOSE="표 전치";
 
 	$MSG_HELP_SEEOJ="OJ 확인";
 	$MSG_HELP_ADD_NEWS="첫 페이지 공지사항 추가";
@@ -303,10 +303,10 @@
 	$MSG_HELP_MORE_TESTDATA_LATER="문제를 등록한 후, 더 많은 채점 데이터를 추가할 수 있습니다.";
 	$MSG_HELP_ADD_FAQS="\"faqs.$OJ_LANG\"를 제목으로 공지사항을 등록하면 <a href=../faqs.php>$MSG_FAQ</a> 페이지를 통해 나타납니다.";
 	$MSG_HELP_HUSTOJ="<sub><a target='_blank' href='https://github.com/zhblue/hustoj'><span class='glyphicon glyphicon-heart' aria-hidden='true'></span> HUSTOJ Github 에서 <span class='glyphicon glyphicon-star' aria-hidden='true'></span>Star를 부탁드립니다!</a></sub>";
-	$MSG_HELP_SPJ="자세한 내용은 <a href='https://cn.bing.com/search?q=hustoj+special+judge' target='_blank'>search hustoj special judge</a>"; 
+	$MSG_HELP_SPJ="자세한 내용은 <a href='https://cn.bing.com/search?q=hustoj+special+judge' target='_blank'>Hustoj Special Judge 검색</a>"; 
 	$MSG_HELP_BALLOON_SCHOOL="인쇄, 풍선 계정의 학교 필드는 작업 목록을 필터링하는 데 사용됩니다. 예를 들어 [동부 캠퍼스]를 채우면 계정이 [동부 캠퍼스]로 시작하는 작업만 표시됩니다.";	
-    $MSG_HELP_LEFT_EMPTY="If you don't want to modify, please left this empty.";
-    $MSG_HELP_LOCAL_EMPTY="Left empty for local problem.";
+    $MSG_HELP_LEFT_EMPTY="수정하지 않으려면 빈칸으로 두세요.";
+    $MSG_HELP_LOCAL_EMPTY="로컬 문제의 경우 빈칸으로 두세요.";
 	$MSG_WARNING_LOGIN_FROM_DIFF_IP="다른 컴퓨터/IP로 로그인했습니다.";
 	$MSG_WARNING_DURING_EXAM_NOT_ALLOWED="시험중에는 허용되지 않습니다.";
 	$MSG_WARNING_ACCESS_DENIED="볼 수 없습니다! 권한이 없거나 제한되어 있습니다.";
@@ -316,7 +316,7 @@
 
 
 
-	$MSG_LOSTPASSWORD_MAILBOX="Email로 전송된 코드를 입력하세요.";
+	$MSG_LOSTPASSWORD_MAILBOX="이메일로 전송된 코드를 입력하세요.";
 	$MSG_LOSTPASSWORD_WILLBENEW="입력된 코드가 정확하면 입력된 코드가 새로운 비밀번호로 저장됩니다.";
 
 
@@ -433,7 +433,7 @@
 	$MSG_NON_ZERO_RETURN="Main 함수는 0이 아닌 값을 반환할 수 없습니다. 그렇지 않으면 프로그램 오류로 간주됩니다.";
 	$MSG_PROBLEM_USED_IN="비공개 대회에 등록되어 있습니다.";
 	$MSG_MAIL_CAN_ONLY_BETWEEN_TEACHER_AND_STUDENT="메일은 교사와 학생 사이에서만 주고 받을 수 있습니다. 학생들끼리는 불가능합니다.";
-	$MSG_COPY_USER_LIST_FROM_CONTEST="Copy user list from a history contest... ";
+	$MSG_COPY_USER_LIST_FROM_CONTEST="과거 대회로부터 참가자 목록 복사... ";
 
 	$MSG_REFRESH_PRIVILEGE="권한 갱신";
 
@@ -453,8 +453,8 @@
 	$MSG_TOTAL="";
 	$MSG_NUMBER_OF_PROBLEMS="문제";
 
-    $MSG_GLOBAL="Global ";
-    $MSG_THIS_CONTEST="This Contest's ";
+    $MSG_GLOBAL="전체 ";
+    $MSG_THIS_CONTEST="이 대회 ";
 	$MSG_SUBMIT_RECORD="채점기록";
 	$MSG_RETURN_CONTEST="대회로 돌아가기";
 	$MSG_COPY="복사";
@@ -475,45 +475,45 @@
 	// sourcecompare.php
 	$MSG_Source_Compare="소스 코드 비교";
 	$MSG_BACK="이전 페이지로 돌아가기";
-	$MSG_NEXT_PAGE="Next Page";
-	$MSG_PREV_PAGE="Prev Page";
+	$MSG_NEXT_PAGE="다음 페이지";
+	$MSG_PREV_PAGE="이전 페이지";
 
-	$MSG_ROLLING_RANK="Rolling Rank";
-	$MSG_SIMILARITY="Similarity";
-	$MSG_NO_SUBMISSIONS="No submissions yet";
-	$MSG_NO_CONTACTS="No contacts";
-	$MSG_SELECT_CONTACT="Please select a contact";
-	$MSG_CONTEST_CLOSED="Contest has ended";
-	$MSG_FILE_SUBMIT="File Submit";
-	$MSG_NO_FREOPEN="No freopen needed";
-	$MSG_OI_CONTEST_VIEWING="OI contest in progress, cannot view";
-	$MSG_ADMIN_NO_EMAIL_CONFIG="Administrator has not configured email sending account, please contact admin or teacher to manually reset password.";
-	$MSG_PLEASE_CONFIG_EMAIL="Please configure $SMTP_USER in db_info.inc.php to enable password recovery.";
-	$MSG_STARRED_OF_MONTH="Star of the Month";
-	$MSG_CORRECT_SUBMISSIONS="Total Correct Submissions";
-	$MSG_TOP_OF_PAGE="Top";
+	$MSG_ROLLING_RANK="롤링 랭킹";
+	$MSG_SIMILARITY="유사도";
+	$MSG_NO_SUBMISSIONS="아직 제출이 없습니다";
+	$MSG_NO_CONTACTS="연락처 없음";
+	$MSG_SELECT_CONTACT="연락처를 선택하세요";
+	$MSG_CONTEST_CLOSED="경쟁이 종료됨";
+	$MSG_FILE_SUBMIT="파일 제출";
+	$MSG_NO_FREOPEN="freopen 필요 없음";
+	$MSG_OI_CONTEST_VIEWING="OI 경쟁 진행 중, 볼 수 없음";
+	$MSG_ADMIN_NO_EMAIL_CONFIG="관리자가 이메일 전송 계정을 설정하지 않았습니다. 암호 재설정은 관리자나 선생님에게 문의하세요.";
+	$MSG_PLEASE_CONFIG_EMAIL="암호 찾기 기능을 사용하려면 db_info.inc.php에서 $SMTP_USER 를 설정하세요.";
+	$MSG_STARRED_OF_MONTH="이번 달之星";
+	$MSG_CORRECT_SUBMISSIONS="총 올바른 제출";
+	$MSG_TOP_OF_PAGE="맨 위로";
 
 	//email
 	$MSG_SYS_WARN="시스템 경고!";
 	$MSG_IS_ROBOT="봇으로 추정됩니다. 확인 후 비활성화하시기 바랍니다.";
-    $MSG_FORBIDDEN="forbidden ";
-    $MSG_OTHERS="other's ";
-    $MSG_SUBNET="subnet ";
-    $MSG_ONLY_LAST_SUBMISSION="Only the last submission will be scored";  
-	$MSG_AI_HELP="AI Help";
-    $MSG_SHOW_DIFF="Show Differ Output";
-       $MSG_UPSOLVING="Upsolving";
+    $MSG_FORBIDDEN="금지 ";
+    $MSG_OTHERS="타인의 ";
+    $MSG_SUBNET="서브넷 ";
+    $MSG_ONLY_LAST_SUBMISSION="마지막 제출만 점수로 인정";  
+	$MSG_AI_HELP="AI 도움말";
+    $MSG_SHOW_DIFF="차이점 출력 보기";
+       $MSG_UPSOLVING="문제 풀이";
     //SaaS friendly
-    $MSG_TEMPLATE="Template";
-    $MSG_FRIENDLY_LEVEL="Friendly Level";
-    $MSG_FRIENDLY_L0="Not friendly at all";
-    $MSG_FRIENDLY_L1="Using UTC+8 TimeZone";
-    $MSG_FRIENDLY_L2="Using Chinese UI";
-    $MSG_FRIENDLY_L3="Show differ,No Verify Code";
-    $MSG_FRIENDLY_L4="Using mail,Code auto share";
-    $MSG_FRIENDLY_L5="Allow test running";
-    $MSG_FRIENDLY_L6="Keep long login";
-    $MSG_FRIENDLY_L7="Enable discus";
-    $MSG_FRIENDLY_L8="Allow download test data";
-    $MSG_FRIENDLY_L9="Allow guest to submit";
+    $MSG_TEMPLATE="템플릿";
+    $MSG_FRIENDLY_LEVEL="친화도";
+    $MSG_FRIENDLY_L0="전혀 친화적이지 않음";
+    $MSG_FRIENDLY_L1="UTC+8 표준시간대 사용";
+    $MSG_FRIENDLY_L2="중국어 UI 사용";
+    $MSG_FRIENDLY_L3="차이점 표시, 검증코드 없음";
+    $MSG_FRIENDLY_L4="메일 사용, 코드 자동 공유";
+    $MSG_FRIENDLY_L5="테스트 실행 허용";
+    $MSG_FRIENDLY_L6="장시간 로그인 유지";
+    $MSG_FRIENDLY_L7="토론 게시판 활성화";
+    $MSG_FRIENDLY_L8="테스트 데이터 다운로드 허용";
+    $MSG_FRIENDLY_L9="방문자 제출 허용";
 	$MSG_HELP_BACKUP_DATABASE="데이터베이스, 테스트 데이터 및 이미지를 문제 0 디렉토리로 백업";
