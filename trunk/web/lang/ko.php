@@ -117,6 +117,9 @@
 	$MSG_SCHOOL="소속/학교";
     $MSG_GROUP_NAME="그룹";
 	$MSG_EMAIL="E-mail";
+
+	$MSG_CANNOT_EMPTY="비어 있을 수 없습니다";
+	$MSG_WRONG_FORMAT="형식이 올바르지 않습니다";
 	$MSG_REG_INFO="등록정보";
 	$MSG_VCODE="확인코드";
     $MSG_ACTIVE_YOUR_ACCOUNT="계정 활성화";

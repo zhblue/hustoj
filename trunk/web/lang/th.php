@@ -110,6 +110,9 @@
 	$MSG_SCHOOL="สถาบัน";
         $MSG_GROUP_NAME="Group";
 	$MSG_EMAIL="อีเมล์";
+
+	$MSG_CANNOT_EMPTY="ไม่สามารถเว้นว่างได้";
+	$MSG_WRONG_FORMAT="รูปแบบไม่ถูกต้อง";
 	$MSG_REG_INFO="ข้อมูล";
 	$MSG_VCODE="Verify Code";
         $MSG_ACTIVE_YOUR_ACCOUNT="Active Your Account ";

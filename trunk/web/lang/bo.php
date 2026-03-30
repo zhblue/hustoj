@@ -108,6 +108,9 @@
 	$MSG_SCHOOL="སློབ་གྲྭ།";
 	$MSG_GROUP_NAME="Group";
 	$MSG_EMAIL="ཡིག་ཟམ།";
+
+	$MSG_CANNOT_EMPTY="cannot be empty";
+	$MSG_WRONG_FORMAT="བཟོ་ཚད་མི་འབྲེལ།";
 	$MSG_REG_INFO="ཐ་འཛིན་ཆ་།";
 	$MSG_VCODE="ངོ་བཅོས་ཨང་།";
 	$MSG_ACTIVE_YOUR_ACCOUNT="Active Your Account ";

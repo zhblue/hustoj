@@ -124,6 +124,9 @@ $MSG_ABSENT="Absent";
 	$MSG_SCHOOL="مەكتەپ";
         $MSG_GROUP_NAME="Group";
 	$MSG_EMAIL="ئېلخەت";
+
+	$MSG_CANNOT_EMPTY="بوش بولمايدۇ";
+	$MSG_WRONG_FORMAT="ھۆججەت فورماتى توغرا ئەمەس";
 	$MSG_REG_INFO="رويىخەت ئۇچۇرى";
 	$MSG_VCODE="دەلىللەش كودى ";
         $MSG_ACTIVE_YOUR_ACCOUNT="Active Your Account ";

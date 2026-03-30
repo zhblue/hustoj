@@ -108,6 +108,9 @@
 	$MSG_SCHOOL="Сургууль";
 	$MSG_GROUP_NAME="Group";
 	$MSG_EMAIL="И-мэйл";
+
+	$MSG_CANNOT_EMPTY="хоосон байж болохгүй";
+	$MSG_WRONG_FORMAT="формат буруу";
 	$MSG_REG_INFO="Бүртгэл";
 	$MSG_VCODE="Баталгааны код";
 	$MSG_ACTIVE_YOUR_ACCOUNT="Active Your Account ";

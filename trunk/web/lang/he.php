@@ -108,6 +108,9 @@
 	$MSG_SCHOOL="בית ספר";
 	$MSG_GROUP_NAME="$MSG_GROUP_NAME";
 	$MSG_EMAIL="אימייל";
+
+	$MSG_CANNOT_EMPTY="לא יכול להיות ריק";
+	$MSG_WRONG_FORMAT="הפורמט לא חוקי";
 	$MSG_REG_INFO="פרופיל הרשמה";
 	$MSG_VCODE="קוד אימות";
 	$MSG_ACTIVE_YOUR_ACCOUNT="$MSG_ACTIVE_YOUR_ACCOUNT";

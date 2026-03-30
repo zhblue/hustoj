@@ -550,7 +550,9 @@ $MSG_ONLY_LAST_SUBMISSION="Only the last submission will be scored";
 	$MSG_DOES_NOT_EXIST_PACKAGE="Check spelling, such as: the system object System starts with a capital S";
 	$MSG_EDIT="Edit";
 	$MSG_EMAIL="Email";
-	$MSG_END_TIME="End Time";
+
+	$MSG_CANNOT_EMPTY="не может быть пустым";
+	$MSG_WRONG_FORMAT="неверный формат";	$MSG_END_TIME="End Time";
 	$MSG_ERROR_EXPLAIN="Expain";
 	$MSG_ERROR_INFO="Runtime information";
 	$MSG_EXPECTED_AMPERSAND_TOKEN="Don't submit C++ language program as C, please choose the language type before submitting.";

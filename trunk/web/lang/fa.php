@@ -109,6 +109,9 @@
 	$MSG_SCHOOL="مدرسه";
         $MSG_GROUP_NAME="Group";
 	$MSG_EMAIL="ایمیل";
+
+	$MSG_CANNOT_EMPTY="نمی تواند خالی باشد";
+	$MSG_WRONG_FORMAT="قالب نامعتبر است";
 	$MSG_REG_INFO="اطلاعات عضویت";
 	$MSG_VCODE="کد امنیتی";
         $MSG_ACTIVE_YOUR_ACCOUNT="Active Your Account ";
