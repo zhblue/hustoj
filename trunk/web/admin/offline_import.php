@@ -1,6 +1,6 @@
 <?php
-ini_set("display_errors", "Off");  //set this to "On" for debugging  ,especially when no reason blank shows up.
-error_reporting(E_ALL);
+ini_set("display_errors", "Off");  // 生产环境应关闭调试
+error_reporting(0);  // 禁止显示任何错误信息
 require_once ("admin-header.php");
 //require_once("../include/check_post_key.php");
 
