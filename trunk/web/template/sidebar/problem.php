@@ -120,7 +120,7 @@ if(file_exists($solution_file)){
       ?>
       
         <div class="ui buttons right floated">
-            <a class="small ui button" href="admin/problem_edit.php?id=<?php echo $id?>&getkey=<?php echo $_SESSION[$OJ_NAME.'_'.'getkey']?>"><?php echo $MSG_EDIT.$MSG_PROBLEM?></a>
+            <a class="small ui button" href="admin/problem_edit.php?id=<?php echo $id?>&getkey=<?php echo htmlentities($_SESSION[$OJ_NAME.'_'.'getkey'], ENT_QUOTES, 'UTF-8')?>"><?php echo $MSG_EDIT.$MSG_PROBLEM?></a>
             <a class="small ui button" href='javascript:phpfm(<?php echo $row['problem_id'];?>)'><?php echo $MSG_TEST_DATA?></a>
         </div>
       <?php }?>

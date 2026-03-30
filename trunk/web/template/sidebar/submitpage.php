@@ -680,7 +680,7 @@ editor.getSession().on("change", function() {
         var mark="<?php echo isset($id)?'problem_id':'cid';?>";
         var problem_id=$("#"+mark).val();
 	if(!!localStorage){
-		 let key="<?php echo $_SESSION[$OJ_NAME.'_user_id']?>source:"+location.href;
+		 let key="<?php echo htmlentities($_SESSION[$OJ_NAME.'_user_id'], ENT_QUOTES, 'UTF-8')?>source:"+location.href;
 		if(typeof(editor) != "undefined")
 			$("#hide_source").val(editor.getValue());
 		localStorage.setItem(key,$("#hide_source").val());
@@ -691,7 +691,7 @@ editor.getSession().on("change", function() {
    	$("#source").css("height",window.innerHeight-180);  
 	if($("#vcode")!=undefined) $("#vcode").click();
 	if(!!localStorage){
-		let key="<?php echo $_SESSION[$OJ_NAME.'_user_id']?>source:"+location.href;
+		let key="<?php echo htmlentities($_SESSION[$OJ_NAME.'_user_id'], ENT_QUOTES, 'UTF-8')?>source:"+location.href;
 		let saved=localStorage.getItem(key);
 		   if(saved!=null&&saved!=""&&saved.length>editor.getValue().length){
                         //let load=confirm("发现自动保存的源码，是否加载？（仅有一次机会）");

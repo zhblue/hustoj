@@ -129,7 +129,7 @@ if (isset($_POST['do'])) {
 		<div class="col-sm-offset-4 col-sm-2">
 			<input type='hidden' name='do' value='do'>
 			<button type="submit" name="contest" value="do" class="btn btn-default btn-block" ><?php echo $MSG_SAVE?></button>
-			<input type=hidden name="postkey" value="<?php echo $_SESSION[$OJ_NAME.'_'.'postkey']?>">
+			<input type=hidden name="postkey" value="<?php echo htmlentities($_SESSION[$OJ_NAME.'_'.'postkey'], ENT_QUOTES, 'UTF-8')?>">
 		</div>
 		<div class="col-sm-2">
 			<button type="reset" class="btn btn-default btn-block"><?php echo $MSG_RESET?></button>
@@ -164,7 +164,7 @@ if (isset($_POST['do'])) {
 		<div class="col-sm-offset-4 col-sm-2">
 			<input type='hidden' name='do' value='do'>
 			<button type="submit" name="psv" value="do" class="btn btn-default btn-block" ><?php echo $MSG_SAVE?></button>
-			<input type=hidden name="postkey" value="<?php echo $_SESSION[$OJ_NAME.'_'.'postkey']?>">
+			<input type=hidden name="postkey" value="<?php echo htmlentities($_SESSION[$OJ_NAME.'_'.'postkey'], ENT_QUOTES, 'UTF-8')?>">
 			</div>
 		<div class="col-sm-2">
 			<button type="reset" class="btn btn-default btn-block"><?php echo $MSG_RESET?></button>

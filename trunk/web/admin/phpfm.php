@@ -5,7 +5,7 @@ require_once("../include/my_func.inc.php");
 if (!(isset($_SESSION[$OJ_NAME.'_'.'administrator'])
       ||isset($_SESSION[$OJ_NAME.'_'.'problem_editor'])
      )){
-	echo $_SESSION[$OJ_NAME.'_'.'administrator'];
+	echo htmlentities($_SESSION[$OJ_NAME.'_'.'administrator'], ENT_QUOTES, 'UTF-8');
 	echo "<a href='../loginpage.php'>Please Login First!</a>";
 	exit(1);
 }

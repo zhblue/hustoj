@@ -30,7 +30,7 @@
         </div>
         <div class="form-group">
           <label class="col-sm-4 control-label"><?php echo $MSG_USER_ID?></label>
-          <div class="col-sm-4"><label class="col-sm-2 control-label"><?php echo $_SESSION[$OJ_NAME.'_'.'user_id']?></label></div>
+          <div class="col-sm-4"><label class="col-sm-2 control-label"><?php echo htmlentities($_SESSION[$OJ_NAME.'_'.'user_id'], ENT_QUOTES, 'UTF-8')?></label></div>
           <?php require_once('./include/set_post_key.php');?>
         </div>
         <div class="form-group">

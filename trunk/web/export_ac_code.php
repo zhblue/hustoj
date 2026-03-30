@@ -14,7 +14,7 @@ $sql = "select distinct source,problem_id from source_code inner join \n
 							in (select contest_id from contest where start_time < now() and end_time >now()) \n
 						) order by problem_id";
 //echo "$sql";
-echo $_SESSION[$OJ_NAME . '_' . 'user_id'] . "\r\n";
+echo htmlentities($_SESSION[$OJ_NAME . '_' . 'user_id'], ENT_QUOTES, 'UTF-8') . "\r\n";
 
 $result = pdo_query($sql, $_SESSION[$OJ_NAME . '_' . 'user_id']);
 foreach ($result as $row) {

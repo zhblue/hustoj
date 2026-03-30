@@ -57,7 +57,7 @@
         require_once("include/set_get_key.php");
       ?>
 
-      [<a href="admin/problem_edit.php?id=<?php echo $id?>&getkey=<?php echo $_SESSION[$OJ_NAME.'_'.'getkey']?>" >Edit</a>]
+      [<a href="admin/problem_edit.php?id=<?php echo $id?>&getkey=<?php echo htmlentities($_SESSION[$OJ_NAME.'_'.'getkey'], ENT_QUOTES, 'UTF-8')?>" >Edit</a>]
       [<a href='javascript:phpfm(<?php echo $row['problem_id'];?>)'>TestData</a>]
 
     <?php
@@ -118,7 +118,7 @@
       require_once("include/set_get_key.php");
     ?>
 
-    [<a href="admin/problem_edit.php?id=<?php echo $id?>&getkey=<?php echo $_SESSION[$OJ_NAME.'_'.'getkey']?>" >Edit</a>]
+    [<a href="admin/problem_edit.php?id=<?php echo $id?>&getkey=<?php echo htmlentities($_SESSION[$OJ_NAME.'_'.'getkey'], ENT_QUOTES, 'UTF-8')?>" >Edit</a>]
     [<a href='javascript:phpfm(<?php echo $row['problem_id'];?>)'>TestData</a>]
 
   <?php

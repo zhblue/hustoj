@@ -8,7 +8,7 @@
         <div class="mdui-btn" mdui-tooltip="{content: '账户'}" mdui-menu="{target: '#account-menu', position: 'bottom', fixed: true}">
             <i class="mdui-icon material-icons">account_circle</i>
             <?php if(isset($_SESSION[$OJ_NAME.'_'.'user_id'])) { ?>
-                <?php echo $_SESSION[$OJ_NAME.'_'.'user_id']; ?>
+                <?php echo htmlentities($_SESSION[$OJ_NAME.'_'.'user_id'], ENT_QUOTES, 'UTF-8'); ?>
             <?php } else { ?>
                 请登录
             <?php } ?>

@@ -86,7 +86,7 @@
  	      echo "<a class='btn btn-danger btn-sm' href='#' onclick='transform()' role='button'>$MSG_SHOW_OFF</a>";
 	      if ( isset($_SESSION[$OJ_NAME.'_'.'administrator']) || isset($_SESSION[$OJ_NAME.'_'."p".$row['problem_id']])  ) {  //only  the original editor can edit this  problem
         	require_once("include/set_get_key.php");
- 					echo "<a class='btn btn-success btn-sm' role='button' href=admin/problem_edit.php?id=$id&getkey=".$_SESSION[$OJ_NAME.'_'.'getkey'].">EDIT</a>";
+ 					echo "<a class='btn btn-success btn-sm' role='button' href=admin/problem_edit.php?id=$id&getkey=".htmlentities($_SESSION[$OJ_NAME.'_'.'getkey'], ENT_QUOTES, 'UTF-8').">EDIT</a>";
  					echo "<a class='btn btn-success btn-sm' role='button' href=javascript:phpfm(".$row['problem_id'].")>TESTDATA</a>";
 	      			if( isset($used_in_contests) && count($used_in_contests)>0 ){
 					echo "<hr><br>$MSG_PROBLEM_USED_IN:";
