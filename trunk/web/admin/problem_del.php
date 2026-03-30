@@ -1,6 +1,6 @@
 <?php
  require_once("admin-header.php");
-ini_set("display_errors","On");
+ini_set("display_errors","Off");
 require_once("../include/check_get_key.php");
 $pid=intval($_GET['id']);
 if(!(isset($_SESSION[$OJ_NAME.'_'.'administrator']) || isset($_SESSION[$OJ_NAME.'_'."p".$pid]) )){
