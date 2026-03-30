@@ -17,8 +17,8 @@ if($view_content){
 ?>
 <table><form method="post" action="mail.php" >
         <tr><td>From:<?php echo htmlentities($from_user,ENT_QUOTES,"UTF-8")?>
-         To:<input name=to_user size=10 value="<?php if ($from_user==$_SESSION[$OJ_NAME.'_user_id']||$from_user=="") echo $to_user ;else echo $from_user;?>">
-        Title:<input name=title size=20 value="<?php echo $title?>">
+         To:<input name=to_user size=10 value="<?php if ($from_user==$_SESSION[$OJ_NAME.'_user_id']||$from_user=="") echo htmlentities($to_user) ;else echo htmlentities($from_user);?>">
+        Title:<input name=title size=20 value="<?php echo htmlentities($title)?>">
         <input type=submit value=<?php echo $MSG_SUBMIT?>></td>
         </tr>
         <tr><td>
