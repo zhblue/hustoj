@@ -59,20 +59,17 @@ if (isset($_POST['cid'])) {
     if ($test_run) $cid = -$cid;
     $_GET['cid'] = $cid;
     require_once("contest-check.php");
-    $sql = "select `problem_id`,'N' defunct  FROM `contest_problem` WHERE `num`='$pid' AND contest_id=$cid";
-
+    $sql = "select `problem_id`,'N' defunct  FROM `contest_problem` WHERE `num`=? AND contest_id=? ";
+    $res = mysql_query_cache($sql,$pid,$cid);
 } else {
     $id = intval($_POST['id']);
     $test_run = $id <= 0;
-    $sql = "select `problem_id`,defunct FROM `problem` WHERE `problem_id`='$id' ";
-
+    $sql = "select `problem_id`,defunct FROM `problem` WHERE `problem_id`=? ";
     if (!($test_run || isset($_SESSION[$OJ_NAME . '_' . 'administrator']) || isset($_SESSION[$OJ_NAME . '_' . 'problem_editor']) || isset($_SESSION[$OJ_NAME . '_' . 'problem_verifiter'])))
         $sql .= " and defunct='N'";
+    $res = mysql_query_cache($sql,$id);
 }
-
-//echo $sql;
 if (!$test_run) {
-    $res = mysql_query_cache($sql);
     if (isset($res) && count($res) < 1 && !isset($_SESSION[$OJ_NAME . '_' . 'administrator']) && !((isset($cid) && $cid <= 0) || (isset($id) && $id <= 0))) {
         $view_errors = $MSG_LINK_ERROR . "<br>";
         require "template/" . $OJ_TEMPLATE . "/error.php";
