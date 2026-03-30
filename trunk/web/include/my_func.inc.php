@@ -334,8 +334,17 @@ function starred($user_id){
         return true;
     }
 
+    // 安全修复：校验 user_id 后再拼入 URL，防止 SSRF
+    if (!$user_id || !is_valid_user_name($user_id)) {
+        return false;
+    }
+    $safe_user_id = preg_replace('/[^a-zA-Z0-9\-_]/', '', $user_id);
+    if ($safe_user_id === '' || $safe_user_id !== $user_id) {
+        return false;
+    }
+
     // GitHub API 请求
-    $url = "https://api.github.com/users/$user_id/starred?per_page=100";
+    $url = "https://api.github.com/users/{$safe_user_id}/starred?per_page=100";
     $ch = curl_init($url);
     curl_setopt_array($ch, [
         CURLOPT_RETURNTRANSFER => true,
