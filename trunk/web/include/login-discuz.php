@@ -4,12 +4,7 @@
 	function check_login($user_id,$password){
 		session_destroy();
 		session_start();
-		$discuz_host="127.0.0.1";
-		$discuz_port="3306";
-		$discuz_user="root";
 		$discuz_db="discuz";
-		$discuz_pass="root";
-		$discuz_conn=mysql_connect($discuz_host.":".$discuz_port,$discuz_user,$discuz_pass);
 
 		$ret=false;
 		pdo_query("set names utf8");
@@ -31,7 +26,6 @@
 			}
 
 		}
-		
 				
 		return $ret; 
 	}
