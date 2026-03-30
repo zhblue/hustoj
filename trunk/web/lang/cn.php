@@ -489,6 +489,20 @@
   $MSG_BACK="返回上一页";
   $MSG_NEXT_PAGE="下一页";
   $MSG_PREV_PAGE="上一页";
+  $MSG_ROLLING_RANK="滚榜";
+  $MSG_SIMILARITY="相似度";
+  $MSG_NO_SUBMISSIONS="暂无选手提交";
+  $MSG_NO_CONTACTS="暂无联系人";
+  $MSG_SELECT_CONTACT="请选择一个人聊天";
+  $MSG_CONTEST_CLOSED="比赛已经关闭";
+  $MSG_FILE_SUBMIT="文件提交";
+  $MSG_NO_FREOPEN="无需freopen";
+  $MSG_OI_CONTEST_VIEWING="OI比赛进行中，暂时无法查看";
+  $MSG_ADMIN_NO_EMAIL_CONFIG="管理员没有配置邮件发送账户，请联系系统管理员或者老师来手工重置密码。";
+  $MSG_PLEASE_CONFIG_EMAIL="请配置db_info.inc.php中的 \$SMTP_USER 等参数，激活邮件密码找回功能。";
+  $MSG_STARRED_OF_MONTH="本月之星";
+  $MSG_CORRECT_SUBMISSIONS="当前系统正确提交数量";
+  $MSG_TOP_OF_PAGE="顶页";
   
   //email
   $MSG_SYS_WARN="系统警告！";

@@ -454,6 +454,21 @@
 	$MSG_BACK="Return to Last Page";
 	$MSG_NEXT_PAGE="Next Page";
 	$MSG_PREV_PAGE="Prev Page";
+
+	$MSG_ROLLING_RANK="رتبه غلتان";
+	$MSG_SIMILARITY="شباهت";
+	$MSG_NO_SUBMISSIONS="هنوز ارسالی نیست";
+	$MSG_NO_CONTACTS="بدون مخاطب";
+	$MSG_SELECT_CONTACT="لطفاً یک مخاطب انتخاب کنید";
+	$MSG_CONTEST_CLOSED="مسابقه پایان یافته";
+	$MSG_FILE_SUBMIT="ارسال فایل";
+	$MSG_NO_FREOPEN="نیاز به freopen نیست";
+	$MSG_OI_CONTEST_VIEWING="مسابقه OI در حال اجرا، امکان مشاهده نیست";
+	$MSG_ADMIN_NO_EMAIL_CONFIG="مدیر ایمیل را پیکربندی نکرده است";
+	$MSG_PLEASE_CONFIG_EMAIL="لطفاً $SMTP_USER را در db_info.inc.php پیکربندی کنید";
+	$MSG_STARRED_OF_MONTH="ستاره ماه";
+	$MSG_CORRECT_SUBMISSIONS="کل ارسال‌های صحیح";
+	$MSG_TOP_OF_PAGE="بالا";
  	//email
 	$MSG_SYS_WARN="System Warning!";
 	$MSG_IS_ROBOT="could be a robot , verify and disable it !";

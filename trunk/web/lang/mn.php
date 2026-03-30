@@ -438,6 +438,21 @@
 	$MSG_BACK="Буцах";
 	$MSG_NEXT_PAGE="Next Page";
 	$MSG_PREV_PAGE="Prev Page";
+
+	$MSG_ROLLING_RANK="Гүйлгээний ранк";
+	$MSG_SIMILARITY="Төстэй байдал";
+	$MSG_NO_SUBMISSIONS="Одоогоор илгээлт алга";
+	$MSG_NO_CONTACTS="Харилцагчид алга";
+	$MSG_SELECT_CONTACT="Харилцагч сонгоно уу";
+	$MSG_CONTEST_CLOSED="Тэмцээн дууслаа";
+	$MSG_FILE_SUBMIT="Файл илгээх";
+	$MSG_NO_FREOPEN="Freopen шаардлагагүй";
+	$MSG_OI_CONTEST_VIEWING="OI тэмцээн явагдаж байна, үзэх боломжгүй";
+	$MSG_ADMIN_NO_EMAIL_CONFIG="Админ имэйл тохиргоо хийгээгүй";
+	$MSG_PLEASE_CONFIG_EMAIL="$SMTP_USER-ийг db_info.inc.php-д тохируулна уу";
+	$MSG_STARRED_OF_MONTH="Сарын од";
+	$MSG_CORRECT_SUBMISSIONS="Нийт зөв илгээлт";
+	$MSG_TOP_OF_PAGE="Дээд";
 	//email
 	$MSG_SYS_WARN="System Warning!";
 	$MSG_IS_ROBOT="could be a robot , verify and disable it !";

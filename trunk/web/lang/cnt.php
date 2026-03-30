@@ -474,6 +474,21 @@
  $MSG_BACK ="返回上一頁";
   $MSG_NEXT_PAGE="下一頁";
   $MSG_PREV_PAGE="上一頁";
+
+	$MSG_ROLLING_RANK="滾榜";
+	$MSG_SIMILARITY="相似度";
+	$MSG_NO_SUBMISSIONS="暫無選手提交";
+	$MSG_NO_CONTACTS="暫無聯繫人";
+	$MSG_SELECT_CONTACT="請選擇一個人聊天";
+	$MSG_CONTEST_CLOSED="比賽已經關閉";
+	$MSG_FILE_SUBMIT="文件提交";
+	$MSG_NO_FREOPEN="無需freopen";
+	$MSG_OI_CONTEST_VIEWING="OI比賽進行中，暫時無法查看";
+	$MSG_ADMIN_NO_EMAIL_CONFIG="管理員沒有配置郵件發送帳戶，請聯繫系統管理員或者老師來手工重置密碼。";
+	$MSG_PLEASE_CONFIG_EMAIL="請配置db_info.inc.php中的$SMTP_USER等參數，啟用郵件密碼找回功能。";
+	$MSG_STARRED_OF_MONTH="本月之星";
+	$MSG_CORRECT_SUBMISSIONS="當前系統正確提交數量";
+	$MSG_TOP_OF_PAGE="頂頁";
  //email
   $MSG_SYS_WARN="系統警告！";
   $MSG_IS_ROBOT="疑似機器人，注意封禁！";

@@ -478,6 +478,21 @@
 	$MSG_NEXT_PAGE="Next Page";
 	$MSG_PREV_PAGE="Prev Page";
 
+	$MSG_ROLLING_RANK="Rolling Rank";
+	$MSG_SIMILARITY="Similarity";
+	$MSG_NO_SUBMISSIONS="No submissions yet";
+	$MSG_NO_CONTACTS="No contacts";
+	$MSG_SELECT_CONTACT="Please select a contact";
+	$MSG_CONTEST_CLOSED="Contest has ended";
+	$MSG_FILE_SUBMIT="File Submit";
+	$MSG_NO_FREOPEN="No freopen needed";
+	$MSG_OI_CONTEST_VIEWING="OI contest in progress, cannot view";
+	$MSG_ADMIN_NO_EMAIL_CONFIG="Administrator has not configured email sending account, please contact admin or teacher to manually reset password.";
+	$MSG_PLEASE_CONFIG_EMAIL="Please configure $SMTP_USER in db_info.inc.php to enable password recovery.";
+	$MSG_STARRED_OF_MONTH="Star of the Month";
+	$MSG_CORRECT_SUBMISSIONS="Total Correct Submissions";
+	$MSG_TOP_OF_PAGE="Top";
+
 	//email
 	$MSG_SYS_WARN="시스템 경고!";
 	$MSG_IS_ROBOT="봇으로 추정됩니다. 확인 후 비활성화하시기 바랍니다.";

@@ -474,6 +474,21 @@
  $MSG_BACK = " Вернуться на предыдущую страницу ";
 	$MSG_NEXT_PAGE="Next Page";
 	$MSG_PREV_PAGE="Prev Page";
+
+	$MSG_ROLLING_RANK="Сrolling Rank";
+	$MSG_SIMILARITY="Сходство";
+	$MSG_NO_SUBMISSIONS="Пока нет посылок";
+	$MSG_NO_CONTACTS="Нет контактов";
+	$MSG_SELECT_CONTACT="Выберите контакт";
+	$MSG_CONTEST_CLOSED="Соревнование завершено";
+	$MSG_FILE_SUBMIT="Отправка файла";
+	$MSG_NO_FREOPEN="Freopen не нужен";
+	$MSG_OI_CONTEST_VIEWING="OI соревнование идёт, просмотр невозможен";
+	$MSG_ADMIN_NO_EMAIL_CONFIG="Администратор не настроил отправку email";
+	$MSG_PLEASE_CONFIG_EMAIL="Настройте $SMTP_USER в db_info.inc.php";
+	$MSG_STARRED_OF_MONTH="Звезда месяца";
+	$MSG_CORRECT_SUBMISSIONS="Всего правильных решений";
+	$MSG_TOP_OF_PAGE="Верх";
  	//email
 	$MSG_SYS_WARN="System Warning!";
 	$MSG_IS_ROBOT="could be a robot , verify and disable it !";

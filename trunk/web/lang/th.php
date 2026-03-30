@@ -454,6 +454,21 @@ $MSG_TOO_BAD="Please surf the internet in a civilized manner";
 	$MSG_BACK="Return to Last Page";
 	$MSG_NEXT_PAGE="Next Page";
 	$MSG_PREV_PAGE="Prev Page";
+
+	$MSG_ROLLING_RANK="Rolling Rank";
+	$MSG_SIMILARITY="ความคล้าย";
+	$MSG_NO_SUBMISSIONS="ยังไม่มีการส่ง";
+	$MSG_NO_CONTACTS="ไม่มีผู้ติดต่อ";
+	$MSG_SELECT_CONTACT="กรุณาเลือกผู้ติดต่อ";
+	$MSG_CONTEST_CLOSED="การแข่งขันสิ้นสุดแล้ว";
+	$MSG_FILE_SUBMIT="ส่งไฟล์";
+	$MSG_NO_FREOPEN="ไม่ต้องใช้ freopen";
+	$MSG_OI_CONTEST_VIEWING="การแข่งขัน OI กำลังดำเนินอยู่ ไม่สามารถดูได้";
+	$MSG_ADMIN_NO_EMAIL_CONFIG="ผู้ดูแลระบบไม่ได้กำหนดค่าอีเมล";
+	$MSG_PLEASE_CONFIG_EMAIL="กรุณาตั้งค่า $SMTP_USER ใน db_info.inc.php";
+	$MSG_STARRED_OF_MONTH="ดาวแห่งเดือน";
+	$MSG_CORRECT_SUBMISSIONS="จำนวนการส่งที่ถูกต้องทั้งหมด";
+	$MSG_TOP_OF_PAGE="บน";
  	//email
 	$MSG_SYS_WARN="System Warning!";
 	$MSG_IS_ROBOT="could be a robot , verify and disable it !";

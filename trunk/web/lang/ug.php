@@ -476,6 +476,21 @@ $MSG_TOO_BAD="Please surf the internet in a civilized manner";
 	$MSG_BACK="Return to Last Page";
 	$MSG_NEXT_PAGE="Next Page";
 	$MSG_PREV_PAGE="Prev Page";
+
+	$MSG_ROLLING_RANK="ئېرىقىش رەت تەرتىپى";
+	$MSG_SIMILARITY="ئوخشاشلىق";
+	$MSG_NO_SUBMISSIONS="تېخى تاپشۇرۇق يوق";
+	$MSG_NO_CONTACTS="ئالاقىدارى يوق";
+	$MSG_SELECT_CONTACT="ئالاقىدار تاللاڭ";
+	$MSG_CONTEST_CLOSED="مۇسابىقە ئاخىرلاشتى";
+	$MSG_FILE_SUBMIT="ھۆججەت تاپشۇرۇش";
+	$MSG_NO_FREOPEN="freopen ھاجەتسىز";
+	$MSG_OI_CONTEST_VIEWING="OI مۇسابىقەسى داۋاملىشىۋاتىدۇ، كۆرۈش مۇمكىن ئەمەس";
+	$MSG_ADMIN_NO_EMAIL_CONFIG="باشقۇرغۇچى ئېلېكترونلۇق خەت تەڭشەكىنى قىلمىغان";
+	$MSG_PLEASE_CONFIG_EMAIL="$SMTP_USER نى db_info.inc.php دا تەڭشەڭ";
+	$MSG_STARRED_OF_MONTH="ئاينىڭ يۇلتۇزى";
+	$MSG_CORRECT_SUBMISSIONS="نۆۋەتتىكى توغرا تاپشۇرۇقلار";
+	$MSG_TOP_OF_PAGE="ئۈستى";
  	//email
 	$MSG_SYS_WARN="System Warning!";
 	$MSG_IS_ROBOT="could be a robot , verify and disable it !";

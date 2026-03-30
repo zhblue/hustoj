@@ -438,6 +438,21 @@
 	$MSG_BACK="חזרה";
 	$MSG_NEXT_PAGE="$MSG_NEXT_PAGE";
 	$MSG_PREV_PAGE="$MSG_PREV_PAGE";
+
+	$MSG_ROLLING_RANK="דירוג גלילה";
+	$MSG_SIMILARITY="דמיון";
+	$MSG_NO_SUBMISSIONS="אין הגשות עדיין";
+	$MSG_NO_CONTACTS="אין אנשי קשר";
+	$MSG_SELECT_CONTACT="אנא בחר איש קשר";
+	$MSG_CONTEST_CLOSED="התחרות הסתיימה";
+	$MSG_FILE_SUBMIT="הגשת קובץ";
+	$MSG_NO_FREOPEN="אין צורך בfreopen";
+	$MSG_OI_CONTEST_VIEWING="תחרות OI מתקיימת, אין אפשרות לצפות";
+	$MSG_ADMIN_NO_EMAIL_CONFIG="המנהל לא הגדיר שליחת אימייל";
+	$MSG_PLEASE_CONFIG_EMAIL="אנא הגדר את $SMTP_USER ב-db_info.inc.php";
+	$MSG_STARRED_OF_MONTH="כוכב החודש";
+	$MSG_CORRECT_SUBMISSIONS="סה\"כ הגשות נכונות";
+	$MSG_TOP_OF_PAGE="למעלה";
 	//email
 	$MSG_SYS_WARN="$MSG_SYS_WARN";
 	$MSG_IS_ROBOT="$MSG_IS_ROBOT";
