@@ -127,14 +127,14 @@
           </a>
           <?php
       if (isset($_GET['prevtop']))
-      echo "<a class=\"item\" href=\"status.php?".$str2."&top=".intval($_GET['prevtop'])."\">上一页</a>";
+      echo "<a class=\"item\" href=\"status.php?".$str2."&top=".intval($_GET['prevtop'])."\">".$MSG_PREV_PAGE."</a>";
       else
-      echo "<a class=\"item\" href=\"status.php?".$str2."&top=".($top+20)."\">上一页</a>";
+      echo "<a class=\"item\" href=\"status.php?".$str2."&top=".($top+20)."\">".$MSG_PREV_PAGE."</a>";
 
       ?>
 
           <a class="icon item" href="<?php echo "status.php?".$str2."&top=".$bottom."&prevtop=$top"; ?>" id="page_next">
-            下一页
+            <?php echo $MSG_NEXT_PAGE?>
           </a>
         </div>
   </div>

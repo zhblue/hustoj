@@ -31,7 +31,7 @@
                             if ($now > $end_time)
                                 echo $MSG_Ended;
                             else if ($now < $start_time)
-                                echo "未开始";
+                                echo $MSG_Contest_Pending;
                             else
                                 echo $MSG_Running;
                             ?>
