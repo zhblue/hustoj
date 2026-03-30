@@ -680,7 +680,7 @@ editor.getSession().on("change", function() {
         var mark="<?php echo isset($id)?'problem_id':'cid';?>";
         var problem_id=$("#"+mark).val();
 	if(!!localStorage){
-		 let key="<?php echo $_SESSION[$OJ_NAME.'_user_id']?>source:"+location.href;
+		 let key="<?php echo htmlentities($_SESSION[$OJ_NAME.'_user_id'])?>source:"+location.href;
 		if(typeof(editor) != "undefined")
 			$("#hide_source").val(editor.getValue());
 		localStorage.setItem(key,$("#hide_source").val());
