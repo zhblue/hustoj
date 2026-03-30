@@ -23,7 +23,7 @@
         }
 
         if ($rows_cnt==0) {
-            $view_title = "比赛已经关闭!";
+            $view_title = "$MSG_CONTEST_CLOSED" . "!";
         }
         else{
             $row = $result[0];
@@ -85,7 +85,7 @@
                     }
 
                     if ($rows_cnt==0) {
-                        $view_title = "比赛已经关闭!";
+                        $view_title = "$MSG_CONTEST_CLOSED" . "!";
                     }
                     else{
                         $row = $result[0];

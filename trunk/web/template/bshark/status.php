@@ -209,15 +209,15 @@
 				</table>
 				<div class="ui container center aligned">
 					<div class="ui borderless tiny menu pagination">
-						<a class="item" href=<?php echo "status.php?" . $str2; ?>>顶页</a>
+						<a class="item" href=<?php echo "status.php?" . $str2; ?>><?php echo $MSG_TOP_OF_PAGE?></a>
 						<?php if (isset($_GET['prevtop'])) { ?>
 							<a class="item"
-								href="<?php echo "status.php?" . $str2 . "&top=" . intval($_GET['prevtop']); ?>">上一页</a>
+								href="<?php echo "status.php?" . $str2 . "&top=" . intval($_GET['prevtop']); ?>"><?php echo $MSG_PREV_PAGE?></a>
 						<?php } else { ?>
-							<a class="item" href="<?php echo "status.php?" . $str2 . "&top=" . ($top + 20); ?>">上一页</a>
+							<a class="item" href="<?php echo "status.php?" . $str2 . "&top=" . ($top + 20); ?>"><?php echo $MSG_PREV_PAGE?></a>
 						<?php } ?>
 						<a class="item"
-							href="<?php echo "status.php?" . $str2 . "&top=" . $bottom . "&prevtop=" . $top; ?>">下一页</a>
+							href="<?php echo "status.php?" . $str2 . "&top=" . $bottom . "&prevtop=" . $top; ?>"><?php echo $MSG_NEXT_PAGE?></a>
 					</div>
 				</div>
 			</div>

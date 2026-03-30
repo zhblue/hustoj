@@ -162,7 +162,7 @@
 				<?php
 				if ($OJ_MEMCACHE) {
 					if (isset($_SESSION[$OJ_NAME.'_'.'administrator'])) {
-						echo ' | <a href="contestrank3.php?cid='.$cid.'">滚榜</a>';
+						echo ' | <a href="contestrank3.php?cid='.$cid.'">'.$MSG_ROLLING_RANK.'</a>';
 
 						if($OJ_MEMCACHE)
 							echo '<a href="contestrank2.php?cid='.$cid.'">Replay</a>';

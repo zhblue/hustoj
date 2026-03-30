@@ -196,7 +196,7 @@
                                                     <?php echo $MSG_Ended; ?>
                                                 </span>
                                             <?php } else if (strtotime($new['start_time']) > time()) { ?><span
-                                                        class="ui label green">未开始</span>
+                                                        class="ui label green"><?php echo $MSG_Contest_Pending?></span>
                                             <?php } else { ?><span class="ui label red">
                                                     <?php echo $MSG_Running; ?>
                                                     </span>
