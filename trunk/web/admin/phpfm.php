@@ -2601,23 +2601,36 @@ function format_path($str){
     return $str;
 }
 function array_csort() {
-  $args = func_get_args();
-  $marray = array_shift($args);
-  $msortline = "return(array_multisort(";
-   foreach ($args as $arg) {
-       $i++;
-       if (is_string($arg)) {
-          foreach ($marray as $row) {
-               $sortarr[$i][] = $row[$arg];
-           }
-       } else {
-          $sortarr[$i] = $arg;
-       }
-       $msortline .= "\$sortarr[".$i."],";
-   }
-   $msortline .= "\$marray));";
-   eval($msortline);
-   return $marray;
+    $args = func_get_args();
+    if (empty($args)) {
+        return [];
+    }
+
+    // 取出需要排序的二维数组
+    $marray = array_shift($args);
+    $sortParams = [];
+
+    foreach ($args as $arg) {
+        if (is_string($arg)) {
+            // 如果参数是字符串（列名），提取该列的值作为排序依据
+            $columnData = [];
+            foreach ($marray as $row) {
+                $columnData[] = $row[$arg];
+            }
+            $sortParams[] = $columnData;
+        } else {
+            // 如果是排序方向（SORT_ASC/SORT_DESC）或排序类型（SORT_REGULAR等）
+            $sortParams[] = $arg;
+        }
+    }
+
+    // 关键点：将原数组的引用放入参数列表的末尾，以便 array_multisort 能直接修改它
+    $sortParams[] = &$marray;
+
+    // 使用 ... 运算符将数组解包为独立的参数，完美替代 eval
+    array_multisort(...$sortParams);
+
+    return $marray;
 }
 function show_perms( $P ) {
    $sP = "<b>";
