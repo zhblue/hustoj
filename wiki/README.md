@@ -43,7 +43,7 @@ sudo bash install-interactive.sh
 创建数据库
 ```
 	mysql
-	set names utf8; 
+	set names utf8mb4;
 	create database jol;
 	use jol;
 	source db.sql

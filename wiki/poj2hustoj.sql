@@ -4,7 +4,7 @@ update source_code set tsource=cast(uncompress(source) as char);
 ALTER TABLE `source_code` DROP COLUMN `source`;
 
 ALTER TABLE `source_code` 
- CHANGE COLUMN `tsource` `source` TEXT  CHARACTER SET utf8  DEFAULT NULL;
+ CHANGE COLUMN `tsource` `source` TEXT  CHARACTER SET utf8mb4  DEFAULT NULL;
 
 --
 ALTER TABLE `users` ADD COLUMN `password2` VARCHAR(32)  NOT NULL AFTER `password`;
@@ -20,25 +20,25 @@ ALTER TABLE `solution` MODIFY COLUMN `solution_id` INTEGER  NOT NULL AUTO_INCREM
 update problem set spj=0;
 CREATE TABLE `online` (
 
-  `hash` varchar(32) collate utf8_unicode_ci NOT NULL,
+  `hash` varchar(32) collate utf8mb4_unicode_ci NOT NULL,
 
-  `ip` varchar(20) character set utf8 NOT NULL default '',
+  `ip` varchar(20) character set utf8mb4 NOT NULL default '',
 
-  `ua` varchar(255) character set utf8 NOT NULL default '',
+  `ua` varchar(255) character set utf8mb4 NOT NULL default '',
 
-  `refer` varchar(255) collate utf8_unicode_ci default NULL,
+  `refer` varchar(255) collate utf8mb4_unicode_ci default NULL,
 
   `lastmove` int(10) NOT NULL,
 
   `firsttime` int(10) default NULL,
 
-  `uri` varchar(255) collate utf8_unicode_ci default NULL,
+  `uri` varchar(255) collate utf8mb4_unicode_ci default NULL,
 
   PRIMARY KEY  (`hash`),
 
   UNIQUE KEY `hash` (`hash`)
 
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 ALTER TABLE `contest` ADD COLUMN `langmask` TINYINT  NOT NULL DEFAULT 0 COMMENT 'bits for LANG to mask' AFTER `private`;
 ALTER TABLE `contest` MODIFY COLUMN `contest_id` INTEGER NOT NULL AUTO_INCREMENT;
 
