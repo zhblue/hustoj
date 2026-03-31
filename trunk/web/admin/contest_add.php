@@ -6,7 +6,6 @@
   require_once("admin-header.php");
    header("Cache-control:private"); 
 if(!(isset($_SESSION[$OJ_NAME.'_'.'administrator'])||isset($_SESSION[$OJ_NAME.'_'.'contest_creator']))){
-    echo "<a href='../loginpage.php'>Please Login First!</a>";
     exit(1);
   }
   echo "<center><h3>".$MSG_CONTEST."-".$MSG_ADD."</h3></center>";

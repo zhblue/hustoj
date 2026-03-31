@@ -1,7 +1,6 @@
 <?php require("admin-header.php");
 require_once("../include/const.inc.php");
 if (!(isset($_SESSION[$OJ_NAME.'_'.'administrator']))){
-        echo "<a href='../loginpage.php'>Please Login First!</a>";
         exit(1);
 }?>
 <?php if(isset($_POST['do'])){

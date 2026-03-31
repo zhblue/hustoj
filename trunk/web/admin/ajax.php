@@ -2,7 +2,6 @@
 ini_set("display_errors", "Off");  //set this to "On" for debugging  ,especially when no reason blank shows up.
 require_once("../include/db_info.inc.php");
 if(!(isset($_SESSION[$OJ_NAME.'_administrator'])||isset($_SESSION[$OJ_NAME.'_problem_editor'])||isset($_SESSION[$OJ_NAME.'_contest_creator'])||isset($_SESSION[$OJ_NAME.'_tag_adder']))){
-  echo "<a href='../loginpage.php'>Please Login First!</a>";
   exit(1);  
 }
 function try_ajax($tb,$fd,$pr){

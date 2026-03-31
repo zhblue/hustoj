@@ -2,7 +2,6 @@
 //ini_set("display_errors", "On");  //set this to "On" for debugging  ,especially when no reason blank shows up.
 require_once("admin-header.php");
 if(!(isset($_SESSION[$OJ_NAME.'_'.'administrator']))){
-  echo "<a href='../loginpage.php'>Please Login First!</a>";
   exit(1);
 }
 

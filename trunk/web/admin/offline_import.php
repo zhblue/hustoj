@@ -5,7 +5,6 @@ require_once ("admin-header.php");
 //require_once("../include/check_post_key.php");
 
 if (!(isset($_SESSION[$OJ_NAME.'_'.'administrator'])||isset($_SESSION[$OJ_NAME.'_problem_editor'])  )) {
-  echo "<a href='../loginpage.php'>Please Login First!</a>";
   exit(1);
 }
 

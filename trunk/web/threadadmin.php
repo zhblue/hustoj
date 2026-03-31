@@ -19,7 +19,7 @@ if ($_REQUEST['target'] == 'reply') {
     if (!isset($_SESSION[$OJ_NAME . '_' . 'administrator'])) {
         if ($stat != 2) {
             $sql .= " AND ?!=''";
-            err_msg("<a href=\"../loginpage.php\">Please Login First</a>");
+            err_msg("<a href=\"../loginpage.php\">".(isset($MSG_Login)?$MSG_Login:"Please Login First")."</a>");
         } else {
             $sql .= " AND author_id=?";
         }
@@ -46,7 +46,7 @@ if ($_REQUEST['target'] == 'thread') {
     if ($_REQUEST['action'] == 'lock') $stat = 1;
     if ($_REQUEST['action'] == 'delete') $stat = 2;
     if (!isset($_SESSION[$OJ_NAME . '_' . 'administrator']) && !isset($_SESSION[$OJ_NAME . '_' . 'user_id']))
-        errmsg("<a href=./loginpage.php>Please Login First</a>");
+        errmsg("<a href=./loginpage.php>".(isset($MSG_Login)?$MSG_Login:"Please Login First")."</a>");
     if ($toplevel == -1 && $stat == -1)
         errmsg("Wrong action.");
     $tid = intval($tid);

@@ -2,8 +2,9 @@
 require_once("discuss_func.inc.php");
 require_once("include/db_info.inc.php");
 require_once("include/my_func.inc.php");
+require_once("include/setlang.php");
 if(!isset($_SESSION[$OJ_NAME.'_'.'user_id'])){
-  $view_errors="<a href=loginpage.php>Please Login First</a>";
+  $view_errors="<a href=loginpage.php>".(isset($MSG_Login)?$MSG_Login:"Please Login First")."</a>";
   require("template/".$OJ_TEMPLATE."/error.php");
   exit(0);
 }
@@ -25,7 +26,7 @@ if (isset($_GET['tid']) && !isset($_GET['cid'])) {
 
 }
 if (!isset($_SESSION[$OJ_NAME . '_' . 'user_id'])) {
-    $view_errors = "<a href=loginpage.php>Please Login First</a>";
+    $view_errors = "<a href=loginpage.php>".(isset($MSG_Login)?$MSG_Login:"Please Login First")."</a>";
     require("template/" . $OJ_TEMPLATE . "/error.php");
     exit(0);
 }

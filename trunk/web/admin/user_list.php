@@ -2,7 +2,6 @@
 require("admin-header.php");
 require_once("../include/set_get_key.php");
 if(!(isset($_SESSION[$OJ_NAME.'_'.'administrator'])||isset($_SESSION[$OJ_NAME.'_'.'password_setter']))){
-  echo "<a href='../loginpage.php'>Please Login First!</a>";
   exit(1);
 }
 if(isset($OJ_LANG)){

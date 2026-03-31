@@ -11,7 +11,6 @@
 <?php require_once("../include/db_info.inc.php");?>
 <?php require_once("admin-header.php");
 if (!(isset($_SESSION[$OJ_NAME.'_'.'administrator']))){
-	echo "<a href='../loginpage.php'>Please Login First!</a>";
 	exit(1);
 }
 ?>
@@ -52,7 +51,7 @@ include_once("kindeditor.php") ;
   //$sample_input=pre_grep(">[\\s]*Sample Input([\\s\\S]*?)>[\\s]*Sample Out?put",$html->outertext);
   //$sample_output=$html->find(">[\\s]*Sample Out?put([\\s\\S]*?)<hr",0);
   
-  //能力和时间有限，想用正则表达式做成功能好一点的，实现不了，留给有兴趣的改进吧！
+  //时蓿式晒芎一模实植耍趣母慕桑
   
 ?>
 <form method=POST action=problem_add.php>

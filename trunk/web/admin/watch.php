@@ -2,7 +2,6 @@
 require_once("../include/db_info.inc.php");
 require_once ("../include/my_func.inc.php");
 if (!(isset($_SESSION[$OJ_NAME.'_'.'administrator'])||isset($_SESSION[$OJ_NAME.'_'.'contest_creator'])||isset($_SESSION[$OJ_NAME.'_'.'problem_editor'])||isset($_SESSION[$OJ_NAME.'_'.'password_setter']))){
-        echo "<a href='../loginpage.php'>Please Login First!</a>";
         exit(1);
 }
 

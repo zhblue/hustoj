@@ -6,7 +6,6 @@ if (!(isset($_SESSION[$OJ_NAME.'_'.'administrator'])
       ||isset($_SESSION[$OJ_NAME.'_'.'problem_editor'])
      )){
 	echo htmlentities($_SESSION[$OJ_NAME.'_'.'administrator'], ENT_QUOTES, 'UTF-8');
-	echo "<a href='../loginpage.php'>Please Login First!</a>";
 	exit(1);
 }
 // this is not a webshell , and it need administrator / problem editor  membership to use, 
