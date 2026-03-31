@@ -206,6 +206,7 @@ $delay=pdo_query($sql);
   <a href="problem_changeid.php" target="main" title="Danger,Use it on your own risk"><font color="eeeeee">ReOrderProblem</font></a>
   
 <?php }?>
-
+<script id="MathJax-script" async src="../template/syzoj/js/tex-chtml.js?v=0.31"></script>
+<script id="marked" async src="../template/syzoj/js/"?>marked.min.js"></script>
 </body>
 </html>
