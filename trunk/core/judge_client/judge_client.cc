@@ -1839,7 +1839,7 @@ int init_mysql_conn()   //连接数据库
 		write_log("%s", mysql_error(conn));
 		return 0;
 	}
-	const char *utf8sql = "set names utf8";
+	const char *utf8sql = "set names utf8mb4";
 	if (mysql_real_query(conn, utf8sql, strlen(utf8sql)))
 	{
 		write_log("%s", mysql_error(conn));

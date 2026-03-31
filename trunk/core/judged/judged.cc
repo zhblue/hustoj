@@ -480,7 +480,7 @@ int init_mysql() {
 			sleep(2);
 			return 1;
 		} else {
-			return executesql("set names utf8");
+			return executesql("set names utf8mb4");
 		}
 	} else {
 			return executesql("commit");
