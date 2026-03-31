@@ -14,6 +14,7 @@
 	$MSG_REGISTER="注册";
 	$MSG_ADMIN="管理";
 	$MSG_SYSTEM="系统";
+	$MSG_SETTINGS="系统设置";
 	$MSG_STANDING="名次";
 	$MSG_STATISTICS="统计";
 	$MSG_USERINFO="用户信息";
@@ -279,6 +280,7 @@
   $MSG_SHOW_ALL_TAGS="所有标签";  
   $MSG_TABLE_TRANSPOSE="行列转换";
 
+  $MSG_HELP_SETTINGS="在网页上修改系统配置参数（布尔开关、文本、数字），敏感项受保护";
   $MSG_HELP_SEEOJ="跳转回到前台";
   $MSG_HELP_ADD_NEWS="添加首页显示的新闻";
   $MSG_HELP_NEWS_LIST="管理已经发布的新闻";

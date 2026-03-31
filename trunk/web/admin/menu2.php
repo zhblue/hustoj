@@ -107,6 +107,7 @@
       <?php echo $MSG_SYSTEM."-".$MSG_ADMIN ?> <span class="caret"></span>
     </button>
     <div class="dropdown-menu">
+      <a class="dropdown-item btn-sm" href="settings.php" target="main" title="<?php echo $MSG_HELP_SETTINGS?>"><b><?php echo $MSG_SYSTEM."-".$MSG_SETTINGS?></b></a>
       <a class="dropdown-item btn-sm" href="rejudge.php" target="main" title="<?php echo $MSG_HELP_REJUDGE?>"><b><?php echo $MSG_SYSTEM."-".$MSG_REJUDGE?></b></a>      
       <a class="dropdown-item btn-sm" href="source_give.php" target="main" title="<?php echo $MSG_HELP_GIVESOURCE?>"><b><?php echo $MSG_SYSTEM."-".$MSG_GIVESOURCE?></b></a>
       <a class="dropdown-item btn-sm" href="../online.php" target="main"><b><?php echo $MSG_SYSTEM."-".$MSG_HELP_ONLINE?></b></a>      
