@@ -14,6 +14,7 @@
 	$MSG_REGISTER="ลงทะเบียน";
 	$MSG_ADMIN="จัดการระบบ";
 	$MSG_SYSTEM="System";
+	$MSG_SETTINGS="System Settings";
 	$MSG_STANDING="STANDING";
 	$MSG_STATISTICS="สถิติ";
 	$MSG_USERINFO="โปรไฟล์";
@@ -257,6 +258,7 @@ $MSG_TOO_BAD="Please surf the internet in a civilized manner";
   $MSG_TABLE_TRANSPOSE="Table Transpose";
 
   $MSG_HELP_SEEOJ="watch the front pages";
+  $MSG_HELP_SETTINGS="Modify system configuration parameters via web UI (booleans, text, numbers); sensitive items are protected";
   $MSG_HELP_ADD_NEWS="add news for the homepage";
   $MSG_HELP_NEWS_LIST="edit or shutdown published news";
   $MSG_HELP_USER_LIST="enable/disable user";

@@ -14,6 +14,7 @@
 	$MSG_REGISTER="عضویت";
 	$MSG_ADMIN="ادمین";
 	$MSG_SYSTEM="System";
+	$MSG_SETTINGS="System Settings";
 	$MSG_STANDING="جایگاه ها";
 	$MSG_STATISTICS="آمار";
 	$MSG_USERINFO="اصلاح اطلاعات";
@@ -256,6 +257,7 @@
   $MSG_TABLE_TRANSPOSE="Table Transpose";
 
   $MSG_HELP_SEEOJ="watch the front pages";
+  $MSG_HELP_SETTINGS="Modify system configuration parameters via web UI (booleans, text, numbers); sensitive items are protected";
   $MSG_HELP_ADD_NEWS="add news for the homepage";
   $MSG_HELP_NEWS_LIST="edit or shutdown published news";
   $MSG_HELP_USER_LIST="enable/disable user";

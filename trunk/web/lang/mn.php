@@ -14,6 +14,7 @@
 	$MSG_REGISTER="Бүртгүүлэх";
 	$MSG_ADMIN="Админ";
 	$MSG_SYSTEM="Систем";
+	$MSG_SETTINGS="System Settings";
 	$MSG_STANDING="Ангилал";
 	$MSG_STATISTICS="Статистик";
 	$MSG_USERINFO="Хэрэглэгчийн мэдээлэл";
@@ -248,6 +249,7 @@
 	$MSG_RESERVED="Хадгалсан";
 	$MSG_TABLE_TRANSPOSE="Table Transpose";
 	$MSG_HELP_SEEOJ="watch the front pages";
+  $MSG_HELP_SETTINGS="Modify system configuration parameters via web UI (booleans, text, numbers); sensitive items are protected";
 	$MSG_HELP_ADD_NEWS="Мэдээ нэмэх";
 	$MSG_HELP_NEWS_LIST="edit or shutdown published news";
 	$MSG_HELP_USER_LIST="Хэрэглэгчийн жагсаалт";

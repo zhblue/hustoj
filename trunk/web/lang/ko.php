@@ -14,6 +14,7 @@
 	$MSG_REGISTER="회원가입";
 	$MSG_ADMIN="관리";
 	$MSG_SYSTEM="시스템";
+	$MSG_SETTINGS="System Settings";
 	$MSG_STANDING="순위";
 	$MSG_STATISTICS="통계";
 	$MSG_USERINFO="회원정보";
@@ -268,6 +269,7 @@
     $MSG_TABLE_TRANSPOSE="표 전치";
 
 	$MSG_HELP_SEEOJ="OJ 확인";
+  $MSG_HELP_SETTINGS="Modify system configuration parameters via web UI (booleans, text, numbers); sensitive items are protected";
 	$MSG_HELP_ADD_NEWS="첫 페이지 공지사항 추가";
 	$MSG_HELP_NEWS_LIST="첫 페이지 공지사항 활성화/비활성화/수정";
 	$MSG_HELP_USER_LIST="사용자 활성화/비활성화";

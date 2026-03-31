@@ -271,6 +271,7 @@
  $MSG_TABLE_TRANSPOSE="行列轉換";
 
  $MSG_HELP_SEEOJ ="跳轉回到前台";
+ $MSG_HELP_SETTINGS="在網頁上修改系統配置參數（布林開關、文本、數字），敏感項受保護";
  $MSG_HELP_ADD_NEWS ="新增首頁顯示的新聞";
  $MSG_HELP_NEWS_LIST ="管理已經發佈的新聞";
  $MSG_HELP_USER_LIST ="對註冊使用者停用、啟用帳號";
@@ -777,6 +778,7 @@
 	$MSG_SUBSCRIPT_ERROR="Cannot perform subscript access to non-array or pointer variables";
 	$MSG_SUCCESS="Success";
 	$MSG_SYSTEM="System";
+ $MSG_SETTINGS="系統設置";
 	$MSG_SYSTEM_OUT_PRINT="The usage of System.out.print in Java is different from that of C language printf, please try System.out.format";
 	$MSG_TEAMGENERATOR="TeamGenerator";
 	$MSG_TESTDATA="TestData";

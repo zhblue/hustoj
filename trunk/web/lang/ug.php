@@ -14,6 +14,7 @@
 	$MSG_REGISTER="رويخەتكە ئىلىش";
 	$MSG_ADMIN="باشقۇرغۇچى";
 	$MSG_SYSTEM="System";
+	$MSG_SETTINGS="System Settings";
 	$MSG_STANDING="مەرتىۋە";
 	$MSG_STATISTICS="سىتاتىستىكا";
 	$MSG_USERINFO="ئابونىت ئۇچۇرى";
@@ -274,6 +275,7 @@ $MSG_TOO_BAD="Please surf the internet in a civilized manner";
   $MSG_TABLE_TRANSPOSE="Table Transpose";
 
   $MSG_HELP_SEEOJ="ئالدىنىقى بەتكە قايتىش  ";
+  $MSG_HELP_SETTINGS="Modify system configuration parameters via web UI (booleans, text, numbers); sensitive items are protected";
   $MSG_HELP_ADD_NEWS="باش بەتكە ئۇقتۇرۇش يېزىش";
   $MSG_HELP_NEWS_LIST=" يېزىلغان ئۇقتۇرۇشلارنى تەھرېرلەش ";
   $MSG_HELP_USER_LIST=" ئابۇنىتچىلارنى باشقۇرۇش ";

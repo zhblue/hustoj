@@ -14,6 +14,7 @@
 	$MSG_REGISTER="Register";
 	$MSG_ADMIN="Admin";
 	$MSG_SYSTEM="System";
+	$MSG_SETTINGS="System Settings";
 	$MSG_STANDING="Standing";
 	$MSG_STATISTICS="Statistics";
 	$MSG_USERINFO="User Information";
@@ -265,6 +266,7 @@
   $MSG_TABLE_TRANSPOSE="Table Transpose";
 
   $MSG_HELP_SEEOJ="watch the front pages";
+  $MSG_HELP_SETTINGS="Modify system configuration parameters via web UI (booleans, text, numbers); sensitive items are protected";
   $MSG_HELP_ADD_NEWS="add news for the homepage";
   $MSG_HELP_NEWS_LIST="edit or shutdown published news";
   $MSG_HELP_USER_LIST="enable/disable user";

@@ -14,6 +14,7 @@
 	$MSG_REGISTER="הרשמה";
 	$MSG_ADMIN="ניהול";
 	$MSG_SYSTEM="מערכת";
+	$MSG_SETTINGS="System Settings";
 	$MSG_STANDING="דירוג";
 	$MSG_STATISTICS="סטטיסטיקה";
 	$MSG_USERINFO="פרופיל משתמש";
@@ -248,6 +249,7 @@
 	$MSG_RESERVED="שמור";
 	$MSG_TABLE_TRANSPOSE="$MSG_TABLE_TRANSPOSE";
 	$MSG_HELP_SEEOJ="ראה OJ";
+  $MSG_HELP_SETTINGS="Modify system configuration parameters via web UI (booleans, text, numbers); sensitive items are protected";
 	$MSG_HELP_ADD_NEWS="הוסף חדשות";
 	$MSG_HELP_NEWS_LIST="רשימת חדשות";
 	$MSG_HELP_USER_LIST="רשימת משתמשים";
