@@ -480,6 +480,8 @@
 	$MSG_NO_SUBMISSIONS="Пока нет посылок";
 	$MSG_NO_CONTACTS="Нет контактов";
 	$MSG_SELECT_CONTACT="Выберите контакт";
+	$MSG_IP_EMAIL_REG_OVERLIMIT="Ваш IP-адрес или Email зарегистрировали более {$OJ_REG_SPEED} аккаунтов, пожалуйста, попробуйте позже.";
+
 	$MSG_CONTEST_CLOSED="Соревнование завершено";
 	$MSG_FILE_SUBMIT="Отправка файла";
 	$MSG_NO_FREOPEN="Freopen не нужен";
@@ -653,6 +655,7 @@ $MSG_ONLY_LAST_SUBMISSION="Only the last submission will be scored";
 	$MSG_LIST="List";
 	$MSG_LOAD_TEMPLATE_CONFIRM="Do you want to reload template?\\n You may lost all code that you've typed here!";
 	$MSG_LOGIN="Login";
+	$MSG_COOKIE_ERROR="Cookie просрочен или недействителен";
 	$MSG_LOGOUT="Logout";
 	$MSG_LOSTPASSWORD_MAILBOX="Input the Code sended to your email (Trash Box )";
 	$MSG_LOSTPASSWORD_WILLBENEW="if it's correct, it will be the new password";
@@ -782,6 +785,7 @@ $MSG_ONLY_LAST_SUBMISSION="Only the last submission will be scored";
 	$MSG_SUBSCRIPT_ERROR="Cannot perform subscript access to non-array or pointer variables";
 	$MSG_SUCCESS="Success";
 	$MSG_SYSTEM="System";
+	$MSG_SERVICE_DISABLED="API интерфейс не включен";
 	$MSG_SETTINGS="System Settings";
 	$MSG_SYSTEM_OUT_PRINT="The usage of System.out.print in Java is different from that of C language printf, please try System.out.format";
 	$MSG_TEAMGENERATOR="TeamGenerator";

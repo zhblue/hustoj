@@ -10,10 +10,12 @@
 	$MSG_RECENT_CONTEST="Recent";
 	$MSG_LOGOUT="خروج";
 	$MSG_LOGIN="ورود";
+	$MSG_COOKIE_ERROR="کوکی منقضی یا نامعتبر";
 	$MSG_LOST_PASSWORD="Lost Password";
 	$MSG_REGISTER="عضویت";
 	$MSG_ADMIN="ادمین";
 	$MSG_SYSTEM="System";
+	$MSG_SERVICE_DISABLED="رابط برنامه‌نویسی فعال نیست";
 	$MSG_SETTINGS="System Settings";
 	$MSG_STANDING="جایگاه ها";
 	$MSG_STATISTICS="آمار";
@@ -462,6 +464,8 @@
 	$MSG_NO_SUBMISSIONS="هنوز ارسالی نیست";
 	$MSG_NO_CONTACTS="بدون مخاطب";
 	$MSG_SELECT_CONTACT="لطفاً یک مخاطب انتخاب کنید";
+	$MSG_IP_EMAIL_REG_OVERLIMIT="آدرس IP یا ایمیل شما بیش از {$OJ_REG_SPEED} حساب ثبت کرده است، لطفاً بعداً دوباره تلاش کنید.";
+
 	$MSG_CONTEST_CLOSED="مسابقه پایان یافته";
 	$MSG_FILE_SUBMIT="ارسال فایل";
 	$MSG_NO_FREOPEN="نیاز به freopen نیست";

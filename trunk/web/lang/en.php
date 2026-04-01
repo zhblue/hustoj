@@ -10,10 +10,12 @@
   	$MSG_RECENT_CONTEST="Recent";
 	$MSG_LOGOUT="Logout";
 	$MSG_LOGIN="Login";
+	$MSG_COOKIE_ERROR="Cookie expired or invalid";
 	$MSG_LOST_PASSWORD="Lost Password";
 	$MSG_REGISTER="Register";
 	$MSG_ADMIN="Admin";
 	$MSG_SYSTEM="System";
+	$MSG_SERVICE_DISABLED="API interface not enabled";
 	$MSG_SETTINGS="System Settings";
 	$MSG_STANDING="Standing";
 	$MSG_STATISTICS="Statistics";
@@ -475,6 +477,8 @@
 	$MSG_NO_SUBMISSIONS="No submissions yet";
 	$MSG_NO_CONTACTS="No contacts";
 	$MSG_SELECT_CONTACT="Please select a contact";
+	$MSG_IP_EMAIL_REG_OVERLIMIT="Your IP address or Email has registered more than {$OJ_REG_SPEED} accounts, please try again later.";
+
 	$MSG_CONTEST_CLOSED="Contest has ended";
 	$MSG_FILE_SUBMIT="File Submit";
 	$MSG_NO_FREOPEN="No freopen needed";

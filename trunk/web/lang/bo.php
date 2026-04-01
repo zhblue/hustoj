@@ -10,10 +10,12 @@
 	$MSG_RECENT_CONTEST="སློབ་ཆེན་གྲགས་རིམ།";
 	$MSG_LOGOUT="ཕྱིར་འབུད།";
 	$MSG_LOGIN="ནང་འཇུག";
+	$MSG_COOKIE_ERROR="Cookie དུས་ཚོད་ལྷུང་བ་ཡང་ན་ནོར་འཁྲུལ།";
 	$MSG_LOST_PASSWORD="གསང་ཨང་བཷད།";
 	$MSG_REGISTER="ཐ་འཛིན།";
 	$MSG_ADMIN="བདག་སྐྱོང་།";
 	$MSG_SYSTEM="རིམ་ཁག";
+	$MSG_SERVICE_DISABLED="API མ་ཐེབ་བ།";
 	$MSG_SETTINGS="System Settings";
 	$MSG_STANDING="གྲགས་རིམ།";
 	$MSG_STATISTICS="གྲངས་རྩིས།";
@@ -446,6 +448,8 @@
 	$MSG_NO_SUBMISSIONS="No submissions yet";
 	$MSG_NO_CONTACTS="No contacts";
 	$MSG_SELECT_CONTACT="Please select a contact";
+	$MSG_IP_EMAIL_REG_OVERLIMIT="ཁྱེད་རང་གི་IP སྲིད་གྲོང་ཡང་ན་གློག་འཕྲིན་{$OJ_REG_SPEED}ལས་མང་བའི་ཐེར་འབད་བྱས་ཟིན། མ་འོངས་པར་བསྐྱར་ཟིན་གྱིས།";
+
 	$MSG_CONTEST_CLOSED="Contest has ended";
 	$MSG_FILE_SUBMIT="File Submit";
 	$MSG_NO_FREOPEN="No freopen needed";

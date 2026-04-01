@@ -481,6 +481,8 @@
 	$MSG_NO_SUBMISSIONS="暫無選手提交";
 	$MSG_NO_CONTACTS="暫無聯繫人";
 	$MSG_SELECT_CONTACT="請選擇一個人聊天";
+	$MSG_IP_EMAIL_REG_OVERLIMIT="您的IP位址或Email已經註冊過{$OJ_REG_SPEED}個帳戶，請稍後再試。";
+
 	$MSG_CONTEST_CLOSED="比賽已經關閉";
 	$MSG_FILE_SUBMIT="文件提交";
 	$MSG_NO_FREOPEN="無需freopen";
@@ -653,6 +655,7 @@
 	$MSG_LIST="List";
 	$MSG_LOAD_TEMPLATE_CONFIRM="Do you want to reload template?\\n You may lost all code that you've typed here!";
 	$MSG_LOGIN="Login";
+	$MSG_COOKIE_ERROR="Cookie失效或錯誤";
 	$MSG_LOGOUT="Logout";
 	$MSG_LOSTPASSWORD_MAILBOX="Input the Code sended to your email (Trash Box )";
 	$MSG_LOSTPASSWORD_WILLBENEW="if it's correct, it will be the new password";
@@ -778,6 +781,7 @@
 	$MSG_SUBSCRIPT_ERROR="Cannot perform subscript access to non-array or pointer variables";
 	$MSG_SUCCESS="Success";
 	$MSG_SYSTEM="System";
+	$MSG_SERVICE_DISABLED="接口未啟用";
  $MSG_SETTINGS="系統設置";
 	$MSG_SYSTEM_OUT_PRINT="The usage of System.out.print in Java is different from that of C language printf, please try System.out.format";
 	$MSG_TEAMGENERATOR="TeamGenerator";

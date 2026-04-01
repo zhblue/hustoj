@@ -10,10 +10,12 @@
 	$MSG_RECENT_CONTEST="세계대회";
 	$MSG_LOGOUT="로그아웃";
 	$MSG_LOGIN="로그인";
+	$MSG_COOKIE_ERROR="Cookie가 만료되었거나 유효하지 않습니다";
 	$MSG_LOST_PASSWORD="비밀번호 찾기";
 	$MSG_REGISTER="회원가입";
 	$MSG_ADMIN="관리";
 	$MSG_SYSTEM="시스템";
+	$MSG_SERVICE_DISABLED="API 인터페이스가 활성화되지 않았습니다";
 	$MSG_SETTINGS="System Settings";
 	$MSG_STANDING="순위";
 	$MSG_STATISTICS="통계";
@@ -485,6 +487,8 @@
 	$MSG_NO_SUBMISSIONS="아직 제출이 없습니다";
 	$MSG_NO_CONTACTS="연락처 없음";
 	$MSG_SELECT_CONTACT="연락처를 선택하세요";
+	$MSG_IP_EMAIL_REG_OVERLIMIT="IP 주소 또는 이메일이 {$OJ_REG_SPEED}개 이상의 계정을 등록했습니다. 나중에 다시 시도해 주세요.";
+
 	$MSG_CONTEST_CLOSED="경쟁이 종료됨";
 	$MSG_FILE_SUBMIT="파일 제출";
 	$MSG_NO_FREOPEN="freopen 필요 없음";

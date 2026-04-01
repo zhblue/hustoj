@@ -10,10 +10,12 @@
         $MSG_RECENT_CONTEST="Recent";
 	$MSG_LOGOUT="ออกจากระบบ";
 	$MSG_LOGIN="เข้าสู่ระบบ";
+	$MSG_COOKIE_ERROR="คุกกี้หมดอายุหรือไม่ถูกต้อง";
 	$MSG_LOST_PASSWORD="Lost Password";
 	$MSG_REGISTER="ลงทะเบียน";
 	$MSG_ADMIN="จัดการระบบ";
 	$MSG_SYSTEM="System";
+	$MSG_SERVICE_DISABLED="API interface ไม่ได้เปิดใช้งาน";
 	$MSG_SETTINGS="System Settings";
 	$MSG_STANDING="STANDING";
 	$MSG_STATISTICS="สถิติ";
@@ -462,6 +464,8 @@ $MSG_TOO_BAD="Please surf the internet in a civilized manner";
 	$MSG_NO_SUBMISSIONS="ยังไม่มีการส่ง";
 	$MSG_NO_CONTACTS="ไม่มีผู้ติดต่อ";
 	$MSG_SELECT_CONTACT="กรุณาเลือกผู้ติดต่อ";
+	$MSG_IP_EMAIL_REG_OVERLIMIT="ที่อยู่ IP หรือ Email ของคุณได้ลงทะเบียนมากกว่า {$OJ_REG_SPEED} บัญชี โปรดลองอีกครั้งในภายหลัง";
+
 	$MSG_CONTEST_CLOSED="การแข่งขันสิ้นสุดแล้ว";
 	$MSG_FILE_SUBMIT="ส่งไฟล์";
 	$MSG_NO_FREOPEN="ไม่ต้องใช้ freopen";

@@ -10,10 +10,12 @@
     $MSG_RECENT_CONTEST="名校联赛";
 	$MSG_LOGOUT="注销";
 	$MSG_LOGIN="登录";
+	$MSG_COOKIE_ERROR="Cookie失效或错误";
 	$MSG_LOST_PASSWORD="忘记密码";
 	$MSG_REGISTER="注册";
 	$MSG_ADMIN="管理";
 	$MSG_SYSTEM="系统";
+	$MSG_SERVICE_DISABLED="接口未启用";
 	$MSG_SETTINGS="系统设置";
 	$MSG_STANDING="名次";
 	$MSG_STATISTICS="统计";
@@ -496,6 +498,8 @@
   $MSG_NO_SUBMISSIONS="暂无选手提交";
   $MSG_NO_CONTACTS="暂无联系人";
   $MSG_SELECT_CONTACT="请选择一个人聊天";
+	$MSG_IP_EMAIL_REG_OVERLIMIT="您的IP地址或Email已经注册过{$OJ_REG_SPEED}个账户，请稍后再试。";
+
   $MSG_CONTEST_CLOSED="比赛已经关闭";
   $MSG_FILE_SUBMIT="文件提交";
   $MSG_NO_FREOPEN="无需freopen";

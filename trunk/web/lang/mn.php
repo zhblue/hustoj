@@ -10,10 +10,12 @@
 	$MSG_RECENT_CONTEST="Их наадам";
 	$MSG_LOGOUT="Гарах";
 	$MSG_LOGIN="Нэвтрэх";
+	$MSG_COOKIE_ERROR="Cookie дууссан эсвэл хүчинтэй буруу";
 	$MSG_LOST_PASSWORD="Нууц үг мартсан";
 	$MSG_REGISTER="Бүртгүүлэх";
 	$MSG_ADMIN="Админ";
 	$MSG_SYSTEM="Систем";
+	$MSG_SERVICE_DISABLED="API интерфейс идэвхжээгүй";
 	$MSG_SETTINGS="System Settings";
 	$MSG_STANDING="Ангилал";
 	$MSG_STATISTICS="Статистик";
@@ -446,6 +448,8 @@
 	$MSG_NO_SUBMISSIONS="Одоогоор илгээлт алга";
 	$MSG_NO_CONTACTS="Харилцагчид алга";
 	$MSG_SELECT_CONTACT="Харилцагч сонгоно уу";
+	$MSG_IP_EMAIL_REG_OVERLIMIT="Таны IP хаяг эсвэл и-мэйл {$OJ_REG_SPEED}-с их тооны данс бүртгүүлсэн байна, дараа дахин оролдоно уу.";
+
 	$MSG_CONTEST_CLOSED="Тэмцээн дууслаа";
 	$MSG_FILE_SUBMIT="Файл илгээх";
 	$MSG_NO_FREOPEN="Freopen шаардлагагүй";

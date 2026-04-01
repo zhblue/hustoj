@@ -10,10 +10,12 @@
 	$MSG_RECENT_CONTEST="يېقىنقى";
 	$MSG_LOGOUT="چىقىش";
 	$MSG_LOGIN="كىرىش";
+	$MSG_COOKIE_ERROR="Cookie مۆئۈت ياكى كۆئۇ";
 	$MSG_LOST_PASSWORD="مەخپى نۇمۇر يۈتتى";
 	$MSG_REGISTER="رويخەتكە ئىلىش";
 	$MSG_ADMIN="باشقۇرغۇچى";
 	$MSG_SYSTEM="System";
+	$MSG_SERVICE_DISABLED="API ئارايۈسى ئۇچۇرلىرى ئۇلانمىغان";
 	$MSG_SETTINGS="System Settings";
 	$MSG_STANDING="مەرتىۋە";
 	$MSG_STATISTICS="سىتاتىستىكا";
@@ -484,6 +486,8 @@ $MSG_TOO_BAD="Please surf the internet in a civilized manner";
 	$MSG_NO_SUBMISSIONS="تېخى تاپشۇرۇق يوق";
 	$MSG_NO_CONTACTS="ئالاقىدارى يوق";
 	$MSG_SELECT_CONTACT="ئالاقىدار تاللاڭ";
+	$MSG_IP_EMAIL_REG_OVERLIMIT="IP ئادرېسىڭ ياكى خېرىلىق ئېلېكترونلۇق خەت {$OJ_REG_SPEED} دىن ئارتۇق ھېسابات تىزىملىگەن، كېيىن قايتا سىناڭ";
+
 	$MSG_CONTEST_CLOSED="مۇسابىقە ئاخىرلاشتى";
 	$MSG_FILE_SUBMIT="ھۆججەت تاپشۇرۇش";
 	$MSG_NO_FREOPEN="freopen ھاجەتسىز";

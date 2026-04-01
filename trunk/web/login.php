@@ -14,7 +14,7 @@ if ($OJ_LONG_LOGIN && isset($_COOKIE[$OJ_NAME . "_user"]) && isset($_COOKIE[$OJ_
     if ($C_check[strlen($C_check) - 1] != $C_num) {
         setcookie($OJ_NAME . "_check", "", 0);
         setcookie($OJ_NAME . "_user", "", 0);
-        echo "<script>\n alert('Cookie失效或错误!(-1)'); \n history.go(-1); \n </script>";
+        echo "<script>\n alert('$MSG_COOKIE_ERROR (-1)'); \n history.go(-1); \n </script>";
         exit(0);
     }
     $C_info = pdo_query("SELECT `password`,`accesstime` FROM `users` WHERE `user_id`=? and defunct='N'", $C_user)[0];
@@ -28,7 +28,7 @@ if ($OJ_LONG_LOGIN && isset($_COOKIE[$OJ_NAME . "_user"]) && isset($_COOKIE[$OJ_
     else {
         setcookie($OJ_NAME . "_check", "", 0);
         setcookie($OJ_NAME . "_user", "", 0);
-        echo "<script>\n alert('Cookie失效或错误!(-2)'); \n history.go(-1); \n </script>";
+        echo "<script>\n alert('$MSG_COOKIE_ERROR (-2)'); \n history.go(-1); \n </script>";
         exit(0);
     }
 }

@@ -10,10 +10,12 @@
 	$MSG_RECENT_CONTEST="ליגת האוניברסיטאות";
 	$MSG_LOGOUT="התנתקות";
 	$MSG_LOGIN="התחברות";
+	$MSG_COOKIE_ERROR="קוקי פג תוקף או לא תקין";
 	$MSG_LOST_PASSWORD="שכחתי סיסמה";
 	$MSG_REGISTER="הרשמה";
 	$MSG_ADMIN="ניהול";
 	$MSG_SYSTEM="מערכת";
+	$MSG_SERVICE_DISABLED="ממשק ה-API לא מופעל";
 	$MSG_SETTINGS="System Settings";
 	$MSG_STANDING="דירוג";
 	$MSG_STATISTICS="סטטיסטיקה";
@@ -446,6 +448,8 @@
 	$MSG_NO_SUBMISSIONS="אין הגשות עדיין";
 	$MSG_NO_CONTACTS="אין אנשי קשר";
 	$MSG_SELECT_CONTACT="אנא בחר איש קשר";
+	$MSG_IP_EMAIL_REG_OVERLIMIT="כתובת ה-IP או האימייל שלך נרשמו ליותר מ-{$OJ_REG_SPEED} חשבונות, אנא נסה שוב מאוחר יותר.";
+
 	$MSG_CONTEST_CLOSED="התחרות הסתיימה";
 	$MSG_FILE_SUBMIT="הגשת קובץ";
 	$MSG_NO_FREOPEN="אין צורך בfreopen";
