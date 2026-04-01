@@ -10,7 +10,7 @@ $now = date('Y-m-d H:i', time());
 $sql = "select count(contest_id) from contest where start_time<'$now' and end_time>'$now' and ( title like '%$OJ_NOIP_KEYWORD%' or (contest_type & 20)>0 )  ";
 $rows = pdo_query($sql);
 $row = $rows[0];
-if ($row[0] > 0) {
+if ($row[0] > 0 && !isset($_SESSION[$OJ_NAME . '_' . "administrator"])) {
     $view_errors = "<h2> $MSG_NOIP_WARNING </h2>";
     require("template/" . $OJ_TEMPLATE . "/error.php");
     exit(0);
