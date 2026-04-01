@@ -322,9 +322,10 @@ int already_running(char * lock_file) {
 	write(fd, buf, strlen(buf) + 1);
 	return (0);
 }
+pid_t pidApp =-1 ;
 void run_php_cron(char * work_dir){
 	int mem_lmt=256;
-	pid_t pidApp = fork();
+	pidApp = fork();
 	if (pidApp == 0){
 		sprintf(php_lock_file,"%s/cron.pid",work_dir);
 		if(already_running(php_lock_file)){
@@ -900,6 +901,7 @@ int main(int argc, char** argv) {
 				if(wait_udp_msg(oj_udp_fd)){
 					if (access(php_cron, R_OK ) != -1){
 						if(DEBUG) printf("Run PHP Cron job: %s\n", php_cron);
+						if(pidApp>0) waitpid(pidApp, NULL, WNOHANG);     // wait last defunct
 						run_php_cron(php_path);
 					}
 				}
