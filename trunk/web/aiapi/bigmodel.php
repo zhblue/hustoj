@@ -15,6 +15,7 @@ require_once("../include/my_func.inc.php");
 $url = 'https://open.bigmodel.cn/api/paas/v4/chat/completions';
 $apiKey = "填写你申请的api-key";
 $models=array("glm-4.5","glm-4.5-air","glm-4.5-flash","glm-4.5-airx");
+// $temperature=1.2;
 //$temperature=0.8;
 if(basename(get_included_files()[0])!="cron.php")
     require_once(dirname(__FILE__)."/common.php");
