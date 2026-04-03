@@ -523,3 +523,10 @@
     $MSG_FRIENDLY_L8="테스트 데이터 다운로드 허용";
     $MSG_FRIENDLY_L9="방문자 제출 허용";
 	$MSG_HELP_BACKUP_DATABASE="데이터베이스, 테스트 데이터 및 이미지를 문제 0 디렉토리로 백업";
+	$MSG_AI_CODE_SUGGESTION_SOURCE_BROWSER="약한 부분을 분석하고 힌트 같은 관련 질문을 하세요.";
+	$MSG_AI_CODE_SUGGESTION="완전한 코드를 주지 말고, 문제 원인만 알려주고 혼자 수정해서 배우게 하세요. 약한 부분을 분석하고 힌트 같은 관련 질문을 한 뒤, 응원이나 격려 한마디를 하세요.";
+	$MSG_AI_PROMPT_SYS="당신은 경험 많은 정보학 올림피아드 프로그래밍高手으로, 제가 이해하지 못하는 오류 메시지를 간단하고 명확한 %s로 설명해 주세요. 비교에서 사용자의 출력이 비어 있으면 여러 입력 처리를 고려하지 않았을 수 있으므로 반복문이 필요할 수 있습니다. %s 가능한 간결하게 토큰을 절약하세요.";
+	$MSG_AI_INVALID_PARAM="잘못된 매개변수";
+	$MSG_AI_PROMPT_USER_TITLE="문제:";
+	$MSG_AI_PROMPT_USER_SOURCE="소스코드:";
+	$MSG_AI_PROMPT_USER_ERROR="오류 메시지:";

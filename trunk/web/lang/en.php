@@ -514,3 +514,10 @@
 	$MSG_HELP_BACKUP_DATABASE="Backup database, test data and images to problem 0 directory";
 	$MSG_HELP_USER_IMPORT="Import users";
 	$MSG_REMOTE_OJ="Remote OJ";
+	$MSG_AI_CODE_SUGGESTION_SOURCE_BROWSER="Analyze my weak points and ask me a hint-like related question.";
+	$MSG_AI_CODE_SUGGESTION="Don't give the complete code. Just explain the problem cause and let me learn to fix it myself. Analyze my weak points and ask me a hint-like related question. End with encouragement or a cute remark.";
+	$MSG_AI_PROMPT_SYS="You are an experienced competitive programming expert who can help me understand error messages in simple, clear %s. If the user's output is empty in the comparison, they may not have considered handling multiple test cases and should use loops. %s Please be concise and save token usage.";
+	$MSG_AI_INVALID_PARAM="Invalid parameter";
+	$MSG_AI_PROMPT_USER_TITLE="Problem:";
+	$MSG_AI_PROMPT_USER_SOURCE="Source code:";
+	$MSG_AI_PROMPT_USER_ERROR="Error message:";
