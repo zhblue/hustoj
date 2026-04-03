@@ -95,11 +95,11 @@ if(basename($_SERVER['PHP_SELF'])!=="cron.php"){
 		}
 
 		if(isset($_SESSION[$OJ_NAME."_source_browser"])){
-			$code_suggestion="分析我可能薄弱的知识点，问我一个提示性的相关问题。";
+			$code_suggestion=$MSG_AI_CODE_SUGGESTION_SOURCE_BROWSER;
 		}else{
-			$code_suggestion="不要直接给出完整代码,只给出问题原因,让我自己学习修改。分析我可能薄弱的知识点，问我一个提示性的相关问题，最后说一句鼓励或安慰的话，卖个萌。";
+			$code_suggestion=$MSG_AI_CODE_SUGGESTION;
 		}
-		$prompt_sys="你是一个经验丰富的信息学奥赛编程高手，能帮我用简单清晰的中文，解释我看不懂的报错信息。如果对比中用户的输出为空，可能是没有考虑到多组输入的情况，应该使用循环处理。$code_suggestion 请尽量言简意赅，节省token消耗。";
+		$prompt_sys=sprintf($MSG_AI_PROMPT_SYS,$code_suggestion);
 		 
 		$sid=intval($_GET['sid']);
 		$solution=pdo_query("select user_id,problem_id from solution where solution_id=?",$sid)[0];
@@ -107,7 +107,7 @@ if(basename($_SERVER['PHP_SELF'])!=="cron.php"){
 		$problem_id=$solution[1];
 
 		if(!(isset($_SESSION[$OJ_NAME."_source_browser"])|| $user_id==$_SESSION[$OJ_NAME."_user_id"] )){
-			echo "非法参数";
+			echo $MSG_AI_INVALID_PARAM;
 			exit();
 		}
 		$sql="SELECT `source` FROM `source_code_user` WHERE `solution_id`=?";
@@ -116,7 +116,7 @@ if(basename($_SERVER['PHP_SELF'])!=="cron.php"){
 			$row=$result[0];
 			$source=$row[0];
 		}else{
-			echo "非法参数";
+			echo $MSG_AI_INVALID_PARAM;
 			exit();
 		}
 		$sql="SELECT `error` FROM `$table` WHERE `solution_id`=?";
@@ -125,7 +125,7 @@ if(basename($_SERVER['PHP_SELF'])!=="cron.php"){
 			$row=$result[0];
 			$ceinfo=$row[0];
 		}else{
-			echo "非法参数";
+			echo $MSG_AI_INVALID_PARAM;
 			exit();
 		}
 		$sql="select answer from solution_ai_answer where solution_id=? ";
