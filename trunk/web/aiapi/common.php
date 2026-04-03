@@ -134,10 +134,8 @@ if(basename($_SERVER['PHP_SELF'])!=="cron.php"){
 			echo htmlentities($answer[0][0]);
 			exit();
 		}
-		$problem=pdo_query("select concat('<br>\n## 题目描述<br>\n\n',description,'<br>\n\n## 输入<br>\n\n',input,'<br>\n\n## 输出<br>\n\n',output,'<br>\n\n## 样例输入<br>\n',sample_input,'<br>\n\n## 样例输出<br>\n',sample_output,'<br>\n## 提示<br>\n',hint) from problem where problem_id=?",$problem_id)[0][0];
-		$prompt_user="$MSG_AI_PROMPT_USER_TITLE<br>\n".$problem."<br>\n$MSG_AI_PROMPT_USER_SOURCE
-\n<pre>\n".htmlentities($source)."\n</pre>\n$MSG_AI_PROMPT_USER_ERROR
-\n<pre>\n".htmlentities($ceinfo)."\n</pre>";
+		$problem=pdo_query("select concat('<br>\n## $MSG_Description <br>\n\n',description,'<br>\n\n## $MSG_Input<br>\n\n',input,'<br>\n\n## $MSG_Output <br>\n\n',output,'<br>\n\n## $MSG_Sample_Input <br>\n',sample_input,'<br>\n\n## $MSG_Sample_Output <br>\n',sample_output,'<br>\n##  $MSG_HINT <br>\n',hint) from problem where problem_id=?",$problem_id)[0][0];
+		$prompt_user="$MSG_AI_PROMPT_USER_TITLE<br>\n".$problem."<br>\n$MSG_AI_PROMPT_USER_SOURCE\n<pre>\n".htmlentities($source)."\n</pre>\n$MSG_AI_PROMPT_USER_ERROR\n<pre>\n".htmlentities($ceinfo)."\n</pre>";
 
 	}
 
