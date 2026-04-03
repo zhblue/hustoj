@@ -817,3 +817,10 @@
 	$MSG_WEEK="Week-Rank";
 	$MSG_YEAR="Year-Rank";
 	$MSG_YEARS="years";
+	$MSG_AI_CODE_SUGGESTION_SOURCE_BROWSER="分析我可能薄弱的知識點，問我一個提示性的相關問題。";
+	$MSG_AI_CODE_SUGGESTION="不要直接給出完整代碼，只給出問題原因，讓我自己學習修改。分析我可能薄弱的知識點，問我一個提示性的相關問題，最後說一句鼓勵或安慰的話，賣個萌。";
+	$MSG_AI_PROMPT_SYS="你是一個經驗豐富的資訊學奧賽編程高手，能幫我用簡單清晰的中文，解釋我看不懂的報錯信息。如果對比中用戶的輸出為空，可能是沒有考慮到多組輸入的情況，應該使用循環處理。%s 請盡量言簡意賅，節省token消耗。";
+	$MSG_AI_INVALID_PARAM="非法參數";
+	$MSG_AI_PROMPT_USER_TITLE="題目是:";
+	$MSG_AI_PROMPT_USER_SOURCE="原始碼是:";
+	$MSG_AI_PROMPT_USER_ERROR="報錯信息是:";
