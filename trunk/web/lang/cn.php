@@ -540,4 +540,7 @@
   $MSG_AI_CODE_SUGGESTION="不要直接给出完整代码,只给出问题原因,让我自己学习修改。分析我可能薄弱的知识点，问我一个提示性的相关问题，最后说一句鼓励或安慰的话，卖个萌。";
   $MSG_AI_PROMPT_SYS="你是一个经验丰富的信息学奥赛编程高手，能帮我用简单清晰的中文，解释我看不懂的报错信息。如果对比中用户的输出为空，可能是没有考虑到多组输入的情况，应该使用循环处理。%s 请尽量言简意赅，节省token消耗。";
   $MSG_AI_INVALID_PARAM="非法参数";
+  $MSG_AI_PROMPT_USER_TITLE="题目是:";
+  $MSG_AI_PROMPT_USER_SOURCE="源代码是:";
+  $MSG_AI_PROMPT_USER_ERROR="报错信息是:";
 
