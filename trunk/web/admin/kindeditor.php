@@ -59,8 +59,9 @@ if(!kindeditorSeted){
                                 fileManagerJson : '../kindeditor/php/file_manager_json.php',
                                 allowFileManager : false,
                                 allowImageRemote: true,
+							    newlineTag: 'br',     // 让kindeditor 不要搞出一堆<p> 增加代码空行。
                                 filterMode:false,
-				pasteType:1,    // 1 纯文本粘贴 2 HTML粘贴
+				                pasteType:1,    // 1 纯文本粘贴 2 HTML粘贴
                                 cssData: 'body { font-family:"Consolas";font-size: 18px;line-height:150% }  ',
 <?php if(isset($OJ_MARKDOWN)&&$OJ_MARKDOWN)
                                 echo "designMode:false,";
