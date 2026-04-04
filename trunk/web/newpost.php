@@ -34,7 +34,7 @@ if (isset($_GET['cid'])) {
             <td width='5%' class='center'></td>
             <td width='15%' class='hidden-xs center'>
                 <?php
-                echo "<a href='../userinfo.php?user=".htmlentities($_SESSION[$OJ_NAME.'_'.'user_id'], ENT_QUOTES, 'UTF-8').'">".htmlentities($_SESSION[$OJ_NAME.'_'.'user_id'], ENT_QUOTES, 'UTF-8')."</a>";
+                echo "<a href='../userinfo.php?user=".htmlentities($_SESSION[$OJ_NAME.'_'.'user_id'], ENT_QUOTES, 'UTF-8').'>'.htmlentities($_SESSION[$OJ_NAME.'_'.'user_id'], ENT_QUOTES, 'UTF-8')."</a>";
                 ?>
             </td>
             <td colspan=2>
