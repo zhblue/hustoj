@@ -7,7 +7,7 @@
 ?>
 <?php include("template/$OJ_TEMPLATE/header.php");?>
 <?php include("include/bbcode.php");?>
-<script src="<?php echo "template/bs3/"?>marked.min.js"></script>
+<script src="<?php echo "template/syzoj/js/"?>marked.min.js"></script>
 <div class="padding">
     <h1><?php echo $news_title ?></h1>
     <div class="ui existing segment">
