@@ -41,6 +41,7 @@ cd src/install
 while ! wget -O hustoj.docker.tar.bz2  http://dl.hustoj.com/docker/hustoj.docker.tar.bz2
 do
   		echo "Download archive image file fail , try again..."
+		echo "for alternative, you can install docker and run 'docker build -t hustoj . ' in /home/judge/src/install later "
 done
 bzip2 -d hustoj.docker.tar.bz2
 docker import hustoj.docker.tar hustoj
