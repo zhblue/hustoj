@@ -12,7 +12,7 @@ require_once("../include/my_func.inc.php");
 if (isset($OJ_LANG) && file_exists("../lang/$OJ_LANG.php")) {
     require_once("../lang/$OJ_LANG.php");
 }
-if (!(isset($_SESSION[$OJ_NAME . '_' . 'administrator']))) {
+if (!(isset($_SESSION[$OJ_NAME . '_' . 'administrator'])) || $domain!=$DOMAIN  ) {
     echo "<a href='../loginpage.php'>" . (isset($MSG_Login) ? $MSG_Login : "Please Login First!") . "</a>";
     exit(1);
 }
