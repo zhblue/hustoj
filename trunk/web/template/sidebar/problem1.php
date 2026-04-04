@@ -83,7 +83,7 @@
       echo "<h4>$MSG_Sample_Output</h4><pre class=content><span class=sampledata>".($soutput)."</span></pre><br>";
     }
 
-    echo "<div class=am-g>"
+    echo "<div class=am-g>";
 		echo "<div class=am><strong>$MSG_Sample_Input</strong><pre class=content><span class=sampledata>".($soutput)."</span></pre></div>";
 		echo "<div class=am><strong>$MSG_Sample_Output</strong><pre class=content><span class=sampledata>".($soutput)."</span></pre></div>";
 		echo "</div>"

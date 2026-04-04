@@ -193,7 +193,7 @@
                             <a class="item" href="portal.php"><i class="tasks icon"></i><?php echo $MSG_TODO;?></a>
                                 <?php if ($OJ_SaaS_ENABLE){ ?>
                                 <?php if($_SERVER['HTTP_HOST']==$DOMAIN)
-                                        echo  "<a class='item' href='http://".htmlentities($_SESSION[$OJ_NAME.'_'.'user_id'], ENT_QUOTES, 'UTF-8']).".$DOMAIN'><i class='globe icon' ></i>MyOJ</a>";?>
+                                        echo  "<a class='item' href='http://".htmlentities($_SESSION[$OJ_NAME.'_'.'user_id'], ENT_QUOTES, 'UTF-8').".$DOMAIN'><i class='globe icon' ></i>MyOJ</a>";?>
                                 <?php } ?>
                             <?php if(isset($_SESSION[$OJ_NAME.'_'.'administrator'])||isset($_SESSION[$OJ_NAME.'_'.'contest_creator'])||isset($_SESSION[$OJ_NAME.'_'.'problem_editor'])){ ?>
                             <a class="item" href="admin/"><i class="settings icon"></i><?php echo $MSG_ADMIN;?></a>

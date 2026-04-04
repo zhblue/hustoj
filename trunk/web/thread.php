@@ -154,7 +154,7 @@ $isadmin = isset($_SESSION[$OJ_NAME . '_' . 'administrator']);
                 </td>
                 <td width='15%' class='center'>
                     <?php
-                    echo "<a href='../userinfo.php?user=".htmlentities($_SESSION[$OJ_NAME.'_'.'user_id'], ENT_QUOTES, 'UTF-8').'">".htmlentities($_SESSION[$OJ_NAME.'_'.'user_id'], ENT_QUOTES, 'UTF-8')."</a>";
+                    echo "<a href='../userinfo.php?user=".htmlentities($_SESSION[$OJ_NAME.'_'.'user_id'], ENT_QUOTES, 'UTF-8').'>'.hhtmlentities($_SESSION[$OJ_NAME.'_'.'user_id'], ENT_QUOTES, 'UTF-8')."</a>";
                     ?>
                 </td>
                 <td colspan=2>
