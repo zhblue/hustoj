@@ -38,13 +38,13 @@ tar xzf hustoj.tar.gz
 
 #svn co https://github.com/zhblue/hustoj/trunk/trunk/ src
 cd src/install
-while ! wget -O hustoj.docker.tar.bz2  http://dl.hustoj.com/docker/hustoj.docker.tar.bz2
+while ! wget -O hustoj.docker.tar.bz2  https://github.com/zhblue/hustoj/releases/download/19.01.1/hustoj.docker.tar.bz2
 do
   		echo "Download archive image file fail , try again..."
 done
 bzip2 -d hustoj.docker.tar.bz2
 docker import hustoj.docker.tar hustoj
-rm hustoj.docker.tar.gz
+rm hustoj.docker.tar
 mysql -h localhost -uroot < db.sql
 echo "insert into jol.privilege values('admin','administrator','true','N');"|mysql -h localhost -uroot
 # mysqladmin -u root password $DBPASS
@@ -73,7 +73,7 @@ chmod 700 etc/judge.conf
 # sed -i "s/DB_PASS=\"root\"/DB_PASS=\"$DBPASS\"/g" src/web/include/db_info.inc.php
 
 sed -i "s+//date_default_timezone_set(\"PRC\");+date_default_timezone_set(\"PRC\");+g" src/web/include/db_info.inc.php
-sed -i "s+//pdo_query(\"SET time_zone ='\+8:00'\");+pdo_query(\"SET time_zone ='\+8:00'\");+g" src/web/include/db_info.inc.php
+sed -i "s+//pdo_query(\"SET time_zone ='\\+8:00'\");+pdo_query(\"SET time_zone ='\\+8:00'\");+g" src/web/include/db_info.inc.php
 
 chmod 775 -R /home/judge/data && chgrp -R apache /home/judge/data
 chmod 700 src/web/include/db_info.inc.php
