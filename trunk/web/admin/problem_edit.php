@@ -55,7 +55,7 @@ include_once("kindeditor.php") ;
         </p>
       <p align=left>
         <?php echo "<h4>".$MSG_Description."</h4>"?>
-        <textarea class="kindeditor" rows=13 name=description cols=80><?php echo htmlentities($row['description'],ENT_QUOTES,"UTF-8")?></textarea><br>
+        <textarea class="kindeditor" rows=33 name=description cols=80><?php echo htmlentities($row['description'],ENT_QUOTES,"UTF-8")?></textarea><br>
       </p>
 
       <p align=left>
