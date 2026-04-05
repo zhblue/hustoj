@@ -156,7 +156,7 @@
 	let memory=$("input[name=memory_limit]").val();
 	preview.find("span.ui.label").eq(1).html("<?php echo $MSG_Memory_Limit ?>："+memory);
 	
-	let description=$("textarea").eq(0).val();
+	let description=$("textarea").eq(1).val();
 	preview.find("#description").html(description);
 	preview.find("#description .md").each(function(){
 		if($("#previewFrame")[0] != undefined) $("#previewFrame")[0].contentWindow.MathJax.typeset();
