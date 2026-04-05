@@ -3184,7 +3184,7 @@ function dir_list_form() {
             $entry_list[$entry_count]["name"] = $file;
             $entry_list[$entry_count]["date"] = date("Ymd", filemtime($current_dir.$file));
             $entry_list[$entry_count]["time"] = date("his", filemtime($current_dir.$file));
-            $entry_list[$entry_count]["datet"] = date("d/m/y h:i", filemtime($current_dir.$file));
+            $entry_list[$entry_count]["datet"] = date("Y-m-d h:i", filemtime($current_dir.$file));
             if ($islinux && $resolveIDs){
                 $entry_list[$entry_count]["p"] = show_perms(fileperms($current_dir.$file));
                 $entry_list[$entry_count]["u"] = get_user(fileowner($current_dir.$file));
