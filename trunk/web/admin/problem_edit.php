@@ -40,6 +40,16 @@ include_once("kindeditor.php") ;
       ?>
 
       <input type=hidden name=problem_id value='<?php echo $row['problem_id']?>'>
+  <div class="ui toggle checkbox">
+        <input type="checkbox" id="preview-toggle" checked>
+        <label for="preview-toggle">题目预览</label>
+  </div>
+        &nbsp;&nbsp;
+  <div class="ui toggle checkbox">
+        <input type="checkbox" id="full-toggle" checked>
+        <label for="full-toggle">完整结构</label>
+  </div>
+
       <p align=left>
         <center>
           <h3>
@@ -57,7 +67,7 @@ include_once("kindeditor.php") ;
         <?php echo "<h4>".$MSG_Description."</h4>"?>
         <textarea class="kindeditor" rows=33 name=description cols=80><?php echo htmlentities($row['description'],ENT_QUOTES,"UTF-8")?></textarea><br>
       </p>
-
+<span class="full" >
       <p align=left>
         <?php echo "<h4>".$MSG_Input."</h4>"?>
         <textarea class="kindeditor" rows=13 name=input cols=80><?php echo htmlentities($row['input'],ENT_QUOTES,"UTF-8")?></textarea><br>
@@ -82,7 +92,7 @@ include_once("kindeditor.php") ;
         <?php echo "<h4>".$MSG_HINT."</h4>"?>
         <textarea class="kindeditor" rows=13 name=hint cols=80><?php echo htmlentities($row['hint'],ENT_QUOTES,"UTF-8")?></textarea><br>
       </p>
-
+</span>
       <p>
         <?php echo "<h4>".$MSG_SPJ."</h4>"?>
         <?php echo "(".$MSG_HELP_SPJ.")"?><br>
@@ -110,6 +120,22 @@ include_once("kindeditor.php") ;
 
 <script src="<?php echo $OJ_CDN_URL."/template/bs3/"?>marked.min.js"></script>
 <script>
+function untransform() {
+    console.log("预览关闭");
+    // 恢复原始的 #main 元素样式
+    let main = $("#main");
+    main.addClass("padding");
+    main.css("width", "");
+    main.css("margin-left", "");
+
+    // 移除预览的 iframe
+    $("#preview").remove();
+
+  
+    // 移除同步事件
+    $("input").off('keyup', sync);
+    $("textarea").off('keyup', sync);
+}
   function transform(){
         let height=document.body.clientHeight;
         let width=parseInt(document.body.clientWidth*0.6);
@@ -183,8 +209,29 @@ include_once("kindeditor.php") ;
 	if($("#previewFrame")[0] != undefined) $("#previewFrame")[0].contentWindow.MathJax.typeset();
   }
   $(document).ready(function(){
-  	 <?php if (!(isset($OJ_OLD_FASHINED) && $OJ_OLD_FASHINED ) ) echo " transform();" ?>
   
+            // 默认开启预览功能
+           <?php if (!(isset($OJ_OLD_FASHINED) && $OJ_OLD_FASHINED )) echo " transform();" ?>
+            
+            // 监听checkbox的点击事件
+            $('#preview-toggle').change(function() {
+                if(this.checked) {
+                    transform();
+                } else {
+                    // 假设这里是关闭预览的函数
+                    untransform();
+                }
+            });
+            $('#full-toggle').change(function() {
+                if(this.checked) {
+		    if($("textarea").eq(3).val()=="") $("textarea").eq(3).val("<span class='md'>\n</span>");
+		    if($("textarea").eq(5).val()=="") $("textarea").eq(3).val("<span class='md'>\n</span>");
+                } else {
+		    if($("textarea").eq(3).val()=="<span class='md'>\n</span>") $("textarea").eq(3).val("");
+		    if($("textarea").eq(5).val()=="<span class='md'>\n</span>") $("textarea").eq(3).val("");
+                }
+		$(".full").toggle();
+            });
   }); 
 </script>
     <?php
