@@ -45,7 +45,7 @@
         </p>
         <p align=left>
           <?php echo "<h4>".$MSG_Description."(<64kB)</h4>"?>
-	  <textarea class="kindeditor" rows=13 name=description cols=80><span class='md auto_select'>&nbsp;
+	  <textarea class="kindeditor" rows=33 name=description cols=80><span class='md auto_select'>&nbsp;
 &nbsp;</span></textarea><br>
         </p>
         <p align=left>
