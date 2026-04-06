@@ -1113,7 +1113,7 @@ function _queryAll(expr, root) {
 			arr = byClass(matches[1], tag, root);
 		} else if ((matches = /\[((?:[\w\-]|\\.)+)\]/.exec(expr))) {
 			arr = byAttr(matches[1].toLowerCase(), null, tag, root);
-		} else if ((matches = /\[((?:[\w\-]|\\.)+)\s*=\s*['"]?((?:\\.|[^'"]+)+)['"]?\]/.exec(expr))) {
+		} else if ((matches = /\[((?:[\w\-]|\\.)+)\s*=\s*['"]?((?:\\.|[^'"\\])+)['"]?\]/.exec(expr))) {
 			var key = matches[1].toLowerCase(), val = matches[2];
 			if (key === 'id') {
 				arr = byId(val, tag, root);
