@@ -519,7 +519,12 @@ function admin_mod(){
 		
 		$(".md").each(function(){
 <?php if ($OJ_MARKDOWN  && $OJ_MARKDOWN=="marked.js") {?>
-			$(this).html(marked.parse($(this).html()));             // html() make > to &gt;   text() keep >
+			let htm=$(this).html();
+                        if(htm.indexOf("```")!=-1){
+                                htm=$(this).text();                     
+						}
+                        $(this).html(marked.parse(htm));
+						//$(this).html(marked.parse($(this).html()));             // html() make > to &gt;   text() keep >
 <?php }else if ($OJ_MARKDOWN  && $OJ_MARKDOWN=="markdown-it") {?>
 			const md = window.markdownit();
 			$(this).html(md.render($(this).text()));
