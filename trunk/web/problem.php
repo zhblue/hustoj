@@ -35,11 +35,11 @@ if (isset($_GET['id'])) {
     else if ($OJ_FREE_PRACTICE)
         $sql = "SELECT * FROM `problem` WHERE defunct='N' and `problem_id`=?";
     else
-        $sql = "SELECT * FROM `problem` WHERE `problem_id`=? AND `defunct`='N' AND `problem_id` NOT IN (
-				SELECT `problem_id` FROM `contest_problem` WHERE `contest_id` IN (
-					SELECT `contest_id` FROM `contest` WHERE ( `end_time`>'$now' and defunct='N' ) or `private`='1'    
-				)
-			)";        //////////  people should not see the problem used in contest before they end by modifying url in browser address bar
+        $sql = "SELECT * FROM `problem` WHERE `problem_id`=? AND `defunct`='N' AND NOT EXISTS (
+            SELECT 1 FROM `contest_problem` cp
+            INNER JOIN `contest` c ON cp.contest_id=c.contest_id
+            WHERE cp.problem_id=? AND (c.end_time>'$now' AND c.defunct='N' OR c.private='1')
+        )";        //////////  people should not see the problem used in contest before they end by modifying url in browser address bar
     /////////   if you give students opportunities to test their result out side the contest ,they can bypass the penalty time of 20 mins for
     /////////   each non-AC sumbission in contest. if you give them opportunities to view problems before exam ,they will ask classmates to write
     /////////   code for them in advance, if you want to share private contest problem to practice you should modify the contest into public
