@@ -258,6 +258,8 @@ $tsql[56]="alter table $DB_NAME.openai_task_queue add column problem_id bigint n
 $csql[56]="";
 $tsql[57]="CREATE INDEX $DB_NAME.idx_contest_user_id ON solution(contest_id,user_id,solution_id);";
 $csql[57]="";
+$tsql[58]="ALTER TABLE $DB_NAME.solution ADD INDEX idx_cid_result_num_sid (contest_id,result,num,solution_id);";
+$csql[58]="";
 
 // 删除6个月以前的非正确源码，优化数据库空间。
 // delete from source_code  where solution_id in (select solution_id from solution where result>4 and  in_date<date_sub(now(),interval 6 month) ); //

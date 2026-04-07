@@ -46,3 +46,5 @@ delimiter ;
 #create fulltext index problem_title_source_index on problem(title,source);
 
                                                                                                          
+
+CREATE INDEX idx_cid_result_num_sid ON solution(contest_id,result,num,solution_id);
