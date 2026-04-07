@@ -259,6 +259,23 @@ if ($start_first) {
 
 $view_status = array();
 
+// Performance optimization: Pre-fetch all contest problem checks at once (fix N+1 query)
+$hidden_problems_cache = array();
+if (!isset($cid) && !empty($result)) {
+    $problem_ids = array_column($result, 'problem_id');
+    if (!empty($problem_ids)) {
+        $pids_str = implode(',', array_map('intval', $problem_ids));
+        $cache_sql = "SELECT DISTINCT cp.problem_id 
+                      FROM contest_problem cp
+                      INNER JOIN contest c ON cp.contest_id = c.contest_id
+                      WHERE cp.problem_id IN ($pids_str)
+                        AND c.defunct = 'N' 
+                        AND c.end_time > NOW()";
+        $cache_result = pdo_query($cache_sql);
+        $hidden_problems_cache = array_column($cache_result, 'problem_id');
+    }
+}
+
 $last = 0;
 $avg_delay = 0;
 $total_count = 0;
@@ -313,17 +330,8 @@ for ($i = 0; $i < $rows_cnt; $i++) {
             $view_status[$i][2] = "<div class=center>";
             if (isset($cid)) {
 
-                //check the problem will be use remained contest/exam
-                $tpid = intval($row['problem_id']);
-                $sql = "SELECT `problem_id` FROM `problem` WHERE `problem_id`=? AND `problem_id` IN (
-          SELECT `problem_id` FROM `contest_problem` WHERE `contest_id` IN (
-            SELECT `contest_id` FROM `contest` WHERE (`defunct`='N' AND now()<`end_time`)
-          )
-        )";
-
-                $tresult = pdo_query($sql, $tpid);
-
-                if (intval($tresult) != 0)   //if the problem will be use remaind contes/exam
+                // Check using pre-cached results (O(1) instead of O(n) queries)
+                if (in_array($row['problem_id'], $hidden_problems_cache))
                     $view_status[$i][2] .= $PID[$row['num']]; //hide link
                 else
                     $view_status[$i][2] .= "<a href='problem.php?id=" . $row['problem_id'] . "'>" . $PID[$row['num']] . "</a>";
