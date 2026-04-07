@@ -45,7 +45,7 @@ if (isset($_GET['id'])) {
     /////////   code for them in advance, if you want to share private contest problem to practice you should modify the contest into public
 
     $pr_flag = true;
-    $result = pdo_query($sql, $id);
+    $result = pdo_query($sql, $id, $id);
 } else if (isset($_GET['cid']) && isset($_GET['pid'])) {
     //contest
     $cid = intval($_GET['cid']);
