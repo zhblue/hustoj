@@ -228,9 +228,14 @@ for ($i = 0; $i < $rows_cnt; $i++) {
     $first_blood[$row['num']] = $row['user_id'];
 }
 
-// 获取只注册但未提交的参赛用户
-$absent = mysql_query_cache("select user_id from privilege where rightstr='c$cid' and user_id not in (select distinct user_id from solution where contest_id=?)", $cid);
-$absentList = mysql_query_cache("select user_id,nick from users where user_id in (select user_id from privilege where rightstr='c$cid' and user_id not in (select distinct user_id from solution where contest_id=?))", $cid);
+// 获取只注册但未提交的参赛用户 (优化: 移除死代码,优化三层嵌套NOT IN为LEFT JOIN)
+$absentList = mysql_query_cache(
+    "SELECT u.user_id, u.nick FROM users u
+     INNER JOIN privilege p ON u.user_id = p.user_id
+     LEFT JOIN solution s ON u.user_id = s.user_id AND s.contest_id = ?
+     WHERE p.rightstr = ? AND s.user_id IS NULL",
+    $cid, "c$cid"
+);
 foreach ($absentList as $row) {
     $U[$user_cnt] = new TM();
     $U[$user_cnt]->user_id = $row['user_id'];
