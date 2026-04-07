@@ -256,6 +256,8 @@ $csql[55]="CREATE TABLE $DB_NAME.openai_task_queue (
 ) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COMMENT='异步任务队列-MyISAM版'; ";
 $tsql[56]="alter table $DB_NAME.openai_task_queue add column problem_id bigint not null default 0  after solution_id;";
 $csql[56]="";
+$tsql[57]="CREATE INDEX $DB_NAME.idx_contest_user_id ON solution(contest_id,user_id,solution_id);";
+$csql[57]="";
 
 // 删除6个月以前的非正确源码，优化数据库空间。
 // delete from source_code  where solution_id in (select solution_id from solution where result>4 and  in_date<date_sub(now(),interval 6 month) ); //
