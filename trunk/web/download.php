@@ -53,12 +53,9 @@ if (!empty($data)) {
     }
     $files = [$infile, $outfile];
 
-    $zip->open($zipname, ZipArchive::CREATE);
     foreach ($files as $file) {
-
-        $fileContent = file_get_contents($file);
-        $file = iconv('utf-8', 'GBK', basename($file));
-        $zip->addFromString($file, $fileContent);
+        $entryname = basename($file);
+        $zip->addFile($file, $entryname, 0, ZipArchive::LENGTH_TO_END, ZipArchive::FL_OVERWRITE | ZipArchive::FL_ENC_UTF_8);
     }
     $zip->close();
 
