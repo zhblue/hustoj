@@ -18,6 +18,9 @@ function write_xml($handle, $content) {
         fwrite($handle, $content . "\n");
 }
 function fixcdata($content) {
+  if ($content === null) {
+    return "";
+  }
   $content = str_replace("\x1a","",$content);   // remove some strange \x1a [SUB] char from datafile
   return str_replace("]]>","]]]]><![CDATA[>",$content);
 }
@@ -338,7 +341,7 @@ else {
 	    else if (file_exists($filecc)) {
 	      write_xml($xmlHandle, "<tpj language=\"C++\"><![CDATA[");
 	      write_xml($xmlHandle, fixcdata(file_get_contents ($filecc )));
-	      write_xml($xmlHandle, "]]></tpj>)");
+	      write_xml($xmlHandle, "]]></tpj>");
 	    }
 	  }else if ($row['spj'] == 2){
 	     write_xml($xmlHandle, "<spj language=\"Text\">text judge</spj>");
@@ -361,7 +364,9 @@ else {
         header("Content-Type: application/zip");
         header("Content-Disposition: attachment; filename=export_".$_SESSION[$OJ_NAME.'_'.'user_id']."_".$filename."_".date('YmdHis').".zip");
         header("Content-Length: " . filesize($zipPath));
-	ob_clean();
+        if (ob_get_level() > 0) {
+            ob_clean();
+        }
 	flush();
         readfile($zipPath);
 

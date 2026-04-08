@@ -266,8 +266,8 @@ $tsql[60]="CREATE INDEX $DB_NAME.idx_contest_result ON solution(contest_id,resul
 $csql[60]="";
 $tsql[61]="CREATE INDEX $DB_NAME.idx_contest_num ON solution(contest_id,num,result);";
 $csql[61]="";
-$tsql[58]="ALTER TABLE $DB_NAME.solution ADD INDEX idx_cid_result_num_sid (contest_id,result,num,solution_id);";
-$csql[58]="";
+$tsql[62]="ALTER TABLE $DB_NAME.solution ADD INDEX idx_cid_result_num_sid (contest_id,result,num,solution_id);";
+$csql[62]="";
 
 // 删除6个月以前的非正确源码，优化数据库空间。
 // delete from source_code  where solution_id in (select solution_id from solution where result>4 and  in_date<date_sub(now(),interval 6 month) ); //
