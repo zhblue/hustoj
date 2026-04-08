@@ -11,7 +11,7 @@ if(isset($OJ_LOG_ENABLED) && $OJ_LOG_ENABLED){
 ?>
 <!DOCTYPE html>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link rel=stylesheet href='../include/hoj.css' type="text/css">
+<link rel=stylesheet href='../template/bs3/bootstrap.min.css' type="text/css">
 <script src="../template/bs3/jquery.min.js"></script>
 <script>
 $("document").ready(function (){
