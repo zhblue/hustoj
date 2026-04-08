@@ -31,10 +31,13 @@ if (isset($_GET['id'])) {
     $used_in_contests = pdo_query($sql, $id);
 
     if (isset($_SESSION[$OJ_NAME . '_' . 'administrator']) || isset($_SESSION[$OJ_NAME . '_' . 'problem_verifiter']) || isset($_SESSION[$OJ_NAME . '_' . 'contest_creator']) || isset($_SESSION[$OJ_NAME . '_' . 'problem_editor']))
-        $sql = "SELECT * FROM `problem` WHERE `problem_id`=?";
-    else if ($OJ_FREE_PRACTICE)
+	{
+		$sql = "SELECT * FROM `problem` WHERE `problem_id`=?";
+		$result = pdo_query($sql, $id);
+	}else if ($OJ_FREE_PRACTICE){
         $sql = "SELECT * FROM `problem` WHERE defunct='N' and `problem_id`=?";
-    else
+		$result = pdo_query($sql, $id);
+	}else{
         $sql = "SELECT * FROM `problem` WHERE `problem_id`=? AND `defunct`='N' AND NOT EXISTS (
             SELECT 1 FROM `contest_problem` cp
             INNER JOIN `contest` c ON cp.contest_id=c.contest_id
@@ -43,9 +46,10 @@ if (isset($_GET['id'])) {
     /////////   if you give students opportunities to test their result out side the contest ,they can bypass the penalty time of 20 mins for
     /////////   each non-AC sumbission in contest. if you give them opportunities to view problems before exam ,they will ask classmates to write
     /////////   code for them in advance, if you want to share private contest problem to practice you should modify the contest into public
-
+		$result = pdo_query($sql, $id, $id);
+	}
     $pr_flag = true;
-    $result = pdo_query($sql, $id, $id);
+    
 } else if (isset($_GET['cid']) && isset($_GET['pid'])) {
     //contest
     $cid = intval($_GET['cid']);
