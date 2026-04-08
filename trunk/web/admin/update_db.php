@@ -258,6 +258,14 @@ $tsql[56]="alter table $DB_NAME.openai_task_queue add column problem_id bigint n
 $csql[56]="";
 $tsql[57]="CREATE INDEX $DB_NAME.idx_contest_user_id ON solution(contest_id,user_id,solution_id);";
 $csql[57]="";
+$tsql[58]="CREATE INDEX $DB_NAME.idx_uid_pid ON solution(user_id,problem_id);";
+$csql[58]="";
+$tsql[59]="CREATE INDEX $DB_NAME.idx_uid_pid_res ON solution(user_id,problem_id,result);";
+$csql[59]="";
+$tsql[60]="CREATE INDEX $DB_NAME.idx_contest_result ON solution(contest_id,result);";
+$csql[60]="";
+$tsql[61]="CREATE INDEX $DB_NAME.idx_contest_num ON solution(contest_id,num,result);";
+$csql[61]="";
 $tsql[58]="ALTER TABLE $DB_NAME.solution ADD INDEX idx_cid_result_num_sid (contest_id,result,num,solution_id);";
 $csql[58]="";
 

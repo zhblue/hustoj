@@ -9,6 +9,10 @@ CREATE TABLE IF NOT EXISTS solution_ai_answer ( solution_id int not null default
 CREATE INDEX idx_solution_in_date ON solution(in_date);
 CREATE INDEX idx_contest_user_id ON solution(contest_id,user_id,solution_id);
 CREATE INDEX idx_cid_result_num_sid ON solution(contest_id,result,num,solution_id);
+CREATE INDEX idx_uid_pid ON solution(user_id,problem_id);
+CREATE INDEX idx_uid_pid_res ON solution(user_id,problem_id,result);
+CREATE INDEX idx_contest_result ON solution(contest_id,result);
+CREATE INDEX idx_contest_num ON solution(contest_id,num,result);
 CREATE TABLE `openai_task_queue` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT COMMENT '自增主键',
   `user_id` varchar(40) NOT NULL DEFAULT '',
