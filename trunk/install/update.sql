@@ -8,6 +8,7 @@ alter table solution add index fst(first_time);
 CREATE TABLE IF NOT EXISTS solution_ai_answer ( solution_id int not null default 0, answer mediumtext ,primary key (solution_id)) charset utf8mb4;
 CREATE INDEX idx_solution_in_date ON solution(in_date);
 CREATE INDEX idx_contest_user_id ON solution(contest_id,user_id,solution_id);
+CREATE INDEX idx_cid_result_num_sid ON solution(contest_id,result,num,solution_id);
 CREATE TABLE `openai_task_queue` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT COMMENT '自增主键',
   `user_id` varchar(40) NOT NULL DEFAULT '',
@@ -47,4 +48,4 @@ delimiter ;
 
                                                                                                          
 
-CREATE INDEX idx_cid_result_num_sid ON solution(contest_id,result,num,solution_id);
+
