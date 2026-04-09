@@ -1,4 +1,4 @@
-@import url('../../../bootstrap/css/bootstrap.min.css');
+@import url('../../bs3/bootstrap.min.css');
 @import url('white.css');
 .ui.header,
 .ui.button,
