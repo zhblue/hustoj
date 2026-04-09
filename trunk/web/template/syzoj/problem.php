@@ -648,6 +648,7 @@ function admin_mod(){
 	    transform();
 	<?php }?>
 	    admin_mod();
+	    MathJax.typeset(); 
 
   });
   </script>   
