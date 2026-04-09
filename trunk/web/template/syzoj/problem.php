@@ -24,15 +24,6 @@ div[class*=ace_br] {
 
 </style>
 <script src="<?php echo $OJ_CDN_URL.$path_fix."template/$OJ_TEMPLATE/"?>clipboard.min.js"></script>
-<script src="<?php echo $OJ_CDN_URL.$path_fix."template/syzoj/js/"?>marked.min.js"></script>
-<script src="<?php echo $OJ_CDN_URL.$path_fix."template/syzoj/js/"?>markdown-it.min.js"></script>
-<link href='<?php echo $OJ_CDN_URL?>highlight/styles/shCore.css' rel='stylesheet' type='text/css'/>
-<link href='<?php echo $OJ_CDN_URL?>highlight/styles/shThemeDefault.css' rel='stylesheet' type='text/css'/>
-<script src='<?php echo $OJ_CDN_URL?>highlight/scripts/shCore.js' type='text/javascript'></script>
-<script src='<?php echo $OJ_CDN_URL?>highlight/scripts/shBrushCpp.js' type='text/javascript'></script>
-<script src='<?php echo $OJ_CDN_URL?>highlight/scripts/shBrushJava.js' type='text/javascript'></script>
-<script src='<?php echo $OJ_CDN_URL?>highlight/scripts/shBrushPython.js' type='text/javascript'></script>
-<script src='<?php echo $OJ_CDN_URL?>highlight/scripts/shBrushCSharp.js' type='text/javascript'></script>
 
 <div class="padding ">
 <div class="ui center aligned grid">
@@ -442,12 +433,29 @@ $(document).ready(function() {
   });
 
 
- SyntaxHighlighter.all(); 
   </script>
 
     
 <?php include("template/$OJ_TEMPLATE/footer.php");?>
 
+<link rel="stylesheet" href="<?php echo $OJ_CDN_URL.$path_fix."template/$OJ_TEMPLATE/css/"?>highlight.css">
+<script src="<?php echo $OJ_CDN_URL.$path_fix."template/$OJ_TEMPLATE/js/"?>highlight.min.js"></script>
+<script src="<?php echo $OJ_CDN_URL.$path_fix."template/$OJ_TEMPLATE/js/"?>marked.umd.js"></script>
+<script src="<?php echo $OJ_CDN_URL.$path_fix."template/$OJ_TEMPLATE/js/"?>marked-highlight.umd.js"></script>
+<script> 
+ const { Marked } = globalThis.marked;
+ const { markedHighlight } = globalThis.markedHighlight;
+const marked = new Marked(
+  markedHighlight({
+	emptyLangClass: 'hljs',
+    langPrefix: 'hljs language-',
+    highlight(code, lang, info) {
+      const language = hljs.getLanguage(lang) ? lang : 'plaintext';
+      return hljs.highlight(code, { language }).value;
+    }
+  })
+);
+</script>
   <script>
 function phpfm(pid){
     //alert(pid);
@@ -520,14 +528,12 @@ function admin_mod(){
 		$(".md").each(function(){
 <?php if ($OJ_MARKDOWN  && $OJ_MARKDOWN=="marked.js") {?>
 			let htm=$(this).html();
+			let cur=$(this);
                         if(htm.indexOf("```")!=-1){
                                 htm=$(this).text();                     
-						}
-                        $(this).html(marked.parse(htm));
+			}
+			marked.parse(htm).then(html => { cur.html(html); });
 						//$(this).html(marked.parse($(this).html()));             // html() make > to &gt;   text() keep >
-<?php }else if ($OJ_MARKDOWN  && $OJ_MARKDOWN=="markdown-it") {?>
-			const md = window.markdownit();
-			$(this).html(md.render($(this).text()));
 <?php } ?>
 		});
 	  	// adding note for ```input1  ```output1 in description
