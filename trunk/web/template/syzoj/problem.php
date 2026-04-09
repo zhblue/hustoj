@@ -701,13 +701,14 @@ $(document).ready(function () {
 </script>
 <?php if (isset($OJ_MATHJAX)&&$OJ_MATHJAX){?>
     <!--以下为了加载公式的使用而既加入-->
+<script id="MathJax-script" async src="template/syzoj/js/tex-chtml.js"></script>
 <script>
   MathJax = {
     tex: {inlineMath: [['$', '$'], ['\\(', '\\)']]}
   };
 </script>
 
-<script id="MathJax-script" async src="template/syzoj/js/tex-chtml.js"></script>
+
 <style>
 .jumbotron1{
   font-size: 18px;
