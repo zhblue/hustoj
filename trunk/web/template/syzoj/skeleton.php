@@ -7,8 +7,31 @@
 	<?php echo $view_content; ?> 
 </span>
 
-<script src="<?php echo $OJ_CDN_URL.$path_fix."template/$OJ_TEMPLATE/js/"?>marked.min.js"></script>
+ 
+<link rel="stylesheet" href="<?php echo $OJ_CDN_URL.$path_fix."template/$OJ_TEMPLATE/css/"?>highlight.css">
+<script src="<?php echo $OJ_CDN_URL.$path_fix."template/$OJ_TEMPLATE/js/"?>highlight.min.js"></script>
+<script src="<?php echo $OJ_CDN_URL.$path_fix."template/$OJ_TEMPLATE/js/"?>marked.umd.js"></script>
+<script src="<?php echo $OJ_CDN_URL.$path_fix."template/$OJ_TEMPLATE/js/"?>marked-highlight.umd.js"></script>
 <script> 
+ const { Marked } = globalThis.marked;
+ const { markedHighlight } = globalThis.markedHighlight;
+const marked = new Marked(
+  markedHighlight({
+	emptyLangClass: 'hljs',
+    langPrefix: 'hljs language-',
+    highlight(code, lang, info) {
+      const language = hljs.getLanguage(lang) ? lang : 'plaintext';
+      return hljs.highlight(code, { language }).value;
+    }
+  })
+);
+
+
+console.log(marked.parse(`
+\`\`\`javascript
+const highlight = "code";
+\`\`\`
+`));
          $(document).ready(function(){
 		$(".md").each(function(){
 			$(this).html(marked.parse($(this).html()));             // html() make > to &gt;   text() keep >
