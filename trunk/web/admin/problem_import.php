@@ -69,6 +69,7 @@
     <form class='form-inline' action='problem_import_xml.php' method=post enctype="multipart/form-data">
       <div class='form-group'>
         <input class='form-control' type=file name=fps>
+		 problem_editor:<input class='form-control' type=text name='user_id' value='<?php echo htmlentities($_SESSION[$OJ_NAME.'_user_id'])?>' >
         <button class='btn btn-success btn-sm' type=submit>Upload to HUSTOJ</button>
       </div>
       <?php require("../include/set_post_key.php");?>
