@@ -223,14 +223,18 @@ function untransform() {
                 }
             });
             $('#full-toggle').change(function() {
-                if(this.checked) {
-		    if($("textarea").eq(3).val()=="") $("textarea").eq(3).val("<span class='md'>\n</span>");
-		    if($("textarea").eq(5).val()=="") $("textarea").eq(3).val("<span class='md'>\n</span>");
-                } else {
-		    if($("textarea").eq(3).val()=="<span class='md'>\n</span>") $("textarea").eq(3).val("");
-		    if($("textarea").eq(5).val()=="<span class='md'>\n</span>") $("textarea").eq(3).val("");
-                }
 		$(".full").toggle();
+                if(this.checked) {
+		    if($("textarea").eq(3).val().trim()=="") $("textarea").eq(2).val("<span class='md'>\n</span>");
+		    if($("textarea").eq(5).val().trim()=="") $("textarea").eq(4).val("<span class='md'>\n</span>");
+		    if($("textarea").eq(9).val().trim()=="") $("textarea").eq(8).val("<span class='md'>\n</span>");
+		    console.log("trim["+$("textarea").eq(8).val()+"]");
+                } else {
+		    if($("textarea").eq(3).val().trim()=="<span class='md'>\n</span>") $("textarea").eq(2).val("");
+		    if($("textarea").eq(5).val().trim()=="<span class='md'>\n</span>") $("textarea").eq(4).val("");
+		    if($("textarea").eq(9).val().trim()=="<span class='md'>\n</span>") $("textarea").eq(8).val("");
+		    console.log("trim["+$("textarea").eq(8).val()+"]");
+                }
             });
   }); 
 </script>
