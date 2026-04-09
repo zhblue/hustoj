@@ -532,7 +532,7 @@ function admin_mod(){
                         if(htm.indexOf("```")!=-1){
                                 htm=$(this).text();                     
 			}
-			marked.parse(htm).then(html => { cur.html(html); });
+			marked.parse(htm).then(html => { cur.html(html); MathJax.typeset(); });
 						//$(this).html(marked.parse($(this).html()));             // html() make > to &gt;   text() keep >
 <?php } ?>
 		});
@@ -701,14 +701,14 @@ $(document).ready(function () {
 </script>
 <?php if (isset($OJ_MATHJAX)&&$OJ_MATHJAX){?>
     <!--以下为了加载公式的使用而既加入-->
-<script id="MathJax-script" async src="template/syzoj/js/tex-chtml.js"></script>
 <script>
   MathJax = {
+    startup : { typeset: false  } ,
     tex: {inlineMath: [['$', '$'], ['\\(', '\\)']]}
   };
 </script>
 
-
+<script id="MathJax-script" async src="template/syzoj/js/tex-chtml.js"></script>
 <style>
 .jumbotron1{
   font-size: 18px;
