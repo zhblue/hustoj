@@ -285,7 +285,7 @@ for ($i = 0; $i < $user_cnt; $i++) {
     if (strpos($_SERVER['HTTP_USER_AGENT'], 'MSIE')) {
         $U[$i]->nick = iconv("utf8", "gbk", $U[$i]->nick);
     }
-    $nick = $row['nick'];
+    $nick = $U[$i]->nick;
     if (preg_match('/^[=+-@]/', $nick)) {
     $nick = "'" . $nick;
     }
