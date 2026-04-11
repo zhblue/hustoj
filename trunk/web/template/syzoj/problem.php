@@ -532,7 +532,11 @@ function admin_mod(){
                         if(htm.indexOf("```")!=-1){
                                 htm=$(this).text();                     
 			}
-			marked.parse(htm).then(html => { cur.html(html); MathJax.typeset(); });
+			marked.parse(htm).then(html => { 
+				cur.html(html); 
+				MathJax.typeset(); 
+
+			});
 						//$(this).html(marked.parse($(this).html()));             // html() make > to &gt;   text() keep >
 <?php } ?>
 		});
@@ -559,6 +563,16 @@ function admin_mod(){
         });
 	        
 	<?php } ?>
+	<?php if (  ($row['spj']>1 || isset($_GET['sid']) || (isset($OJ_AUTO_SHOW_OFF)&&$OJ_AUTO_SHOW_OFF)  )  && !isset($_GET['spa']) ){?>
+	    transform();
+	<?php }?>
+	admin_mod(); 
+	MathJax.typeset();
+	window.setTimeout("generateAutoSelect();",1000);
+
+  });
+function generateAutoSelect(){
+
 	        //单纯文本1. A. B. C. D. 自动变控件
         $('span[class=auto_select]').each(function(){
                 let i=1;
@@ -644,13 +658,8 @@ function admin_mod(){
                 });
                 selectMulti(num,answer);
         }).css("width","24px").css("height","21px");
-	<?php if (  ($row['spj']>1 || isset($_GET['sid']) || (isset($OJ_AUTO_SHOW_OFF)&&$OJ_AUTO_SHOW_OFF)  )  && !isset($_GET['spa']) ){?>
-	    transform();
-	<?php }?>
-	    admin_mod();
-	    MathJax.typeset(); 
 
-  });
+}
   </script>   
 
 
