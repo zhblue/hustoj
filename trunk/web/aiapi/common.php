@@ -3,25 +3,16 @@ if(basename($_SERVER['PHP_SELF'])!=="cron.php"){
 
 	$http_referer =basename(parse_url( $_SERVER['HTTP_REFERER'])['path']);
 	if((isset($_SESSION[$OJ_NAME.'_administrator'])|| isset($_SESSION[$OJ_NAME.'_problem_editor']) ) ){
-		    $role="有20年Linux运维经验的网络工程师";
 			$keyword="Linux运维";
-			if( basename($http_referer)=="news_add_page.php"){
+		if( basename($http_referer)=="news_add_page.php"){
 				$title=$_GET['title'];
 				$prompt_sys=file_get_contents(dirname(__FILE__)."/news.md"); 
-			if($title==""){
-				$prompt_sys.="你可以想出一些有趣的标题。你言简意赅，只做非常简练的回答，不做任何解释。这个标题不会包含任何的markdown标记,长度不要超过30字符,可以随机的采用某一句诗词或者游戏的名字，或者上市公司的简称，用广为人知的梗替换诗句中的名词。";
-				$prompt_user="想一个$keyword的吸引人的标题,随机挑选一个$keyword学习主题，不局限于某种算法，只要一个标题，不要多余的解释，只要标题，不要超过20个字" ;
-			}else{
-				$prompt_sys.="
-	# Output Format
-	请按以下格式输出：
-	### [主题标题]
-	- **核心技术栈**：(例如: eBPF, Prometheus, Ansible)
-	- **目标读者**：(初级/中级/高级运维)
-	- **内容要点**：(3-4个核心知识点)";
-				$prompt_user="写一篇$keyword公众号文，题目是:".$title ."，不要多余的解释,不要'好的，这是你要的....'，我需要直接复制粘贴到公众号后台中使用,所以只需要文章本身，从$title\n--开始";
-
-			}
+				if($title==""){
+					$prompt_sys.="你可以想出一些有趣的标题。你言简意赅，只做非常简练的回答，不做任何解释。这个标题不会包含任何的markdown标记,长度不要超过30字符,可以随机的采用某一句诗词或者游戏的名字，或者上市公司的简称，用广为人知的梗替换诗句中的名词。";
+					$prompt_user="想一个$keyword的吸引人的标题,随机挑选一个$keyword学习主题，不局限于某种算法，只要一个标题，不要多余的解释，只要标题，不要超过20个字" ;
+				}else{
+					$prompt_user="写一篇$keyword公众号文，题目是:".$title ."，不要多余的解释,不要'好的，这是你要的....'，我需要直接复制粘贴到公众号后台中使用,所以只需要文章本身，从$title\n--开始";
+				}
 		}else if(str_starts_with( basename($http_referer),"phpfm.php")|| str_starts_with( basename($http_referer),"submitpage.php") ){
 		$table=false;
 		$pid=intval($_GET['pid']);
