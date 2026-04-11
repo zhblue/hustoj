@@ -165,14 +165,14 @@ document.addEventListener('keydown', function(e) {
     <div class="column">
       <h4 class="ui top attached block header"><?php if(!(str_contains($row['description'],"问题描述")|| str_contains($row['description'],$MSG_Description))) echo $MSG_Description?></h4>
       <div id="description" class="ui bottom attached segment font-content">
-		<?php if (str_contains($row['description'],"md auto_select"))echo $row['description']; else echo  bbcode_to_html($row['description']); ?></div>
+		<?php if (str_contains($row['description'],"md auto_select")|| str_contains($row['description'],"<svg") )echo $row['description']; else echo  bbcode_to_html($row['description']); ?></div>
     </div>
   </div>
   <?php if($row['input']||isset($_GET['spa'])){ ?>
     <div class="row">
       <div class="column">
           <h4 class="ui top attached block header"><?php echo $MSG_Input?></h4>
-          <div id='input' class="ui bottom attached segment font-content"><?php echo bbcode_to_html($row['input']); ?></div>
+          <div id='input' class="ui bottom attached segment font-content"><?php echo str_contains($row['input'],"<svg")?$row['input']:bbcode_to_html($row['input']); ?></div>
       </div>
     </div>
   <?php }?>
@@ -180,7 +180,7 @@ document.addEventListener('keydown', function(e) {
     <div class="row">
         <div class="column">
           <h4 class="ui top attached block header"><?php echo $MSG_Output?></h4>
-          <div id='output' class="ui bottom attached segment font-content"><?php echo bbcode_to_html($row['output']); ?></div>
+          <div id='output' class="ui bottom attached segment font-content"><?php echo str_contains($row['output'],"<svg")?$row['output']: bbcode_to_html($row['output']); ?></div>
         </div>
     </div>
   <?php }?>
@@ -222,7 +222,7 @@ document.addEventListener('keydown', function(e) {
     <div class="row">
         <div class="column">
           <h4 class="ui top attached block header"><?php echo $MSG_HINT?></h4>
-          <div id='hint' class="ui bottom attached segment font-content hint"><?php echo bbcode_to_html($row['hint']); ?></div>
+          <div id='hint' class="ui bottom attached segment font-content hint"><?php echo str_contains($row['hint'],"<svg")?$row['hint']:bbcode_to_html($row['hint']); ?></div>
         </div>
     </div>
   <?php }?>
