@@ -535,6 +535,9 @@ function admin_mod(){
 			marked.parse(htm).then(html => { 
 				cur.html(html); 
 				MathJax.typeset(); 
+				<?php if ( $row['spj']>1 ){?>
+					window.setTimeout("generateMarkdownAutoSelect();",100);
+				<?php }?>
 
 			});
 						//$(this).html(marked.parse($(this).html()));             // html() make > to &gt;   text() keep >
@@ -568,13 +571,15 @@ function admin_mod(){
 	<?php }?>
 	admin_mod(); 
 	MathJax.typeset();
+
 	<?php if ( $row['spj']>1 ){?>
-		window.setTimeout("generateAutoSelect();",1000);
+		window.setTimeout("generateAutoSelect();",100);
 	<?php }?>
-
   });
+var did_auto_select=false;
 function generateAutoSelect(){
-
+	if(did_auto_select) return;
+	else did_auto_select=true;
 	        //单纯文本1. A. B. C. D. 自动变控件
         $('span[class=auto_select]').each(function(){
                 let i=1;
@@ -611,8 +616,28 @@ function generateAutoSelect(){
                 $(this).html(raw);
         });
 
+        $(".auto_select").find('input[type="text"]').change(function(){
+                selectOne($(this).attr("name"),$(this).val());
+        });
+
+
+        $('input[type="radio"]').click(function(){
+                if ($(this).is(':checked'))
+                   selectOne($(this).attr("name"),$(this).val());
+        }).css("width","24px").css("height","21px");
+	$('input[type="checkbox"]').click(function(){
+                let num=$(this).attr("name");
+                let answer="";
+                $("input[type=checkbox][name="+num+"]").each(function(){
+                        if ($(this).is(':checked'))
+                                answer+=$(this).val();
+                });
+                selectMulti(num,answer);
+        }).css("width","24px").css("height","21px");
+}
+function generateMarkdownAutoSelect(){
 // subjective problems from hydroOJ markdown and embeded marks
-               $('span[class="md auto_select"]').each(function(){
+        $('span[class="md auto_select"]').each(function(){
                 let i=1;
                 let options=['A','B','C','D','E','F','G'];
                 $(this).find("ul").each(function(){
