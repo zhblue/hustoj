@@ -120,7 +120,7 @@ class BBCode
 // 定义正则表达式
 //$regex = '/<(?!div)/';
 //$input = preg_replace($regex, '&lt;', $input);
-	  
+	if(empty($input)) return "";	  
 	//尝试自动修复有问题的html片段
     $dom = new DOMDocument();
     // 使用 @ 抑制非标准 HTML5 标签引发的警告
