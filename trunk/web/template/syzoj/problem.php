@@ -568,7 +568,9 @@ function admin_mod(){
 	<?php }?>
 	admin_mod(); 
 	MathJax.typeset();
-	window.setTimeout("generateAutoSelect();",1000);
+	<?php if ( $row['spj']>1 ){?>
+		window.setTimeout("generateAutoSelect();",1000);
+	<?php }?>
 
   });
 function generateAutoSelect(){
