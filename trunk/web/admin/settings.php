@@ -86,7 +86,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         'OJ_CONTEST_RANK_FIX_HEADER','OJ_OI_MODE','OJ_OI_1_SOLUTION_ONLY',
         'OJ_CE_PENALTY','OJ_APPENDCODE','OJ_OFFLINE_ZIP_CCF_DIRNAME',
         'OJ_NOIP_HINT','OJ_DL_1ST_WA_ONLY','OJ_RECENT_CONTEST',
-        'OJ_REMOTE_JUDGE',
+        'OJ_REMOTE_JUDGE','OJ_NICK_IMMUTABLE',
     ];
 
     // 如果开启了 SaaS 模式，阻止 SMTP_PASS 被保存（表单不显示，但 POST 可能带值）
@@ -424,6 +424,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             ['OJ_LOG_USER_ENABLED', '日志中记录用户ID'],
             ['OJ_LOG_URL_ENABLED', '日志中记录URL'],
             ['OJ_LOG_TRACE_ENABLED', '记录 TRACE 日志'],
+            ['OJ_NICK_IMMUTABLE', '昵称不可自行修改（管理员可在用户列表双击修改）'],
         ];
         foreach ($bool_sec as $b) {
             echo '<div class="row">';
