@@ -83,18 +83,16 @@ else $password = pwGen($_POST['npassword']);
 $nick = htmlentities($nick, ENT_QUOTES, "UTF-8");
 $school = (htmlentities($school, ENT_QUOTES, "UTF-8"));
 $email = (htmlentities($email, ENT_QUOTES, "UTF-8"));
-$sql = "UPDATE `users` SET"
-    . "`password`=?,"
-    . "`nick`=?,"    //注释此行  +   删除94行的,$nick +  注释97行   ->   禁用昵称修改
-    . "`school`=?,"
-    . "`email`=?"
-    . "WHERE `user_id`=?";
-//echo $sql;
-//exit(0);
-pdo_query($sql, $password, $nick, $school, $email, $user_id);
-if ($nick != "") {
-    $sql = "update solution set nick=? where user_id=?";
-    pdo_query($sql, $nick, $user_id);
+if(isset($OJ_NICK_IMMUTABLE)&&$OJ_NICK_IMMUTABLE){
+    $sql = "UPDATE `users` SET `password`=?,`school`=?,`email`=? WHERE `user_id`=?";
+    pdo_query($sql, $password , $school, $email, $user_id);
+}else{
+    $sql = "UPDATE `users` SET `password`=?,`nick`=?,`school`=?,`email`=? WHERE `user_id`=?";
+    pdo_query($sql, $password, $nick, $school, $email, $user_id);
+    if ($nick != "") {
+        $sql = "update solution set nick=? where user_id=?";
+        pdo_query($sql, $nick, $user_id);
+    }
 }
 header("Location: ./");
 ?>
