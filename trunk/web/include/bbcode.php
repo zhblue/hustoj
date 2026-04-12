@@ -125,7 +125,7 @@ class BBCode
     $dom = new DOMDocument();
     // 使用 @ 抑制非标准 HTML5 标签引发的警告
     @$dom->loadHTML(mb_convert_encoding($input, 'HTML-ENTITIES', 'UTF-8'), LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
-    $input=$dom->saveHTML();
+    // $input=$dom->saveHTML();
 
     // split input string into array using regex, UTF-8 aware
     //  this should give us tokens to work with
