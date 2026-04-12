@@ -77,7 +77,6 @@ if ($err_cnt > 0) {
     echo $err_str;
     print "');\n history.go(-1);\n</script>";
     exit(0);
-
 }
 if (strlen($_POST['npassword']) == 0) $password = pwGen($_POST['opassword']);
 else $password = pwGen($_POST['npassword']);
