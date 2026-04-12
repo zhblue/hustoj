@@ -10,10 +10,12 @@
                     <input class="form-control" placeholder="<?php echo $MSG_Input.$MSG_USER_ID?>"  disabled="disabled" type="text" value="<?php echo htmlentities($_SESSION[$OJ_NAME.'_'.'user_id'])?>">
                 </div>
                 <?php require_once('./include/set_post_key.php');?>
+                <?php if (!(isset($OJ_NICK_IMMUTABLE) && $OJ_NICK_IMMUTABLE)) { ?>
                 <div class="field">
                     <label for="username"><?php echo $MSG_NICK?>*</label>
                     <input name="nick" placeholder="<?php echo $MSG_Input.$MSG_NICK?>" type="text" value="<?php echo htmlentities($row['nick'],ENT_QUOTES,"UTF-8")?>">
                 </div>
+                <?php } ?>                                                                   
                 <div class="field">
                     <label class="ui header"><?php echo $MSG_PASSWORD?>*</label>
                       <input name="opassword" placeholder="<?php echo $MSG_Input.$MSG_PASSWORD?>" type="password">
