@@ -616,24 +616,7 @@ function generateAutoSelect(){
                 $(this).html(raw);
         });
 
-        $(".auto_select").find('input[type="text"]').change(function(){
-                selectOne($(this).attr("name"),$(this).val());
-        });
-
-
-        $('input[type="radio"]').click(function(){
-                if ($(this).is(':checked'))
-                   selectOne($(this).attr("name"),$(this).val());
-        }).css("width","24px").css("height","21px");
-	$('input[type="checkbox"]').click(function(){
-                let num=$(this).attr("name");
-                let answer="";
-                $("input[type=checkbox][name="+num+"]").each(function(){
-                        if ($(this).is(':checked'))
-                                answer+=$(this).val();
-                });
-                selectMulti(num,answer);
-        }).css("width","24px").css("height","21px");
+	bindSelect();
 }
 function generateMarkdownAutoSelect(){
 // subjective problems from hydroOJ markdown and embeded marks
@@ -665,7 +648,9 @@ function generateMarkdownAutoSelect(){
                 html=html.replaceAll("＞","&gt;");
                 $(this).html(html);
         });
-
+	bindSelect();
+}
+function bindSelect(){
 
         $(".auto_select").find('input[type="text"]').change(function(){
                 selectOne($(this).attr("name"),$(this).val());
@@ -687,6 +672,9 @@ function generateMarkdownAutoSelect(){
         }).css("width","24px").css("height","21px");
 
 }
+
+
+
   </script>   
 
 
@@ -741,7 +729,7 @@ $(document).ready(function () {
 <script>
   MathJax = {
     startup : { typeset: false  } ,
-    tex: {inlineMath: [['$', '$'], ['\\(', '\\)']]}
+    tex: {inlineMath: [['$', '$'], ['\(', '\)']]}
   };
 </script>
 
