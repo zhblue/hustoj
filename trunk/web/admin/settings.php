@@ -424,7 +424,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             ['OJ_LOG_USER_ENABLED', '日志中记录用户ID'],
             ['OJ_LOG_URL_ENABLED', '日志中记录URL'],
             ['OJ_LOG_TRACE_ENABLED', '记录 TRACE 日志'],
-            ['OJ_NICK_IMMUTABLE', '昵称不可自行修改（管理员可在用户列表双击修改）'],
+            ['OJ_NICK_IMMUTABLE', '昵称不可自行修改<br>（管理员可在用户列表双击修改）'],
         ];
         foreach ($bool_sec as $b) {
             echo '<div class="row">';
