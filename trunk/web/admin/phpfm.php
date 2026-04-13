@@ -3086,7 +3086,7 @@ function tips($filename) {
     } elseif ($lower === 'main.cc') {
         return '标准C++程序';
     } elseif ($lower === 'gen.py') {
-        return '测试输入数据生成器Python脚本';
+        return '输入数据生成器Python脚本';
     } elseif ($lower === 'solution.name') {
         return '强制上传文件方式提交答案，内含规定文件名';
     } elseif ($lower === 'input.name') {
