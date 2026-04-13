@@ -168,7 +168,7 @@ document.addEventListener('keydown', function(e) {
 		<?php if (str_contains($row['description'],"md auto_select")|| str_contains($row['description'],"<svg") )echo $row['description']; else echo  bbcode_to_html($row['description']); ?></div>
     </div>
   </div>
-  <?php if($row['input']||isset($_GET['spa'])){ ?>
+  <?php if(!(empty($row['input']) || $row['input']=="<span class='md'>\n</span>" )||isset($_GET['spa'])){ ?>
     <div class="row">
       <div class="column">
           <h4 class="ui top attached block header"><?php echo $MSG_Input?></h4>
@@ -176,7 +176,7 @@ document.addEventListener('keydown', function(e) {
       </div>
     </div>
   <?php }?>
-  <?php if($row['output']||isset($_GET['spa'])){ ?>
+  <?php if(!(empty($row['output']) || $row['output']=="<span class='md'>\n</span>" )||isset($_GET['spa'])){ ?>
     <div class="row">
         <div class="column">
           <h4 class="ui top attached block header"><?php echo $MSG_Output?></h4>
@@ -218,7 +218,7 @@ document.addEventListener('keydown', function(e) {
         </div>
     </div>
   <?php }?>
-  <?php if($row['hint']||isset($_GET['spa'])){ ?>
+  <?php if(!(empty($row['hint']) || $row['hint']=="<span class='md'>\n</span>" )||isset($_GET['spa'])){ ?>
     <div class="row">
         <div class="column">
           <h4 class="ui top attached block header"><?php echo $MSG_HINT?></h4>
