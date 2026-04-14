@@ -160,7 +160,7 @@ echo "</select>";
 		}
 		echo "<div id='source_".$row['problem_id']."' class=\"show_tag_controled\" style=\"float: right; \">";		
     	echo $view;		
-	if(count($cate)<3) echo "<span class='ai label label-primary' onclick=ai_gen(this,".$row['problem_id'].") > AI+ </span>";
+	if(count(array_filter(array_map('trim', $cate))) < 3) echo "<span class='ai label label-primary' onclick=ai_gen(this,".$row['problem_id'].") > AI+ </span>";
 		echo "</div></td>";
 		
         if(isset($_SESSION[$OJ_NAME.'_'.'administrator'])||isset($_SESSION[$OJ_NAME.'_'.'problem_editor'])){
