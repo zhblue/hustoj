@@ -51,8 +51,6 @@ if (isset($_SESSION[$OJ_NAME . '_' . 'OJ_LANG'])) {
 }
 require(dirname(__FILE__)."/../lang/$OJ_LANG.php");
 
-
-
 if($OJ_SaaS_ENABLE){
 	$DOMAIN="my.hustoj.com";   //   如启用，需要替换为SaaS服务的主域名。
 	$OJ_SaaS_CONF=realpath(dirname(__FILE__)."/..")."/SaaS/".basename($_SERVER["HTTP_HOST"]).".php";
@@ -161,41 +159,7 @@ if(isset($OJ_ON_SITE_CONTEST_ID) || isset($OJ_EXAM_CONTEST_ID)) $OJ_FREE_PRACTIC
 
 // $OJ_BG="/image/bg".date('H').".jpg";  //每个整点更换壁纸，需要准备bg[0~23].jpg在image目录
 // if (time() < strtotime('2025-3-31')) $OJ_BG="http://cdn.hustoj.com/upload/bg/nz0".(date('i')%9+1).".png";  //哪吒2上映期间，每分钟更换一张哪吒壁纸
-// if OJ_BG==bing ,using bing.com for daily change background
-if(isset($OJ_BG)&&$OJ_BG=="bing"){
-    $logfile="/dev/shm/bing.log";
-    $history=@file_get_contents($logfile);
-    if($history!=""){
-        $history=json_decode($history);
-    }else{
-        $history=array();
-    }
-   $bg_file=dirname(dirname(__FILE__))."/image/bg.url";
-   if(!file_exists($bg_file)) touch($bg_file);
-   if(time()-fileatime($bg_file)>3600*24){
-           require_once(dirname(__FILE__)."/curl.php");
-           $data=curl_get("https://cn.bing.com/");
-           $OJ_BG=getPartByMark($data,"<link rel=\"preload\" href=\"","\" as=\"image\" id=\"preloadBg\"");
-           if(strpos($OJ_BG,"http")!=0)$OJ_BG="https://cn.bing.com/".$OJ_BG;
-           //echo $OJ_BG;
-           if($OJ_BG){
-                   file_put_contents($bg_file,$OJ_BG);
-                    if(!in_array($OJ_BG,$history)){
-                        array_push($history,$OJ_BG);
-                        if(count($history)>30) array_shift($history);
-                        file_put_contents($logfile,json_encode($history));
-                    }
-           }
-           else touch($bg_file);
-   }else{
-           $OJ_BG=file_get_contents($bg_file);
-           if(!empty($history)){
-                $OJ_BG=$history[rand(0,count($history)-1)];
 
-           }
-   }
-
-}
 if (!empty($OJ_CDN_URL)) {
         header('Access-Control-Allow-Origin:'.$OJ_CDN_URL);
 }
