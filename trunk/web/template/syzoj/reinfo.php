@@ -81,6 +81,7 @@ td > code {
     exps[10]="<?php echo $MSG_NON_ZERO_RETURN ?>";
 
   MathJax = {
+	startup : { typeset: false  } ,
     tex: {inlineMath: [['$', '$'], ['\(', '\)']]}
   };
 function fill_data(data){
