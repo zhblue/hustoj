@@ -81,12 +81,14 @@ td > code {
     exps[10]="<?php echo $MSG_NON_ZERO_RETURN ?>";
 
   MathJax = {
-	startup : { typeset: false  } ,
+    startup : { typeset: false  } ,
     tex: {inlineMath: [['$', '$'], ['\(', '\)']]}
   };
 function fill_data(data){
     $("#errexp").html(data);    
     $("#errexp").html(marked.parse($("#errexp").text()));    
+    console.log("Mathjax");
+    MathJax.typeset(); 
     const target = document.getElementById('errexp');
 	MathJax.typesetPromise([target]).then(() => {
 	  console.log('局部渲染完成！');
@@ -148,20 +150,37 @@ function pull_result(id){
     }
     explain();
 </script>
-<script src="<?php echo $OJ_CDN_URL.$path_fix."template/bs3/"?>marked.min.js"></script>
+<link rel="stylesheet" href="<?php echo $OJ_CDN_URL.$path_fix."template/$OJ_TEMPLATE/css/"?>highlight.css">
+<script src="<?php echo $OJ_CDN_URL.$path_fix."template/$OJ_TEMPLATE/js/"?>highlight.min.js"></script>
+<script src="<?php echo $OJ_CDN_URL.$path_fix."template/$OJ_TEMPLATE/js/"?>marked.umd.js"></script>
+<script src="<?php echo $OJ_CDN_URL.$path_fix."template/$OJ_TEMPLATE/js/"?>marked-highlight.umd.js"></script>
+<script> 
+ const { Marked } = globalThis.marked;
+ const { markedHighlight } = globalThis.markedHighlight;
+const marked = new Marked(
+  markedHighlight({
+	emptyLangClass: 'hljs',
+    langPrefix: 'hljs language-',
+    highlight(code, lang, info) {
+      const language = hljs.getLanguage(lang) ? lang : 'plaintext';
+      return hljs.highlight(code, { language }).value;
+    }
+  })
+);
+</script>
 <script id="MathJax-script" async src="template/bs3/tex-chtml.js"></script>
 <script>
     $(document).ready(function(){
                 marked.use({
                   // 开启异步渲染
-                  async: true,
+                  async: false,
                   pedantic: false,
                   gfm: true,
                   mangle: false,
                   headerIds: false
                 });
                 $("#errtxt").each(function(){
-                        $(this).html(marked.parse($(this).text()));
+                        $(this).html(marked.parse($(this).html()));
                 });
                 // adding note for ```input1  ```output1 in description
                 for(let i=1;i<10;i++){
