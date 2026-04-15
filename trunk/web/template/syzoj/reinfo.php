@@ -81,7 +81,7 @@ td > code {
     exps[10]="<?php echo $MSG_NON_ZERO_RETURN ?>";
 
   MathJax = {
-    tex: {inlineMath: [['$', '$'], ['\\(', '\\)']]}
+    tex: {inlineMath: [['$', '$'], ['\(', '\)']]}
   };
 function fill_data(data){
     $("#errexp").html(data);    
