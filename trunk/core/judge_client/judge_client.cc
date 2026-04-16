@@ -1667,7 +1667,7 @@ int compile(int lang, char *work_dir)
 			stdout=freopen("ce.txt", "w", stdout);
 		}
 		if(chown(work_dir, judge_uid, judge_gid)!=0 && DEBUG) printf("chown %s\n",work_dir) ;
-		execute_cmd("/bin/chmod 750 %s ", work_dir);
+		chmod(work_dir, 0750);
 
 		if (compile_chroot && lang != LANG_JAVA && lang != LANG_CSHARP && lang != LANG_PYTHON && lang != LANG_FREEBASIC && lang != LANG_BASH && lang != LANG_R )
 		{
@@ -1948,7 +1948,7 @@ void get_solution(int solution_id, char *work_dir, int lang,int p_id)
 	}
 	sprintf(path, "%s/%s", work_dir, src_pth);
 	if(chown(path, judge_uid, judge_gid)!=0 && DEBUG) printf("chown %s\n",path) ;
-	execute_cmd("chmod 711 %s/%s", work_dir, src_pth);
+	chmod(path, 0711);
 }
 
 #ifdef _mysql_h
@@ -2351,6 +2351,7 @@ void copy_objc_runtime(char *work_dir)
 /* 将 Bash 运行时及工具（bc、grep、awk、sed 等）复制到 work_dir chroot。 */
 void copy_bash_runtime(char *work_dir)
 {
+	char path[BUFFER_SIZE];
 	//char cmd[BUFFER_SIZE];
 	//const char * ruby_run="/usr/bin/ruby";
 	copy_shell_runtime(work_dir);
@@ -2370,7 +2371,8 @@ void copy_bash_runtime(char *work_dir)
 	execute_cmd("/bin/ln -s /bin/busybox %s/bin/tail", work_dir);
 	execute_cmd("/bin/ln -s /bin/busybox %s/bin/head", work_dir);
 	execute_cmd("/bin/ln -s /bin/busybox %s/bin/xargs", work_dir);
-	execute_cmd("chmod +rx %s/Main.sh", work_dir);
+	sprintf(path, "%s/Main.sh", work_dir);
+	chmod(path, 0755);
 }
 /* 将 Ruby 解释器及库复制到 work_dir 用于运行 Ruby。 */
 void copy_ruby_runtime(char *work_dir)
@@ -2508,6 +2510,7 @@ void copy_python_runtime(char *work_dir)
 /* 将 PHP 解释器及库复制到 work_dir 用于运行 PHP。 */
 void copy_php_runtime(char *work_dir)
 {
+	char path[BUFFER_SIZE];
 
 	copy_shell_runtime(work_dir);
 	execute_cmd("/bin/mkdir -p %s/usr/bin", work_dir);
@@ -2532,7 +2535,8 @@ void copy_php_runtime(char *work_dir)
 	execute_cmd("/bin/cp /usr/lib/x86_64-linux-gnu/libcrypto* %s/usr/lib/", work_dir);
 #endif
 	execute_cmd("/bin/cp /usr/bin/php* %s/usr/bin", work_dir);
-	execute_cmd("chmod +rx %s/Main.php", work_dir);
+	sprintf(path, "%s/Main.php", work_dir);
+	chmod(path, 0755);
 }
 /* 将 Perl 解释器及库复制到 work_dir 用于运行 Perl。 */
 void copy_perl_runtime(char *work_dir)
@@ -2741,9 +2745,11 @@ void run_solution(int &lang, char *work_dir, double &time_lmt, int &usedtime,
 	
 	if (copy_data){
 		execute_cmd("chgrp judge %s/user.out %s/data.in", work_dir,work_dir);
-		execute_cmd("chmod 740 %s/data.in", work_dir);
+		sprintf(path, "%s/data.in", work_dir);
+		chmod(path, 0740);
 	}
-	execute_cmd("chmod 760 %s/user.out", work_dir);
+	sprintf(path, "%s/user.out", work_dir);
+	chmod(path, 0760);
 	if (   
 		(!use_docker) && lang != 3 && lang != 5 && lang != 20 && lang != 9  && !(lang ==6 && python_free )
 	   ){
@@ -2949,7 +2955,9 @@ int fix_java_mis_judge(char *work_dir, int &ACflg, int &topmemory,
 					   int mem_lmt)
 {
 	int comp_res = OJ_AC;
-	execute_cmd("chmod 700 %s/error.out", work_dir);
+	char path[BUFFER_SIZE];
+	sprintf(path, "%s/error.out", work_dir);
+	chmod(path, 0700);
 	if (DEBUG)
 		execute_cmd("cat %s/error.out", work_dir);
 	comp_res = execute_cmd("/bin/grep 'Exception'  %s/error.out", work_dir);
@@ -3061,11 +3069,13 @@ int special_judge(char *oj_home, int problem_id, char *infile, char *outfile,
 	char upjpath[BUFFER_SIZE/2];
 	if (DEBUG) printf("pid=%d\n", problem_id);
 	// prevent privileges settings caused spj fail in [issues686]
-	execute_cmd("chgrp judge %s/data/%d/?pj %s %s %s", oj_home, problem_id,infile, outfile, userfile);
-	execute_cmd("chmod 751 %s/data/%d/?pj %s %s %s", oj_home, problem_id,infile, outfile, userfile);
 	sprintf(spjpath,"%s/data/%d/spj", oj_home, problem_id);
 	sprintf(tpjpath,"%s/data/%d/tpj", oj_home, problem_id);
 	sprintf(upjpath,"%s/data/%d/upj", oj_home, problem_id);
+	execute_cmd("chgrp judge %s/data/%d/?pj %s %s %s", oj_home, problem_id,infile, outfile, userfile);
+	chmod(spjpath, 0751);
+	chmod(tpjpath, 0751);
+	chmod(upjpath, 0751);
 	
 	pid = fork();
 	int ret = 0;
@@ -3658,7 +3668,7 @@ void mk_shm_workdir(char *work_dir)
 	execute_cmd("/bin/mkdir -p %s  2>/dev/null", shm_path);
 	execute_cmd("/bin/ln -s %s %s/  2>/dev/null", shm_path, oj_home);
 	if(chown(shm_path, judge_uid, judge_gid)!=0 && DEBUG) printf("chown %s\n",shm_path) ;
-	execute_cmd("chmod 755 %s  2>/dev/null", shm_path);
+	chmod(shm_path, 0755);
 	//sim need a soft link in shm_dir to work correctly
 	sprintf(shm_path, "/dev/shm/hustoj/%s/", oj_home);
 	execute_cmd("/bin/ln -s %s/data %s  2>/dev/null", oj_home, shm_path);
@@ -4003,8 +4013,8 @@ int main(int argc, char **argv)
 		if (lang == 3)
 		{
 			execute_cmd("/bin/cp %s/etc/java0.policy %s/java.policy", oj_home, work_dir);
-			execute_cmd("chmod 755 %s/java.policy", work_dir);
 			sprintf(jpath, "%s/java.policy", work_dir);
+			chmod(jpath, 0755);
 			if(chown(jpath, judge_uid, judge_gid)!=0 && DEBUG) printf("chown %s\n",jpath) ;
 		}
 	}
