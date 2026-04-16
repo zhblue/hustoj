@@ -1666,7 +1666,7 @@ int compile(int lang, char *work_dir)
 		{
 			stdout=freopen("ce.txt", "w", stdout);
 		}
-		if(chown(work_dir, judge_uid, judge_gid)&& DEBUG) printf("chown %s\n",work_dir) ;
+		if(chown(work_dir, judge_uid, judge_gid)!=0 && DEBUG) printf("chown %s\n",work_dir) ;
 		execute_cmd("/bin/chmod 750 %s ", work_dir);
 
 		if (compile_chroot && lang != LANG_JAVA && lang != LANG_CSHARP && lang != LANG_PYTHON && lang != LANG_FREEBASIC && lang != LANG_BASH && lang != LANG_R )
@@ -1947,8 +1947,7 @@ void get_solution(int solution_id, char *work_dir, int lang,int p_id)
                 execute_cmd("cp %s/../data/%d/sb3/%d.sb3 %s", work_dir,p_id,solution_id, src_pth);
 	}
 	sprintf(path, "%s/%s", work_dir, src_pth);
-	//chown(path, judge_uid, judge_gid);
-	if(chown(path, judge_uid, judge_gid)&& DEBUG) printf("chown %s\n",path) ;
+	if(chown(path, judge_uid, judge_gid)!=0 && DEBUG) printf("chown %s\n",path) ;
 	execute_cmd("chmod 711 %s/%s", work_dir, src_pth);
 }
 
@@ -2190,8 +2189,7 @@ void prepare_files(char *filename, int namelen, char *infile, int &p_id,
 		if (fscanf(fpname, "%s", noip_file_name) == 1){
 		    execute_cmd("/bin/cp '%s' %s/%s", infile, work_dir,basename(noip_file_name));   // 如果存在input.name则复制测试数据
 		    sprintf(dst, "%s/%s", work_dir, basename(noip_file_name));
-		    //chown(dst, judge_uid, judge_gid);
-		    if(chown(dst, judge_uid, judge_gid)&& DEBUG) printf("chown %s\n",dst) ;
+		    if(chown(dst, judge_uid, judge_gid)!=0 && DEBUG) printf("chown %s\n",dst) ;
 		    if(DEBUG) printf("NOIP filename:%s\n",noip_file_name);
 		}
 		fclose(fpname);
@@ -2501,8 +2499,7 @@ void copy_python_runtime(char *work_dir)
 	execute_cmd("cp -a /usr/include/python* %s/usr/include/", work_dir);
 	execute_cmd("cp -a /usr/lib/libpython* %s/usr/lib/", work_dir);
 	execute_cmd("/bin/mkdir -p %s/home/judge", work_dir);
-	//chown(work_dir, judge_uid, judge_gid);
-	if(chown(work_dir, judge_uid, judge_gid)&& DEBUG) printf("chown %s\n",work_dir) ;
+	if(chown(work_dir, judge_uid, judge_gid)!=0 && DEBUG) printf("chown %s\n",work_dir) ;
 	execute_cmd("/bin/mkdir -p %s/etc", work_dir);
 	execute_cmd("/bin/grep judge /etc/passwd>%s/etc/passwd", work_dir);
 	execute_cmd("/bin/mount -o bind /dev %s/dev", work_dir);
@@ -2594,8 +2591,7 @@ void copy_mono_runtime(char *work_dir)
 #endif
 	execute_cmd("/bin/mkdir -p %s/home/judge", work_dir);
 	sprintf(path, "%s/home/judge", work_dir);
-	//chown(path, judge_uid, judge_gid);
-	if(chown(path, judge_uid, judge_gid)&& DEBUG) printf("chown %s\n",path) ;
+	if(chown(path, judge_uid, judge_gid)!=0 && DEBUG) printf("chown %s\n",path) ;
 	execute_cmd("/bin/mkdir -p %s/etc", work_dir);
 	execute_cmd("/bin/grep judge /etc/passwd>%s/etc/passwd", work_dir);
 }
@@ -2726,8 +2722,7 @@ void run_solution(int &lang, char *work_dir, double &time_lmt, int &usedtime,
 	if(lang==18){ 
 		execute_cmd("/usr/bin/sqlite3 %s/data.db < %s", work_dir,data_file_path);
 		sprintf(path, "%s/data.db", work_dir);
-		//chown(path, judge_uid, judge_gid);
-		if(chown(path, judge_uid, judge_gid)&& DEBUG) printf("chown %s\n",path) ;
+		if(chown(path, judge_uid, judge_gid)!=0 && DEBUG) printf("chown %s\n",path) ;
 		stdin=freopen("Main.sql", "r", stdin);
 	}else{
 		char noip_file_name[BUFFER_SIZE];
@@ -3174,8 +3169,7 @@ void judge_solution(int &ACflg, int &usedtime, double time_lmt, int spj,
 		if (spj){  
 			execute_cmd("/bin/cp %s/data/%d/checker %s",oj_home,p_id,work_dir);
 			sprintf(path, "%s/checker", work_dir);
-			//chown(path, judge_uid, judge_gid); 
-			if(chown(path, judge_uid, judge_gid)&& DEBUG) printf("chown %s\n",path) ;
+			if(chown(path, judge_uid, judge_gid)!=0 && DEBUG) printf("chown %s\n",path) ;
 			comp_res = special_judge(oj_home, p_id, infile, outfile, userfile,spj_mark,spj);
 			if (comp_res == 0)
 				comp_res = OJ_AC;
@@ -3630,12 +3624,12 @@ int get_sim(int solution_id, int lang, int pid, int &sim_s_id)
         if (!sim){
                 execute_cmd("/bin/mkdir ../data/%d/ac/ 2>/dev/null", pid);
                 sprintf(path, "../data/%d/ac/", pid);
-                //chown(path, www_uid, -1);
-		if(chown(path, www_uid, judge_gid)&& DEBUG) printf("chown %s\n",path) ;
+
+		if(chown(path, www_uid, -1)!=0 && DEBUG) printf("chown %s\n",path) ;
                 execute_cmd("/bin/cp %s ../data/%d/ac/%d.%s 2>/dev/null", src_pth, pid, solution_id,lang_ext[lang]);
                 sprintf(path, "../data/%d/ac/%d.%s", pid, solution_id, lang_ext[lang]);
-                //chown(path, www_uid, -1);
-		if(chown(path, www_uid, judge_gid)&& DEBUG) printf("chown %s\n",path) ;
+
+		if(chown(path, www_uid, -1)!=0 && DEBUG) printf("chown %s\n",path) ;
  		 //c cpp will
                 if (lang == 0)
                         execute_cmd("/bin/ln ../data/%d/ac/%d.%s ../data/%d/ac/%d.%s 2>/dev/null", pid,
@@ -3663,8 +3657,7 @@ void mk_shm_workdir(char *work_dir)
 	sprintf(shm_path, "/dev/shm/hustoj/%s", work_dir);
 	execute_cmd("/bin/mkdir -p %s  2>/dev/null", shm_path);
 	execute_cmd("/bin/ln -s %s %s/  2>/dev/null", shm_path, oj_home);
-	//chown(shm_path, judge_uid, judge_gid);
-	if(chown(shm_path, judge_uid, judge_gid)&& DEBUG) printf("chown %s\n",shm_path) ;
+	if(chown(shm_path, judge_uid, judge_gid)!=0 && DEBUG) printf("chown %s\n",shm_path) ;
 	execute_cmd("chmod 755 %s  2>/dev/null", shm_path);
 	//sim need a soft link in shm_dir to work correctly
 	sprintf(shm_path, "/dev/shm/hustoj/%s/", oj_home);
@@ -3973,8 +3966,7 @@ int main(int argc, char **argv)
 		mk_shm_workdir(work_dir);
 	}else{
 		execute_cmd("mkdir %s",work_dir);
-		//chown(work_dir, judge_uid, judge_gid);
-		if(chown(work_dir, judge_uid, judge_gid)&& DEBUG) printf("chown %s\n",work_dir) ;
+		if(chown(work_dir, judge_uid, judge_gid)!=0 && DEBUG) printf("chown %s\n",work_dir) ;
 	}
 	
 	clean_workdir(work_dir);
@@ -4013,8 +4005,7 @@ int main(int argc, char **argv)
 			execute_cmd("/bin/cp %s/etc/java0.policy %s/java.policy", oj_home, work_dir);
 			execute_cmd("chmod 755 %s/java.policy", work_dir);
 			sprintf(jpath, "%s/java.policy", work_dir);
-			//chown(jpath, judge_uid, judge_gid);
-			if(chown(jpath, judge_uid, judge_gid)&& DEBUG) printf("chown %s\n",jpath) ;
+			if(chown(jpath, judge_uid, judge_gid)!=0 && DEBUG) printf("chown %s\n",jpath) ;
 		}
 	}
 
