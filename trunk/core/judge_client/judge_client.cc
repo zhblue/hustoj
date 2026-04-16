@@ -2231,13 +2231,19 @@ void prepare_files(char *filename, int namelen, char *infile, int &p_id,
 /* 将 shell（bash/busybox）运行时环境复制到 work_dir chroot：基础库、bin、sh。 */
 void copy_shell_runtime(char *work_dir)
 {
+	char path[BUFFER_SIZE];
 
-	execute_cmd("/bin/mkdir %s/lib", work_dir);
-	execute_cmd("/bin/mkdir %s/lib64", work_dir);
-	execute_cmd("/bin/mkdir %s/bin", work_dir);
+	(void)mkdir(work_dir, 0755);
+	sprintf(path, "%s/lib", work_dir);
+	(void)mkdir(path, 0755);
+	sprintf(path, "%s/lib64", work_dir);
+	(void)mkdir(path, 0755);
+	sprintf(path, "%s/bin", work_dir);
+	(void)mkdir(path, 0755);
 #ifdef __mips__
-	execute_cmd("/bin/cp -a /lib/mips64el-linux-gnuabi64/  %s/lib/mips64el-linux-gnuabi64",work_dir);
-	execute_cmd("mkdir -p %s/lib/mips64el-linux-gnuabi64/",work_dir);
+	execute_cmd("/bin/cp -a /lib/mips64el-linux-gnuabi64/  %s/lib/mips64el-linux-gnuabiabi64",work_dir);
+	sprintf(path, "%s/lib/mips64el-linux-gnuabi64/", work_dir);
+	(void)mkdir(path, 0755);
 	execute_cmd("/bin/cp -a /lib64/ld.so.1  %s/lib64/", work_dir);
 	execute_cmd("/bin/cp -a /lib/mips64el-linux-gnuabi64/libdl.so.2  %s/lib/mips64el-linux-gnuabi64", work_dir);
 	execute_cmd("/bin/cp -a /lib/mips64el-linux-gnuabi64/libutil.so.1  %s/lib/mips64el-linux-gnuabi64", work_dir);
@@ -2280,10 +2286,14 @@ void copy_shell_runtime(char *work_dir)
 /* 将 GNUstep/Objective-C 运行时复制到 work_dir 用于 Objective-C 编译。 */
 void copy_objc_runtime(char *work_dir)
 {
+	char path[BUFFER_SIZE];
+
 	copy_shell_runtime(work_dir);
-	execute_cmd("/bin/mkdir -p %s/proc", work_dir);
+	sprintf(path, "%s/proc", work_dir);
+	(void)mkdir(path, 0755);
 	execute_cmd("/bin/mount -o bind /proc %s/proc", work_dir);
-	execute_cmd("/bin/mkdir -p %s/lib/", work_dir);
+	sprintf(path, "%s/lib/", work_dir);
+	(void)mkdir(path, 0755);
 	execute_cmd(
 		"/bin/cp -aL /lib/libdbus-1.so.3                          %s/lib/ ",
 		work_dir);
@@ -2377,11 +2387,15 @@ void copy_bash_runtime(char *work_dir)
 /* 将 Ruby 解释器及库复制到 work_dir 用于运行 Ruby。 */
 void copy_ruby_runtime(char *work_dir)
 {
+	char path[BUFFER_SIZE];
 
 	copy_shell_runtime(work_dir);
-	execute_cmd("mkdir -p %s/usr/bin", work_dir);
-	execute_cmd("mkdir -p %s/usr/lib", work_dir);
-	execute_cmd("mkdir -p %s/usr/lib64", work_dir);
+	sprintf(path, "%s/usr/bin", work_dir);
+	(void)mkdir(path, 0755);
+	sprintf(path, "%s/usr/lib", work_dir);
+	(void)mkdir(path, 0755);
+	sprintf(path, "%s/usr/lib64", work_dir);
+	(void)mkdir(path, 0755);
 	execute_cmd("cp -a /usr/lib/libruby* %s/usr/lib/", work_dir);
 	execute_cmd("cp -a /usr/lib/ruby* %s/usr/lib/", work_dir);
 	execute_cmd("cp -a /usr/lib64/ruby* %s/usr/lib64/", work_dir);
@@ -2396,13 +2410,18 @@ void copy_ruby_runtime(char *work_dir)
 /* 将 Guile（Scheme）运行时及支持库复制到 work_dir。 */
 void copy_guile_runtime(char *work_dir)
 {
+	char path[BUFFER_SIZE];
 
 	copy_shell_runtime(work_dir);
-	execute_cmd("/bin/mkdir -p %s/proc", work_dir);
+	sprintf(path, "%s/proc", work_dir);
+	(void)mkdir(path, 0755);
 	execute_cmd("/bin/mount -o bind /proc %s/proc", work_dir);
-	execute_cmd("/bin/mkdir -p %s/usr/bin", work_dir);
-	execute_cmd("/bin/mkdir -p %s/usr/lib", work_dir);
-	execute_cmd("/bin/mkdir -p %s/usr/share", work_dir);
+	sprintf(path, "%s/usr/bin", work_dir);
+	(void)mkdir(path, 0755);
+	sprintf(path, "%s/usr/lib", work_dir);
+	(void)mkdir(path, 0755);
+	sprintf(path, "%s/usr/share", work_dir);
+	(void)mkdir(path, 0755);
 	execute_cmd("/bin/cp -a /usr/share/guile %s/usr/share/", work_dir);
 	execute_cmd("/bin/cp /usr/lib/libguile* %s/usr/lib/", work_dir);
 	execute_cmd("/bin/cp /usr/lib/libgc* %s/usr/lib/", work_dir);
@@ -2426,26 +2445,46 @@ void copy_guile_runtime(char *work_dir)
 /* 将 Python 解释器及所有依赖库复制到 work_dir chroot 用于运行 Python。 */
 void copy_python_runtime(char *work_dir)
 {
+	char path[BUFFER_SIZE];
+
 	copy_shell_runtime(work_dir);
-	execute_cmd("mkdir -p %s/usr/include", work_dir);
-	execute_cmd("mkdir -p %s/dev", work_dir);
-	
-	execute_cmd("mkdir -p %s/usr/bin", work_dir);
-	execute_cmd("mkdir -p %s/usr/lib", work_dir);
-	execute_cmd("mkdir -p %s/usr/lib64", work_dir);
-	execute_cmd("mkdir -p %s/usr/local/lib", work_dir);
-	execute_cmd("mkdir -p %s/lib/x86_64-linux-gnu", work_dir);
+	sprintf(path, "%s/usr", work_dir);
+	(void)mkdir(path, 0755);
+	sprintf(path, "%s/usr/include", work_dir);
+	(void)mkdir(path, 0755);
+	sprintf(path, "%s/dev", work_dir);
+	(void)mkdir(path, 0755);
+	sprintf(path, "%s/usr/bin", work_dir);
+	(void)mkdir(path, 0755);
+	sprintf(path, "%s/usr/lib", work_dir);
+	(void)mkdir(path, 0755);
+	sprintf(path, "%s/usr/lib64", work_dir);
+	(void)mkdir(path, 0755);
+	sprintf(path, "%s/usr/local", work_dir);
+	(void)mkdir(path, 0755);
+	sprintf(path, "%s/usr/local/lib", work_dir);
+	(void)mkdir(path, 0755);
+	sprintf(path, "%s/lib/x86_64-linux-gnu", work_dir);
+	(void)mkdir(path, 0755);
 
 	// /etc/abrt/plugins/python.conf for Centos7
-	execute_cmd("mkdir -p %s/etc/abrt", work_dir);
-	execute_cmd("mkdir -p %s/etc/abrt/plugins", work_dir);
+	sprintf(path, "%s/etc", work_dir);
+	(void)mkdir(path, 0755);
+	sprintf(path, "%s/etc/abrt", work_dir);
+	(void)mkdir(path, 0755);
+	sprintf(path, "%s/etc/abrt/plugins", work_dir);
+	(void)mkdir(path, 0755);
 	execute_cmd("cp -a /etc/abrt/plugins/python.conf %s/etc/abrt/plugins/python.conf", work_dir);
 	
 	// /usr/share/abrt/conf.d/plugins/python.conf for Centos7
-	execute_cmd("mkdir -p %s/usr/share", work_dir);
-	execute_cmd("mkdir -p %s/usr/share/abrt/", work_dir);
-	execute_cmd("mkdir -p %s/usr/share/abrt/conf.d", work_dir);
-	execute_cmd("mkdir -p %s/usr/share/abrt/conf.d/plugins", work_dir);
+	sprintf(path, "%s/usr/share", work_dir);
+	(void)mkdir(path, 0755);
+	sprintf(path, "%s/usr/share/abrt", work_dir);
+	(void)mkdir(path, 0755);
+	sprintf(path, "%s/usr/share/abrt/conf.d", work_dir);
+	(void)mkdir(path, 0755);
+	sprintf(path, "%s/usr/share/abrt/conf.d/plugins", work_dir);
+	(void)mkdir(path, 0755);
 	execute_cmd("cp -a /usr/share/abrt/conf.d/plugins/python.conf %s/usr/share/abrt/conf.d/plugins/python.conf", work_dir);
 	if(!py2){	
 		execute_cmd("cp /usr/bin/python2* %s/usr/bin", work_dir);
@@ -2453,7 +2492,6 @@ void copy_python_runtime(char *work_dir)
 		execute_cmd("cp -a /usr/lib64/python2.7  %s/usr/lib64/", work_dir);
 #if (defined __mips__)
 		execute_cmd("cp -a /usr/lib64/python2* %s/usr/lib64/", work_dir);
-		execute_cmd("mkdir -p  %s/usr/local/lib/", work_dir);
 		execute_cmd("cp -a /usr/local/lib/python2* %s/usr/local/lib/", work_dir);
 #endif
 	}else{
@@ -2462,7 +2500,6 @@ void copy_python_runtime(char *work_dir)
 		execute_cmd("cp -a /usr/lib64/python3.6  %s/usr/lib64/", work_dir);
 #if (defined __mips__)
 		execute_cmd("cp -a /usr/lib64/python3* %s/usr/lib64/", work_dir);
-		execute_cmd("mkdir -p  %s/usr/local/lib/", work_dir);
 		execute_cmd("cp -a /usr/local/lib/python3* %s/usr/local/lib/", work_dir);
 #endif
 	}
@@ -2500,9 +2537,11 @@ void copy_python_runtime(char *work_dir)
 	execute_cmd("cp -a /usr/local/lib/python* %s/usr/local/lib/", work_dir);
 	execute_cmd("cp -a /usr/include/python* %s/usr/include/", work_dir);
 	execute_cmd("cp -a /usr/lib/libpython* %s/usr/lib/", work_dir);
-	execute_cmd("/bin/mkdir -p %s/home/judge", work_dir);
+	sprintf(path, "%s/home/judge", work_dir);
+	(void)mkdir(path, 0755);
 	if(chown(work_dir, judge_uid, judge_gid)!=0 && DEBUG) printf("chown %s\n",work_dir) ;
-	execute_cmd("/bin/mkdir -p %s/etc", work_dir);
+	sprintf(path, "%s/etc", work_dir);
+	(void)mkdir(path, 0755);
 	execute_cmd("/bin/grep judge /etc/passwd>%s/etc/passwd", work_dir);
 	execute_cmd("/bin/mount -o bind /dev %s/dev", work_dir);
 	execute_cmd("/bin/mount -o remount,ro %s/dev", work_dir);
@@ -2513,8 +2552,12 @@ void copy_php_runtime(char *work_dir)
 	char path[BUFFER_SIZE];
 
 	copy_shell_runtime(work_dir);
-	execute_cmd("/bin/mkdir -p %s/usr/bin", work_dir);
-	execute_cmd("/bin/mkdir %s/usr/lib", work_dir);
+	sprintf(path, "%s/usr", work_dir);
+	(void)mkdir(path, 0755);
+	sprintf(path, "%s/usr/bin", work_dir);
+	(void)mkdir(path, 0755);
+	sprintf(path, "%s/usr/lib", work_dir);
+	(void)mkdir(path, 0755);
 	execute_cmd("/bin/cp /usr/lib/libedit* %s/usr/lib/", work_dir);
 	execute_cmd("/bin/cp /usr/lib/libdb* %s/usr/lib/", work_dir);
 	execute_cmd("/bin/cp /usr/lib/libgssapi_krb5* %s/usr/lib/", work_dir);
@@ -2541,20 +2584,32 @@ void copy_php_runtime(char *work_dir)
 /* 将 Perl 解释器及库复制到 work_dir 用于运行 Perl。 */
 void copy_perl_runtime(char *work_dir)
 {
+	char path[BUFFER_SIZE];
 
 	copy_shell_runtime(work_dir);
-	execute_cmd("/bin/mkdir -p %s/usr/bin", work_dir);
-	execute_cmd("/bin/mkdir %s/usr/lib", work_dir);
+	sprintf(path, "%s/usr", work_dir);
+	(void)mkdir(path, 0755);
+	sprintf(path, "%s/usr/bin", work_dir);
+	(void)mkdir(path, 0755);
+	sprintf(path, "%s/usr/lib", work_dir);
+	(void)mkdir(path, 0755);
 	execute_cmd("/bin/cp /usr/lib/libperl* %s/usr/lib/", work_dir);
 	execute_cmd("/bin/cp /usr/bin/perl* %s/usr/bin", work_dir);
 }
 /* 将 FreeBASIC 编译器及库复制到 work_dir。 */
 void copy_freebasic_runtime(char *work_dir)
 {
+	char path[BUFFER_SIZE];
 
 	copy_shell_runtime(work_dir);
-	execute_cmd("/bin/mkdir -p %s/usr/local/lib", work_dir);
-	execute_cmd("/bin/mkdir -p %s/usr/local/bin", work_dir);
+	sprintf(path, "%s/usr", work_dir);
+	(void)mkdir(path, 0755);
+	sprintf(path, "%s/usr/local", work_dir);
+	(void)mkdir(path, 0755);
+	sprintf(path, "%s/usr/local/lib", work_dir);
+	(void)mkdir(path, 0755);
+	sprintf(path, "%s/usr/local/bin", work_dir);
+	(void)mkdir(path, 0755);
 	execute_cmd("/bin/cp /usr/local/lib/freebasic %s/usr/local/lib/", work_dir);
 	execute_cmd("/bin/cp /usr/local/bin/fbc %s/", work_dir);
 	execute_cmd("/bin/cp -a /lib32/* %s/lib/", work_dir);
@@ -2565,11 +2620,25 @@ void copy_mono_runtime(char *work_dir)
 	char path[BUFFER_SIZE];
 
 	copy_shell_runtime(work_dir);
-	execute_cmd("/bin/mkdir -p %s/usr/bin", work_dir);
-	execute_cmd("/bin/mkdir %s/proc", work_dir);
-	execute_cmd("/bin/mkdir -p %s/usr/lib/mono/2.0", work_dir);
+	sprintf(path, "%s/usr", work_dir);
+	(void)mkdir(path, 0755);
+	sprintf(path, "%s/usr/bin", work_dir);
+	(void)mkdir(path, 0755);
+	sprintf(path, "%s/proc", work_dir);
+	(void)mkdir(path, 0755);
+	sprintf(path, "%s/usr/lib", work_dir);
+	(void)mkdir(path, 0755);
+	sprintf(path, "%s/usr/lib/mono", work_dir);
+	(void)mkdir(path, 0755);
+	sprintf(path, "%s/usr/lib/mono/2.0", work_dir);
+	(void)mkdir(path, 0755);
 	execute_cmd("/bin/cp -a /usr/lib/mono %s/usr/lib/", work_dir);
-	execute_cmd("/bin/mkdir -p %s/usr/lib64/mono/2.0", work_dir);
+	sprintf(path, "%s/usr/lib64", work_dir);
+	(void)mkdir(path, 0755);
+	sprintf(path, "%s/usr/lib64/mono", work_dir);
+	(void)mkdir(path, 0755);
+	sprintf(path, "%s/usr/lib64/mono/2.0", work_dir);
+	(void)mkdir(path, 0755);
 	execute_cmd("/bin/cp -a /usr/lib64/mono %s/usr/lib64/", work_dir);
 
 	execute_cmd("/bin/cp /usr/lib/libgthread* %s/usr/lib/", work_dir);
@@ -2585,7 +2654,8 @@ void copy_mono_runtime(char *work_dir)
 	execute_cmd("/bin/cp /lib/ld-linux* %s/lib/", work_dir);
 #ifdef __x86_64__
 	execute_cmd("/bin/cp /lib64/ld-linux* %s/lib64/", work_dir);
-	execute_cmd("/bin/mkdir -p %s/usr/lib/x86_64-linux-gnu", work_dir);
+	sprintf(path, "%s/usr/lib/x86_64-linux-gnu", work_dir);
+	(void)mkdir(path, 0755);
 	execute_cmd("/bin/cp /usr/lib/x86_64-linux-gnu/libm.so.6 %s/usr/lib/x86_64-linux-gnu/", work_dir);
 	execute_cmd("/bin/cp /usr/lib/x86_64-linux-gnu/librt.so.1 %s/usr/lib/x86_64-linux-gnu/", work_dir);
 	execute_cmd("/bin/cp /usr/lib/x86_64-linux-gnu/libpthread.so.0 %s/usr/lib/x86_64-linux-gnu/", work_dir);
@@ -2593,28 +2663,35 @@ void copy_mono_runtime(char *work_dir)
 	execute_cmd("/bin/cp /usr/lib/x86_64-linux-gnu/libc.so.6 %s/usr/lib/x86_64-linux-gnu/", work_dir);
 	execute_cmd("/bin/cp /lib64/ld-linux-x86-64.so.2 %s/lib64", work_dir);
 #endif
-	execute_cmd("/bin/mkdir -p %s/home/judge", work_dir);
 	sprintf(path, "%s/home/judge", work_dir);
-	if(chown(path, judge_uid, judge_gid)!=0 && DEBUG) printf("chown %s\n",path) ;
-	execute_cmd("/bin/mkdir -p %s/etc", work_dir);
+	(void)mkdir(path, 0755);
+	if(chown(work_dir, judge_uid, judge_gid)!=0 && DEBUG) printf("chown %s\n",work_dir) ;
+	sprintf(path, "%s/etc", work_dir);
+	(void)mkdir(path, 0755);
 	execute_cmd("/bin/grep judge /etc/passwd>%s/etc/passwd", work_dir);
 }
 /* 将 Lua 解释器复制到 work_dir。 */
 void copy_lua_runtime(char *work_dir)
 {
+	char path[BUFFER_SIZE];
 
 	copy_shell_runtime(work_dir);
-	execute_cmd("mkdir -p %s/usr/bin", work_dir);
-	execute_cmd("/bin/mkdir -p %s/usr/local/lib", work_dir);
-	execute_cmd("/bin/mkdir -p %s/usr/local/bin", work_dir);
+	sprintf(path, "%s/usr/bin", work_dir);
+	(void)mkdir(path, 0755);
+	sprintf(path, "%s/usr/local/lib", work_dir);
+	(void)mkdir(path, 0755);
+	sprintf(path, "%s/usr/local/bin", work_dir);
+	(void)mkdir(path, 0755);
 	execute_cmd("/bin/cp /usr/bin/lua %s/usr/bin", work_dir);
 }
 /* 将 SQLite3 运行时复制到 work_dir 用于运行 SQL。 */
 void copy_sql_runtime(char *work_dir)
 {
+	char path[BUFFER_SIZE];
 
 	copy_shell_runtime(work_dir);
-	execute_cmd("mkdir -p %s/usr/bin", work_dir);
+	sprintf(path, "%s/usr/bin", work_dir);
+	(void)mkdir(path, 0755);
 	execute_cmd("/bin/cp /usr/bin/sqlite3 %s/usr/bin", work_dir);
 #ifdef __mips__
 	execute_cmd("/bin/cp /lib64/libedit.so.0 %s/lib64/", work_dir);
@@ -2653,13 +2730,24 @@ void copy_sql_runtime(char *work_dir)
 /* 将 Node.js 运行时（libuv、ICU、V8）复制到 work_dir 用于运行 JavaScript。 */
 void copy_js_runtime(char *work_dir)
 {
+	char path[BUFFER_SIZE];
 
 	//copy_shell_runtime(work_dir);
-	execute_cmd("mkdir -p %s/usr/bin", work_dir);
-	execute_cmd("mkdir -p %s/dev", work_dir);
+	(void)mkdir(work_dir, 0755);
+	sprintf(path, "%s/usr/bin", work_dir);
+	(void)mkdir(path, 0755);
+	sprintf(path, "%s/dev", work_dir);
+	(void)mkdir(path, 0755);
 	execute_cmd("/bin/mount -o bind /dev %s/dev", work_dir);
 	execute_cmd("/bin/mount -o remount,ro %s/dev", work_dir);
-	execute_cmd("/bin/mkdir -p %s/usr/lib %s/lib/i386-linux-gnu/ %s/lib64/", work_dir, work_dir, work_dir);
+	sprintf(path, "%s/usr/lib", work_dir);
+	(void)mkdir(path, 0755);
+	sprintf(path, "%s/lib", work_dir);
+	(void)mkdir(path, 0755);
+	sprintf(path, "%s/lib/i386-linux-gnu/", work_dir);
+	(void)mkdir(path, 0755);
+	sprintf(path, "%s/lib64/", work_dir);
+	(void)mkdir(path, 0755);
 	execute_cmd("/bin/cp /lib/i386-linux-gnu/libz.so.*  %s/lib/i386-linux-gnu/", work_dir);
 	execute_cmd("/bin/cp /usr/lib/i386-linux-gnu/libuv.so.*  %s/lib/i386-linux-gnu/", work_dir);
 	execute_cmd("/bin/cp /usr/lib/i386-linux-gnu/libicui18n.so.*  %s/lib/i386-linux-gnu/", work_dir);
@@ -2681,7 +2769,10 @@ void copy_js_runtime(char *work_dir)
 	execute_cmd("/bin/cp /lib/ld-linux.so.*  %s/lib/", work_dir);
 
 #ifdef __x86_64__
-	execute_cmd("/bin/mkdir -p %s/usr/lib/x86_64-linux-gnu/ %s/lib/x86_64-linux-gnu/", work_dir, work_dir);
+	sprintf(path, "%s/usr/lib/x86_64-linux-gnu/", work_dir);
+	(void)mkdir(path, 0755);
+	sprintf(path, "%s/lib/x86_64-linux-gnu/", work_dir);
+	(void)mkdir(path, 0755);
 
 	//execute_cmd("/bin/cp /usr/lib/x86_64-linux-gnu/  %s/usr/lib/x86_64-linux-gnu/", work_dir);
 	execute_cmd("/bin/cp /usr/lib/libv8.so.*  %s/usr/lib/", work_dir);
@@ -3565,6 +3656,7 @@ static int is_safe_workdir(const char *work_dir)
 
 void clean_workdir(char *work_dir)
 {
+	char path[BUFFER_SIZE];
 	/* 先验证 work_dir，避免将不安全/非法路径传给 umount 或 shell。 */
 	if (!is_safe_workdir(work_dir))
 	{
@@ -3576,12 +3668,14 @@ void clean_workdir(char *work_dir)
 	{
 		execute_cmd("/bin/rmdir %s/log/* 2>/dev/null", work_dir);
 		execute_cmd("/bin/rm -rf %s/log/* 2>/dev/null", work_dir);
-		execute_cmd("mkdir %s/log/ 2>/dev/null", work_dir);
+		sprintf(path, "%s/log/", work_dir);
+		(void)mkdir(path, 0755);
 		execute_cmd("/bin/mv %s/* %s/log/ 2>/dev/null", work_dir, work_dir);
 	}
 	else
 	{
-		execute_cmd("mkdir %s/log/ 2>/dev/null", work_dir);
+		sprintf(path, "%s/log/", work_dir);
+		(void)mkdir(path, 0755);
 		execute_cmd("/bin/mv %s/* %s/log/ 2>/dev/null", work_dir, work_dir);
 		execute_cmd("/bin/rmdir %s/log/* 2>/dev/null", work_dir);
 		execute_cmd("/bin/rm -rf %s/log/* 2>/dev/null", work_dir);
@@ -3632,8 +3726,8 @@ int get_sim(int solution_id, int lang, int pid, int &sim_s_id)
         FILE *pf;
         pf = fopen("sim", "r");
         if (!sim){
-                execute_cmd("/bin/mkdir ../data/%d/ac/ 2>/dev/null", pid);
                 sprintf(path, "../data/%d/ac/", pid);
+                (void)mkdir(path, 0755);
 
 		if(chown(path, www_uid, -1)!=0 && DEBUG) printf("chown %s\n",path) ;
                 execute_cmd("/bin/cp %s ../data/%d/ac/%d.%s 2>/dev/null", src_pth, pid, solution_id,lang_ext[lang]);
@@ -3665,7 +3759,7 @@ void mk_shm_workdir(char *work_dir)
 {
 	char shm_path[BUFFER_SIZE];
 	sprintf(shm_path, "/dev/shm/hustoj/%s", work_dir);
-	execute_cmd("/bin/mkdir -p %s  2>/dev/null", shm_path);
+	(void)mkdir(shm_path, 0755);
 	execute_cmd("/bin/ln -s %s %s/  2>/dev/null", shm_path, oj_home);
 	if(chown(shm_path, judge_uid, judge_gid)!=0 && DEBUG) printf("chown %s\n",shm_path) ;
 	chmod(shm_path, 0755);
@@ -3690,6 +3784,7 @@ int get_test_file(char *work_dir, int p_id)
 {
 	char filename[BUFFER_SIZE/2];
 	char localfile[BUFFER_SIZE];
+	char path[BUFFER_SIZE];
 	time_t remote_date, local_date;
 	int ret = 0;
 	const char *cmd =
@@ -3717,7 +3812,8 @@ int get_test_file(char *work_dir, int p_id)
 
 			if (strcmp(filename, "spj") == 0)
 				continue;
-			execute_cmd("/bin/mkdir -p %s/data/%d", oj_home, p_id);
+			sprintf(path, "%s/data/%d", oj_home, p_id);
+			(void)mkdir(path, 0755);
 			const char *cmd2 =
 				" wget --post-data=\"gettestdata=1&filename=%d/%s\" --load-cookies=cookie --save-cookies=cookie --keep-session-cookies -q -O \"%s\"  \"%s%s\"";
 			execute_cmd(cmd2, p_id, filename, localfile, http_baseurl, http_apipath);
@@ -3975,7 +4071,7 @@ int main(int argc, char **argv)
 	if (shm_run){
 		mk_shm_workdir(work_dir);
 	}else{
-		execute_cmd("mkdir %s",work_dir);
+		(void)mkdir(work_dir, 0755);
 		if(chown(work_dir, judge_uid, judge_gid)!=0 && DEBUG) printf("chown %s\n",work_dir) ;
 	}
 	
