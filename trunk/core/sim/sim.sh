@@ -2,8 +2,7 @@
 umask 0077
 EXTENSION=`echo "$1" | cut -d'.' -f2`
 FIRST=""
-for i in `ls ../data/$2/ac/*.$EXTENSION`
-do
+find ../data/"$2"/ac/ -name "*.$EXTENSION" -mtime -90 -print0 | while IFS= read -r -d '' i; do
         echo "i:$i"
         if [ ! -e "/usr/bin/sim_$EXTENSION" ]
         then
