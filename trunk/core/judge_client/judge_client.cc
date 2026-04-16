@@ -53,6 +53,8 @@
 #include "okcalls.h"
 #include <sched.h>
 #include <map>
+#include <pwd.h>
+#include <grp.h>
 
 
 #define STD_MB 1048576LL
@@ -221,6 +223,8 @@ static char cc_std[BUFFER_SIZE/10];
 static char cpp_std[BUFFER_SIZE/10];
 static int auto_result = OJ_AC ;
 static int www_uid= 33 ;  // www-data in ubuntu , might overwrite for BT.cn
+static uid_t judge_uid;
+static gid_t judge_gid;
 
 int num_of_test = 0;
 //static int sleep_tmp;
@@ -1662,7 +1666,7 @@ int compile(int lang, char *work_dir)
 		{
 			stdout=freopen("ce.txt", "w", stdout);
 		}
-		execute_cmd("/bin/chown judge %s ", work_dir);
+		if(chown(work_dir, judge_uid, judge_gid)&& DEBUG) printf("chown %s\n",work_dir) ;
 		execute_cmd("/bin/chmod 750 %s ", work_dir);
 
 		if (compile_chroot && lang != LANG_JAVA && lang != LANG_CSHARP && lang != LANG_PYTHON && lang != LANG_FREEBASIC && lang != LANG_BASH && lang != LANG_R )
@@ -1922,6 +1926,7 @@ void _get_solution_http(int solution_id, char *work_dir, int lang)
 void get_solution(int solution_id, char *work_dir, int lang,int p_id)
 {
 	char src_pth[BUFFER_SIZE];
+	char path[BUFFER_SIZE*2];
 	sprintf(src_pth, "Main.%s", lang_ext[lang]);
 	if (http_judge)
 	{
@@ -1941,7 +1946,9 @@ void get_solution(int solution_id, char *work_dir, int lang,int p_id)
 	if(lang == LANG_SB3 ){
                 execute_cmd("cp %s/../data/%d/sb3/%d.sb3 %s", work_dir,p_id,solution_id, src_pth);
 	}
-	execute_cmd("chown judge %s/%s", work_dir, src_pth);
+	sprintf(path, "%s/%s", work_dir, src_pth);
+	//chown(path, judge_uid, judge_gid);
+	if(chown(path, judge_uid, judge_gid)&& DEBUG) printf("chown %s\n",path) ;
 	execute_cmd("chmod 711 %s/%s", work_dir, src_pth);
 }
 
@@ -2174,6 +2181,7 @@ void prepare_files(char *filename, int namelen, char *infile, int &p_id,
 	//printf("%s\n%s\n",fname0,fname);
 	sprintf(infile, "%s/data/%d/%s.in", oj_home, p_id, fname);
 	char noip_file_name[BUFFER_SIZE];
+	char dst[BUFFER_SIZE*2];
 	sprintf(noip_file_name,"%s/data/%d/input.name",oj_home,p_id);
 	if(DEBUG) printf("NOIP filename:%s\n",noip_file_name);
  	if (access(noip_file_name, R_OK ) != -1){
@@ -2181,7 +2189,9 @@ void prepare_files(char *filename, int namelen, char *infile, int &p_id,
 		FILE * fpname=fopen(noip_file_name,"r");
 		if (fscanf(fpname, "%s", noip_file_name) == 1){
 		    execute_cmd("/bin/cp '%s' %s/%s", infile, work_dir,basename(noip_file_name));   // 如果存在input.name则复制测试数据
-		     execute_cmd("/usr/bin/chown judge %s/%s", work_dir,basename(noip_file_name));   // 修改属主
+		    sprintf(dst, "%s/%s", work_dir, basename(noip_file_name));
+		    //chown(dst, judge_uid, judge_gid);
+		    if(chown(dst, judge_uid, judge_gid)&& DEBUG) printf("chown %s\n",dst) ;
 		    if(DEBUG) printf("NOIP filename:%s\n",noip_file_name);
 		}
 		fclose(fpname);
@@ -2491,7 +2501,8 @@ void copy_python_runtime(char *work_dir)
 	execute_cmd("cp -a /usr/include/python* %s/usr/include/", work_dir);
 	execute_cmd("cp -a /usr/lib/libpython* %s/usr/lib/", work_dir);
 	execute_cmd("/bin/mkdir -p %s/home/judge", work_dir);
-	execute_cmd("/bin/chown judge %s", work_dir);
+	//chown(work_dir, judge_uid, judge_gid);
+	if(chown(work_dir, judge_uid, judge_gid)&& DEBUG) printf("chown %s\n",work_dir) ;
 	execute_cmd("/bin/mkdir -p %s/etc", work_dir);
 	execute_cmd("/bin/grep judge /etc/passwd>%s/etc/passwd", work_dir);
 	execute_cmd("/bin/mount -o bind /dev %s/dev", work_dir);
@@ -2550,6 +2561,7 @@ void copy_freebasic_runtime(char *work_dir)
 /* 将 Mono 运行时（.NET）及库复制到 work_dir 用于运行 C#。 */
 void copy_mono_runtime(char *work_dir)
 {
+	char path[BUFFER_SIZE];
 
 	copy_shell_runtime(work_dir);
 	execute_cmd("/bin/mkdir -p %s/usr/bin", work_dir);
@@ -2581,7 +2593,9 @@ void copy_mono_runtime(char *work_dir)
 	execute_cmd("/bin/cp /lib64/ld-linux-x86-64.so.2 %s/lib64", work_dir);
 #endif
 	execute_cmd("/bin/mkdir -p %s/home/judge", work_dir);
-	execute_cmd("/bin/chown judge %s/home/judge", work_dir);
+	sprintf(path, "%s/home/judge", work_dir);
+	//chown(path, judge_uid, judge_gid);
+	if(chown(path, judge_uid, judge_gid)&& DEBUG) printf("chown %s\n",path) ;
 	execute_cmd("/bin/mkdir -p %s/etc", work_dir);
 	execute_cmd("/bin/grep judge /etc/passwd>%s/etc/passwd", work_dir);
 }
@@ -2694,6 +2708,7 @@ void copy_js_runtime(char *work_dir)
 void run_solution(int &lang, char *work_dir, double &time_lmt, int &usedtime,
 				  int &mem_lmt,char * data_file_path,int p_id)   // 为每个测试数据运行一次提交的答案
 {
+	char path[BUFFER_SIZE];
 	//准备环境变量处理中文，如果希望使用非中文的语言环境，可能需要修改这些环境变量
 	char * const envp[]={(char * const )"PYTHONIOENCODING=utf-8",
 			     (char * const )"PATH=/bin:/usr/bin:/opt/cangjie/bin",
@@ -2710,7 +2725,9 @@ void run_solution(int &lang, char *work_dir, double &time_lmt, int &usedtime,
 	// open the files
 	if(lang==18){ 
 		execute_cmd("/usr/bin/sqlite3 %s/data.db < %s", work_dir,data_file_path);
-		execute_cmd("/bin/chown judge %s/data.db", work_dir);
+		sprintf(path, "%s/data.db", work_dir);
+		//chown(path, judge_uid, judge_gid);
+		if(chown(path, judge_uid, judge_gid)&& DEBUG) printf("chown %s\n",path) ;
 		stdin=freopen("Main.sql", "r", stdin);
 	}else{
 		char noip_file_name[BUFFER_SIZE];
@@ -3128,6 +3145,7 @@ void judge_solution(int &ACflg, int &usedtime, double time_lmt, int spj,
 {
 	//usedtime-=1000;
 	int comp_res;
+	char path[BUFFER_SIZE];
 	if (num_of_test == 0 )
 		num_of_test = 1.0;
 	
@@ -3155,7 +3173,9 @@ void judge_solution(int &ACflg, int &usedtime, double time_lmt, int spj,
 	{
 		if (spj){  
 			execute_cmd("/bin/cp %s/data/%d/checker %s",oj_home,p_id,work_dir);
-                        execute_cmd("/bin/chown judge  %s/checker",work_dir); 
+			sprintf(path, "%s/checker", work_dir);
+			//chown(path, judge_uid, judge_gid); 
+			if(chown(path, judge_uid, judge_gid)&& DEBUG) printf("chown %s\n",path) ;
 			comp_res = special_judge(oj_home, p_id, infile, outfile, userfile,spj_mark,spj);
 			if (comp_res == 0)
 				comp_res = OJ_AC;
@@ -3601,6 +3621,7 @@ void init_parameters(int argc, char **argv, int &solution_id,
 int get_sim(int solution_id, int lang, int pid, int &sim_s_id)
 {
         char src_pth[BUFFER_SIZE];
+        char path[BUFFER_SIZE];
         //char cmd[BUFFER_SIZE];
         sprintf(src_pth, "Main.%s", lang_ext[lang]);
         int sim = execute_cmd("/usr/bin/sim.sh %s %d", src_pth, pid);
@@ -3608,9 +3629,13 @@ int get_sim(int solution_id, int lang, int pid, int &sim_s_id)
         pf = fopen("sim", "r");
         if (!sim){
                 execute_cmd("/bin/mkdir ../data/%d/ac/ 2>/dev/null", pid);
-                execute_cmd("/bin/chown %d ../data/%d/ac/ 2>/dev/null", www_uid, pid);
+                sprintf(path, "../data/%d/ac/", pid);
+                //chown(path, www_uid, -1);
+		if(chown(path, www_uid, judge_gid)&& DEBUG) printf("chown %s\n",path) ;
                 execute_cmd("/bin/cp %s ../data/%d/ac/%d.%s 2>/dev/null", src_pth, pid, solution_id,lang_ext[lang]);
-                execute_cmd("/bin/chown %d ../data/%d/ac/%d.%s 2>/dev/null",www_uid, pid, solution_id,lang_ext[lang]);
+                sprintf(path, "../data/%d/ac/%d.%s", pid, solution_id, lang_ext[lang]);
+                //chown(path, www_uid, -1);
+		if(chown(path, www_uid, judge_gid)&& DEBUG) printf("chown %s\n",path) ;
  		 //c cpp will
                 if (lang == 0)
                         execute_cmd("/bin/ln ../data/%d/ac/%d.%s ../data/%d/ac/%d.%s 2>/dev/null", pid,
@@ -3638,7 +3663,8 @@ void mk_shm_workdir(char *work_dir)
 	sprintf(shm_path, "/dev/shm/hustoj/%s", work_dir);
 	execute_cmd("/bin/mkdir -p %s  2>/dev/null", shm_path);
 	execute_cmd("/bin/ln -s %s %s/  2>/dev/null", shm_path, oj_home);
-	execute_cmd("/bin/chown judge %s  2>/dev/null", shm_path);
+	//chown(shm_path, judge_uid, judge_gid);
+	if(chown(shm_path, judge_uid, judge_gid)&& DEBUG) printf("chown %s\n",shm_path) ;
 	execute_cmd("chmod 755 %s  2>/dev/null", shm_path);
 	//sim need a soft link in shm_dir to work correctly
 	sprintf(shm_path, "/dev/shm/hustoj/%s/", oj_home);
@@ -3911,6 +3937,7 @@ int main(int argc, char **argv)
 	ACflg = PEflg = OJ_AC;
 	int usedtime = 0, topmemory = 0;
 	char fullpath[BUFFER_SIZE];
+	char jpath[BUFFER_SIZE*2];
 	char infile[BUFFER_SIZE/10];
 	char outfile[BUFFER_SIZE/10];
 	char userfile[BUFFER_SIZE/10];
@@ -3918,6 +3945,12 @@ int main(int argc, char **argv)
 	init_parameters(argc, argv, solution_id, runner_id);
 
 	init_judge_conf();
+
+	struct passwd *pw = getpwnam("judge");
+	if (pw) {
+		judge_uid = pw->pw_uid;
+		judge_gid = pw->pw_gid;
+	}
 
 #ifdef _mysql_h
 	if (!http_judge && !init_mysql_conn())
@@ -3940,7 +3973,8 @@ int main(int argc, char **argv)
 		mk_shm_workdir(work_dir);
 	}else{
 		execute_cmd("mkdir %s",work_dir);
-		execute_cmd("chown judge %s",work_dir);
+		//chown(work_dir, judge_uid, judge_gid);
+		if(chown(work_dir, judge_uid, judge_gid)&& DEBUG) printf("chown %s\n",work_dir) ;
 	}
 	
 	clean_workdir(work_dir);
@@ -3978,7 +4012,9 @@ int main(int argc, char **argv)
 		{
 			execute_cmd("/bin/cp %s/etc/java0.policy %s/java.policy", oj_home, work_dir);
 			execute_cmd("chmod 755 %s/java.policy", work_dir);
-			execute_cmd("chown judge %s/java.policy", work_dir);
+			sprintf(jpath, "%s/java.policy", work_dir);
+			//chown(jpath, judge_uid, judge_gid);
+			if(chown(jpath, judge_uid, judge_gid)&& DEBUG) printf("chown %s\n",jpath) ;
 		}
 	}
 
