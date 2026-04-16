@@ -1676,12 +1676,12 @@ int compile(int lang, char *work_dir)
 				execute_cmd("chown judge -R root tmp ");
 				execute_cmd("mount -o bind /usr usr");
 				execute_cmd("mount -o remount,ro usr");
-				(void)symlink("usr/bin", "bin");
-				(void)symlink("usr/lib", "lib");
-				(void)symlink("usr/lib32", "lib32");
-				(void)symlink("usr/libx32", "libx32");
+				if(symlink("usr/bin", "bin"));
+				if(symlink("usr/lib", "lib"));
+				if(symlink("usr/lib32", "lib32"));
+				if(symlink("usr/libx32", "libx32"));
 #ifndef __i386__
-				(void)symlink("usr/lib64", "lib64");
+				if(symlink("usr/lib64", "lib64"));
 #endif
 				execute_cmd("cp /etc/alternatives/* etc/alternatives");
 				execute_cmd("cp /etc/fpc* etc/");
