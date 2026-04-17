@@ -729,7 +729,7 @@ $(document).ready(function () {
 <script>
   MathJax = {
     startup : { typeset: false  } ,
-    tex: {inlineMath: [['$', '$'], ['\(', '\)']]}
+    tex: {inlineMath: [['$', '$'], ['\\(', '\\)']]}
   };
 </script>
 
