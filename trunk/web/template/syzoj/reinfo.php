@@ -82,7 +82,7 @@ td > code {
 
   MathJax = {
     startup : { typeset: false  } ,
-    tex: {inlineMath: [['$', '$'], ['\(', '\)']]}
+    tex: {inlineMath: [['$', '$'], ['\\(', '\\)']]}
   };
 function fill_data(data){
     $("#errexp").html(data);    
