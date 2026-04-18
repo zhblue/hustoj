@@ -32,35 +32,75 @@
 
 
       <div class="nine wide right aligned column">
-     
         <div class="ui toggle checkbox" id="show_tag">
-          <style id="show_tag_style"></style>
-          <script>
-          if (localStorage.getItem('show_tag') != '0') {
-            document.write('<input type="checkbox" checked>');
-            document.getElementById('show_tag_style').innerHTML = '.show_tag_controled { white-space: nowrap; overflow: hidden; }';
-          } else {
-            document.write('<input type="checkbox">');
-            document.getElementById('show_tag_style').innerHTML = '.show_tag_controled { width: 0; white-space: nowrap; overflow: hidden; }';
-          }
-          </script>
-
-          <script>
-          $(function () {
-            $('#show_tag').checkbox('setting', 'onChange', function () {
-              let checked = $('#show_tag').checkbox('is checked');
-              localStorage.setItem('show_tag', checked ? '1' : '0');
-              if (checked) {
-                document.getElementById('show_tag_style').innerHTML = '.show_tag_controled { white-space: nowrap; overflow: hidden; }';
-              } else {
-                document.getElementById('show_tag_style').innerHTML = '.show_tag_controled { width: 0; white-space: nowrap; overflow: hidden; }';
-              }
-            });
-          });
-          </script>
-          <label><?php echo $MSG_SHOW_TAGS;?></label>
+        <style id="show_tag_style">
+          .show_tag_controled { display: none !important; }
+          .no-transition * { transition: none !important; }
           
+          #show_tag { 
+            cursor: pointer !important; 
+            padding: 5px 10px !important; 
+            user-select: none;
+            display: inline-flex !important;
+            align-items: center;
+          }
+          #show_tag label { 
+            cursor: pointer !important; 
+            padding-left: 3.5rem !important;
+          }
+        </style>
+
+        <div class="ui toggle checkbox no-transition" id="show_tag">
+          <input type="checkbox" id="show_tag_input" style="pointer-events: none;">
+          <label><?php echo $MSG_SHOW_TAGS;?></label>
         </div>
+
+        <script>
+        (function() {
+          var container = document.getElementById('show_tag');
+          var input = document.getElementById('show_tag_input');
+          var style = document.getElementById('show_tag_style');
+          var wantShow = (localStorage.getItem('show_tag') !== '0');
+
+          if (wantShow) {
+            input.checked = true;
+            container.classList.add('checked');
+            style.innerHTML = ''; 
+          } else {
+            input.checked = false;
+            container.classList.remove('checked');
+            style.innerHTML = '.show_tag_controled { display: none !important; }';
+          }
+
+          setTimeout(function() {
+            container.classList.remove('no-transition');
+          }, 50);
+        })();
+
+        $(document).ready(function() {
+          $('#show_tag').on('click', function(e) {
+            e.preventDefault(); 
+            e.stopPropagation();
+
+            var $input = $('#show_tag_input');
+            var $container = $(this);
+            var $style = $('#show_tag_style');
+            var isNowChecked = !$input.prop('checked');
+            $input.prop('checked', isNowChecked);
+            
+            if (isNowChecked) {
+              $container.addClass('checked');
+              $style.html('');
+              localStorage.setItem('show_tag', '1');
+            } else {
+              $container.removeClass('checked');
+              $style.html('.show_tag_controled { display: none !important; }');
+              localStorage.setItem('show_tag', '0');
+            }
+          });
+        });
+        </script>
+
         <div style="margin-left: 10px; display: inline-block; ">
                <a style="margin-left: 10px; " href="category.php" class="ui labeled icon mini green button"><i class="plus icon"></i> <?php echo $MSG_SHOW_ALL_TAGS;?></a>
           
