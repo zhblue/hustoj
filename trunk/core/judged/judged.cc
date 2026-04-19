@@ -326,6 +326,7 @@ pid_t pidApp =-1 ;
 void run_php_cron(char * work_dir){
 	int mem_lmt=256;
 	pidApp = fork();
+	int once=0;
 	if (pidApp == 0){
 		sprintf(php_lock_file,"%s/cron.pid",work_dir);
 		if(already_running(php_lock_file)){
@@ -364,7 +365,8 @@ void run_php_cron(char * work_dir){
 		setrlimit(RLIMIT_AS, &LIM);
 		execl("/usr/bin/php", "/usr/bin/php","cron.php", (char *) NULL);
 	}else{
-		waitpid(pidApp, NULL, WNOHANG);     // wait 4 one child exit
+		once=waitpid(pidApp, NULL, WNOHANG);     // wait 4 one child exit
+		if(once==pidApp) pidApp=0;
 	}
 }
 void run_client(int runid, int clientid) {
@@ -684,6 +686,10 @@ int work() {
 			continue;
 		if (workcnt >= max_running) {           // if no more client can running
 			tmp_pid = waitpid(-1, NULL, WNOHANG);     // wait 4 one child exit
+		        if(tmp_pid==pidApp){
+			       	pidApp=0;
+				continue;
+			}
 			if (DEBUG) printf("try get one tmp_pid=%d\n",tmp_pid);
 			for (i = 0; i < max_running; i++){     // get the client id
 				if (ID[i] == tmp_pid){
@@ -743,8 +749,11 @@ int work() {
                 }
 
 	}
-
-	while ((tmp_pid = waitpid(-1, NULL, WNOHANG )) > 0) {       // if run dedicated judge using WNOHANG
+	while ((tmp_pid = waitpid(-1, NULL, pidApp>0 ? WNOHANG:0 )) > 0 ) {       // if run dedicated judge using WNOHANG
+		if(tmp_pid==pidApp){
+			pidApp=0;
+			continue;
+		}
 		for (i = 0; i < max_running; i++){     // get the client id
 			if (ID[i] == tmp_pid){
 				workcnt--;
@@ -755,6 +764,7 @@ int work() {
 		}
 		printf("tmp_pid = %d\n", tmp_pid);
 	}
+
 	if (!http_judge) {
 #ifdef _mysql_h
 		if(res!=NULL) {
