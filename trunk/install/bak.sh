@@ -12,9 +12,9 @@ PORT=$(grep 'OJ_PORT_NUMBER' $CONFIG | cut -d= -f2)
 
 # 定义清理函数
 cleanup_old_backups() {
-    echo "警告：空间不足，正在强制清理 3 天前的旧备份..."
-    find $BACKUP_DIR -name "hustoj_*.tar.bz2" -mtime +3 -delete
-    find $BACKUP_DIR -name "db_*.sql.bz2" -mtime +3 -delete
+    echo "警告：空间不足，正在强制清理 2 天前的旧备份..."
+    find $BACKUP_DIR -name "hustoj_*.tar.bz2" -mtime +2 -delete
+    find $BACKUP_DIR -name "db_*.sql.bz2" -mtime +2 -delete
 }
 
 # 2. 动态计算空间阈值
