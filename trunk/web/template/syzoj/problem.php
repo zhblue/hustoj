@@ -544,12 +544,13 @@ function admin_mod(){
 <?php } ?>
 		});
 	  	// adding note for ```input1  ```output1 in description
-	        for(let i=1;i<10;i++){
+                setTimeout(function(){
+                for(let i=1;i<10;i++){
                         $(".language-input"+i).parent().before("<div><?php echo $MSG_Sample_Input?>"+i+":</div>");
                         $(".language-output"+i).parent().before("<div><?php echo $MSG_Sample_Output?>"+i+":</div>");
                 }
-
-	       
+                },200);
+       
         $(".md table tr td").css({
             "border": "1px solid grey",
             "text-align": "center",
