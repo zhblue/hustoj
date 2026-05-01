@@ -112,7 +112,7 @@ HUSTOJ 是采用 GPL 的自由软件。(仅限原创部分代码，其中使用�
 * masteroj uoj loj syzoj zoj qduoj openJudger [scratch-run](https://github.com/VNOI-Admin/scratch-run) [PHPMailer](https://github.com/zhblue/hustoj/tree/PHPMailer)
 * linux apache nginx php mysql mariadb memcached [sqlite](https://sqlite.org/)
 * bootstrap kindeditor ACEeditor blockly codemirror katex phpfilemanager mdui
-* sim gcc clang openjdk freepascal mono docker SyntaxHighlighter
+* sim gcc clang openjdk freepascal mono docker SyntaxHighlighter marked.js
 
 排名不分先后本列表欢迎补充
 
