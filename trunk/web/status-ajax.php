@@ -27,6 +27,7 @@ $result = pdo_query($sql, $solution_id);
 if (!empty($result)) {
     $row = $result[0];
     $contest_id = $row['contest_id'];
+    if ($row['result']>=16 && $OJ_REMOTE_JUDGE) trigger_judge($solution_id);
     if (isset($_GET['tr']) && ($row['problem_id'] == 0 || ($row['problem_id'] > 0 && $OJ_SHOW_DIFF && !contest_locked($contest_id, 16))) &&
         (isset($_SESSION[$OJ_NAME . '_' . 'user_id']) && $_SESSION[$OJ_NAME . '_' . 'user_id'] == $row['user_id'])) {
 
