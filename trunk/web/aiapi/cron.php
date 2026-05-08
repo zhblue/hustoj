@@ -209,4 +209,4 @@ do {
 } while ($did > 0);
 
 echo "[CRON] 全部任务处理完毕，退出。\n";
-exit(0);
+if(!$OJ_REMOTE_JUDGE) exit(0);
