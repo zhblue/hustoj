@@ -155,6 +155,7 @@
 	$MSG_Output= "输出" ;
 	$MSG_Sample_Input= "样例输入" ;
 	$MSG_Sample_Output= "样例输出" ;
+	$MSG_Sample_Zip= "大样例" ;
 	$MSG_Test_Input= "测试输入" ;
 	$MSG_Test_Output= "测试输出" ;
 	$MSG_NJ= "普通裁判" ;
