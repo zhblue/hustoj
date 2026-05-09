@@ -2,6 +2,16 @@
 ////////////////////////////Common head
 require_once('./include/db_info.inc.php');
 require_once('./include/my_func.inc.php');
+$id = intval($_GET['id']);
+if(empty($OJ_DATA)) die();
+$zipname=$OJ_DATA."/".$id."/sample.zip";
+if(file_exists($zipname)){
+    header('Content-Type: application/zip;charset=utf8');
+    header('Content-disposition: attachment; filename=Sample_' . date('Y-m-d') . '.zip');
+    header('Content-Length: ' . filesize($zipname));
+    readfile($zipname);
+    die();
+}
 if ((!isset($OJ_DOWNLOAD)) || !$OJ_DOWNLOAD) {
     $view_errors = "Download Disabled!";
     require("template/" . $OJ_TEMPLATE . "/error.php");
