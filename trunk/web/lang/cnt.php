@@ -145,6 +145,7 @@
  $MSG_Output = "輸出" ;
  $MSG_Sample_Input = "範例輸入" ;
  $MSG_Sample_Output = "範例輸出" ;
+	$MSG_Sample_Zip = "範例壓縮" ;
  $MSG_Test_Input = "測試輸入" ;
  $MSG_Test_Output = "測試輸出" ;
  $MSG_NJ = "普通裁判" ;

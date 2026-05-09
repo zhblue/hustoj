@@ -133,6 +133,7 @@
 	$MSG_Output="$MSG_Output";
 	$MSG_Sample_Input="$MSG_Sample_Input";
 	$MSG_Sample_Output="$MSG_Sample_Output";
+	$MSG_Sample_Zip="$MSG_Sample_Zip";
 	$MSG_Test_Input="$MSG_Test_Input";
 	$MSG_Test_Output="$MSG_Test_Output";
 	$MSG_NJ="שיפוט רגיל";

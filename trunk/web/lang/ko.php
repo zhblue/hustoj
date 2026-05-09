@@ -143,6 +143,7 @@
 	$MSG_Output="출력 설명";
 	$MSG_Sample_Input="입력 예시";
 	$MSG_Sample_Output="출력 예시";
+	$MSG_Sample_Zip="샘플 압축";
 	$MSG_Test_Input="테스트 입력";
 	$MSG_Test_Output="테스트 출력";
 	$MSG_NJ="일반 채점" ;

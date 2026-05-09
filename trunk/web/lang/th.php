@@ -135,6 +135,7 @@ $MSG_TOO_BAD="Please surf the internet in a civilized manner";
 	$MSG_Output= "ข้อมูลส่งอออก" ;
 	$MSG_Sample_Input= "ตัวอย่างข้อมูลนำเข้า";
 	$MSG_Sample_Output= "ตัวอย่างข้อมูลส่งออก";
+	$MSG_Sample_Zip= "ไฟล์ตัวอย่าง";
 	$MSG_Test_Input= "Test Input" ;
 	$MSG_Test_Output= "Test Output" ;
 	$MSG_NJ= "Normal Judger" ;

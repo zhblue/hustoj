@@ -134,6 +134,7 @@
 	$MSG_Output= "خروجی";
 	$MSG_Sample_Input= "نمونه وردی";
 	$MSG_Sample_Output= "نمونه خروجی";
+	$MSG_Sample_Zip= "نمونه فشرده";
 	$MSG_Test_Input= "Test Input" ;
 	$MSG_Test_Output= "Test Output" ;
 	$MSG_NJ= "Normal Judger" ;

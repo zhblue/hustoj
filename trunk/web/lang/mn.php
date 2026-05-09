@@ -133,6 +133,7 @@
 	$MSG_Output="Output";
 	$MSG_Sample_Input="Sample Input";
 	$MSG_Sample_Output="Sample Output";
+	$MSG_Sample_Zip= "Sample Zip" ;
 	$MSG_Test_Input="Test Input";
 	$MSG_Test_Output="Test Output";
 	$MSG_NJ="Энгийн шалгалт";

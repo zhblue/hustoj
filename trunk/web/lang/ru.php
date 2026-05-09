@@ -142,6 +142,7 @@
  $MSG_Output = " Вывод ";
  $MSG_Sample_Input = " Образец ввода ";
  $MSG_Sample_Output = " Вывод образца ";
+	$MSG_Sample_Zip = " Архив образца ";
  $MSG_Test_Input = " Проверка ввода ";
  $MSG_Test_Output = " Вывод теста ";
  $MSG_NJ =" Обычный судья ";

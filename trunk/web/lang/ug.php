@@ -150,6 +150,7 @@ $MSG_TOO_BAD="Please surf the internet in a civilized manner";
 	$MSG_Output= "چىقىرىش";
 	$MSG_Sample_Input= "ئۈلگە كىرگۈزۈش";
 	$MSG_Sample_Output= "ئۈلگە چىقىرىش";
+	$MSG_Sample_Zip= "ئۈلگە ھۆججەت";
 	$MSG_Test_Input= "سىناق كىرگۈزۈش" ;
 	$MSG_Test_Output= "سىناق چىقىرىش" ;
 	$MSG_NJ= "Normal Judger" ;
