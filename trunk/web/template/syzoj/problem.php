@@ -217,7 +217,9 @@ document.addEventListener('keydown', function(e) {
           </div>
         </div>
     </div>
-  <?php }?>
+  <?php }
+   if(file_exists($OJ_DATA."/".$id."/sample.zip")) echo "<a class='small ui success button' href='download.php?id=$id' role='button'>$MSG_DOWNLOAD $MSG_Sample_Zip</a>";  
+  ?>
   <?php if(!(empty($row['hint']) || $row['hint']=="<span class='md'>\n</span>" )||isset($_GET['spa'])){ ?>
     <div class="row">
         <div class="column">
