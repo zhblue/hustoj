@@ -831,3 +831,4 @@ $MSG_ONLY_LAST_SUBMISSION="Only the last submission will be scored";
 	$MSG_AI_PROMPT_USER_ERROR="Error message:";
 
   $MSG_COIN_EARNED="Заработанные очки"; $MSG_COIN_BONUS="Бонусные очки"; $MSG_COIN_SPENT="Потраченные очки"; $MSG_COIN_BALANCE="Баланс очков";
+  $MSG_NUM="№";

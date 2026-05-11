@@ -495,3 +495,4 @@
 	$MSG_AI_PROMPT_USER_ERROR="Error message:";
 
   $MSG_COIN_EARNED="Points Earned"; $MSG_COIN_BONUS="Bonus Points"; $MSG_COIN_SPENT="Points Spent"; $MSG_COIN_BALANCE="Points Balance";
+  $MSG_NUM="Serial";

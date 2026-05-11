@@ -610,3 +610,4 @@ $MSG_TOO_BAD="Please surf the internet in a civilized manner";
 	$MSG_AI_PROMPT_USER_ERROR="Error message:";
 
   $MSG_COIN_EARNED="Earned Marks"; $MSG_COIN_BONUS="Bonus Marks"; $MSG_COIN_SPENT="Spent Marks"; $MSG_COIN_BALANCE="Balance Marks";
+  $MSG_NUM="#";

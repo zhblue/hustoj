@@ -495,3 +495,4 @@
 	$MSG_AI_PROMPT_USER_ERROR="Error message:";
 
   $MSG_COIN_EARNED="Олгосон оноо"; $MSG_COIN_BONUS="Бэлэгдэх оноо"; $MSG_COIN_SPENT="Зарцуулсан оноо"; $MSG_COIN_BALANCE="Тооцоотой үлдэгдэл";
+  $MSG_NUM="Дугаар";

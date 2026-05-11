@@ -827,3 +827,4 @@
 	$MSG_AI_PROMPT_USER_ERROR="報錯信息是:";
 
   $MSG_COIN_EARNED="解題獲得積分"; $MSG_COIN_BONUS="老師獎勵積分"; $MSG_COIN_SPENT="已消耗積分"; $MSG_COIN_BALANCE="當前積分餘額";
+  $MSG_NUM="編號";

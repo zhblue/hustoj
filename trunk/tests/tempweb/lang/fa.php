@@ -525,3 +525,4 @@
 	$MSG_AI_PROMPT_USER_ERROR="Error message:";
 
   $MSG_COIN_EARNED=" امتیاز کسب شده"; $MSG_COIN_BONUS="امتیاز جایزه"; $MSG_COIN_SPENT="امتیاز مصرف شده"; $MSG_COIN_BALANCE=" موجودی امتیاز";
+  $MSG_NUM="#";

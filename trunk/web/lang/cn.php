@@ -549,3 +549,4 @@
   $MSG_COIN_SPENT="已消耗积分";
   $MSG_COIN_BALANCE="当前积分余额";
 
+$MSG_NUM="序号";
