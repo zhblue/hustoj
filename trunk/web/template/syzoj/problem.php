@@ -39,8 +39,8 @@ div[class*=ace_br] {
             $id=$row['problem_id'];
             //echo "<title>$MSG_PROBLEM ".$PID[$pid].": ".$row['title']." </title>";
             echo "$MSG_PROBLEM ".$PID[$pid]."：".$row['title'];
-            if(intval($row['coin'])>0) for($i=0;$i<min(intval($row['coin']),5);$i++) echo "<span style='color:orange'>\u2605</span>";
           }
+          if(intval($row['coin'])>0) for($i=0;$i<min(intval($row['coin']),5);$i++) echo "<span style='color:orange'>\u2605</span>";
           if($row['defunct']=="Y")
           echo "<span class=\"p-label ui tiny red label\">$MSG_RESERVED</span>";
         ?>
