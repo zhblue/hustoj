@@ -1,0 +1,33 @@
+<appwizard>
+<introduction>
+<name>HUSTOJ在线裁判系统SAE版</name>
+<author>zhblue</author>
+<icon>image/logo.png</icon>
+<homepage>http://code.google.com/p/hustoj</homepage>
+<description>
+<![CDATA[
+    HUSTOJ是一个基于GPL协议的开源软件，可用于各类计算机程序设计竞赛、教学、招聘等用途。
+	其Web端可安装于SAE,判题系统需另行配置，详见 http://code.google.com/p/hustoj
+         ]]>
+</description>
+</introduction>
+<platform>
+<services>
+<service name="web"  params="public">Storage</service>
+<service name="data"  params="private">Storage</service>
+<service>Mysql</service>
+<service size="30M">Memcache</service>
+</services>
+<appconfig>
+<tpl>
+<![CDATA[
+name: <<appname>>
+version: <<version>>
+             ]]>
+</tpl>
+</appconfig>
+</platform>
+<code>
+<initScript>sae/install.php</initScript>
+</code>
+</appwizard>

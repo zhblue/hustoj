@@ -1,0 +1,66 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>SQLite Wasm Demo</title>
+    <script src="/include/jquery-latest.js"></script>
+    <script type="module" src="./sqlite3.js"></script>
+  </head>
+  <body>
+    <h3>SQLite Wasm Demo for hustoj </h3>
+    <div class="main-thread"></div>
+    <textarea id="input" rows=10 cols=40 >CREATE TABLE IF NOT EXISTS user(a,b,c);
+insert into user values(1,2,3),(4,5,6);</textarea>
+    <textarea id="sql" rows=10 cols=40 >select * from user</textarea>
+    <button id="run" onclick="run()">Run</button>
+    <textarea id="output" rows=10 cols=80 ></textarea>
+  </body>
+  <script>
+	const log = function (...args){
+	    for(const arg of args)
+	      $("#output").val($("#output").val() + arg+"\n");
+	}
+	const start = function (sqlite3,input_sql,user_sql) {
+	 // log('Running SQLite3 version', sqlite3.version.libVersion);
+	  const db = new sqlite3.oo1.DB('/mydb.sqlite3', 'ct');
+	 // log('Created transient database', db.filename);
+
+	  try {
+	   // log('Creating a table...');
+	    db.exec(input_sql);
+	   // log('Query data with exec()...');
+	    db.exec({
+	      sql: user_sql,
+	      callback: (row) => {
+		log(row.join("|"));
+		console.log(row);
+	      },
+	    });
+	  } finally {
+	    db.close();
+	  }
+	};
+
+function run(){
+	const input=$("#input").val();
+	$("#output").val("");
+	runSQL(input,$("#sql").val()); 
+}
+function runSQL(input,sql){
+//	log('Loading and initializing SQLite3 module...');
+	sqlite3InitModule({
+	  print: log,
+	  printErr: log,
+	}).then((sqlite3) => {
+//	  log('Done initializing. Running demo...');
+	  try {
+	    start(sqlite3,input,sql);
+	  } catch (err) {
+	    log(err.name, err.message);
+	  }
+	});
+
+}
+
+  </script>
+</html>

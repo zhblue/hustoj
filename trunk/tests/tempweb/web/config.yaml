@@ -1,0 +1,7 @@
+name: hustoj
+version: 1
+handle:
+- compress:  if ( out_header["Content-type"]=="text/javascript" ) compress
+- compress:  if ( out_header["Content-type"]=="text/css" ) compress
+- compress:  if ( out_header["Content-type"]=="text/html" ) compress
+- compress:  if ( out_header["Content-type"]=="text/plain" ) compress

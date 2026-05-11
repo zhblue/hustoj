@@ -1,0 +1,186 @@
+@import url(../bootstrap/css/bootstrap.css);
+input{
+   height:24px;
+}
+a {
+    color: #1A5CC8;
+    text-decoration: none;
+}
+a:hover {
+    color: orange;
+    text-decoration: underline;
+}
+h2 {
+    color: blue;
+}
+#wrapper {
+    width: 95%;
+    position: relative;
+    left: 2.5%;
+}
+
+.toprow {
+    background-color: #1A5CC8;
+    color: #FFFFFF;
+    font-weight: bold;
+    white-space: nowrap;
+    background: url("../image/menu_bg.png");
+}
+.toprow a {
+    color: #FFFFFF;
+    font-family: Arial;
+    font-size: 18px;
+    font-weight: bold;
+    margin: 15px;
+}
+.toprow a:hover {
+    color: orange;
+    font-family: Arial;
+    font-size: 18px;
+    font-weight: bold;
+    margin: 15px;
+}
+.oddrow {
+    background-color: #E5ECF9;
+    white-space: nowrap;
+}
+.evenrow {
+    background-color: #FFFFFF;
+    white-space: nowrap;
+}
+body {
+    background-color: #FFFFFF;
+    background-image: url("../image/background.jpg");
+    font-size:24px;
+    line-height:48px;
+}
+.hd {
+    color: #FFFFFF;
+    font-weight: bold;
+}
+.time {
+    text-align: right;
+}
+.ip {
+    padding-right: 5px;
+    text-align: right;
+}
+tr.userinfo {
+    background-color: #FFFFF0;
+    font-size: 16px;
+}
+span.yes {
+    color: green;
+    font-weight: bolder;
+}
+span.no {
+    color: red;
+    font-weight: bolder;
+}
+.green {
+    color: green;
+}
+.red {
+    color: red;
+}
+.blue {
+    color: blue;
+}
+.gray {
+    color: gray;
+}
+.orange {
+    color: orange;
+}
+.navy {
+    color: navy;
+}
+span.exadmin {
+    color: gray;
+}
+#center {
+    text-align: center;
+}
+div.content {
+    background: none repeat scroll 0 0 #E4F0F8;
+    font-family: Times New Roman;
+    font-size: 14px;
+    height: auto;
+    margin: 0;
+    padding: 0 20px;
+    text-align: left;
+    white-space:normal;
+}
+.sampledata {
+    background: none repeat scroll 0 0 #8DB8FF;
+    font-family: Monospace;
+    font-size: 18px;
+    white-space: pre;
+}
+#head {
+    height: 53px;
+    position: static;
+    text-align: center;
+    visibility: visible;
+    width: 100%;
+    z-index: 1;
+}
+#menu {
+    background: url("../image/menu_bg.png") repeat scroll 0 0 transparent;
+    font-weight: bold;
+    height: 35px;
+    position: static;
+    text-align: center;
+    visibility: visible;
+    width: 100%;
+    z-index: 2;
+}
+.menu_item {
+    display: inline;
+    position: relative;
+    top: 5px;
+    vertical-align: bottom;
+}
+.menu_item a {
+    color: #FFFFFF;
+    font-size: 20px;
+    top: 2px;
+}
+#profile {
+    font-weight: bold;
+    height: 32px;
+    left: 0;
+    position: absolute;
+    text-align: right;
+    top: 0;
+    visibility: visible;
+    width: 100%;
+    z-index: 3;
+}
+#broadcast {
+    color: red;
+    height: 50px;
+    position: static;
+    text-align: center;
+    visibility: visible;
+    width: 100%;
+    z-index: 4;
+}
+#main {
+    height: auto;
+    position: static;
+    width: 100%;
+    z-index: 6;
+}
+#foot {
+    height: 133px;
+    position: static;
+    text-align: center;
+    visibility: visible;
+    width: 100%;
+    z-index: 7;
+}
+#logo {
+    position: static;
+    vertical-align: middle;
+}

@@ -1,0 +1,37 @@
+@media (prefers-color-scheme: dark) {
+ // one
+ .app{
+  filter: invert(1) hue-rotate(180deg);
+  img,button,.active {
+    //filter: brightness(.8) contrast(1.2);
+    filter: invert(1) hue-rotate(180deg);
+  }
+ }
+ // two
+ div:not(.no-invert){
+   filter: invert(1) hue-rotate(180deg);
+ }
+ // three
+ :not(img) { filter: invert(100%) hue-rotate(180deg); }
+}
+
+body {
+    filter: invert(1) hue-rotate(180deg);
+    margin-top: 0px !important;
+    // 不需要反转的，在反转回去
+    // 图片
+    img,
+    iframe,
+    // element 元素
+    .el-tag--primary, .el-tag--success, .el-tag--warning, .el-tag--error,
+    .el-button--primary, .el-button--primary,
+    .invert-restore{
+        filter: invert(1) hue-rotate(180deg);
+    }
+    .invert-restore{
+        // 反转回去的，里面的东西，在去除反转
+        img{
+            filter: none;
+        }
+    }
+}

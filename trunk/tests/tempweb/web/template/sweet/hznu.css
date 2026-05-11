@@ -1,0 +1,66 @@
+.toprow{
+   background-color:#eee;
+   white-space:nowrap;
+}
+.navbar-nav li a,.navbar-header .navbar-brand{
+   color:#fff;
+   font-weight: 600;
+}
+.dropdown-menu,.navbar-default{
+   background-color:#0e90d2;
+   color:white;
+   background-image: linear-gradient(to bottom, #0e90d2 0px, #0e90d2 100%);
+   background-repeat: repeat-x;
+   border-radius: 4px;
+   box-shadow: 0px 1px 0px rgba(255, 255, 255, 0.15) inset, 0px 1px 5px rgba(0, 0, 0, 0.075);
+}
+.navbar-default .navbar-nav>li>a {
+    color:white;
+}
+.http_judge_form{
+   white-space:nowrap;
+}
+.center{
+   text-align: center
+}
+.mynav {
+   margin-top: 20px
+}
+.container .jumbotron{
+   padding: 5px;
+   background-image: url(../../image/background.jpg);
+   border: 1px solid #eee;
+}
+
+h3.pagenav {
+   margin-top: 5px;
+   margin-bottom: 20px;
+}
+
+h3.pagenav div.item{
+   padding: 4px;
+   margin: 3px;
+   font-size: 16px;
+   border: 1px solid #eee;
+   border-radius: 3px;
+   display: inline-block;
+   width: 30px;
+}
+
+h3.pagenav div.item:hover{
+   background-color: #ddd;
+   cursor: pointer;
+}
+
+h3.pagenav div.active{
+   color: #888;
+}
+
+.broadcast {
+   height: 20px;
+}
+
+#problemset {
+   margin-top: 20px;
+}
+

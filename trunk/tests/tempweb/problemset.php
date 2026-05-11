@@ -140,7 +140,7 @@ if (isset($_SESSION[$OJ_NAME . '_' . 'administrator'])) {  //all problems
  * 统计总页数，获取当前页的问题数据
  */
 pdo_query("SET sort_buffer_size = 1024*1024");   // Out of sort memory, consider increasing server sort buffer size
-$sql = "select `problem_id`,`title`,`source`,`submit`,`accepted`,defunct FROM problem A WHERE $filter_sql $order_by $limit_sql ";
+$sql = "select `problem_id`,`title`,`source`,`submit`,`accepted`,defunct,coin FROM problem A WHERE $filter_sql $order_by $limit_sql ";
 $count_sql = "select count(1) from problem where  $filter_sql ";
 //echo htmlentities( $sql);
 if (isset($_GET['search']) && trim($_GET['search']) != "") {

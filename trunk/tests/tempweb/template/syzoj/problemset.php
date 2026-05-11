@@ -186,7 +186,7 @@
              echo "</a>";
              if($row['defunct']=='Y')
               {echo "<a href=admin/problem_df_change.php?id=".$row['problem_id']."&getkey=".htmlentities($_SESSION[$OJ_NAME.'_'.'getkey']).">".("<span class=\"ui tiny red label\">未公开</span>")."</a>";}
-              if(intval($row['coin'])>0) echo str_repeat('<span style=\'color:orange\'>\u2605</span>', min(intval($row['coin']), 5));
+              if(intval($row['coin'])>0) echo str_repeat('<span style=\'color:orange\'>✦</span>', min(intval($row['coin']), 5));
 
               echo "<div class=\"show_tag_controled\" style=\"float: right; \">";
               //echo "<span class=\"ui header\">";

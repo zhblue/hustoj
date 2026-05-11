@@ -1,0 +1,166 @@
+@import url(../../bootstrap/css/bootstrap.css);
+a {
+    color: #00ff00;
+    text-decoration: none;
+}
+a:hover {
+    color: orange;
+    text-decoration: underline;
+}
+h2 {
+    color: 00ff00;
+}
+.toprow {
+    background-color: #1A5CC8;
+    color: #FFFFFF;
+    font-weight: bold;
+    white-space: nowrap;
+}
+.toprow a {
+    color: #FFFFFF;
+    font-family: Arial;
+    font-size: 18px;
+    font-weight: bold;
+    margin: 15px;
+}
+.toprow a:hover {
+    color: orange;
+    font-family: Arial;
+    font-size: 18px;
+    font-weight: bold;
+    margin: 15px;
+}
+.oddrow {
+    background-color: 999999;
+    white-space: nowrap;
+}
+.evenrow {
+    background-color: 777777;
+    white-space: nowrap;
+}
+body {
+    background-color: #000000;
+    //background-image: url("../image/background.jpg");
+    color: #00ff00;
+}
+.hd {
+    color: #FFFFFF;
+    font-weight: bold;
+}
+.time {
+    text-align: right;
+}
+.ip {
+    padding-right: 5px;
+    text-align: right;
+}
+tr.userinfo {
+    background-color: #444440;
+    font-size: 16px;
+}
+span.yes {
+    color: green;
+    font-weight: bolder;
+}
+span.no {
+    color: red;
+    font-weight: bolder;
+}
+.green {
+    color: green;
+}
+.red {
+    color: red;
+}
+.blue {
+    color: blue;
+}
+.gray {
+    color: gray;
+}
+.orange {
+    color: orange;
+}
+.navy {
+    color: navy;
+}
+span.exadmin {
+    color: gray;
+}
+#center {
+    text-align: center;
+}
+div.content {
+    background: none repeat scroll 0 0 #444048;
+    font-family: Times New Roman;
+    font-size: 14px;
+    height: auto;
+    margin: 0;
+    padding: 0 20px;
+    text-align: left;
+}
+.sampledata {
+    background: none repeat scroll 0 0 #5D585F;
+    font-family: Monospace;
+    font-size: 18px;
+    white-space: pre;
+}
+#head {
+    height: 53px;
+    position: static;
+    text-align: center;
+    visibility: visible;
+    width: 100%;
+    z-index: 1;
+}
+#menu {
+    font-weight: bold;
+    height: 32px;
+    position: static;
+    text-align: center;
+    visibility: visible;
+    width: 100%;
+    z-index: 2;
+}
+.menu_item {
+    display: inline;
+}
+#profile {
+    font-weight: bold;
+    height: 32px;
+    left: 0;
+    position: absolute;
+    text-align: right;
+    top: 0;
+    visibility: visible;
+    width: 100%;
+    z-index: 3;
+}
+#broadcast {
+    color: red;
+    height: 50px;
+    position: static;
+    text-align: center;
+    visibility: visible;
+    width: 100%;
+    z-index: 4;
+}
+#main {
+    height: auto;
+    position: static;
+    width: 100%;
+    z-index: 6;
+}
+#foot {
+    height: 133px;
+    position: static;
+    text-align: center;
+    visibility: visible;
+    width: 100%;
+    z-index: 7;
+}
+#logo {
+    position: static;
+    vertical-align: middle;
+}
+

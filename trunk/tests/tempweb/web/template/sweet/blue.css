@@ -1,0 +1,41 @@
+.toprow{
+   background-color:#79a3d5;
+   white-space:nowrap;
+}
+.toprow,.navbar .navbar-nav li a,.navbar-header .navbar-brand{
+  color:#fff;
+}
+.dropdown-menu,.navbar-default{
+   background-color:#79a3d5;
+   background-image: linear-gradient(to bottom, #323a81 0px, #79a3d5 100%);
+   background-repeat: repeat-x;
+   border-radius: 4px;
+   box-shadow: 0px 1px 0px rgba(255, 255, 255, 0.15) inset, 0px 1px 5px rgba(0, 0, 0, 0.075);
+}
+.http_judge_form{
+   white-space:nowrap;
+}
+.center{
+   text-align: center
+}
+.sampledata {
+    background: none repeat scroll 0 0 #ccccFF;
+    font-family: Monospace;
+    font-size: 18px;
+    line-height:2px;
+    white-space: pre;
+}
+
+.navbar{
+    position: fixed;
+    width: 100%;
+    padding: 0 auto;
+    top: 0;
+    left: 0;
+    -moz-opacity: 0.9;
+    -khtml-opacity: 0.9;
+    opacity: 0.9;
+    z-index: 9999;
+    color:#999;
+}
+/* funny color*/

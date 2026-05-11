@@ -1,0 +1,13 @@
+please install a phpBB here or edit /bbs.php to relink OJ to your BBS
+to make more integretion with HUSTOJ,you can modify phpBB3 as follow:
+
+1. search "RE:" in posting.php, add 3 lines after the condition block which "RE:" in .
+//-------------------
+		if (($mode == 'post' )&&$_GET['pid'] && !$submit && !$preview && !$refresh){
+		   $post_data['post_subject'] = "[".$_GET['pid']."]";
+		}
+//-------------------
+
+2. search "WORD_IN_NO_POST" /language/[YOUR_LANG]/search.php
+   edit the right string of "=>" tobe as follow:
+   'No posts were found because the word is not contained in any post.  <a href=/bbs/posting.php?mode=post&f=2&pid=%s><B>ClickHere</B></a> to ask a new question.',

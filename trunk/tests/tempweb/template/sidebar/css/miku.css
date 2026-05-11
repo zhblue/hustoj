@@ -1,0 +1,45 @@
+/* 初音未来的配色方案 主体框架由AI狗蛋生成 */
+:root {
+  --hatsune-green: #55a8aa; /* 主绿色 */
+  --hatsune-darkblue: #094c55; /* 蓝黑色 */
+  --hatsune-blue: #4cd0d499; /* 主蓝色 */
+  --hatsune-pink: #ff69b4; /* 粉色 */
+  --hatsune-white: #bdc8ce66; /* 白色 */
+  --hatsune-red: #f04b83; /* 红色 */
+}
+
+/* Semantic UI 默认颜色覆盖 */
+.ui.primary.button {
+  background-color: var(--hatsune-green);
+}
+.ui.stackable.mobile.ui.container{
+  background-color: var(--hatsune-blue);
+}
+.ui.secondary.button {
+  background-color: var(--hatsune-blue);
+}
+
+.ui.accent.button {
+  background-color: var(--hatsune-pink);
+}
+
+.ui.basic.button {
+  background-color: var(--hatsune-white);
+}
+
+/* 其他组件的颜色覆盖 */
+.ui.header {
+  color: var(--hatsune-darkblue);
+}
+
+a {
+  color: var(--hatsune-red);
+}
+.ui.segment {
+  background-color: var(--hatsune-white);
+}
+.padding {
+  background-color: var(--hatsune-blue) !important;
+}
+
+/* ... 可以根据需要继续覆盖其他组件的颜色 */

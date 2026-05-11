@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="cn" style="position:fixed; width: 100%; overflow: hidden; ">
+<head>
+    <meta charset="utf-8">
+    <meta content="IE=edge" http-equiv="X-UA-Compatible">
+    <meta name="viewport" content="width=device-width, initial-scale=0.5">
+  <style>
+	#source {
+	    width: 80%;
+	    height: 600px;
+	}
+	.ace-chrome .ace_marker-layer .ace_active-line{   /*当前行*/
+	   background-color: rgba(0,0,199,0.3);
+	}
+		    .button, input, optgroup, select, textarea {  /*选择题的题号大小*/
+	    font-family: sans-serif;
+	    font-size: 150%;
+	    line-height: 1.2;
+
+	}
+  </style>
+<center>
+<script src="include/jquery-latest.js"></script>
+<script src="include/checksource.js"></script>
+<form id=frmSolution method="post" onsubmit='do_test_run()' enctype="multipart/form-data" >
+<input id=problem_id type='hidden' value='0' name="id" >
+<span id="language_span">Language: 
+<select name="language" id="language" onchange="switchLang($(this).val())">
+<option value="0" selected="">
+C
+</option><option value="1">
+C++
+</option><option value="6">
+Python
+</option>
+</select>
+<span class="btn" id=result>状态</span>	
+</span>
+    <button onclick="toggleTheme(event)" style="background-color: bisque; position: absolute; top: 5px; right:70px;" v-if="false">
+        <i>🌗</i>
+    </button>
+    <button onclick="increaseFontSize(event)" style="background-color: bisque; position: absolute; top: 5px; right:40px;" v-if="false">
+        <i>➕</i>
+    </button>
+    <button onclick="decreaseFontSize(event)" style="background-color: bisque; position: absolute; top: 5px; right:10px;" v-if="false">
+        <i>➖</i>
+    </button>
+
+         <textarea style="width:80%;height:600px" cols=180 rows=30 id="source" name="source">
+#include <stdio.h>
+int main(){
+    int a, b;
+    while(scanf("%d %d",&a, &b) != EOF){
+        printf("%d\n", a + b);
+    }
+    return 0;
+}
+	</textarea>
+<style>
+            .button, input, optgroup, select, textarea {
+    font-family: sans-serif;
+    font-size: 150%;
+    line-height: 1.15;
+    margin: 0;
+    background: border-box;
+}
+        </style>
+         <div class="row">
+            <div class="" style="display: flex;">
+<div style=" width: 40%;height:150px; padding: 14px;    flex-direction: ;">
+        <div style=" display: flex;border-radius: 8px; background-color: rgb(255,255,255,0.4);" id="language_span">输入</div>
+         <textarea style="width:100%;height:135px;" cols=40 rows=5 id="input_text" name="input_text" >1 2</textarea>
+    </div>
+    <div style="
+    width: 40%;height:150px; padding: 14px;
+    flex-direction: ;
+    ">
+   <div style="    display: flex;
+    border-radius: 8px;
+    background-color: rgb(255,255,255,0.4);justify-content: space-between;" id="language_span">输出
+    </div>
+          <textarea style=" width:100%;background-color: white;height:135px; " cols=10 rows=5 id="out" name="out" disabled="true" placeholder='' ></textarea>    
+     </div>
+        <!--运行按钮-->
+            <input style=" margin-top:38px; margin-left: 15px; width: 7%;background-color: #22ba46a3;border-color: #00fff470;height: 130px;" id="TestRun" class="btn btn-info" type=button value="RUN" onclick=do_test_run();>
+        </div>
+ </div>
+        </div>
+    </form>
+</center>
+<script>
+var sid=0;
+var i=0;
+var using_blockly=false;
+var judge_result=['等待','等待重判','编译中','运行并评判','正确','格式错误','答案错误','时间超限','内存超限','输出超限','运行错误','编译错误','编译成功','运行完成','自动评测通过，等待人工确认','提交中','远程等待','远程判题',''];
+function show_re(solution_id){
+	var json = {};
+	json["action"]="re";
+	json["solution_id"]=solution_id;
+	json=JSON.stringify(json);
+	$.post("service.php",json,function(data){
+		let json=JSON.parse(data);
+	        $("#out").val(json.error);	
+	});
+}
+function show_ce(solution_id){
+	var json = {};
+	json["action"]="ce";
+	json["solution_id"]=solution_id;
+	json=JSON.stringify(json);
+	$.post("service.php",json,function(data){
+		let json=JSON.parse(data);
+	        $("#out").val(json.error);	
+	});
+	
+}
+function fresh_result(solution_id)
+{
+	var tb=window.document.getElementById('result');
+	if(solution_id==undefined){
+		tb.innerHTML="Vcode Error!";		
+		if($("#vcode")!=null) $("#vcode").click();
+		return ;
+	}
+	
+	sid=parseInt(solution_id);
+        if(sid<=0){
+                tb.innerHTML="10";
+                if($("#vcode")!=null) $("#vcode").click();
+                return ;
+        }
+	var json = {};
+	json["action"]="query";
+	json["solution_id"]=solution_id;
+	json=JSON.stringify(json);
+	$.post("service.php",json,function(data){
+		let json=JSON.parse(data);
+		if(json.result<4){
+			console.log(json.result);
+			window.setTimeout("fresh_result("+solution_id+")",1700);
+		}else{
+			if(json.result==11){
+				show_ce(solution_id);	
+			}else{
+				show_re(solution_id);	
+			}
+			console.log(json.result);
+			if(tb!=null)tb.innerHTML=json.memory+"kb "+json.time+"ms";
+		}		
+	});
+}
+var count=0;
+function login(){
+	let json="{\"action\":\"login\",   \"user_id\":\"service\",   \"password\":\"123456\"}";	
+	$.post("service.php",json,function(data){		
+		console.log(data);
+	})
+} 
+var handler_interval;
+function do_test_run(){
+	if( handler_interval) window.clearInterval( handler_interval);
+	var loader="<img width=18 src=image/loader.gif>";
+	var tb=window.document.getElementById('result');
+        var source=$("#source").val();
+	if(typeof(editor) != "undefined") {
+		source=editor.getValue();
+        	$("#hide_source").val(source);
+	}
+	if(source.length<10) return alert("too short!");
+	if(tb!=null)tb.innerHTML=loader;
+	var mark="0";
+	var problem_id=document.getElementById(mark);
+	document.getElementById("frmSolution").target="testRun";
+	let form=$("#frmSolution").serializeArray();
+	var json = {};
+	json["action"]="submit";
+	json["problem_id"]="0";
+	json["input_text"]=$("#input_text").val();
+	json["language"]=$("#language").val();
+	json["source"]=source;
+	json=JSON.stringify(json);
+	console.log(json);
+	login();
+	$.post("service.php",json,function(data){
+		let json=JSON.parse(data);
+		window.setTimeout("fresh_result("+json.solution_id+")",1700);	
+		console.log(json);
+	});
+  	$("#Submit").prop('disabled', true);
+  	$("#TestRun").prop('disabled', true);
+	count= 2 ;
+	handler_interval= window.setTimeout("resume();",1000);
+}
+function resume(){
+	var s=$("#Submit")[0];
+	var t=$("#TestRun")[0];
+	if(count==0){
+		if(t!=null) $("#TestRun").attr("disabled",false);
+		if(t!=null) $("#TestRun").val("Run");
+		if( handler_interval) window.clearInterval( handler_interval);
+		if($("#vcode")!=null) $("#vcode").click();
+	}else{
+		 $("#Submit").text("提交("+count+")");
+		if(t!=null)t.value="RUN("+count+")";
+		window.setTimeout("resume();",1000);
+	}
+	count--;
+}
+function switchLang(lang){
+   var langnames=new Array("c_cpp","c_cpp","pascal","java","ruby","sh","python","php","perl","csharp","objectivec","vbscript","scheme","c_cpp","c_cpp","lua","javascript","golang","sql","fortran","matlab","cobol","r","c_cpp","python");
+   editor.getSession().setMode("ace/mode/"+langnames[lang]);
+
+}
+
+</script>
+<script language="Javascript" type="text/javascript" src="include/base64.js"></script>
+<script src="ace/ace.js"></script>
+<script src="ace/ext-language_tools.js"></script>
+<script>
+    var editor;
+    ace.require("ace/ext/language_tools");
+   //reloadtemplate($("#language").val()); 
+   function autoSave(){
+        var mark="0";
+	if(!!localStorage){
+		let key="source:"+location.href;
+		localStorage.setItem(key,editor.getValue());
+	}
+   }
+   $(document).ready(function(){
+    	editor = ace.edit("source");
+	    editor.setTheme("ace/theme/xcode");
+	    editor.setOptions({
+		enableBasicAutocompletion: true,
+		enableSnippets: false,
+		enableLiveAutocompletion: false,  //改为true,打开自动补齐功能，改为false关闭
+		 fontFamily: "Consolas",  // MacOS missing align
+		// theme: "ace/theme/ambiance",   // Black theme
+		fontSize: "18px",
+	    });
+	if(!!localStorage){
+		let key="source:"+location.href;
+		let saved=localStorage.getItem(key);
+		   if(saved!=null&&saved!=undefined&&saved.length>editor.getValue().length){
+                                console.log("loading "+saved.length);
+                                if(typeof(editor) != "undefined")
+                                        editor.setValue(saved);
+                }
+
+	}
+	if(typeof(editor) != "undefined") editor.resize();
+	window.setInterval('autoSave();',5000);
+	$("pre").css("height",window.innerHeight-300);
+	login();
+	switchLang(0);
+   });
+</script>
+  </body>
+</html>
