@@ -35,14 +35,14 @@ $trash="";
 if(isset($_GET['keyword']) && $_GET['keyword']!=""){
   $gkeyword = $_GET['keyword'];
   $keyword = "%$gkeyword%";
-  $sql = "select `user_id`,`nick`,email,`accesstime`,`reg_time`,`expiry_date`,`ip`,`school`,`group_name`,`defunct` FROM `users` WHERE (user_id LIKE ?) OR (nick LIKE ?) OR (school LIKE ?)  OR (group_name LIKE ?) or (ip like ?) ORDER BY `user_id` DESC";
+  $sql = "select `user_id`,`nick`,email,`accesstime`,`reg_time`,`expiry_date`,`ip`,`school`,`group_name`,`defunct`,`coin_earned`,`coin_bonus`,`coin_spent` FROM `users` WHERE (user_id LIKE ?) OR (nick LIKE ?) OR (school LIKE ?)  OR (group_name LIKE ?) or (ip like ?) ORDER BY `user_id` DESC";
   $result = pdo_query($sql,$keyword,$keyword,$keyword,$keyword,$keyword);
 }else if(isset($_GET['trash'])){
   $trash="&trash";
-  $sql = "select `user_id`,`nick`,email,`accesstime`,`reg_time`,`expiry_date`,`ip`,`school`,`group_name`,`defunct` FROM `users` where defunct='Y' ORDER BY `accesstime` DESC LIMIT $sid, $idsperpage";
+  $sql = "select `user_id`,`nick`,email,`accesstime`,`reg_time`,`expiry_date`,`ip`,`school`,`group_name`,`defunct`,`coin_earned`,`coin_bonus`,`coin_spent` FROM `users` where defunct='Y' ORDER BY `accesstime` DESC LIMIT $sid, $idsperpage";
   $result = pdo_query($sql);
 }else{
-  $sql = "select `user_id`,`nick`,email,`accesstime`,`reg_time`,`expiry_date`,`ip`,`school`,`group_name`,`defunct` FROM `users` where defunct='N' ORDER BY `accesstime` DESC LIMIT $sid, $idsperpage";
+  $sql = "select `user_id`,`nick`,email,`accesstime`,`reg_time`,`expiry_date`,`ip`,`school`,`group_name`,`defunct`,`coin_earned`,`coin_bonus`,`coin_spent` FROM `users` where defunct='N' ORDER BY `accesstime` DESC LIMIT $sid, $idsperpage";
   $result = pdo_query($sql);
 }
 ?>
@@ -68,6 +68,9 @@ if(isset($_GET['keyword']) && $_GET['keyword']!=""){
       <th><?php echo $MSG_LAST_LOGIN?></th>
       <th><?php echo $MSG_REGISTER?></th>
       <th><?php echo $MSG_EXPIRY_DATE?></th>
+      <th>金币</th>
+      <th>奖励</th>
+      <th>消耗</th>
       <th><?php echo $MSG_STATUS?></th>
       <th><?php echo $MSG_ADMIN ?></th>
       <th><?php echo $MSG_SETPASSWORD?></th>
@@ -101,6 +104,9 @@ if(isset($_GET['keyword']) && $_GET['keyword']!=""){
         else if($edate>=$today) $color="blue";
         echo "<td><span fd='expiry_date' user_id='".$row['user_id']."' class='".$color."' >".$row['expiry_date']."</span></td>";
 
+        echo "<td>".intval($row['coin_earned'])."</td>";
+        echo "<td><span fd='coin_bonus' user_id='".$row['user_id']."'>".intval($row['coin_bonus'])."</span></td>";
+        echo "<td><span fd='coin_spent' user_id='".$row['user_id']."'>".intval($row['coin_spent'])."</span></td>";
         echo "<td>".($row['defunct']=="N"?"<span class=green >$MSG_NORMAL</span>":"<span class=red>$MSG_DELETED</span>")."</td>";
       if(isset($_SESSION[$OJ_NAME.'_'.'administrator']) && $row['user_id']!=$_SESSION[$OJ_NAME."_user_id"]){
         echo "<td><a href=user_df_change.php?cid=".$row['user_id']."&getkey=".htmlentities($_SESSION[$OJ_NAME.'_'.'getkey'], ENT_QUOTES, 'UTF-8').">".
@@ -214,6 +220,47 @@ function admin_mod(){
                                 $.post("ajax.php",sp.find("form").serialize()).done(function(){
                                         console.log("new expiry_date:"+newexpiry_date);
                                         sp.html(newexpiry_date);
+                                });
+
+                        });
+                });
+
+        });
+        $("span[fd=coin_bonus]").each(function(){
+                let sp=$(this);
+                let user_id=$(this).attr('user_id');
+                $(this).dblclick(function(){
+                        let val=sp.text();
+                        sp.html("<form onsubmit='return false;'><input type=hidden name='m' value='user_update_coin_bonus'><input type=hidden name='user_id' value='"+user_id+"'><input type=number' name='coin_bonus' value='"+val+"' selected='true' class='input-mini' size=6 ></form>");
+                        let ipt=sp.find("input[name=coin_bonus]");
+                        ipt.focus();
+                        ipt[0].select();
+                        sp.find("input").change(function(){
+                                let newval=sp.find("input[name=coin_bonus]").val();
+                                $.post("ajax.php",sp.find("form").serialize()).done(function(){
+                                        console.log("new coin_bonus:"+newval);
+                                        sp.html(newval);
+                                });
+
+                        });
+                });
+
+
+        });
+        $("span[fd=coin_spent]").each(function(){
+                let sp=$(this);
+                let user_id=$(this).attr('user_id');
+                $(this).dblclick(function(){
+                        let val=sp.text();
+                        sp.html("<form onsubmit='return false;'><input type=hidden name='m' value='user_update_coin_spent'><input type=hidden name='user_id' value='"+user_id+"'><input type=number' name='coin_spent' value='"+val+"' selected='true' class='input-mini' size=6 ></form>");
+                        let ipt=sp.find("input[name=coin_spent]");
+                        ipt.focus();
+                        ipt[0].select();
+                        sp.find("input").change(function(){
+                                let newval=sp.find("input[name=coin_spent]").val();
+                                $.post("ajax.php",sp.find("form").serialize()).done(function(){
+                                        console.log("new coin_spent:"+newval);
+                                        sp.html(newval);
                                 });
 
                         });

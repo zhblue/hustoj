@@ -66,7 +66,14 @@
                 <div class="extra content">
                     <a><i class="check icon"></i>通过 <?php echo $AC ?> 题</a>
                     <a style="float: right; "><i class="star icon <?php if($starred) echo "active"?>" title='用同名账户给hustoj项目加星，可以点亮此星' ></i>排名 <?php echo $Rank ?></a>
-                    
+                    <?php if (isset($coin_balance)) { ?>
+                    <div style="margin-top:8px;font-size:12px">
+                        <span><i class="circle icon"></i><?php echo $MSG_COIN_EARNED ?>: <?php echo $coin_earned ?></span>
+                        <span style="margin-left:12px"><i class="gift icon"></i><?php echo $MSG_COIN_BONUS ?>: <?php echo $coin_bonus ?></span>
+                        <span style="margin-left:12px"><i class="minus circle icon"></i><?php echo $MSG_COIN_SPENT ?>: <?php echo $coin_spent ?></span>
+                        <span style="margin-left:12px;font-weight:bold"><i class="money icon"></i><?php echo $MSG_COIN_BALANCE ?>: <?php echo $coin_balance ?></span>
+                    </div>
+                    <?php } ?>
                      <?php if ($email != "") { ?>
                             <div style="margin-top:10px;margin-bottom:10px">
                                 <a href="mailto:<?php echo "Hello" ?>?body=CSPOJ">

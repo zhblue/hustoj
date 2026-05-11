@@ -74,6 +74,8 @@ $output = ($output);
 $hint = ($hint);
 //echo "->".$OJ_DATA."<-"; 
 $pid = addproblem($title, $time_limit, $memory_limit, $description, $input, $output, $sample_input, $sample_output, $hint, $source, $spj, $OJ_DATA);
+$coin = intval($_POST['coin'] ?? 1);
+pdo_query("UPDATE problem SET coin=$coin WHERE problem_id=$pid");
 $basedir = "$OJ_DATA/$pid";
 mkdir($basedir);
 if(strlen($sample_output) && !strlen($sample_input)) $sample_input = "0";

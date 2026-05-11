@@ -62,6 +62,10 @@ include_once("kindeditor.php") ;
           <input class="input input-mini" type=number min="0.001" max="300" step="0.001" name=time_limit size=20 value="<?php echo $row['time_limit']?>"> sec
           <?php echo $MSG_Memory_Limit?>
           <input class="input input-mini" type=number min="1" max="1024" step="1" name=memory_limit size=20 value="<?php echo $row['memory_limit']?>"> MiB
+          <?php if (isset($_SESSION[$OJ_NAME."_"."administrator"]) || isset($_SESSION[$OJ_NAME."_"."problem_editor"])) { ?>
+          金币(AC获得)
+          <input class="input input-mini" type=number min="0" max="9999" step="1" name=coin size=20 value="<?php echo intval($row['coin'] ?? 1)?>">
+          <?php } ?>
         </p>
       <p align=left>
         <?php echo "<h4>".$MSG_Description."</h4>"?>
@@ -328,11 +332,12 @@ function untransform() {
 
       $spj = intval($spj);
 
-      $sql = "UPDATE `problem` SET `title`=?,`time_limit`=?,`memory_limit`=?, `description`=?,`input`=?,`output`=?,`sample_input`=?,`sample_output`=?,`hint`=?,`source`=?,`spj`=?,remote_oj=?,remote_id=?,`in_date`=NOW() WHERE `problem_id`=?";
+      $sql = "UPDATE `problem` SET `title`=?,`time_limit`=?,`memory_limit`=?, `description`=?,`input`=?,`output`=?,`sample_input`=?,`sample_output`=?,`hint`=?,`source`=?,`spj`=?,remote_oj=?,remote_id=?,`in_date`=NOW(),`coin`=? WHERE `problem_id`=?";
 
       //echo "SQL: " . $sql . "<br>";
       //echo "Params: remote_oj=[$remote_oj] (" . strlen($remote_oj) . "), remote_id=[$remote_id] (" . strlen($remote_id) . ")<br>"; 
-      @pdo_query($sql,$title,$time_limit,$memory_limit,$description,$input,$output,$sample_input,$sample_output,$hint,$source,$spj,$remote_oj,$remote_id,$id);
+      $coin = intval($_POST['coin'] ?? 1);
+      @pdo_query($sql,$title,$time_limit,$memory_limit,$description,$input,$output,$sample_input,$sample_output,$hint,$source,$spj,$remote_oj,$remote_id,$coin,$id);
   
       echo "Edit OK!<br>";
       echo "<a href='../problem.php?id=$id'>See The Problem!</a>";
