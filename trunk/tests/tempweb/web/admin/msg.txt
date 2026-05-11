@@ -1,0 +1,4 @@
+<center>
+	如果页面显示不正常，可以尝试：Win键+R，输入ms-settings:network-proxy，将【自动检测设置】关闭。
+	<span>欢迎关注微信公众号</span><img src="http://hustoj.com/wx.jpg" width="96px" />onlinejudge
+</center>
