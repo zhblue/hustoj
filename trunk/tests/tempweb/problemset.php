@@ -170,9 +170,9 @@ foreach ($result as $row) {
 
     if (isset($sub_arr[$row['problem_id']])) {
         if (isset($acc_arr[$row['problem_id']]))
-            $view_problemset[$i][0] = "<div class='badge bg-success text-white'>Y</div>";
+            $view_problemset[$i][0] = "<div class='label label-success'>Y</div>";
         else
-            $view_problemset[$i][0] = "<div class='badge bg-danger text-white'>N</div>";
+            $view_problemset[$i][0] = "<div class='label label-danger'>N</div>";
     } else {
         $view_problemset[$i][0] = "<div class=none> </div>";
     }
@@ -200,8 +200,7 @@ foreach ($result as $row) {
         if ($label_theme == "")
             $label_theme = "default";
 
-        $bs5_badge = ($label_theme == 'warning') ? 'bg-warning text-dark' : ($label_theme == 'default' ? 'bg-secondary text-white' : 'bg-' . $label_theme . ' text-white');
-        $view_problemset[$i][3] .= "<a title='" . htmlentities($cat, ENT_QUOTES, 'UTF-8') . "' class='badge $bs5_badge' style='display: inline-block;' href='problemset.php?search=" . htmlentities(urlencode($cat), ENT_QUOTES, 'UTF-8') . "'>" . mb_substr($cat, 0, 10, 'utf8') . "</a>&nbsp;";
+        $view_problemset[$i][3] .= "<a title='" . htmlentities($cat, ENT_QUOTES, 'UTF-8') . "' class='label label-$label_theme' style='display: inline-block;' href='problemset.php?search=" . htmlentities(urlencode($cat), ENT_QUOTES, 'UTF-8') . "'>" . mb_substr($cat, 0, 10, 'utf8') . "</a>&nbsp;";
     }
 
     $view_problemset[$i][3] .= "</div >";
