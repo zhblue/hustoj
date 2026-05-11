@@ -108,14 +108,11 @@ echo "</select>";
       <td><?php echo $MSG_AC?></td>	 
       <td><?php echo $MSG_SAVED_DATE?></td>
 	   <td><?php echo $MSG_SOURCE ?></td><!--分类-->
-      <?php if(isset($_SESSION[$OJ_NAME.'_'.'administrator']) ||isset($_SESSION[$OJ_NAME.'_'.'problem_editor'])) { ?>
-      <td>金币</td>
-      <?php } ?>
       <?php
       if(isset($_SESSION[$OJ_NAME.'_'.'administrator']) ||isset($_SESSION[$OJ_NAME.'_'.'problem_editor'])){
         if(isset($_SESSION[$OJ_NAME.'_'.'administrator']) ||isset($_SESSION[$OJ_NAME.'_'.'problem_editor']))
-          echo "<td>$MSG_PROBLEM_STATUS</td><td>$MSG_DELETE</td>";
-        echo "<td>$MSG_EDIT</td><td>$MSG_TESTDATA</td>";
+          echo "<td>$MSG_PROBLEM_STATUS</td>  <td>Coin</td>  <td>$MSG_DELETE</td>";
+          echo "<td>$MSG_EDIT</td><td>$MSG_TESTDATA</td>";
       }
       ?>
     </tr>
@@ -172,10 +169,10 @@ echo "</select>";
           echo "<td>".intval($row['coin'])."</td>";
 		    if(isset($_SESSION[$OJ_NAME.'_'.'administrator']) || isset($_SESSION[$OJ_NAME.'_'."p".$row['problem_id']]) ){
 			    ?>
-			             <a href=# onclick='javascript:if(confirm(<?php echo json_encode($MSG_DELETE."[".htmlentities($row['title'],ENT_QUOTES,"UTF-8")."]?")?>)) 
+			           <td>  <a href=# onclick='javascript:if(confirm(<?php echo json_encode($MSG_DELETE."[".htmlentities($row['title'],ENT_QUOTES,"UTF-8")."]?")?>)) 
 					     location.href="problem_del.php?id=<?php echo $row['problem_id']?>&getkey=<?php echo htmlentities($_SESSION[$OJ_NAME.'_'.'getkey'], ENT_QUOTES, 'UTF-8')?>"'>
 						<?php echo $MSG_DELETE ?>
-			              </a>
+			              </a> </td>
 			        <?php
 		    }
           }
