@@ -531,3 +531,5 @@
 	$MSG_AI_PROMPT_USER_TITLE="문제:";
 	$MSG_AI_PROMPT_USER_SOURCE="소스코드:";
 	$MSG_AI_PROMPT_USER_ERROR="오류 메시지:";
+
+  $MSG_COIN_EARNED=" 획득 점수"; $MSG_COIN_BONUS="보너스 점수"; $MSG_COIN_SPENT="사용 점수"; $MSG_COIN_BALANCE="잔여 점수";

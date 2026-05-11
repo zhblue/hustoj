@@ -525,3 +525,5 @@ $MSG_TOO_BAD="Please surf the internet in a civilized manner";
 	$MSG_AI_PROMPT_USER_TITLE="Problem:";
 	$MSG_AI_PROMPT_USER_SOURCE="Source code:";
 	$MSG_AI_PROMPT_USER_ERROR="Error message:";
+
+  $MSG_COIN_EARNED="คะแนนที่ได้รับ"; $MSG_COIN_BONUS="คะแนนโบนัส"; $MSG_COIN_SPENT="คะแนนที่ใช้ไป"; $MSG_COIN_BALANCE="ยอดคงเหลือ";

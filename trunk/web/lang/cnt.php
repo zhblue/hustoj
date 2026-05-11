@@ -825,3 +825,5 @@
 	$MSG_AI_PROMPT_USER_TITLE="題目是:";
 	$MSG_AI_PROMPT_USER_SOURCE="原始碼是:";
 	$MSG_AI_PROMPT_USER_ERROR="報錯信息是:";
+
+  $MSG_COIN_EARNED="解題獲得積分"; $MSG_COIN_BONUS="老師獎勵積分"; $MSG_COIN_SPENT="已消耗積分"; $MSG_COIN_BALANCE="當前積分餘額";
