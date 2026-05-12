@@ -397,7 +397,7 @@ function modify_source(pid){
                 let problem_id=$(this).attr("problem_id");
                 $(this).dblclick(function(){
                         let val=sp.text();
-                        sp.html("<form onsubmit='return false;'><input type=hidden name='m' value='problem_update_coin'><input type=hidden name='problem_id' value='"+problem_id+"'><input type=number' name='coin' value='"+val+"' selected='true' class='input-mini' size=6 ></form>");
+                        sp.html("<form onsubmit='return false;'><input type=hidden name='m' value='problem_update_coin'><input type=hidden name='problem_id' value='"+problem_id+"'><input type='number' name='coin' value='"+val+"' selected='true' class='input-mini' size=6 ></form>");
                         let ipt=sp.find("input[name=coin]");
                         ipt.focus();
                         ipt[0].select();
