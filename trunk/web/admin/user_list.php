@@ -231,7 +231,7 @@ function admin_mod(){
                 let user_id=$(this).attr('user_id');
                 $(this).dblclick(function(){
                         let val=sp.text();
-                        sp.html("<form onsubmit='return false;'><input type=hidden name='m' value='user_update_coin_bonus'><input type=hidden name='user_id' value='"+user_id+"'><input type=number' name='coin_bonus' value='"+val+"' selected='true' class='input-mini' size=6 ></form>");
+                        sp.html("<form onsubmit='return false;'><input type=hidden name='m' value='user_update_coin_bonus'><input type=hidden name='user_id' value='"+user_id+"'><input type='number' name='coin_bonus' value='"+val+"' selected='true' class='input-mini' size=6 ></form>");
                         let ipt=sp.find("input[name=coin_bonus]");
                         ipt.focus();
                         ipt[0].select();
@@ -252,7 +252,7 @@ function admin_mod(){
                 let user_id=$(this).attr('user_id');
                 $(this).dblclick(function(){
                         let val=sp.text();
-                        sp.html("<form onsubmit='return false;'><input type=hidden name='m' value='user_update_coin_spent'><input type=hidden name='user_id' value='"+user_id+"'><input type=number' name='coin_spent' value='"+val+"' selected='true' class='input-mini' size=6 ></form>");
+                        sp.html("<form onsubmit='return false;'><input type=hidden name='m' value='user_update_coin_spent'><input type=hidden name='user_id' value='"+user_id+"'><input type='number' name='coin_spent' value='"+val+"' selected='true' class='input-mini' size=6 ></form>");
                         let ipt=sp.find("input[name=coin_spent]");
                         ipt.focus();
                         ipt[0].select();

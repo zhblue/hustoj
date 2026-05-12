@@ -5,7 +5,7 @@
 <div class="card">
     <div class="card-header">
         <nav aria-label="Page navigation">
-            <<ul class="pagination justify-content-center mb-0">
+            <ul class="pagination justify-content-center mb-0">
                 <li class="page-item"><a class="page-link" href="problemset.php?page=1">&laquo;&laquo;</a></li>
                 <?php
                 if ( !isset( $page ) )$page = 1;
