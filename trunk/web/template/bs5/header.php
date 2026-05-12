@@ -17,7 +17,7 @@
             $sql_news_menu_result = mysql_query_cache( $sql_news_menu );
             if ( $sql_news_menu_result ) {
                 foreach ( $sql_news_menu_result as $row ) {
-                    $result .= '<a class="dropdown-item" href="/viewnews.php?id=' . $row['news_id'] . '"><i class="bi bi-star"></i> ' . $row['title'] . '</a>';
+                    $result .= '<a class="dropdown-item" href="/viewnews.php?id=' . $row['news_id'] . '"><i class="bi bi-star"></i> ' . htmlentities($row['title'], ENT_QUOTES, 'utf-8') . '</a>';
                 }
             }
             return $result;

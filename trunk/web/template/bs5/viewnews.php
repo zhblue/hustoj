@@ -3,8 +3,8 @@
 
 <div class="card mb-3">
     <div class="card-header">
-        <h4 class="mb-0"><i class="bi bi-newspaper"></i> <?php echo $row['title']?></h4>
-        <small class="text-muted"><?php echo $row['time']?></small>
+        <h4 class="mb-0"><i class="bi bi-newspaper"></i> <?php echo htmlentities($row['title'], ENT_QUOTES, 'utf-8')?></h4>
+        <small class="text-muted"><?php echo htmlentities($row['time'], ENT_QUOTES, 'utf-8')?></small>
     </div>
     <div class="card-body">
         <?php echo bbcode_to_html($row['content'])?>
