@@ -48,10 +48,10 @@ $sql = "";
 if(isset($_GET['keyword']) && $_GET['keyword']!=""){
   $keyword = $_GET['keyword'];
   $keyword = "%$keyword%";
-  $sql = "SELECT `problem_id`,`title`,`accepted`,`in_date`,`defunct`,`source`,`remote_oj`,`remote_id`  FROM `problem` WHERE (problem_id LIKE ?) OR (title LIKE ?) OR (description LIKE ?) OR (source LIKE ?) OR (hint LIKE ?) ORDER BY `problem_id` ASC";
+  $sql = "SELECT `problem_id`,`title`,`accepted`,`in_date`,`defunct`,`source`,`remote_oj`,`remote_id`,`coin`  FROM `problem` WHERE (problem_id LIKE ?) OR (title LIKE ?) OR (description LIKE ?) OR (source LIKE ?) OR (hint LIKE ?) ORDER BY `problem_id` ASC";
   $result = pdo_query($sql,$keyword,$keyword,$keyword,$keyword,$keyword);
 }else{
-  $sql = "SELECT `problem_id`,`title`,`accepted`,`in_date`,`defunct`,`source`,`remote_oj`,`remote_id`  FROM `problem` ORDER BY `problem_id` DESC LIMIT $sid, $idsperpage";
+  $sql = "SELECT `problem_id`,`title`,`accepted`,`in_date`,`defunct`,`source`,`remote_oj`,`remote_id`,`coin`  FROM `problem` ORDER BY `problem_id` DESC LIMIT $sid, $idsperpage";
   $result = pdo_query($sql);
 }
 ?>
@@ -111,8 +111,8 @@ echo "</select>";
       <?php
       if(isset($_SESSION[$OJ_NAME.'_'.'administrator']) ||isset($_SESSION[$OJ_NAME.'_'.'problem_editor'])){
         if(isset($_SESSION[$OJ_NAME.'_'.'administrator']) ||isset($_SESSION[$OJ_NAME.'_'.'problem_editor']))
-          echo "<td>$MSG_PROBLEM_STATUS</td><td>$MSG_DELETE</td>";
-        echo "<td>$MSG_EDIT</td><td>$MSG_TESTDATA</td>";
+          echo "<td>$MSG_PROBLEM_STATUS</td>  <td>Coin</td>  <td>$MSG_DELETE</td>";
+          echo "<td>$MSG_EDIT</td><td>$MSG_TESTDATA</td>";
       }
       ?>
     </tr>
@@ -165,13 +165,14 @@ echo "</select>";
 		
         if(isset($_SESSION[$OJ_NAME.'_'.'administrator'])||isset($_SESSION[$OJ_NAME.'_'.'problem_editor'])){
           if(isset($_SESSION[$OJ_NAME.'_'.'administrator']) || isset($_SESSION[$OJ_NAME.'_'.'problem_editor'])){
-            echo "<td><a href=problem_df_change.php?id=".$row['problem_id']."&getkey=".htmlentities($_SESSION[$OJ_NAME.'_'.'getkey'], ENT_QUOTES, 'UTF-8').">".($row['defunct']=="N"?"<span titlc='click to reserve it' class=green>$MSG_AVAILABLE</span>":"<span class=red title='click to be available'>$MSG_RESERVED</span>")."</a><td>";
+            echo "<td><a href=problem_df_change.php?id=".$row['problem_id']."&getkey=".htmlentities($_SESSION[$OJ_NAME.'_'.'getkey'], ENT_QUOTES, 'UTF-8').">".($row['defunct']=="N"?"<span titlc='click to reserve it' class=green>$MSG_AVAILABLE</span>":"<span class=red title='click to be available'>$MSG_RESERVED</span>")."</a></td>";
+          echo "<td><span fd='coin' problem_id='" . $row['problem_id'] . "'>" . intval($row['coin']) . "</span></td>";
 		    if(isset($_SESSION[$OJ_NAME.'_'.'administrator']) || isset($_SESSION[$OJ_NAME.'_'."p".$row['problem_id']]) ){
 			    ?>
-			             <a href=# onclick='javascript:if(confirm(<?php echo json_encode($MSG_DELETE."[".htmlentities($row['title'],ENT_QUOTES,"UTF-8")."]?")?>)) 
+			           <td>  <a href=# onclick='javascript:if(confirm(<?php echo json_encode($MSG_DELETE."[".htmlentities($row['title'],ENT_QUOTES,"UTF-8")."]?")?>)) 
 					     location.href="problem_del.php?id=<?php echo $row['problem_id']?>&getkey=<?php echo htmlentities($_SESSION[$OJ_NAME.'_'.'getkey'], ENT_QUOTES, 'UTF-8')?>"'>
 						<?php echo $MSG_DELETE ?>
-			              </a>
+			              </a> </td>
 			        <?php
 		    }
           }
@@ -389,6 +390,27 @@ function modify_source(pid){
 			}
 		    });
 	}
+
+
+        $("span[fd=coin]").each(function(){
+                let sp=$(this);
+                let problem_id=$(this).attr("problem_id");
+                $(this).dblclick(function(){
+                        let val=sp.text();
+                        sp.html("<form onsubmit='return false;'><input type=hidden name='m' value='problem_update_coin'><input type=hidden name='problem_id' value='"+problem_id+"'><input type='number' name='coin' value='"+val+"' selected='true' class='input-mini' size=6 ></form>");
+                        let ipt=sp.find("input[name=coin]");
+                        ipt.focus();
+                        ipt[0].select();
+                        sp.find("input").change(function(){
+                                let newval=sp.find("input[name=coin]").val();
+                                $.post("ajax.php",sp.find("form").serialize()).done(function(){
+                                        console.log("new coin:"+newval);
+                                        sp.html(newval);
+                                });
+
+                        });
+                });
+        });
 
 </script>
 </div>

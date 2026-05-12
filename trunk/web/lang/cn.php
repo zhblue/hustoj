@@ -543,5 +543,10 @@
   $MSG_AI_INVALID_PARAM="非法参数";
   $MSG_AI_PROMPT_USER_TITLE="题目是:";
   $MSG_AI_PROMPT_USER_SOURCE="源代码是:";
-  $MSG_AI_PROMPT_USER_ERROR="报错信息是:";
+  $MSG_AI_PROMPT_USER_ERROR="报错信息:";
+  $MSG_COIN_EARNED="做题获得积分";
+  $MSG_COIN_BONUS="老师奖励积分";
+  $MSG_COIN_SPENT="已消耗积分";
+  $MSG_COIN_BALANCE="当前积分余额";
 
+$MSG_NUM="序号";

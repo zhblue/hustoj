@@ -31,6 +31,14 @@ CREATE TABLE `openai_task_queue` (
 ) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COMMENT='异步任务队列-MyISAM版';
 alter table openai_task_queue add column problem_id bigint not null default 0  after solution_id;
 
+ALTER TABLE `users` 
+ADD COLUMN `coin_earned` INT NOT NULL DEFAULT 0 COMMENT '做题获得的积分',
+ADD COLUMN `coin_bonus`  INT NOT NULL DEFAULT 0 COMMENT '老师额外奖励的积分',
+ADD COLUMN `coin_spent`  INT NOT NULL DEFAULT 0 COMMENT '已经消耗的积分';
+
+ALTER TABLE `problem` 
+ADD COLUMN `coin` INT NOT NULL DEFAULT 1 COMMENT 'AC此题可得的金币数';
+
 delimiter //
 
 drop trigger if exists firstAC//
@@ -40,10 +48,17 @@ before update on solution
 for each row
 begin
  declare acTimes int;
+ declare acCoin int;
  if new.result=4 then
-    select count(1) from solution where problem_id=new.problem_id and result=4 and first_time=1 and  user_id=new.user_id into acTimes;
+    select count(1) from solution where problem_id=new.problem_id and result=4 and first_time=1 and user_id=new.user_id into acTimes;
+    select ifnull(coin, 1) from problem where  problem_id=new.problem_id into acCoin;
     if acTimes=0 then
         set new.first_time=1;
+        if old.first_time=0 then
+            update users 
+                set coin_earned = coin_earned + acCoin 
+                where user_id = new.user_id;
+        end if;
     end if;
 end if;
 end;//

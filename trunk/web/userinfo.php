@@ -146,6 +146,18 @@ $result = mysql_query_cache($sql, $AC);
 $row = $result[0];
 $Rank = intval($row[0]) + 1;
 
+// load coin data (recalculate from first-ac problems to ensure consistency)
+$sql = "UPDATE users SET coin_earned = COALESCE((SELECT SUM(coin) FROM problem WHERE problem_id IN (SELECT DISTINCT problem_id FROM solution WHERE user_id=users.user_id AND result=4 AND first_time=1 AND problem_id>0)), 0) WHERE user_id=?";
+pdo_query($sql, $user);
+
+$sql = "select `coin_earned`, `coin_bonus`, `coin_spent` FROM `users` WHERE `user_id`=?";
+$result = mysql_query_cache($sql, $user);
+$row = $result[0];
+$coin_earned = intval($row['coin_earned']);
+$coin_bonus = intval($row['coin_bonus']);
+$coin_spent = intval($row['coin_spent']);
+$coin_balance = $coin_earned + $coin_bonus - $coin_spent;
+
 if (isset($_SESSION[$OJ_NAME . '_' . 'administrator'])) {
     $sql = "select user_id,password,ip,`time` FROM `loginlog` WHERE `user_id`=? order by `time` desc LIMIT 0,50";
     $view_userinfo = mysql_query_cache($sql, $user);

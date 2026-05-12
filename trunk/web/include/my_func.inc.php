@@ -362,7 +362,7 @@ function starred($user_id){
     foreach ($stars as $star) {
         if (isset($star->full_name) && $star->full_name === "zhblue/hustoj") {
             // 可选：更新数据库缓存
-            pdo_query("UPDATE users SET starred=1 WHERE user_id=?", $user_id);
+            pdo_query("UPDATE users SET starred=1, coin_bonus=coin_bonus+5 WHERE user_id=?", $user_id);
             return true;
         }
     }

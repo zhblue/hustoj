@@ -1,0 +1,87 @@
+/* Bootstrap 5 Template Custom Styles */
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    background-color: #f8f9fa;
+}
+
+.navbar-brand {
+    font-family: 'Exo 2', 'Segoe UI', sans-serif;
+    font-weight: 600;
+}
+
+.table-hover tbody tr:hover {
+    background-color: rgba(0, 123, 255, 0.05);
+}
+
+.card {
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+    border: none;
+    border-radius: 0.5rem;
+}
+
+.card-header {
+    background-color: #fff;
+    border-bottom: 1px solid rgba(0,0,0,0.125);
+}
+
+pre {
+    background-color: #f5f5f5;
+    padding: 1rem;
+    border-radius: 0.25rem;
+    overflow-x: auto;
+}
+
+.content {
+    line-height: 1.6;
+}
+
+.content img {
+    max-width: 100%;
+    height: auto;
+}
+
+.sampledata {
+    font-family: 'Consolas', 'Monaco', monospace;
+    font-size: 0.9em;
+}
+
+.badge {
+    font-weight: 500;
+}
+
+.footer {
+    margin-top: auto;
+}
+
+/* Override some table styles */
+.table thead th {
+    border-bottom: 2px solid #dee2e6;
+}
+
+/* Fix for nav-tabs in Bootstrap 5 */
+.nav-tabs .nav-link {
+    border: none;
+    border-bottom: 2px solid transparent;
+}
+
+.nav-tabs .nav-link.active {
+    border-bottom-color: #0d6efd;
+}
+
+/* Carousel adjustments */
+.carousel-inner {
+    border-radius: 0.5rem;
+    overflow: hidden;
+}
+
+/* Badge styles */
+.badge.bg-success {
+    background-color: #198754 !important;
+}
+
+/* Text colors for result status */
+.text-success { color: #198754 !important; }
+.text-danger { color: #dc3545 !important; }
+.text-warning { color: #ffc107 !important; }
+.text-info { color: #0dcaf0 !important; }
+.text-muted { color: #6c757d !important; }

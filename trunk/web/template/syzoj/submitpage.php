@@ -848,7 +848,7 @@ function formatCode() {
 }
 
 // 使用 PHP 判断，如果开启了缩进检测，才绑定 change 事件
-<?php if (isset($OJ_SUOJIN) && $OJ_SUOJIN == true): ?>
+<?php if (isset($OJ_INDENT) && $OJ_INDENT == true): ?>
 editor.getSession().on('change', function() {
     // 建议增加一个防抖，避免高频输入时卡顿
     if (this.indentTimer) clearTimeout(this.indentTimer);

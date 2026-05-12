@@ -493,3 +493,6 @@
 	$MSG_AI_PROMPT_USER_TITLE="Problem:";
 	$MSG_AI_PROMPT_USER_SOURCE="Source code:";
 	$MSG_AI_PROMPT_USER_ERROR="Error message:";
+
+  $MSG_COIN_EARNED="נקודות שהרווחת"; $MSG_COIN_BONUS="מענק נקודות"; $MSG_COIN_SPENT="נקודות שהוצאו"; $MSG_COIN_BALANCE="יתרת נקודות";
+  $MSG_NUM="מספר";

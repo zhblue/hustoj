@@ -92,6 +92,7 @@ if (isset($_GET['cid'])) {
         if ($now < $end_time) { //竞赛进行中
             $view_problemset[$cnt][1] = "<a href='problem.php?cid=$cid&pid=$cnt'>" . $PID[$cnt] . "</a>";
             $view_problemset[$cnt][2] = "<a href='problem.php?cid=$cid&pid=$cnt'>" . $row['title'] . "</a>";
+            $view_problemset[$cnt][5] = intval($row['coin']) > 0 ? str_repeat('<span style=\'color:orange\'>✦</span>', min(intval($row['coin']), 5)) : '';
         } else {               //竞赛结束
             //检查问题是否会在其他竞赛中使用
             $tpid = intval($row['problem_id']);
