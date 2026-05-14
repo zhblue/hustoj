@@ -71,6 +71,7 @@ if(isset($_GET['keyword']) && $_GET['keyword']!=""){
       <th><?php echo $MSG_EARNED.$MSG_COIN?></th>
       <th><?php echo $MSG_BONUS.$MSG_COIN?></th>
       <th><?php echo $MSG_SPENT.$MSG_COIN?></th>
+      <th><?php echo $MSG_COIN_BALANCE ?></th>
       <th><?php echo $MSG_STATUS?></th>
       <th><?php echo $MSG_ADMIN ?></th>
       <th><?php echo $MSG_SETPASSWORD?></th>
@@ -107,6 +108,7 @@ if(isset($_GET['keyword']) && $_GET['keyword']!=""){
         echo "<td>".intval($row['coin_earned'])."</td>";
         echo "<td><span fd='coin_bonus' user_id='".$row['user_id']."'>".intval($row['coin_bonus'])."</span></td>";
         echo "<td><span fd='coin_spent' user_id='".$row['user_id']."'>".intval($row['coin_spent'])."</span></td>";
+        echo "<td>".intval($row['coin_earned']+$row['coin_bonus']-$row['coin_spent'])."</td>";
         echo "<td>".($row['defunct']=="N"?"<span class=green >$MSG_NORMAL</span>":"<span class=red>$MSG_DELETED</span>")."</td>";
       if(isset($_SESSION[$OJ_NAME.'_'.'administrator']) && $row['user_id']!=$_SESSION[$OJ_NAME."_user_id"]){
         echo "<td><a href=user_df_change.php?cid=".$row['user_id']."&getkey=".htmlentities($_SESSION[$OJ_NAME.'_'.'getkey'], ENT_QUOTES, 'UTF-8').">".
