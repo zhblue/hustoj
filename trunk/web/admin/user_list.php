@@ -68,9 +68,9 @@ if(isset($_GET['keyword']) && $_GET['keyword']!=""){
       <th><?php echo $MSG_LAST_LOGIN?></th>
       <th><?php echo $MSG_REGISTER?></th>
       <th><?php echo $MSG_EXPIRY_DATE?></th>
-      <th>金币</th>
-      <th>奖励</th>
-      <th>消耗</th>
+      <th><?php echo $MSG_EARNED.$MSG_COIN?></th>
+      <th><?php echo $MSG_BONUS.$MSG_COIN?></th>
+      <th><?php echo $MSG_SPENT.$MSG_COIN?></th>
       <th><?php echo $MSG_STATUS?></th>
       <th><?php echo $MSG_ADMIN ?></th>
       <th><?php echo $MSG_SETPASSWORD?></th>
