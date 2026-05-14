@@ -194,14 +194,16 @@
             <?php } ?>
 
             <div class="right menu">
-                <?php if(isset($_SESSION[$OJ_NAME.'_'.'user_id'])) { ?>
+                <?php if(isset($_SESSION[$OJ_NAME.'_'.'user_id'])) {
+                    $coin=pdo_query("select coin_earned+coin_bonus-coin_spent from users where user_id=?",$_SESSION[$OJ_NAME."_user_id"])[0][0];
+                ?>
                 <a href="<?php echo $path_fix?>/userinfo.php?user=<?php echo htmlentities($_SESSION[$OJ_NAME.'_'.'user_id'])?>"
                     style="color: inherit; ">
                     <div class="ui simple dropdown item">
                         <?php echo htmlentities($_SESSION[$OJ_NAME.'_'.'user_id']); 
                               if(!empty($_SESSION[$OJ_NAME.'_nick'])) echo "(".htmlentities($_SESSION[$OJ_NAME.'_nick']).")";
                               if(!empty($_SESSION[$OJ_NAME.'_group_name'])) echo "[".htmlentities($_SESSION[$OJ_NAME.'_group_name'])."]";
-                                      
+                              if($coin>0) echo "🪙$coin";        
                         ?>
                         <i class="dropdown icon"></i>
                         <div class="menu">
