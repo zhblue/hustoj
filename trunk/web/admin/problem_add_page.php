@@ -49,7 +49,7 @@
           <?php echo $MSG_Memory_Limit?>
           <input class="input input-mini" type=number min="1" max="2048" step="1" name=memory_limit size=20 value=128> MiB<br><br>
           <?php if (isset($_SESSION[$OJ_NAME."_"."administrator"]) || isset($_SESSION[$OJ_NAME."_"."problem_editor"])) { ?>
-          <?php echo "金币(AC获得)"?>
+          <?php echo "$MSG_COIN"?>
           <input class="input input-mini" type=number min="0" max="9999" step="1" name=coin size=20 value=1> <br><br>
           <?php } ?>
         </p>
