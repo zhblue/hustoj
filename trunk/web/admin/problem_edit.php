@@ -58,14 +58,12 @@ include_once("kindeditor.php") ;
         </center>
       </p>
         <p align=left>
-          <?php echo $MSG_Time_Limit?>
+          <?php echo $MSG_Time_Limit; ?>
           <input class="input input-mini" type=number min="0.001" max="300" step="0.001" name=time_limit size=20 value="<?php echo $row['time_limit']?>"> sec
-          <?php echo $MSG_Memory_Limit?>
+          <?php echo $MSG_Memory_Limit; ?>
           <input class="input input-mini" type=number min="1" max="1024" step="1" name=memory_limit size=20 value="<?php echo $row['memory_limit']?>"> MiB
-          <?php if (isset($_SESSION[$OJ_NAME."_"."administrator"]) || isset($_SESSION[$OJ_NAME."_"."problem_editor"])) { ?>
-          金币(AC获得)
+          <?php echo $MSG_COIN; ?>
           <input class="input input-mini" type=number min="0" max="9999" step="1" name=coin size=20 value="<?php echo intval($row['coin'] ?? 1)?>">
-          <?php } ?>
         </p>
       <p align=left>
         <?php echo "<h4>".$MSG_Description."</h4>"?>
