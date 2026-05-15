@@ -166,4 +166,6 @@ if (!empty($OJ_CDN_URL)) {
 if(isset($_SESSION[$OJ_NAME."_user_id"])){
 	 $coins=pdo_query("select coin_earned,coin_bonus,coin_spent from users where user_id=?",$_SESSION[$OJ_NAME."_user_id"])[0];
 	 $coin=$coins['coin_earned']+$coins['coin_bonus']-$coins['coin_spent'];
+}else{
+	 $coin=0;	
 }
