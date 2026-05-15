@@ -203,7 +203,7 @@
                         <?php echo htmlentities($_SESSION[$OJ_NAME.'_'.'user_id']); 
                               if(!empty($_SESSION[$OJ_NAME.'_nick'])) echo "(".htmlentities($_SESSION[$OJ_NAME.'_nick']).")";
                               if(!empty($_SESSION[$OJ_NAME.'_group_name'])) echo "[".htmlentities($_SESSION[$OJ_NAME.'_group_name'])."]";
-                              if($coin>0) echo "🪙$coin";        
+                              if($coin>0) echo "💰️$coin";        
                         ?>
                         <i class="dropdown icon"></i>
                         <div class="menu">
