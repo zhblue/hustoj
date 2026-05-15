@@ -544,7 +544,7 @@
   $MSG_AI_PROMPT_USER_TITLE="题目是:";
   $MSG_AI_PROMPT_USER_SOURCE="源代码是:";
   $MSG_AI_PROMPT_USER_ERROR="报错信息:";
-  $MSG_COIN="积分";
+  $MSG_COIN="积分";  //可以改成硬币或者🪙
   $MSG_EARNED="获得";
   $MSG_BONUS="奖励";
   $MSG_SPENT="消耗";
@@ -552,5 +552,7 @@
   $MSG_COIN_BONUS="老师奖励$MSG_COIN";
   $MSG_COIN_SPENT="已消耗$MSG_COIN";
   $MSG_COIN_BALANCE="当前$MSG_COIN余额";
+  $MSG_NO_COIN="没有足够的$MSG_COIN";
+  $MSG_PAID="已支付$MSG_COIN";
 
 $MSG_NUM="序号";
