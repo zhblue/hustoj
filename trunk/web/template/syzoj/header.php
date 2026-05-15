@@ -195,7 +195,7 @@
 
             <div class="right menu">
                 <?php if(isset($_SESSION[$OJ_NAME.'_'.'user_id'])) {
-                    $coin=pdo_query("select coin_earned+coin_bonus-coin_spent from users where user_id=?",$_SESSION[$OJ_NAME."_user_id"])[0][0];
+                   
                 ?>
                 <a href="<?php echo $path_fix?>/userinfo.php?user=<?php echo htmlentities($_SESSION[$OJ_NAME.'_'.'user_id'])?>"
                     style="color: inherit; ">
