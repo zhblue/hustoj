@@ -220,7 +220,7 @@ const marked = new Marked(
             "text-align": "center"
         });
         <?php
-          if(isset($OJ_DOWNLOAD)&&$OJ_DOWNLOAD){
+          if(isset($OJ_DOWNLOAD)&&$OJ_DOWNLOAD && $coin>0 ){
             if(isset($OJ_DL_1ST_WA_ONLY) && $OJ_DL_1ST_WA_ONLY){
         ?>
            let down=$($("#errtxt").find("h2")[0]);
