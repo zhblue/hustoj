@@ -127,7 +127,7 @@ function pull_result(id){
         }
       }
        <?php if (!$isAC && isset($OJ_AI_API_URL)&&!empty($OJ_AI_API_URL) && $coin >0){ ?>
-                expmsg+="<input type=button class='ui button primary' onclick='ai_explain()' value='🪙AI Help'>";
+                expmsg+="<input type=button class='ui button primary' onclick='ai_explain()' value='💰AI Help'>";
         <?php } ?>
       document.getElementById("errexp").innerHTML=expmsg;
     }
@@ -225,7 +225,7 @@ const marked = new Marked(
         ?>
            let down=$($("#errtxt").find("h2")[0]);
            let filename=down.text();
-           down.html("<a href='download.php?sid=<?php echo $id?>&name=" + filename+ "'>🪙" + filename+ "</a>");
+           down.html("<a href='download.php?sid=<?php echo $id?>&name=" + filename+ "'>💰" + filename+ "</a>");
         <?php
             }else{
         ?>
