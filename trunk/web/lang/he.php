@@ -493,6 +493,15 @@
 	$MSG_AI_PROMPT_USER_TITLE="Problem:";
 	$MSG_AI_PROMPT_USER_SOURCE="Source code:";
 	$MSG_AI_PROMPT_USER_ERROR="Error message:";
-
-  $MSG_COIN_EARNED="נקודות שהרווחת"; $MSG_COIN_BONUS="מענק נקודות"; $MSG_COIN_SPENT="נקודות שהוצאו"; $MSG_COIN_BALANCE="יתרת נקודות";
   $MSG_NUM="מספר";
+  $MSG_BONUS="Bonus";
+  $MSG_COIN="Coin";
+  $MSG_COIN_BALANCE="Current ${MSG_COIN} Balance";
+  $MSG_COIN_BONUS="Teacher Bonus ${MSG_COIN}";
+  $MSG_COIN_EARNED="Earned ${MSG_COIN} from Solutions";
+  $MSG_COIN_SPENT="Spent ${MSG_COIN}";
+  $MSG_EARNED="Earned";
+  $MSG_FRIENDLY_B1="Disable Register,Force Login";
+  $MSG_NO_COIN="Insufficient ${MSG_COIN}";
+  $MSG_PAID="${MSG_COIN} Paid";
+  $MSG_SPENT="Spent";

@@ -829,6 +829,15 @@ $MSG_ONLY_LAST_SUBMISSION="Only the last submission will be scored";
 	$MSG_AI_PROMPT_USER_TITLE="Problem:";
 	$MSG_AI_PROMPT_USER_SOURCE="Source code:";
 	$MSG_AI_PROMPT_USER_ERROR="Error message:";
-
-  $MSG_COIN_EARNED="Заработанные очки"; $MSG_COIN_BONUS="Бонусные очки"; $MSG_COIN_SPENT="Потраченные очки"; $MSG_COIN_BALANCE="Баланс очков";
   $MSG_NUM="№";
+  $MSG_BONUS="Бонус";
+  $MSG_COIN="Монета";
+  $MSG_COIN_BALANCE="Текущий баланс ${MSG_COIN}";
+  $MSG_COIN_BONUS="Бонус преподавателя ${MSG_COIN}";
+  $MSG_COIN_EARNED="Получено ${MSG_COIN} за решения";
+  $MSG_COIN_SPENT="Потрачено ${MSG_COIN}";
+  $MSG_EARNED="Получено";
+  $MSG_FRIENDLY_B1="Запретить регистрацию, принудительный вход";
+  $MSG_NO_COIN="Недостаточно ${MSG_COIN}";
+  $MSG_PAID="${MSG_COIN} оплачено";
+  $MSG_SPENT="Потрачено";
