@@ -115,7 +115,7 @@ function pull_result(id){
 	}
     });
 }
-    function explain(){
+   function explain(){
       var errmsg = $("#errtxt").text();
       var expmsg = "";
       for(var i=0; i<pats.length; i++){
@@ -126,29 +126,37 @@ function pull_result(id){
           expmsg += ret+" : "+exp+"<br><hr />";
         }
       }
+       <?php if (!$isAC && isset($OJ_AI_API_URL)&&!empty($OJ_AI_API_URL) && $coin >0){ ?>
+                expmsg+="<input type=button class='ui button primary' onclick='ai_explain()' value='🪙AI Help'>";
+        <?php } ?>
       document.getElementById("errexp").innerHTML=expmsg;
-        
-       <?php if (!$isAC && isset($OJ_AI_API_URL)&&!empty($OJ_AI_API_URL)){ ?>
-                expmsg+="AI 答疑 ...<img src='image/loader.gif'>";
-                $("#errexp").html(expmsg);
-		    $.ajax({
-			url: '<?php echo $OJ_AI_API_URL ?>?sid=<?php echo $id?>', 
-			type: 'GET',
-			success: function(data) {
-				if(parseInt(data)>0)
-					window.setTimeout('pull_result('+data+')',2000);
-				else{
-					fill_data(data);		
-				}
-			},
-			error: function() {
-			    console.log('获取数据失败');
-			}
-		    });
-       <?php } ?>
-
     }
     explain();
+    function ai_explain(){
+
+       <?php
+                if (!$isAC && isset($OJ_AI_API_URL)&&!empty($OJ_AI_API_URL)){ ?>
+                let expmsg=document.getElementById("errexp").innerHTML;
+                expmsg+="AI 答疑 ...<img src='image/loader.gif'>";
+                $("#errexp").html(expmsg);
+                    $.ajax({
+                        url: '<?php echo $OJ_AI_API_URL ?>?sid=<?php echo $id?>',
+                        type: 'GET',
+                        success: function(data) {
+                                if(parseInt(data)>0)
+                                        window.setTimeout('pull_result('+data+')',2000);
+                                else{
+                                        fill_data(data);
+                                }
+                        },
+                        error: function() {
+                            console.log('获取数据失败');
+                        }
+                    });
+       <?php } ?>
+    }
+
+
 </script>
 <link rel="stylesheet" href="<?php echo $OJ_CDN_URL.$path_fix."template/$OJ_TEMPLATE/css/"?>highlight.css">
 <script src="<?php echo $OJ_CDN_URL.$path_fix."template/$OJ_TEMPLATE/js/"?>highlight.min.js"></script>
