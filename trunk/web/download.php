@@ -52,6 +52,11 @@ if (!empty($data)) {
         }
 
     }
+    if($coin<=0){
+        $view_errors = "<h2> $MSG_NO_COIN </h2>";
+        require("template/" . $OJ_TEMPLATE . "/error.php");
+        exit(0);
+    }
     $infile = "$OJ_DATA/$pid/$name.in";
     $outfile = "$OJ_DATA/$pid/$name.out";
 
@@ -74,6 +79,7 @@ if (!empty($data)) {
     header('Content-Length: ' . filesize($zipname));
     readfile($zipname);
     unlink($zipname);
+    pdo_query("update users set coin_spent=coint_spent+1 where user_id=?", $_SESSION[$OJ_NAME . '_user_id'] );
     die();
 }
 ?>
