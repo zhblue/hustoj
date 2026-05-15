@@ -225,7 +225,7 @@ const marked = new Marked(
         ?>
            let down=$($("#errtxt").find("h2")[0]);
            let filename=down.text();
-           down.html("<a href='download.php?sid=<?php echo $id?>&name=" + filename+ "'>" + filename+ "</a>");
+           down.html("<a href='download.php?sid=<?php echo $id?>&name=" + filename+ "'>🪙" + filename+ "</a>");
         <?php
             }else{
         ?>
