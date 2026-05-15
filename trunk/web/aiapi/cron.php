@@ -180,6 +180,7 @@ do {
                 $answer .= "<a href='https://github.com/zhblue/hustoj/' target=_blank>如果你觉得这个系统对你有帮助，请到Github来给我们加个Star⭐吧</a>";
                 $sql = "INSERT INTO solution_ai_answer (solution_id, answer) VALUES (?, ?)";
                 pdo_query($sql, $task['solution_id'], $answer);
+                pdo_query("update users set coin_spent=coin_spent+1 where user_id=?", $task['user_id'] );
             } else {
                 echo "[CRON] 警告: solution_id={$task['solution_id']} 但响应中无 choices[0].message.content\n";
             }
