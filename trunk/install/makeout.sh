@@ -29,6 +29,12 @@ else
     EXEC="./$1"
 fi
 
+if [ -f "interactor.cc" ]; then
+    g++ --static -o interactor interactor.cc ||  g++ -o interactor interactor.cc
+fi
+if [ -f "spj.cc" ]; then
+    g++ --static -o spj spj.cc ||  g++ -o spj spj.cc
+fi
 
 for INFILE in `ls *.in`
 do
