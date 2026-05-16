@@ -35,6 +35,12 @@ fi
 if [ -f "spj.cc" ]; then
     g++ --static -o spj spj.cc ||  g++ -o spj spj.cc
 fi
+if [ -f "tpj.cc" ]; then
+    g++ --static -o tpj tpj.cc ||  g++ -o tpj tpj.cc
+fi
+if [ -f "upj.cc" ]; then
+    g++ --static -o upj upj.cc ||  g++ -o upj upj.cc
+fi
 
 for INFILE in `ls *.in`
 do
