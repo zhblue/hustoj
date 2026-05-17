@@ -269,7 +269,7 @@ else {
    write_xml($xmlHandle,"<!DOCTYPE fps PUBLIC"); 
    write_xml($xmlHandle,'"-//freeproblemset//An opensource XML standard for Algorithm Contest Problem Set//EN"');
    write_xml($xmlHandle,'"http://hustoj.com/fps.current.dtd" >');
-   write_xml($xmlHandle,'<fps version="1.5" url="https://github.com/zhblue/freeproblemset/">');
+   write_xml($xmlHandle,'<fps version="1.6" url="https://github.com/zhblue/freeproblemset/">');
    write_xml($xmlHandle,'<generator name="HUSTOJ" url="https://github.com/zhblue/hustoj/" />');
    foreach ($result as  $row) {
 	write_xml($xmlHandle,'<item>');
@@ -345,6 +345,13 @@ else {
 	    }
 	  }else if ($row['spj'] == 2){
 	     write_xml($xmlHandle, "<spj language=\"Text\">text judge</spj>");
+	  }else if ($row['spj'] == 3){
+	    $filecc = "$OJ_DATA/".$row['problem_id']."/interactor.cc";
+	    if (file_exists($filecc)) {
+	      write_xml($xmlHandle, "<interactor language=\"C++\"><![CDATA[");
+	      write_xml($xmlHandle, fixcdata(file_get_contents($filecc)));
+	      write_xml($xmlHandle, "]]></interactor>");
+	    }
 	  }
 	write_xml($xmlHandle,"</item>");
 	  //	 $content=ob_get_clean();
