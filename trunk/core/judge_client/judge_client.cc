@@ -63,6 +63,7 @@
 #define STD_M_LIM (STD_MB << 8) //default memory limit 256m ,2^8=256
 #define BUFFER_SIZE 4096		//default size of char buffer 5120 bytes
 #define LOCKMODE (S_IRUSR|S_IWUSR|S_IRGRP|S_IROTH)
+#define FIFO_INTER "p_interactor"
 
 #define OJ_WT0 0     //提交排队
 #define OJ_WT1 1     //重判排队
@@ -223,8 +224,8 @@ static char cc_std[BUFFER_SIZE/10];
 static char cpp_std[BUFFER_SIZE/10];
 static int auto_result = OJ_AC ;
 static int www_uid= 33 ;  // www-data in ubuntu , might overwrite for BT.cn
-static uid_t judge_uid;
-static gid_t judge_gid;
+static uid_t judge_uid=1536;
+static gid_t judge_gid=1536;
 
 int num_of_test = 0;
 //static int sleep_tmp;
@@ -353,12 +354,8 @@ int execute_cmd(const char *fmt, ...)   //执行命令获得返回值
 
 	va_start(ap, fmt);
 	vsprintf(cmd, fmt, ap);
-	if (DEBUG)
-		printf("%s\n", cmd);
 	ret = system(cmd);
 	va_end(ap);
-	if (DEBUG)
-		printf("\n");
 	return ret;
 }
 
@@ -1695,11 +1692,11 @@ int compile(int lang, char *work_dir)
 			}
 			if(chroot(work_dir)) printf("warning chroot fail!\n");
 		}
-		while (setgid(1536) != 0)
+		while (setgid(judge_gid) != 0)
 			sleep(1);
-		while (setuid(1536) != 0)
+		while (setuid(judge_uid) != 0)
 			sleep(1);
-		while (setresuid(1536, 1536, 1536) != 0)
+		while (setresuid(judge_uid, judge_uid, judge_uid) != 0)
 			sleep(1);
 
 		switch (lang)
@@ -2197,6 +2194,7 @@ void prepare_files(char *filename, int namelen, char *infile, int &p_id,
 		if(copy_data||lang == LANG_R) execute_cmd("/bin/cp '%s' %s/data.in", infile, work_dir);   // 如果开启了COPY_DATA则复制测试数据
 	}
 	execute_cmd("/bin/cp %s/data/%d/*.dic %s/ 2>/dev/null", oj_home, p_id, work_dir);
+	execute_cmd("/bin/cp %s/data/%d/interactor %s/ 2>/dev/null", oj_home, p_id, work_dir);
  	execute_cmd("chown judge %s/*.dic ", work_dir);
 	sprintf(outfile, "%s/data/%d/%s.out", oj_home, p_id, fname0);
 
@@ -2797,7 +2795,7 @@ void copy_js_runtime(char *work_dir)
 }
 /* Fork 出的子进程：设置环境（rlimit、chroot、用户），然后用适当参数 exec 编译后的程序。 */
 void run_solution(int &lang, char *work_dir, double &time_lmt, int &usedtime,
-				  int &mem_lmt,char * data_file_path,int p_id)   // 为每个测试数据运行一次提交的答案
+				  int &mem_lmt,char * data_file_path,int p_id,int spj)   // 为每个测试数据运行一次提交的答案
 {
 	char path[BUFFER_SIZE];
 	//准备环境变量处理中文，如果希望使用非中文的语言环境，可能需要修改这些环境变量
@@ -2807,7 +2805,7 @@ void run_solution(int &lang, char *work_dir, double &time_lmt, int &usedtime,
 			     (char * const )"LANG=zh_CN.UTF-8",
 			     (char * const )"LANGUAGE=zh_CN.UTF-8",
 			     (char * const )"LC_ALL=zh_CN.utf-8",NULL};
-	if(nice(19)!=19) printf("......................renice fail... \n");
+	if(nice(19)!=19) perror("......................renice fail... \n");
 	// now the user is "judger"
 	if(chdir(work_dir)){
 		write_log("Working directory :%s switch fail...",work_dir);		
@@ -2817,45 +2815,39 @@ void run_solution(int &lang, char *work_dir, double &time_lmt, int &usedtime,
 	if(lang==18){ 
 		execute_cmd("/usr/bin/sqlite3 %s/data.db < %s", work_dir,data_file_path);
 		sprintf(path, "%s/data.db", work_dir);
-		if(chown(path, judge_uid, judge_gid)!=0 && DEBUG) printf("chown %s\n",path) ;
+		if(chown(path, judge_uid, judge_gid)!=0 && DEBUG) fprintf(stderr,"chown %s\n",path) ;
 		stdin=freopen("Main.sql", "r", stdin);
-	}else{
+	}else if (spj!=3){
 		char noip_file_name[BUFFER_SIZE];
 		sprintf(noip_file_name,"%s/data/%d/input.name",oj_home,p_id);
-		if(DEBUG) printf("---------NOIP filename:%s\n",noip_file_name);
 		if (p_id==0 || access(noip_file_name, R_OK ) == -1){   //不存在指定文件名，使用标准输入
 			if(copy_data){
 				stdin=freopen("data.in", "r", stdin);
 			}else{
-				printf("infile: [%s]\n",data_file_path);
+				//printf("infile: [%s]\n",data_file_path);
 				stdin=freopen(data_file_path,"r",stdin);
 			}
 		}
 	}
-	execute_cmd("touch %s/user.out", work_dir);
+	if(spj!=3)execute_cmd("touch %s/user.out", work_dir);
 	
 	if (copy_data){
-		execute_cmd("chgrp judge %s/user.out %s/data.in", work_dir,work_dir);
+		sprintf(path, "%s/user.out", work_dir);
+		if(chown(path,judge_uid,judge_gid));
+		chmod(path, 0740);
 		sprintf(path, "%s/data.in", work_dir);
+		if(chown(path,judge_uid,judge_gid));
 		chmod(path, 0740);
 	}
 	sprintf(path, "%s/user.out", work_dir);
 	chmod(path, 0760);
-	if (   
-		(!use_docker) && lang != 3 && lang != 5 && lang != 20 && lang != 9  && !(lang ==6 && python_free )
-	   ){
-		
-		if(DEBUG)printf("chroot...............................................\n");
-	
-	}else{
-		if(DEBUG)printf("Skiping chroot........................................\n");
-	
+	if(spj!=3){
+		stdout=freopen("user.out", "w", stdout);
+		stderr=freopen("error.out", "a+", stderr);
 	}
-	stdout=freopen("user.out", "w", stdout);
-	stderr=freopen("error.out", "a+", stderr);
 	// trace me
 	unshare(CLONE_NEWNET);
-	ptrace(PTRACE_TRACEME, 0, NULL, NULL);
+	if(spj!=3 && use_ptrace) ptrace(PTRACE_TRACEME, 0, NULL, NULL);
 	// run me
 	if (   
 		(!use_docker) 
@@ -2874,11 +2866,11 @@ void run_solution(int &lang, char *work_dir, double &time_lmt, int &usedtime,
 	}else{
 		// vm script language don't chroot within docker
 	}
-	while (setgid(1536) != 0)
+	while (setgid(judge_gid) != 0)
 		sleep(1);
-	while (setuid(1536) != 0)
+	while (setuid(judge_uid) != 0)
 		sleep(1);
-	while (setresuid(1536, 1536, 1536) != 0)
+	while (setresuid(judge_uid, judge_uid, judge_uid) != 0)
 		sleep(1);
 
 	//      char java_p1[BUFFER_SIZE], java_p2[BUFFER_SIZE];
@@ -3018,219 +3010,327 @@ void run_solution(int &lang, char *work_dir, double &time_lmt, int &usedtime,
 
 	}
 	//sleep(1);
-	printf("Execution error, USE_DOCKER:%d !\nYou need to install compiler VM or runtime for your language.",use_docker);
+	fprintf(stderr,"Execution error, USE_DOCKER:%d !\nYou need to install compiler VM or runtime for your language.",use_docker);
 	fflush(stderr);
 	exit(0);
 }
-/* 检测 error.out 中的 Python MemoryError 并将结果升级为 OJ_ML。 */
-int fix_python_mis_judge(char *work_dir, int &ACflg, int &topmemory,
-						 int mem_lmt)
-{
-	int comp_res = OJ_AC;
+int interact(int &lang, char *work_dir, double &time_lmt, int &usedtime,
+				  int &mem_lmt,char * data_file_path,int p_id) {
+    // 定义两组管道
+    // p_input:  Interactor -> User Program (交互器写，用户读)
+    // p_output: User Program -> Interactor (用户写，交互器读)
+    int p_input[2];
+    int p_output[2];
 
-	comp_res = execute_cmd(
-		"/bin/grep 'MemoryError'  %s/error.out", work_dir);
+    fprintf(stderr,"./interactor %s \n", data_file_path);
+	    if (pipe(p_input) < 0 || pipe(p_output) < 0) {
+		perror("Pipe creation failed");
+		return 1;
+	    }
 
-	if (!comp_res)
-	{
-		printf("Python need more Memory!");
-		ACflg = OJ_ML;
-		topmemory = mem_lmt * STD_MB;
-	}
+	    pid_t pid = fork();
+	    if (pid < 0) {
+		perror("Fork failed");
+		return 1;
+	    }
+	    if(DEBUG>=1)printf("-------------------------------------------------------------------------------------\n");
+	    if (pid > 0) {
+		/* --------- 父进程：运行用户程序 (user_program)，受watch_solution监控 --------- */
+		
+		// 1. 重定向标准输入：从 p_input 的读端读取
+		dup2(p_input[0], STDIN_FILENO);
+		// 2. 重定向标准输出：写入到 p_output 的写端
+		dup2(p_output[1], STDOUT_FILENO);
 
-	return comp_res;
-}
+		// 3. 关闭子进程中不需要的管道文件描述符
+		close(p_input[0]);
+		close(p_input[1]);
+		close(p_output[0]);
+		close(p_output[1]);
 
-/* 检测 error.out 中的 Java 异常和 OutOfMemoryError 以修正被误判的 RE/ML 结果。 */
-int fix_java_mis_judge(char *work_dir, int &ACflg, int &topmemory,
-					   int mem_lmt)
-{
-	int comp_res = OJ_AC;
-	char path[BUFFER_SIZE];
-	sprintf(path, "%s/error.out", work_dir);
-	chmod(path, 0700);
-	if (DEBUG)
-		execute_cmd("cat %s/error.out", work_dir);
-	comp_res = execute_cmd("/bin/grep 'Exception'  %s/error.out", work_dir);
-	if (!comp_res)
-	{
-		printf("Exception reported\n");
-		ACflg = OJ_RE;
-	}
-	execute_cmd("cat %s/error.out", work_dir);
+		// 4. 执行用户程序 (假设编译出的可执行文件叫 ./user)
+		//execl("./Main", "./Main", NULL);
+		FILE * diff=fopen("diff.out","a+");
+        	fprintf(diff,"%s\n--\n```\n", getFileNameFromPath(data_file_path));
+		fclose(diff);
+		run_solution(lang, work_dir, time_lmt, usedtime, mem_lmt,data_file_path,p_id,3);
+		
+		// 如果 execl 返回，说明执行失败
+		perror("Failed to execute user program");
+		exit(1);
+	    } else {
+		if(chdir(work_dir));
+		/* --------- 子进程：运行交互器 (interactor) --------- */
+		
+		// 1. 重定向标准输入：从 p_output 的读端读取（获取用户程序的输出）
+		dup2(p_output[0], STDIN_FILENO);
+		// 2. 重定向标准输出：写入到 p_input 的写端（向用户程序发送数据）
+		dup2(p_input[1], STDOUT_FILENO);
 
-	comp_res = execute_cmd(
-		"/bin/grep 'java.lang.OutOfMemoryError'  %s/error.out", work_dir);
-
-	if (!comp_res)
-	{
-		printf("JVM need more Memory!");
-		ACflg = OJ_ML;
-		topmemory = mem_lmt * STD_MB;
-	}
-
-	if (!comp_res)
-	{
-		printf("JVM need more Memory or Threads!");
-		ACflg = OJ_ML;
-		topmemory = mem_lmt * STD_MB;
-	}
-	comp_res = execute_cmd("/bin/grep 'Could not create'  %s/error.out",
-						   work_dir);
-	if (!comp_res)
-	{
-		printf("jvm need more resource,tweak -Xmx(OJ_JAVA_BONUS) Settings");
-		ACflg = OJ_RE;
-		//topmemory=0;
-	}
-	return comp_res;
-}
-/* 对文件中嵌有评分标记的原始文本输出进行评测（格式：[N]）。返回总得分。 */
-float raw_text_judge( char *infile, char *outfile, char *userfile, float *total_mark){
-        float mark=0;
-        int total=0;
-        FILE *in=fopen(infile,"r");
-        if(fscanf(in,"%d",&total)!=1) return -1;
-        fclose(in);
-        FILE *out=fopen(outfile,"r");
-        int num=0;
-        char * user_answer=NULL;
-        size_t user_length;
-        size_t buf_length;
-        size_t ans_length;
-        float m[total+1];
-        char * ans[total+1];
-        *total_mark=0;
-        for(int i=1;i<=total;i++){
-                ans[i]=NULL;
-                buf_length=0;
-                if(fscanf(out,"%d",&num)!=1) return -2;
-                if(i==num){
-                        if(fscanf(out,"%*[^\[][%f]",&m[num])!=1) return -3;
-                        *total_mark+=m[num];
-                        ans_length=getline(&ans[i],&buf_length,out);
-                        for(int j=ans_length-1;'\n'==ans[i][j]||'\r'==ans[i][j];j--){
-                                ans[i][j]='\0';
-                        }
-                        trim(ans[i]);
-                }else{
-                }
-        }
-        fclose(out);
-        FILE *user=fopen(userfile,"r");
-        FILE *df=fopen("diff.out","a");
-        for(int i=1;i<=total;i++){
-                user_answer=NULL;
-                buf_length=0;
-                if(fscanf(user,"%d",&num)==EOF) continue;
-                user_length=getline(&user_answer,&buf_length,user);
-                int j=0;
-                for(j=user_length-1;'\n'==user_answer[j]||'\r'==user_answer[j];j--){
-                        user_answer[j]='\0';
-                }
-                trim(user_answer);
-                if(num>0&&num<=total){
-                        if(strcasecmp(ans[num],user_answer)==0 || strcasecmp(ans[num],"*")==0 || strcasecmp(ans[num]," *")==0){
-                                mark+=m[num];
-                        }else{
-                              if(raw_text_diff) fprintf(df,"%d Answer:%s[You:%s] -%.1f\n",i,ans[i],user_answer,m[i]);
-                        }
-                        m[num]=0;
-                }else{
-                        break;
-                }
-        }
-        for(int i=1;i<=total;i++){
-                free(ans[i]);
-        }
-        free(user_answer);
-        fclose(user);
-        fclose(df);
-        return mark;
-
-}
-/* Fork 子进程运行题目的特殊评判程序（spj/tpj/upj），返回其退出码（0=AC）。 */
-int special_judge(char *oj_home, int problem_id, char *infile, char *outfile,
-				  char *userfile,double* spj_mark,int spj)
-{
-
-	pid_t pid;
-	char spjpath[BUFFER_SIZE/2];
-	char tpjpath[BUFFER_SIZE/2];
-	char upjpath[BUFFER_SIZE/2];
-	if (DEBUG) printf("pid=%d\n", problem_id);
-	// prevent privileges settings caused spj fail in [issues686]
-	sprintf(spjpath,"%s/data/%d/spj", oj_home, problem_id);
-	sprintf(tpjpath,"%s/data/%d/tpj", oj_home, problem_id);
-	sprintf(upjpath,"%s/data/%d/upj", oj_home, problem_id);
-	execute_cmd("chgrp judge %s/data/%d/?pj %s %s %s", oj_home, problem_id,infile, outfile, userfile);
-	chmod(spjpath, 0751);
-	chmod(tpjpath, 0751);
-	chmod(upjpath, 0751);
-	
-	pid = fork();
-	int ret = 0;
-	if (pid == 0)
-	{
-
-
-		struct rlimit LIM; // time limit, file limit& memory limit
-
-		LIM.rlim_cur = 15;
-		LIM.rlim_max = LIM.rlim_cur;
-		setrlimit(RLIMIT_CPU, &LIM);
-		alarm(0);
-		alarm(10);
-
-		// file limit
-		LIM.rlim_max = STD_F_LIM + STD_MB;
-		LIM.rlim_cur = STD_F_LIM;
-		setrlimit(RLIMIT_FSIZE, &LIM);
-
-		while (setgid(1536) != 0)
-			sleep(1);
-		while (setuid(1536) != 0)
-			sleep(1);
-		while (setresuid(1536, 1536, 1536) != 0)
-			sleep(1);
-		if( access( upjpath , X_OK ) == 0 ){
-			ret = execl(upjpath,upjpath, infile, outfile, userfile,NULL);    // hustoj style 2
-			if (DEBUG) printf("hustoj upj return: %d\n", ret);
-		}else if( access( tpjpath , X_OK ) == 0 ){
-			//ret = execute_cmd("%s/data/%d/tpj %s %s %s 2>> diff.out ", oj_home, problem_id, infile, userfile, outfile);    // testlib style
-			ret = execl(tpjpath,tpjpath, infile, userfile, outfile, NULL);    // testlib style: switch userfile and outfile position 
-			if (DEBUG) printf("testlib spj return: %d\n", ret);
-		}else if (access( spjpath , X_OK ) == 0 ) {	
-			ret = execl(spjpath,spjpath, infile, outfile, userfile,NULL);    // hustoj style 1
-			//ret = execute_cmd("%s/data/%d/spj %s %s %s", oj_home, problem_id, infile, outfile, userfile);    // hustoj style
-			if (DEBUG) printf("hustoj spj return: %d\n", ret);
-		}else if(spj == 2){
-
+		// 3. 关闭父进程中不需要的管道文件描述符
+		close(p_input[0]);
+		close(p_input[1]);
+		close(p_output[0]);
+		close(p_output[1]);
+		/* 
+		 * 4. 执行基于 testlib.h 的交互器
+		 * 参数规范：./interactor <输入文件> <输出文件> <答案文件>
+		 * 这里假设输入数据为 data.in，输出记录到 out.txt，答案对比为 ans.txt
+		 */
+		if(freopen("diff.out","a+",stderr)) errno=0;
+		pid_t pid_inter=fork();
+		if(pid_inter==0){
+			execl("./interactor", "./interactor", data_file_path, "user.out", NULL);
+		// 如果 execl 返回，说明执行失败
+			perror("Failed to execute interactor");
+			exit(1);
 		}else{
-			printf("spj tpj not found problem: %d\n", problem_id);		
-			ret=1;
-		}
-		if (ret)
-			exit(ret);
-		else
+			int status=-1;
+			waitpid(pid_inter,&status,0);
+			int ret = WEXITSTATUS(status);
+	/*		FILE * fresult=fopen("interactor.log","a+");
+			fprintf(fresult,"%d\n",ret);
+			fclose(fresult);
+	*/
+			int fd = open(FIFO_INTER, O_WRONLY);
+			    if (fd != -1) {
+				if(DEBUG>1) fprintf(stderr,"读取interactor退出状态：通过管道发送退出信号 [%d]...\n", ret);
+				if(write(fd, &ret, sizeof(ret)));
+				close(fd);
+			    }
+			    if(DEBUG>1) perror("interactor 退出状态得到：正式退出。\n");
+			fprintf(stderr,"\n```\n");
+			fclose(stderr);
 			exit(0);
-	}
-	else
-	{
-		int status;
-
-		waitpid(pid, &status, 0);
-		ret = WEXITSTATUS(status);
-		if( access( upjpath , X_OK ) == 0 ){
-			printf("upj return: %d\n", ret);
-			*spj_mark=ret/100.0;
-			if(ret==100) ret=0;
-			else ret=1;
-			printf("spj_mark: %.2f ret: %d\n",*spj_mark, ret);
 		}
-		if (DEBUG)
-			printf("recorded spj: %d\n", ret);
+	    }
+
+	    return 0;
 	}
+	/* 检测 error.out 中的 Python MemoryError 并将结果升级为 OJ_ML。 */
+	int fix_python_mis_judge(char *work_dir, int &ACflg, int &topmemory,
+							 int mem_lmt)
+	{
+		int comp_res = OJ_AC;
+
+		comp_res = execute_cmd(
+			"/bin/grep 'MemoryError'  %s/error.out", work_dir);
+
+		if (!comp_res)
+		{
+			printf("Python need more Memory!");
+			ACflg = OJ_ML;
+			topmemory = mem_lmt * STD_MB;
+		}
+
+		return comp_res;
+	}
+
+	/* 检测 error.out 中的 Java 异常和 OutOfMemoryError 以修正被误判的 RE/ML 结果。 */
+	int fix_java_mis_judge(char *work_dir, int &ACflg, int &topmemory,
+						   int mem_lmt)
+	{
+		int comp_res = OJ_AC;
+		char path[BUFFER_SIZE];
+		sprintf(path, "%s/error.out", work_dir);
+		chmod(path, 0700);
+		if (DEBUG)
+			execute_cmd("cat %s/error.out", work_dir);
+		comp_res = execute_cmd("/bin/grep 'Exception'  %s/error.out", work_dir);
+		if (!comp_res)
+		{
+			printf("Exception reported\n");
+			ACflg = OJ_RE;
+		}
+		execute_cmd("cat %s/error.out", work_dir);
+
+		comp_res = execute_cmd(
+			"/bin/grep 'java.lang.OutOfMemoryError'  %s/error.out", work_dir);
+
+		if (!comp_res)
+		{
+			printf("JVM need more Memory!");
+			ACflg = OJ_ML;
+			topmemory = mem_lmt * STD_MB;
+		}
+
+		if (!comp_res)
+		{
+			printf("JVM need more Memory or Threads!");
+			ACflg = OJ_ML;
+			topmemory = mem_lmt * STD_MB;
+		}
+		comp_res = execute_cmd("/bin/grep 'Could not create'  %s/error.out",
+							   work_dir);
+		if (!comp_res)
+		{
+			printf("jvm need more resource,tweak -Xmx(OJ_JAVA_BONUS) Settings");
+			ACflg = OJ_RE;
+			//topmemory=0;
+		}
+		return comp_res;
+	}
+	/* 对文件中嵌有评分标记的原始文本输出进行评测（格式：[N]）。返回总得分。 */
+	float raw_text_judge( char *infile, char *outfile, char *userfile, float *total_mark){
+		float mark=0;
+		int total=0;
+		FILE *in=fopen(infile,"r");
+		if(fscanf(in,"%d",&total)!=1) return -1;
+		fclose(in);
+		FILE *out=fopen(outfile,"r");
+		int num=0;
+		char * user_answer=NULL;
+		size_t user_length;
+		size_t buf_length;
+		size_t ans_length;
+		float m[total+1];
+		char * ans[total+1];
+		*total_mark=0;
+		for(int i=1;i<=total;i++){
+			ans[i]=NULL;
+			buf_length=0;
+			if(fscanf(out,"%d",&num)!=1) return -2;
+			if(i==num){
+				if(fscanf(out,"%*[^\[][%f]",&m[num])!=1) return -3;
+				*total_mark+=m[num];
+				ans_length=getline(&ans[i],&buf_length,out);
+				for(int j=ans_length-1;'\n'==ans[i][j]||'\r'==ans[i][j];j--){
+					ans[i][j]='\0';
+				}
+				trim(ans[i]);
+			}else{
+			}
+		}
+		fclose(out);
+		FILE *user=fopen(userfile,"r");
+		FILE *df=fopen("diff.out","a");
+		for(int i=1;i<=total;i++){
+			user_answer=NULL;
+			buf_length=0;
+			if(fscanf(user,"%d",&num)==EOF) continue;
+			user_length=getline(&user_answer,&buf_length,user);
+			int j=0;
+			for(j=user_length-1;'\n'==user_answer[j]||'\r'==user_answer[j];j--){
+				user_answer[j]='\0';
+			}
+			trim(user_answer);
+			if(num>0&&num<=total){
+				if(strcasecmp(ans[num],user_answer)==0 || strcasecmp(ans[num],"*")==0 || strcasecmp(ans[num]," *")==0){
+					mark+=m[num];
+				}else{
+				      if(raw_text_diff) fprintf(df,"%d Answer:%s[You:%s] -%.1f\n",i,ans[i],user_answer,m[i]);
+				}
+				m[num]=0;
+			}else{
+				break;
+			}
+		}
+		for(int i=1;i<=total;i++){
+			free(ans[i]);
+		}
+		free(user_answer);
+		fclose(user);
+		fclose(df);
+		return mark;
+
+	}
+	/* Fork 子进程运行题目的特殊评判程序（spj/tpj/upj），返回其退出码（0=AC）。 */
+	int special_judge(char *oj_home, int problem_id, char *infile, char *outfile,
+					  char *userfile,double* spj_mark,int spj)
+	{
+
+		pid_t pid;
+		char spjpath[BUFFER_SIZE/2];
+		char tpjpath[BUFFER_SIZE/2];
+		char upjpath[BUFFER_SIZE/2];
+		if (DEBUG>1) fprintf(stderr,"pid=%d\n", problem_id);
+		// prevent privileges settings caused spj fail in [issues686]
+		sprintf(spjpath,"%s/data/%d/spj", oj_home, problem_id);
+		sprintf(tpjpath,"%s/data/%d/tpj", oj_home, problem_id);
+		sprintf(upjpath,"%s/data/%d/upj", oj_home, problem_id);
+		execute_cmd("chgrp judge %s/data/%d/?pj %s %s %s", oj_home, problem_id,infile, outfile, userfile);
+		chmod(spjpath, 0751);
+		chmod(tpjpath, 0751);
+		chmod(upjpath, 0751);
+		
+		int ret = 0;
+			if(spj==3){
+				// 打开管道读取孙子的信息（此操作会阻塞，直到孙子写入）
+				int fd = open(FIFO_INTER, O_RDONLY);
+				int received_msg=OJ_RE;
+				if (fd != -1) {
+				    if (read(fd, &received_msg, sizeof(received_msg)) > 0) {
+					if(DEBUG>1) printf("祖父：成功接收到孙子进程的退出信息，内容为: %d\n", received_msg);
+				    } else {
+					if(DEBUG>1) printf("祖父：未能读取到有效信息。\n");
+				   }
+				  close(fd);
+				}
+				// 清理管道文件
+				return received_msg;
+			}else{
+				pid = fork();
+				if (pid == 0)
+				{
+
+					struct rlimit LIM; // time limit, file limit& memory limit
+
+					LIM.rlim_cur = 15;
+					LIM.rlim_max = LIM.rlim_cur;
+					setrlimit(RLIMIT_CPU, &LIM);
+					alarm(0);
+					alarm(10);
+
+					// file limit
+					LIM.rlim_max = STD_F_LIM + STD_MB;
+					LIM.rlim_cur = STD_F_LIM;
+					setrlimit(RLIMIT_FSIZE, &LIM);
+
+					while (setgid(judge_gid) != 0)
+						sleep(1);
+					while (setuid(judge_uid) != 0)
+						sleep(1);
+					while (setresuid(judge_uid, judge_uid, judge_uid) != 0)
+						sleep(1);
+					if( access( upjpath , X_OK ) == 0 ){
+						ret = execl(upjpath,upjpath, infile, outfile, userfile,NULL);    // hustoj style 2
+						if (DEBUG) printf("hustoj upj return: %d\n", ret);
+					}else if( access( tpjpath , X_OK ) == 0 ){
+						//ret = execute_cmd("%s/data/%d/tpj %s %s %s 2>> diff.out ", oj_home, problem_id, infile, userfile, outfile);    // testlib style
+						ret = execl(tpjpath,tpjpath, infile, userfile, outfile, NULL);    // testlib style: switch userfile and outfile position 
+						if (DEBUG) printf("testlib spj return: %d\n", ret);
+					}else if (access( spjpath , X_OK ) == 0 ) {	
+						ret = execl(spjpath,spjpath, infile, outfile, userfile,NULL);    // hustoj style 1
+						//ret = execute_cmd("%s/data/%d/spj %s %s %s", oj_home, problem_id, infile, outfile, userfile);    // hustoj style
+						if (DEBUG) printf("hustoj spj return: %d\n", ret);
+					}else if(spj == 2){
+
+					}else{
+						printf("spj tpj not found problem: %d\n", problem_id);		
+						ret=1;
+					}
+					if (ret)
+						exit(ret);
+					else
+						exit(0);
+				}
+				else
+				{
+					int status;
+
+					waitpid(pid, &status, 0);
+					ret = WEXITSTATUS(status);
+					if( access( upjpath , X_OK ) == 0 ){
+						printf("upj return: %d\n", ret);
+						*spj_mark=ret/100.0;
+						if(ret==100) ret=0;
+						else ret=1;
+						printf("spj_mark: %.2f ret: %d\n",*spj_mark, ret);
+					}
+					if (DEBUG)
+						printf("recorded spj: %d\n", ret);
+				}
+			}
 	return ret;
 }
 /* 运行后：比较用户输出与期望输出（或运行 spj），修正 Java/Python 的误判，更新 ACflg/PEflg。 */
@@ -3241,7 +3341,7 @@ void judge_solution(int &ACflg, int &usedtime, double time_lmt, int spj,
 {
 	//usedtime-=1000;
 	int comp_res;
-	char path[BUFFER_SIZE];
+	//char path[BUFFER_SIZE];
 	if (num_of_test == 0 )
 		num_of_test = 1.0;
 	
@@ -3268,17 +3368,25 @@ void judge_solution(int &ACflg, int &usedtime, double time_lmt, int spj,
 	if (ACflg == OJ_AC)
 	{
 		if (spj){  
-			execute_cmd("/bin/cp %s/data/%d/checker %s",oj_home,p_id,work_dir);
-			sprintf(path, "%s/checker", work_dir);
-			if(chown(path, judge_uid, judge_gid)!=0 && DEBUG) printf("chown %s\n",path) ;
-			comp_res = special_judge(oj_home, p_id, infile, outfile, userfile,spj_mark,spj);
-			if (comp_res == 0)
-				comp_res = OJ_AC;
-			else{
-				if (DEBUG)
-					printf("fail test %s\n", infile);
-				comp_res = OJ_WA;
-			}
+				//execute_cmd("/bin/cp %s/data/%d/checker %s",oj_home,p_id,work_dir);
+				//sprintf(path, "%s/checker", work_dir);
+				//if(chown(path, judge_uid, judge_gid)!=0 && DEBUG) printf("chown %s\n",path) ;
+
+				int received_msg = special_judge(oj_home, p_id, infile, outfile, userfile,spj_mark,spj);
+				if (received_msg == 0){
+					comp_res = OJ_AC;
+				}else if(received_msg==1){
+				       	comp_res=OJ_WA;
+				}else if(received_msg==2){
+				       	comp_res=OJ_PE;
+				}else if(received_msg==3){
+				       	comp_res=OJ_RE;
+				}else{
+					if (DEBUG)
+						printf("fail test %s spj:%d \n", infile,received_msg);
+					comp_res = OJ_WA;
+				}
+			
 		}else{
 			comp_res = compare(outfile, userfile,infile,userfile,spj_mark);
 		}
@@ -3354,7 +3462,7 @@ void watch_solution(pid_t pidApp, char *infile, int &ACflg, int spj,
 	int tempmemory = 0;
 
 	if (DEBUG)
-		printf("pid=%d judging %s\n", pidApp, infile);
+		fprintf(stderr,"pid=%d judging %s\n", pidApp, infile);
 
 	int status, sig, exitcode;
 	// char white_code[256]={0};
@@ -3513,7 +3621,7 @@ void watch_solution(pid_t pidApp, char *infile, int &ACflg, int spj,
 				case SIGKILL:
 				case SIGXCPU:
 					ACflg = OJ_TL;
-					usedtime += time_lmt * 1000;  // 等待IO的Alarm超时虽然没有占用CPU，但为了省去给每个人解释的时间，计入用时。
+					if(usedtime<time_lmt*100) usedtime = time_lmt * 1000;  // 等待IO的Alarm超时虽然没有占用CPU，但为了省去给每个人解释的时间，计入用时。
 					if (DEBUG)
 						printf("TLE:%d\n", usedtime);
 					break;
@@ -3536,7 +3644,7 @@ void watch_solution(pid_t pidApp, char *infile, int &ACflg, int spj,
 
 
 		// check the system calls
-	if (!use_ptrace) continue;
+	if (!use_ptrace || spj==3 ) continue;
 
 #ifdef __mips__
 //		if(exitcode!=5&&exitcode!=133){
@@ -3576,7 +3684,7 @@ void watch_solution(pid_t pidApp, char *infile, int &ACflg, int spj,
 			call_id = call_id % call_array_size;
 //			printf("call_id:%d %d\n",call_id,call_counter[call_id]);
 			pidStat[pidCur] ^= 1;
-			if (DEBUG) printf("pid=%d call=%d EE=%d\n", pidCur, call_id, pidStat[pidCur]&1);
+			if (DEBUG>1) fprintf(stderr,"pid=%d call=%d EE=%d\n", pidCur, call_id, pidStat[pidCur]&1);
 
 			if (call_id==511){
 				printf("CALLID=511 status=%x\n", status);
@@ -3662,7 +3770,6 @@ void clean_workdir(char *work_dir)
 	{
 		return;
 	}
-
 	umount(work_dir);
 	if (DEBUG)
 	{
@@ -3699,7 +3806,10 @@ void init_parameters(int argc, char **argv, int &solution_id,
 		fprintf(stderr,"Example:\n\tsudo %s 1001 0 /home/judge/ debug  \n\n",argv[0]);
 		exit(1);
 	}
-	DEBUG = (argc > 4);
+	if (argc > 4) DEBUG=1;
+	if(DEBUG){
+		sscanf(argv[4],"%d",&DEBUG);
+	}
 	record_call = (argc > 5);
 	if (argc > 5)
 	{
@@ -3994,7 +4104,7 @@ int test_run(int solution_id,int p_id,int lang,char * work_dir,double time_lmt,i
 
 	if (pidApp == 0)
 	{
-		run_solution(lang, work_dir, time_lmt, usedtime, mem_lmt,(char *)"data.in",p_id);
+		run_solution(lang, work_dir, time_lmt, usedtime, mem_lmt,(char *)"data.in",p_id,spj);
 	}
 	else
 	{
@@ -4049,6 +4159,8 @@ int main(int argc, char **argv)
 	if (pw) {
 		judge_uid = pw->pw_uid;
 		judge_gid = pw->pw_gid;
+	}else{
+		judge_uid = judge_gid = 1536 ;
 	}
 
 #ifdef _mysql_h
@@ -4282,6 +4394,18 @@ int main(int argc, char **argv)
 	prelen=strlen(path_buf);
 	if (prelen<strlen(oj_home)+6) prelen=strlen(oj_home)+6;
 
+	if( spj == 3 ){
+		
+		struct stat st;
+		if (stat(FIFO_INTER, &st) == 0) {
+			unlink(FIFO_INTER);
+		}
+		if (mkfifo(FIFO_INTER, 0600) == -1) {
+			if(DEBUG>1) perror("祖父：创建命名管道失败");
+		//	exit(EXIT_FAILURE);
+		}
+	}
+
 	for (int i=0 ; (oi_mode || ACflg == OJ_AC || ACflg == OJ_PE) && i < namelist_len ;i++)
 	{
 		usedtime=0;
@@ -4298,7 +4422,7 @@ int main(int argc, char **argv)
 
 		prepare_files(dirp->d_name, namelen, infile, p_id, work_dir, outfile,
 					  userfile, runner_id, lang );
-		if (access(outfile, R_OK ) == -1)
+		if (spj==0 && access(outfile, R_OK ) == -1)
 		{
 			//out file does not exist
 			char error[BUFFER_SIZE];
@@ -4310,13 +4434,16 @@ int main(int argc, char **argv)
 		init_syscalls_limits(lang);
 
 		pid_t pidApp = fork();                  //创建子进程，这里程序将自身复制一份，两份同时运行，进程根据返回值确定自己的身份
-
 		if (pidApp == 0)                        //返回值是0，我就是子进程 
 		{
 			if(spj==2){
 			       	exit(0);
 			}
-			run_solution(lang, work_dir, time_lmt, usedtime, mem_lmt,infile,p_id);
+			if(spj==3){
+				interact(lang, work_dir, time_lmt, usedtime, mem_lmt,infile,p_id);
+			}else{
+				run_solution(lang, work_dir, time_lmt, usedtime, mem_lmt,infile,p_id,spj);
+			}
 
 		}
 		else
@@ -4327,13 +4454,16 @@ int main(int argc, char **argv)
 			if(spj!=2)watch_solution(pidApp, infile, ACflg, spj, userfile, outfile,
 						   solution_id, lang, topmemory, mem_lmt, usedtime, time_lmt,
 						   p_id, PEflg, work_dir);
+			if(topmemory==0) {
+				topmemory = get_proc_status(pidApp, "VmPeak:") << 10;
+			}
 			kill(pidApp,9);
 			printf("%s: mem=%d time=%d\n",infile+prelen,topmemory,usedtime);	
 			total_time+=usedtime;
 			printf("time:%d/%d\n",usedtime,total_time);
 			//判断用户程序输出是否正确，给出结果
 			printf("test userfile ... %s\n", userfile);
-			if (access(userfile, R_OK ) == -1){
+			if (spj!=3 && access(userfile, R_OK ) == -1 ){
 				printf("userfile missing... %s\n", userfile);
 				ACflg=OJ_WA;
 			}else{
