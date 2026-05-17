@@ -3022,7 +3022,7 @@ int interact(int &lang, char *work_dir, double &time_lmt, int &usedtime,
     int p_input[2];
     int p_output[2];
 
-    printf("./interactor %s \n", data_file_path);
+    fprintf(stderr,"./interactor %s \n", data_file_path);
 	    if (pipe(p_input) < 0 || pipe(p_output) < 0) {
 		perror("Pipe creation failed");
 		return 1;
@@ -3033,7 +3033,7 @@ int interact(int &lang, char *work_dir, double &time_lmt, int &usedtime,
 		perror("Fork failed");
 		return 1;
 	    }
-	    printf("-------------------------------------------------------------------------------------\n");
+	    if(DEBUG>=1)printf("-------------------------------------------------------------------------------------\n");
 	    if (pid > 0) {
 		/* --------- 父进程：运行用户程序 (user_program)，受watch_solution监控 --------- */
 		
@@ -3050,6 +3050,9 @@ int interact(int &lang, char *work_dir, double &time_lmt, int &usedtime,
 
 		// 4. 执行用户程序 (假设编译出的可执行文件叫 ./user)
 		//execl("./Main", "./Main", NULL);
+		FILE * diff=fopen("diff.out","a+");
+        	fprintf(diff,"%s\n--\n```\n", getFileNameFromPath(data_file_path));
+		fclose(diff);
 		run_solution(lang, work_dir, time_lmt, usedtime, mem_lmt,data_file_path,p_id,3);
 		
 		// 如果 execl 返回，说明执行失败
@@ -3069,15 +3072,15 @@ int interact(int &lang, char *work_dir, double &time_lmt, int &usedtime,
 		close(p_input[1]);
 		close(p_output[0]);
 		close(p_output[1]);
-		if(freopen("diff.out","a+",stderr));
 		/* 
 		 * 4. 执行基于 testlib.h 的交互器
 		 * 参数规范：./interactor <输入文件> <输出文件> <答案文件>
 		 * 这里假设输入数据为 data.in，输出记录到 out.txt，答案对比为 ans.txt
 		 */
+		if(freopen("diff.out","a+",stderr)) errno=0;
 		pid_t pid_inter=fork();
 		if(pid_inter==0){
-			execl("./interactor", "./interactor", data_file_path, "out.txt", NULL);
+			execl("./interactor", "./interactor", data_file_path, "user.out", NULL);
 		// 如果 execl 返回，说明执行失败
 			perror("Failed to execute interactor");
 			exit(1);
@@ -3096,6 +3099,8 @@ int interact(int &lang, char *work_dir, double &time_lmt, int &usedtime,
 				close(fd);
 			    }
 			    if(DEBUG>1) perror("interactor 退出状态得到：正式退出。\n");
+			fprintf(stderr,"\n```\n");
+			fclose(stderr);
 			exit(0);
 		}
 	    }
@@ -3249,27 +3254,24 @@ int interact(int &lang, char *work_dir, double &time_lmt, int &usedtime,
 		chmod(upjpath, 0751);
 		
 		int ret = 0;
-				if(spj==3){
-				
-					// 打开管道读取孙子的信息（此操作会阻塞，直到孙子写入）
-					int fd = open(FIFO_INTER, O_RDONLY);
-					int received_msg=OJ_RE;
-					if (fd != -1) {
-					    if (read(fd, &received_msg, sizeof(received_msg)) > 0) {
-						if(DEBUG>1) printf("祖父：成功接收到孙子进程的退出信息，内容为: %d\n", received_msg);
-					    } else {
-						if(DEBUG>1) printf("祖父：未能读取到有效信息。\n");
-				    }
-				    close(fd);
+			if(spj==3){
+				// 打开管道读取孙子的信息（此操作会阻塞，直到孙子写入）
+				int fd = open(FIFO_INTER, O_RDONLY);
+				int received_msg=OJ_RE;
+				if (fd != -1) {
+				    if (read(fd, &received_msg, sizeof(received_msg)) > 0) {
+					if(DEBUG>1) printf("祖父：成功接收到孙子进程的退出信息，内容为: %d\n", received_msg);
+				    } else {
+					if(DEBUG>1) printf("祖父：未能读取到有效信息。\n");
+				   }
+				  close(fd);
 				}
 				// 清理管道文件
-				unlink(FIFO_INTER);
 				return received_msg;
 			}else{
 				pid = fork();
 				if (pid == 0)
 				{
-
 
 					struct rlimit LIM; // time limit, file limit& memory limit
 
@@ -3768,7 +3770,6 @@ void clean_workdir(char *work_dir)
 	{
 		return;
 	}
-
 	umount(work_dir);
 	if (DEBUG)
 	{
@@ -4393,6 +4394,18 @@ int main(int argc, char **argv)
 	prelen=strlen(path_buf);
 	if (prelen<strlen(oj_home)+6) prelen=strlen(oj_home)+6;
 
+	if( spj == 3 ){
+		
+		struct stat st;
+		if (stat(FIFO_INTER, &st) == 0) {
+			unlink(FIFO_INTER);
+		}
+		if (mkfifo(FIFO_INTER, 0600) == -1) {
+			if(DEBUG>1) perror("祖父：创建命名管道失败");
+		//	exit(EXIT_FAILURE);
+		}
+	}
+
 	for (int i=0 ; (oi_mode || ACflg == OJ_AC || ACflg == OJ_PE) && i < namelist_len ;i++)
 	{
 		usedtime=0;
@@ -4421,13 +4434,6 @@ int main(int argc, char **argv)
 		init_syscalls_limits(lang);
 
 		pid_t pidApp = fork();                  //创建子进程，这里程序将自身复制一份，两份同时运行，进程根据返回值确定自己的身份
-		if( spj == 3 ){
-			unlink(FIFO_INTER); // 确保没有同名旧文件
-			if (mkfifo(FIFO_INTER, 0600) == -1) {
-				perror("祖父：创建命名管道失败");
-			//	exit(EXIT_FAILURE);
-			}
-		}
 		if (pidApp == 0)                        //返回值是0，我就是子进程 
 		{
 			if(spj==2){
@@ -4457,7 +4463,7 @@ int main(int argc, char **argv)
 			printf("time:%d/%d\n",usedtime,total_time);
 			//判断用户程序输出是否正确，给出结果
 			printf("test userfile ... %s\n", userfile);
-			if (access(userfile, R_OK ) == -1 && spj!=3 ){
+			if (spj!=3 && access(userfile, R_OK ) == -1 ){
 				printf("userfile missing... %s\n", userfile);
 				ACflg=OJ_WA;
 			}else{
