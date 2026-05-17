@@ -139,7 +139,8 @@
 	$MSG_NJ="שיפוט רגיל";
 	$MSG_SPJ="שיפוט מיוחד";
 	$MSG_RTJ="שיפוט טקסט";
-	$MSG_CLICK_VIEW_HINT="$MSG_CLICK_VIEW_HINT";
+		$MSG_INTERACT= "Interactive Judger" ;
+$MSG_CLICK_VIEW_HINT="$MSG_CLICK_VIEW_HINT";
 	$MSG_HINT="רמז";
 	$MSG_Source="$MSG_Source";
 	$MSG_Time_Limit="$MSG_Time_Limit";

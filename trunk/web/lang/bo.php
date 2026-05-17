@@ -139,7 +139,8 @@
 	$MSG_NJ="སྤྱི་གཏན།";
 	$MSG_SPJ="དམིགས་བསལ་གཏན་།";
 	$MSG_RTJ="རིག་གཏན།";
-	$MSG_CLICK_VIEW_HINT="Click to View Spoiler";
+		$MSG_INTERACT= "Interactive Judger" ;
+$MSG_CLICK_VIEW_HINT="Click to View Spoiler";
 	$MSG_HINT="གདམ་ང།";
 	$MSG_Source="Source";
 	$MSG_Time_Limit="Time Limit";

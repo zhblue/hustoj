@@ -140,7 +140,8 @@
 	$MSG_NJ= "Normal Judger" ;
 	$MSG_SPJ= "Special Judger" ;
 	$MSG_RTJ= "Raw Text Judger" ;
-        $MSG_CLICK_VIEW_HINT="Click to View Spoiler";
+        	$MSG_INTERACT= "Interactive Judger" ;
+$MSG_CLICK_VIEW_HINT="Click to View Spoiler";
 	$MSG_HINT= "تذکر";
 	$MSG_Source= "منبع";
 	$MSG_Time_Limit="محدودیت زمانی";
