@@ -2847,7 +2847,7 @@ void run_solution(int &lang, char *work_dir, double &time_lmt, int &usedtime,
 	}
 	// trace me
 	unshare(CLONE_NEWNET);
-	ptrace(PTRACE_TRACEME, 0, NULL, NULL);
+	if(spj!=3 && use_ptrace) ptrace(PTRACE_TRACEME, 0, NULL, NULL);
 	// run me
 	if (   
 		(!use_docker) 
@@ -3619,7 +3619,7 @@ void watch_solution(pid_t pidApp, char *infile, int &ACflg, int spj,
 				case SIGKILL:
 				case SIGXCPU:
 					ACflg = OJ_TL;
-					usedtime += time_lmt * 1000;  // 等待IO的Alarm超时虽然没有占用CPU，但为了省去给每个人解释的时间，计入用时。
+					if(usedtime<time_lmt*100) usedtime = time_lmt * 1000;  // 等待IO的Alarm超时虽然没有占用CPU，但为了省去给每个人解释的时间，计入用时。
 					if (DEBUG)
 						printf("TLE:%d\n", usedtime);
 					break;
@@ -3642,7 +3642,7 @@ void watch_solution(pid_t pidApp, char *infile, int &ACflg, int spj,
 
 
 		// check the system calls
-	if (!use_ptrace) continue;
+	if (!use_ptrace || spj==3 ) continue;
 
 #ifdef __mips__
 //		if(exitcode!=5&&exitcode!=133){
@@ -4448,6 +4448,9 @@ int main(int argc, char **argv)
 			if(spj!=2)watch_solution(pidApp, infile, ACflg, spj, userfile, outfile,
 						   solution_id, lang, topmemory, mem_lmt, usedtime, time_lmt,
 						   p_id, PEflg, work_dir);
+			if(topmemory==0) {
+				topmemory = get_proc_status(pidApp, "VmPeak:") << 10;
+			}
 			kill(pidApp,9);
 			printf("%s: mem=%d time=%d\n",infile+prelen,topmemory,usedtime);	
 			total_time+=usedtime;
