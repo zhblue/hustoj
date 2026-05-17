@@ -3060,6 +3060,8 @@ int interact(int &lang, char *work_dir, double &time_lmt, int &usedtime,
 		exit(1);
 	    } else {
 		if(chdir(work_dir));
+		if(chown("./interactor", www_uid, judge_gid)!=0 && DEBUG>1) fprintf(stderr,"error on chown interactor ") ;
+		chmod("./interactor",0777);
 		/* --------- 子进程：运行交互器 (interactor) --------- */
 		
 		// 1. 重定向标准输入：从 p_output 的读端读取（获取用户程序的输出）
@@ -3080,6 +3082,14 @@ int interact(int &lang, char *work_dir, double &time_lmt, int &usedtime,
 		if(freopen("diff.out","a+",stderr)) errno=0;
 		pid_t pid_inter=fork();
 		if(pid_inter==0){
+			/*
+			while (setgid(judge_gid) != 0)
+				sleep(1);
+			while (setuid(judge_uid) != 0)
+				sleep(1);
+			while (setresuid(judge_uid, judge_uid, judge_uid) != 0)
+				sleep(1);
+				*/
 			execl("./interactor", "./interactor", data_file_path, "user.out", NULL);
 		// 如果 execl 返回，说明执行失败
 			perror("Failed to execute interactor");
@@ -4400,10 +4410,11 @@ int main(int argc, char **argv)
 		if (stat(FIFO_INTER, &st) == 0) {
 			unlink(FIFO_INTER);
 		}
-		if (mkfifo(FIFO_INTER, 0600) == -1) {
+		if (mkfifo(FIFO_INTER, 0660) == -1) {
 			if(DEBUG>1) perror("祖父：创建命名管道失败");
 		//	exit(EXIT_FAILURE);
 		}
+		chown(FIFO_INTER,www_uid,judge_uid);
 	}
 
 	for (int i=0 ; (oi_mode || ACflg == OJ_AC || ACflg == OJ_PE) && i < namelist_len ;i++)
