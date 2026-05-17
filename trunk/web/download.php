@@ -2,7 +2,7 @@
 ////////////////////////////Common head
 require_once('./include/db_info.inc.php');
 require_once('./include/my_func.inc.php');
-$id = intval($_GET['id']);
+$id = intval($_GET['id']??"0");
 if(empty($OJ_DATA)) die();
 $zipname=$OJ_DATA."/".$id."/sample.zip";
 if(file_exists($zipname)){
@@ -20,6 +20,7 @@ if ((!isset($OJ_DOWNLOAD)) || !$OJ_DOWNLOAD) {
 }
 $sid = intval($_GET['sid']);
 $name = basename($_GET['name'], ".out");
+$name = basename($name, ".in");
 $sql = "select problem_id,contest_id,user_id from solution where solution_id=?";
 $data = pdo_query($sql, $sid);
 //var_dump($sql);
@@ -52,15 +53,10 @@ if (!empty($data)) {
         }
 
     }
-    if($coin<=0){
-        $view_errors = "<h2> $MSG_NO_COIN </h2>";
-        require("template/" . $OJ_TEMPLATE . "/error.php");
-        exit(0);
-    }
     $infile = "$OJ_DATA/$pid/$name.in";
     $outfile = "$OJ_DATA/$pid/$name.out";
 
-    $zipname = tempnam(__dir__ . '/upload', '');
+    $zipname = tempnam(sys_get_temp_dir(), 'download.zip');
     $zip = new ZipArchive();
 
     if ($zip->open($zipname, ZIPARCHIVE::CREATE) !== TRUE) {
@@ -69,17 +65,20 @@ if (!empty($data)) {
     $files = [$infile, $outfile];
 
     foreach ($files as $file) {
+	if(!file_exists($file)) continue;
         $entryname = basename($file);
-        $zip->addFile($file, $entryname, 0, ZipArchive::LENGTH_TO_END, ZipArchive::FL_OVERWRITE | ZipArchive::FL_ENC_UTF_8);
+	if(!($zip->addFile($file, $entryname, 0,0, ZipArchive::FL_OVERWRITE | ZipArchive::FL_ENC_UTF_8))){
+		echo htmlentities($infile);
+		exit();
+	}
     }
     $zip->close();
-
     header('Content-Type: application/zip;charset=utf8');
     header('Content-disposition: attachment; filename=' . $name . date('Y-m-d') . '.zip');
     header('Content-Length: ' . filesize($zipname));
+    ob_end_flush();
     readfile($zipname);
     unlink($zipname);
-    pdo_query("update users set coin_spent=coin_spent+1 where user_id=?", $_SESSION[$OJ_NAME . '_user_id'] );
     die();
 }
 ?>
