@@ -2834,7 +2834,7 @@ void run_solution(int &lang, char *work_dir, double &time_lmt, int &usedtime,
 	if (copy_data){
 		sprintf(path, "%s/user.out", work_dir);
 		if(chown(path,judge_uid,judge_gid));
-		chmod(path, 0740);
+		chmod(path, 0770);
 		sprintf(path, "%s/data.in", work_dir);
 		if(chown(path,judge_uid,judge_gid));
 		chmod(path, 0740);
@@ -3059,9 +3059,14 @@ int interact(int &lang, char *work_dir, double &time_lmt, int &usedtime,
 		perror("Failed to execute user program");
 		exit(1);
 	    } else {
-		if(chdir(work_dir));
-		if(chown("./interactor", www_uid, judge_gid)!=0 && DEBUG>1) fprintf(stderr,"error on chown interactor ") ;
-		chmod("./interactor",0500);
+		if(chdir(work_dir)){
+			perror("chdir failed");
+			exit(1);
+		}
+		if(chown(work_dir,judge_uid,www_uid));
+		chmod(work_dir,0770);
+		if(chown("./interactor", www_uid, judge_uid)!=0 && DEBUG>1) fprintf(stderr,"error on chown interactor ") ;
+		chmod("./interactor",0770);
 		/* --------- 子进程：运行交互器 (interactor) --------- */
 		
 		// 1. 重定向标准输入：从 p_output 的读端读取（获取用户程序的输出）
@@ -3079,20 +3084,21 @@ int interact(int &lang, char *work_dir, double &time_lmt, int &usedtime,
 		 * 参数规范：./interactor <输入文件> <输出文件> <答案文件>
 		 * 这里假设输入数据为 data.in，输出记录到 out.txt，答案对比为 ans.txt
 		 */
-		if(freopen("diff.out","a+",stderr)) errno=0;
+		if(freopen("diff.out","a+",stderr));
 		pid_t pid_inter=fork();
 		if(pid_inter==0){
-			/*
-			while (setgid(judge_gid) != 0)
-				sleep(1);
-			while (setuid(judge_uid) != 0)
+			
+			if(chown("./user.out", judge_uid, judge_uid)!=0 && DEBUG>1);
+			if(chmod("./user.out", 0700)!=0 && DEBUG>1) ;
+			while (setgid(judge_uid) != 0)
 				sleep(1);
 			while (setresuid(judge_uid, judge_uid, judge_uid) != 0)
 				sleep(1);
-				*/
+				
 			execl("./interactor", "./interactor", data_file_path, "user.out", NULL);
 		// 如果 execl 返回，说明执行失败
 			perror("Failed to execute interactor");
+			execute_cmd("whoami");
 			exit(1);
 		}else{
 			int status=-1;
