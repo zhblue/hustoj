@@ -2831,10 +2831,10 @@ void run_solution(int &lang, char *work_dir, double &time_lmt, int &usedtime,
 	}
 	if(spj!=3)execute_cmd("touch %s/user.out", work_dir);
 	
-	if (copy_data){
+	if (spj!=3 && copy_data){
 		sprintf(path, "%s/user.out", work_dir);
 		if(chown(path,judge_uid,judge_gid));
-		chmod(path, 0770);
+		chmod(path, 0700);
 		sprintf(path, "%s/data.in", work_dir);
 		if(chown(path,judge_uid,judge_gid));
 		chmod(path, 0740);
@@ -3064,9 +3064,9 @@ int interact(int &lang, char *work_dir, double &time_lmt, int &usedtime,
 			exit(1);
 		}
 		if(chown(work_dir,judge_uid,www_uid));
-		chmod(work_dir,0770);
-		if(chown("./interactor", www_uid, judge_uid)!=0 && DEBUG>1) fprintf(stderr,"error on chown interactor ") ;
-		chmod("./interactor",0770);
+		chmod(work_dir,0700);
+		if(chown("./interactor", judge_uid, www_uid)!=0 && DEBUG>1) fprintf(stderr,"error on chown interactor ") ;
+		chmod("./interactor",0700);
 		/* --------- 子进程：运行交互器 (interactor) --------- */
 		
 		// 1. 重定向标准输入：从 p_output 的读端读取（获取用户程序的输出）
