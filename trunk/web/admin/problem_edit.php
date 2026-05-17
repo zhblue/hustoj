@@ -101,6 +101,7 @@ include_once("kindeditor.php") ;
         <input type=radio name=spj value='0' <?php echo $row['spj']=="0"?"checked":""?> title='Normal Judger'><?php echo $MSG_NJ?><br>
         <input type=radio name=spj value='1' <?php echo $row['spj']=="1"?"checked":""?> title='Special Judger'><?php echo $MSG_SPJ?><br>
         <input type=radio name=spj value='2' <?php echo $row['spj']=="2"?"checked":""?> title='Raw Text Judger' ><?php echo $MSG_RTJ?><br>
+		<input type=radio name=spj value='3' <?php echo $row['spj']=="3"?"checked":""?> title='Interactive Judger' ><?php echo $MSG_INTERACT?><br>
       </p>
 
       <p align=left>
