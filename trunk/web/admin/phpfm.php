@@ -189,7 +189,7 @@ if (!(isset($_SESSION[$OJ_NAME.'_'.'administrator'])
             chdir($current_dir);
 	    $user_id=$_SESSION[$OJ_NAME.'_user_id'];
 	    $nick=$_SESSION[$OJ_NAME.'_nick'];
-            if(file_exists($current_dir."/Gen.py")  || file_exists($current_dir."/Main.c") || file_exists($current_dir."/Main.cc") ){
+            if(file_exists($current_dir."/interactor.cc") ||file_exists($current_dir."/Gen.py")  || file_exists($current_dir."/Main.c") || file_exists($current_dir."/Main.cc") ){
     		$sql = "INSERT INTO solution(problem_id,user_id,nick,in_date,language,ip,code_length,result) VALUES(?,?,?,NOW(),?,?,?,1)";
     		$insert_id = pdo_query($sql, -$pid, $user_id, $nick, 6 , $ip, 0 );
 		echo "$pid pending".$insert_id."<img src='../image/loader.gif'>";
@@ -523,7 +523,7 @@ function et($tag){
     $cn['Seconds'] = '秒';
     $cn['ErrorReport'] = '错误报告';
     $cn['Random-data'] = '随机测试数据生成器';
-    $cn['GenerateOut'] = '用Gen.py+Main.c生成测试数据';
+    $cn['GenerateOut'] = '生成测试数据或交互器';
     $cn['Ans2out'] = '自动修订文件名';
     $cn['IOFilename'] = '指定输入输出文件名';
     $cn['SolutionFilename'] = '指定NOIP提交代码文件名';
