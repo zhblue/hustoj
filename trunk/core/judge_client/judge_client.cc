@@ -3301,6 +3301,8 @@ int interact(int &lang, char *work_dir, double &time_lmt, int &usedtime,
 					LIM.rlim_max = STD_F_LIM + STD_MB;
 					LIM.rlim_cur = STD_F_LIM;
 					setrlimit(RLIMIT_FSIZE, &LIM);
+					
+					if(freopen("diff.out","a+",stderr));
 
 					while (setgid(judge_gid) != 0)
 						sleep(1);
@@ -3313,8 +3315,8 @@ int interact(int &lang, char *work_dir, double &time_lmt, int &usedtime,
 						if (DEBUG) printf("hustoj upj return: %d\n", ret);
 					}else if( access( tpjpath , X_OK ) == 0 ){
 						//ret = execute_cmd("%s/data/%d/tpj %s %s %s 2>> diff.out ", oj_home, problem_id, infile, userfile, outfile);    // testlib style
-						ret = execl(tpjpath,tpjpath, infile, userfile, outfile, NULL);    // testlib style: switch userfile and outfile position 
-						if (DEBUG) printf("testlib spj return: %d\n", ret);
+						ret = execl(tpjpath,tpjpath, infile, outfile, userfile, NULL);    // testlib style: switch userfile and outfile position 
+						if (DEBUG) printf("testlib tpj return: %d\n", ret);
 					}else if (access( spjpath , X_OK ) == 0 ) {	
 						ret = execl(spjpath,spjpath, infile, outfile, userfile,NULL);    // hustoj style 1
 						//ret = execute_cmd("%s/data/%d/spj %s %s %s", oj_home, problem_id, infile, outfile, userfile);    // hustoj style
@@ -3400,6 +3402,13 @@ void judge_solution(int &ACflg, int &usedtime, double time_lmt, int spj,
 				}else{
 					if (DEBUG)
 						printf("fail test %s spj:%d \n", infile,received_msg);
+					if(received_msg==7 && spj!=2){  // 读取testlib.h 的格式输出部分分 "points %lf"
+						*spj_mark=0.5;
+						FILE *fjobs = read_cmd_output("tail -1 diff.out");
+						if(1!=fscanf(fjobs, "points %lf", spj_mark));
+						pclose(fjobs);
+					
+					}
 					comp_res = OJ_WA;
 				}
 			
