@@ -161,6 +161,7 @@
 	$MSG_NJ= "普通裁判" ;
 	$MSG_SPJ= "特殊裁判" ;
 	$MSG_RTJ= "文本裁判" ;
+	$MSG_INTERACT= "交互裁判" ;
 	$MSG_HINT= "提示" ;
 	$MSG_Source= "来源" ;
 	$MSG_Time_Limit="时间限制";

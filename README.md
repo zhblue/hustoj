@@ -154,6 +154,7 @@ Star us, please!
 	
 日期  | 类型 |  更新内容 | 图
 ------- | :--:  | :--: | :-------
+05-17 | 更新 | 支持基于testlib.h的交互器判题| 感谢Firefly提供的交互器例子。
 05-15 | 更新 | 下载测试数据（download.php）和运行错误、错误答案的解析（reinfo.php），升级为收费（积分Coin）服务。|用 🪙 标识
 05-12 | 更新 | 用户做题可得积分(金币)，管理员可给用户积分奖励，积分可由管理员进行消费抵扣(线下奖励)，用户自行二次开发可增加积分消费功能。| <img width="227" height="48" alt="image" src="https://github.com/user-attachments/assets/b89faa7c-5021-4e01-b289-edc94385dcd3" />
 01-29 | 更新 | 基于人工智能的题目分类标签生成 | ![QQ20260129-151030](https://github.com/user-attachments/assets/8018bda2-1af1-4690-a537-9b13c70dd83f)

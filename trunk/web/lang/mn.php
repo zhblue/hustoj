@@ -139,7 +139,8 @@
 	$MSG_NJ="Энгийн шалгалт";
 	$MSG_SPJ="Захиалгат шалгалт";
 	$MSG_RTJ="Текст шалгалт";
-	$MSG_CLICK_VIEW_HINT="Click to View Spoiler";
+		$MSG_INTERACT= "Interactive Judger" ;
+$MSG_CLICK_VIEW_HINT="Click to View Spoiler";
 	$MSG_HINT="Кlund";
 	$MSG_Source="Source";
 	$MSG_Time_Limit="Time Limit";

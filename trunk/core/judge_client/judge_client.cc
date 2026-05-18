@@ -3022,7 +3022,7 @@ int interact(int &lang, char *work_dir, double &time_lmt, int &usedtime,
     int p_input[2];
     int p_output[2];
 
-    fprintf(stderr,"./interactor %s \n", data_file_path);
+    if (DEBUG >= 1) fprintf(stderr, "./interactor %s \n", data_file_path);
 	    if (pipe(p_input) < 0 || pipe(p_output) < 0) {
 		perror("Pipe creation failed");
 		return 1;
@@ -3090,7 +3090,7 @@ int interact(int &lang, char *work_dir, double &time_lmt, int &usedtime,
 			
 			if(chown("./user.out", judge_uid, judge_uid)!=0 && DEBUG>1);
 			if(chmod("./user.out", 0700)!=0 && DEBUG>1) ;
-			while (setgid(judge_uid) != 0)
+			while (setgid(judge_gid) != 0)
 				sleep(1);
 			while (setresuid(judge_uid, judge_uid, judge_uid) != 0)
 				sleep(1);
@@ -4420,7 +4420,7 @@ int main(int argc, char **argv)
 			if(DEBUG>1) perror("祖父：创建命名管道失败");
 		//	exit(EXIT_FAILURE);
 		}
-		if(chown(FIFO_INTER,judge_uid,judge_uid));
+		if(chown(FIFO_INTER,judge_uid,judge_gid));
 	}
 
 	for (int i=0 ; (oi_mode || ACflg == OJ_AC || ACflg == OJ_PE) && i < namelist_len ;i++)

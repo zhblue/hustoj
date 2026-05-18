@@ -148,6 +148,7 @@
  $MSG_NJ =" Обычный судья ";
  $MSG_SPJ =" Специальный судья ";
  $MSG_RTJ = " Судья по тексту ";
+	$MSG_INTERACT = "Interactive Judger" ;
  $MSG_HINT = " Подсказка ";
  $MSG_Source = " Источник ";
  $MSG_Time_Limit = " лимит времени ";

@@ -279,8 +279,13 @@ if ($_FILES["fps"]["error"] > 0) {
                         file_put_contents($OJ_DATA . "/$pid/output.name", $iofile . ".out\n");
                     }
 
+		    if($hydrop['type'] == "interactive") {
+			    $spj=3;
+			    if($time<=0) $time= 1;
+		    }else $spj=0;
+
                     if ($time > 0) {
-                        pdo_query("UPDATE problem SET time_limit=?, memory_limit=? WHERE problem_id=?", $time, $memory, $pid);
+                        pdo_query("UPDATE problem SET time_limit=?, memory_limit=?,spj=? WHERE problem_id=?", $time, $memory,$spj, $pid);
                     }
                 }
             } elseif ($pid != "" && strpos($file_path, "testdata") !== false && basename($file_name) != "testdata") {
