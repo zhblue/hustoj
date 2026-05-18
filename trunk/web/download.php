@@ -18,6 +18,11 @@ if ((!isset($OJ_DOWNLOAD)) || !$OJ_DOWNLOAD) {
     exit(0);
 
 }
+if($coin<=0){
+        $view_errors = "<h2> $MSG_NO_COIN </h2>";
+        require("template/" . $OJ_TEMPLATE . "/error.php");
+        exit(0);
+}
 $sid = intval($_GET['sid']);
 $name = basename($_GET['name'], ".out");
 $name = basename($name, ".in");
