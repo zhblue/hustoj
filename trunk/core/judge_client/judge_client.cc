@@ -3090,7 +3090,7 @@ int interact(int &lang, char *work_dir, double &time_lmt, int &usedtime,
 			
 			if(chown("./user.out", judge_uid, judge_uid)!=0 && DEBUG>1);
 			if(chmod("./user.out", 0700)!=0 && DEBUG>1) ;
-			while (setgid(judge_uid) != 0)
+			while (setgid(judge_gid) != 0)
 				sleep(1);
 			while (setresuid(judge_uid, judge_uid, judge_uid) != 0)
 				sleep(1);
