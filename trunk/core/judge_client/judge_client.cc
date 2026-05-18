@@ -4420,7 +4420,7 @@ int main(int argc, char **argv)
 			if(DEBUG>1) perror("祖父：创建命名管道失败");
 		//	exit(EXIT_FAILURE);
 		}
-		if(chown(FIFO_INTER,judge_uid,judge_uid));
+		if(chown(FIFO_INTER,judge_uid,judge_gid));
 	}
 
 	for (int i=0 ; (oi_mode || ACflg == OJ_AC || ACflg == OJ_PE) && i < namelist_len ;i++)
