@@ -3022,7 +3022,7 @@ int interact(int &lang, char *work_dir, double &time_lmt, int &usedtime,
     int p_input[2];
     int p_output[2];
 
-    fprintf(stderr,"./interactor %s \n", data_file_path);
+    if (DEBUG >= 1) fprintf(stderr, "./interactor %s \n", data_file_path);
 	    if (pipe(p_input) < 0 || pipe(p_output) < 0) {
 		perror("Pipe creation failed");
 		return 1;
