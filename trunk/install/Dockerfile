@@ -46,7 +46,6 @@ RUN     cd /home/judge/src/core/ && bash make.sh
 #RUN     DEBIAN_FRONTEND=noninteractive apt-get -y install --no-install-recommends r-base
 #RUN     wget -O /opt/cangjie.tar.gz http://dl3.hustoj.com/docker/Cangjie-STS-linux_x64.tar.gz && cd /opt && tar xzf cangjie.tar.gz && chmod +rx -R cangjie && rm cangjie.tar.gz
 
-
 #  Scratch3 judge need these lines
 #RUN wget -c http://dl.hustoj.com/scratch-run_0.1.5_linux_amd64.zip
 #RUN apt-get install unzip
@@ -65,16 +64,10 @@ ENV LANG zh_CN.UTF-8
 ENV LANGUAGE zh_CN:zh  
 ENV LC_ALL zh_CN.UTF-8 
 
-# override endl not to flush the io buffer
-RUN echo "#ifndef HUSTOJ">>`find /usr/include/c++/ -name iostream`
-RUN echo "#define HUSTOJ">>`find /usr/include/c++/ -name iostream`
-RUN echo "std::ostream& endl(std::ostream& s) {">>`find /usr/include/c++/ -name iostream`
-RUN echo "s<<'\\\\n'; ">>`find /usr/include/c++/ -name iostream`
-RUN echo "return s; ">>`find /usr/include/c++/ -name iostream`
-RUN echo "}">>`find /usr/include/c++/ -name iostream`
-RUN echo "#endif">>`find /usr/include/c++/ -name iostream`
 #generate gch file for faster compiling speed
 RUN g++ -x c++-header -O2 -std=c++14 `find /usr/include/ -name "stdc++.h"`
 RUN gcc -x c-header -O2 -std=c99 /usr/include/stdio.h
+
+#copy files for interactor and spj build from testlib.h
 COPY testlib.h /usr/include
 COPY makeout.sh /usr/bin/
