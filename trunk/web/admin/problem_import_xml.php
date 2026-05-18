@@ -166,6 +166,7 @@ function import_fps($tempfile) {
     $hint = getValue ($searchNode,'hint');
     $source = getValue ($searchNode,'source');				
     $spjcode = getValue ($searchNode,'spj');
+    $interactorcode = getValue ($searchNode,'interactor');
     $remote_oj= trim((string)getValue ($searchNode,'remote_oj'));
     $remote_id= trim((string)getValue ($searchNode,'remote_id'));
  
@@ -173,6 +174,8 @@ function import_fps($tempfile) {
     $tpjcode = getValue ($searchNode,'tpj');
     if($tpjcode) $tpjlang=getAttribute($searchNode,'tpj','language');
     $spj = (trim($spjcode)||trim($tpjcode))?1:0;
+    if(!empty($interactorcode)) $spj=3;
+
     if((isset($spjlang) && $spjlang=="Text")||(isset($tpjlang) && $tpjlang=="Text")) $spj=2;
     if(hasRemoteProblem($remote_oj,$remote_id)){
    	$sql="update problem set title=?,time_limit=?,memory_limit=?,description=?,input=?,output=?,sample_input=?,sample_output=?,hint=?,source=?,spj=? where remote_oj=? and remote_id=?";
@@ -287,6 +290,12 @@ function import_fps($tempfile) {
       }
 
       if (!isset($OJ_SAE) || !$OJ_SAE) {
+	if($interactorcode){
+		  $fp = fopen("$basedir/interactor.cc","w");
+		  fputs($fp, $interactorcode);
+		  fclose($fp);
+		  $spj=3;
+	}
         if ($spj==1) {
 		if($spjcode){
 		  if($spjlang=="C++"){
