@@ -84,11 +84,11 @@ echo"<option value=$i ".( $lastlang==$i?"selected":"").">
 <input class="btn btn-danger" title="AI everythin..." type=button value="AI一下"  onclick="ai_gen('Main.'+$('#language option:selected').text().trim());" id='ai_bt'>
 <?php }?>
 <!--选择题状态-->
-<?php if ($spj>1 || !$OJ_TEST_RUN ){?>
+<?php if ($spj==2 || !$OJ_TEST_RUN ){?>
 <span class="btn" id=result><?php echo $MSG_STATUS?></span>	
 <?php }?>
 </span>
-<?php if($spj <= 1 &&  !$solution_name){ ?>
+<?php if($spj !=2 &&  !$solution_name){ ?>
     <button onclick="toggleTheme(event)" style="background-color: bisque; position: absolute; top: 5px; right:70px;" v-if="false">
         <i>🌗</i>
     </button>
@@ -147,7 +147,7 @@ echo"<option value=$i ".( $lastlang==$i?"selected":"").">
         </style>
          <div class="row">
             <div class="column" style="display: flex;">
-<?php if ( isset($OJ_TEST_RUN) && $OJ_TEST_RUN && $spj<=1 && !$solution_name  ){?>
+<?php if ( isset($OJ_TEST_RUN) && $OJ_TEST_RUN && $spj!=2 && !$solution_name  ){?>
 <div style="
    
      margin-left: 60px;
@@ -184,7 +184,7 @@ echo"<option value=$i ".( $lastlang==$i?"selected":"").">
 	<span id='reinfo' style="display:none"></span>
    </div>
 <?php }	 ?>
-<?php if (isset($OJ_TEST_RUN)&&$OJ_TEST_RUN && $spj<=1 && !$solution_name  ){?>
+<?php if (isset($OJ_TEST_RUN)&&$OJ_TEST_RUN && $spj!=2 && !$solution_name  ){?>
         <!--运行按钮-->
             <input style="
              margin-top: 30px;
