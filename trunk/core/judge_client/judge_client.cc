@@ -64,6 +64,7 @@
 #define BUFFER_SIZE 4096		//default size of char buffer 5120 bytes
 #define LOCKMODE (S_IRUSR|S_IWUSR|S_IRGRP|S_IROTH)
 #define FIFO_INTER "p_interactor"
+#define DIFF_FILE "diff.out"
 
 #define OJ_WT0 0     //提交排队
 #define OJ_WT1 1     //重判排队
@@ -883,7 +884,7 @@ void make_diff_out_simple(FILE *f1, FILE *f2,char * prefix, int c1, int c2, cons
 {
         char buf1[BUFFER_SIZE];
         char buf2[BUFFER_SIZE];
-        FILE *diff=fopen("diff.out","a+");
+        FILE *diff=fopen(DIFF_FILE,"a+");
         fprintf(diff,"%s\n--\n", getFileNameFromPath(path));
         fprintf(diff,"|Expected|Yours\n|--|--\n|...|...\n");
         int row=0;
@@ -1409,12 +1410,12 @@ void adddiffinfo(int solution_id)
 
 	if (http_judge)
 	{
-		_addreinfo_http(solution_id, "diff.out");
+		_addreinfo_http(solution_id, DIFF_FILE);
 	}
 	else
 	{
 #ifdef _mysql_h
-		_addreinfo_mysql(solution_id, "diff.out");
+		_addreinfo_mysql(solution_id, DIFF_FILE);
 #endif
 	}
 }
@@ -3061,7 +3062,7 @@ int interact(int &lang, char *work_dir, double &time_lmt, int &usedtime,
 
 		// 4. 执行用户程序 (假设编译出的可执行文件叫 ./user)
 		//execl("./Main", "./Main", NULL);
-		FILE * diff=fopen("diff.out","a+");
+		FILE * diff=fopen(DIFF_FILE,"a+");
         	fprintf(diff,"%s\n--\n```\n", getFileNameFromPath(data_file_path));
 		fclose(diff);
 		run_solution(lang, work_dir, time_lmt, usedtime, mem_lmt,data_file_path,p_id,3);
@@ -3095,7 +3096,7 @@ int interact(int &lang, char *work_dir, double &time_lmt, int &usedtime,
 		 * 参数规范：./interactor <输入文件> <输出文件> <答案文件>
 		 * 这里假设输入数据为 data.in，输出记录到 out.txt，答案对比为 ans.txt
 		 */
-		if(freopen("diff.out","a+",stderr));
+		if(freopen(DIFF_FILE,"a+",stderr));
 		pid_t pid_inter=fork();
 		if(pid_inter==0){
 			
@@ -3115,8 +3116,8 @@ int interact(int &lang, char *work_dir, double &time_lmt, int &usedtime,
 			int status=-1;
 			waitpid(pid_inter,&status,0);
 			killUser();
-			FILE * diff=fopen("diff.out","a+");
-				fprintf(diff,"\n```\n");
+			FILE * diff=fopen(DIFF_FILE,"a+");
+			fprintf(diff,"\n```\n");
 			fclose(diff);
 			int ret = WEXITSTATUS(status);
 	/*		FILE * fresult=fopen("interactor.log","a+");
@@ -3233,7 +3234,7 @@ int interact(int &lang, char *work_dir, double &time_lmt, int &usedtime,
 		}
 		fclose(out);
 		FILE *user=fopen(userfile,"r");
-		FILE *df=fopen("diff.out","a");
+		FILE *df=fopen(DIFF_FILE,"a");
 		for(int i=1;i<=total;i++){
 			user_answer=NULL;
 			buf_length=0;
@@ -3316,7 +3317,7 @@ int interact(int &lang, char *work_dir, double &time_lmt, int &usedtime,
 					LIM.rlim_cur = STD_F_LIM;
 					setrlimit(RLIMIT_FSIZE, &LIM);
 					
-					if(freopen("diff.out","a+",stderr));
+					if(freopen(DIFF_FILE,"a+",stderr));
 
 					while (setgid(judge_gid) != 0)
 						sleep(1);
@@ -4234,6 +4235,7 @@ int main(int argc, char **argv)
 	clean_workdir(work_dir);
 	
 	if(chdir(work_dir)) exit(-3);
+	//if(mkdir("log",0700));
 
 	if (http_judge)
 		if(!system("/bin/ln -s ../cookie ./")) printf("cookie link fail \n");
@@ -4438,6 +4440,8 @@ int main(int argc, char **argv)
 	prelen=strlen(path_buf);
 	if (prelen<strlen(oj_home)+6) prelen=strlen(oj_home)+6;
 
+	execute_cmd("touch %s",DIFF_FILE);
+
 	if( spj == 3 ){
 		
 		struct stat st;
@@ -4535,7 +4539,7 @@ int main(int argc, char **argv)
 			time_space_index+=sprintf(time_space_table+time_space_index,"%s|%ld|%s|%dk|%dms\n",infile+prelen,get_file_size(infile),jresult[ACflg],topmemory/1024,usedtime);
 			/*   // full diff code backup
 			 if( ACflg != OJ_AC ){
-                                FILE *DF=fopen("diff.out","a");
+                                FILE *DF=fopen(DIFF_FILE,"a");
                                 fprintf(DF,"%s:%s mem=%dk time=%dms\n",infile+strlen(oj_home)+5,jresult[ACflg],topmemory/1024,usedtime);
                                 fprintf(DF,"=============================================================\n");
                                 fclose(DF);
@@ -4657,7 +4661,7 @@ int main(int argc, char **argv)
 			update_solution(solution_id, finalACflg,total_mark,mark*10,sim,sim_s_id, pass_rate);
 
 	}
-	FILE *df=fopen("diff.out","a");
+	FILE *df=fopen(DIFF_FILE,"a");
 	fprintf(df,"filename|size|result|memory|time\n--|--|--|--|--\n%s\n",time_space_table);
 	fclose(df);
 	if(DEBUG) printf("ACflg:%d\n",ACflg);
