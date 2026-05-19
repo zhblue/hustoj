@@ -570,7 +570,7 @@ function admin_mod(){
         });
 	        
 	<?php } ?>
-	<?php if (  ($row['spj']>1 || isset($_GET['sid']) || (isset($OJ_AUTO_SHOW_OFF)&&$OJ_AUTO_SHOW_OFF)  )  && !isset($_GET['spa']) ){?>
+	<?php if (($row['spj']==2 || isset($_GET['sid']) || (isset($OJ_AUTO_SHOW_OFF)&&$OJ_AUTO_SHOW_OFF)  )  && !isset($_GET['spa']) ){?>
 	    transform();
 	<?php }?>
 	admin_mod(); 
