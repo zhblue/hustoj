@@ -226,7 +226,7 @@ static int auto_result = OJ_AC ;
 static int www_uid= 33 ;  // www-data in ubuntu , might overwrite for BT.cn
 static uid_t judge_uid=1536;
 static gid_t judge_gid=1536;
-
+//int first_run =1;
 int num_of_test = 0;
 //static int sleep_tmp;
 size_t prelen=16;
@@ -3014,6 +3014,17 @@ void run_solution(int &lang, char *work_dir, double &time_lmt, int &usedtime,
 	fflush(stderr);
 	exit(0);
 }
+void killUser(){
+
+	FILE * pid_file=fopen("user.pid","r");
+	int pidApp=0;
+	if(fscanf(pid_file,"%d",&pidApp));
+	fclose(pid_file);
+	if(pidApp>0){
+		if(DEBUG>1)  fprintf(stderr,"杀死用户程序 [%d]...\n", pidApp);
+		kill(pidApp,9);
+	}
+}
 int interact(int &lang, char *work_dir, double &time_lmt, int &usedtime,
 				  int &mem_lmt,char * data_file_path,int p_id) {
     // 定义两组管道
@@ -3080,7 +3091,7 @@ int interact(int &lang, char *work_dir, double &time_lmt, int &usedtime,
 		close(p_output[0]);
 		close(p_output[1]);
 		/* 
-		 * 4. 执行基于 testlib.h 的交互器
+		 * 4. tderr,"读取interactor退出状态：通过管道发送退出信号 [%d]...\n", ret);行基于 testlib.h 的交互器
 		 * 参数规范：./interactor <输入文件> <输出文件> <答案文件>
 		 * 这里假设输入数据为 data.in，输出记录到 out.txt，答案对比为 ans.txt
 		 */
@@ -3098,11 +3109,15 @@ int interact(int &lang, char *work_dir, double &time_lmt, int &usedtime,
 			execl("./interactor", "./interactor", data_file_path, "user.out", NULL);
 		// 如果 execl 返回，说明执行失败
 			perror("Failed to execute interactor");
-			execute_cmd("whoami");
+			killUser();
 			exit(1);
 		}else{
 			int status=-1;
 			waitpid(pid_inter,&status,0);
+			killUser();
+			FILE * diff=fopen("diff.out","a+");
+				fprintf(diff,"\n```\n");
+			fclose(diff);
 			int ret = WEXITSTATUS(status);
 	/*		FILE * fresult=fopen("interactor.log","a+");
 			fprintf(fresult,"%d\n",ret);
@@ -3115,7 +3130,6 @@ int interact(int &lang, char *work_dir, double &time_lmt, int &usedtime,
 				close(fd);
 			    }
 			    if(DEBUG>1) perror("interactor 退出状态得到：正式退出。\n");
-			fprintf(stderr,"\n```\n");
 			fclose(stderr);
 			exit(0);
 		}
@@ -3403,7 +3417,7 @@ void judge_solution(int &ACflg, int &usedtime, double time_lmt, int spj,
 					if (DEBUG)
 						printf("fail test %s spj:%d \n", infile,received_msg);
 					if(received_msg==7 && spj!=2){  // 读取testlib.h 的格式输出部分分 "points %lf"
-						*spj_mark=0.5;
+						*spj_mark=0.0;
 						FILE *fjobs = read_cmd_output("tail -1 diff.out");
 						if(1!=fscanf(fjobs, "points %lf", spj_mark));
 						pclose(fjobs);
@@ -3645,10 +3659,15 @@ void watch_solution(pid_t pidApp, char *infile, int &ACflg, int spj,
 					alarm(0);
 				case SIGKILL:
 				case SIGXCPU:
-					ACflg = OJ_TL;
-					if(usedtime<time_lmt*100) usedtime = time_lmt * 1000;  // 等待IO的Alarm超时虽然没有占用CPU，但为了省去给每个人解释的时间，计入用时。
-					if (DEBUG)
-						printf("TLE:%d\n", usedtime);
+					if(spj!=3 ) {
+						if(usedtime<time_lmt*1000) 
+							usedtime = time_lmt * 1000;  // 等待IO的Alarm超时虽然没有占用CPU，但为了省去给每个人解释的时间，计入用时。
+						ACflg = OJ_TL;
+						if (DEBUG)
+							printf("TLE:%d\n", usedtime);
+					}else{
+						ACflg = OJ_WA;
+					}
 					break;
 				case SIGXFSZ:
 					ACflg = OJ_OL;
@@ -4474,9 +4493,14 @@ int main(int argc, char **argv)
 		}
 		else
 		{                                       //返回值非0 ，我是父进程，返回值就是上面那个子进程的pid
-
+			FILE * pid_file=fopen("user.pid","w");
+			fprintf(pid_file,"%d",pidApp);
+			fclose(pid_file);
 			//num_of_test++;
                         //看护子进程，不让他做奇怪的事
+			if(topmemory==0) {
+				topmemory = get_proc_status(pidApp, "VmRSS:") << 10;
+			}
 			if(spj!=2)watch_solution(pidApp, infile, ACflg, spj, userfile, outfile,
 						   solution_id, lang, topmemory, mem_lmt, usedtime, time_lmt,
 						   p_id, PEflg, work_dir);
