@@ -3114,16 +3114,15 @@ int interact(int &lang, char *work_dir, double &time_lmt, int &usedtime,
 			exit(1);
 		}else{
 			int status=-1;
+			int killed=0;
 			waitpid(pid_inter,&status,0);
+			if(WIFSIGNALED(status)) killed=1;
 			killUser();
 			FILE * diff=fopen(DIFF_FILE,"a+");
 			fprintf(diff,"\n```\n");
 			fclose(diff);
 			int ret = WEXITSTATUS(status);
-	/*		FILE * fresult=fopen("interactor.log","a+");
-			fprintf(fresult,"%d\n",ret);
-			fclose(fresult);
-	*/
+			if (killed) ret=1;  // reverse PE to WA 
 			int fd = open(FIFO_INTER, O_WRONLY);
 			    if (fd != -1) {
 				if(DEBUG>1) fprintf(stderr,"读取interactor退出状态：通过管道发送退出信号 [%d]...\n", ret);
@@ -3266,7 +3265,7 @@ int interact(int &lang, char *work_dir, double &time_lmt, int &usedtime,
 
 	}
 	/* Fork 子进程运行题目的特殊评判程序（spj/tpj/upj），返回其退出码（0=AC）。 */
-	int special_judge(char *oj_home, int problem_id, char *infile, char *outfile,
+int special_judge(char *oj_home, int problem_id, char *infile, char *outfile,
 					  char *userfile,double* spj_mark,int spj)
 	{
 
@@ -3300,6 +3299,9 @@ int interact(int &lang, char *work_dir, double &time_lmt, int &usedtime,
 				// 清理管道文件
 				return received_msg;
 			}else{
+				FILE * diff=fopen(DIFF_FILE,"a+");
+				fprintf(diff,"%s\n--\n```\n", getFileNameFromPath(outfile));
+				fclose(diff);
 				pid = fork();
 				if (pid == 0)
 				{
@@ -3349,8 +3351,8 @@ int interact(int &lang, char *work_dir, double &time_lmt, int &usedtime,
 				}
 				else
 				{
-					int status;
-
+					int status=0;
+					
 					waitpid(pid, &status, 0);
 					ret = WEXITSTATUS(status);
 					if( access( upjpath , X_OK ) == 0 ){
@@ -3360,8 +3362,15 @@ int interact(int &lang, char *work_dir, double &time_lmt, int &usedtime,
 						else ret=1;
 						printf("spj_mark: %.2f ret: %d\n",*spj_mark, ret);
 					}
+					if(WIFSIGNALED(status)) {
+						spj_mark=0;
+						ret=1;
+					}
+					FILE * diff=fopen(DIFF_FILE,"a+");
+					fprintf(diff,"\n```\n");
+					fclose(diff);
 					if (DEBUG)
-						printf("recorded spj: %d\n", ret);
+						printf("\nrecorded spj: %d\n", ret);
 				}
 			}
 	return ret;
