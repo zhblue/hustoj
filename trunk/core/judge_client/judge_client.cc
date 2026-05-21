@@ -3114,15 +3114,13 @@ int interact(int &lang, char *work_dir, double &time_lmt, int &usedtime,
 			exit(1);
 		}else{
 			int status=-1;
-			int killed=0;
 			waitpid(pid_inter,&status,0);
-			if(WIFSIGNALED(status)) killed=1;
 			killUser();
 			FILE * diff=fopen(DIFF_FILE,"a+");
 			fprintf(diff,"\n```\n");
 			fclose(diff);
 			int ret = WEXITSTATUS(status);
-			if (killed) ret=1;  // reverse PE to WA 
+			if(WIFSIGNALED(status)) ret=1;
 			int fd = open(FIFO_INTER, O_WRONLY);
 			    if (fd != -1) {
 				if(DEBUG>1) fprintf(stderr,"读取interactor退出状态：通过管道发送退出信号 [%d]...\n", ret);
