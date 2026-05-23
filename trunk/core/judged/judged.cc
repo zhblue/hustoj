@@ -372,6 +372,7 @@ void run_php_cron(char * work_dir){
 void run_client(int runid, int clientid) {
 	char buf[BUFFER_SIZE], runidstr[BUFFER_SIZE];
 	struct rlimit LIM;
+	printf("-------------use docker %d------",use_docker);	
 	LIM.rlim_max = 800;
 	LIM.rlim_cur = 800;
 	setrlimit(RLIMIT_CPU, &LIM);
@@ -417,29 +418,68 @@ void run_client(int runid, int clientid) {
 //			     (char * const )"LC_ALL=zh_CN.UTF-8",NULL};
 	//if (!DEBUG)
 	if(use_docker){
-		char docker_v[BUFFER_SIZE*3];
+		char etc_v[BUFFER_SIZE*3];
+		char core_v[BUFFER_SIZE*3];
 		char data_v[BUFFER_SIZE*3];
-		char client_path[BUFFER_SIZE];
+		char log_v[BUFFER_SIZE*3];
+		//char client_path[BUFFER_SIZE];
 		char data_path[BUFFER_SIZE*2];
 		char real_data_path[BUFFER_SIZE*2];
-		sprintf(docker_v,"%s:/home/judge",oj_home);
-		if(internal_client)
-				sprintf(client_path,"/usr/bin/judge_client");
-		else
-				sprintf(client_path,"/home/judge/src/core/judge_client/judge_client");
+		const int MAX=32;
+		char *argv[MAX];
+		int i=0;
+		for(i=0;i<MAX;i++)argv[i]=(char *)malloc(BUFFER_SIZE);
+		i=0;
+		printf("-------------%s-----------\n",docker_path);	
+		sprintf(argv[i++],"%s",docker_path);
+		sprintf(argv[i++],"container");
+		sprintf(argv[i++],"run");
+		sprintf(argv[i++],"--security-opt=no-new-privileges:true");
+		sprintf(argv[i++],"--pids-limit");
+		sprintf(argv[i++],"100");
+		sprintf(argv[i++],"--rm");
+		sprintf(argv[i++],"--cap-add");
+		sprintf(argv[i++],"SYS_PTRACE");
+		sprintf(argv[i++],"--cap-add");
+		sprintf(argv[i++],"CAP_SYS_ADMIN");
+		sprintf(argv[i++],"--net=host");
+		sprintf(log_v,"%s/log:/home/judge/log",oj_home);
+		sprintf(argv[i++],"-v");
+		sprintf(argv[i++],"%s",log_v);
+		sprintf(etc_v,"%s/etc:/home/judge/etc",oj_home);
+		sprintf(argv[i++],"-v");
+		sprintf(argv[i++],"%s",etc_v);
+		sprintf(core_v,"%s/src/core:/home/judge/src/core",oj_home);
+		sprintf(argv[i++],"-v");
+		sprintf(argv[i++],"%s",core_v);
+		sprintf(argv[i++],"-v");
+	        
+		for(int j=0;j<i;j++) write_log("%s ",argv[j]);
 		sprintf(data_path,"%s/data2",oj_home);
 		char *follow=follow_link(data_path,real_data_path,sizeof(real_data_path)-1);
-
-		sprintf(data_v,"%s:/home/judge/data",follow);
 		if(follow!=data_path) {
-				printf("data volume param :%s \n",data_v);
-				execl(docker_path,docker_path, "container","run", "--security-opt=no-new-privileges:true" ,"--pids-limit", "100","--rm","--cap-add","SYS_PTRACE",  "--cap-add" ,"CAP_SYS_ADMIN" , "--net=host",
-								"-v", docker_v,"-v",data_v, "hustoj", client_path, runidstr, buf, (char *) NULL);
+			sprintf(data_v,"%s:/home/judge/data",follow);
 		}else{
-				execl(docker_path,docker_path, "container","run", "--security-opt=no-new-privileges:true" ,"--pids-limit", "100","--rm","--cap-add","SYS_PTRACE",  "--cap-add" ,"CAP_SYS_ADMIN" , "--net=host",
-								"-v", docker_v, "hustoj", client_path, runidstr, buf, (char *) NULL);
+			sprintf(data_v,"%s/data:/home/judge/data",oj_home);
 		}
+		sprintf(argv[i++],"%s",data_v);
 
+		sprintf(argv[i++],"hustoj");
+		
+		if(internal_client)
+				sprintf(argv[i++],"/usr/bin/judge_client");
+		else
+				sprintf(argv[i++],"/home/judge/src/core/judge_client/judge_client");
+		sprintf(argv[i++],"%d",runid);
+		sprintf(argv[i++],"%d",clientid);
+		argv[i++]=NULL;
+		if(DEBUG){
+			int l=i;
+			write_log("--------[%d]----------\n",l);
+			for(i=0;i<l;i++) write_log("%s ",argv[i]);
+		}
+		execv(argv[0],argv);
+		perror("docker fail:");
 	}else{
 		execl("/usr/bin/judge_client", "/usr/bin/judge_client", runidstr, buf,
 				oj_home, (char *) NULL);
@@ -718,6 +758,7 @@ int work() {
 						write_log("Judging solution %d", runid);
 						write_log("<<=sid=%d===clientid=%d==>>\n", runid, i);
 					}
+					write_log("-------------use docker %d------",use_docker);	
 					run_client(runid, i);    // if the process is the son, run it
 					workcnt--;
 					exit(0);
