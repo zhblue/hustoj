@@ -440,8 +440,8 @@ void run_client(int runid, int clientid) {
 		sprintf(argv[i++],"--rm");
 		sprintf(argv[i++],"--cap-add");
 		sprintf(argv[i++],"SYS_PTRACE");
-		sprintf(argv[i++],"--cap-add");
-		sprintf(argv[i++],"CAP_SYS_ADMIN");
+//		sprintf(argv[i++],"--cap-add");
+//		sprintf(argv[i++],"CAP_SYS_ADMIN");
 		sprintf(argv[i++],"--net=host");
 		sprintf(log_v,"%s/log:/home/judge/log",oj_home);
 		sprintf(argv[i++],"-v");
