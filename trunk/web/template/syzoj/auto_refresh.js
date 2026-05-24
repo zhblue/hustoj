@@ -126,7 +126,7 @@ $(".http_judge_form").append(hj_ss);
 
 window.setTimeout("auto_refresh();",1000);
 
-$(".td_result").mouseover(function () {
+$(".td_result").dblclick(function () {
   //$(this).children(".label").hide(300);
   $(this).find("form").show(600);
   var sid = $(this).find("span[class=original]").attr("sid");
