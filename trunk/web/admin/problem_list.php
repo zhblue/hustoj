@@ -111,7 +111,7 @@ echo "</select>";
       <?php
       if(isset($_SESSION[$OJ_NAME.'_'.'administrator']) ||isset($_SESSION[$OJ_NAME.'_'.'problem_editor'])){
         if(isset($_SESSION[$OJ_NAME.'_'.'administrator']) ||isset($_SESSION[$OJ_NAME.'_'.'problem_editor']))
-          echo "<td>$MSG_PROBLEM_STATUS</td>  <td>Coin</td>  <td>$MSG_DELETE</td>";
+          echo "<td>$MSG_PROBLEM_STATUS</td>  <td>$MSG_COIN</td>  <td>$MSG_DELETE</td>";
           echo "<td>$MSG_EDIT</td><td>$MSG_TESTDATA</td>";
       }
       ?>
