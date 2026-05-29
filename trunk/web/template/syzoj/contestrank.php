@@ -14,7 +14,7 @@
          <button  class='ui small yellow button' onclick='$("tr[class!=active]").toggle();'><?php echo $MSG_SHOW ?>/<?php echo $MSG_HIDE ?></button>
  </h1>
 </div>
-<div id="rankdiv" class="padding" ondblclick="$(this).css('margin-left',(this.innerWidth-window.innerWidth/2)+'px').css('margin-right',(this.innerWidth-window.innerWidth/2)+'px')" style="overflow:auto" >  
+<div id="rankdiv" class="padding" ondblclick="$(this).css('position','absolute').css('width','100vw').css('height','100vh').css('overflow','auto')" style="left:0;right:0;overflow:auto" > 
     <?php if($user_cnt>0){ ?>
     <table class="ui very basic center striped aligned table" style="margin:30px">
         <thead>
