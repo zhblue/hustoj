@@ -24,7 +24,8 @@
     <div class="container">
     <?php include("template/$OJ_TEMPLATE/nav.php");?>	    
       <!-- Main component for a primary marketing message or call to action -->
-      <div id="rankdiv" class="padding" ondblclick="$(this).css('margin-left',(this.innerWidth-window.innerWidth/2)+'px').css('margin-right',(this.innerWidth-window.innerWidth/2)+'px')" style="margin-left:-200px;margin-right:-200px;overflow:auto"  > 
+<div id="rankdiv" class="padding" ondblclick="$(this).css('position','absolute').css('width','100vw').css('height','100vh').css('overflow','auto')" style="left:0;right:0;overflow:auto" >
+
 
 <?php
 $rank=1;
