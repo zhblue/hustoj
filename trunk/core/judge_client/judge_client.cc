@@ -2806,7 +2806,7 @@ void run_solution(int &lang, char *work_dir, double &time_lmt, int &usedtime,
 			     (char * const )"LANG=zh_CN.UTF-8",
 			     (char * const )"LANGUAGE=zh_CN.UTF-8",
 			     (char * const )"LC_ALL=zh_CN.utf-8",NULL};
-	if(nice(19)!=19) perror("......................renice fail... \n");
+	// if(nice(19)!=19) perror("......................renice fail... \n");
 	// now the user is "judger"
 	if(chdir(work_dir)){
 		write_log("Working directory :%s switch fail...",work_dir);		
