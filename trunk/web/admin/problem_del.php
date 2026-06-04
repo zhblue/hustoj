@@ -38,7 +38,7 @@ function recursiveDelete($dir) {
         pdo_query($sql,$id) ;
 	$sql = "delete from `privilege` where `rightstr`=? ";
 	pdo_query($sql, "p$id");
-	$sql = "update solution set problem_id=0 where `problem_id`=? ";
+	$sql = "update solution set problem_id=0,result=13 where `problem_id`=? ";
 	pdo_query($sql, $id);
 	  
         $sql="select max(problem_id) FROM `problem`" ;
