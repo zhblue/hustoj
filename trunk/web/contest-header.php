@@ -30,7 +30,7 @@ if (isset($_GET['pid']))
     </tr>
 </table>
 <?php
-$view_marquee_msg = file_get_contents($OJ_SAE ? "saestor://web/msg.txt" : "./admin/msg.txt");
+$view_marquee_msg = file_get_contents("./admin/msg.txt");
 
 ?>
 <div id=broadcast>
