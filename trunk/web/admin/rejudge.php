@@ -39,7 +39,7 @@ if (!(isset($_SESSION[$OJ_NAME.'_'.'administrator']))){
         }else if (isset($_POST['result'])){
                 $result=intval($_POST['result']);
                 $to=intval($_POST['to']);
-                $sql="UPDATE `solution` SET `result`=$to,pass_rate=0 WHERE `result`=? and problem_id>0" ;
+                $sql="UPDATE `solution` SET `result`=$to,pass_rate=0 WHERE `result`=? and problem_id>=0" ;
                 pdo_query($sql,$result) ;
                 $url="../status.php?jresult=$to";
                 echo "<script>location.href='$url';</script>";
