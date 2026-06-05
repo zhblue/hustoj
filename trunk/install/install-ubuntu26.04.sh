@@ -57,7 +57,7 @@ wget -O hustoj.tar.gz http://dl.hustoj.com/hustoj.tar.gz
 tar xzf hustoj.tar.gz
 
 # 数据库依赖
-apt-get install -y libmysqlclient-dev libmysql++-dev libmariadb-dev-compat libmariadb-dev mariadb-server
+apt-get install -y libmysqlclient-dev mariadb-server
 
 # 动态探测 PHP 版本 (26.04 默认为 8.3 或 8.4)
 PHP_VER=`apt-cache search php-fpm|grep -e '[[:digit:]]\.[[:digit:]]' -o | head -n 1`
