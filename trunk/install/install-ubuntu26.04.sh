@@ -1,151 +1,272 @@
 #!/bin/bash
 
-# 针对 Ubuntu 26.04 LTS (Resolute Raccoon) 的 HUSTOJ 安装脚本
-
-# 检查是否在 WSL 下运行
+#detect and refuse to run under WSL
 if [ -d /mnt/c ]; then
-    echo "警告：不建议在 WSL 下运行，建议使用原生 Ubuntu 26.04 环境。"
+    echo "WSL is NOT recommended."
+#    exit 1
 fi
-
 MEM=`free -m|grep Mem|awk '{print $2}'`
 NBUFF=512
 if [ "$MEM" -lt "2000" ] ; then
-        echo "内存小于 2GB，正在配置 Swap..."
+        echo "Memory size less than 2GB."
         NBUFF=128
         if grep 'swap' /etc/fstab ; then
-                echo "交换分区已存在。"
+                echo "already has swap"
         else
                 dd if=/dev/zero of=/swap bs=2M count=1024
                 chmod 600 /swap
                 mkswap /swap
                 swapon /swap
                 echo "/swap none swap defaults 0 0 " >> /etc/fstab 
-                # 26.04 中 snapd 依然存在，但我们可以优化其内存占用
+                /etc/init.d/multipath-tools stop
                 pkill -9 snapd
+                pkill -9 ds-identify
          fi
 else
-        echo "内存容量 : $MEM MB"
+        echo "Memory size : $MEM MB"
         apt-get install -y memcached
 fi
 
-# 更新软件源至 2026 年主流镜像 (阿里云)
-# 26.04 使用新版 deb822 格式的情况较多，但传统的 sources.list 依然有效
 sed -i 's/tencentyun/aliyun/g' /etc/apt/sources.list
 sed -i 's/cn.archive.ubuntu/mirrors.aliyun/g' /etc/apt/sources.list
-# 解决自动重启提示问题
-if [ -f /etc/needrestart/needrestart.conf ]; then
-    sed -i "s|#\$nrconf{restart} = 'i'|\$nrconf{restart} = 'a'|g" /etc/needrestart/needrestart.conf
-fi
+sed -i "s|#\$nrconf{restart} = 'i'|\$nrconf{restart} = 'a'|g" /etc/needrestart/needrestart.conf
 
+apt autoremove -y --purge needrestart
 apt-get update && apt-get -y upgrade
 
-# 安装基础依赖
 apt-get install -y software-properties-common
 add-apt-repository -y universe
 add-apt-repository -y multiverse
 add-apt-repository -y restricted
 
-apt-get update
+apt-get update && apt-get -y upgrade
 
-# 创建判题用户
+#apt-get install -y subversion
 /usr/sbin/useradd -m -u 1536 -s /sbin/nologin judge
 
 cd /home/judge/ || exit
 
-# 获取源码
+#using tgz src files
 wget -O hustoj.tar.gz http://dl.hustoj.com/hustoj.tar.gz
 tar xzf hustoj.tar.gz
+#svn up src
+#svn co https://github.com/zhblue/hustoj/trunk/trunk/  src
 
-# 数据库依赖
-apt-get install -y libmysqlclient-dev mariadb-server
+#手工解决阿里云软件源的包依赖问题 apt install libssl1.1=1.1.1f-1ubuntu2.8 -y --allow-downgrades
 
-# 动态探测 PHP 版本 (26.04 默认为 8.3 或 8.4)
-PHP_VER=`apt-cache search php-fpm|grep -e '[[:digit:]]\.[[:digit:]]' -o | head -n 1`
-if [ "$PHP_VER" = "" ] ; then PHP_VER="8.3"; fi
-echo "检测到 PHP 版本为: $PHP_VER"
-
-# 安装全套组件
-for pkg in bzip2 flex fail2ban net-tools make g++ php$PHP_VER-fpm nginx php$PHP_VER-mysql php$PHP_VER-common php$PHP_VER-gd php$PHP_VER-zip php$PHP_VER-mbstring php$PHP_VER-xml php$PHP_VER-curl php$PHP_VER-intl php$PHP_VER-soap php-memcached php-yaml php-apcu tzdata
+apt-get install -y libmysqlclient-dev
+apt-get install -y libmysql++-dev
+apt-get install -y libmariadb-dev-compat libmariadb-dev
+PHP_VER=`apt-cache search php-fpm|grep -e '[[:digit:]]\.[[:digit:]]' -o`
+if [ "$PHP_VER" = "" ] ; then PHP_VER="8.5"; fi
+for pkg in bzip2 flex fail2ban net-tools make g++ php$PHP_VER-fpm nginx php$PHP_VER-mysql php$PHP_VER-common php$PHP_VER-gd php$PHP_VER-zip php$PHP_VER-mbstring php$PHP_VER-xml php$PHP_VER-curl php$PHP_VER-intl php$PHP_VER-xmlrpc php$PHP_VER-soap php-memcache php-memcached php-yaml php-apcu tzdata
 do
-        apt-get install -y "$pkg" || {
-            dpkg --configure -a
-            apt-get install -f -y
-            apt-get install -y "$pkg"
-        }
+        while ! apt-get install -y "$pkg"
+        do
+                dpkg --configure -a
+                apt-get install -f
+                echo "Network fail, retry... you might want to change another apt source for install"
+        done
 done
-
-# 启动服务
+apt-get install -y mariadb-server
 service php$PHP_VER-fpm start
 service mariadb start
 service nginx start
 
-# 配置权限
-chgrp www-data /home/judge
+chgrp www-data  /home/judge
 chmod +x /home/judge/src/install/*
 
-# 数据库初始化
 USER="hustoj"
 PASSWORD=`tr -cd '[:alnum:]' < /dev/urandom | fold -w30 | head -n1`
 mysql < src/install/db.sql
-echo "CREATE USER IF NOT EXISTS $USER identified by '$PASSWORD'; grant all privileges on jol.* to $USER; flush privileges;" | mysql
-
-# 判题核心配置
+echo "DROP USER $USER;" | mysql
+echo "CREATE USER $USER identified by '$PASSWORD';grant all privileges on jol.* to $USER ;flush privileges;"|mysql
 CPU=$(grep "cpu cores" /proc/cpuinfo |head -1|awk '{print $4}')
-mkdir -p etc data log backup
-cp src/install/java0.policy /home/judge/etc
-cp src/install/judge.conf /home/judge/etc
-chmod +x src/install/ans2out /home/judge/src/install/*.sh
+MEM=`free -m|grep Mem|awk '{print $2}'`
 
-# 根据内核调度优化
-if [ "$CPU" -lt "1" ]; then CPU=1; fi
-for N in `seq 0 $(($CPU-1))`
-do
-   mkdir -p run$N
-   chown judge run$N
-done
-
-# 写入配置文件
-sed -i "s/OJ_USER_NAME=.*/OJ_USER_NAME=$USER/g" etc/judge.conf
-sed -i "s/OJ_PASSWORD=.*/OJ_PASSWORD=$PASSWORD/g" etc/judge.conf
-sed -i "s/OJ_RUNNING=1/OJ_RUNNING=$CPU/g" etc/judge.conf
-
-# Nginx 性能微调
-sed -i "s/php7.4/php$PHP_VER/g" /etc/nginx/sites-enabled/default
-sed -i "s|fastcgi_pass 127.0.0.1:9000;|fastcgi_pass 127.0.0.1:9001;\n\t\tfastcgi_buffer_size 256k;\n\t\tfastcgi_buffers $NBUFF 64k;|g" /etc/nginx/sites-enabled/default
-
-# PHP 性能微调
-sed -i "s/post_max_size = 8M/post_max_size = 500M/g" /etc/php/$PHP_VER/fpm/php.ini
-sed -i "s/upload_max_filesize = 2M/upload_max_filesize = 500M/g" /etc/php/$PHP_VER/fpm/php.ini
-# 26.04 默认已启用大部分 JIT 优化，这里做确认
-if ! grep -q "opcache.jit_buffer_size" /etc/php/$PHP_VER/fpm/php.ini; then
-    echo "opcache.jit_buffer_size=32M" >> /etc/php/$PHP_VER/fpm/php.ini
+if [ "$MEM" -lt "1000" ] ; then
+        echo "Memory size less than 1GB."
+        if grep 'key_buffer_size        = 1M' /etc/mysql/mariadb.conf.d/50-server.cnf ; then
+                echo "already trim config"
+        else
+                sed -i 's/#key_buffer_size        = 128M/key_buffer_size        = 1M/' /etc/mysql/mariadb.conf.d/50-server.cnf
+                sed -i 's/#table_cache            = 64/#table_cache            = 5/' /etc/mysql/mariadb.conf.d/50-server.cnf
+                sed -i 's/#skip-name-resolve/skip-name-resolve/' /etc/mysql/mariadb.conf.d/50-server.cnf
+                service mariadb restart
+                free -h
+        fi
+else
+        echo "Memory size : $MEM MB"
 fi
 
-# 编译 Core
+mkdir etc data log backup
+
+cp src/install/java0.policy  /home/judge/etc
+cp src/install/judge.conf  /home/judge/etc
+chmod +x src/install/ans2out /home/judge/src/install/*.sh
+
+# create enough runX dirs for each CPU core
+if grep "OJ_SHM_RUN=0" etc/judge.conf ; then
+        for N in `seq 0 $(($CPU-1))`
+        do
+           mkdir run$N
+           chown judge run$N
+        done
+fi
+
+sed -i "s/OJ_USER_NAME=.*/OJ_USER_NAME=$USER/g" etc/judge.conf
+sed -i "s/OJ_PASSWORD=.*/OJ_PASSWORD=$PASSWORD/g" etc/judge.conf
+sed -i "s/OJ_COMPILE_CHROOT=1/OJ_COMPILE_CHROOT=0/g" etc/judge.conf
+sed -i "s/OJ_RUNNING=1/OJ_RUNNING=$CPU/g" etc/judge.conf
+
+chmod 700 backup
+chmod 700 etc/judge.conf
+chown -R root:root etc
+
+sed -i "s/DB_USER[[:space:]]*=[[:space:]]*\".*\"/DB_USER=\"$USER\"/g" src/web/include/db_info.inc.php
+sed -i "s/DB_PASS[[:space:]]*=[[:space:]]*\".*\"/DB_PASS=\"$PASSWORD\"/g" src/web/include/db_info.inc.php
+chmod 700 src/web/include/db_info.inc.php
+chown -R www-data:www-data src/web/
+chown www-data:www-data src/web/upload
+chown www-data:judge data
+chmod 750 -R data
+if grep "client_max_body_size" /etc/nginx/nginx.conf ; then
+        echo "client_max_body_size already added" ;
+else
+        sed -i 's/# multi_accept on;/ multi_accept on;/' /etc/nginx/nginx.conf
+        sed -i 's/# server_tokens off;/ server_tokens off;/' /etc/nginx/nginx.conf
+        sed -i "s:include /etc/nginx/mime.types;:client_max_body_size    500m;\n\tinclude /etc/nginx/mime.types;:g" /etc/nginx/nginx.conf
+fi
+
+echo "insert into jol.privilege values('admin','administrator','true','N');"|mysql -h localhost -u"$USER" -p"$PASSWORD"
+echo "insert into jol.privilege values('admin','source_browser','true','N');"|mysql -h localhost -u"$USER" -p"$PASSWORD"
+
+if grep "added by hustoj" /etc/nginx/sites-enabled/default ; then
+        echo "default site modified!"
+else
+        echo "modify the default site"
+        sed -i "s#listen 80 default_server;#listen 80 default_server backlog=4096;#g" /etc/nginx/sites-enabled/default
+        sed -i "s#root /var/www/html;#root /home/judge/src/web;#g" /etc/nginx/sites-enabled/default
+        sed -i "s:index index.html:index index.php index.html:g" /etc/nginx/sites-enabled/default
+        sed -i "s:#location ~ \\\.php\\$:location ~ \\\.php\\$:g" /etc/nginx/sites-enabled/default
+        sed -i "s:#\tinclude snippets:\tinclude snippets:g" /etc/nginx/sites-enabled/default
+        sed -i "s|#\tfastcgi_pass unix|\tfastcgi_pass unix|g" /etc/nginx/sites-enabled/default
+        sed -i "s:}#added by hustoj::g" /etc/nginx/sites-enabled/default
+        sed -i "s:php7.4:php$PHP_VER:g" /etc/nginx/sites-enabled/default
+        sed -i "s|# deny access to .htaccess files|}#added by hustoj\n\n\n\t# deny access to .htaccess files|g" /etc/nginx/sites-enabled/default
+        sed -i "s|fastcgi_pass 127.0.0.1:9000;|fastcgi_pass 127.0.0.1:9001;\n\t\tfastcgi_buffer_size 256k;\n\t\tfastcgi_buffers $NBUFF 64k;|g" /etc/nginx/sites-enabled/default
+fi
+/etc/init.d/nginx restart
+sed -i "s/post_max_size = 8M/post_max_size = 500M/g" /etc/php/$PHP_VER/fpm/php.ini
+sed -i "s/upload_max_filesize = 2M/upload_max_filesize = 500M/g" /etc/php/$PHP_VER/fpm/php.ini
+if grep 'date.timezone = PRC' /etc/php/$PHP_VER/fpm/php.ini ; then
+    echo "date.timezone = PRC is already set ... "
+else
+    sed -i 's/;date.timezone =/date.timezone = PRC/' /etc/php/$PHP_VER/fpm/php.ini 
+fi
+if grep "opcache.jit_buffer_size" /etc/php/$PHP_VER/fpm/php.ini ; then
+    echo "opcache for jit is already enabled ... "
+else
+    sed -i "s|opcache.lockfile_path=/tmp|opcache.lockfile_path=/tmp\nopcache.jit_buffer_size=16M|g" /etc/php/$PHP_VER/fpm/php.ini
+fi
+WWW_CONF=$(find /etc/php -name www.conf)
+sed -i 's/;request_terminate_timeout = 0/request_terminate_timeout = 128/g' "$WWW_CONF"
+sed -i 's/pm.max_children = 5/pm.max_children = 600/g' "$WWW_CONF"
+sed -i 's/;listen.backlog = 511/listen.backlog = 4096/g' "$WWW_CONF"
+
+COMPENSATION=$(grep 'mips' /proc/cpuinfo|head -1|awk -F: '{printf("%.2f",$2/7000)}')
+sed -i "s/OJ_CPU_COMPENSATION=1.0/OJ_CPU_COMPENSATION=$COMPENSATION/g" etc/judge.conf
+
+PHP_FPM=$(find /etc/init.d/ -name "php*-fpm")
+$PHP_FPM restart
+PHP_FPM=$(service --status-all|grep php|awk '{print $4}')
+if [ "$PHP_FPM" != ""  ]; then service "$PHP_FPM" restart ;else echo "NO PHP FPM";fi;
+
 cd src/core || exit
 chmod +x ./make.sh
 ./make.sh
-cp judged /usr/bin/
-
-# 设置自启动
-systemctl enable nginx mariadb php$PHP_VER-fpm fail2ban
-/usr/bin/judged
-
-# Docker 适配：26.04 环境下使用 ubuntu:26.04 基础镜像
-if test -f /.dockerenv ;then
-        apt-get install -y flex fp-compiler openjdk-21-jdk mono-devel
+if grep "/usr/bin/judged" /etc/rc.local ; then
+        echo "auto start judged added!"
 else
-        # 针对 26.04 更新 Dockerfile 模板
-        if [ -f Dockerfile ]; then
-            sed -i 's/ubuntu:24/ubuntu:26/g' Dockerfile
-            sed -i 's|/usr/include/c++/11|/usr/include/c++/13|g' Dockerfile
-            bash docker.sh
-        fi
+        sed -i "s/exit 0//g" /etc/rc.local
+        echo "/usr/bin/judged" >> /etc/rc.local
+        echo "exit 0" >> /etc/rc.local
+fi
+if grep "bak.sh" /var/spool/cron/crontabs/root ; then
+        echo "auto backup added!"
+else
+        crontab -l > conf 
+        echo "1 0 * * * /home/judge/src/install/bak.sh" >> conf
+        echo "0 * * * * /home/judge/src/install/oomsaver.sh" >> conf 
+        crontab conf 
+        rm -f conf
+        /etc/init.d/cron reload
+fi
+ln -s /usr/bin/mcs /usr/bin/gmcs
+
+/usr/bin/judged
+cp /home/judge/src/install/hustoj /etc/init.d/hustoj
+update-rc.d hustoj defaults
+systemctl enable hustoj
+systemctl enable nginx
+systemctl enable mariadb
+systemctl enable php$PHP_VER-fpm
+#systemctl enable judged
+systemctl start fail2ban
+systemctl enable fail2ban
+
+if ps -C memcached; then 
+    sed -i 's/static  $OJ_MEMCACHE=false;/static  $OJ_MEMCACHE=true;/g' /home/judge/src/web/include/db_info.inc.php
+    sed -i 's/-m 64/-m 8/g' /etc/memcached.conf
+    /etc/init.d/memcached restart
 fi
 
-echo "------------------------------------------------------"
-echo "HUSTOJ 安装完成！"
-echo "数据库账号: $USER"
-echo "数据库密码: $PASSWORD"
-echo "请访问系统并注册 admin 用户获取权限。"
-echo "------------------------------------------------------"
+/etc/init.d/mariadb start
+mkdir /var/log/hustoj/
+chown www-data -R /var/log/hustoj/
+cd /home/judge/src/install
+bash set-nofile.sh
+if test -f  /.dockerenv ;then
+        echo "Already in docker, skip docker installation, install some compilers ... "
+        apt-get intall -y flex fp-compiler openjdk-17-jdk mono-devel
+else
+        sed -i 's/ubuntu:22/ubuntu:24/g' Dockerfile
+        sed -i 's|/usr/include/c++/9|/usr/include/c++/11|g' Dockerfile
+        bash docker.sh
+fi
+IP=`curl http://hustoj.com/ip.php`
+LIP=`ip a|grep inet|grep brd|head -1|awk '{print $2}'|awk -F/ '{print $1}'`
+clear
+reset
+
+echo "Remember your database account for HUST Online Judge:"
+echo "username:$USER"
+echo "password:$PASSWORD"
+echo "DO NOT POST THESE INFORMATION ON ANY PUBLIC CHANNEL!"
+echo "Register a user as 'admin' on http://127.0.0.1/ "
+echo "打开http://127.0.0.1/ 或者 http://$IP  或者 http://$LIP 注册用户admin，获得管理员权限。"
+echo "如果无法打开页面或无法注册用户，请检查上方数据库账号是否能正常连接数据库。"
+echo "如果发现数据库账号登录错误，可用sudo bash /home/judge/src/install/fixdb.sh 尝试修复。"
+echo "遇到服务器内部错误500，查看/var/log/nginx/error.log末尾，寻找详细原因。"
+echo "更多问题请查阅http://hustoj.com/"
+echo "不要在QQ群或其他地方公开发送以上信息，否则可能导致系统安全受到威胁。"
+echo "█████████████████████████████████████████"
+echo "████ ▄▄▄▄▄ ██▄▄ ▀  █▀█▄▄██ ███ ▄▄▄▄▄ ████"
+echo "████ █   █ █▀▄  █▀██ ██▄▄  █▄█ █   █ ████"
+echo "████ █▄▄▄█ █▄▀ █▄█▀█  ▄▄█▀▀▄██ █▄▄▄█ ████"
+echo "████▄▄▄▄▄▄▄█▄▀▄█ █ █▄█▄▀ █ ▀▄█▄▄▄▄▄▄▄████"
+echo "████ ▄▀▀█▄▄ █▄ █▄▄▄█▄█▀███▄  ██▀ ▄▀▀█████"
+echo "████▀█▀▀▀▀▄▀▀▄▀ ▄▄█▄ █▀▀ ▄▀▀▄  █▄▄▀▄█████"
+echo "████▄█ ▀▄▀▄▄ ▄ █▀█▀█ ▄▀▄ █▀▀▄█  ███  ████"
+echo "████▄ █▄ █▄▀▀▄██▀▄ ▄ ▄▄█▄█▀█▀   ▄█▀▄▀████"
+echo "████▄▄█   ▄▄██ █▄▄▀  ▄▀█▀▀▀ ▄█▀▄▄▀█ ▀████"
+echo "█████▄   ▀▄▄█ ▄▀▄▄▀▄▄▄▀▄▀█▀  ▀▀█▄█▀█▄████"
+echo "████ ▀ █▄▀▄▄█▀▀▄▀▀▄▄▄ ▀▀█▀ ▀▄▄█▀ ▀█ █████"
+echo "████ █▀   ▄ ▄ ▀█▀▄█ █▄▄███▀██▀▀██ ▀▄█████"
+echo "████▄▄▄██▄▄█ ▀█▄▄▄▀█ █▀▀█▀ █ ▄▄▄ █▀▄▀████"
+echo "████ ▄▄▄▄▄ █ ▄  ▄▄▀  ▄ ▀▄▄▄▄ █▄█   ▄█████"
+echo "████ █   █ ██ ▄▄▀▀█ ▀▀▀▀▀ ▄▀  ▄  ▀███████"
+echo "████ █▄▄▄█ █▀▄▄▄▀▀█ ▀▄ ▄▀██▄█ ██ █ █▄████"
+echo "████▄▄▄▄▄▄▄█▄███▄█▄▄▄████▄▄▄▄▄▄█▄██▄█████"
+echo "█████████████████████████████████████████"
+echo "            QQ扫码加官方群"
