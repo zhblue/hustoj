@@ -132,7 +132,7 @@ function get_extension($file) {
 }
 
 function import_fps($tempfile,$tempData) {
-  global $OJ_DATA,$OJ_SAE,$OJ_REDIS,$OJ_REDISSERVER,$OJ_REDISPORT,$OJ_REDISQNAME,$domain,$DOMAIN,$OJ_NAME;
+  global $OJ_DATA,$OJ_REDIS,$OJ_REDISSERVER,$OJ_REDISPORT,$OJ_REDISQNAME,$domain,$DOMAIN,$OJ_NAME;
   $xmlDoc = simplexml_load_file($tempfile, 'SimpleXMLElement', LIBXML_PARSEHUGE);
   $searchNodes = $xmlDoc->xpath("/DocumentElement");
   $spid = 0;
@@ -240,9 +240,7 @@ function import_fps($tempfile,$tempData) {
 	//新文件名
 	$new_file_name = date("YmdHis") . '_' . rand(10000, 99999) . '.' . $ext;
 	$newpath = $save_path."/$pid"."_".$testno."_".$new_file_name;
-         if ($OJ_SAE)
-            $newpath = "saestor://web/upload/".$newpath;
-	 else
+            $newpath="../upload/".$newpath;
             $newpath="../upload/".$newpath;
 		
           image_save_file($newpath,$base64);
@@ -261,7 +259,6 @@ function import_fps($tempfile,$tempData) {
         }
       }
 
-      if (!isset($OJ_SAE) || !$OJ_SAE) {
         if ($spj==1) {
 		if($spjcode){
 		  if($spjlang=="C++"){
@@ -307,7 +304,6 @@ function import_fps($tempfile,$tempData) {
 		  
 	  }
         }
-      }
 
       $solutions = $searchNode->children()->solution;
 

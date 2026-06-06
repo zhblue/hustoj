@@ -477,11 +477,7 @@ $file = "cache/cache_$sid.html";
 if ($OJ_MEMCACHE) {
     $mem = new Memcache();
 
-    if ($OJ_SAE) {
-        $mem = memcache_init();
-    } else {
         $mem->connect($OJ_MEMSERVER, $OJ_MEMPORT);
-    }
 
     $mem->delete($file, 0);
 } elseif (file_exists($file)) {

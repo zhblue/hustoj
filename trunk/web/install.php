@@ -25,7 +25,6 @@ function toName($k)
     $name["OJ_ACE_EDITOR"] = "代码高亮";
     $name["OJ_AUTO_SHARE"] = "代码共享";
     $name["OJ_CSS"] = "色系样式表";
-    $name["OJ_SAE"] = "新浪云";
     $name["OJ_VCODE"] = "验证码";
     $name["OJ_REG_SPEED"] = "注册速度限制";
     $name["OJ_APPENDCODE"] = "附加代码模式";

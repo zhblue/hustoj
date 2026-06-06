@@ -65,7 +65,7 @@ function get_extension($file) {
 }
 
 function import_json($json) {
-  global $OJ_DATA,$OJ_SAE,$OJ_REDIS,$OJ_REDISSERVER,$OJ_REDISPORT,$OJ_REDISQNAME,$domain,$DOMAIN;
+  global $OJ_DATA,$OJ_REDIS,$OJ_REDISSERVER,$OJ_REDISPORT,$OJ_REDISQNAME,$domain,$DOMAIN;
   $qduoj_problem=json_decode($json)->{'problem'};
  echo( "<br> ".$qduoj_problem->{'problemId'});
   echo( $qduoj_problem->{'title'})."<br>";
