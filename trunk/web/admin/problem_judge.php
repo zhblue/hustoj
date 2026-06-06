@@ -208,53 +208,23 @@ if(isset($_POST['update_solution'])){
 
 
 	$pid=intval($_POST['pid']);
-      
-  	if($OJ_SAE){
-          //echo $OJ_DATA."$pid";
-         
-           $store = new SaeStorage();
-           $ret = $store->getList("data", "$pid" ,100,0);
-            foreach($ret as $file) {
-              if(!strstr($file,"sae-dir-tag")){
-                     $file=pathinfo($file);
-                     $file=$file['basename'];
-                    		 echo $file."\n";   
-              }
-                    
-            }
+              
+	$dir=opendir($OJ_DATA."/$pid");
+	while (($file = readdir($dir)) != ""){
+	  if(!is_dir($file)&&$file!="ac"){
+	if(isset($_POST['time'])){
+				echo filemtime($OJ_DATA."/$pid/".$file)."\n";
+			}
 
-
-        } else{
-        
-            $dir=opendir($OJ_DATA."/$pid");
-            while (($file = readdir($dir)) != ""){
-              if(!is_dir($file)&&$file!="ac"){
-		    if(isset($_POST['time'])){
-                        echo filemtime($OJ_DATA."/$pid/".$file)."\n";
-                    }
-
-               	    $file=pathinfo($file);
-                    $file=$file['basename'];
-                    echo "$file\n";
-              }
-            }
-            closedir($dir);
-        }
-        
-	
+			$file=pathinfo($file);
+			$file=$file['basename'];
+			echo "$file\n";
+	  }
+	}
+	closedir($dir);
 }else if(isset($_POST['gettestdata'])){
-	$file=$_POST['filename'];
-        if($OJ_SAE){ 
-		$store = new SaeStorage();
-                if($store->fileExists("data",$file)){
-                       
-                		echo $store->read("data",$file);
-                }
-                
-        }else{
-          	echo file_get_contents($OJ_DATA.'/'.$file);
-        }
-           
+	$file=$_POST['filename'];  
+    echo file_get_contents($OJ_DATA.'/'.$file);     
 }else{
 ?>
 
