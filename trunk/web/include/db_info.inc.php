@@ -28,7 +28,6 @@ static  $OJ_LANGMASK=33554356; //掩码计算器:https://pigeon-developer.github
 static  $OJ_ACE_EDITOR=true;  // 是否启用有高亮提示的提交代码输入框
 static  $OJ_AUTO_SHARE=false; //true: 设为true则通过的题目可在统计页查看其他人代码.
 static  $OJ_CSS="white.css";  // bing.css | kawai.css | black.css | blue.css | green.css | hznu.css
-static  $OJ_SAE=false; //使用新浪引擎
 static  $OJ_VCODE=false;  //验证码
 static 	$OJ_REG_SPEED=60 ; //限制每小时同ip注册个数，0不限制
 static  $OJ_APPENDCODE=true;  // 代码预定模板

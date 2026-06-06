@@ -5,7 +5,7 @@ function pdo_query($sql){
     $args = func_get_args();       //获得传入的所有参数的数组
     $args = array_slice($args,1,--$num_args);
     if(isset($args[0])&&is_array($args[0])) $args=$args[0]; 
-    global $DB_HOST,$DB_NAME,$DB_USER,$DB_PASS,$dbh,$OJ_SAE,$OJ_TEMPLATE;
+    global $DB_HOST,$DB_NAME,$DB_USER,$DB_PASS,$dbh,$OJ_TEMPLATE;
     try{
 	    if(!$dbh||stripos($sql,"create") === 0||stripos($sql,"drop") === 0|| stripos($sql,"grant") === 0){
 				

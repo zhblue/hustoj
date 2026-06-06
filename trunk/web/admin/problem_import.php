@@ -51,16 +51,14 @@
   <div class="container">
     <?php 
     $show_form = true;
-    if (!isset($OJ_SAE) || !$OJ_SAE) {
-      if (!writable($OJ_DATA)) {
-        echo "<div class='alert alert-danger'>权限异常，请执行：<br><b>chmod 775 -R $OJ_DATA && chgrp -R ".get_current_user()." $OJ_DATA</b></div>";
-        $show_form = false;
-      }
-      if (!file_exists("../upload")) mkdir("../upload");
-      if (!writable("../upload")) {
-        echo "<div class='alert alert-danger'>../upload 目录不可写，请执行 <b>chmod 770 ../upload</b></div>";
-        $show_form = false;
-      }
+    if (!writable($OJ_DATA)) {
+      echo "<div class='alert alert-danger'>权限异常，请执行：<br><b>chmod 775 -R $OJ_DATA && chgrp -R ".get_current_user()." $OJ_DATA</b></div>";
+      $show_form = false;
+    }
+    if (!file_exists("../upload")) mkdir("../upload");
+    if (!writable("../upload")) {
+      echo "<div class='alert alert-danger'>../upload 目录不可写，请执行 <b>chmod 770 ../upload</b></div>";
+      $show_form = false;
     }
 
     if ($show_form) { ?>

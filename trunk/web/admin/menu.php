@@ -111,7 +111,7 @@ $OJ_TEMPLATE = "bs3";
             <a class='btn btn-sm' href="https://mp.weixin.qq.com/s?__biz=MzI1MTAwMTI2NA==&mid=2656403287&idx=1&sn=2b1b9a5cd0b271aa4a050c349981e715" target="_blank"><i class="glyphicon glyphicon-book-open"></i><b>二次开发教程</b></a><br>
         <?php }?>
 
-        <?php if (isset($_SESSION[$OJ_NAME.'_'.'administrator'])&&!$OJ_SAE){?>
+        <?php if (isset($_SESSION[$OJ_NAME.'_'.'administrator'])){?>
             <a href="solution_statistics.php" target="main" title="Create your own data"><i class="glyphicon glyphicon-chart-line"></i><font color="eeeeee">SS Report</font></a> <br>
             <a href="problem_copy.php" target="main" title="Create your own data"><i class="glyphicon glyphicon-copy"></i><font color="eeeeee">CopyProblem</font></a> <br>
             <a href="problem_changeid.php" target="main" title="Danger,Use it on your own risk"><i class="glyphicon glyphicon-exchange-alt"></i><font color="eeeeee">ReOrderProblem</font></a>

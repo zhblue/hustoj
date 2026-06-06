@@ -207,7 +207,7 @@ $delay=pdo_query($sql);
   </tbody>
 </table>
 
-<?php if (isset($_SESSION[$OJ_NAME.'_'.'administrator'])&&!$OJ_SAE){?>
+<?php if (isset($_SESSION[$OJ_NAME.'_'.'administrator'])){?>
   <a href="problem_copy.php" target="main" title="Create your own data"><font color="eeeeee">CopyProblem</font></a> <br>
   <a href="problem_changeid.php" target="main" title="Danger,Use it on your own risk"><font color="eeeeee">ReOrderProblem</font></a>
   

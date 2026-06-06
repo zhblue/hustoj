@@ -114,7 +114,7 @@ function mkpta($pid,$prepends,$node) {
 
 
 function import_dir($json) {
-  global $OJ_DATA,$OJ_SAE,$OJ_REDIS,$OJ_REDISSERVER,$OJ_REDISPORT,$OJ_REDISQNAME,$domain,$DOMAIN,$_SESSION;
+  global $OJ_DATA,$OJ_REDIS,$OJ_REDISSERVER,$OJ_REDISPORT,$OJ_REDISQNAME,$domain,$DOMAIN,$_SESSION;
   $qduoj_problem=json_decode($json);
   echo( $qduoj_problem->{'problem'}->{'title'})."<br>";
 
