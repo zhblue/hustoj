@@ -131,7 +131,7 @@ function get_extension($file) {
 }
 
 function import_fps($tempfile) {
-  global $OJ_DATA,$OJ_SAE,$OJ_REDIS,$OJ_REDISSERVER,$OJ_REDISPORT,$OJ_REDISQNAME,$domain,$DOMAIN,$OJ_NAME,$OJ_REMOTE_JUDGE;
+  global $OJ_DATA,$OJ_REDIS,$OJ_REDISSERVER,$OJ_REDISPORT,$OJ_REDISQNAME,$domain,$DOMAIN,$OJ_NAME,$OJ_REMOTE_JUDGE;
   $xmlDoc = simplexml_load_file($tempfile, 'SimpleXMLElement', LIBXML_PARSEHUGE);
   $searchNodes = $xmlDoc->xpath("/fps/item");
   $spid = 0;
@@ -209,7 +209,7 @@ function import_fps($tempfile) {
       if (strlen($sample_input)) mkdata($pid,"sample.in",$sample_input,$OJ_DATA);
       if (strlen($sample_output)) mkdata($pid,"sample.out",$sample_output,$OJ_DATA);
 
-      //if(!isset($OJ_SAE)||!$OJ_SAE){
+     
       $testinputs = $searchNode->children()->test_input;
       $testno = 0;
 
@@ -268,11 +268,7 @@ function import_fps($tempfile) {
 	//新文件名
 	$new_file_name = date("YmdHis") . '_' . rand(10000, 99999) . '.' . $ext;
 	$newpath = $save_path."/$pid"."_".$testno."_".$new_file_name;
-         if ($OJ_SAE)
-            $newpath = "saestor://web/upload/".$newpath;
-	 else
-            $newpath="../upload/".$newpath;
-		
+    $newpath="../upload/".$newpath;
           image_save_file($newpath,$base64);
           $sql = "UPDATE problem SET description=replace(description,?,?) WHERE problem_id=?";  
           pdo_query($sql,$src,$newpath,$pid);
@@ -289,7 +285,7 @@ function import_fps($tempfile) {
         }
       }
 
-      if (!isset($OJ_SAE) || !$OJ_SAE) {
+    
 	if($interactorcode){
 		  $fp = fopen("$basedir/interactor.cc","w");
 		  fputs($fp, $interactorcode);
@@ -341,7 +337,7 @@ function import_fps($tempfile) {
 		  
 	  }
         }
-      }
+      
 
       $solutions = $searchNode->children()->solution;
 
