@@ -40,43 +40,9 @@ function getTestFileOut($pid, $testfile,$OJ_DATA) {
 }
 
 function printTestCases($xmlHandle,$pid,$OJ_DATA) {
-  if (strstr($OJ_DATA,"saestor:")) {
-    // echo "<debug>$pid</debug>";
-    $store = new SaeStorage();
-    $ret = $store->getList("data", "$pid",100,0 );
-
-    foreach ($ret as $file) {
-      //echo "<debug>$file</debug>";
-
-      if (!strstr($file,"sae-dir-tag")) {
-        $pinfo = pathinfo($file);
-
-        if (isset($pinfo['extension']) &&$pinfo['extension']=="in" && $pinfo['basename']!="sample.in") {
-          $f = basename($pinfo['basename'],".".$pinfo ['extension']);
-          
-          $outfile = "$pid/".$f.".out";
-          $infile = "$pid/".$f.".in";
-
-          if ($store->fileExists("data",$infile)) {
-            write_xml($xmlHandle,"<test_input><![CDATA[".fixcdata($store->read("data",$infile))."]]></test_input>\n");;
-          }
-
-          if ($store->fileExists("data",$outfile)) {
-            write_xml($xmlHandle,"<test_output><![CDATA[".fixcdata($store->read("data",$outfile))."]]></test_output>\n");
-          }
-          //break;
-        }
-      }
-    }
-  
-  }
-  else {
     $ret = "";
     if(!is_dir("$OJ_DATA/$pid/")) return "";
-    //$pdir = opendir("$OJ_DATA/$pid/");
     $files = scandir("$OJ_DATA/$pid/"); //sorting file names by ascending order with default scandir function
-
-    //while ($file=readdir($pdir)) {
     foreach ($files as $file) {
       $pinfo = pathinfo($file);
       
@@ -99,7 +65,7 @@ function printTestCases($xmlHandle,$pid,$OJ_DATA) {
     
     //closedir($pdir);
     return $ret;
-  }
+  
 }
 
 
