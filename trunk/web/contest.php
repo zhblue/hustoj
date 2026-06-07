@@ -47,7 +47,7 @@ if (isset($_GET['cid'])) {
      * 查询竞赛相关问题信息
      * 使用内连接获取问题标题、ID、来源和竞赛问题编号
      */
-    $sql = "select p.title,p.problem_id,p.source,cp.num as pnum,cp.c_accepted accepted,cp.c_submit submit from problem p inner join contest_problem cp on p.problem_id = cp.problem_id and cp.contest_id=$cid order by cp.num";
+    $sql = "select p.title,p.problem_id,p.source,cp.num as pnum,p.coin coin,cp.c_accepted accepted,cp.c_submit submit from problem p inner join contest_problem cp on p.problem_id = cp.problem_id and cp.contest_id=$cid order by cp.num";
     $result = mysql_query_cache($sql);
     $view_problemset = array();
     $pids = array_column($result, 'problem_id');
@@ -92,7 +92,7 @@ if (isset($_GET['cid'])) {
         if ($now < $end_time) { //竞赛进行中
             $view_problemset[$cnt][1] = "<a href='problem.php?cid=$cid&pid=$cnt'>" . $PID[$cnt] . "</a>";
             $view_problemset[$cnt][2] = "<a href='problem.php?cid=$cid&pid=$cnt'>" . $row['title'] . "</a>";
-            $view_problemset[$cnt][5] = intval($row['coin']) > 0 ? str_repeat('<span style=\'color:orange\'>✦</span>', min(intval($row['coin']), 5)) : '';
+            $view_problemset[$cnt][2] .= intval($row['coin']) > 0 ? str_repeat('<span style=\'color:orange\'>✦</span>', min(intval($row['coin']), 5)) : '';
         } else {               //竞赛结束
             //检查问题是否会在其他竞赛中使用
             $tpid = intval($row['problem_id']);
