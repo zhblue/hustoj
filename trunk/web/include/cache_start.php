@@ -5,6 +5,7 @@
         if(!isset($cache_time)) $cache_time=10;
         $OJ_APCU_OK = ( extension_loaded('apcu') && apcu_enabled() );
         $sid=$OJ_NAME.$_SERVER["HTTP_HOST"];
+        if(isset($_POST['keyword'])) $sid.=$_POST['keyword'];
         $OJ_CACHE_SHARE=(isset($OJ_CACHE_SHARE)&&$OJ_CACHE_SHARE)&&!isset($_SESSION[$OJ_NAME.'_'.'administrator']);
         if (!$OJ_CACHE_SHARE&&isset($_SESSION[$OJ_NAME.'_'.'user_id'])){
                 $ip = ($_SERVER['REMOTE_ADDR']);
