@@ -147,7 +147,7 @@ echo"<option value=$i ".( $lastlang==$i?"selected":"").">
         </style>
          <div class="row">
             <div class="column" style="display: flex;">
-<?php if ( isset($OJ_TEST_RUN) && $OJ_TEST_RUN && $spj<=1 && !$solution_name  ){?>
+<?php if ( isset($OJ_TEST_RUN) && $OJ_TEST_RUN && $spj!=2 && !$solution_name  ){?>
 <div style="
    
      margin-left: 60px;
@@ -184,7 +184,7 @@ echo"<option value=$i ".( $lastlang==$i?"selected":"").">
 	<span id='reinfo' style="display:none"></span>
    </div>
 <?php }	 ?>
-<?php if (isset($OJ_TEST_RUN)&&$OJ_TEST_RUN && $spj<=1 && !$solution_name  ){?>
+<?php if (isset($OJ_TEST_RUN)&&$OJ_TEST_RUN && $spj!=2 && !$solution_name  ){?>
         <!--运行按钮-->
             <input style="
              margin-top: 30px;
