@@ -987,33 +987,33 @@ int compare_zoj(const char *file1, const char *file2,const char * infile,const c
                                                 ret = OJ_WA;
                                                 goto end;
                                         }else if(preK<BUFFER_SIZE-1){
-						prefix[preK++]=c1;
-						prefix[preK]='\0';
+												prefix[preK++]=c1;
+												prefix[preK]='\0';
                                         }else{
-						preK=0;
-						prefix[preK]='\0';
-					}
-					c1 = fgetc(f1);
-					c2 = fgetc(f2);
-				}
-				find_next_nonspace(c1, c2, f1, f2, ret);
-				preK=0;
-	                        prefix[preK]='\0';
-				if (c1 == EOF && c2 == EOF)
-				{
-					goto end;
-				}
-				if (c1 == EOF || c2 == EOF)
-				{
-					ret = OJ_WA;
-					goto end;
-				}
-
-				if ((c1 == '\n' || !c1) && (c2 == '\n' || !c2))
-				{
-					break;
-				}
-			}
+												preK=0;
+												prefix[preK]='\0';
+										}
+									c1 = fgetc(f1);
+									c2 = fgetc(f2);
+								}
+								find_next_nonspace(c1, c2, f1, f2, ret);
+								//preK=0;
+					            //prefix[preK]='\0';
+								if (c1 == EOF && c2 == EOF)
+								{
+									goto end;
+								}
+								if (c1 == EOF || c2 == EOF)
+								{
+									ret = OJ_WA;
+									goto end;
+								}
+				
+								if ((c1 == '\n' || !c1) && (c2 == '\n' || !c2))
+								{
+									break;
+								}
+						}
 		}
 end:
 	long out_size,user_now;
