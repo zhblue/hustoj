@@ -672,8 +672,9 @@ int inFile(const struct dirent * dp){   //获得测试数据目录中测试数�
 }
 
 /* 输出比较时同步跳过两个文件中的空白字符。处理行尾差异以检测格式错误（PE）。 */
-void find_next_nonspace(int &c1, int &c2, FILE *&f1, FILE *&f2, int &ret)
+int find_next_nonspace(int &c1, int &c2, FILE *&f1, FILE *&f2, int &result)
 {
+	int newLine=0;
 	// Find the next non-space character or \n.
 	while ((isspace(c1)) || (isspace(c2)))
 	{
@@ -684,6 +685,7 @@ void find_next_nonspace(int &c1, int &c2, FILE *&f1, FILE *&f2, int &ret)
 				do
 				{
 					c1 = fgetc(f1);
+					if(c1=='\n') newLine=1;
 				} while (isspace(c1));
 				continue;
 			}
@@ -697,8 +699,10 @@ void find_next_nonspace(int &c1, int &c2, FILE *&f1, FILE *&f2, int &ret)
 			}else if(ignore_esol){			
 				if (isspace(c1) && isspace(c2))
 				{
-					while (c2 == '\n' && isspace(c1) && c1 != '\n')
+					while (c2 == '\n' && isspace(c1) && c1 != '\n'){
 						c1 = fgetc(f1);
+						if(c1=='\n') newLine=1;
+					}
 					while (c1 == '\n' && isspace(c2) && c2 != '\n')
 						c2 = fgetc(f2);
 
@@ -707,12 +711,14 @@ void find_next_nonspace(int &c1, int &c2, FILE *&f1, FILE *&f2, int &ret)
 					if (DEBUG)
 						printf("%d=%c\t%d=%c", c1, c1, c2, c2);
 					;
-					ret = OJ_PE;
+					result = OJ_PE;
 				}
 			}else if(!ignore_esol){
+				if(c1=='\n') newLine=1;
 				if ((c1 == '\r' && c2 == '\n'))
 				{
 					c1 = fgetc(f1);
+					if(c1=='\n') newLine=1;
 				}
 				else if ((c2 == '\r' && c1 == '\n'))
 				{
@@ -722,19 +728,21 @@ void find_next_nonspace(int &c1, int &c2, FILE *&f1, FILE *&f2, int &ret)
 					if (DEBUG)
 						printf("%d=%c\t%d=%c", c1, c1, c2, c2);
 					;
-					ret = OJ_PE;
+					result = OJ_PE;
 				}
 			}
 		}
 		if (isspace(c1))
 		{
 			c1 = fgetc(f1);
+			if(c1=='\n') newLine=1;
 		}
 		if (isspace(c2))
 		{
 			c2 = fgetc(f2);
 		}
 	}
+	return newLine;
 }
 
 /***
@@ -967,7 +975,11 @@ int compare_zoj(const char *file1, const char *file2,const char * infile,const c
                         // Blank lines are skipped.
                         c1 = fgetc(f1);
                         c2 = fgetc(f2);
-                        find_next_nonspace(c1, c2, f1, f2, ret);
+                        if(find_next_nonspace(c1, c2, f1, f2, ret)){
+				preK=0;
+				prefix[preK]='\0';
+			
+			}
                         // Compare the current line.
                         for (;;)
                         {
@@ -987,33 +999,38 @@ int compare_zoj(const char *file1, const char *file2,const char * infile,const c
                                                 ret = OJ_WA;
                                                 goto end;
                                         }else if(preK<BUFFER_SIZE-1){
-												prefix[preK++]=c1;
-												prefix[preK]='\0';
+						prefix[preK++]=c1;
+						prefix[preK]='\0';
                                         }else{
-												preK=0;
-												prefix[preK]='\0';
-										}
-									c1 = fgetc(f1);
-									c2 = fgetc(f2);
-								}
-								find_next_nonspace(c1, c2, f1, f2, ret);
-								//preK=0;
-					            //prefix[preK]='\0';
-								if (c1 == EOF && c2 == EOF)
-								{
-									goto end;
-								}
-								if (c1 == EOF || c2 == EOF)
-								{
-									ret = OJ_WA;
-									goto end;
-								}
-				
-								if ((c1 == '\n' || !c1) && (c2 == '\n' || !c2))
-								{
-									break;
-								}
-						}
+						preK=0;
+						prefix[preK]='\0';
+					}
+					c1 = fgetc(f1);
+					c2 = fgetc(f2);
+					if(c1=='\n'){
+						preK=0;
+						prefix[preK]='\0';
+					}
+				}
+				if(find_next_nonspace(c1, c2, f1, f2, ret)){
+					preK=0;
+					prefix[preK]='\0';
+				}
+				if (c1 == EOF && c2 == EOF)
+				{
+					goto end;
+				}
+				if (c1 == EOF || c2 == EOF)
+				{
+					ret = OJ_WA;
+					goto end;
+				}
+
+				if ((c1 == '\n' || !c1) && (c2 == '\n' || !c2))
+				{
+					break;
+				}
+			}
 		}
 end:
 	long out_size,user_now;
