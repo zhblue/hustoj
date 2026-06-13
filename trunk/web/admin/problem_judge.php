@@ -206,31 +206,23 @@ if(isset($_POST['update_solution'])){
 	echo "1";
 }else if(isset($_POST['gettestdatalist'])){
 
+	$pid=intval($_POST['pid']);           
+	$dir=opendir($OJ_DATA."/$pid");
+	while (($file = readdir($dir)) != ""){
+	  if(!is_dir($file)&&$file!="ac"){
+	  if(isset($_POST['time'])){
+				echo filemtime($OJ_DATA."/$pid/".$file)."\n";
+			}
 
-	$pid=intval($_POST['pid']);
-      
-        {
-        
-            $dir=opendir($OJ_DATA."/$pid");
-            while (($file = readdir($dir)) != ""){
-              if(!is_dir($file)&&$file!="ac"){
-		    if(isset($_POST['time'])){
-                        echo filemtime($OJ_DATA."/$pid/".$file)."\n";
-                    }
-
-               	    $file=pathinfo($file);
-                    $file=$file['basename'];
-                    echo "$file\n";
-              }
-            }
-            closedir($dir);
-        }
-        
-	
+			$file=pathinfo($file);
+			$file=$file['basename'];
+			echo "$file\n";
+	  }
+	}
+	closedir($dir);
 }else if(isset($_POST['gettestdata'])){
-	$file=$_POST['filename'];
-  echo file_get_contents($OJ_DATA.'/'.$file);
-           
+	$file=$_POST['filename'];  
+    echo file_get_contents($OJ_DATA.'/'.$file);     
 }else{
 ?>
 

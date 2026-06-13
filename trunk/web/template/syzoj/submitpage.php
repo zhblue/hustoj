@@ -77,18 +77,18 @@ echo"<option value=$i ".( $lastlang==$i?"selected":"").">
 <button  id="Submit" type="button" class="ui primary icon button"  onclick="do_submit();"><?php echo $MSG_SUBMIT?></button> 
 <label id="countDown" ></label>
 <?php if (isset($OJ_ENCODE_SUBMIT)&&$OJ_ENCODE_SUBMIT){?>
-<input class="btn btn-success" title="WAF gives you reset ? try this." type=button value="Encoded <?php echo $MSG_SUBMIT?>"  onclick="encoded_submit();">
+<input id="Encoded" class="btn btn-success" title="WAF gives you reset ? try this." type=button value="Encoded <?php echo $MSG_SUBMIT?>" >
 <input type=hidden id="encoded_submit_mark" name="reverse2" value="reverse"/>
 <?php }?>
 <?php if (isset($_SESSION[$OJ_NAME.'_administrator'])){?>
 <input class="btn btn-danger" title="AI everythin..." type=button value="AI一下"  onclick="ai_gen('Main.'+$('#language option:selected').text().trim());" id='ai_bt'>
 <?php }?>
 <!--选择题状态-->
-<?php if ($spj==2 || !$OJ_TEST_RUN ){?>
+<?php if ($spj>1 || !$OJ_TEST_RUN ){?>
 <span class="btn" id=result><?php echo $MSG_STATUS?></span>	
 <?php }?>
 </span>
-<?php if($spj !=2 &&  !$solution_name){ ?>
+<?php if($spj <= 1 &&  !$solution_name){ ?>
     <button onclick="toggleTheme(event)" style="background-color: bisque; position: absolute; top: 5px; right:70px;" v-if="false">
         <i>🌗</i>
     </button>
@@ -234,7 +234,7 @@ function removeContentBeforeSeparator(text) {
     return text;
 }
 function parseToCompactCards(data) {
-	console.log(data);
+	//console.log(data);
 	data=removeContentBeforeSeparator(data);
 	const lines = data.trim().split('\n');
 	const headers = lines[0].split('|');
@@ -460,7 +460,17 @@ function encoded_submit(){
 	}
 //      source.value=source.value.split("").reverse().join("");
 //      alert(source.value);
+<?php if(isset($_GET['spa'])){?>
+	<?php if($solution_name) { ?>document.getElementById("frmSolution").submit(); <?php } ?>  //如果是指定文件名，则强制用文件post方式提交。
+        $.post("submit.php?ajax",$("#frmSolution").serialize(),function(data){fresh_result(data);});
+        $("#Encoded").prop('disabled', true);
+        $("#TestRun").prop('disabled', true);
+        count=<?php echo $OJ_SUBMIT_COOLDOWN_TIME?> * 2 ;
+        handler_interval= window.setTimeout("resume();",1000);
+	 <?php if(isset($OJ_REMOTE_JUDGE)&&$OJ_REMOTE_JUDGE) {?>$("#sk").attr("src","remote.php"); <?php } ?>
+<?php }else{?>
         document.getElementById("frmSolution").submit();
+<?php }?>
 }
 
 function do_submit(){
@@ -580,6 +590,7 @@ function resume(){
 	var t=$("#TestRun")[0];
 	if(count<0){
 		 $("#Submit").attr("disabled",false);
+		 $("#Encoded").attr("disabled",false);
 		 $("#Submit").val("<?php echo $MSG_SUBMIT?>");
 		if(t!=null) $("#TestRun").attr("disabled",false);
 		if(t!=null) $("#TestRun").val("<?php echo $MSG_TR?>");
@@ -690,6 +701,7 @@ editor.getSession().on("change", function() {
    $(document).ready(function(){
    	$("#source").css("height",window.innerHeight-180);  
 	if($("#vcode")!=undefined) $("#vcode").click();
+	$("#Encoded").bind("click",encoded_submit);
 	if(!!localStorage){
 		let key="<?php echo htmlentities($_SESSION[$OJ_NAME.'_user_id'])?>source:"+location.href;
 		let saved=localStorage.getItem(key);
