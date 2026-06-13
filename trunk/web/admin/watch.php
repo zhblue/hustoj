@@ -14,6 +14,23 @@ if (!(isset($_SESSION[$OJ_NAME.'_'.'administrator'])||isset($_SESSION[$OJ_NAME.'
                     $history=@file_get_contents($logfile);
                     if($history!=""){
                         $history=json_decode($history);
+                        // FIX: Validate and clean corrupted history data
+                        // Valid timestamps should be between 2020-01-01 and 2035-01-01 (in ms)
+                        $min_ts = 1577836800000; // 2020-01-01
+                        $max_ts = 2051222400000; // 2035-01-01
+                        if(is_array($history) && count($history) > 0){
+                            $valid_history = array_filter($history, function($sample) use ($min_ts, $max_ts) {
+                                return isset($sample[4]) && is_numeric($sample[4]) 
+                                       && $sample[4] >= $min_ts && $sample[4] <= $max_ts;
+                            });
+                            // If more than 80% of data is corrupted, clear the log
+                            if(count($valid_history) < count($history) * 0.2 && count($history) > 10){
+                                $history = array();
+                                @file_put_contents($logfile, json_encode($history));
+                            } else {
+                                $history = array_values($valid_history);
+                            }
+                        }
                     }else{
                         $history=array();
                     }
@@ -133,6 +150,12 @@ if(function_exists('system')){
                     // Filter out data points with Y values > maxVal (likely timestamp or error)
                     return data.filter(p => p[1] <= maxVal);
                 }
+                function filterByTimeRange(data, minTime, maxTime) {
+                    // Filter out data points with timestamps outside valid range
+                    // minTime: 2020-01-01 in ms = 1577836800000
+                    // maxTime: 2035-01-01 in ms = 2051222400000
+                    return data.filter(p => p[0] >= minTime && p[0] <= maxTime);
+                }
                 
                 function update(){
                         $.getJSON("<?php echo basename(__FILE__)?>?json",function(result){
@@ -141,7 +164,16 @@ if(function_exists('system')){
                                 let swap=result[2];
                                 let tcp=result[3];
                                 
-                                // FIX: Filter extreme values before plotting
+                                // FIX: Filter by valid timestamp range (2020-2035)
+                                // This fixes X-axis showing 1975 due to corrupted log data
+                                const MIN_TS = 1577836800000; // 2020-01-01
+                                const MAX_TS = 2051222400000; // 2035-01-01
+                                cpu = filterByTimeRange(cpu, MIN_TS, MAX_TS);
+                                mem = filterByTimeRange(mem, MIN_TS, MAX_TS);
+                                swap = filterByTimeRange(swap, MIN_TS, MAX_TS);
+                                tcp = filterByTimeRange(tcp, MIN_TS, MAX_TS);
+                                
+                                // FIX: Filter extreme Y values after time filtering
                                 // Max values: CPU 100%, Memory 100%, Swap 100%, TCP 100000
                                 cpu = filterExtremeY(cpu, 100);
                                 mem = filterExtremeY(mem, 100);
