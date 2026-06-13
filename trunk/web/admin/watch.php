@@ -26,21 +26,54 @@ if(function_exists('system')){
                 if($HL<0||(isset($history[$HL][4]) && $history[$HL][4] <= (time()-$delay)*1000) ){
                         $info=array();
                            // system(" top -bn1 | grep \"Cpu\" | awk -F, '{print $4}' | awk '{print 100-$1}' ");
-                            exec(" top -bn1 | grep \"Cpu\" | awk -F, '{print $4}' | awk '{print 100-$1}' ",$info);
+                            // FIX: Cross-distro compatible CPU extraction (Debian 13 & Ubuntu 24.04/26.04)
+                            // Use sed to extract idle% then compute 100-idle%
+                            // Works with both %Cpu(s): and other top output formats
+                            exec("top -bn1 2>/dev/null | grep -E '^%Cpu' | head -1 | sed -n 's/.*, \([0-9.]*\) id.*/\1/p' | awk '{print 100-\$1}'",$info);
                             $info[count($info)-1]=floatval($info[count($info)-1]);
-                            exec("free -m|grep Mem|awk '{print $7 }'",$info);
+                            // Validate CPU value is reasonable (0-100)
+                            if($info[count($info)-1] < 0 || $info[count($info)-1] > 100 || !is_numeric($info[count($info)-1])) {
+                                $info[count($info)-1] = 0;
+                            }
+                            exec("free -m|grep Mem|awk '{print \$7 }'",$info);
                             $info[count($info)-1]=floatval($info[count($info)-1]);
-                            exec("free -m|grep Swap|awk '{print $3 }'",$info);
+                            exec("free -m|grep Swap|awk '{print \$3 }'",$info);
                             $info[count($info)-1]=floatval($info[count($info)-1]);
-                            exec("netstat -s |grep 'connections established'|cut -d\  -f5",$info);
-                            $info[count($info)-1]=floatval($info[count($info)-1]);
+                            // FIX: Cross-distro TCP connections detection
+                            // Try ss first (modern, works on Debian 13+), fall back to netstat
+                            $tcp_out = @exec("ss -tan 2>/dev/null | grep -v '^State' | wc -l");
+                            if(!is_numeric($tcp_out) || $tcp_out < 0 || $tcp_out > 1000000) {
+                                // Fallback to netstat with robust awk parsing
+                                $tcp_out = @exec("netstat -s 2>/dev/null | awk '/^[ ]*[0-9]+[ ]+connections established$/ {gsub(/[^0-9]/,\"\"); print; exit}'");
+                            }
+                            $info[] = floatval($tcp_out);
+                            // Validate TCP value is reasonable (0-1000000)
+                            if($info[count($info)-1] < 0 || $info[count($info)-1] > 1000000 || !is_numeric($info[count($info)-1])) {
+                                $info[count($info)-1] = 0;
+                            }
 
                             array_push($info,(time())*1000);
 
-                            exec("df -m|grep '/dev/vda3'|grep -v 'shm'|awk '{print $3 }'",$info);
-                            $info[count($info)-1]=floatval($info[count($info)-1]);
-                            exec("df -m|grep 'aliyun'|grep -v 'shm'|awk '{print $3} '",$info);
-                            $info[count($info)-1]=floatval($info[count($info)-1]);
+                            // FIX: More robust disk detection - find largest non-tmpfs partition
+                            $disk_found = false;
+                            $disk_output = @exec("df -m 2>/dev/null | awk 'NR>1 && \$6 !~ /shm|tmpfs/ {print \$3}' | sort -rn | head -1");
+                            if(is_numeric($disk_output) && $disk_output > 0) {
+                                $info[] = floatval($disk_output);
+                                $disk_found = true;
+                            }
+                            if(!$disk_found) {
+                                $info[] = 0;
+                            }
+                            // FIX: More robust NAS/network mount detection
+                            $nas_found = false;
+                            $nas_output = @exec("df -m 2>/dev/null | awk 'NR>1 && (\$6 ~ /\/mnt\/nfs/ || \$1 ~ /\/\/192\.|\/\/10\./) {print \$3}' | sort -rn | head -1");
+                            if(is_numeric($nas_output) && $nas_output > 0) {
+                                $info[] = floatval($nas_output);
+                                $nas_found = true;
+                            }
+                            if(!$nas_found) {
+                                $info[] = 0;
+                            }
                             //echo json_encode($info);
                             array_push($history,$info);
                             while(count($history)>900) array_shift($history);
@@ -94,18 +127,33 @@ if(function_exists('system')){
         <script src="/include/jquery.flot.js" > </script>
         <div id="panel" style="width:98%;height:180px" onclick='update()'>loading data ... </div>
         <script type="text/javascript">
+                // FIX: Helper function to clamp values and filter extreme data points
+                function clamp(v, min, max) { return v < min ? min : v > max ? max : v; }
+                function filterExtremeY(data, maxVal) {
+                    // Filter out data points with Y values > maxVal (likely timestamp or error)
+                    return data.filter(p => p[1] <= maxVal);
+                }
+                
                 function update(){
                         $.getJSON("<?php echo basename(__FILE__)?>?json",function(result){
                                 let cpu=result[0];
                                 let mem=result[1];
                                 let swap=result[2];
                                 let tcp=result[3];
+                                
+                                // FIX: Filter extreme values before plotting
+                                // Max values: CPU 100%, Memory 100%, Swap 100%, TCP 100000
+                                cpu = filterExtremeY(cpu, 100);
+                                mem = filterExtremeY(mem, 100);
+                                swap = filterExtremeY(swap, 100);
+                                tcp = filterExtremeY(tcp, 100000);
+                                
                                 $.plot( $( "#panel" ), [ {
                                         label: "FREE:"+(<?php echo $memory[0]?>*mem[mem.length-1][1]/100).toFixed(0),data: mem,lines: {show: true}
                                 }
-                                ,{      label: "CPU:"+cpu[cpu.length-1][1]+"%",data: cpu,bars: {show: true}
+                                ,{      label: "CPU:"+(cpu.length ? cpu[cpu.length-1][1] : 0)+"%",data: cpu,bars: {show: true}
                                 }
-                                ,{      label: "TCP:"+tcp[tcp.length-1][1]*2,data: tcp,lines: {show: true}
+                                ,{      label: "TCP:"+(tcp.length ? tcp[tcp.length-1][1]*2 : 0),data: tcp,lines: {show: true}
                                 }
                                 ,{      label: "SWAP:"+(<?php echo $memory[1]?>*swap[swap.length-1][1]/100).toFixed(0),data: swap,lines: {show: true}
                                 }
@@ -119,14 +167,20 @@ if(function_exists('system')){
                                         xaxis: {
                                                 mode: "time" //,
                                         },
+                                        // FIX: Add Y-axis range limits to prevent extreme values
+                                        yaxis: {
+                                                min: 0,
+                                                max: 100
+                                        },
                                         legend: {
                                                 position: "nw"
                                         }
                                 } );
-                                $("#cpu").text(cpu[cpu.length-1][1]+"%");
-                                $("#mem").text(mem[mem.length-1][1].toFixed(2)+"%");
-                                $("#swap").text(swap[swap.length-1][1].toFixed(2)+"%");
-                                $("#tcp").text(tcp[tcp.length-1][1]);
+                                // FIX: Clamp displayed values and handle empty arrays
+                                $("#cpu").text(cpu.length ? clamp(cpu[cpu.length-1][1], 0, 100).toFixed(1)+"%" : "N/A");
+                                $("#mem").text(mem.length ? clamp(mem[mem.length-1][1], 0, 100).toFixed(2)+"%" : "N/A");
+                                $("#swap").text(swap.length ? clamp(swap[swap.length-1][1], 0, 100).toFixed(2)+"%" : "N/A");
+                                $("#tcp").text(tcp.length ? clamp(tcp[tcp.length-1][1], 0, 1000000) : "N/A");
                         });
 
                 }
