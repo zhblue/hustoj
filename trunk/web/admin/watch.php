@@ -34,8 +34,12 @@ $current_time_ms = time() * 1000;
 $one_week_ago_ms = $current_time_ms - (7 * 24 * 3600 * 1000);
 
 // 【核心修复】严格筛选：只保留过去1周内且合法的毫秒级时间戳，彻底清除脏数据
-$history = array_filter($history, function($sample) use ($one_week_ago_ms) {
-    return isset($sample[4]) && $sample[4] > $one_week_ago_ms;
+$history = array_filter($history, function($sample) use ($one_week_ago_ms, $current_time_ms) {
+    return is_array($sample)
+        && isset($sample[0], $sample[1], $sample[2], $sample[3], $sample[4])
+        && is_numeric($sample[4])
+        && $sample[4] >= $one_week_ago_ms
+        && $sample[4] <= $current_time_ms;
 });
 $history = array_values($history);
 $HL = count($history) - 1;
