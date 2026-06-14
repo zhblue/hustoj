@@ -81,7 +81,7 @@ if (function_exists('exec')) {
 
 // 拼装输出给图表的数据：历史轨迹 + 当前最新实时点（保证实时刷新的连贯性）
 $output_history = $history;
-if ($HL >= 0 && $history[$HL][4] < $current_time_ms) {
+if (!empty($info) && isset($info[4]) && ($HL < 0 || $history[$HL][4] < $info[4])) {
     array_push($output_history, $info);
 }
 
