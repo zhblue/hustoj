@@ -132,11 +132,14 @@ if (isset($_GET['json'])) {
     <script type="text/javascript">
         function update() {
             $.getJSON("<?php echo basename(__FILE__) ?>?json", function(result) {
-                let cpu = result[0];
-                let mem = result[1];
-                let swap = result[2];
-                let tcp = result[3];
-                
+let cpu = result[0] || [];
+let mem = result[1] || [];
+let swap = result[2] || [];
+let tcp = result[3] || [];
+if (!cpu.length || !mem.length || !swap.length || !tcp.length) {
+    $("#cpu,#mem,#swap,#tcp").text("N/A");
+    return;
+}
                 $.plot($("#panel"), [
                     { label: "FREE M: " + (<?php echo $total_mem ?> * mem[mem.length - 1][1] / 100).toFixed(0), data: mem, lines: { show: true } },
                     { label: "CPU: " + cpu[cpu.length - 1][1] + "%", data: cpu, bars: { show: true } },
