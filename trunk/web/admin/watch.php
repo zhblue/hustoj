@@ -67,8 +67,10 @@ if (function_exists('exec')) {
     $info[4] = $current_time_ms;
 
     // 5. 磁盘与总空间
-    $info[5] = round((disk_total_space("/") - disk_free_space("/")) / 1048576);
-    $info[6] = round(disk_total_space("/") / 1073741824);
+$disk_total = @disk_total_space("/");
+$disk_free = @disk_free_space("/");
+$info[5] = ($disk_total !== false && $disk_free !== false) ? round(($disk_total - $disk_free) / 1048576) : 0;
+$info[6] = ($disk_total !== false) ? round($disk_total / 1073741824) : 0;
 
     // 【性能优化】达到设定的时间间隔（1分钟）才允许写入历史文件
     if ($HL < 0 || ($current_time_ms - $history[$HL][4] >= $log_interval * 1000)) {
