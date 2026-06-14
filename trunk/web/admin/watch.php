@@ -9,6 +9,7 @@ if (!(isset($_SESSION[$OJ_NAME.'_'.'administrator']) || isset($_SESSION[$OJ_NAME
 
 // 高效读取系统内存信息
 $meminfo = @file_get_contents('/proc/meminfo');
+if ($meminfo === false) $meminfo = '';
 preg_match('/MemTotal:\s+(\d+) kB/', $meminfo, $mt);
 preg_match('/MemAvailable:\s+(\d+) kB/', $meminfo, $ma);
 if (empty($ma)) preg_match('/MemFree:\s+(\d+) kB/', $meminfo, $ma);
