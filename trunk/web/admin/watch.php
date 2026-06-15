@@ -9,6 +9,7 @@ if (!(isset($_SESSION[$OJ_NAME.'_'.'administrator']) || isset($_SESSION[$OJ_NAME
 
 // 高效读取系统内存信息
 $meminfo = @file_get_contents('/proc/meminfo');
+if ($meminfo === false) $meminfo = '';
 preg_match('/MemTotal:\s+(\d+) kB/', $meminfo, $mt);
 preg_match('/MemAvailable:\s+(\d+) kB/', $meminfo, $ma);
 if (empty($ma)) preg_match('/MemFree:\s+(\d+) kB/', $meminfo, $ma);
@@ -62,8 +63,10 @@ if (function_exists('exec')) {
     $info[4] = $current_time_ms;
 
     // 5. 磁盘与总空间
-    $info[5] = round((disk_total_space("/") - disk_free_space("/")) / 1048576);
-    $info[6] = round(disk_total_space("/") / 1073741824);
+$disk_total = @disk_total_space("/");
+$disk_free = @disk_free_space("/");
+$info[5] = ($disk_total !== false && $disk_free !== false) ? round(($disk_total - $disk_free) / 1048576) : 0;
+$info[6] = ($disk_total !== false) ? round($disk_total / 1073741824) : 0;
 
     // 【性能优化】达到设定的时间间隔（1分钟）才允许写入历史文件
     if ($HL < 0 || ($current_time_ms - $history[$HL][4] >= $log_interval * 1000)) {
@@ -76,7 +79,7 @@ if (function_exists('exec')) {
 
 // 拼装输出给图表的数据：历史轨迹 + 当前最新实时点（保证实时刷新的连贯性）
 $output_history = $history;
-if ($HL >= 0 && $history[$HL][4] < $current_time_ms) {
+if (!empty($info) && isset($info[4]) && ($HL < 0 || $history[$HL][4] < $info[4])) {
     array_push($output_history, $info);
 }
 
@@ -132,11 +135,14 @@ if (isset($_GET['json'])) {
     <script type="text/javascript">
         function update() {
             $.getJSON("<?php echo basename(__FILE__) ?>?json", function(result) {
-                let cpu = result[0];
-                let mem = result[1];
-                let swap = result[2];
-                let tcp = result[3];
-                
+let cpu = result[0] || [];
+let mem = result[1] || [];
+let swap = result[2] || [];
+let tcp = result[3] || [];
+if (!cpu.length || !mem.length || !swap.length || !tcp.length) {
+    $("#cpu,#mem,#swap,#tcp").text("N/A");
+    return;
+}
                 $.plot($("#panel"), [
                     { label: "FREE M: " + (<?php echo $total_mem ?> * mem[mem.length - 1][1] / 100).toFixed(0), data: mem, lines: { show: true } },
                     { label: "CPU: " + cpu[cpu.length - 1][1] + "%", data: cpu, bars: { show: true } },
