@@ -238,7 +238,7 @@ IP=`curl http://hustoj.com/ip.php`
 LIP=`ip a|grep inet|grep brd|head -1|awk '{print $2}'|awk -F/ '{print $1}'`
 
 sed -i 's/11.4.0/15.2.0/g' /home/judge/src/web/template/syzoj/faqs.php
-
+service nginx restart
 clear
 reset
 

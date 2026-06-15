@@ -236,6 +236,7 @@ else
 fi
 IP=`curl http://hustoj.com/ip.php`
 LIP=`ip a|grep inet|grep brd|head -1|awk '{print $2}'|awk -F/ '{print $1}'`
+service nginx restart
 clear
 reset
 
