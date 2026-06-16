@@ -3236,7 +3236,12 @@ int interact(int &lang, char *work_dir, double &time_lmt, int &usedtime,
 			buf_length=0;
 			if(fscanf(out,"%d",&num)!=1) return -2;
 			if(i==num){
-				if(fscanf(out,"%*[^\[][%f]",&m[num])!=1) return -3;
+				if(fscanf(out,"%*[^\[][%f]",&m[num])!=1){
+					FILE *df=fopen(DIFF_FILE,"a");
+					fprintf(df,"第%d题 标准答案格式不正确，分数需要用[ ]包裹 \n",i);
+					fclose(df);
+					return -3;
+				}
 				*total_mark+=m[num];
 				ans_length=getline(&ans[i],&buf_length,out);
 				for(int j=ans_length-1;'\n'==ans[i][j]||'\r'==ans[i][j];j--){
