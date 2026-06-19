@@ -537,7 +537,7 @@ function admin_mod(){
 			}
 			marked.parse(htm).then(html => { 
 				cur.html(html); 
-				MathJax.typeset(); 
+				 window.setTimeout("MathJax.typeset();",100);
 				<?php if ( $row['spj']>1 ){?>
 					window.setTimeout("generateMarkdownAutoSelect();",100);
 				<?php }?>
