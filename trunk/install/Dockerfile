@@ -72,3 +72,6 @@ RUN gcc -x c-header -O2 -std=c99 /usr/include/stdio.h
 #copy files for interactor and spj build from testlib.h
 COPY testlib.h /usr/include
 COPY makeout.sh /usr/bin/
+#Baota need next two lines
+#RUN useradd -u 1001 www
+#RUN chown www /home/judge
