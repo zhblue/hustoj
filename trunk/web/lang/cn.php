@@ -552,7 +552,7 @@
   $MSG_COIN_EARNED="做题获得$MSG_COIN";
   $MSG_COIN_BONUS="老师奖励$MSG_COIN";
   $MSG_COIN_SPENT="已消耗$MSG_COIN";
-  $MSG_COIN_BALANCE="当前${MSG_COIN}余额";
+  $MSG_COIN_BALANCE="当前{$MSG_COIN}余额";
   $MSG_NO_COIN="没有足够的$MSG_COIN";
   $MSG_PAID="已支付$MSG_COIN";
 
