@@ -140,6 +140,8 @@ if test -f  /.dockerenv ;then
 else
         sed -i "s/ubuntu:22.04/ubuntu:$OSRS/g" Dockerfile
 	sed -i 's|/usr/include/c++/9|/usr/include/c++/11|g' Dockerfile 
+	echo "RUN useradd -u 1001 www" >> Dockerfile
+	echo "RUN chown www /home/judge" >> Dockerfile
 	bash docker.sh
          sed -i "s/OJ_USE_DOCKER=0/OJ_USE_DOCKER=1/g" /home/judge/etc/judge.conf
          sed -i "s/OJ_PYTHON_FREE=0/OJ_PYTHON_FREE=1/g" /home/judge/etc/judge.conf
