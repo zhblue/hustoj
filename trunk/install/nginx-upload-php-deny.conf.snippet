@@ -1,0 +1,24 @@
+# Defense-in-depth: disable PHP execution inside /upload/ tree.
+#
+# Even if the PHP whitelist in problem_import_md.php is bypassed or a future
+# import path regresses, this rule prevents any *.php under /upload/ from being
+# executed by php-fpm. Falls through to a static 403 so logs still show the hit.
+#
+# Drop this inside the `server { ... }` block of the HUSTOJ nginx vhost
+# (e.g. /etc/nginx/sites-enabled/hustoj), ideally before any catch-all
+# `location ~ \.php$` block.
+
+location ^~ /upload/ {
+    # Belt-and-braces: explicitly deny PHP execution for any *.php under upload.
+    location ~ \.php$ {
+        deny all;
+        return 403;
+    }
+
+    # Optional: also block other server-side script extensions that could be
+    # interpreted by misconfigured handlers.
+    location ~ \.(phtml|phar|php[3-7]?|cgi|pl|py|jsp|asp|aspx)$ {
+        deny all;
+        return 403;
+    }
+}

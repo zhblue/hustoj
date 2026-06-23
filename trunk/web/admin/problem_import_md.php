@@ -152,8 +152,19 @@ function process_md_and_files($zip_path, $upload_dir)
                 $image_path = realpath($temp_dir . "/" . $original_path);
 
                 if (file_exists($image_path)) {
+                    // SECURITY: enforce an image-extension whitelist to prevent
+                    // arbitrary file upload (e.g. .php) that would lead to RCE
+                    // when nginx's default `location ~ \.php$` handler executes it.
+                    // (See audit memory/2026-06-21-hustoj-arbitrary-file-upload.md)
+                    $image_ext = strtolower(pathinfo($image_path, PATHINFO_EXTENSION));
+                    $allowed_image_exts = array('jpg', 'jpeg', 'png', 'gif', 'webp', 'bmp');
+                    if (!in_array($image_ext, $allowed_image_exts, true)) {
+                        // Drop the unsafe image reference silently; keep the
+                        // original markdown intact so the import can continue.
+                        return $matches[0];
+                    }
+
                     // Create a unique name for the uploaded image
-                    $image_ext = pathinfo($image_path, PATHINFO_EXTENSION);
                     $new_image_name = date("YmdHis") . "_" . uniqid() . "." . $image_ext;
                     $new_image_path = $upload_date_dir . "/" . $new_image_name;
 
