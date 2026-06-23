@@ -1,6 +1,11 @@
 <?php 
 ini_set("memory_limit", "1024M");  //set this bigger to import big files.
 ini_set("max_execution_time", "600");
+// 检查 Referer 是否存在，且主域名是否与当前服务器域名一致
+if (!isset($_SERVER['HTTP_REFERER']) || parse_url($_SERVER['HTTP_REFERER'], PHP_URL_HOST) !== $_SERVER['HTTP_HOST']) {
+    header('HTTP/1.1 403 Forbidden');
+    exit('Access Denied: Invalid Referer.');
+}
 require_once("../include/db_info.inc.php");
 require_once ("../include/my_func.inc.php");
 if(file_exists("../lang/$OJ_LANG.php")) require_once("../lang/$OJ_LANG.php");
