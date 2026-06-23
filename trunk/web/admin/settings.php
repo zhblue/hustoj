@@ -126,8 +126,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } elseif (is_numeric($val) && !preg_match('/[a-zA-Z]/', $val)) {
             $new_line = "static \${$var}={$val};";
         } else {
-            $val = str_replace('\\', '\\\\', $val);
-            $new_line = "static \${$var}=\"{$val}\";";
+            $exported = var_export($val, true);
+            $new_line = "static \${$var}={$exported};";
         }
 
         // 构建用于比较的 new_val（去掉引号，与 get_config_value 格式一致）
