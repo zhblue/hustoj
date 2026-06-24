@@ -5,11 +5,7 @@
 // Database credentials, OJ_DATA, SMTP_PASS and other critical settings
 // are intentionally excluded from editing for safety.
 // ---------------------------------------------------------------------------
-// 检查 Referer 是否存在，且主域名是否与当前服务器域名一致
-if (!isset($_SERVER['HTTP_REFERER']) || parse_url($_SERVER['HTTP_REFERER'], PHP_URL_PATH) !== '/admin/settings.php') {
-    header('HTTP/1.1 403 Forbidden');
-    exit('Access Denied: Invalid Referer Path.');
-}
+
 // 管理员权限检查
 require_once("../include/db_info.inc.php");
 require_once("../include/my_func.inc.php");
