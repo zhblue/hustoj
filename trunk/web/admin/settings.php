@@ -265,7 +265,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <code>$OJ_FANCY_MP3</code> <code>$OJ_UDPSERVER</code> <code>$OJ_JUDGE_HUB_PATH</code> 等。
             </div>
             <div class="info-row">
-                <span>📄 配置文件：<strong><?php echo htmlentities($config_file, ENT_QUOTES, 'UTF-8'); ?></strong></span>
+                <span>📄 配置文件：<strong><?php echo htmlentities(basename($config_file), ENT_QUOTES, 'UTF-8'); ?></strong></span>
                 <span>🎨 模板：<strong><?php echo cfg('OJ_TEMPLATE'); ?></strong></span>
                 <span>📛 系统名：<strong><?php echo cfg('OJ_NAME'); ?></strong></span>
             </div>
