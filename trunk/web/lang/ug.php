@@ -126,6 +126,7 @@ $MSG_ABSENT="Absent";
 	$MSG_REPEAT_PASSWORD="مەخپى نۇمۇرنى قايتىلاش";
 	$MSG_SCHOOL="مەكتەپ";
         $MSG_GROUP_NAME="Group";
+        $MSG_PARENT_PHONE="ئاتا-ئانسىنىڭ تېلېفونى";
 	$MSG_EMAIL="ئېلخەت";
 
 	$MSG_CANNOT_EMPTY="بوش بولمايدۇ";

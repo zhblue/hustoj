@@ -64,7 +64,13 @@ begin
     end if;
 end if;
 end;//
+
 delimiter ;
+
+# 家长手机号字段（xiaoke.php 家长查询使用）
+alter table users add column parent_phone varchar(20) not null default '' after school;
+alter table users add index idx_parent_phone(parent_phone);
+
 #create fulltext index problem_title_source_index on problem(title,source);
 
                                                                                                          

@@ -35,14 +35,14 @@ $trash="";
 if(isset($_GET['keyword']) && $_GET['keyword']!=""){
   $gkeyword = $_GET['keyword'];
   $keyword = "%$gkeyword%";
-  $sql = "select `user_id`,`nick`,email,`accesstime`,`reg_time`,`expiry_date`,`ip`,`school`,`group_name`,`defunct`,`coin_earned`,`coin_bonus`,`coin_spent` FROM `users` WHERE (user_id LIKE ?) OR (nick LIKE ?) OR (school LIKE ?)  OR (group_name LIKE ?) or (ip like ?) ORDER BY `user_id` DESC";
-  $result = pdo_query($sql,$keyword,$keyword,$keyword,$keyword,$keyword);
+  $sql = "select `user_id`,`nick`,email,`accesstime`,`reg_time`,`expiry_date`,`ip`,`school`,`group_name`,`parent_phone`,`defunct`,`coin_earned`,`coin_bonus`,`coin_spent` FROM `users` WHERE (user_id LIKE ?) OR (nick LIKE ?) OR (school LIKE ?)  OR (group_name LIKE ?) OR (parent_phone LIKE ?) or (ip like ?) ORDER BY `user_id` DESC";
+  $result = pdo_query($sql,$keyword,$keyword,$keyword,$keyword,$keyword,$keyword);
 }else if(isset($_GET['trash'])){
   $trash="&trash";
-  $sql = "select `user_id`,`nick`,email,`accesstime`,`reg_time`,`expiry_date`,`ip`,`school`,`group_name`,`defunct`,`coin_earned`,`coin_bonus`,`coin_spent` FROM `users` where defunct='Y' ORDER BY `accesstime` DESC LIMIT $sid, $idsperpage";
+  $sql = "select `user_id`,`nick`,email,`accesstime`,`reg_time`,`expiry_date`,`ip`,`school`,`group_name`,`parent_phone`,`defunct`,`coin_earned`,`coin_bonus`,`coin_spent` FROM `users` where defunct='Y' ORDER BY `accesstime` DESC LIMIT $sid, $idsperpage";
   $result = pdo_query($sql);
 }else{
-  $sql = "select `user_id`,`nick`,email,`accesstime`,`reg_time`,`expiry_date`,`ip`,`school`,`group_name`,`defunct`,`coin_earned`,`coin_bonus`,`coin_spent` FROM `users` where defunct='N' ORDER BY `accesstime` DESC LIMIT $sid, $idsperpage";
+  $sql = "select `user_id`,`nick`,email,`accesstime`,`reg_time`,`expiry_date`,`ip`,`school`,`group_name`,`parent_phone`,`defunct`,`coin_earned`,`coin_bonus`,`coin_spent` FROM `users` where defunct='N' ORDER BY `accesstime` DESC LIMIT $sid, $idsperpage";
   $result = pdo_query($sql);
 }
 ?>
@@ -65,6 +65,7 @@ if(isset($_GET['keyword']) && $_GET['keyword']!=""){
       <th><?php echo $MSG_EMAIL?></th>
       <th><?php echo $MSG_SCHOOL?></th>
       <th><?php echo $MSG_GROUP_NAME?></th>
+      <th><?php echo $MSG_PARENT_PHONE?></th>
       <th><?php echo $MSG_LAST_LOGIN?></th>
       <th><?php echo $MSG_REGISTER?></th>
       <th><?php echo $MSG_EXPIRY_DATE?></th>
@@ -95,6 +96,8 @@ if(isset($_GET['keyword']) && $_GET['keyword']!=""){
         echo "<td><span fd='school' user_id='".$row['user_id']."'>".$row['school']."</span></td>";
         if($row['group_name']=="") $row['group_name']="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
         echo "<td><span fd='group_name' user_id='".$row['user_id']."'>".$row['group_name']."</span></td>";
+        if($row['parent_phone']=="") $row['parent_phone']="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+        echo "<td><span fd='parent_phone' user_id='".$row['user_id']."'>".$row['parent_phone']."</span></td>";
         echo "<td>".$row['accesstime']."</td>";
         echo "<td>".$row['reg_time']."</td>";
         $color="red";
@@ -144,6 +147,7 @@ if(!(isset($_GET['keyword']) && $_GET['keyword']!=""))
 ?>
 
 </div>
+<script src="../include/qrcode.min.js"></script>
 <script>
 function admin_mod(){
         $("span[fd=group_name]").each(function(){
@@ -162,6 +166,29 @@ function admin_mod(){
                                         sp.html(newgroup_name);
                                 });
 
+                        });
+                });
+        });
+        $("span[fd=parent_phone]").each(function(){
+                let sp=$(this);
+                let user_id=$(this).attr('user_id');
+                $(this).dblclick(function(){
+                        let parent_phone=sp.text().trim();
+                        sp.html("<form onsubmit='return false;'><input type=hidden name='m' value='user_update_parent_phone'><input type='hidden' name='user_id' value='"+user_id+"'><input type='text' name='parent_phone' value='"+parent_phone+"' selected='true' class='input-large' size=20 pattern='1[3-9][0-9]{9}' placeholder='11位手机号'></form>");
+                        let ipt=sp.find("input[name=parent_phone]");
+                        ipt.focus();
+                        ipt[0].select();
+                        sp.find("input").change(function(){
+                                let newphone=sp.find("input[name=parent_phone]").val().trim();
+                                if(newphone!=='' && !/^1[3-9][0-9]{9}$/.test(newphone)){
+                                        alert('<?php echo $MSG_PARENT_PHONE; ?>: ' + newphone);
+                                        sp.html(parent_phone || '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;');
+                                        return;
+                                }
+                                $.post("ajax.php",sp.find("form").serialize()).done(function(){
+                                        console.log("new parent_phone"+newphone);
+                                        sp.html(newphone || '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;');
+                                });
                         });
                 });
         });
@@ -274,6 +301,65 @@ function admin_mod(){
 }
 $(document).ready(function(){
         admin_mod();
+        // 家长手机号悬浮 → 鼠标附近弹出查询二维码
+        initParentPhoneQR();
 });
+
+// 悬浮 QR 浮层（鼠标附近弹出该学员的消课查询二维码）
+function initParentPhoneQR(){
+    // 计算 xiaoke.php 的绝对 URL（适应子目录部署）
+    var basePath = window.location.pathname.replace(/\/admin\/.*$/, '/');
+    var baseUrl  = window.location.protocol + '//' + window.location.host + basePath;
+
+    $("span[fd=parent_phone]").each(function(){
+        var sp = $(this);
+        var user_id = sp.attr('user_id');
+        var phone = sp.text().trim();
+        if(!phone || !/^1[3-9][0-9]{9}$/.test(phone)) return;  // 没手机号就不显示
+
+        sp.hover(function(e){
+            // mouseenter: 创建浮层 + 生成 QR
+            if($('#xiaoke-qr-float').length) $('#xiaoke-qr-float').remove();
+            var qrd = $('<div id="xiaoke-qr-float"></div>').css({
+                position: 'fixed',
+                top:  e.clientY + 16,
+                left: e.clientX + 16,
+                'z-index': 99999,
+                background: '#fff',
+                padding: '10px',
+                border: '1px solid #888',
+                'border-radius': '6px',
+                'box-shadow': '0 4px 16px rgba(0,0,0,0.25)',
+                cursor: 'default'
+            }).appendTo('body');
+
+            var url = baseUrl + 'xiaoke.php?mode=parent'
+                    + '&phone=' + encodeURIComponent(phone)
+                    + '&student=' + encodeURIComponent(user_id);
+            try {
+                new QRCode(qrd[0], {
+                    text: url,
+                    width: 180, height: 180,
+                    colorDark: '#000', colorLight: '#fff',
+                    correctLevel: QRCode.CorrectLevel.M
+                });
+            } catch(err) {
+                qrd.html('<div style="color:red;font-size:12px">QR 生成失败</div>');
+            }
+            // 加个说明文字
+            qrd.append('<div style="font-size:11px;color:#666;margin-top:6px;text-align:center">扫码查 <b>'
+                + $('<div>').text(user_id).html() + '</b> 消课</div>');
+        }, function(){
+            // mouseleave: 移除浮层
+            $('#xiaoke-qr-float').remove();
+        }).mousemove(function(e){
+            // 跟随鼠标
+            var qrd = $('#xiaoke-qr-float');
+            if(qrd.length){
+                qrd.css({ top: e.clientY + 16, left: e.clientX + 16 });
+            }
+        });
+    });
+}
 
 </script>

@@ -132,6 +132,7 @@
 	$MSG_REPEAT_PASSWORD="重复密码";
 	$MSG_SCHOOL="学校";
         $MSG_GROUP_NAME="班级/小组";
+        $MSG_PARENT_PHONE="家长手机";
 	$MSG_EMAIL="电子邮件";
 	$MSG_CANNOT_EMPTY="不能为空";
 	$MSG_WRONG_FORMAT="格式错误";

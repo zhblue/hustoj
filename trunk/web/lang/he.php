@@ -110,6 +110,7 @@
 	$MSG_REPEAT_PASSWORD="חזור על הסיסמה";
 	$MSG_SCHOOL="בית ספר";
 	$MSG_GROUP_NAME="$MSG_GROUP_NAME";
+	$MSG_PARENT_PHONE="$MSG_PARENT_PHONE";
 	$MSG_EMAIL="אימייל";
 
 	$MSG_CANNOT_EMPTY="לא יכול להיות ריק";

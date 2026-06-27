@@ -110,6 +110,7 @@
 	$MSG_REPEAT_PASSWORD="Нууц үгийг давт";
 	$MSG_SCHOOL="Сургууль";
 	$MSG_GROUP_NAME="Group";
+	$MSG_PARENT_PHONE="Эцэг эхийн утас";
 	$MSG_EMAIL="И-мэйл";
 
 	$MSG_CANNOT_EMPTY="хоосон байж болохгүй";

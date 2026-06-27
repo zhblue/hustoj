@@ -125,6 +125,7 @@
  $MSG_REPEAT_PASSWORD ="重複密碼";
  $MSG_SCHOOL ="學校";
  $MSG_GROUP_NAME="班級/小組";
+ $MSG_PARENT_PHONE="家長手機";
  $MSG_EMAIL ="電子郵件";
  $MSG_REG_INFO ="設定註冊資訊";
  $MSG_VCODE ="驗證碼";
