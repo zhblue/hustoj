@@ -205,7 +205,8 @@ CREATE TABLE IF NOT EXISTS `users` (
   `coin_earned` int(11) NOT NULL DEFAULT '0' COMMENT '做题获得的累计积分',
   `coin_bonus` int(11) NOT NULL DEFAULT '0' COMMENT '老师奖励的累计积分',
   `coin_spent` int(11) NOT NULL DEFAULT '0' COMMENT '已消耗的累计积分',
-  PRIMARY KEY (`user_id`)
+  PRIMARY KEY (`user_id`),
+  KEY  idx_parent_phone(parent_phone)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE IF NOT EXISTS `online` (
