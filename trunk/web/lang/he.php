@@ -109,8 +109,7 @@
 	$MSG_PASSWORD="סיסמה";
 	$MSG_REPEAT_PASSWORD="חזור על הסיסמה";
 	$MSG_SCHOOL="בית ספר";
-	$MSG_GROUP_NAME="$MSG_GROUP_NAME";
-	$MSG_EMAIL="אימייל";
+	$MSG_PARENT_PHONE="טלפון הורה";
 
 	$MSG_CANNOT_EMPTY="לא יכול להיות ריק";
 	$MSG_WRONG_FORMAT="הפורמט לא חוקי";

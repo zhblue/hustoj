@@ -111,6 +111,7 @@
 	$MSG_REPEAT_PASSWORD="تکرار رمز عبور";
 	$MSG_SCHOOL="مدرسه";
         $MSG_GROUP_NAME="Group";
+        $MSG_PARENT_PHONE="تلفن والدین";
 	$MSG_EMAIL="ایمیل";
 
 	$MSG_CANNOT_EMPTY="نمی تواند خالی باشد";

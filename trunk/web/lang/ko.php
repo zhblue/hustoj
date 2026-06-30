@@ -119,6 +119,7 @@
 	$MSG_REPEAT_PASSWORD="비밀번호 확인";
 	$MSG_SCHOOL="소속/학교";
     $MSG_GROUP_NAME="그룹";
+    $MSG_PARENT_PHONE="학부모 전화";
 	$MSG_EMAIL="이메일";
 
 	$MSG_CANNOT_EMPTY="비어 있을 수 없습니다";

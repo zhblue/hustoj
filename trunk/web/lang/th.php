@@ -112,6 +112,7 @@
 	$MSG_REPEAT_PASSWORD="รหัสผ่าน (ซ้ำ)";
 	$MSG_SCHOOL="สถาบัน";
         $MSG_GROUP_NAME="Group";
+        $MSG_PARENT_PHONE="เบอร์โทรผู้ปกครอง";
 	$MSG_EMAIL="อีเมล์";
 
 	$MSG_CANNOT_EMPTY="ไม่สามารถเว้นว่างได้";

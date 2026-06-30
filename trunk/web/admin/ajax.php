@@ -91,11 +91,23 @@ if($_SERVER['REQUEST_METHOD']=="POST"){
                 $sql="update users set group_name=? where user_id=?";
                 echo pdo_query($sql,$group_name,$user_id);
 	}
+	if($m=="user_update_parent_phone"  && ( isset($_SESSION[$OJ_NAME.'_administrator']) )){
+                $user_id=$_POST['user_id'];
+                $parent_phone=trim($_POST['parent_phone']);
+                // 兜底：服务端也校验手机号格式
+                if($parent_phone!=='' && !preg_match('/^1[3-9][0-9]{9}$/', $parent_phone)){
+                        echo "ERR: invalid phone";
+                        return;
+                }
+                $sql="update users set parent_phone=? where user_id=?";
+                echo pdo_query($sql,$parent_phone,$user_id);
+	}
 	 */
 	// try_ajax("user","nick","administrator");
 	try_ajax("user","expiry_date","administrator");
 	try_ajax("user","school","administrator");
 	try_ajax("user","group_name","administrator");
+	try_ajax("user","parent_phone","administrator");
 	try_ajax("user","coin_bonus","administrator");
 	try_ajax("problem","coin","administrator");
 	try_ajax("problem","coin","problem_editor");

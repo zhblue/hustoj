@@ -198,13 +198,15 @@ CREATE TABLE IF NOT EXISTS `users` (
   `expiry_date` date NOT NULL DEFAULT '2099-01-01',	
   `nick` varchar(20) NOT NULL DEFAULT '',
   `school` varchar(20) NOT NULL DEFAULT '',
+  `parent_phone` varchar(20) NOT NULL DEFAULT '' COMMENT '家长手机号',
   `group_name` varchar(16) NOT NULL DEFAULT '',
   `activecode` varchar(16) NOT NULL DEFAULT '',
   `starred` int(11) NOT NULL DEFAULT '0',
   `coin_earned` int(11) NOT NULL DEFAULT '0' COMMENT '做题获得的累计积分',
   `coin_bonus` int(11) NOT NULL DEFAULT '0' COMMENT '老师奖励的累计积分',
   `coin_spent` int(11) NOT NULL DEFAULT '0' COMMENT '已消耗的累计积分',
-  PRIMARY KEY (`user_id`)
+  PRIMARY KEY (`user_id`),
+  KEY  idx_parent_phone(parent_phone)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE IF NOT EXISTS `online` (

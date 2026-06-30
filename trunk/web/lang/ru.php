@@ -121,6 +121,7 @@
  $MSG_REPEAT_PASSWORD = " Повторить пароль ";
  $MSG_SCHOOL = " школа ";
  $MSG_GROUP_NAME="Group";
+ $MSG_PARENT_PHONE="Телефон родителя";
  $MSG_EMAIL = " электронная почта ";
  $MSG_REG_INFO =" Установить регистрационную информацию ";
  $MSG_VCODE = " Проверочный код ";

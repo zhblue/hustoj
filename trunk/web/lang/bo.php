@@ -110,6 +110,7 @@
 	$MSG_REPEAT_PASSWORD="གསང་ཨང་་བསྐྱར།";
 	$MSG_SCHOOL="སློབ་གྲྭ།";
 	$MSG_GROUP_NAME="Group";
+	$MSG_PARENT_PHONE="Parent Phone";
 	$MSG_EMAIL="ཡིག་ཟམ།";
 
 	$MSG_CANNOT_EMPTY="cannot be empty";

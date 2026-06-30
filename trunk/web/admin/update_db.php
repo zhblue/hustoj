@@ -271,6 +271,9 @@ $csql[62]="";
 $tsql[63]="ALTER TABLE $DB_NAME.`users` ADD COLUMN `coin_earned` INT UNSIGNED NOT NULL DEFAULT 0 COMMENT '做题获得的积分', ADD COLUMN `coin_bonus` INT UNSIGNED NOT NULL DEFAULT 0 COMMENT '老师奖励的积分', ADD COLUMN `coin_spent` INT UNSIGNED NOT NULL DEFAULT 0 COMMENT '已消耗的积分';";
 $csql[63]="ALTER TABLE $DB_NAME.`problem` ADD COLUMN `coin` INT UNSIGNED NOT NULL DEFAULT 1 COMMENT 'AC此题可得的金币数' AFTER `defunct`;";
 
+$tsql[64]="ALTER TABLE $DB_NAME.`users` ADD COLUMN `parent_phone` VARCHAR(20) NOT NULL DEFAULT '' COMMENT '家长手机号' AFTER `school`;";
+$csql[64]="ALTER TABLE $DB_NAME.`users` ADD INDEX `idx_parent_phone` (`parent_phone`);";
+
 // 删除6个月以前的非正确源码，优化数据库空间。
 // delete from source_code  where solution_id in (select solution_id from solution where result>4 and  in_date<date_sub(now(),interval 6 month) ); //
 if(isset($_POST['do'])){  

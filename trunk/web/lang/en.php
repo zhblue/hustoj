@@ -117,6 +117,7 @@
 	$MSG_REPEAT_PASSWORD="Repeat Password";
 	$MSG_SCHOOL="School";
         $MSG_GROUP_NAME="Group";
+        $MSG_PARENT_PHONE="Parent Phone";
 	$MSG_EMAIL="Email";
 	$MSG_CANNOT_EMPTY="cannot be empty";
 	$MSG_WRONG_FORMAT="format is invalid";
