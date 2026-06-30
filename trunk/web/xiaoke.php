@@ -96,9 +96,7 @@ $matched = null;          // 用户信息 [user_id, nick, school, parent_phone]
 $cur_user = '';           // 当前登录用户
 $is_privileged = false;
 
-if ($mode == 'parent' || $mode == 'csv') {
-    // 家长模式 / CSV 导出 — 不需要登录
-    $phone   = isset($_GET['phone'])   ? trim($_GET['phone'])   : '';
+if ($mode == 'parent' || ($mode == 'csv' && isset($_GET['phone']) && isset($_GET['student']))) {
     $student = isset($_GET['student']) ? trim($_GET['student']) : '';
     if (!preg_match('/^1[3-9]\d{9}$/', $phone)) {
         $err = "请输入 11 位有效手机号";
