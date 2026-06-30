@@ -2,9 +2,21 @@
 ini_set("memory_limit", "1024M");  //set this bigger to import big files.
 ini_set("max_execution_time", "600");
 // 检查 Referer 是否存在，且主域名是否与当前服务器域名一致
-if (!isset($_SERVER['HTTP_REFERER']) || parse_url($_SERVER['HTTP_REFERER'], PHP_URL_HOST) !== $_SERVER['HTTP_HOST']) {  // 这里的$_SERVER['HTTP_HOST'] 可能需要修改为实际访问时"主机名"/"IP"
+// 1. 在这里定义你的白名单（支持域名、IP或带端口的地址）
+$allowed_hosts = [
+    $_SERVER['HTTP_HOST'],     // 默认允许当前访问的主机名
+    'www.yourdomain.com',      // 你的主域名
+    '127.0.0.1',               // 本地测试IP
+    'localhost'
+];
+
+// 2. 获取 Referer 中的主机名
+$referer_host = isset($_SERVER['HTTP_REFERER']) ? parse_url($_SERVER['HTTP_REFERER'], PHP_URL_HOST) : null;
+
+// 3. 验证是否在白名单中
+if (!$referer_host || !in_array($referer_host, $allowed_hosts)) {
     header('HTTP/1.1 403 Forbidden');
-    exit('Access Denied: Invalid Referer.\n 如果使用了反代或者穿透，可能在admin/admin-header.php第5行被拦截，请根据实际访问的主机名修改前面的判断');
+    exit("Access Denied: Invalid Referer.\n如果使用了反代或者穿透，请检查当前访问域名是否已加入白名单。");
 }
 require_once("../include/db_info.inc.php");
 require_once ("../include/my_func.inc.php");
