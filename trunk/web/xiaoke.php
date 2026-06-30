@@ -281,7 +281,9 @@ $form_action = "xiaoke.php";
   <form class="form-inline" method="get" action="<?php echo $form_action; ?>" style="margin-bottom:16px">
     <input type="hidden" name="mode" value="<?php echo htmlspecialchars($mode); ?>">
     <?php if ($mode == 'user') { ?>
-      <input type="hidden" name="user_id" value="<?php echo htmlspecialchars($matched ? $matched['user_id'] : ''); ?>">
+      <label>学员账号&nbsp;<input type="text" name="user_id" required
+        value="<?php echo htmlspecialchars($matched ? $matched['user_id'] : (isset($_GET['user_id']) ? $_GET['user_id'] : '')); ?>" class="form-control" placeholder="user_id"></label>
+      &nbsp;
     <?php } ?>
     <?php if ($mode == 'parent') { ?>
       <label>家长手机号&nbsp;<input type="tel" name="phone" maxlength="11" required
