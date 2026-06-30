@@ -9,8 +9,8 @@
  *   csv     ?...同上，导出 CSV
  *
  * 共用参数：
- *   start=YYYY-MM-DD  起（默认本月）
- *   end=YYYY-MM-DD    止（默认今天）
+ *   start=YYYY-MM-DD  起（默认 -1 month）
+ *   end=YYYY-MM-DD    止（默认 +1 year）
  *   min_ac=N          最少 AC 数（默认 1）
  *
  * 数据访问全部走 HUSTOJ 自带 pdo_query（PDO prepared statements）。
