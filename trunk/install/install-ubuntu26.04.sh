@@ -59,7 +59,7 @@ apt-get install -y libmysql++-dev
 apt-get install -y libmariadb-dev-compat libmariadb-dev
 PHP_VER=`apt-cache search php-fpm|grep -e '[[:digit:]]\.[[:digit:]]' -o`
 if [ "$PHP_VER" = "" ] ; then PHP_VER="8.5"; fi
-for pkg in bzip2 flex fail2ban net-tools make g++ php$PHP_VER-fpm nginx php$PHP_VER-mysql php$PHP_VER-common php$PHP_VER-gd php$PHP_VER-zip php$PHP_VER-mbstring php$PHP_VER-xml php$PHP_VER-curl php$PHP_VER-intl php$PHP_VER-xmlrpc php$PHP_VER-soap php-memcache php-memcached php-yaml php-apcu tzdata
+for pkg in bzip2 flex fail2ban net-tools make g++ php$PHP_VER-fpm nginx php$PHP_VER-mysql php$PHP_VER-common php$PHP_VER-gd php$PHP_VER-zip php$PHP_VER-mbstring php$PHP_VER-xml php$PHP_VER-curl php$PHP_VER-intl php$PHP_VER-xmlrpc php$PHP_VER-soap php-memcache php-memcached php-yaml php-apcu php-redis redis-server tzdata
 do
         while ! apt-get install -y "$pkg"
         do
@@ -159,6 +159,7 @@ fi
 /etc/init.d/nginx restart
 sed -i "s/post_max_size = 8M/post_max_size = 500M/g" /etc/php/$PHP_VER/fpm/php.ini
 sed -i "s/upload_max_filesize = 2M/upload_max_filesize = 500M/g" /etc/php/$PHP_VER/fpm/php.ini
+sed 's|session.save_handler *= *files|session.save_handler = redis\nsession.save_path="tcp://127.0.0.1:6379"|'  /etc/php/$PHP_VER/fpm/php.ini
 if grep 'date.timezone = PRC' /etc/php/$PHP_VER/fpm/php.ini ; then
     echo "date.timezone = PRC is already set ... "
 else
