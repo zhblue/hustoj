@@ -2491,7 +2491,7 @@ function save_upload($temp_file,$filename,$dir_dest) {
                     $out = 1;
                 } else $out = 2;
             }
-	if(file_exists("/usr/bin/dos2unix")&&function_exists("system")) system("/usr/bin/dos2unix ".$file);
+	if(file_exists("/usr/bin/dos2unix")&&function_exists("system")) system("/usr/bin/dos2unix ".escapeshellarg($file));
         } else $out = 3;
     } else $out = 4;
     return $out;
@@ -4408,10 +4408,8 @@ function config_form(){
     $Warning = "";
     switch ($config_action){
         case 1:
-            if ($fh = fopen("http://phpfm.sf.net/latest.php","r")){
-                $data = "";
-                while (!feof($fh)) $data .= fread($fh,1024);
-                fclose($fh);
+            $data = @file_get_contents("https://phpfm.sf.net/latest.php");
+            if ($data!==false){
                 $data = unserialize($data);
                 $ChkVerWarning = "<tr><td align=right> ";
                 if (is_array($data)&&count($data)){
