@@ -4408,6 +4408,7 @@ function config_form(){
     $Warning = "";
     switch ($config_action){
         case 1:
+		/*
             $data = @file_get_contents("https://phpfm.sf.net/latest.php");
             if ($data!==false){
                 $data = unserialize($data);
@@ -4420,6 +4421,7 @@ function config_form(){
                     else $ChkVerWarning .= "<td><font color=red>".et('ChkVerNotAvailable')."</font>";
                 } else $ChkVerWarning .= "<td><font color=red>".et('ChkVerError')."</font>";
             } else $ChkVerWarning .= "<td><font color=red>".et('ChkVerError')."</font>";
+			*/
         break;
         case 2:
             $reload = false;
