@@ -16,3 +16,157 @@ $ball_color=Array('#66cccc','red','green','pink','yellow','violet','magenta','ma
 $ball_name=Array('蒂芙妮蓝','红','green','pink','yellow','violet','magenta','maroon','olive','chocolate');
 $color_theme=Array("default","primary","success","info","warning","danger");
 $contest_locks=array($MSG_SOURCE_NOT_ALLOWED_FOR_EXAM , $MSG_FORBIDDEN.$MSG_DOWNLOAD , $MSG_FORBIDDEN.$MSG_RANKLIST , $MSG_FORBIDDEN.$MSG_OTHERS.$MSG_CONTEST_STATUS , $MSG_NOIP_WARNING, $MSG_FORBIDDEN.$MSG_SHOW_DIFF,$MSG_FORBIDDEN.$MSG_UPSOLVING,$MSG_ONLY_LAST_SUBMISSION,$MSG_FORBIDDEN.$MSG_AI_HELP);
+$hustoj_zh_columns = [
+    // ===== users 用户表 =====
+    'user_id'        => '用户名',
+    'email'          => '邮箱',
+    'submit'         => '提交数',
+    'solved'         => '通过数',
+    'defunct'        => '封禁',
+    'ip'             => '最后登录IP',
+    'accesstime'     => '最后访问时间',
+    'volume'         => '默认题册',
+    'language'       => '默认语言',
+    'password'       => '密码',
+    'reg_time'       => '注册时间',
+    'expiry_date'    => '账号到期日',
+    'nick'           => '昵称',
+    'school'         => '学校',
+    'parent_phone'   => '家长手机',
+    'group_name'     => '班级',
+    'activecode'     => '激活码',
+    'starred'        => '收藏数',
+    'coin_earned'    => '做题积分',
+    'coin_bonus'     => '奖励积分',
+    'coin_spent'     => '已用积分',
+
+    // ===== solution 提交记录 =====
+    'solution_id'    => '提交ID',
+    'problem_id'     => '题号',
+    'time'           => '耗时(毫秒)',
+    'memory'         => '内存(KB)',
+    'in_date'        => '提交时间',
+    'result'         => '判题结果',
+    'language'       => '语言',
+    'contest_id'     => '所属比赛',
+    'valid'          => '有效提交',
+    'num'            => '场内序号',
+    'code_length'    => '代码长度',
+    'judgetime'      => '判题时间',
+    'pass_rate'      => '通过率',
+    'first_time'     => '一血标记',
+    'lint_error'     => '静态检查错误数',
+    'judger'         => '判题机',
+    'remote_oj'      => '远端OJ',
+    'remote_id'      => '远端题号',
+
+    // ===== problem 题目表 =====
+    'title'          => '标题',
+    'description'    => '题目描述',
+    'input'          => '输入说明',
+    'output'         => '输出说明',
+    'sample_input'   => '样例输入',
+    'sample_output'  => '样例输出',
+    'spj'            => '特判',
+    'hint'           => '提示',
+    'source'         => '来源',
+    'time_limit'     => '时间限制(秒)',
+    'memory_limit'   => '内存限制(KB)',
+    'accepted'       => '通过次数',
+    'coin'           => '题目积分',
+
+    // ===== contest 比赛表 =====
+    'start_time'     => '开始时间',
+    'end_time'       => '结束时间',
+    'description'    => '比赛说明',
+    'private'        => '私有',
+    'langmask'       => '可用语言掩码',
+    'password'       => '比赛密码',   // 与 users.password 冲突，见 alias
+    'contest_type'   => '比赛类型',
+    'subnet'         => 'IP段限制',
+
+    // ===== contest_problem 比赛题目关联 =====
+    'c_accepted'     => '比赛通过数',
+    'c_submit'       => '比赛提交数',
+
+    // ===== news 公告表 =====
+    'news_id'        => '公告ID',
+    'content'        => '内容',
+    'importance'     => '重要级别',
+    'menu'           => '菜单显示',
+
+    // ===== mail 站内信 =====
+    'mail_id'        => '邮件ID',
+    'to_user'        => '收件人',
+    'from_user'      => '发件人',
+    'new_mail'       => '未读',
+    'reply'          => '回复标记',
+
+    // ===== privilege 权限表 =====
+    'rightstr'       => '权限标识',
+    'valuestr'       => '权限值',
+
+    // ===== loginlog 登录日志 =====
+    'log_id'         => '日志ID',
+    'log_password'   => '登录尝试密码',  // loginlog.password 别名（避免覆盖 users.password）
+
+    // ===== reply 主题回复 =====
+    'rid'            => '回复ID',
+    'author_id'      => '作者',
+    'topic_id'       => '所属主题',
+    'status'         => '状态',
+
+    // ===== topic 讨论主题 =====
+    'tid'            => '主题ID',
+    'top_level'      => '置顶',
+    'cid'            => '所属比赛',
+    'pid'            => '所属题目',
+    'author_id'      => '主题作者',   // 与 reply.author_id 同名，按 reply 优先
+
+    // ===== compileinfo / runtimeinfo 判题错误 =====
+    'error'          => '错误信息',
+    'answer'         => 'AI答案',     // solution_ai_answer
+
+    // ===== custominput 自定输入 =====
+    'input_text'     => '自定义输入',
+
+    // ===== printer 打印任务 =====
+    'printer_id'     => '打印ID',
+    'worktime'       => '完成时间',
+    'printer'        => '打印机名',
+    'printer_content'=> '打印内容',  // printer.content 别名
+
+    // ===== balloon 气球 =====
+    'balloon_id'     => '气球ID',
+    'sid'            => '提交ID',
+
+    // ===== share_code 代码分享 =====
+    'share_id'       => '分享ID',
+    'share_code'     => '分享代码',
+    'share_time'     => '分享时间',
+
+    // ===== online 在线会话 =====
+    'hash'           => '会话哈希',
+    'ua'             => '浏览器标识',
+    'refer'          => '来源页',
+    'lastmove'       => '最近活动',
+    'firsttime'      => '首次访问',
+    'uri'            => '请求地址',
+
+    // ===== sim 代码查重 =====
+    's_id'           => '比对提交ID',
+    'sim_s_id'       => '重复提交ID',
+    'sim'            => '相似度',
+
+    // ===== source_code 源码 =====
+    'source'         => '源代码',
+
+    // ===== openai_task_queue AI 任务队列 =====
+    'id'             => '任务ID',
+    'task_type'      => '任务类型',
+    'request_body'   => '请求参数',
+    'response_body'  => '返回结果',
+    'error_message'  => '错误信息',
+    'create_date'    => '创建时间',
+    'update_date'    => '更新时间',
+];
