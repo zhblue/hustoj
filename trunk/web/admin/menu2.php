@@ -120,7 +120,9 @@
         <li><a href="update_db.php" target="main" title="<?php echo $MSG_HELP_UPDATE_DATABASE?>"><b><?php echo $MSG_SYSTEM."-".$MSG_UPDATE_DATABASE?></b></a></li>
         <li><a href="backup.php" target="main" title="<?php echo $MSG_HELP_BACKUP_DATABASE?>"><b><?php echo $MSG_SYSTEM."-".$MSG_BACKUP_DATABASE?></b></a></li>
         <li><a href="ranklist_export.php" target="main" title="<?php echo $MSG_EXPORT.$MSG_RANKLIST ?>"><b><?php echo  $MSG_EXPORT.$MSG_RANKLIST ?></b></a></li>
-    </ul>
+        <li><a href="aidba.php" target="main" title="AI-DBA"><b><?php echo "AI-DBA" ?></b></a></li>
+
+                                                          </ul>
   </div>
 <?php }?>
 
