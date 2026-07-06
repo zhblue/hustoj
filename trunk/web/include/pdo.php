@@ -5,7 +5,7 @@ function rdo_query($sql){
     $args = func_get_args();       //获得传入的所有参数的数组
     $args = array_slice($args,1,--$num_args);
     if(isset($args[0])&&is_array($args[0])) $args=$args[0]; 
-    global $DB_RO_HOST,$DB_RO_NAME,$DB_RO_USER,$DB_RO_PASS,$db_ro_h,$OJ_TEMPLATE;
+    global $DB_RO_HOST,$DB_RO_NAME,$DB_RO_USER,$DB_RO_PASS,$db_ro_h,$OJ_TEMPLATE,$DB_HOST,$DB_NAME,$DB_USER,$DB_PASS;
     $DB_RO_HOST=$DB_RO_HOST??$DB_HOST; 
     $DB_RO_NAME=$DB_RO_NAME??$DB_NAME;
     $DB_RO_USER=$DB_RO_USER??$DB_USER;
