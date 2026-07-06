@@ -2,6 +2,14 @@
 if(basename($_SERVER['PHP_SELF'])!=="cron.php"){
 
 	$http_referer =basename(parse_url( $_SERVER['HTTP_REFERER'])['path']);
+	if( isset($_SESSION[$OJ_NAME.'_administrator']) &&  basename($http_referer)=="aidba.php"){
+		$purpose=$_POST['purpose'];
+		$dbSqlPath = '/home/judge/src/install/db.sql';
+		$dbSchema = file_exists($dbSqlPath) ? file_get_contents($dbSqlPath) : "无法读取数据库结构文件。";
+		$prompt_sys.="你是一个 MySQL 专家，请根据以下数据库表结构定义，编写一个标准的 MySQL 查询语句来帮助用户查询数据库，\n\n表结构定义：\n{$dbSchema}\n\n 请直接输出 SQL 语句，不要包含 Markdown 格式，不要显示密码字段，不要包含解释。产生的结果列名尽量用中文别名";
+		$prompt_user="任务目标：\"{$purpose}\"。\n\n 列名含义: ".json_encode($hustoj_zh_columns)." \n\n";
+	
+	}
 	if((isset($_SESSION[$OJ_NAME.'_administrator'])|| isset($_SESSION[$OJ_NAME.'_problem_editor']) ) ){
 			$keyword="Linux运维";
 		if( basename($http_referer)=="news_add_page.php"){
