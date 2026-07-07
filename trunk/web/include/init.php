@@ -91,23 +91,21 @@ if(isset($OJ_LIP_URL) && isset($_COOKIE['lip']) ){
 	 $ip=long2ip(intval($_COOKIE['lip']));
 }
 if(isset($_SESSION[$OJ_NAME.'_user_id'])&&!empty($_SESSION[$OJ_NAME.'_user_id']) &&isset($OJ_LIMIT_TO_1_IP)&& $OJ_LIMIT_TO_1_IP){
-        $sql="select ip from loginlog where user_id=? order by time desc";
+        $sql="select ip from loginlog where user_id=? order by time desc limit 1";
         $rows=pdo_query($sql,$_SESSION[$OJ_NAME.'_user_id'] );
-        if(is_array($rows))$lastip=$rows[0][0];
+        if(!empty($rows))$lastip=$rows[0];
+        if(!empty($lastip)) $lastip=$lastip['ip'];
         if(!empty($lastip) && $ip!=$lastip){
                 unset($_SESSION[$OJ_NAME.'_'.'user_id']);
                 setcookie($OJ_NAME."_user","");
                 setcookie($OJ_NAME."_check","");
                 $view_errors=$_SESSION[$OJ_NAME.'_user_id']."Logged in another ip address:$lastip != $ip, auto logout!";
-			    session_destroy();
+                session_destroy();
                 echo $view_errors;
                 require_once(dirname(dirname(__FILE__))."/template/$OJ_TEMPLATE/error.php");
                 exit(0);
         }
 }
-
-
-
 
 $OJ_LOG_FILE="/var/log/hustoj/{$OJ_NAME}.log";
 require_once(dirname(__FILE__) . "/logger.php");
