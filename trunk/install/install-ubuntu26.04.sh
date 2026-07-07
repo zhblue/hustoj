@@ -81,6 +81,9 @@ PASSWORD=`tr -cd '[:alnum:]' < /dev/urandom | fold -w30 | head -n1`
 mysql < src/install/db.sql
 echo "DROP USER $USER;" | mysql
 echo "CREATE USER $USER identified by '$PASSWORD';grant all privileges on jol.* to $USER ;flush privileges;"|mysql
+RO_USER="hustoj_ro";
+RO_PASSWORD=`tr -cd '[:alnum:]' < /dev/urandom | fold -w30 | head -n1`
+echo "CREATE USER $RO_USER identified by '$RO_PASSWORD';grant select on jol.* to $RO_USER ;flush privileges;"|mysql
 CPU=$(grep "cpu cores" /proc/cpuinfo |head -1|awk '{print $4}')
 MEM=`free -m|grep Mem|awk '{print $2}'`
 
@@ -125,6 +128,8 @@ chown -R root:root etc
 
 sed -i "s/DB_USER[[:space:]]*=[[:space:]]*\".*\"/DB_USER=\"$USER\"/g" src/web/include/db_info.inc.php
 sed -i "s/DB_PASS[[:space:]]*=[[:space:]]*\".*\"/DB_PASS=\"$PASSWORD\"/g" src/web/include/db_info.inc.php
+sed -i "s/DB_RO_USER[[:space:]]*=[[:space:]]*\".*\"/DB_RO_USER=\"$RO_USER\"/g" src/web/include/db_info.inc.php
+sed -i "s/DB_RO_PASS[[:space:]]*=[[:space:]]*\".*\"/DB_RO_USER=\"$RO_PASSWORD\"/g" src/web/include/db_info.inc.php
 chmod 700 src/web/include/db_info.inc.php
 chown -R www-data:www-data src/web/
 chown www-data:www-data src/web/upload
