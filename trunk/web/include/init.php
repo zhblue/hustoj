@@ -98,8 +98,8 @@ if(isset($_SESSION[$OJ_NAME.'_user_id'])&&!empty($_SESSION[$OJ_NAME.'_user_id'])
                 unset($_SESSION[$OJ_NAME.'_'.'user_id']);
                 setcookie($OJ_NAME."_user","");
                 setcookie($OJ_NAME."_check","");
-                //session_destroy();
                 $view_errors=$_SESSION[$OJ_NAME.'_user_id']."Logged in another ip address:$lastip != $ip, auto logout!";
+			    session_destroy();
                 echo $view_errors;
                 require_once(dirname(dirname(__FILE__))."/template/$OJ_TEMPLATE/error.php");
                 exit(0);
