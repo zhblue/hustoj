@@ -1,6 +1,6 @@
 <?php
 date_default_timezone_set("PRC");
-ini_set("display_errors", "On"); 
+ini_set("display_errors", "Off"); 
 require_once("../include/db_info.inc.php");
 require_once("../include/const.inc.php");
 
@@ -38,35 +38,42 @@ if(isset($_GET['id'])){
     if (empty($rows)) {
         echo "<p>查询成功，但未找到匹配的数据。</p>";
         //exit;
-    }
-// var_dump($rows);
-    // 4. 动态渲染为 HTML 二维表格
-    echo '<div><table id="result" border="1" cellpadding="8" cellspacing="0" style="border-collapse: collapse; text-align: left;">';
+    }else if (!is_array($rows)){
+    	echo $rows;
+    }else{
+	// var_dump($rows);
+	    // 4. 动态渲染为 HTML 二维表格
+	    echo '<div><table id="result" border="1" cellpadding="8" cellspacing="0" style="border-collapse: collapse; text-align: left;">';
 
-    // 表头：动态获取第一行的所有键名（列名）
-    echo '<tr style="background-color: #f2f2f2;">';
-    foreach (array_keys($rows[0]) as $columnName) {
-        // echo '<th>' . htmlspecialchars($columnName) . '</th>';
-	$displayName = isset($columnsMap[$columnName]) ? $columnsMap[$columnName] : $columnName;
-        echo '<th>' . htmlspecialchars($displayName) . '</th>';
-    }
-    echo '</tr>';
-
-    // 表体：循环输出每一行数据
-    foreach ($rows as $row) {
-        echo '<tr>';
-    	foreach (array_keys($row) as $columnName) {
-            // 处理 null 值，并防止 XSS 注入
-	    $value=$row[$columnName];
-	    if($columnName=='user_id' || $columnName == "用户名" ){
-            	echo '<td><a target="_blank" href="user_list.php?keyword=' . htmlentities($value??'') . '">'.htmlentities($value??'').'</a> </td>';
-	    }else{
-            	echo '<td>' . ($value !== null ? htmlspecialchars($value) : '<i>NULL</i>') . '</td>';
+	    // 表头：动态获取第一行的所有键名（列名）
+	    echo '<tr style="background-color: #f2f2f2;">';
+	    foreach (array_keys($rows[0]) as $columnName) {
+		// echo '<th>' . htmlspecialchars($columnName) . '</th>';
+		$displayName = isset($columnsMap[$columnName]) ? $columnsMap[$columnName] : $columnName;
+		echo '<th>' . htmlspecialchars($displayName) . '</th>';
 	    }
-        }
-        echo '</tr>';
+	    echo '</tr>';
+
+	    // 表体：循环输出每一行数据
+	    foreach ($rows as $row) {
+		echo '<tr>';
+		foreach (array_keys($row) as $columnName) {
+		    // 处理 null 值，并防止 XSS 注入
+		    $value=$row[$columnName];
+		    if($columnName=='problem_id' || $columnName == "题目ID"  || $columnName == '题号' || $columnName == '题目编号' ){
+			echo '<td><a target="_blank" href="../problemt.php?id=' . htmlentities($value??'') . '">'.htmlentities($value??'').'</a> </td>';
+		    }else if($columnName=='contest_id' || $columnName == "比赛ID" || $columnName == '比赛编号' ){
+			echo '<td><a target="_blank" href="../contest.php?cid=' . htmlentities($value??'') . '">'.htmlentities($value??'').'</a> </td>';
+		    }else if($columnName=='user_id' || $columnName == "用户名" ){
+			echo '<td><a target="_blank" href="user_list.php?keyword=' . htmlentities($value??'') . '">'.htmlentities($value??'').'</a> </td>';
+		    }else{
+			echo '<td>' . ($value !== null ? htmlspecialchars($value) : '<i>NULL</i>') . '</td>';
+		    }
+		}
+		echo '</tr>';
+	    }
+	    echo '</table></div>';
     }
-    echo '</table></div>';
     exit();
 }
 // 5. 解析并打印结果
@@ -92,12 +99,12 @@ if(isset($_GET['id'])){
         .pagination a:hover { background: #007bff; color: white; }
         .timestamp { font-size: 0.85em; color: #495057; white-space: nowrap; }
         /* 代码块简单样式微调 */
-        pre { background: #f1f1f1; padding: 10px; border-radius: 3px; overflow-x: auto; }
+        pre { background: #f1f1f1; padding: 10px; border-radius: 3px; overflow-x: auto; display:none }
         code { font-family: Consolas, Monaco, monospace; color: #d63384; }
     </style>
 <link rel="stylesheet" href="<?php echo "../template/$OJ_TEMPLATE"?>/css/katex.min.css">
 </head>
-<body>
+<body ondblclick='$("pre").toggle()'>
 请描述您的数据库需求
     <h3>AI报表: </h3>
 <script>
