@@ -136,7 +136,7 @@ chown www -R /var/log/hustoj/
 cd /home/judge/src/install
 if test -f  /.dockerenv ;then
         echo "Already in docker, skip docker installation, install some compilers ... "
-        apt-get intall -y flex fp-compiler openjdk-14-jdk mono-devel
+        apt-get install -y flex fp-compiler openjdk-14-jdk mono-devel
 else
         sed -i "s/ubuntu:22.04/ubuntu:$OSRS/g" Dockerfile
 	sed -i 's|/usr/include/c++/9|/usr/include/c++/11|g' Dockerfile 
