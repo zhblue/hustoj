@@ -16,7 +16,7 @@ $referer_host = isset($_SERVER['HTTP_REFERER']) ? parse_url($_SERVER['HTTP_REFER
 // 3. 验证是否在白名单中
 if (!$referer_host || !in_array($referer_host, $allowed_hosts)) {
     header('HTTP/1.1 403 Forbidden');
-    exit("Access Denied: Invalid Referer.\n如果使用了反代或者穿透，请检查当前访问域名是否已加入白名单。");
+    exit("Access Denied: Invalid Referer.\n如果使用了反代或者穿透，请检查当前访问域名是否已加入白名单(admin-header.php)。");
 }
 require_once("../include/db_info.inc.php");
 require_once ("../include/my_func.inc.php");
