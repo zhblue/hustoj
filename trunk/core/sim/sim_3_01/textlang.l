@@ -16,6 +16,9 @@
 #include	"lang.h"
 #include	"language.h"
 
+/* compatible with gcc 13 or 14 */
+#include    "options.h"
+
 /* General language front end data */
 Token lex_token;
 size_t lex_nl_cnt;

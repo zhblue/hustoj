@@ -122,8 +122,8 @@ do_dir(
 	Closedir(dir);
 }
 
-static MSDOS_sep = (Fchar)'\\';
-static UNIX_sep = (Fchar)'/';
+static Fchar MSDOS_sep = (Fchar)'\\';
+static Fchar UNIX_sep = (Fchar)'/';
 
 static void
 clean_name(Fchar *Fn) {
