@@ -1,6 +1,6 @@
 # Core 解析
 
-`core` 分 `3` 部分，`judged` 、 `judge_client` 、 `sim` 。源码解读：[点我](/Compostition-Code)
+`core` 分 `3` 部分，`judged` 、 `judge_client` 、 `sim` 。源码解读：[点我](/Compostition-Code.md)
 
 ### judged 解析
 
