@@ -1,5 +1,5 @@
 var i = 0;
-var interval = 800;
+var interval = (typeof defaultInterval !== 'undefined') ? defaultInterval : 800;
 
 function auto_refresh() {
         interval *=2 ;
