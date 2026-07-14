@@ -150,7 +150,7 @@
                 echo "'$result',";
         } ?>
         ''];
-
+        <?php if (isset($defaultInterval))  echo "var defaultInterval=".intval($defaultInterval); ?> ;
         var judge_color = [<?php
         foreach ($judge_color as $result) {
                 echo "'$result',";
