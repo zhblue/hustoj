@@ -192,7 +192,31 @@ else
 fi
 /etc/init.d/nginx restart
 fi
+# 修改 post_max_size 和 upload_max_filesize
+sed -i "s/post_max_size = 8M/post_max_size = 500M/g" /etc/php/$PHP_VER/fpm/php.ini
+sed -i "s/upload_max_filesize = 2M/upload_max_filesize = 500M/g" /etc/php/$PHP_VER/fpm/php.ini
 
+# 修改 session 存储为 Redis
+sed 's|session.save_handler *= *files|session.save_handler = redis\nsession.save_path="tcp://127.0.0.1:6379"|'  /etc/php/$PHP_VER/fpm/php.ini
+
+# 设置时区为Asia/Shanghai
+if grep 'date.timezone = Asia/Shanghai' /etc/php/$PHP_VER/fpm/php.ini ; then
+    echo "date.timezone = Asia/Shanghai is already set ... "
+else
+    # 如果存在注释掉的 ;date.timezone = ，则替换；否则追加
+    if grep '^;date.timezone =' /etc/php/$PHP_VER/fpm/php.ini ; then
+        sed -i 's/;date.timezone =/date.timezone = Asia\/Shanghai/' /etc/php/$PHP_VER/fpm/php.ini
+    else
+        echo "date.timezone = Asia/Shanghai" >> /etc/php/$PHP_VER/fpm/php.ini
+    fi
+fi
+
+# 启用 Opcache JIT
+if grep "opcache.jit_buffer_size" /etc/php/$PHP_VER/fpm/php.ini ; then
+    echo "opcache for jit is already enabled ... "
+else
+    sed -i "s|opcache.lockfile_path=/tmp|opcache.lockfile_path=/tmp\nopcache.jit_buffer_size=16M|g" /etc/php/$PHP_VER/fpm/php.ini
+fi
 WWW_CONF=$(find /etc/php -name www.conf)
 sed -i 's/;request_terminate_timeout = 0/request_terminate_timeout = 128/g' "$WWW_CONF"
 sed -i 's/pm.max_children = 5/pm.max_children = 600/g' "$WWW_CONF"
