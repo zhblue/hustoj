@@ -46,6 +46,7 @@
 
       <center>
       <div class='form-group'>
+	<input type='checkbox' name='zip' >ZIP 
         <input type="hidden" name="do" value="do">
         <!-- <input type="submit" name="submit" value="Export to XML Script"> -->
         <button class='btn btn-default btn-sm' type=submit>Download to XML File</button>

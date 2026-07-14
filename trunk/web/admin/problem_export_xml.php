@@ -327,26 +327,38 @@ else {
   write_xml($xmlHandle,"</fps>");
 }
 	 fclose($xmlHandle);
+    if(isset($_POST['zip'])){
+		     // 创建ZIP压缩包
+	    $zip = new ZipArchive();
+	    if ($zip->open($zipPath, ZipArchive::CREATE) === TRUE) {
+		$zip->addFile($xmlPath, 'problem.xml');
+		$zip->close();
+		unlink($xmlPath);
+		// 发送ZIP文件
+		header("Content-Type: application/zip");
+		header("Content-Disposition: attachment; filename=export_".$_SESSION[$OJ_NAME.'_'.'user_id']."_".$filename."_".date('YmdHis').".zip");
+		header("Content-Length: " . filesize($zipPath));
+		if (ob_get_level() > 0) {
+		    ob_clean();
+		}
+		flush();
+		readfile($zipPath);
 
-	     // 创建ZIP压缩包
-    $zip = new ZipArchive();
-    if ($zip->open($zipPath, ZipArchive::CREATE) === TRUE) {
-        $zip->addFile($xmlPath, 'problem.xml');
-        $zip->close();
-        // 发送ZIP文件
-        header("Content-Type: application/zip");
-        header("Content-Disposition: attachment; filename=export_".$_SESSION[$OJ_NAME.'_'.'user_id']."_".$filename."_".date('YmdHis').".zip");
-        header("Content-Length: " . filesize($zipPath));
-        if (ob_get_level() > 0) {
-            ob_clean();
-        }
-	flush();
-        readfile($zipPath);
-
-        // 清理临时文件
-        array_map('unlink', glob("$tmpDir/*"));
-        rmdir($tmpDir);
-        exit;
-    } else {
-        die("无法创建压缩文件");
+		// 清理临时文件
+		array_map('unlink', glob("$tmpDir/*"));
+		rmdir($tmpDir);
+		exit;
+	    } else {
+		die("无法创建压缩文件");
+	    }
+    }else{
+		header("Content-Type: text/xml");
+		header("Content-Disposition: attachment; filename=export_".$_SESSION[$OJ_NAME.'_'.'user_id']."_".$filename."_".date('YmdHis').".xml");
+		header("Content-Length: " . filesize($xmlPath));
+		if (ob_get_level() > 0) {
+		    ob_clean();
+		}
+		flush();
+   	readfile($xmlPath); 
+	unlink($xmlPath);
     }
