@@ -67,8 +67,8 @@ function get_extension($file) {
 function import_json($json) {
   global $OJ_DATA,$OJ_REDIS,$OJ_REDISSERVER,$OJ_REDISPORT,$OJ_REDISQNAME,$domain,$DOMAIN;
   $qduoj_problem=json_decode($json)->{'problem'};
- echo( "<br> ".$qduoj_problem->{'problemId'});
-  echo( $qduoj_problem->{'title'})."<br>";
+   echo( "<br> ".$qduoj_problem->{'problemId'});
+   echo( $qduoj_problem->{'title'})."<br>";
 
     $title = $qduoj_problem->{'title'};
 
@@ -90,14 +90,14 @@ function import_json($json) {
     $examples=$qduoj_problem->{'examples'};
     $sample_input = strip($examples,"input");
     $sample_output = strip($examples,"output");;
-    echo "sin:".$sample_input."<br>";
-    echo "sout:".$sample_output."<br>";
+   // echo "sin:".$sample_input."<br>";
+   // echo "sout:".$sample_output."<br>";
     $hint = "[md]\n".$qduoj_problem->{'hint'}."\n[/md]";
     $source ="";
-    echo json_decode($json)->{'tags'}->{'value'};				
+   // echo json_decode($json)->{'tags'}->{'value'};				
     $spj=0;
     
-    echo "($title, $time_limit, $memory_limit, $description, $input, $output, $sample_input, $sample_output, $hint, $source, $spj  )";
+  //  echo "($title, $time_limit, $memory_limit, $description, $input, $output, $sample_input, $sample_output, $hint, $source, $spj  )";
     $pid = addproblem($title, $time_limit, $memory_limit, $description, $input, $output, $sample_input, $sample_output, $hint, $source, $spj, $OJ_DATA);
     return $pid;
 }
@@ -119,16 +119,30 @@ else {
             $file_name = $resource->getNameIndex($i);
             $file_name = getSafeZipPath($tempdir,$file_name);
             $file_path = substr($file_name,0,strrpos($file_name, "/"));
-            if (substr($file_name, -1) != "/") {
+            if(substr($file_name, -1) != "/") {
                 $file_content = $resource->getFromIndex($i);
                 if(get_extension($file_name)=="json") {
                     // import_json($file_content);
-                } else {
-                    if(!file_exists($tempdir."/".dirname($file_name))) mkdir($tempdir."/".dirname($file_name),0755,true);
-                    file_put_contents($tempdir."/".$file_name,$file_content);
+                } else if(!empty($file_content)) {
+			if(!file_exists($tempdir."/".basename(dirname($file_name)))) {
+				mkdir($tempdir."/".basename(dirname($file_name)),0755,true);
+			//	echo "mkdir ->".$tempdir."/".basename(dirname($file_name))."<br>\n";
+			}
+			if(!empty($file_content)){
+				file_put_contents($file_name,$file_content);
+		        //	echo "put_contents:".$file_name."<br>\n";
+                		if(get_extension($file_name)=="out") {
+					$infile=dirname($file_name)."/".basename($file_name,".out").".in";
+					if(!file_exists($infile)) {
+						touch($infile);
+						echo "make empty infile<br>";
+					}
+				}
+			}
+
                 }
             } else {
-                echo $file_name;
+                echo "skip1:".$file_name."<br>\n";
             }
         }
         $cmds=array();
@@ -143,13 +157,11 @@ else {
                     mkdir("$OJ_DATA/$pid");
                     $data_dir=basename($file_name,".json");
                     array_push ($cmds,"mv $tempdir/$data_dir/* $OJ_DATA/$pid/");
+                    echo "mv $tempdir/$data_dir/* $OJ_DATA/$pid/"."<br>\n";
                     array_push ($cmds,"rmdir $tempdir/$data_dir/");
-                } else {
-                    if(!file_exists($tempdir."/".dirname($file_name))) mkdir($tempdir."/".dirname($file_name),0755,true);
-                    file_put_contents($tempdir."/".$file_name,$file_content);
                 }
             } else {
-                echo $file_name;
+                echo "skip2:$file_name<br>\n";
             }
         }
         $resource->close();
