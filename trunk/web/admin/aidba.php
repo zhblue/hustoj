@@ -1,5 +1,5 @@
 <?php
-date_default_timezone_set("PRC");
+date_default_timezone_set("Asia/Shanghai");
 ini_set("display_errors", "Off"); 
 require_once("../include/db_info.inc.php");
 require_once("../include/const.inc.php");

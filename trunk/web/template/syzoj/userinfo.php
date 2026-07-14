@@ -370,7 +370,7 @@ foreach ($ret as $row) {
     $max_count = max($max_count, (int)$row[1]);
 }
 // $max_count = ceil($max_count / 100) * 100;
-date_default_timezone_set('PRC');
+date_default_timezone_set('Asia/Shanghai');
 $today = date('Y-m-d', time());
 $beg_time = date('Y-m-d', strtotime("-6 month"));
 // echo json_encode($sub_data, false);

@@ -191,19 +191,8 @@ else
         sed -i "s|fastcgi_pass 127.0.0.1:9000;|fastcgi_pass 127.0.0.1:9001;\n\t\tfastcgi_buffer_size 256k;\n\t\tfastcgi_buffers $NBUFF 64k;|g" /etc/nginx/sites-enabled/default
 fi
 /etc/init.d/nginx restart
-sed -i "s/post_max_size = 8M/post_max_size = 500M/g" /etc/php/$PHP_VER/fpm/php.ini
-sed -i "s/upload_max_filesize = 2M/upload_max_filesize = 500M/g" /etc/php/$PHP_VER/fpm/php.ini
-sed 's|session.save_handler *= *files|session.save_handler = redis\nsession.save_path="tcp://127.0.0.1:6379"|'  /etc/php/$PHP_VER/fpm/php.ini
-if grep 'date.timezone = PRC' /etc/php/$PHP_VER/fpm/php.ini ; then
-    echo "date.timezone = PRC is already set ... "
-else
-    sed -i 's/;date.timezone =/date.timezone = PRC/' /etc/php/$PHP_VER/fpm/php.ini 
 fi
-if grep "opcache.jit_buffer_size" /etc/php/$PHP_VER/fpm/php.ini ; then
-    echo "opcache for jit is already enabled ... "
-else
-    sed -i "s|opcache.lockfile_path=/tmp|opcache.lockfile_path=/tmp\nopcache.jit_buffer_size=16M|g" /etc/php/$PHP_VER/fpm/php.ini
-fi
+
 WWW_CONF=$(find /etc/php -name www.conf)
 sed -i 's/;request_terminate_timeout = 0/request_terminate_timeout = 128/g' "$WWW_CONF"
 sed -i 's/pm.max_children = 5/pm.max_children = 600/g' "$WWW_CONF"

@@ -42,7 +42,7 @@ $HL = count($history) - 1;
 
 $info = array();
 if (function_exists('exec')) {
-    date_default_timezone_set("PRC");
+    date_default_timezone_set("Asia/Shanghai");
 
     // 1. CPU 利用率
     $cpu_out = array();
