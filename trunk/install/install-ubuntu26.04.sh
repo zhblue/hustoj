@@ -129,7 +129,7 @@ chown -R root:root etc
 sed -i "s/DB_USER[[:space:]]*=[[:space:]]*\".*\"/DB_USER=\"$USER\"/g" src/web/include/db_info.inc.php
 sed -i "s/DB_PASS[[:space:]]*=[[:space:]]*\".*\"/DB_PASS=\"$PASSWORD\"/g" src/web/include/db_info.inc.php
 sed -i "s/DB_RO_USER[[:space:]]*=[[:space:]]*\".*\"/DB_RO_USER=\"$RO_USER\"/g" src/web/include/db_info.inc.php
-sed -i "s/DB_RO_PASS[[:space:]]*=[[:space:]]*\".*\"/DB_RO_USER=\"$RO_PASSWORD\"/g" src/web/include/db_info.inc.php
+sed -i "s/DB_RO_PASS[[:space:]]*=[[:space:]]*\".*\"/DB_RO_PASS=\"$RO_PASSWORD\"/g" src/web/include/db_info.inc.php
 chmod 700 src/web/include/db_info.inc.php
 chown -R www-data:www-data src/web/
 chown www-data:www-data src/web/upload
