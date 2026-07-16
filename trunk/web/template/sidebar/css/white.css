@@ -27,8 +27,9 @@
 .padding::before {
 
   z-index: -2;
+  -webkit-backdrop-filter: blur(4px);
   backdrop-filter: blur(4px);
-  filter: url(#customLensFilter) saturate(120%) brightness(1.15);
+  filter: saturate(120%) brightness(1.15);
 
 }
 .padding::after {
