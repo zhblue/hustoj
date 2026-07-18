@@ -121,22 +121,21 @@ else {
             $file_path = substr($file_name,0,strrpos($file_name, "/"));
             if(substr($file_name, -1) != "/") {
                 $file_content = $resource->getFromIndex($i);
-                if(get_extension($file_name)=="json") {
+		$ext=get_extension($file_name);
+                if($ext=="json") {
                     // import_json($file_content);
-                } else if(!empty($file_content)) {
+                } else if($ext=="in"||$ext=="out") {
 			if(!file_exists($tempdir."/".basename(dirname($file_name)))) {
 				mkdir($tempdir."/".basename(dirname($file_name)),0755,true);
 			//	echo "mkdir ->".$tempdir."/".basename(dirname($file_name))."<br>\n";
 			}
-			if(!empty($file_content)){
-				file_put_contents($file_name,$file_content);
-		        //	echo "put_contents:".$file_name."<br>\n";
-                		if(get_extension($file_name)=="out") {
-					$infile=dirname($file_name)."/".basename($file_name,".out").".in";
-					if(!file_exists($infile)) {
-						touch($infile);
-						echo "make empty infile<br>";
-					}
+			file_put_contents($file_name,$file_content);
+		//	echo "put_contents:".$file_name."<br>\n";
+			if(get_extension($file_name)=="out") {
+				$infile=dirname($file_name)."/".basename($file_name,".out").".in";
+				if(!file_exists($infile)) {
+					touch($infile);
+					echo "make empty infile<br>";
 				}
 			}
 
