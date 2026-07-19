@@ -13,7 +13,18 @@ if (!isset($OJ_LANG)) {
 
 require_once("../lang/$OJ_LANG.php");
 require_once("../include/const.inc.php");
-
+/**
+ * 将文本转义为标准的 XML 内容格式
+ * 适合非 CDATA 节点，自动处理所有 XML 敏感字符及 ]
+ */
+function escapeForXml(string $text): string
+{
+    // 1. 处理基础 XML 特殊字符 (&, <, >, ", ')
+    $text = htmlspecialchars($text, ENT_XML1 | ENT_QUOTES, 'UTF-8');
+    
+    // 2. 将 ] 替换为十六进制实体
+    return str_replace(']', '&#x5D;', $text);
+}
 function write_xml($handle, $content) {
         fwrite($handle, $content . "\n");
 }
@@ -254,14 +265,14 @@ else {
 	fixImageURL($xmlHandle,$row['output'],$did);
 	fixImageURL($xmlHandle,$row['hint'],$did);
 
-	write_xml($xmlHandle,'<description><![CDATA[' . $row['description'] . ']]></description>');
-	write_xml($xmlHandle,'<input><![CDATA[' .  $row['input']. ']]></input>');
-	write_xml($xmlHandle,'<output><![CDATA[' . $row['output']. ']]></output>');
+	write_xml($xmlHandle,'<description><![CDATA[' . escapeForXml($row['description']) . ']]></description>');
+	write_xml($xmlHandle,'<input><![CDATA[' .  escapeForXml($row['input']). ']]></input>');
+	write_xml($xmlHandle,'<output><![CDATA[' . escapeForXml($row['output']). ']]></output>');
 	write_xml($xmlHandle,'<sample_input><![CDATA['. $row['sample_input'].']]></sample_input>');
 	write_xml($xmlHandle,'<sample_output><![CDATA['.  $row['sample_output'].']]></sample_output>');
 	if($_POST['remote_name']=="")  
 	    printTestCases($xmlHandle,$row['problem_id'],$OJ_DATA);
-	write_xml($xmlHandle,'<hint><![CDATA['. $row['hint'].']]></hint>');
+	write_xml($xmlHandle,'<hint><![CDATA['. escapeForXml($row['hint']).']]></hint>');
 	write_xml($xmlHandle,'<source><![CDATA[' . fixcdata($row['source']) . ']]></source>');
 	write_xml($xmlHandle,'<remote_oj><![CDATA[' . (trim($_POST['remote_name'])!=""?trim(basename($_POST['remote_name'])):fixcdata($row['remote_oj'])).']]></remote_oj>');
 	write_xml($xmlHandle,'<remote_id><![CDATA[' . ($_POST['remote_name']!=""?$row['problem_id']:fixcdata($row['remote_id'])).']]></remote_id>');
