@@ -1,16 +1,20 @@
 <?php
-require_once ("admin-header.php");
-require_once("../include/check_post_key.php");
-
-if (!(isset($_SESSION[$OJ_NAME.'_'.'administrator'])||isset($_SESSION[$OJ_NAME.'_problem_importer']))) {
-  exit(1);
+if(PHP_SAPI === 'cli'){
+	ini_set("display_errors", "Off");  //set this to "On" for debugging  ,especially when no reason blank shows up.
+	require_once (dirname(dirname(__FILE__))."/include/db_info.inc.php");
+}else{
+	require_once (dirname(__FILE__)."/admin-header.php");
+	require_once(dirname(dirname(__FILE__))."/include/check_post_key.php");
+	if (!(isset($_SESSION[$OJ_NAME.'_'.'administrator'])||isset($_SESSION[$OJ_NAME.'_problem_importer']))) {
+	  exit(1);
+	}
 }
-
 if (isset($OJ_LANG)) {
-  require_once("../lang/$OJ_LANG.php");
+  require_once(dirname(dirname(__FILE__))."/lang/$OJ_LANG.php");
 }
 
-require_once ("../include/const.inc.php");
+require_once (dirname(dirname(__FILE__))."/include/const.inc.php");
+require_once (dirname(dirname(__FILE__))."/include/my_func.inc.php");
 ?>
 
 <?php
@@ -25,8 +29,8 @@ function image_save_file($filepath ,$base64_encoded_img) {
 	  fclose($fp);
 }
 
-require_once ("../include/problem.php");
-require_once ("../include/db_info.inc.php");
+require_once (dirname(dirname(__FILE__))."/include/problem.php");
+require_once (dirname(dirname(__FILE__))."/include/db_info.inc.php");
 
 function getLang($language) {  
   $language_name = $GLOBALS['language_name'];
@@ -52,7 +56,11 @@ function submitSolution($pid,$solution,$language) {
   global $OJ_NAME,$_SESSION;
   $language = getLang($language);
   $len = mb_strlen($solution,'utf-8');
-  $user_id=$_SESSION[$OJ_NAME.'_'.'user_id'];
+  if(PHP_SAPI === 'cli') {
+  	$user_id='admin';
+  }else{
+  	$user_id=$_SESSION[$OJ_NAME.'_'.'user_id']??"admin";
+  }
   $sql = "SELECT nick FROM users WHERE user_id=?";
   $nick = pdo_query($sql, $user_id);
   if ($nick) {
@@ -63,7 +71,7 @@ function submitSolution($pid,$solution,$language) {
   }
 
   $sql = "INSERT INTO solution(problem_id,user_id,nick,in_date,language,ip,code_length,result) VALUES(?,?,?,NOW(),?,'127.0.0.1',?,14)";
-  $insert_id = pdo_query($sql, $pid,$_SESSION[$OJ_NAME.'_'.'user_id'],$nick, $language, $len);
+  $insert_id = pdo_query($sql, $pid,$user_id,$nick, $language, $len);
 //  echo "submiting$language.....$insert_id";
 
   $sql = "INSERT INTO `source_code`(`solution_id`,`source`) VALUES(?,?)";
@@ -74,16 +82,19 @@ function submitSolution($pid,$solution,$language) {
   pdo_query("UPDATE solution SET result=1 WHERE solution_id=?", $insert_id);
   pdo_query("UPDATE problem SET submit=submit+1 WHERE problem_id=?", $pid);
 }
-?>
+if(PHP_SAPI === 'cli'){
 
-<hr>
-&nbsp;&nbsp;- Import Problem ... <br>
-&nbsp;&nbsp;- 如果导入失败，请参考 <a href="https://github.com/zhblue/hustoj/blob/master/wiki/FAQ.md#%E5%90%8E%E5%8F%B0%E5%AF%BC%E5%85%A5%E9%97%AE%E9%A2%98%E5%A4%B1%E8%B4%A5" target="_blank">FAQ</a>。
-<br>
-<a href="problem_list.php" > Return to Problem List </a>
-<br>
+}else{
+?>
+	<hr>
+	&nbsp;&nbsp;- Import Problem ... <br>
+	&nbsp;&nbsp;- 如果导入失败，请参考 <a href="https://github.com/zhblue/hustoj/blob/master/wiki/FAQ.md#%E5%90%8E%E5%8F%B0%E5%AF%BC%E5%85%A5%E9%97%AE%E9%A2%98%E5%A4%B1%E8%B4%A5" target="_blank">FAQ</a>。
+	<br>
+	<a href="problem_list.php" > Return to Problem List </a>
+	<br>
 
 <?php
+}
 function getValue($Node, $TagName) {
  // $value=mb_ereg_replace("<div[a-z -=\"]*>","",$Node->$TagName);
  // $value=mb_ereg_replace("</div>","",$value);
@@ -131,7 +142,7 @@ function get_extension($file) {
 }
 
 function import_fps($tempfile) {
-  global $OJ_DATA,$OJ_REDIS,$OJ_REDISSERVER,$OJ_REDISPORT,$OJ_REDISQNAME,$domain,$DOMAIN,$OJ_NAME,$OJ_REMOTE_JUDGE;
+  global $OJ_DATA,$OJ_REDIS,$OJ_REDISSERVER,$OJ_REDISPORT,$OJ_REDISQNAME,$domain,$DOMAIN,$OJ_NAME,$OJ_REMOTE_JUDGE,$user_id;
   $xmlDoc = simplexml_load_file($tempfile, 'SimpleXMLElement', LIBXML_PARSEHUGE);
   $searchNodes = $xmlDoc->xpath("/fps/item");
   $spid = 0;
@@ -197,14 +208,14 @@ function import_fps($tempfile) {
       if ($spid==0)
       	$spid = $pid;
       $sql = "INSERT INTO `privilege` (`user_id`,`rightstr`) VALUES(?,?)";
-	  $user_id=empty($_POST['user_id'])?$_SESSION[$OJ_NAME.'_'.'user_id']:$_POST['user_id'];
-      pdo_query($sql, $user_id, "p$pid");
+      $user_id=$_POST['user_id']??$user_id;
+      pdo_query($sql, $user_id??"admin", "p$pid");
 
-      pdo_query($sql, $_SESSION[$OJ_NAME.'_'.'user_id'], "p$pid");
+      pdo_query($sql, $user_id??"admin", "p$pid");
       $_SESSION[$OJ_NAME.'_'."p$pid"] = true;
 
       $basedir = "$OJ_DATA/$pid";
-      mkdir($basedir);
+      @mkdir($basedir);
 
       if (strlen($sample_input)) mkdata($pid,"sample.in",$sample_input,$OJ_DATA);
       if (strlen($sample_output)) mkdata($pid,"sample.out",$sample_output,$OJ_DATA);
@@ -358,7 +369,7 @@ function import_fps($tempfile) {
     }
   }
 
-  unlink($tempfile);
+  if(PHP_SAPI !== 'cli') unlink($tempfile);
 
   if (isset($OJ_REDIS) && $OJ_REDIS) {
     $redis = new Redis();
@@ -373,18 +384,27 @@ function import_fps($tempfile) {
   }
 
   if ($spid>0) {
-    require_once("../include/set_get_key.php");
+    require_once(dirname(dirname(__FILE__))."/include/set_get_key.php");
     //echo "<br><a class=blue href=contest_add.php?spid=$spid&getkey=".$_SESSION[$OJ_NAME.'_'.'getkey'].">Use these problems to create a contest.</a>";
   }
 }
 
 
-if ($_FILES ["fps"] ["error"] > 0) {
+if (!empty($_FILES ["fps"])&&$_FILES ["fps"] ["error"] > 0) {
   echo "&nbsp;&nbsp;- Error: ".$_FILES ["fps"] ["error"]."File size is too big, change in PHP.ini<br />";
 }
 else {
-  $tempfile = $_FILES ["fps"] ["tmp_name"];
-  if (get_extension( $_FILES ["fps"] ["name"])=="zip") {
+  if(PHP_SAPI === 'cli') {
+	  if (isset($argv[1])) {
+		  $tempfile = $argv[1];
+	  }else{
+		echo "Usage: php ".$argv[0]." fps.xml \n\n";
+	  	exit();
+	  }
+  }else{
+  	$tempfile = $_FILES ["fps"] ["tmp_name"];
+  }
+  if (get_extension( $_FILES ["fps"] ["name"]??$tempfile )=="zip") {
     echo "&nbsp;&nbsp;- zip file, only fps/xml files in root dir are supported";
     $resource = new ZipArchive;
     if ($resource->open($tempfile) === TRUE) {
