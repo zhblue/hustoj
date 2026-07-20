@@ -13,18 +13,7 @@ if (!isset($OJ_LANG)) {
 
 require_once("../lang/$OJ_LANG.php");
 require_once("../include/const.inc.php");
-/**
- * 将文本转义为标准的 XML 内容格式
- * 适合非 CDATA 节点，自动处理所有 XML 敏感字符及 ]
- */
-function escapeForXml(string $text): string
-{
-    // 1. 处理基础 XML 特殊字符 (&, <, >, ", ')
-    $text = htmlspecialchars($text, ENT_XML1 | ENT_QUOTES, 'UTF-8');
-    
-    // 2. 将 ] 替换为十六进制实体
-    return str_replace(']', '&#x5D;', $text);
-}
+
 function write_xml($handle, $content) {
         fwrite($handle, $content . "\n");
 }
@@ -241,6 +230,13 @@ else {
 }
     $xmlPath = $tmpDir . '/problem.xml';
     $zipPath = $tmpDir . '/export.zip';
+    if(isset($_POST['zip'])){
+	    $downPath=$zipPath;
+    }else{
+	    $downPath=$xmlPath;
+    }
+    $_SESSION[$OJ_NAME."_last_file"]=$downPath;
+    $_SESSION[$OJ_NAME."_".$downPath]=0;
    $xmlHandle = fopen($xmlPath, 'w');
    write_xml($xmlHandle, "<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
    write_xml($xmlHandle,"<!DOCTYPE fps PUBLIC"); 
@@ -248,6 +244,8 @@ else {
    write_xml($xmlHandle,'"http://hustoj.com/fps.current.dtd" >');
    write_xml($xmlHandle,'<fps version="1.6" url="https://github.com/zhblue/freeproblemset/">');
    write_xml($xmlHandle,'<generator name="HUSTOJ" url="https://github.com/zhblue/hustoj/" />');
+   $total=count($result);
+   $c=0;
    foreach ($result as  $row) {
 	write_xml($xmlHandle,'<item>');
 	write_xml($xmlHandle,'<title><![CDATA['. $row['title'] . ']]></title>');
@@ -265,14 +263,14 @@ else {
 	fixImageURL($xmlHandle,$row['output'],$did);
 	fixImageURL($xmlHandle,$row['hint'],$did);
 
-	write_xml($xmlHandle,'<description><![CDATA[' . escapeForXml($row['description']) . ']]></description>');
-	write_xml($xmlHandle,'<input><![CDATA[' .  escapeForXml($row['input']). ']]></input>');
-	write_xml($xmlHandle,'<output><![CDATA[' . escapeForXml($row['output']). ']]></output>');
-	write_xml($xmlHandle,'<sample_input><![CDATA['. $row['sample_input'].']]></sample_input>');
-	write_xml($xmlHandle,'<sample_output><![CDATA['.  $row['sample_output'].']]></sample_output>');
+	write_xml($xmlHandle,'<description><![CDATA[' . fixcdata($row['description']) . ']]></description>');
+	write_xml($xmlHandle,'<input><![CDATA[' .  fixcdata($row['input']). ']]></input>');
+	write_xml($xmlHandle,'<output><![CDATA[' . fixcdata($row['output']). ']]></output>');
+	write_xml($xmlHandle,'<sample_input><![CDATA['. fixcdata($row['sample_input']).']]></sample_input>');
+	write_xml($xmlHandle,'<sample_output><![CDATA['.  fixcdata($row['sample_output']).']]></sample_output>');
 	if($_POST['remote_name']=="")  
 	    printTestCases($xmlHandle,$row['problem_id'],$OJ_DATA);
-	write_xml($xmlHandle,'<hint><![CDATA['. escapeForXml($row['hint']).']]></hint>');
+	write_xml($xmlHandle,'<hint><![CDATA['. fixcdata($row['hint']).']]></hint>');
 	write_xml($xmlHandle,'<source><![CDATA[' . fixcdata($row['source']) . ']]></source>');
 	write_xml($xmlHandle,'<remote_oj><![CDATA[' . (trim($_POST['remote_name'])!=""?trim(basename($_POST['remote_name'])):fixcdata($row['remote_oj'])).']]></remote_oj>');
 	write_xml($xmlHandle,'<remote_id><![CDATA[' . ($_POST['remote_name']!=""?$row['problem_id']:fixcdata($row['remote_id'])).']]></remote_id>');
@@ -333,9 +331,12 @@ else {
 	write_xml($xmlHandle,"</item>");
 	  //	 $content=ob_get_clean();
 	  //	 fwrite($xmlHandle, $content );
+	$c++;
+	$_SESSION[$OJ_NAME."_".$downPath]=intval($c*90/$total);
    }
 
   write_xml($xmlHandle,"</fps>");
+	$_SESSION[$OJ_NAME."_".$downPath]=90;
 }
 	 fclose($xmlHandle);
     if(isset($_POST['zip'])){
@@ -344,6 +345,7 @@ else {
 	    if ($zip->open($zipPath, ZipArchive::CREATE) === TRUE) {
 		$zip->addFile($xmlPath, 'problem.xml');
 		$zip->close();
+		$_SESSION[$OJ_NAME."_".$downPath]=100;
 		unlink($xmlPath);
 		// 发送ZIP文件
 		header("Content-Type: application/zip");
@@ -358,11 +360,13 @@ else {
 		// 清理临时文件
 		array_map('unlink', glob("$tmpDir/*"));
 		rmdir($tmpDir);
+		rmdir(dirname($zipPath));
 		exit;
 	    } else {
 		die("无法创建压缩文件");
 	    }
     }else{
+		$_SESSION[$OJ_NAME."_".$downPath]=100;
 		header("Content-Type: text/xml");
 		header("Content-Disposition: attachment; filename=export_".$_SESSION[$OJ_NAME.'_'.'user_id']."_".$filename."_".date('YmdHis').".xml");
 		header("Content-Length: " . filesize($xmlPath));
@@ -372,4 +376,5 @@ else {
 		flush();
    	readfile($xmlPath); 
 	unlink($xmlPath);
+	rmdir(dirname($xmlPath));
     }

@@ -5,7 +5,24 @@
   if (!(isset($_SESSION[$OJ_NAME.'_'.'administrator']) || isset($_SESSION[$OJ_NAME.'_'.'problem_importer']) )) {
     exit(1);
   }
-
+  if(isset($_GET['last_file'])){
+	  $last_file=$_SESSION[$OJ_NAME."_last_file"];
+	  if($_SESSION[$OJ_NAME."_".$last_file]==100&&file_exists($last_file)){
+		header("Content-Type: application/zip");
+		header("Content-Disposition: attachment; filename=export_".$_SESSION[$OJ_NAME.'_'.'user_id']."_".basename($last_file));
+		header("Content-Length: " . filesize($last_file));
+		if (ob_get_level() > 0) {
+		    ob_clean();
+		}
+		readfile($last_file);
+	  	unlink($last_file);
+		rmdir(dirname($last_file));
+		unset($_SESSION[$OJ_NAME."_".$last_file]);
+		unset($_SESSION[$OJ_NAME."_last_file"]);
+		exit();
+	  }
+  
+  }
   echo "<center><h3>".$MSG_PROBLEM."-".$MSG_EXPORT."</h3></center>";
 
 ?>
@@ -56,6 +73,11 @@
       <?php require_once("../include/set_post_key.php");?>
     </form>
 
+   <?php if (isset($_SESSION[$OJ_NAME."_last_file"])){
+		$last_file=$_SESSION[$OJ_NAME."_last_file"];		
+		echo "<a class='btn btn-success btn-sm' href='problem_export.php?last_file=".htmlentities($_SESSION[$OJ_NAME."_last_file"])."'>下载前个任务".$_SESSION[$OJ_NAME."_".$last_file]."%</a>";
+      }
+	?>
     <br><br>
     <!--
     * from-to will working if empty IN <br>
