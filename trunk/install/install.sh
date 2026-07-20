@@ -72,6 +72,7 @@ if wget -O hello.tar.gz dl.hustoj.com/hello.tar.gz; then
 fi
 cd /home/judge/src/install
 bash set-nofile.sh
+php /home/judge/src/web/admin/problem_import_xml.php /home/judge/src/install/A+B.xml
 clear
 reset
 
