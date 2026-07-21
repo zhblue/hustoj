@@ -189,7 +189,12 @@ if (!(isset($_SESSION[$OJ_NAME.'_'.'administrator'])
             chdir($current_dir);
 	    $user_id=$_SESSION[$OJ_NAME.'_user_id'];
 	    $nick=$_SESSION[$OJ_NAME.'_nick'];
-            if(file_exists($current_dir."/interactor.cc") ||file_exists($current_dir."/Gen.py")  || file_exists($current_dir."/Main.c") || file_exists($current_dir."/Main.cc") ){
+        if(file_exists($current_dir."/interactor.cc") ||file_exists($current_dir."/Gen.py")  ||
+               file_exists($current_dir."/Main.c") || file_exists($current_dir."/Main.cc")||
+               file_exists($current_dir."/spj.c") || file_exists($current_dir."/spj.cc")||
+               file_exists($current_dir."/tpj.c") || file_exists($current_dir."/tpj.cc")||
+               file_exists($current_dir."/upj.c") || file_exists($current_dir."/upj.cc")
+                ){
     		$sql = "INSERT INTO solution(problem_id,user_id,nick,in_date,language,ip,code_length,result) VALUES(?,?,?,NOW(),?,?,?,1)";
     		$insert_id = pdo_query($sql, -$pid, $user_id, $nick, 6 , $ip, 0 );
 		echo "$pid pending".$insert_id."<img src='../image/loader.gif'>";
