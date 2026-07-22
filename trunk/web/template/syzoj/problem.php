@@ -516,8 +516,19 @@ function admin_mod(){
 		$("span[fd="+fd_name+"]").each(db_click_modify);
 	}
 }
+var mathjaxRended=false;
   $(document).ready(function(){
-    	$("#creator").load("problem-ajax.php?pid=<?php echo $id?>");
+    	$("#creator").load("problem-ajax.php?pid=<?php echo $id?>",function(responseTxt, statusTxt, xhr) {
+		if (statusTxt === "success") {
+			if(!mathjaxRended){
+				mathjaxRended=true;
+				window.setTimeout("MathJax.typeset();",800);
+			
+			}
+		}
+		if (statusTxt === "error") {
+		}
+	});
 	<?php if(isset($OJ_MARKDOWN)&&$OJ_MARKDOWN){ ?>
 		marked.use({
                   // 开启异步渲染
@@ -537,7 +548,10 @@ function admin_mod(){
 			}
 			marked.parse(htm).then(html => { 
 				cur.html(html); 
-				 window.setTimeout("MathJax.typeset();",100);
+				if(!mathjaxRended){
+					mathjaxRended=true;
+					window.setTimeout("MathJax.typeset();",800);
+				}
 				<?php if ( $row['spj']>1 ){?>
 					window.setTimeout("generateMarkdownAutoSelect();",100);
 				<?php }?>
