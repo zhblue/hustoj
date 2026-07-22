@@ -949,6 +949,40 @@ void make_diff_out_simple(FILE *f1, FILE *f2,char * prefix, int c1, int c2, cons
         fprintf(diff,"\n\n");
         fclose(diff);
 }
+void truncate_prefix_utf8(char *prefix, int *preK, int n, int m, int buffer_size) {
+    // 1. 基础参数合法性检验
+    if (!prefix || !preK || n < 0 || m < 0 || m >= buffer_size) {
+        return;
+    }
+
+    // 2. 超过指定长度 n 时进行截断
+    if (*preK > n) {
+        if (m > *preK) {
+            m = *preK;
+        }
+
+        int start = *preK - m;
+
+        // 3. 核心：防止 UTF-8 字符截断
+        // 如果计算出的 start 位置正好处于一个多字节字符的内部（即该字节的高两位是 10）
+        // 就继续向左回退，避免把汉字切半
+        while (start > 0 && (prefix[start] & 0xC0) == 0x80) {
+            start--;
+        }
+
+        // 重新计算从安全起点到原末尾实际要保留的字节数
+        int new_len = *preK - start;
+
+        // 4. 将内容移动到位置 0
+        for (int i = 0; i < new_len; i++) {
+            prefix[i] = prefix[start + i];
+        }
+
+        // 5. 更新长度并添加字符串结束符
+        *preK = new_len;
+        prefix[*preK] = '\0';
+    }
+}
 
 /*
  * translated from ZOJ judger r367
@@ -1044,7 +1078,8 @@ end:
 	{
 		switch(full_diff)
 		{
-                        case 1: make_diff_out_simple(f1, f2, prefix, c1, c2, file1,userfile);
+                        case 1: truncate_prefix_utf8(prefix,&preK,50,10,BUFFER_SIZE);
+							    make_diff_out_simple(f1, f2, prefix, c1, c2, file1,userfile);
                                 break;
                         case 2: make_diff_out(f1, f2,  c1, c2, file1,userfile);
                                 break;
