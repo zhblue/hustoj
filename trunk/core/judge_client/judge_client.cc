@@ -869,6 +869,7 @@ inline void fprintSafe(FILE * f,char * buf){
 		str_replace(buf,"*","＊");
 		str_replace(buf,"\r","");
 		str_replace(buf,"\n","↩");
+		str_replace(buf," ","　");  // 英文空格替换为中文全角空格
 		fprintf(f,"%s",buf);
 	}else{
 		for(size_t i=0;i<strlen(buf);i++){
@@ -968,18 +969,17 @@ int compare_zoj(const char *file1, const char *file2,const char * infile,const c
         {
                 ret = OJ_RE;
         }
-        else
-                for (;;)
-                {
+        else{
+        	for (;;){
                         // Find the first non-space character at the beginning of line.
                         // Blank lines are skipped.
                         c1 = fgetc(f1);
                         c2 = fgetc(f2);
                         if(find_next_nonspace(c1, c2, f1, f2, ret)){
-				preK=0;
-				prefix[preK]='\0';
-			
-			}
+							preK=0;
+							prefix[preK]='\0';
+								
+					    }
                         // Compare the current line.
                         for (;;)
                         {
@@ -999,37 +999,39 @@ int compare_zoj(const char *file1, const char *file2,const char * infile,const c
                                                 ret = OJ_WA;
                                                 goto end;
                                         }else if(preK<BUFFER_SIZE-1){
-						prefix[preK++]=c1;
-						prefix[preK]='\0';
-                                        }else{
-						preK=0;
-						prefix[preK]='\0';
-					}
-					c1 = fgetc(f1);
-					c2 = fgetc(f2);
-					if(c1=='\n'){
-						preK=0;
-						prefix[preK]='\0';
-					}
-				}
-				if(find_next_nonspace(c1, c2, f1, f2, ret)){
-					preK=0;
-					prefix[preK]='\0';
-				}
-				if (c1 == EOF && c2 == EOF)
-				{
-					goto end;
-				}
-				if (c1 == EOF || c2 == EOF)
-				{
-					ret = OJ_WA;
-					goto end;
-				}
-
-				if ((c1 == '\n' || !c1) && (c2 == '\n' || !c2))
-				{
-					break;
-				}
+												prefix[preK++]=c1;
+												prefix[preK]='\0';
+                                        }else{	
+                                                preK=0;
+                                                prefix[preK++]=c1;
+                                                prefix[preK]='\0';
+										}
+										c1 = fgetc(f1);
+										c2 = fgetc(f2);
+										if(c1=='\n'){
+											preK=0;
+											prefix[preK]='\0';
+										}
+							 }
+							if(find_next_nonspace(c1, c2, f1, f2, ret)){
+								preK=0;
+								prefix[preK]='\0';
+							}
+							if (c1 == EOF && c2 == EOF)
+							{
+								goto end;
+							}
+							if (c1 == EOF || c2 == EOF)
+							{
+								ret = OJ_WA;
+								goto end;
+							}
+			
+							if ((c1 == '\n' || !c1) && (c2 == '\n' || !c2))
+							{
+								break;
+							}
+						}
 			}
 		}
 end:
