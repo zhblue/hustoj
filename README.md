@@ -767,7 +767,13 @@ sudo bash /home/judge/src/install/fixing.sh
 访问[TK题库免费专区](http://tk.hustoj.com/problemset.php?search=free)
 
 FQ访问[谷歌代码存档版](http://code.google.com/p/freeproblemset)，下载老版本 FPS 共享题库。
-	
+
+## 你可能感兴趣的项目
+
+[HUSTOJ-Reborn](https://github.com/Azure99/hustoj-reborn) 基于TS和Rust的AI重现版本。
+
+[HUSTOJ-Go](https://github.com/sempr/hustoj-go) Go重写的独立判题机
+
 	
 ## 推荐云服务商
 [搬-瓦+工](https://bandwagonhost.com/aff.php?aff=67213)
