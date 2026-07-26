@@ -1,7 +1,7 @@
 <?php
 ini_set("display_errors", "Off");  // 生产环境应关闭调试
 require_once ("admin-header.php");
-if (!(isset($_SESSION[$OJ_NAME . '_' . 'administrator']) || isset($_SESSION[$OJ_NAME . '_problem_importer']))) {
+if (!(isset($_SESSION[$OJ_NAME . '_' . 'administrator']) || isset($_SESSION[$OJ_NAME . '_user_adder']))) {
     exit(1);
 }
 if (isset($OJ_LANG)) {
