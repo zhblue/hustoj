@@ -22,7 +22,14 @@ function getSafeZipPath($baseDir, $entryName) {
     // 1. 统一分隔符，防止 Windows/Unix 混合攻击
     $entryName = str_replace(['\\', '/'], DIRECTORY_SEPARATOR, $entryName);
 
-    // 2. 拆分路径并过滤掉 "." 和空值，处理 ".."
+    // 2. ★ 新增：白名单过滤，仅允许安全字符（字母数字、点、下划线、连字符、目录分隔符）
+    $ds = preg_quote(DIRECTORY_SEPARATOR, '/');
+    $entryName = preg_replace('/[^a-zA-Z0-9._\-' . $ds . ']/', '', $entryName);
+    if ($entryName === '') {
+        throw new Exception("Invalid entry name after sanitization");
+    }
+
+    // 3. 拆分路径并过滤掉 "." 和空值，处理 ".."
     $parts = explode(DIRECTORY_SEPARATOR, $entryName);
     $safeParts = [];
     foreach ($parts as $part) {
@@ -34,14 +41,17 @@ function getSafeZipPath($baseDir, $entryName) {
         }
     }
     
-    // 3. 重新组合
+    // 4. 重新组合
     $safeRelativePath = implode(DIRECTORY_SEPARATOR, $safeParts);
     
-    // 4. 计算最终绝对路径
+    // 5. 计算最终绝对路径
     $realBase = realpath($baseDir);
+    if ($realBase === false) {
+        throw new Exception("Base directory does not exist");
+    }
     $finalPath = $realBase . DIRECTORY_SEPARATOR . $safeRelativePath;
 
-    // 5. 关键安全检查：最终路径必须依然以 baseDir 开头
+    // 6. 关键安全检查：最终路径必须依然以 baseDir 开头
     if (strpos($finalPath, $realBase) !== 0) {
         throw new Exception("检测到路径遍历攻击: $entryName");
     }
