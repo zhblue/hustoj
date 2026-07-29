@@ -65,6 +65,7 @@ if (isset($_GET['code'])) {
             pdo_query($sql, $uname, $email, $ip, $password, $nick, $school);
         }
         // login it
+        session_regenerate_id(true);
         $_SESSION[$OJ_NAME . '_' . 'user_id'] = $uname;
         // redirect it
         header("Location: ./");
