@@ -4358,9 +4358,12 @@ int main(int argc, char **argv)
 	//      printf("%s\n",cmd);
 	// set the result to compiling
 	int Compile_OK = 0 ;
-        if(spj!=2){
-                Compile_OK = compile(lang, work_dir);
-        }
+	execute_cmd("/bin/cp %s/data/%d/*.h %s/ ", oj_home, p_id, work_dir);
+    execute_cmd("/bin/chown judge %s/*.h ", work_dir);
+        
+	if(spj!=2){
+			Compile_OK = compile(lang, work_dir);
+	}
 	if ( Compile_OK != 0 && spj!=2 )
 	{
 		addceinfo(solution_id);
