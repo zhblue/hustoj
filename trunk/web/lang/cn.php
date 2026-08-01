@@ -122,7 +122,8 @@
 	$MSG_RATIO="比率";
 	$MSG_DAY="日排行";
  	$MSG_WEEK="周排行";
-	$MSG_MONTH="月排行";
+	$MSG_LAST_MONTH="上月排行";
+	$MSG_MONTH="本月排行";
 	$MSG_YEAR="年排行";
         $MSG_ABSENT="缺席";
 
