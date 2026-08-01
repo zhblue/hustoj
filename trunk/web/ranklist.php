@@ -70,7 +70,12 @@ if ($scope) {
     if (!empty($last_id) && is_array($last_id)) $last_id = $last_id[0][0]; else $last_id = 0;
     if(isset($_GET['pre'])){
 	    $pre=intval($_GET['pre'])??1;
-	    $s = date('Y-m-d', strtotime('first day of last month'));
+	    $s = match($scope){
+                'd' => date('Y-m-d', strtotime('last day')),
+                'w' => date('Y-m-d', strtotime('monday last week')),
+                'm' => date('Y-m-d', strtotime('first day of last month')),
+                default => date('Y-m-d', strtotime('first day of last year')),
+        };
 	    $pre_id = mysql_query_cache("select solution_id from solution where in_date<str_to_date('$s','%Y-%m-%d') order by solution_id desc limit 1;");
 	    if (!empty($pre_id) && is_array($pre_id)) $pre_id = $pre_id[0][0]; else $pre_id = 0;
     	$cond=" solution_id>$pre_id and  solution_id <= $last_id  ";
