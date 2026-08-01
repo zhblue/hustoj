@@ -3,9 +3,10 @@
 
 <div class="padding">
 	<a href="ranklist.php?scope=d" class="ui mini button"><?php echo $MSG_DAY?></a>
-	<a href="ranklist.php?scope=w" class="ui mini button"><?php echo $MSG_WEEK?></a>
-	<a href="ranklist.php?scope=m" class="ui mini button"><?php echo $MSG_MONTH?></a>
-	<a href="ranklist.php?scope=y" class="ui mini button"><?php echo $MSG_YEAR?></a>
+	<a href="ranklist.php?scope=w" class="ui mini button primary "><?php echo $MSG_WEEK?></a>
+	<a href="ranklist.php?scope=m" class="ui mini button red"><?php echo $MSG_MONTH?></a>
+	<a href="ranklist.php?scope=m&pre=1" class="ui mini button green"><?php echo $MSG_LAST_MONTH?></a>
+	<a href="ranklist.php?scope=y" class="ui mini button violet"><?php echo $MSG_YEAR?></a>
   <form action="ranklist.php" class="ui mini form" method="get" role="form" style="margin-bottom: 25px; text-align: right; ">
     <div class="ui action left icon input inline" style="width: 180px; margin-right: 77px; ">
       <i class="search icon"></i><input name="prefix" placeholder="<?php echo $MSG_USER?>" type="text" value="<?php echo htmlentities(isset($_GET['prefix'])?$_GET['prefix']:"",ENT_QUOTES,"utf-8") ?>">
