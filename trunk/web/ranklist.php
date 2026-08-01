@@ -60,33 +60,33 @@ if ($rank < 0)
 $sql = "SELECT `user_id`,`nick`,`solved`,`submit`,group_name,starred FROM `users` $where ORDER BY `solved` DESC,submit,reg_time  LIMIT  " . strval($rank) . ",$page_size";
 
 if ($scope) {
-    $s = "";
-    switch ($scope) {
-        case 'd':
-            $s = date('Y') . '-' . date('m') . '-' . date('d');
-            break;
-        case 'w':
-            $monday = mktime(0, 0, 0, date("m"), date("d") - (date("w") + 6) % 7, date("Y"));
-            $s = date('Y-m-d', $monday);
-            break;
-        case 'm':
-            $s = date('Y') . '-' . date('m') . '-01';;
-            break;
-        default :
-            $s = date('Y') . '-01-01';
-    }
+	$s = match ($scope) {
+	    'd' => date('Y-m-d'),
+	    'w' => date('Y-m-d', strtotime('monday this week')),
+	    'm' => date('Y-m-01'),
+	    default => date('Y-01-01'),
+	};
     $last_id = mysql_query_cache("select solution_id from solution where  in_date<str_to_date('$s','%Y-%m-%d') order by solution_id desc limit 1;");
     if (!empty($last_id) && is_array($last_id)) $last_id = $last_id[0][0]; else $last_id = 0;
-    $view_total = mysql_query_cache("select count(distinct(user_id)) from solution where solution_id>$last_id")[0][0];
+    if(isset($_GET['pre'])){
+	    $pre=intval($_GET['pre'])??1;
+	    $s = date('Y-m-d', strtotime('first day of last month'));
+	    $pre_id = mysql_query_cache("select solution_id from solution where in_date<str_to_date('$s','%Y-%m-%d') order by solution_id desc limit 1;");
+	    if (!empty($pre_id) && is_array($pre_id)) $pre_id = $pre_id[0][0]; else $pre_id = 0;
+    	$cond=" solution_id>$pre_id and  solution_id <= $last_id  ";
+    }else{
+    	$cond="  solution_id>$last_id  ";
+    }
+    $view_total = mysql_query_cache("select count(distinct(user_id)) from solution where $cond ")[0][0];
     $sql = "SELECT users.`user_id`,`nick`,s.`solved`,t.`submit`,group_name,starred FROM `users`
                                         inner join
                                         (select count(distinct (problem_id)) solved ,user_id from solution
-                                               where solution_id>$last_id and user_id not in (" . $OJ_RANK_HIDDEN . ") and problem_id>0 and result=4 and first_time=1 
+                                               where $cond and user_id not in (" . $OJ_RANK_HIDDEN . ") and problem_id>0 and result=4 and first_time=1 
 					       group by user_id order by solved desc limit " . strval($rank) . ",$page_size) s
                                         on users.user_id=s.user_id
                                         inner join
                                         (select count( problem_id) submit ,user_id from solution
-                                                where solution_id > $last_id
+                                                where $cond
                                                 group by user_id order by submit desc ) t
                                         on users.user_id=t.user_id
                                         and users.user_id not in (" . $OJ_RANK_HIDDEN . ") and defunct='N'
