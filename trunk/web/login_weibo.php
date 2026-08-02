@@ -19,6 +19,11 @@ require_once("./include/db_info.inc.php");
 require_once("./include/my_func.inc.php");
 
 if (isset($_GET['code'])) {
+    if (!isset($_GET['state']) || !isset($_SESSION['oauth_weibo_state']) || $_GET['state'] !== $_SESSION['oauth_weibo_state']) {
+        echo "Invalid state parameter!";
+        exit;
+    }
+    unset($_SESSION['oauth_weibo_state']);
     $code = $_GET['code'];
     $GURL = "https://api.weibo.com/oauth2/access_token?";
     $vars = array(
@@ -73,6 +78,8 @@ if (isset($_GET['code'])) {
         echo "Login Expire!";
     }
 } else {
-    $CBURL = "https://api.weibo.com/oauth2/authorize?client_id={$OJ_WEIBO_AKEY}&response_type=code&redirect_uri=$OJ_WEIBO_CBURL";
+    $state = bin2hex(random_bytes(16));
+    $_SESSION['oauth_weibo_state'] = $state;
+    $CBURL = "https://api.weibo.com/oauth2/authorize?client_id={$OJ_WEIBO_AKEY}&response_type=code&redirect_uri=$OJ_WEIBO_CBURL&state=" . urlencode($state);
     header("Location: " . $CBURL);
 }
