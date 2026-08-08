@@ -116,6 +116,7 @@
  $MSG_RATIO ="比率";
  $MSG_DAY ="日排行";
  $MSG_WEEK ="週排行";
+ $MSG_LAST_MONTH="上月排行";
  $MSG_MONTH ="月排行";
  $MSG_YEAR ="年排行";
  $MSG_ABSENT="缺席";
@@ -677,6 +678,7 @@
 	$MSG_MINUTES="minutes";
 	$MSG_MLE="MLE";
 	$MSG_MODIFY_NOT_ALLOWED_FOR_EXAM="You can't change password during examing or contest on site.";
+	$MSG_LAST_MONTH="上月排行";
 	$MSG_MONTH="Month-Rank";
 	$MSG_MONTHS="months";
 	$MSG_MY_CONTESTS="My Contests";

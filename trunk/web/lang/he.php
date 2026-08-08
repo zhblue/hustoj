@@ -101,9 +101,12 @@
 	$MSG_RATIO="יחס";
 	$MSG_DAY="דירוג יומי";
 	$MSG_WEEK="דירוג שבועי";
+	$MSG_LAST_MONTH="דירוג חודש שעבר";
 	$MSG_MONTH="דירוג חודשי";
 	$MSG_YEAR="דירוג שנתי";
 	$MSG_ABSENT="$MSG_ABSENT";
+	$MSG_GROUP_NAME="קבוצה";
+	$MSG_EMAIL="דוא\"ל";
 	//registerpage.php
 	$MSG_USER_ID="מזהה משתמש";
 	$MSG_PASSWORD="סיסמה";

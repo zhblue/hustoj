@@ -109,6 +109,7 @@
 	$MSG_RATIO="정답률";
 	$MSG_DAY="일간-순위";
 	$MSG_WEEK="주간-순위";
+	$MSG_LAST_MONTH="지난달 순위";
 	$MSG_MONTH="월간-순위";
 	$MSG_YEAR="연간-순위";
     $MSG_ABSENT="결석";
