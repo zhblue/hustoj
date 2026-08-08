@@ -101,6 +101,7 @@
 	$MSG_RATIO="Харьцаа";
 	$MSG_DAY="Өдрийн ангилал";
 	$MSG_WEEK="Долоо хоногийн ангилал";
+	$MSG_LAST_MONTH="Last-Month-Rank";
 	$MSG_MONTH="Сарын ангилал";
 	$MSG_YEAR="Жилийн ангилал";
 	$MSG_ABSENT="Absent";

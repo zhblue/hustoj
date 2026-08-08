@@ -117,6 +117,7 @@ if(date('m')==4&&date('d')==1&&rand(0,100)<10){
 	$MSG_RATIO="نىسبىتى";
 	$MSG_DAY="كۈنلۈك مەرتىۋە";
  	$MSG_WEEK="ھەپتىلىك مەرتىۋە";
+	$MSG_LAST_MONTH="Last-Month-Rank";
 	$MSG_MONTH="ئايلىق مەرتىۋە";
 	$MSG_YEAR="يىللىق مەرتىۋە";
 $MSG_ABSENT="Absent";

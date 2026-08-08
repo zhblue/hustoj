@@ -112,6 +112,7 @@
  $MSG_RATIO =" коэффициент ";
  $MSG_DAY = " Рейтинг дня ";
  $MSG_WEEK =" Рейтинг недели ";
+ $MSG_LAST_MONTH = " Last-Month-Rank ";
  $MSG_MONTH = " Рейтинг месяца ";
  $MSG_YEAR =" Рейтинг года ";
  $MSG_ABSENT="Absent";
@@ -677,6 +678,7 @@ $MSG_ONLY_LAST_SUBMISSION="Only the last submission will be scored";
 	$MSG_MINUTES="minutes";
 	$MSG_MLE="MLE";
 	$MSG_MODIFY_NOT_ALLOWED_FOR_EXAM="You can't change password during examing or contest on site.";
+	$MSG_LAST_MONTH="Last-Month-Rank";
 	$MSG_MONTH="Month-Rank";
 	$MSG_MONTHS="months";
 	$MSG_MY_CONTESTS="My Contests";

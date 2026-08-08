@@ -506,6 +506,7 @@ $MSG_CLICK_VIEW_HINT="Click to View Spoiler";
 	$MSG_HELP_BACKUP_DATABASE="Backup database, test data and images to problem 0 directory";
 	$MSG_HELP_USER_IMPORT="Import users";
 	$MSG_MARK="Mark";
+	$MSG_LAST_MONTH="Last-Month-Rank";
 	$MSG_MONTH="Month-Rank";
 	$MSG_NO_MAIL_HERE="This OJ does not support internal mail.";
 	$MSG_REMOTE_JUDGING="Remote Judging";
