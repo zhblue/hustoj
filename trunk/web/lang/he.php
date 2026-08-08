@@ -101,7 +101,7 @@
 	$MSG_RATIO="יחס";
 	$MSG_DAY="דירוג יומי";
 	$MSG_WEEK="דירוג שבועי";
-	$MSG_LAST_MONTH="Last-Month-Rank";
+	$MSG_LAST_MONTH="דירוג חודש שעבר";
 	$MSG_MONTH="דירוג חודשי";
 	$MSG_YEAR="דירוג שנתי";
 	$MSG_ABSENT="$MSG_ABSENT";

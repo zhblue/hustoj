@@ -101,7 +101,7 @@
 	$MSG_RATIO="བསྡུར་ཚད།";
 	$MSG_DAY="Day-Rank";
 	$MSG_WEEK="Week-Rank";
-	$MSG_LAST_MONTH="Last-Month-Rank";
+	$MSG_LAST_MONTH="ཕྱི་ཟླ་གྲགས་རིམ";
 	$MSG_MONTH="Month-Rank";
 	$MSG_YEAR="Year-Rank";
 	$MSG_ABSENT="Absent";
