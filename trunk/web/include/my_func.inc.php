@@ -18,6 +18,24 @@ if (!function_exists('mb_trim')) {
 	    return preg_replace('/^['.$trim_chars.']*(?U)(.*)['.$trim_chars.']*$/u', '\\1',$string);
 	}
 }
+function normalizeSpaces(string $str): string 
+{
+    // 各种 Unicode 空格 -> 普通空格
+    $str = preg_replace(
+        '/[\x{00A0}\x{1680}\x{2000}-\x{200A}\x{202F}\x{205F}\x{3000}]+/u',
+        ' ',
+        $str
+    );
+
+    // 零宽字符 / BOM 删除
+    $str = preg_replace(
+        '/[\x{200B}\x{200C}\x{200D}\x{2060}\x{FEFF}]/u',
+        '',
+        $str
+    );
+
+    return $str;
+}
 function getSafeZipPath($baseDir, $entryName) {
     // 1. 统一分隔符，防止 Windows/Unix 混合攻击
     $entryName = str_replace(['\\', '/'], DIRECTORY_SEPARATOR, $entryName);
