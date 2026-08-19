@@ -30,10 +30,10 @@ $output = $_POST['output'];
 //$output = str_replace("</p>", "<br />", $output);
 $output = str_replace(",", "&#44;", $output); 
 
-$sample_input = $_POST['sample_input'];
-$sample_output = $_POST['sample_output'];
-$test_input = $_POST['test_input'];
-$test_output = $_POST['test_output'];
+$sample_input = normalizeSpaces($_POST['sample_input']);
+$sample_output = normalizeSpaces($_POST['sample_output']);
+$test_input = normalizeSpaces($_POST['test_input']);
+$test_output = normalizeSpaces($_POST['test_output']);
 /* don't do this , we will left them empty for not generating invalid test data files 
 if ($sample_input=="") $sample_input="\n";
 if ($sample_output=="") $sample_output="\n";
