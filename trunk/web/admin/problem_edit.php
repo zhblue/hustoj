@@ -260,50 +260,15 @@ function untransform() {
       $memory_limit = $_POST['memory_limit'];
 
       $description = $_POST['description'];
-     // $description = str_replace("<p>", "", $description);
-     // $description = str_replace("</p>", "<br />", $description);
-    //  $description = str_replace(",", "&#44;", $description);
-
       $input = $_POST['input'];
-     // $input = str_replace("<p>", "", $input);
-     // $input = str_replace("</p>", "<br />", $input);
-    //  $input = str_replace(",", "&#44;", $input);
-
       $output = $_POST['output'];
-     // $output = str_replace("<p>", "", $output);
-     // $output = str_replace("</p>", "<br />", $output);
-     // $output = str_replace(",", "&#44;", $output);
-
-      $sample_input = $_POST['sample_input'];
-      $sample_output = $_POST['sample_output'];
-      //if ($sample_input=="") $sample_input="\n";
-      //if ($sample_output=="") $sample_output="\n";
-
+      $sample_input = normalizeSpaces($_POST['sample_input']);
+      $sample_output = normalizeSpaces($_POST['sample_output']);
       $hint = $_POST['hint'];
-     // $hint = str_replace("<p>", "", $hint);
-    //  $hint = str_replace("</p>", "<br />", $hint);
-    //  $hint = str_replace(",", "&#44;", $hint);
-
       $source = $_POST['source'];
       $remote_oj= $_POST['remote_oj'];
       $remote_id = $_POST['remote_id'];
       $spj = $_POST['spj'];
-
-      if (false) {
-        $title = stripslashes($title);
-        $time_limit = stripslashes($time_limit);
-        $memory_limit = stripslashes($memory_limit);
-        $description = stripslashes($description);
-        $input = stripslashes($input);
-        $output = stripslashes($output);
-        $sample_input = stripslashes($sample_input);
-        $sample_output = stripslashes($sample_output);
-        //$test_input = stripslashes($test_input);
-        //$test_output = stripslashes($test_output);
-        $hint = stripslashes($hint);
-        $source = stripslashes($source);
-        $spj = stripslashes($spj);
-      }
 
       $title = ($title);
       $description = ($description);
