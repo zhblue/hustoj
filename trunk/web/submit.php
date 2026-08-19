@@ -185,7 +185,7 @@ if (isset($_POST['encoded_submit'])) {
 }
 
 $input_text = preg_replace("(\r\n)", "\n", $input_text);
-
+$input_text = normalizeSpaces($input_text);
 if ($test_run) {
     $id = -$id;
 }
