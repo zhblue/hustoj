@@ -489,7 +489,7 @@ void init_syscalls_limits(int lang)      //白名单初始化
 	else call_counter[220]= 1;
 #else
 	call_counter[SYS_execve %  call_array_size ]= 1;
-	if(lang == LANG_R ) call_counter[SYS_execve %  call_array_size ]= 8;
+	if(lang == LANG_R || lang == LANG_PYTHON ) call_counter[SYS_execve %  call_array_size ]= 8;
 #endif
 	printf("SYS_execve:%d [%d] \n",SYS_execve  % call_array_size , call_counter[SYS_execve %  call_array_size ]);
 }
