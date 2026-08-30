@@ -562,27 +562,26 @@ var mathjaxRended=false;
 		});
 	  	// adding note for ```input1  ```output1 in description
                 setTimeout(function(){
-                for(let i=1;i<10;i++){
-                        $(".language-input"+i).parent().before("<div><?php echo $MSG_Sample_Input?>"+i+":</div>");
-                        $(".language-output"+i).parent().before("<div><?php echo $MSG_Sample_Output?>"+i+":</div>");
-                }
-                },200);
-       
-        $(".md table tr td").css({
-            "border": "1px solid grey",
-            "text-align": "center",
-            "width": "200px",
-            "height": "30px"
-        });
+                         for(let i=1;i<10;i++){
+                                $(".language-input"+i).parent().before("<div><?php echo $MSG_Sample_Input?>"+i+":</div>");
+                                $(".language-output"+i).parent().before("<div><?php echo $MSG_Sample_Output?>"+i+":</div>");
+                        }
+                        $(".md table tr td").css({
+                            "border": "1px solid grey",
+                            "text-align": "center",
+                            "width": "200px",
+                            "height": "30px"
+                        });
 
-        $(".md table th").css({
-            "border": "1px solid grey",
-            "width": "200px",
-            "height": "30px",
-            "background-color": "#9e9e9ea1",
-            "text-align": "center"
-        });
-	        
+                        $(".md table th").css({
+                            "border": "1px solid grey",
+                            "width": "200px",
+                            "height": "30px",
+                            "background-color": "#9e9e9ea1",
+                            "text-align": "center"
+                        });
+                },200);
+                
 	<?php } ?>
 	<?php if (($row['spj']==2 || isset($_GET['sid']) || (isset($OJ_AUTO_SHOW_OFF)&&$OJ_AUTO_SHOW_OFF)  )  && !isset($_GET['spa']) ){?>
 	    transform();
