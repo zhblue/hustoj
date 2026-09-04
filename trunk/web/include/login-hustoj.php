@@ -24,7 +24,7 @@
 					$sql="select min(start_time - INTERVAL 30 MINUTE) from contest where start_time<=now() and end_time>=now() and contest_id>=?";
 					$rows=pdo_query($sql,$ccid);
 					$start_time=$rows[0][0];
-					$sql="select ip from loginlog where user_id=? and time>? order by time desc limit 1";
+					$sql="select ip from loginlog where user_id=? and time>? and password='login ok' order by time desc limit 1";
 					$rows=pdo_query($sql,$user_id,$start_time);
 					$lastip=$rows[0][0];
 					$sql="select count(1) from `privilege` where `user_id`=? and `rightstr`='administrator' limit 1";
