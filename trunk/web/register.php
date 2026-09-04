@@ -207,7 +207,7 @@ if (isset($OJ_EMAIL_CONFIRM) && $OJ_EMAIL_CONFIRM) {
 
 // 记录登录日志
 $sql = "INSERT INTO `loginlog`(user_id,password,ip,time) VALUES(?,?,?,NOW())";
-pdo_query($sql, $user_id, "no save", $ip);
+pdo_query($sql, $user_id, "registed", $ip);
 
 // 如果不需要确认注册，则自动登录用户
 if (!isset($OJ_REG_NEED_CONFIRM) || !$OJ_REG_NEED_CONFIRM) {
