@@ -24,6 +24,8 @@ if (isset($_GET['code'])) {
         exit;
     }
     unset($_SESSION['oauth_weibo_state']);
+    $code_verifier = isset($_SESSION['oauth_weibo_code_verifier']) ? $_SESSION['oauth_weibo_code_verifier'] : '';
+    unset($_SESSION['oauth_weibo_code_verifier']);
     $code = $_GET['code'];
     $GURL = "https://api.weibo.com/oauth2/access_token?";
     $vars = array(
@@ -31,7 +33,8 @@ if (isset($_GET['code'])) {
         'client_secret' => $OJ_WEIBO_ASEC,
         'grant_type' => 'authorization_code',
         'redirect_uri' => $OJ_WEIBO_CBURL,
-        'code' => $code);
+        'code' => $code,
+        'code_verifier' => $code_verifier);
     $GURL = $GURL . http_build_query($vars);
     $ret = http_request($GURL, True);
     $data = json_decode($ret);
@@ -80,6 +83,9 @@ if (isset($_GET['code'])) {
 } else {
     $state = bin2hex(random_bytes(16));
     $_SESSION['oauth_weibo_state'] = $state;
-    $CBURL = "https://api.weibo.com/oauth2/authorize?client_id={$OJ_WEIBO_AKEY}&response_type=code&redirect_uri=$OJ_WEIBO_CBURL&state=" . urlencode($state);
+    $code_verifier = bin2hex(random_bytes(32));
+    $_SESSION['oauth_weibo_code_verifier'] = $code_verifier;
+    $code_challenge = rtrim(strtr(base64_encode(hash('sha256', $code_verifier, true)), '+/', '-_'), '=');
+    $CBURL = "https://api.weibo.com/oauth2/authorize?client_id={$OJ_WEIBO_AKEY}&response_type=code&redirect_uri=$OJ_WEIBO_CBURL&state=" . urlencode($state) . "&code_challenge=$code_challenge&code_challenge_method=S256";
     header("Location: " . $CBURL);
 }
