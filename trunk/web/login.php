@@ -132,5 +132,5 @@ if ($login) {
         echo "</script>";
     }
 }
-$sql="INSERT INTO `loginlog`(user_id,password,ip,time) VALUES(?,'login ok',?,NOW())";
-pdo_query($sql,$user_id,$ip);
+$sql="INSERT INTO `loginlog`(user_id,password,ip,time) VALUES(?,?,?,NOW())";
+pdo_query($sql,$user_id,$login?'login ok':'login fail',$ip);
