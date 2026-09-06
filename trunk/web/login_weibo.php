@@ -75,6 +75,9 @@ if (isset($_GET['code'])) {
         // login it
         session_regenerate_id(true);
         $_SESSION[$OJ_NAME . '_' . 'user_id'] = $uname;
+        // bind the oauth access token to this session so a stolen token
+        // cannot be replayed to hijack a different session
+        $_SESSION[$OJ_NAME . '_' . 'oauth_weibo_token'] = hash('sha256', $token . session_id());
         // redirect it
         header("Location: ./");
     } else {
