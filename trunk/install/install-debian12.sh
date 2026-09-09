@@ -108,7 +108,7 @@ update-rc.d hustoj defaults
 systemctl enable nginx
 systemctl enable mysql
 systemctl enable php$PHP_VER-fpm
-systemctl enable judged
+systemctl enable hustoj
 if ps -C memcached; then 
     sed -i 's/static  $OJ_MEMCACHE=false;/static  $OJ_MEMCACHE=true;/g' /home/judge/src/web/include/db_info.inc.php
     sed -i 's/-m 64/-m 8/g' /etc/memcached.conf
