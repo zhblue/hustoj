@@ -6,6 +6,7 @@ chown -R mysql:mysql /var/run/mysqld
 chmod -R 755         /var/run/mysqld
 service mysql start
 mysql < /trunk/install/db.sql
+apt-get install openssl
 ADMIN_PASSWORD=`openssl rand -base64 12`
 mysql -e "insert into jol.users (user_id,password,nick,reg_time) values('admin', md5('$ADMIN_PASSWORD'), 'admin', now());"
 mysql -e "insert into jol.privilege ( user_id, rightstr ) values('admin','administrator');"
