@@ -32,6 +32,9 @@ function problem_exist($pid, $cid)
 
 function err_msg($msg)
 {
+    global $OJ_TEMPLATE, $OJ_NAME, $OJ_LANG, $OJ_ADMIN, $OJ_MEMCACHE,
+           $OJ_CDN_URL, $DOMAIN, $domain, $path_fix, $OJ_BEIAN,
+           $MSG_ERROR_INFO, $MSG_BACK;
     $view_errors = "$msg";
     require("template/" . $OJ_TEMPLATE . "/error.php");
     exit(0);
