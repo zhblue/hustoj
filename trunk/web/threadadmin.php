@@ -45,10 +45,15 @@ if ($_REQUEST['target'] == 'thread') {
     if ($_REQUEST['action'] == 'resume') $stat = 0;
     if ($_REQUEST['action'] == 'lock') $stat = 1;
     if ($_REQUEST['action'] == 'delete') $stat = 2;
-    if (!isset($_SESSION[$OJ_NAME . '_' . 'administrator']) && !isset($_SESSION[$OJ_NAME . '_' . 'user_id']))
-        errmsg("<a href=./loginpage.php>".(isset($MSG_Login)?$MSG_Login:"Please Login First")."</a>");
+    if (!isset($_SESSION[$OJ_NAME . '_' . 'user_id']))
+        err_msg("<a href=./loginpage.php>".(isset($MSG_Login)?$MSG_Login:"Please Login First")."</a>");
     if ($toplevel == -1 && $stat == -1)
-        errmsg("Wrong action.");
+        err_msg("Wrong action.");
+    if (!isset($_SESSION[$OJ_NAME . '_' . 'administrator'])) {
+        $owner = pdo_query("SELECT author_id FROM topic WHERE tid=?", $tid);
+        if (empty($owner) || $_SESSION[$OJ_NAME . '_' . 'user_id'] != $owner[0]['author_id'])
+            err_msg("Permission denied.");
+    }
     $tid = intval($tid);
     if ($stat == -1)
         $sql = "UPDATE topic SET top_level = $toplevel WHERE `tid` = '$tid'";
