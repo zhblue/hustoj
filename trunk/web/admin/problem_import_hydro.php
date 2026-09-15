@@ -185,7 +185,7 @@ if ($_FILES["fps"]["error"] > 0) {
                     continue;
                 }
                 $title = $hydrop['title'];
-                $source = implode(" ", $hydrop['tag']);
+                $source = empty($hydrop['tag'])?"":implode(" ", $hydrop['tag']);
                 echo "<hr>" . htmlentities($file_name . " $title $source");
 
                 if (!in_array($title, $inserted)) {
