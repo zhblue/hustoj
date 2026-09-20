@@ -134,8 +134,21 @@ function process_md_and_files($zip_path, $upload_dir)
             mkdir($temp_dir, 0755, true);
         }
 
-        // Extract all files to a temporary directory
-        $zip->extractTo($temp_dir);
+        // Validate every entry before extraction; never allow an archive path out of temp_dir.
+        for ($i = 0; $i < $zip->numFiles; $i++) {
+            $entry = $zip->getNameIndex($i);
+            if ($entry === false || substr($entry, -1) === '/') continue;
+            try {
+                getSafeZipPath($temp_dir, $entry);
+            } catch (Exception $e) {
+                $zip->close();
+                return [];
+            }
+        }
+        if (!$zip->extractTo($temp_dir)) {
+            $zip->close();
+            return [];
+        }
         $zip->close();
 
         $md_files = glob($temp_dir . "/*.md");
@@ -284,7 +297,12 @@ if ($_FILES["fps"]["error"] > 0) {
                         // 解压到目标目录，忽略内部目录结构
                         for ($i = 0; $i < $zip->numFiles; $i++) {
                             $entry = $zip->getNameIndex($i);
-                            $entry_path = "$OJ_DATA/$pid/" . basename($entry);
+                            if (substr($entry, -1) === '/') continue;
+                            try {
+                                $entry_path = getSafeZipPath("$OJ_DATA/$pid", $entry);
+                            } catch (Exception $e) {
+                                continue;
+                            }
                             copy("zip://" . $zip_file_path . "#" . $entry, $entry_path);
                         }
                         $zip->close();
