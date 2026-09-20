@@ -114,7 +114,7 @@ else {
     $i = 1;
     while ($dir_resource = zip_read($resource)) {
       if (zip_entry_open($resource,$dir_resource)) {
-        $file_name = getSafeZipPath($tempdir,zip_entry_name($dir_resource));
+        try { $file_name = getSafeZipPath($tempdir,zip_entry_name($dir_resource)); } catch (Exception $e) { zip_entry_close($dir_resource); continue; }
         $file_path = dirname($file_name);
         if (!is_dir($file_name)) {
           $file_size = zip_entry_filesize($dir_resource);
@@ -139,7 +139,7 @@ else {
     $i = 1;
     while ($dir_resource = zip_read($resource)) {
       if (zip_entry_open($resource,$dir_resource)) {
-        $file_name = getSafeZipPath($tempdir,zip_entry_name($dir_resource));
+        try { $file_name = getSafeZipPath($tempdir,zip_entry_name($dir_resource)); } catch (Exception $e) { zip_entry_close($dir_resource); continue; }
         $file_path = dirname($file_name);
         if (!is_dir($file_name)) {
           $file_size = zip_entry_filesize($dir_resource);

@@ -78,6 +78,7 @@ else
 	sed -i "s:}#added by hustoj::g" /etc/nginx/sites-enabled/default
 	sed -i "s:php7.0:php7.2:g" /etc/nginx/sites-enabled/default
 	sed -i "s|# deny access to .htaccess files|}#added by hustoj\n\n\n\t# deny access to .htaccess files|g" /etc/nginx/sites-enabled/default
+	sed -i '/# deny access to \.htaccess files/i\\        location ~* ^/upload/.*\\.php$ { deny all; return 403; }' /etc/nginx/sites-enabled/default
 fi
 /etc/init.d/nginx restart
 sed -i "s/post_max_size = 8M/post_max_size = 80M/g" /etc/php/7.2/fpm/php.ini

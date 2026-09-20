@@ -65,6 +65,7 @@ else
 	sed -i "s|#\tfastcgi_pass unix|\tfastcgi_pass unix|g" /etc/nginx/sites-enabled/default
 	sed -i "s:}#added_by_hustoj::g" /etc/nginx/sites-enabled/default
 	sed -i "s|# deny access to .htaccess files|}#added by hustoj\n\n\n\t# deny access to .htaccess files|g" /etc/nginx/sites-enabled/default
+	sed -i '/# deny access to \.htaccess files/i\\        location ~* ^/upload/.*\\.php$ { deny all; return 403; }' /etc/nginx/sites-enabled/default
 	/etc/init.d/nginx restart
 	sed -i "s/post_max_size = 8M/post_max_size = 80M/g" /etc/php/$PHP_VER/fpm/php.ini
 	sed -i "s/upload_max_filesize = 2M/upload_max_filesize = 80M/g" /etc/php/$PHP_VER/fpm/php.ini

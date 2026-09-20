@@ -117,7 +117,7 @@ else {
     if ($resource->open($tempfile) === TRUE) {
         for ($i = 0; $i < $resource->numFiles; $i++) {
             $file_name = $resource->getNameIndex($i);
-            $file_name = getSafeZipPath($tempdir,$file_name);
+            try { $file_name = getSafeZipPath($tempdir,$file_name); } catch (Exception $e) { continue; }
             $file_path = substr($file_name,0,strrpos($file_name, "/"));
             if(substr($file_name, -1) != "/") {
                 $file_content = $resource->getFromIndex($i);
@@ -147,7 +147,7 @@ else {
         $cmds=array();
         for ($i = 0; $i < $resource->numFiles; $i++) {
             $file_name = $resource->getNameIndex($i);
-            $file_name = getSafeZipPath($tempdir,$file_name);
+            try { $file_name = getSafeZipPath($tempdir,$file_name); } catch (Exception $e) { continue; }
             $file_path = substr($file_name,0,strrpos($file_name, "/"));
             if (substr($file_name, -1) != "/") {
                 $file_content = $resource->getFromIndex($i);

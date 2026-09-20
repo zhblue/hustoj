@@ -37,41 +37,37 @@ function normalizeSpaces(string $str): string
     return $str;
 }
 function getSafeZipPath($baseDir, $entryName) {
-    // 1. 统一分隔符，防止 Windows/Unix 混合攻击
-    $entryName = str_replace(['\\', '/'], DIRECTORY_SEPARATOR, $entryName);
-
-    // 2. ★ 新增：白名单过滤，仅允许安全字符（字母数字、点、下划线、连字符、目录分隔符）
-    $ds = preg_quote(DIRECTORY_SEPARATOR, '/');
-    $entryName = preg_replace('/[^a-zA-Z0-9._\-' . $ds . ']/', '', $entryName);
-    if ($entryName === '') {
-        throw new Exception("Invalid entry name after sanitization");
+    if (!is_string($entryName) || $entryName === '' || strpos($entryName, "\0") !== false) {
+        throw new Exception("Invalid ZIP entry name");
     }
-
-    // 3. 拆分路径并过滤掉 "." 和空值，处理 ".."
-    $parts = explode(DIRECTORY_SEPARATOR, $entryName);
+    // ZIP names may use either separator. Reject traversal rather than repairing it.
+    $entryName = str_replace('\\', '/', $entryName);
+    if ($entryName[0] === '/' || preg_match('/^[A-Za-z]:\//', $entryName)) {
+        throw new Exception("Absolute ZIP path is not allowed");
+    }
+    $parts = explode('/', $entryName);
     $safeParts = [];
     foreach ($parts as $part) {
-        if ($part === '.' || $part === '') continue;
-        if ($part === '..') {
-            array_pop($safeParts); // 向上跳一级
-        } else {
-            $safeParts[] = $part;
+        if ($part === '' || $part === '.') continue;
+        if ($part === '..' || !preg_match('/^[A-Za-z0-9._+\-]+$/', $part)) {
+            throw new Exception("Unsafe ZIP entry path");
         }
+        $safeParts[] = $part;
     }
-    
-    // 4. 重新组合
+    if (empty($safeParts)) {
+        throw new Exception("Empty ZIP entry path");
+    }
     $safeRelativePath = implode(DIRECTORY_SEPARATOR, $safeParts);
-    
-    // 5. 计算最终绝对路径
+
     $realBase = realpath($baseDir);
     if ($realBase === false) {
         throw new Exception("Base directory does not exist");
     }
     $finalPath = $realBase . DIRECTORY_SEPARATOR . $safeRelativePath;
 
-    // 6. 关键安全检查：最终路径必须依然以 baseDir 开头
-    if (strpos($finalPath, $realBase) !== 0) {
-        throw new Exception("检测到路径遍历攻击: $entryName");
+    $basePrefix = rtrim($realBase, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
+    if (strpos($finalPath, $basePrefix) !== 0) {
+        throw new Exception("ZIP path escapes base directory");
     }
 
     return $finalPath;

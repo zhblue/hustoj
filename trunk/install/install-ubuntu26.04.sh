@@ -158,7 +158,8 @@ else
         sed -i "s|#\tfastcgi_pass unix|\tfastcgi_pass unix|g" /etc/nginx/sites-enabled/default
         sed -i "s:}#added by hustoj::g" /etc/nginx/sites-enabled/default
         sed -i "s:php7.4:php$PHP_VER:g" /etc/nginx/sites-enabled/default
-        sed -i "s|# deny access to .htaccess files|}#added by hustoj\n\n\n\t# deny access to .htaccess files|g" /etc/nginx/sites-enabled/default
+	sed -i "s|# deny access to .htaccess files|}#added by hustoj\n\n\n\t# deny access to .htaccess files|g" /etc/nginx/sites-enabled/default
+        sed -i '/# deny access to \.htaccess files/i\        location ~* ^/upload/.*\\.php$ { deny all; return 403; }' /etc/nginx/sites-enabled/default
         sed -i "s|fastcgi_pass 127.0.0.1:9000;|fastcgi_pass 127.0.0.1:9001;\n\t\tfastcgi_buffer_size 256k;\n\t\tfastcgi_buffers $NBUFF 64k;|g" /etc/nginx/sites-enabled/default
 fi
 /etc/init.d/nginx restart

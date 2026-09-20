@@ -173,6 +173,11 @@ if ($_FILES["fps"]["error"] > 0) {
         for ($index = 0; $index < $zip->numFiles; $index++) {
             $file_name = $zip->getNameIndex($index);
             if ($file_name === false) continue;
+            try {
+                getSafeZipPath(sys_get_temp_dir(), $file_name);
+            } catch (Exception $e) {
+                continue;
+            }
 
             $file_path = dirname($file_name);
             $file_content = $zip->getFromIndex($index);
@@ -338,4 +343,3 @@ if ($_FILES["fps"]["error"] > 0) {
         echo ($tempfile);
     }
 }
-

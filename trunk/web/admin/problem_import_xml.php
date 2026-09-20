@@ -412,6 +412,11 @@ else {
         for ($i = 0; $i < $resource->numFiles; $i++) {
             $file_name = $resource->getNameIndex($i);
             if (substr($file_name, -1) == '/') continue;
+            try {
+                getSafeZipPath(sys_get_temp_dir(), $file_name);
+            } catch (Exception $e) {
+                continue;
+            }
             
             $file_content = $resource->getFromIndex($i);
             file_put_contents($tempfile_extract, $file_content);
