@@ -115,7 +115,7 @@ else {
     while ($dir_resource = zip_read($resource)) {
       if (zip_entry_open($resource,$dir_resource)) {
         $file_name = getSafeZipPath($tempdir,zip_entry_name($dir_resource));
-        $file_path = substr($file_name,0,strrpos($file_name, "/"));
+        $file_path = dirname($file_name);
         if (!is_dir($file_name)) {
           $file_size = zip_entry_filesize($dir_resource);
           $file_content = zip_entry_read($dir_resource,$file_size);
@@ -125,10 +125,10 @@ else {
 	  }else{
 	  	//echo "$file_name"."<br>";
 		mkdir($tempdir."/".dirname($file_name));
-		file_put_contents($tempdir."/".$file_name,$file_content);
+		file_put_contents($file_name,$file_content);
 	  }
 	}else{
-	  echo $file_name;
+	  echo htmlentities($file_name);
 	}
        zip_entry_close($dir_resource);
       }
@@ -139,8 +139,8 @@ else {
     $i = 1;
     while ($dir_resource = zip_read($resource)) {
       if (zip_entry_open($resource,$dir_resource)) {
-        $file_name = $path.zip_entry_name($dir_resource);
-        $file_path = substr($file_name,0,strrpos($file_name, "/"));
+        $file_name = getSafeZipPath($tempdir,zip_entry_name($dir_resource));
+        $file_path = dirname($file_name);
         if (!is_dir($file_name)) {
           $file_size = zip_entry_filesize($dir_resource);
           $file_content = zip_entry_read($dir_resource,$file_size);
