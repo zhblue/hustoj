@@ -114,7 +114,7 @@ else {
     $i = 1;
     while ($dir_resource = zip_read($resource)) {
       if (zip_entry_open($resource,$dir_resource)) {
-        $file_name = $path.zip_entry_name($dir_resource);
+        $file_name = getSafeZipPath($tempdir,zip_entry_name($dir_resource));
         $file_path = substr($file_name,0,strrpos($file_name, "/"));
         if (!is_dir($file_name)) {
           $file_size = zip_entry_filesize($dir_resource);
