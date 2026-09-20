@@ -2468,11 +2468,53 @@ function download(){
         } else alert(et('ReadDenied').": ".$file);
     } else alert(et('FileNotFound').": ".$file);
 }
+function is_allowed_upload_filename($filename) {
+    // The file manager is for judge data and source files, not arbitrary files.
+    if (!is_string($filename) || $filename === '' || strlen($filename) > 128) {
+        return false;
+    }
+    if (basename($filename) !== $filename || strpos($filename, "\0") !== false) {
+        return false;
+    }
+    if (!preg_match('/^[A-Za-z0-9][A-Za-z0-9._+\-]{0,127}$/', $filename)) {
+        return false;
+    }
+
+    $lower_name = strtolower($filename);
+    if (preg_match('/(?:^|\.)php(?:\.|$)/', $lower_name)) {
+        return false;
+    }
+
+    $extension = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
+    $allowed_extensions = array(
+        'in', 'out', 'ou', 'ans', 'zip',
+        'c', 'cc', 'pas', 'java', 'rb', 'sh', 'py', 'pl', 'cs', 'm',
+        'bas', 'scm', 'lua', 'js', 'go', 'sql', 'f95', 'cob', 'r', 'cpp',
+        'sb3', 'cj'
+    );
+    return in_array($extension, $allowed_extensions, true);
+}
+
 function save_upload($temp_file,$filename,$dir_dest) {
     global $upload_ext_filter;
+    if (!is_allowed_upload_filename($filename)) {
+        return 4;
+    }
+    if (strtolower(pathinfo($filename, PATHINFO_EXTENSION)) === 'cpp') {
+        $cpp_warning = true;
+    }
     $filename = remove_special_chars($filename);
+    if (!is_allowed_upload_filename($filename)) {
+        return 4;
+    }
     $file = $dir_dest.$filename;
+    if (!is_uploaded_file($temp_file) || !is_file($temp_file)) {
+        return 2;
+    }
     $filesize = filesize($temp_file);
+    if ($filesize === false) {
+        return 2;
+    }
     $is_denied = false;
     foreach($upload_ext_filter as $key=>$ext){
         if (preg_match($ext,$filename)){
@@ -2487,13 +2529,13 @@ function save_upload($temp_file,$filename,$dir_dest) {
                 if (unlink($file)){
                     if (copy($temp_file,$file)){
                         @chmod($file,0744);
-                        $out = 6;
+                        $out = isset($cpp_warning) ? 8 : 6;
                     } else $out = 2;
                 } else $out = 5;
             } else {
                 if (copy($temp_file,$file)){
                     @chmod($file,0744);
-                    $out = 1;
+                    $out = isset($cpp_warning) ? 8 : 1;
                 } else $out = 2;
             }
 	if(file_exists("/usr/bin/dos2unix")&&function_exists("system")) system("/usr/bin/dos2unix ".escapeshellarg($file));
@@ -2506,38 +2548,52 @@ function zip_extract(){
   $zip = zip_open($current_dir.$cmd_arg);
   if ($zip) {
     while ($zip_entry = zip_read($zip)) {
-        if (zip_entry_filesize($zip_entry)) {
-            $complete_path = $path.dirname(zip_entry_name($zip_entry));
-            $complete_name = $path.zip_entry_name($zip_entry);
-	    if(str_ends_with($complete_name,".txt")){   // atcoder zip
-                $ext=".txt";
-                if (str_contains($complete_path,"in")){   //  A/in/*.txt
-                        $complete_name=basename($complete_name,".txt").".in";
-                }
-                if (str_contains($complete_path,"out")){   //  A/out/*.txt
-                        $complete_name=basename($complete_name,".txt").".out";
-                }
-            }
+        $entry_name = zip_entry_name($zip_entry);
+        $entry_size = zip_entry_filesize($zip_entry);
+        if (!is_string($entry_name) || $entry_name === '' || $entry_size <= 0) {
+            continue;
+        }
 
-	    $complete_path=remove_special_chars($complete_path);
-		
-            if(!file_exists($complete_path)) {
-                $tmp = '';
-                foreach(explode('/',$complete_path) AS $k) {
-                    $tmp .= $k.'/';
-                    if(!file_exists($tmp)) {
-                        @mkdir($current_dir.$tmp, 0711);
-                    }
-                }
+        // Never create archive directories. Flatten them into a filename prefix.
+        $entry_name = str_replace('\\', '/', $entry_name);
+        if (strpos($entry_name, "\0") !== false ||
+            $entry_name[0] === '/' || preg_match('/^[A-Za-z]:\//', $entry_name)) {
+            continue;
+        }
+        $parts = explode('/', $entry_name);
+        $safe_parts = array();
+        foreach ($parts as $part) {
+            if ($part === '' || $part === '.') continue;
+            if ($part === '..' || !preg_match('/^[A-Za-z0-9._-]+$/', $part)) {
+                $safe_parts = array();
+                break;
             }
-            if (zip_entry_open($zip, $zip_entry, "r")) {
-		$complete_name=remove_special_chars($complete_name);
-                if ($fd = fopen($current_dir.$complete_name, 'w')){
-                    fwrite($fd, zip_entry_read($zip_entry, zip_entry_filesize($zip_entry)));
-                    fclose($fd);
-                } else echo "fopen($current_dir.$complete_name) error<br>";
-                zip_entry_close($zip_entry);
-            } else echo "zip_entry_open($zip,$zip_entry) error<br>";
+            $safe_parts[] = $part;
+        }
+        if (count($safe_parts) === 0) continue;
+
+        $basename = array_pop($safe_parts);
+        $prefix = count($safe_parts) ? implode('_', $safe_parts) . '_' : '';
+        $complete_name = $prefix . $basename;
+
+        // Preserve the existing AtCoder convention while still validating output.
+        if (strtolower(pathinfo($complete_name, PATHINFO_EXTENSION)) === 'txt') {
+            $lower_path = strtolower(implode('/', $safe_parts));
+            if (strpos($lower_path, 'in') !== false) {
+                $complete_name = basename($complete_name, '.txt') . '.in';
+            } elseif (strpos($lower_path, 'out') !== false) {
+                $complete_name = basename($complete_name, '.txt') . '.out';
+            }
+        }
+        if (!is_allowed_upload_filename($complete_name)) continue;
+
+        $target = rtrim($current_dir, '/\\') . DIRECTORY_SEPARATOR . $complete_name;
+        if (zip_entry_open($zip, $zip_entry, "r")) {
+            $data = zip_entry_read($zip_entry, $entry_size);
+            if ($data !== false && file_put_contents($target, $data, LOCK_EX) === false) {
+                echo "file_put_contents($target) error<br>";
+            }
+            zip_entry_close($zip_entry);
         }
     }
     zip_close($zip);
@@ -3946,6 +4002,11 @@ function upload_form(){
                 break;
                 case 7:
                 $out .= "<tr><td colspan=2><b>".str_zero($x+1,3).".<font color=red><b> ".et('FileIgnored')."</font></td></tr>\n";
+                break;
+                case 8:
+                $out .= "<tr><td><b>".str_zero($x+1,3).".<font color=green><b> ".et('FileSent').":</font><td>".htmlspecialchars($filename, ENT_QUOTES, 'UTF-8')."</td></tr>";
+                $out .= "<tr><td colspan=2><font color=orange><b>提示：</b>系统接受的 C++ 扩展名是 .cc，建议将 .cpp 文件重命名为 .cc。</font></td></tr>\n";
+                break;
             }
         }
         if ($fechar) {
