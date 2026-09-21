@@ -123,7 +123,7 @@ if (!(isset($_SESSION[$OJ_NAME.'_'.'administrator'])
     $fm_self = $doc_root.$_SERVER["PHP_SELF"];
     $path_info = pathinfo($fm_self);
 	// Register Globals
-	$blockKeys = array('_SERVER','_SESSION','_GET','_POST','_COOKIE','charset','ip','islinux','url','url_info','doc_root','fm_self','path_info');
+	$blockKeys = array('current_dir','_SERVER','_SESSION','_GET','_POST','_COOKIE','charset','ip','islinux','url','url_info','doc_root','fm_self','path_info');
     foreach ($_GET as $key => $val) if (array_search($key,$blockKeys) === false) $$key=$val;
     foreach ($_POST as $key => $val) if (array_search($key,$blockKeys) === false) $$key=$val;
     foreach ($_COOKIE as $key => $val) if (array_search($key,$blockKeys) === false) $$key=$val;
