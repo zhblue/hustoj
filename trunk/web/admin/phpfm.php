@@ -4341,9 +4341,9 @@ function view(){
 }
 function edit_file_form(){
     global $current_dir,$filename,$file_data,$save_file,$path_info,$OJ_AI_API_URL,$pid;
-    $filename=remove_special_chars($filename);
+    $filename=remove_special_chars(basename($filename));
    // echo "[$filename]";
-    $file = $current_dir.basename($filename);
+    $file = $current_dir.($filename);
     if ($save_file){
         $fh=fopen($file,"w");
 	$file_data=preg_replace("(\r\n)","\n",$file_data);
