@@ -4343,7 +4343,7 @@ function edit_file_form(){
     global $current_dir,$filename,$file_data,$save_file,$path_info,$OJ_AI_API_URL,$pid;
     $filename=remove_special_chars($filename);
    // echo "[$filename]";
-    $file = $current_dir.$filename;
+    $file = $current_dir.basename($filename);
     if ($save_file){
         $fh=fopen($file,"w");
 	$file_data=preg_replace("(\r\n)","\n",$file_data);
@@ -4843,7 +4843,7 @@ function frame3(){
             break;
             case 3: // rename arq ou dir
             if ((strlen($old_name))&&(strlen($new_name))){
-                rename($current_dir.$old_name,$current_dir.$new_name);
+                rename($current_dir.basename($old_name),$current_dir.basename($new_name));
                 if (is_dir($current_dir.$new_name)) reloadframe("parent",2);
             }
             break;
