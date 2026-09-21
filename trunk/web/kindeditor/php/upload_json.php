@@ -30,7 +30,7 @@ function upload_one_file($file_name,$tmp_name,$file_size){
 		'image' => array('gif', 'jpg', 'jpeg', 'png', 'bmp'),
 		'flash' => array('swf', 'flv'),
 		'media' => array('swf', 'flv', 'mp3', 'wav', 'wma', 'wmv', 'mid', 'avi', 'mpg', 'asf', 'rm', 'rmvb', "mp4"),
-		'file' => array('pdf','doc', 'docx', 'xls', 'xlsx', 'ppt', 'htm', 'html', 'txt', 'zip', 'rar', 'gz', 'bz2'),
+		'file' => array('pdf','doc', 'docx', 'xls', 'xlsx', 'ppt', 'txt', 'zip', 'rar', 'gz', 'bz2'),
 	);
 	//最大文件大小
 	$max_size = 400*1024*1024;
