@@ -153,8 +153,9 @@ if (!(isset($_SESSION[$OJ_NAME.'_'.'administrator'])
 
     $dir_dest=$current_dir;
     if (!isset($current_dir)){
-        $current_dir = $path_info["dirname"]."/";
-        if (!$islinux) $current_dir = ucfirst($current_dir);
+		exit();
+       // $current_dir = $path_info["dirname"]."/";
+       // if (!$islinux) $current_dir = ucfirst($current_dir);
         //@chmod($current_dir,0711);
     } else $current_dir = format_path($current_dir);
     // Auto Expand Local Path
