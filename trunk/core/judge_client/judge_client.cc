@@ -4119,6 +4119,7 @@ int make_out(int solution_id,int p_id,int lang,char * work_dir,double time_lmt,i
 	if(p_id>=0) return 1;
 	p_id=-p_id;
 	init_syscalls_limits(lang);
+	if(chown(oj_home,www_uid,judge_gid)) printf("fail to chown %d:%d %s\n",www_uid,judge_gid,oj_home);
 	sprintf(work_dir,"%s/data/%d/",oj_home,p_id);
 	pid_t pidApp = fork();
 	if (pidApp == 0){
