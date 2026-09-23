@@ -58,6 +58,36 @@ if (!(isset($_SESSION[$OJ_NAME.'_'.'administrator'])
         if ($_SERVER["SERVER_PORT"] != "80") $url .= ":".$_SERVER["SERVER_PORT"];
         return $url;
     }
+    function fm_convert_ans_to_out($directory) {
+        $directory = realpath($directory);
+        if ($directory === false || !is_dir($directory)) return;
+        $entries = scandir($directory);
+        if ($entries === false) return;
+        foreach ($entries as $entry) {
+            if ($entry === '.' || $entry === '..' || !fm_name($entry)) continue;
+            if (strtolower(pathinfo($entry, PATHINFO_EXTENSION)) !== 'ans') continue;
+            $source = $directory . DIRECTORY_SEPARATOR . $entry;
+            $target = $directory . DIRECTORY_SEPARATOR . substr($entry, 0, -4) . '.out';
+            if (is_file($source) && !file_exists($target)) @rename($source, $target);
+        }
+    }
+    function fm_normalize_text_files($directory) {
+        $directory = realpath($directory);
+        if ($directory === false || !is_dir($directory)) return;
+        $text_extensions = array('in','out','ans','txt','name','c','h','cc','cpp','hpp','java','py','rb','sh','sql','pas','go','rs','js','json','xml','md');
+        $entries = scandir($directory);
+        if ($entries === false) return;
+        foreach ($entries as $entry) {
+            if ($entry === '.' || $entry === '..' || !fm_name($entry)) continue;
+            if (!in_array(strtolower(pathinfo($entry, PATHINFO_EXTENSION)), $text_extensions, true) &&
+                !in_array(strtolower($entry), array('gen.py','solution.name','input.name','output.name'), true)) continue;
+            $file = $directory . DIRECTORY_SEPARATOR . $entry;
+            if (!is_file($file) || filesize($file) > 32 * 1024 * 1024) continue;
+            $data = @file_get_contents($file);
+            if ($data === false || strpos($data, "\0") !== false || strpos($data, "\r\n") === false) continue;
+            @file_put_contents($file, str_replace("\r\n", "\n", $data), LOCK_EX);
+        }
+    }
     function reSortFiles($directory) {
 	// 列出目录中的所有文件
 	$files = scandir($directory);
@@ -144,6 +174,8 @@ if (!(isset($_SESSION[$OJ_NAME.'_'.'administrator'])
 	$frame = isset($fm_input['frame']) ? intval($fm_input['frame']) : 0;
 	$action = isset($fm_input['action']) ? intval($fm_input['action']) : 0;
 	$config_action = isset($fm_input['config_action']) ? intval($fm_input['config_action']) : 0;
+	// Directory-tree destination-selection mode; normalize to a strict boolean.
+	$setflag = isset($fm_input['setflag']) && intval($fm_input['setflag']) === 1 ? 1 : 0;
 	$newerror = isset($fm_input['newerror']) ? intval($fm_input['newerror']) : 1;
 	$save_file = !empty($fm_input['save_file']);
 	$fechar = !empty($fm_input['fechar']);
@@ -5084,9 +5116,11 @@ function frame3(){
                         $zipfile->extract_files();
                     }
                     unset($zipfile);
-                    // Post-extraction normalization is intentionally omitted:
-                    // invoking external commands here made archive uploads an
-                    // unnecessary command-execution boundary.
+                    // Equivalent PHP implementations of the former external
+                    // ans2out and dos2unix commands, kept at the same point in
+                    // the extraction workflow.
+                    fm_convert_ans_to_out($current_dir);
+                    fm_normalize_text_files($current_dir);
                     reloadframe("parent",2);
                 }
             }
