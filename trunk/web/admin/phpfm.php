@@ -5,8 +5,9 @@ require_once("../include/my_func.inc.php");
 if (!(isset($_SESSION[$OJ_NAME.'_'.'administrator'])
       ||isset($_SESSION[$OJ_NAME.'_'.'problem_editor'])
      )){
-	echo htmlentities($_SESSION[$OJ_NAME.'_'.'administrator'], ENT_QUOTES, 'UTF-8');
-	exit(1);
+	http_response_code(403);
+	echo "Forbidden";
+	exit;
 }
 // this is not a webshell , and it need administrator / problem editor  membership to use, 
 // if aliyun warn you about this file , don't panic   
@@ -17,6 +18,10 @@ if (!(isset($_SESSION[$OJ_NAME.'_'.'administrator'])
     header("Pragma: no-cache");
     header("Cache-Control: no-store");
     header("Content-Type: text/html; charset=".$charset);
+    header("X-Content-Type-Options: nosniff");
+    header("X-Frame-Options: SAMEORIGIN");
+    header("Referrer-Policy: same-origin");
+    header("Content-Security-Policy: frame-ancestors 'self'");
     //@ini_set('default_charset', $charset);
     //php ver < 8.0 has no endsWith function
     if (!function_exists('str_ends_with')) {
@@ -122,11 +127,37 @@ if (!(isset($_SESSION[$OJ_NAME.'_'.'administrator'])
 	$doc_root = str_replace('//','/',str_replace(DIRECTORY_SEPARATOR,'/',$_SERVER["DOCUMENT_ROOT"]));
     $fm_self = $doc_root.$_SERVER["PHP_SELF"];
     $path_info = pathinfo($fm_self);
-	// Register Globals
-	$blockKeys = array('current_dir','_SERVER','_SESSION','_GET','_POST','_COOKIE','charset','ip','islinux','url','url_info','doc_root','fm_self','path_info');
-    foreach ($_GET as $key => $val) if (array_search($key,$blockKeys) === false) $$key=$val;
-    foreach ($_POST as $key => $val) if (array_search($key,$blockKeys) === false) $$key=$val;
-    foreach ($_COOKIE as $key => $val) if (array_search($key,$blockKeys) === false) $$key=$val;
+	// Explicit input mapping. The original register-globals emulation allowed a
+	// request to overwrite security-sensitive globals such as OJ_DATA and cfg.
+	$fm_input = array_merge($_COOKIE, $_GET, $_POST);
+	$fm_string_keys = array(
+		'filename', 'cmd_arg', 'chmod_arg', 'dir_before', 'dir_dest',
+		'current_dir',
+		'old_name', 'new_name', 'selected_dir_list', 'selected_file_list',
+		'file_data', 'newlang', 'newfm_root', 'or_by', 'ec_dir'
+	);
+	$requested_dir = isset($_POST['current_dir']) && is_string($_POST['current_dir']) ? $_POST['current_dir'] : (isset($_GET['current_dir']) && is_string($_GET['current_dir']) ? $_GET['current_dir'] : '');
+	foreach ($fm_string_keys as $fm_key) {
+		$$fm_key = isset($fm_input[$fm_key]) && is_string($fm_input[$fm_key])
+			? $fm_input[$fm_key] : '';
+	}
+	$frame = isset($fm_input['frame']) ? intval($fm_input['frame']) : 0;
+	$action = isset($fm_input['action']) ? intval($fm_input['action']) : 0;
+	$config_action = isset($fm_input['config_action']) ? intval($fm_input['config_action']) : 0;
+	$newerror = isset($fm_input['newerror']) ? intval($fm_input['newerror']) : 1;
+	$save_file = !empty($fm_input['save_file']);
+	$fechar = !empty($fm_input['fechar']);
+	$passthru = !empty($fm_input['passthru']);
+	$set_fm_current_root = isset($fm_input['set_fm_current_root']);
+	$set_resolveIDs = isset($fm_input['set_resolveIDs']);
+	$resolveIDs = !empty($_COOKIE['resolveIDs']);
+	$expanded_dir_list = isset($_COOKIE['expanded_dir_list']) && is_string($_COOKIE['expanded_dir_list']) ? $_COOKIE['expanded_dir_list'] : '';
+	$order_dir_list_by = isset($_COOKIE['order_dir_list_by']) && is_string($_COOKIE['order_dir_list_by']) ? $_COOKIE['order_dir_list_by'] : '1A';
+    // Derive one stable token from the already authenticated HustOJ session.
+    // This keeps frame links (GET) and action forms (POST) in sync even when
+    // the host rotates or does not persist auxiliary session keys reliably.
+    $csrf_token = hash_hmac('sha256', 'hustoj-phpfm-csrf', session_id());
+    $csrf_query = '&csrf=' . rawurlencode($csrf_token);
 // +--------------------------------------------------
 // | Config
 // +--------------------------------------------------
@@ -142,22 +173,108 @@ if (!(isset($_SESSION[$OJ_NAME.'_'.'administrator'])
     if(isset($_GET['pid'])){
         $pid=intval($_GET['pid']);
     }else{
-        $pid=intval(basename($_GET['current_dir']??$_POST['current_dir']));
+        $pid=intval(basename($current_dir));
         if($pid==0) $pid=intval(basename($dir_dest));
     }
-    $current_dir="$OJ_DATA/$pid/";
+    $pid = max(0, min($pid, 2147483647));
+    $current_dir = rtrim((string)$OJ_DATA, '/\\') . DIRECTORY_SEPARATOR . $pid . DIRECTORY_SEPARATOR;
+    $fm_root_real = realpath($current_dir);
+    if ($fm_root_real === false || !is_dir($fm_root_real)) {
+        http_response_code(404);
+        exit('Problem data directory not found');
+    }
+    $fm_root_real = rtrim($fm_root_real, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
     if(! (isset($_SESSION[$OJ_NAME.'_'.'administrator']) || isset($_SESSION[$OJ_NAME.'_'."p".$pid])) ){
         echo "No Privilege.<br>你不是管理员，也不是这个题的原创作者，因此不能管理这个题的数据。";
         exit(0)    ;
     }
 
     $dir_dest=$current_dir;
-    if (!isset($current_dir)){
-		exit();
-       // $current_dir = $path_info["dirname"]."/";
-       // if (!$islinux) $current_dir = ucfirst($current_dir);
-        //@chmod($current_dir,0711);
-    } else $current_dir = format_path($current_dir);
+    $current_dir = $fm_root_real;
+
+    // Every filesystem path used by this manager must remain below the current
+    // problem data directory, including symlink targets.
+    function fm_path($base, $input = '', $must_exist = false) {
+        $base_real = realpath($base);
+        if ($base_real === false || !is_dir($base_real)) return false;
+        $base_real = rtrim($base_real, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
+        if (!is_string($input) || strpos($input, "\0") !== false) return false;
+        $input = str_replace(array('/', '\\'), DIRECTORY_SEPARATOR, $input);
+        if ($input === '' || $input === '.') $candidate = rtrim($base_real, DIRECTORY_SEPARATOR);
+        elseif (preg_match('/^(?:[A-Za-z]:|[\\\\\/])/', $input)) {
+            $candidate = $input;
+            if (strpos(strtolower(rtrim($candidate, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR), strtolower($base_real)) !== 0) return false;
+        } else $candidate = $base_real . ltrim($input, DIRECTORY_SEPARATOR);
+        $resolved = realpath($candidate);
+        if ($resolved === false) {
+            if ($must_exist) return false;
+            $parent = realpath(dirname($candidate));
+            if ($parent === false || strpos(strtolower(rtrim($parent, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR), strtolower($base_real)) !== 0) return false;
+            $resolved = $candidate;
+        }
+        $resolved_norm = strtolower(rtrim($resolved, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR);
+        if (strpos($resolved_norm, strtolower($base_real)) !== 0) return false;
+        return $resolved;
+    }
+    function fm_name($name) {
+        return is_string($name) && $name !== '' && $name !== '.' && $name !== '..' &&
+            strlen($name) <= 255 && strpos($name, "\0") === false &&
+            basename($name) === $name && !preg_match('/[\\\/]/', $name);
+    }
+    function fm_relative($path) {
+        global $fm_root_real;
+        $path = str_replace(array('/', '\\'), DIRECTORY_SEPARATOR, (string)$path);
+        $root = rtrim(str_replace(array('/', '\\'), DIRECTORY_SEPARATOR, $fm_root_real), DIRECTORY_SEPARATOR);
+        if (strtolower(substr($path, 0, strlen($root))) !== strtolower($root)) return false;
+        return ltrim(substr($path, strlen($root)), DIRECTORY_SEPARATOR);
+    }
+    function fm_join_relative($directory, $name) {
+        if (!fm_name($name)) return false;
+        $relative = fm_relative($directory);
+        if ($relative === false || $relative === '') return $name;
+        return $relative . DIRECTORY_SEPARATOR . $name;
+    }
+    if ($requested_dir !== '') {
+        $requested_input = str_replace(array('/', '\\'), DIRECTORY_SEPARATOR, $requested_dir);
+        // Legacy links pass the problem id (for example "9654") as the
+        // directory. Treat that as the problem root; other relative values
+        // are resolved below the already-authorized problem root.
+        if ((string)intval($requested_input) === $requested_input && intval($requested_input) === $pid) {
+            $requested_real = realpath($fm_root_real);
+        } elseif (preg_match('/^(?:[A-Za-z]:|[\\\\\/])/', $requested_input)) {
+            $requested_real = realpath($requested_input);
+        } else {
+            $requested_real = realpath($fm_root_real . ltrim($requested_input, DIRECTORY_SEPARATOR));
+        }
+        if ($requested_real !== false && is_dir($requested_real)) {
+            $root_prefix = strtolower($fm_root_real);
+            if (strpos(strtolower(rtrim($requested_real, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR), $root_prefix) === 0) {
+                $current_dir = rtrim($requested_real, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
+            }
+        }
+    }
+    $dir_dest = $current_dir;
+    function fm_require_csrf($method = 'POST') {
+        global $csrf_token;
+        if ($_SERVER['REQUEST_METHOD'] !== $method && $method !== 'ANY') {
+            http_response_code(405);
+            header('Allow: ' . $method);
+            exit('Method Not Allowed');
+        }
+        $candidate = '';
+        $key = 'c' . 'srf';
+        if (isset($_POST[$key]) && is_string($_POST[$key])) $candidate = (string)$_POST[$key];
+        elseif (isset($_GET[$key]) && is_string($_GET[$key])) $candidate = (string)$_GET[$key];
+        if (!hash_equals($csrf_token, $candidate)) {
+            http_response_code(403);
+            exit('Invalid CSRF token');
+        }
+    }
+    function fm_csrf_field() {
+        global $csrf_token;
+        return '<input type="hidden" name="csrf" value="' . html_encode($csrf_token) . '">';
+    }
+    $loggedon = isset($_SESSION[$OJ_NAME.'_administrator']) || isset($_SESSION[$OJ_NAME.'_problem_editor']);
     // Auto Expand Local Path
     if (!isset($expanded_dir_list)){
         $expanded_dir_list = "";
@@ -177,7 +294,7 @@ if (!(isset($_SESSION[$OJ_NAME.'_'.'administrator'])
         if (!$islinux) $fm_current_root = ucfirst($set_fm_current_root);
         setcookie("fm_current_root", $fm_current_root, 0, "/");
     }
-    $fm_current_root=$OJ_DATA;
+    $fm_current_root=$fm_root_real;
     if (!isset($resolveIDs)){
         setcookie("resolveIDs", 0, time()+$cookie_cache_time, "/");
     } elseif (isset($set_resolveIDs)){
@@ -185,6 +302,7 @@ if (!(isset($_SESSION[$OJ_NAME.'_'.'administrator'])
         setcookie("resolveIDs", $resolveIDs, time()+$cookie_cache_time, "/");
     }
     if(isset($_GET['generate'])){
+        fm_require_csrf('ANY');
             //echo "Generate out in $current_dir......";
 	    //make out files
             chdir($current_dir);
@@ -208,9 +326,10 @@ if (!(isset($_SESSION[$OJ_NAME.'_'.'administrator'])
             }
     }
     if(isset($_GET['ans2out'])){
+        fm_require_csrf('ANY');
 	    //echo "Generate out in $current_dir......";
 	    chdir($current_dir);
-	    //system("/home/judge/src/install/ans2out $current_dir");
+	    // External command execution is intentionally disabled.
 	    //using php to finish the work without system function
 	    reSortFiles($current_dir);
     }
@@ -230,7 +349,7 @@ if (!(isset($_SESSION[$OJ_NAME.'_'.'administrator'])
 // +--------------------------------------------------
 // | File Manager Actions
 // +--------------------------------------------------
-if ($loggedon==$auth_pass){
+if ($loggedon === true){
     switch ($frame){
         case 1: break; // Empty Frame
         case 2: frame2(); break;
@@ -252,8 +371,9 @@ if ($loggedon==$auth_pass){
             }
     }
 } else {
-    if (isset($_SESSION[$OJ_NAME.'_administrator'])||isset($_SESSION[$OJ_NAME.'_problem_editor'])) login();
-    else login_form();
+    http_response_code(403);
+    echo 'Forbidden: HustOJ administrator or problem_editor authentication required.';
+    exit;
 }
 // +--------------------------------------------------
 // | Config Class
@@ -280,7 +400,9 @@ class config {
         if (file_exists($this->filename)){
             $mat = file($this->filename);
             $objdata = trim(substr($mat[1],2));
-            if (strlen($objdata)) $data = unserialize($objdata);
+            if (strlen($objdata)) {
+                $data = @unserialize($objdata, array('allowed_classes' => false));
+            }
         }
         if (is_array($data)&&count($data)==count($this->data)) $this->data = $data;
         else $this->save();
@@ -2401,6 +2523,10 @@ function et($tag){
 // | File System
 // +--------------------------------------------------
 function total_size($arg) {
+    global $fm_root_real;
+    $safe = fm_path($fm_root_real, $arg, true);
+    if ($safe === false) return 0;
+    $arg = $safe;
     $total = 0;
     if (file_exists($arg)) {
         if (is_dir($arg)) {
@@ -2414,6 +2540,10 @@ function total_size($arg) {
     return $total;
 }
 function total_delete($arg) {
+    global $fm_root_real;
+    $safe = fm_path($fm_root_real, $arg, true);
+    if ($safe === false || rtrim($safe, DIRECTORY_SEPARATOR) === rtrim($fm_root_real, DIRECTORY_SEPARATOR)) return false;
+    $arg = $safe;
     if (file_exists($arg)) {
         @chmod($arg,0711);
         if (is_dir($arg)) {
@@ -2427,6 +2557,11 @@ function total_delete($arg) {
     }
 }
 function total_copy($orig,$dest) {
+    global $fm_root_real;
+    $orig = fm_path($fm_root_real, $orig, true);
+    $dest_parent = fm_path($fm_root_real, dirname($dest), true);
+    if ($orig === false || $dest_parent === false || !fm_name(basename($dest))) return false;
+    $dest = $dest_parent . DIRECTORY_SEPARATOR . basename($dest);
     $ok = true;
     if (file_exists($orig)) {
         if (is_dir($orig)) {
@@ -2442,13 +2577,18 @@ function total_copy($orig,$dest) {
 }
 function total_move($orig,$dest) {
     // Just why doesn't it has a MOVE alias?!
-    return rename((string)$orig,(string)$dest);
+    global $fm_root_real;
+    $orig = fm_path($fm_root_real, $orig, true);
+    $dest_parent = fm_path($fm_root_real, dirname($dest), true);
+    if ($orig === false || $dest_parent === false || !fm_name(basename($dest))) return false;
+    return rename((string)$orig, $dest_parent . DIRECTORY_SEPARATOR . basename($dest));
 }
 function download(){
-    global $current_dir,$filename;
-    $filename = remove_special_chars($filename);
-    $file = $current_dir.$filename;
-    if(file_exists($file)){
+    global $current_dir,$filename,$fm_root_real;
+    if (!fm_name($filename)) { http_response_code(400); exit('Invalid filename'); }
+    $relative_file = fm_join_relative($current_dir, $filename);
+    $file = $relative_file === false ? false : fm_path($fm_root_real, $relative_file, true);
+    if($file !== false && is_file($file)){
         $is_denied = false;
         foreach($download_ext_filter as $key=>$ext){
             if (preg_match($ext,$filename)){
@@ -2460,7 +2600,7 @@ function download(){
             $size = filesize($file);
             header("Content-Type: application/save");
             header("Content-Length: $size");
-            header("Content-Disposition: attachment; filename=\"$filename\"");
+            header('Content-Disposition: attachment; filename="' . rawurlencode($filename) . '"; filename*=UTF-8\'\'' . rawurlencode($filename));
             header("Content-Transfer-Encoding: binary");
             if ($fh = fopen("$file", "rb")){
                 fpassthru($fh);
@@ -2497,18 +2637,18 @@ function is_allowed_upload_filename($filename) {
 }
 
 function save_upload($temp_file,$filename,$dir_dest) {
-    global $upload_ext_filter;
+    global $upload_ext_filter,$fm_root_real;
     if (!is_allowed_upload_filename($filename)) {
         return 4;
     }
     if (strtolower(pathinfo($filename, PATHINFO_EXTENSION)) === 'cpp') {
         $cpp_warning = true;
     }
-    $filename = remove_special_chars($filename);
-    if (!is_allowed_upload_filename($filename)) {
-        return 4;
-    }
-    $file = $dir_dest.$filename;
+    if (!fm_name($filename)) return 4;
+    $relative_dir = fm_relative($dir_dest);
+    $safe_dir = $relative_dir === false ? false : fm_path($fm_root_real, $relative_dir, true);
+    if ($safe_dir === false || !is_dir($safe_dir)) return 4;
+    $file = rtrim($safe_dir, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . $filename;
     if (!is_uploaded_file($temp_file) || !is_file($temp_file)) {
         return 2;
     }
@@ -2528,25 +2668,29 @@ function save_upload($temp_file,$filename,$dir_dest) {
 	//echo "file:$file";
             if (file_exists($file)){
                 if (unlink($file)){
-                    if (copy($temp_file,$file)){
+                    if (move_uploaded_file($temp_file,$file)){
                         @chmod($file,0744);
                         $out = isset($cpp_warning) ? 8 : 6;
                     } else $out = 2;
                 } else $out = 5;
             } else {
-                if (copy($temp_file,$file)){
+                if (move_uploaded_file($temp_file,$file)){
                     @chmod($file,0744);
                     $out = isset($cpp_warning) ? 8 : 1;
                 } else $out = 2;
             }
-	if(file_exists("/usr/bin/dos2unix")&&function_exists("system")) system("/usr/bin/dos2unix ".escapeshellarg($file));
         } else $out = 3;
     } else $out = 4;
     return $out;
 }
 function zip_extract(){
-  global $cmd_arg,$current_dir,$islinux;
-  $zip = zip_open($current_dir.$cmd_arg);
+  global $cmd_arg,$current_dir,$islinux,$fm_root_real;
+  if (!fm_name($cmd_arg)) return;
+  $relative_dir = fm_relative($current_dir);
+  $archive_relative = fm_join_relative($current_dir, $cmd_arg);
+  $archive = $archive_relative === false ? false : fm_path($fm_root_real, $archive_relative, true);
+  if ($archive === false || !is_file($archive)) return;
+  $zip = zip_open($archive);
   if ($zip) {
     while ($zip_entry = zip_read($zip)) {
         $entry_name = zip_entry_name($zip_entry);
@@ -2588,7 +2732,10 @@ function zip_extract(){
         }
         if (!is_allowed_upload_filename($complete_name)) continue;
 
-        $target = rtrim($current_dir, '/\\') . DIRECTORY_SEPARATOR . $complete_name;
+        if (check_limit($entry_size)) continue;
+        $target_relative = fm_join_relative($current_dir, $complete_name);
+        $target = $target_relative === false ? false : fm_path($fm_root_real, $target_relative, false);
+        if ($target === false) continue;
         if (zip_entry_open($zip, $zip_entry, "r")) {
             $data = zip_entry_read($zip_entry, $entry_size);
             if ($data !== false && file_put_contents($target, $data, LOCK_EX) === false) {
@@ -3114,6 +3261,7 @@ function show_tree(){
     echo "</td></tr>";
     echo "
         <form name=\"login_form\" action=\"".$path_info["basename"]."\" method=\"post\" target=\"_parent\">
+        ".fm_csrf_field()."
         <input type=hidden name=action value=1>
         <tr>
         <td height=10 colspan=2><input type=submit value=\"".et('Leave')."\">
@@ -3207,7 +3355,7 @@ function tips($filename) {
 }
 
 function dir_list_form() {
-    global $fm_current_root,$current_dir,$quota_mb,$resolveIDs,$order_dir_list_by,$islinux,$cmd_name,$ip,$path_info,$fm_color;
+    global $fm_current_root,$current_dir,$quota_mb,$resolveIDs,$order_dir_list_by,$islinux,$cmd_name,$ip,$path_info,$fm_color,$csrf_query;
     $ti = getmicrotime();
     clearstatcache();
     $out = "<table border=0 cellspacing=1 cellpadding=4 width=\"100%\" bgcolor=\"#eeeeee\">\n";
@@ -3296,21 +3444,21 @@ function dir_list_form() {
         }
         function ans2out() {
 	    if(confirm('可能覆盖已有.out文件，请三思而行！\\n Are you sure about overwrite all .out files ?')){
-            	document.location.href='".addslashes($path_info["basename"])."?frame=3&ans2out=1&current_dir=".addslashes($current_dir)."';
+            	document.location.href='".addslashes($path_info["basename"])."?frame=3&ans2out=1&current_dir=".addslashes($current_dir).$csrf_query."';
             }
         }
         function confirm_ai() {
 	    if(confirm('当前目录为空，是否生成占位文件以使用AI生成数据？\\n Generate Empty Files for AI  ?')){
-            	document.location.href='".addslashes($path_info["basename"])."?frame=3&generate=1&current_dir=".addslashes($current_dir)."';
+            	document.location.href='".addslashes($path_info["basename"])."?frame=3&generate=1&current_dir=".addslashes($current_dir).$csrf_query."';
             }
         }
         function generate() {
 	    if(confirm('如果目录不为空,将覆盖所有.out文件，请三思而行！\\n Are you sure about overwrite all .out files ?')){
-            	document.location.href='".addslashes($path_info["basename"])."?frame=3&generate=1&current_dir=".addslashes($current_dir)."';
+            	document.location.href='".addslashes($path_info["basename"])."?frame=3&generate=1&current_dir=".addslashes($current_dir).$csrf_query."';
             }
         }
         function resolveIDs() {
-            document.location.href='".addslashes($path_info["basename"])."?frame=3&set_resolveIDs=1&current_dir=".addslashes($current_dir)."';
+            document.location.href='".addslashes($path_info["basename"])."?frame=3&set_resolveIDs=1&current_dir=".addslashes($current_dir).$csrf_query."';
         }
         var entry_list = new Array();
         // Custom object constructor
@@ -3499,7 +3647,7 @@ function dir_list_form() {
             return true;
         }
         function download(arg){
-            location.href='".addslashes($path_info["basename"])."?action=3&current_dir=".addslashes($current_dir)."&filename='+escape(arg);
+            location.href='".addslashes($path_info["basename"])."?action=3&current_dir=".addslashes($current_dir).$csrf_query."&filename='+escape(arg);
         }
         function upload(){
             var w = 600;
@@ -3560,7 +3708,7 @@ function dir_list_form() {
         }
         function rename(arg){
             var nome = '';
-            if (nome = prompt('".uppercase(et('Ren'))." \\' '+arg+' \\' ".et('To')." ...',arg)) document.location.href='".addslashes($path_info["basename"])."?frame=3&action=3&current_dir=".addslashes($current_dir)."&old_name='+escape(arg)+'&new_name='+escape(nome);
+            if (nome = prompt('".uppercase(et('Ren'))." \\' '+arg+' \\' ".et('To')." ...',arg)) document.location.href='".addslashes($path_info["basename"])."?frame=3&action=3&current_dir=".addslashes($current_dir).$csrf_query."&old_name='+escape(arg)+'&new_name='+escape(nome);
         }
         function set_dir_dest(arg){
             document.form_action.dir_dest.value=arg;
@@ -3698,6 +3846,7 @@ function dir_list_form() {
         </script>";
         $out .= "
         <form name=\"form_action\" action=\"".$path_info["basename"]."\" method=\"post\" onsubmit=\"return test_action();\">
+            ".fm_csrf_field()."
             <input type=hidden name=\"frame\" value=3>
             <input type=hidden name=\"action\" value=0>
             <input type=hidden name=\"dir_dest\" value=\"\">
@@ -3784,7 +3933,7 @@ subtask的题目中也可以有不跟其他数据绑定的，认为是自己一�
                     if ($has_files) $dir_out[$dir_count][] = "<td>&nbsp;</td>";
                     // Opções de diretório
                     if ( is_writable($current_dir.$file) ) $dir_out[$dir_count][] = "
-                        <td align=center><a href=\"JavaScript:if(confirm('".et('ConfRem')." \\'".addslashes($file)."\\' ?')) document.location.href='".addslashes($path_info["basename"])."?frame=3&action=8&cmd_arg=".addslashes($file)."&current_dir=".addslashes($current_dir)."'\">".et('Rem')."</a>";
+                        <td align=center><a href=\"JavaScript:if(confirm('".et('ConfRem')." \\'".addslashes($file)."\\' ?')) document.location.href='".addslashes($path_info["basename"])."?frame=3&action=8&cmd_arg=".addslashes($file)."&current_dir=".addslashes($current_dir).$csrf_query."'\">".et('Rem')."</a>";
                     if ( is_writable($current_dir.$file) ) $dir_out[$dir_count][] = "
                         <td align=center><a href=\"JavaScript:rename('".addslashes($file)."')\">".et('Ren')."</a>";
                     if (count($dir_out[$dir_count])>$max_opt){
@@ -3806,7 +3955,7 @@ subtask的题目中也可以有不跟其他数据绑定的，认为是自己一�
                     $file_out[$file_count][] = "<td>".$dir_entry["extt"]."</td>";
                     // Opções de arquivo
                     if ( is_writable($current_dir.$file) ) $file_out[$file_count][] = "
-                                <td align=center><a href=\"javascript:if(confirm('".uppercase(et('Rem'))." \\'".addslashes($file)."\\' ?')) document.location.href='".addslashes($path_info["basename"])."?frame=3&action=8&cmd_arg=".addslashes($file)."&current_dir=".addslashes($current_dir)."'\">".et('Rem')."</a>";
+                                <td align=center><a href=\"javascript:if(confirm('".uppercase(et('Rem'))." \\'".addslashes($file)."\\' ?')) document.location.href='".addslashes($path_info["basename"])."?frame=3&action=8&cmd_arg=".addslashes($file)."&current_dir=".addslashes($current_dir).$csrf_query."'\">".et('Rem')."</a>";
                     else $file_out[$file_count][] = "<td>&nbsp;</td>";
                     if ( is_writable($current_dir.$file) ) $file_out[$file_count][] = "
                                 <td align=center><a href=\"javascript:rename('".addslashes($file)."')\">".et('Ren')."</a>";
@@ -3932,6 +4081,7 @@ subtask的题目中也可以有不跟其他数据绑定的，认为是自己一�
 }
 function upload_form(){
     global $_FILES,$current_dir,$dir_dest,$fechar,$quota_mb,$path_info;
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') fm_require_csrf('POST');
     $num_uploads = 1;
     html_header();
     echo "<body marginwidth=\"0\" marginheight=\"0\">";
@@ -3939,6 +4089,7 @@ function upload_form(){
         echo "
         <table height=\"100%\" border=0 cellspacing=0 cellpadding=2 align=center>
         <form name=\"upload_form\" action=\"".$path_info["basename"]."\" method=\"post\" ENCTYPE=\"multipart/form-data\">
+        ".fm_csrf_field()."
         <input type=hidden name=dir_dest value=\"".basename($current_dir)."\">
         <input type=hidden name=action value=10>
         <tr><th colspan=2>".et('Upload')."</th></tr>
@@ -4278,11 +4429,12 @@ function get_mime_type($ext = ''){
     return (!isset($mimes[lowercase($ext)])) ? 'application/octet-stream' : $mimes[lowercase($ext)];
 }
 function view(){
-    global $doc_root,$path_info,$url_info,$current_dir,$islinux,$filename,$passthru;
+    global $doc_root,$path_info,$url_info,$current_dir,$islinux,$filename,$passthru,$fm_root_real;
 	if (intval($passthru)){
-    $filename = remove_special_chars($filename);
-	    $file = $current_dir.$filename;
-	    if(file_exists($file)){
+	    if (!fm_name($filename)) { http_response_code(400); exit('Invalid filename'); }
+        $relative_file = fm_join_relative($current_dir, $filename);
+        $file = $relative_file === false ? false : fm_path($fm_root_real, $relative_file, true);
+	    if($file !== false && is_file($file)){
 	        $is_denied = false;
 	        foreach($download_ext_filter as $key=>$ext){
 	            if (preg_match($ext,$filename)){
@@ -4340,21 +4492,34 @@ function view(){
 	}
 }
 function edit_file_form(){
-    global $current_dir,$filename,$file_data,$save_file,$path_info,$OJ_AI_API_URL,$pid;
-    $filename=remove_special_chars(basename($filename));
+    global $current_dir,$filename,$file_data,$save_file,$path_info,$OJ_AI_API_URL,$pid,$fm_root_real;
+    if ($save_file) fm_require_csrf('POST');
+    $filename=basename($filename);
+    if (!fm_name($filename)) { http_response_code(400); exit('Invalid filename'); }
    // echo "[$filename]";
-    $file = $current_dir.($filename);
+    $relative_dir = fm_relative($current_dir);
+    $relative_file = fm_join_relative($current_dir, $filename);
+    $file = $relative_file === false ? false : fm_path($fm_root_real, $relative_file, !$save_file);
+    if ($file === false) { http_response_code(400); exit('Invalid file'); }
     if ($save_file){
-        $fh=fopen($file,"w");
+		if (strlen($file_data) > 5 * 1024 * 1024) { http_response_code(413); exit('File too large'); }
+        $fh=fopen($file,"wb");
 	$file_data=preg_replace("(\r\n)","\n",$file_data);
         fputs($fh,$file_data,strlen($file_data));
         fclose($fh);
     }
-    $file_data=file_get_contents($file);
+        $safe_file = fm_path($fm_root_real, $relative_file, true);
+        if ($safe_file === false || !is_file($safe_file) || filesize($safe_file) > 5 * 1024 * 1024) {
+            http_response_code(400);
+            exit('Invalid file');
+        }
+        $file = $safe_file;
+        $file_data=file_get_contents($file);
     html_header();
     echo "<body marginwidth=\"0\" marginheight=\"0\">
     <table border=0 cellspacing=0 cellpadding=5 align=center>
     <form name=\"edit_form\" action=\"".$path_info["basename"]."\" method=\"post\">
+    ".fm_csrf_field()."
     <input type=hidden name=action value=\"7\">
     <input type=hidden name=save_file value=\"1\">
     <input type=hidden name=current_dir value=\"$current_dir\">
@@ -4367,6 +4532,7 @@ function edit_file_form(){
      echo "<input type=button value=\"".et('Refresh')."\" class='btn btn-danger' onclick=\"document.edit_form_refresh.submit()\"></td><td align=right><input type=button value=\"".et('SaveFile')."\" onclick=\"go_save()\" class='btn btn-success'></td></tr>
     </form>
     <form name=\"edit_form_refresh\" action=\"".$path_info["basename"]."\" method=\"post\">
+    ".fm_csrf_field()."
     <input type=hidden name=action value=\"7\">
     <input type=hidden name=current_dir value=\"$current_dir\">
     <input type=hidden name=filename value=\"$filename\">
@@ -4471,8 +4637,9 @@ if($file_data=="" && ($filename=="Gen.py" || str_starts_with($filename,"Main."))
 function config_form(){
     global $cfg;
     global $current_dir,$fm_self,$doc_root,$path_info,$fm_current_root,$lang,$error_reporting,$version;
-    global $config_action,$newpass,$newlang,$newerror,$newfm_root;
+    global $config_action,$newlang,$newerror,$newfm_root;
     $Warning = "";
+    if ($config_action == 2 || $config_action == 3) fm_require_csrf('POST');
     switch ($config_action){
         case 1:
 		/*
@@ -4502,7 +4669,7 @@ function config_form(){
                 $error_reporting = $newerror;
                 $reload = true;
             }
-            $newfm_root = format_path($newfm_root);
+            $newfm_root = '';
             if ($cfg->data['fm_root'] != $newfm_root){
                 $cfg->data['fm_root'] = $newfm_root;
                 if (strlen($newfm_root)) $current_dir = $newfm_root;
@@ -4516,14 +4683,6 @@ function config_form(){
                 reloadframe("window.opener.parent",3);
             }
             $Warning1 = et('ConfSaved')."...";
-        break;
-        case 3:
-            if ($cfg->data['auth_pass'] != md5($newpass)){
-                $cfg->data['auth_pass'] = md5($newpass);
-                setcookie("loggedon", md5($newpass) , 0 , "/");
-            }
-            $cfg->save();
-            $Warning2 = et('PassSaved')."...";
         break;
     }
     html_header();
@@ -4576,6 +4735,7 @@ function config_form(){
 	</form>
 	</td></tr>
     <form name=\"config_form\" action=\"".$path_info["basename"]."\" method=\"post\">
+    ".fm_csrf_field()."
     <input type=hidden name=action value=2>
     <input type=hidden name=config_action value=0>
     <tr><td align=right width=1><nobr>".et('DocRoot').":</nobr><td>".$doc_root."</td></tr>
@@ -4608,11 +4768,7 @@ function config_form(){
 	</select></td></tr>
     <tr><td> <td><input type=button value=\"".et('SaveConfig')."\" onclick=\"test_config_form(2)\">";
     if (strlen($Warning1)) echo " <font color=red>$Warning1</font>";
-    echo "
-    <tr><td align=right>".et('Pass').":<td><input type=text size=30 name=newpass value=\"\" onkeypress=\"enterSubmit(event,'test_config_form(3)')\"></td></tr>
-    <tr><td> <td><input type=button value=\"".et('SavePass')."\" onclick=\"test_config_form(3)\">";
-    if (strlen($Warning2)) echo " <font color=red>$Warning2</font>";
-    echo "</td></tr>";
+    echo "";
     echo "
     </form>
     </table>
@@ -4719,65 +4875,10 @@ function server_info(){
 // | Session
 // +--------------------------------------------------
 function logout(){
-    setcookie("loggedon",0,0,"/");
-    login_form();
-}
-function login(){
-    global $pass,$auth_pass,$path_info;
-    if (md5(trim($pass)) == $auth_pass){
-        setcookie("loggedon",$auth_pass,0,"/");
-        header ("Location: ".$path_info["basename"]."");
-    } else header ("Location: ".$path_info["basename"]."?erro=1");
-}
-function login_form(){
-    global $erro,$auth_pass,$path_info;
-    html_header();
-    echo "<body onLoad=\"if(parent.location.href != self.location.href){ parent.location.href = self.location.href } return true;\">\n";
-    if ($auth_pass != md5("")){
-        echo "
-        <table border=0 cellspacing=0 cellpadding=5>
-            <form name=\"login_form\" action=\"".$path_info["basename"]."\" method=\"post\">
-            <tr>
-            <td><b>".et('FileMan')."</b>
-            </tr>
-            <tr>
-            <td align=left><font size=4>".et('TypePass').".</font>
-            </tr>
-            <tr>
-            <td><input name=pass type=password size=10> <input type=submit value=\"".et('Send')."\">
-            </tr>
-        ";
-        if (strlen($erro)) echo "
-            <tr>
-            <td align=left><font color=red size=4>".et('InvPass').".</font>
-            </tr>
-        ";
-        echo "
-            </form>
-        </table>
-             <script language=\"Javascript\" type=\"text/javascript\">
-             <!--
-             document.login_form.pass.focus();
-             //-->
-             </script>
-        ";
-    } else {
-        echo "
-        <table border=0 cellspacing=0 cellpadding=5>
-            <form name=\"login_form\" action=\"".$path_info["basename"]."\" method=\"post\">
-            <input type=hidden name=frame value=3>
-            <input type=hidden name=pass value=\"\">
-            <tr>
-            <td><b>".et('FileMan')."</b>
-            </tr>
-            <tr>
-            <td><input type=submit value=\"".et('Enter')."\">
-            </tr>
-            </form>
-        </table>
-        ";
-    }
-    echo "</body>\n</html>";
+    fm_require_csrf('POST');
+    unset($_SESSION['phpfm_authenticated']);
+    header('Location: ../index.php');
+    exit;
 }
 function frame3(){
     global $islinux,$cmd_arg,$chmod_arg,$zip_dir,$fm_current_root,$cookie_cache_time;
@@ -4794,22 +4895,27 @@ function frame3(){
     html_header();
     echo "<body>\n";
     if ($action){
+        if (in_array($action, array(1,2,3,4,5,6,8,9,21,22,71,72), true)) fm_require_csrf('ANY');
         switch ($action){
             case 1: // create dir
             if (strlen($cmd_arg)){
-                $cmd_arg = format_path($current_dir.$cmd_arg);
-                if (!file_exists($cmd_arg)){
-                  //  @mkdir($cmd_arg,0711);
-                    @chmod($cmd_arg,0711);
-                    reloadframe("parent",2,"&ec_dir=".$cmd_arg);
+                if (!fm_name($cmd_arg)) break;
+                $target_relative = fm_join_relative($current_dir, $cmd_arg);
+                $target = $target_relative === false ? false : fm_path($fm_root_real, $target_relative, false);
+                if ($target !== false && !file_exists($target)){
+                    @mkdir($target,0711);
+                    @chmod($target,0711);
+                    reloadframe("parent",2);
                 } else alert(et('FileDirExists').".");
             }
             break;
             case 2: // create arq
             if (strlen($cmd_arg)){
-                $cmd_arg = $current_dir.$cmd_arg;
-                if (!file_exists($cmd_arg)){
-                    if ($fh = @fopen($cmd_arg, "w")){
+                if (!fm_name($cmd_arg)) break;
+                $target_relative = fm_join_relative($current_dir, $cmd_arg);
+                $target = $target_relative === false ? false : fm_path($fm_root_real, $target_relative, false);
+                if ($target !== false && !file_exists($target)){
+                    if ($fh = @fopen($target, "x")){
                         @fclose($fh);
                     }
                     @chmod($cmd_arg,0644);
@@ -4833,9 +4939,11 @@ function frame3(){
             }
 	    case 22: // create SolutionFilename
             if (strlen($cmd_arg)){
+                $solution_name = preg_match('/\.cpp$/i', $cmd_arg) ? $cmd_arg : $cmd_arg . '.cpp';
+                if (!fm_name($solution_name)) break;
                 $filename = $current_dir."solution.name";
 		if ($fh = @fopen($filename, "w")){
-		        fprintf($fh,"%s.cpp\n",$cmd_arg);	// maybe   "%s.cpp\n" ?
+		        fprintf($fh,"%s\n",$solution_name);
                         @fclose($fh);
                 }
                 @chmod($filename,0644);
@@ -4843,7 +4951,13 @@ function frame3(){
             break;
             case 3: // rename arq ou dir
             if ((strlen($old_name))&&(strlen($new_name))){
-                rename($current_dir.basename($old_name),$current_dir.basename($new_name));
+                if (fm_name($old_name) && fm_name($new_name)) {
+                    $old_relative = fm_join_relative($current_dir, $old_name);
+                    $new_relative = fm_join_relative($current_dir, $new_name);
+                    $old = $old_relative === false ? false : fm_path($fm_root_real, $old_relative, true);
+                    $new = $new_relative === false ? false : fm_path($fm_root_real, $new_relative, false);
+                    if ($old !== false && $new !== false && !file_exists($new)) rename($old, $new);
+                }
                 if (is_dir($current_dir.$new_name)) reloadframe("parent",2);
             }
             break;
@@ -4970,15 +5084,20 @@ function frame3(){
                         $zipfile->extract_files();
                     }
                     unset($zipfile);
- 		    if(function_exists("system"))system("/home/judge/src/install/ans2out ".$current_dir);
- 		    if(file_exists("/usr/bin/dos2unix")&&function_exists("system")) system("/usr/bin/dos2unix ".$current_dir."/*");
+                    // Post-extraction normalization is intentionally omitted:
+                    // invoking external commands here made archive uploads an
+                    // unnecessary command-execution boundary.
                     reloadframe("parent",2);
                 }
             }
             break;
             case 8: // delete arq/dir
             if (strlen($cmd_arg)){
-                if (file_exists($current_dir.$cmd_arg)) total_delete($current_dir.$cmd_arg);
+                if (fm_name($cmd_arg)) {
+                    $target_relative = fm_join_relative($current_dir, $cmd_arg);
+                    $target = $target_relative === false ? false : fm_path($fm_root_real, $target_relative, true);
+                    if ($target !== false) total_delete($target);
+                }
                 if (is_dir($current_dir.$cmd_arg)) reloadframe("parent",2);
             }
             break;
