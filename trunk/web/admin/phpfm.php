@@ -159,6 +159,7 @@ if (!(isset($_SESSION[$OJ_NAME.'_'.'administrator'])
 		$$fm_key = isset($fm_input[$fm_key]) && is_string($fm_input[$fm_key])
 			? $fm_input[$fm_key] : '';
 	}
+	$setflag = isset($fm_input['setflag']) ? intval($fm_input['setflag']) : 0;
 	$frame = isset($fm_input['frame']) ? intval($fm_input['frame']) : 0;
 	$action = isset($fm_input['action']) ? intval($fm_input['action']) : 0;
 	$config_action = isset($fm_input['config_action']) ? intval($fm_input['config_action']) : 0;
