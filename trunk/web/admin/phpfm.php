@@ -159,7 +159,6 @@ if (!(isset($_SESSION[$OJ_NAME.'_'.'administrator'])
 		$$fm_key = isset($fm_input[$fm_key]) && is_string($fm_input[$fm_key])
 			? $fm_input[$fm_key] : '';
 	}
-	$setflag = isset($fm_input['setflag']) ? intval($fm_input['setflag']) : 0;
 	$frame = isset($fm_input['frame']) ? intval($fm_input['frame']) : 0;
 	$action = isset($fm_input['action']) ? intval($fm_input['action']) : 0;
 	$config_action = isset($fm_input['config_action']) ? intval($fm_input['config_action']) : 0;
@@ -2565,17 +2564,20 @@ function total_delete($arg) {
     $safe = fm_path($fm_root_real, $arg, true);
     if ($safe === false || rtrim($safe, DIRECTORY_SEPARATOR) === rtrim($fm_root_real, DIRECTORY_SEPARATOR)) return false;
     $arg = $safe;
-    if (file_exists($arg)) {
-        @chmod($arg,0711);
-        if (is_dir($arg)) {
-            $handle = opendir($arg);
-            while($aux = readdir($handle)) {
-                if ($aux != "." && $aux != "..") total_delete($arg."/".$aux);
-            }
-            @closedir($handle);
-            rmdir($arg);
-        } else unlink($arg);
+    if (!file_exists($arg) && !is_link($arg)) return false;
+    if (is_link($arg) || is_file($arg)) return @unlink($arg);
+    if (!is_dir($arg)) return false;
+    $handle = @opendir($arg);
+    if ($handle === false) return false;
+    $ok = true;
+    while (($aux = readdir($handle)) !== false) {
+        if ($aux === "." || $aux === "..") continue;
+        if (!total_delete($arg . DIRECTORY_SEPARATOR . $aux)) $ok = false;
     }
+    @closedir($handle);
+    if (!$ok) return false;
+    @chmod($arg, 0711);
+    return @rmdir($arg);
 }
 function total_copy($orig,$dest) {
     global $fm_root_real;
@@ -4902,7 +4904,7 @@ function logout(){
     exit;
 }
 function frame3(){
-    global $islinux,$cmd_arg,$chmod_arg,$zip_dir,$fm_current_root,$cookie_cache_time;
+    global $islinux,$cmd_arg,$chmod_arg,$zip_dir,$fm_current_root,$fm_root_real,$cookie_cache_time;
     global $dir_dest,$current_dir,$dir_before;
     global $selected_file_list,$selected_dir_list,$old_name,$new_name;
     global $action,$or_by,$order_dir_list_by;
@@ -4977,19 +4979,30 @@ function frame3(){
                     $new_relative = fm_join_relative($current_dir, $new_name);
                     $old = $old_relative === false ? false : fm_path($fm_root_real, $old_relative, true);
                     $new = $new_relative === false ? false : fm_path($fm_root_real, $new_relative, false);
-                    if ($old !== false && $new !== false && !file_exists($new)) rename($old, $new);
+                    if ($old === false || $new === false) {
+                        alert('Invalid file path.');
+                    } elseif (file_exists($new)) {
+                        alert(et('FileDirExists').'.');
+                    } elseif (!rename($old, $new)) {
+                        alert(et('IOError').'.');
+                    }
                 }
                 if (is_dir($current_dir.$new_name)) reloadframe("parent",2);
             }
             break;
             case 4: // delete sel
-            if(strstr($current_dir,$fm_current_root)){
+            $delete_ok = true;
+            if (fm_relative($current_dir) !== false) {
                 if (strlen($selected_file_list)){
                     $selected_file_list = explode("<|*|>",$selected_file_list);
                     if (count($selected_file_list)) {
                         for($x=0;$x<count($selected_file_list);$x++) {
                             $selected_file_list[$x] = trim($selected_file_list[$x]);
-                            if (strlen($selected_file_list[$x])) total_delete($current_dir.$selected_file_list[$x],$dir_dest.$selected_file_list[$x]);
+                            if (strlen($selected_file_list[$x])) {
+                                $relative = fm_join_relative($current_dir, $selected_file_list[$x]);
+                                $target = $relative === false ? false : fm_path($fm_root_real, $relative, true);
+                                if ($target === false || !total_delete($target)) $delete_ok = false;
+                            }
                         }
                     }
                 }
@@ -4998,12 +5011,17 @@ function frame3(){
                     if (count($selected_dir_list)) {
                         for($x=0;$x<count($selected_dir_list);$x++) {
                             $selected_dir_list[$x] = trim($selected_dir_list[$x]);
-                            if (strlen($selected_dir_list[$x])) total_delete($current_dir.$selected_dir_list[$x],$dir_dest.$selected_dir_list[$x]);
+                            if (strlen($selected_dir_list[$x])) {
+                                $relative = fm_join_relative($current_dir, $selected_dir_list[$x]);
+                                $target = $relative === false ? false : fm_path($fm_root_real, $relative, true);
+                                if ($target === false || !total_delete($target)) $delete_ok = false;
+                            }
                         }
                         reloadframe("parent",2);
                     }
                 }
             }
+            if (!$delete_ok) alert(et('IOError').'.');
             break;
             case 5: // copy sel
             if (strlen($dir_dest)){
@@ -5116,12 +5134,18 @@ function frame3(){
             break;
             case 8: // delete arq/dir
             if (strlen($cmd_arg)){
+                $was_dir = false;
+                $deleted = false;
                 if (fm_name($cmd_arg)) {
                     $target_relative = fm_join_relative($current_dir, $cmd_arg);
                     $target = $target_relative === false ? false : fm_path($fm_root_real, $target_relative, true);
-                    if ($target !== false) total_delete($target);
+                    if ($target !== false) {
+                        $was_dir = is_dir($target);
+                        $deleted = total_delete($target);
+                    }
                 }
-                if (is_dir($current_dir.$cmd_arg)) reloadframe("parent",2);
+                if (!$deleted) alert(et('IOError').'.');
+                if ($was_dir && $deleted) reloadframe("parent",2);
             }
             break;
             case 9: // CHMOD
