@@ -142,7 +142,7 @@ if (!(isset($_SESSION[$OJ_NAME.'_'.'administrator'])
     if(isset($_GET['pid'])){
         $pid=intval($_GET['pid']);
     }else{
-        $pid=intval(basename($current_dir));
+        $pid=intval(basename($_GET['current_dir']??$_POST['current_dir']));
         if($pid==0) $pid=intval(basename($dir_dest));
     }
     $current_dir="$OJ_DATA/$pid/";
