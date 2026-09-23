@@ -89,23 +89,11 @@ if (!(isset($_SESSION[$OJ_NAME.'_'.'administrator'])
         }
     }
     function reSortFiles($directory) {
-	// 列出目录中的所有文件
+	// Keep .ans -> .out handling consistent with archive extraction.
+	fm_convert_ans_to_out($directory);
+	// Re-read the directory after extension conversion before applying numeric sorting.
 	$files = scandir($directory);
-	// 遍历所有文件
-	foreach ($files as $file) {
-	// 检查文件是否是.ans文件
-		if (str_ends_with($file, '.ans') === false ) {
-		    continue;
-		}
-		$main=basename($file,".ans");
-		$filePath = $directory . '/' . $main.".ans";
-		$newFilePath = $directory . '/' . $main.".out";
-		if (rename($filePath, $newFilePath)) {
-		//              echo "File renamed: $filePath -> $newFilePath<br>";
-		} else {
-		echo "Error renaming file: $file<br>";
-		}
-	}
+	if ($files === false) return;
 	$emp=true;
 	foreach ($files as $file) {
 		$emp=false;
