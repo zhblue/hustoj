@@ -90,7 +90,8 @@ if(basename($_SERVER['PHP_SELF'])!=="cron.php"){
 		$solution=pdo_query("select user_id,problem_id from solution where solution_id=?",$sid)[0];
 		$user_id=$solution[0];
 		$problem_id=$solution[1];
-
+		$problem=pdo_query("select * from problem where problem_id=?",$problem_id)[0];
+		$spj=$problem['spj'];
 		if(!(isset($_SESSION[$OJ_NAME."_source_browser"])|| $user_id==$_SESSION[$OJ_NAME."_user_id"] )){
 			echo $MSG_AI_INVALID_PARAM;
 			exit();
@@ -109,6 +110,7 @@ if(basename($_SERVER['PHP_SELF'])!=="cron.php"){
 		if(!empty($result)){
 			$row=$result[0];
 			$ceinfo=$row[0];
+			if($spj==2) $ceinfo="前面的选择题，系统批阅解雇如下，每行依次是\n\n 题号 Answer:正确答案[You:错误答案] 扣除分数 \n\n，请帮我解释我错在何处？".$ceinfo;
 		}else{
 			echo $MSG_AI_INVALID_PARAM;
 			exit();
@@ -119,8 +121,14 @@ if(basename($_SERVER['PHP_SELF'])!=="cron.php"){
 			echo htmlentities($answer[0][0]);
 			exit();
 		}
-		$problem=pdo_query("select concat('<br>\n## $MSG_Description <br>\n\n',description,'<br>\n\n## $MSG_Input<br>\n\n',input,'<br>\n\n## $MSG_Output <br>\n\n',output,'<br>\n\n## $MSG_Sample_Input <br>\n',sample_input,'<br>\n\n## $MSG_Sample_Output <br>\n',sample_output,'<br>\n##  $MSG_HINT <br>\n',hint) from problem where problem_id=?",$problem_id)[0][0];
-		$prompt_user="$MSG_AI_PROMPT_USER_TITLE<br>\n".$problem."<br>\n$MSG_AI_PROMPT_USER_SOURCE\n<pre>\n".htmlentities($source)."\n</pre>\n$MSG_AI_PROMPT_USER_ERROR\n<pre>\n".htmlentities($ceinfo)."\n</pre>";
+		$problem_text= '<br>\n\n## '.$MSG_Description.' <br>\n\n'.$problem['description'];
+		if(!empty($problem['input'])) $problem_text.='<br>\n\n## '.$MSG_Input.'<br>\n\n'.$problem['input'].'<br>\n\n';
+		if(!empty($problem['output'])) $problem_text.='<br>\n\n## '.$MSG_Output.'<br>\n\n'.$problem['output'].'<br>\n\n';
+		if(!empty($problem['sample_input'])) $problem_text.='<br>\n\n## '.$MSG_Sample_Input.'<br>\n\n'.$problem['sample_input'].'<br>\n\n';
+		if(!empty($problem['sample_output'])) $problem_text.='<br>\n\n## '.$MSG_Sample_Output.'<br>\n\n'.$problem['sample_output'].'<br>\n\n';
+		if(!empty($problem['hint'])) $problem_text.='<br>\n\n## '.$MSG_HINT.'<br>\n\n'.$problem['hint'].'<br>\n\n';
+
+		$prompt_user="$MSG_AI_PROMPT_USER_TITLE<br>\n".$problem_text." <br>\n$MSG_AI_PROMPT_USER_SOURCE\n<pre>\n".htmlentities($source)."\n</pre>\n$MSG_AI_PROMPT_USER_ERROR\n<pre>\n".htmlentities($ceinfo)."\n</pre>";
 
 	}
 
