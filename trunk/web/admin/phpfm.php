@@ -192,6 +192,8 @@ if (!(isset($_SESSION[$OJ_NAME.'_'.'administrator'])
     $pid=0;
     if(isset($_GET['pid'])){
         $pid=intval($_GET['pid']);
+    }elseif(isset($_POST['pid']) && is_string($_POST['pid'])){
+        $pid=intval($_POST['pid']);
     }else{
         $pid=intval(basename($current_dir));
         if($pid==0) $pid=intval(basename($dir_dest));
