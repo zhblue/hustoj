@@ -1,4 +1,5 @@
 <?php
+$OJ_NAME=str_replace(' ','_',$OJ_NAME); //避免空格影响session解析
 // 启用 XSS 保护，仅对同源资源启用
 header("X-XSS-Protection: 1; mode=block; sameorigin");
 header("X-Download-Options: noopen");
