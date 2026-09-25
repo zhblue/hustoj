@@ -121,7 +121,8 @@ if(basename($_SERVER['PHP_SELF'])!=="cron.php"){
 			echo htmlentities($answer[0][0]);
 			exit();
 		}
-		$problem_text= "<br>\n\n## ".$MSG_Description." <br>\n\n".$problem["description"];
+		$problem_text= "<br>\n\n## ".$problem["title"];
+        $problem_text.= "<br>\n\n## ".$MSG_Description." <br>\n\n".$problem["description"];
 		if(!empty($problem["input"])) $problem_text.="<br>\n\n## ".$MSG_Input."<br>\n\n".$problem["input"]."<br>\n\n";
 		if(!empty($problem["output"])) $problem_text.="<br>\n\n## ".$MSG_Output."<br>\n\n".$problem["output"]."<br>\n\n";
 		if(!empty($problem["sample_input"])) $problem_text.="<br>\n\n## ".$MSG_Sample_Input."<br>\n\n".$problem["sample_input"]."<br>\n\n";
