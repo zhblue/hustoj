@@ -11,6 +11,9 @@ if(!(isset($_SESSION[$OJ_NAME.'_'.'administrator'])
   exit(1);
 }
 
+// 批量删除是不可逆操作，只允许管理员发起。
+$can_batch_delete = isset($_SESSION[$OJ_NAME.'_'.'administrator']);
+
 
 if(isset($OJ_LANG)){
   require_once("../lang/$OJ_LANG.php");
@@ -102,6 +105,7 @@ echo "</select>";
   <form id='pform' method=post action=contest_add.php >
 <input type="hidden" name=keyword value="<?php if(isset($_GET['keyword']))echo htmlentities($_GET['keyword'],ENT_QUOTES,"utf-8")?>">
 <input type="hidden" name=hlist value="" >
+<?php require_once("../include/set_post_key.php"); ?>
     <tr>
       <td width=60px><?php echo $MSG_PROBLEM_ID?><input type=checkbox style='vertical-align:2px;' onchange='$("input[type=checkbox]").prop("checked", this.checked)'></td>
       <td><?php echo $MSG_TITLE?></td>
@@ -123,6 +127,9 @@ echo "</select>";
       <input type=submit name='enable' value='<?php echo $MSG_AVAILABLE ?>' onclick='$("form").attr("action","problem_df_change.php")'>
       <input type=submit name='disable' value='<?php echo $MSG_RESERVED ?>' onclick='$("form").attr("action","problem_df_change.php")'>
       <input type=submit name='plist' value='<?php echo $MSG_NEW_PROBLEM_LIST?>' onclick='$("form").attr("action","news_add_page.php")'>
+      <?php if ($can_batch_delete) { ?>
+      <input type=submit name='batch_delete' value='<?php echo $MSG_DELETE?>' class='btn btn-danger' onclick='return submitBatchDelete(this.form);'>
+      <?php } ?>
       <?php if (isset($_SESSION[$OJ_NAME."_administrator"])) { ?><span class='btn btn-primary' onclick='$(".ai.label.label-primary").click();'>AI-category</span> <?php } ?>
       </td>
     </tr>
@@ -191,6 +198,9 @@ echo "</select>";
       <input type=submit name='enable' value='<?php echo $MSG_AVAILABLE ?>' onclick='$("form").attr("action","problem_df_change.php")'>
       <input type=submit name='disable' value='<?php echo $MSG_RESERVED ?>' onclick='$("form").attr("action","problem_df_change.php")'>
       <input type=submit name='plist' value='<?php echo $MSG_NEW_PROBLEM_LIST?>' onclick='$("form").attr("action","news_add_page.php")'>
+      <?php if ($can_batch_delete) { ?>
+      <input type=submit name='batch_delete' value='<?php echo $MSG_DELETE?>' class='btn btn-danger' onclick='return submitBatchDelete(this.form);'>
+      <?php } ?>
       </td>
     </tr>
 
@@ -208,6 +218,35 @@ function phpfm(pid){
       document.location.href="phpfm.php?frame=3&pid="+pid;
     }
   });
+}
+function submitBatchDelete(form){
+  var ids = [];
+  var selected = $(form).find("input[name='pid[]']:checked");
+  selected.each(function(){
+    var id = parseInt($(this).val(), 10);
+    if (id > 0 && ids.indexOf(id) < 0) ids.push(id);
+  });
+  var remembered = sessionStorage.getItem('plist') || '';
+  if (remembered) {
+    remembered.split(',').forEach(function(rawId){
+      var id = parseInt(rawId, 10);
+      if (id > 0 && ids.indexOf(id) < 0) ids.push(id);
+    });
+  }
+  ids.sort(function(a, b){ return a - b; });
+  // 后端单次最多处理 200 道题目，确认框显示与实际处理一致的编号。
+  ids = ids.slice(0, 200);
+  if (ids.length === 0) {
+    alert("请先选择要删除的题目");
+    return false;
+  }
+  var confirmText = "确定删除选中的 " + ids.length + " 道题目？\n题目编号：" + ids.join(", ") + "\n\n题面和测试数据将被永久删除。";
+  if (!confirm(confirmText)) {
+    return false;
+  }
+  form.action = "problem_batch_delete.php";
+  if (window.sessionStorage) sessionStorage.removeItem('plist');
+  return true;
 }
 function delPid(pid){
 
