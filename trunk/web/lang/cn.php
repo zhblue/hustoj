@@ -559,3 +559,13 @@
   $MSG_PAID="已支付$MSG_COIN";
 
 $MSG_NUM="序号";
+
+// admin/problem_list.php 批量删除
+$MSG_BATCH_DELETE_EMPTY="请先选择要删除的题目";
+$MSG_BATCH_DELETE_CONFIRM="确定删除选中的 {count} 道题目？";
+$MSG_BATCH_DELETE_IDS="题目编号：";
+$MSG_BATCH_DELETE_WARNING="题面和测试数据将被永久删除。";
+$MSG_BATCH_DELETE_FORBIDDEN="仅管理员可以批量删除题目";
+$MSG_BATCH_DELETE_METHOD="请求方法不允许";
+$MSG_BATCH_DELETE_RESULT="已删除 {count} 道题目。";
+$MSG_BATCH_DELETE_BACK="返回题目列表";

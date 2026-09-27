@@ -508,3 +508,13 @@ $MSG_CLICK_VIEW_HINT="Click to View Spoiler";
   $MSG_NO_COIN="Insufficient {$MSG_COIN}";
   $MSG_PAID="{$MSG_COIN} Paid";
   $MSG_SPENT="Spent";
+
+// admin/problem_list.php batch deletion
+$MSG_BATCH_DELETE_EMPTY="Please select problems to delete first.";
+$MSG_BATCH_DELETE_CONFIRM="Delete the selected {count} problem(s)?";
+$MSG_BATCH_DELETE_IDS="Problem IDs: ";
+$MSG_BATCH_DELETE_WARNING="Problem statements and test data will be permanently deleted.";
+$MSG_BATCH_DELETE_FORBIDDEN="Only administrators can delete problems in batch.";
+$MSG_BATCH_DELETE_METHOD="Request method not allowed.";
+$MSG_BATCH_DELETE_RESULT="{count} problem(s) deleted.";
+$MSG_BATCH_DELETE_BACK="Back to problem list";

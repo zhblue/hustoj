@@ -546,3 +546,12 @@ $MSG_HINT="도움";
   $MSG_PAID="{$MSG_COIN} 지불 완료";
   $MSG_SPENT="사용";
 $MSG_NUM="#";
+
+$MSG_BATCH_DELETE_EMPTY="삭제할 문제를 먼저 선택하세요.";
+$MSG_BATCH_DELETE_CONFIRM="선택한 {count}개의 문제를 삭제하시겠습니까?";
+$MSG_BATCH_DELETE_IDS="문제 번호: ";
+$MSG_BATCH_DELETE_WARNING="문제 설명과 테스트 데이터가 영구적으로 삭제됩니다.";
+$MSG_BATCH_DELETE_FORBIDDEN="관리자만 문제를 일괄 삭제할 수 있습니다.";
+$MSG_BATCH_DELETE_METHOD="허용되지 않는 요청 방식입니다.";
+$MSG_BATCH_DELETE_RESULT="{count}개의 문제가 삭제되었습니다.";
+$MSG_BATCH_DELETE_BACK="문제 목록으로 돌아가기";

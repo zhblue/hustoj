@@ -841,3 +841,13 @@
   $MSG_PAID="已支付$MSG_COIN";
   $MSG_SPENT="消耗";
 $MSG_NUM="序號";
+
+// admin/problem_list.php 批量刪除
+$MSG_BATCH_DELETE_EMPTY="請先選擇要刪除的題目";
+$MSG_BATCH_DELETE_CONFIRM="確定刪除選中的 {count} 道題目？";
+$MSG_BATCH_DELETE_IDS="題目編號：";
+$MSG_BATCH_DELETE_WARNING="題面和測試資料將被永久刪除。";
+$MSG_BATCH_DELETE_FORBIDDEN="僅管理員可以批量刪除題目";
+$MSG_BATCH_DELETE_METHOD="請求方法不允許";
+$MSG_BATCH_DELETE_RESULT="已刪除 {count} 道題目。";
+$MSG_BATCH_DELETE_BACK="返回題目列表";
