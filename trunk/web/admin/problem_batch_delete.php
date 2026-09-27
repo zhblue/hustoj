@@ -3,11 +3,11 @@ require_once("admin-header.php");
 
 if (!isset($_SESSION[$OJ_NAME.'_'.'administrator'])) {
     http_response_code(403);
-    exit("仅管理员可以批量删除题目");
+    exit($MSG_BATCH_DELETE_FORBIDDEN);
 }
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     http_response_code(405);
-    exit("Method Not Allowed");
+    exit($MSG_BATCH_DELETE_METHOD);
 }
 require_once("../include/check_post_key.php");
 
@@ -65,6 +65,6 @@ foreach ($ids as $id) {
 }
 
 echo "<meta charset='utf-8'>";
-echo "<div class='container'><div class='alert alert-success'>已删除 " . intval($deleted) . " 道题目。</div>";
-echo "<a class='btn btn-primary' href='problem_list.php'>返回题目列表</a></div>";
+echo "<div class='container'><div class='alert alert-success'>" . htmlspecialchars(str_replace('{count}', intval($deleted), $MSG_BATCH_DELETE_RESULT), ENT_QUOTES, 'UTF-8') . "</div>";
+echo "<a class='btn btn-primary' href='problem_list.php'>" . htmlspecialchars($MSG_BATCH_DELETE_BACK, ENT_QUOTES, 'UTF-8') . "</a></div>";
 ?>

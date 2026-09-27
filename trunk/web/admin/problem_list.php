@@ -237,10 +237,12 @@ function submitBatchDelete(form){
   // 后端单次最多处理 200 道题目，确认框显示与实际处理一致的编号。
   ids = ids.slice(0, 200);
   if (ids.length === 0) {
-    alert("请先选择要删除的题目");
+    alert(<?php echo json_encode($MSG_BATCH_DELETE_EMPTY); ?>);
     return false;
   }
-  var confirmText = "确定删除选中的 " + ids.length + " 道题目？\n题目编号：" + ids.join(", ") + "\n\n题面和测试数据将被永久删除。";
+  var confirmText = <?php echo json_encode($MSG_BATCH_DELETE_CONFIRM); ?>.replace('{count}', ids.length)
+    + "\n" + <?php echo json_encode($MSG_BATCH_DELETE_IDS); ?> + ids.join(", ")
+    + "\n\n" + <?php echo json_encode($MSG_BATCH_DELETE_WARNING); ?>;
   if (!confirm(confirmText)) {
     return false;
   }
