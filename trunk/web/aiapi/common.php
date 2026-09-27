@@ -89,7 +89,7 @@ if(basename($_SERVER['PHP_SELF'])!=="cron.php"){
 		$sid=intval($_GET['sid']);
 		$solution=pdo_query("select user_id,problem_id from solution where solution_id=?",$sid)[0];
 		$user_id=$solution[0];
-		$problem_id=$solution[1];
+		$problem_id=abs($solution[1]);
 		$problem=pdo_query("select * from problem where problem_id=?",$problem_id)[0];
 		$spj=$problem['spj'];
 		if(!(isset($_SESSION[$OJ_NAME."_source_browser"])|| $user_id==$_SESSION[$OJ_NAME."_user_id"] )){
