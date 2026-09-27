@@ -64,6 +64,12 @@ foreach ($ids as $id) {
     $deleted++;
 }
 
+// 删除后同步重置自增值，保持与单题删除流程一致，避免后续新增题目继续使用过大的题号。
+$max_result = pdo_query("SELECT MAX(`problem_id`) AS `max_id` FROM `problem`");
+$max_id = isset($max_result[0]['max_id']) ? intval($max_result[0]['max_id']) : 0;
+$next_id = max(1000, $max_id + 1);
+pdo_query("ALTER TABLE `problem` AUTO_INCREMENT = $next_id");
+
 echo "<meta charset='utf-8'>";
 echo "<div class='container'><div class='alert alert-success'>" . htmlspecialchars(str_replace('{count}', intval($deleted), $MSG_BATCH_DELETE_RESULT), ENT_QUOTES, 'UTF-8') . "</div>";
 echo "<a class='btn btn-primary' href='problem_list.php'>" . htmlspecialchars($MSG_BATCH_DELETE_BACK, ENT_QUOTES, 'UTF-8') . "</a></div>";
