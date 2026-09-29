@@ -2234,15 +2234,15 @@ void prepare_files(char *filename, int namelen, char *infile, int &p_id,
 	char noip_file_name[BUFFER_SIZE];
 	char dst[BUFFER_SIZE*2];
 	sprintf(noip_file_name,"%s/data/%d/input.name",oj_home,p_id);
-	if(DEBUG) printf("NOIP filename:%s\n",noip_file_name);
+	//if(DEBUG) printf("NOIP filename:%s\n",noip_file_name);
  	if (access(noip_file_name, R_OK ) != -1){
-		if(DEBUG) printf("NOIP filename:%s\n",noip_file_name);
+		//if(DEBUG) printf("NOIP filename:%s\n",noip_file_name);
 		FILE * fpname=fopen(noip_file_name,"r");
 		if (fscanf(fpname, "%s", noip_file_name) == 1){
 		    execute_cmd("/bin/cp '%s' %s/%s", infile, work_dir,basename(noip_file_name));   // 如果存在input.name则复制测试数据
 		    sprintf(dst, "%s/%s", work_dir, basename(noip_file_name));
 		    if(chown(dst, judge_uid, judge_gid)!=0 && DEBUG) printf("chown %s\n",dst) ;
-		    if(DEBUG) printf("NOIP filename:%s\n",noip_file_name);
+		    if(DEBUG) printf("NOIP input :%s\n",noip_file_name);
 		}
 		fclose(fpname);
 	}else{
@@ -2254,11 +2254,11 @@ void prepare_files(char *filename, int namelen, char *infile, int &p_id,
 	sprintf(outfile, "%s/data/%d/%s.out", oj_home, p_id, fname0);
 
 	sprintf(noip_file_name,"%s/data/%d/output.name",oj_home,p_id);
-	if(DEBUG) printf("NOIP filename:%s\n",noip_file_name);
+	//if(DEBUG) printf("NOIP filename:%s\n",noip_file_name);
 	FILE * fpname = fopen(noip_file_name, "r");
 	if (fpname != NULL){
 		if (fscanf(fpname, "%s", noip_file_name) == 1){
-		    if(DEBUG) printf("NOIP filename:%s\n",noip_file_name);
+		   // if(DEBUG) printf("NOIP filename:%s\n",noip_file_name);
 		    if(!strstr(noip_file_name,"//")){
                             sprintf(userfile, "%s/run%d/%s", oj_home, runner_id,basename(noip_file_name));
                             if (strlen(userfile) > 0 && strchr(userfile, ' ') == NULL) {
@@ -2271,6 +2271,7 @@ void prepare_files(char *filename, int namelen, char *infile, int &p_id,
                                 execute_cmd("rm %s",userfile);
                             }
                     }
+			if(DEBUG) printf("NOIP output :%s\n",userfile);
 		}
 		fclose(fpname);
 	}else{
