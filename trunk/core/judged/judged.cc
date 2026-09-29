@@ -98,6 +98,7 @@ static char php_path[BUFFER_SIZE];
 static int internal_client = 1;
 static int oj_dedicated=0;
 static int www_uid= 33;
+static uid_t judge_uid=1536;
 
 static bool STOP = false;
 static int DEBUG = 0;
@@ -876,7 +877,7 @@ int main(int argc, char** argv) {
 	else
 		strcpy(oj_home, "/home/judge");
 	chdir(oj_home);    // change the dir
-	
+	if(chown(oj_home,judge_uid,www_uid)) printf("Warning check your home ownership :%s\n ",oj_home);
 	sprintf(judged_lock_file,"%s/etc/judge.pid",oj_home);
 	if (!DEBUG)
 		daemon_init();
