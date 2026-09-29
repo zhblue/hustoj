@@ -4592,11 +4592,11 @@ int main(int argc, char **argv)
 				ACflg=OJ_WA;
 			}else{
 				//判断用户程序输出是否正确，给出结果
-				printf("before judge_solution");
+				printf("before judge_solution\n");
 				judge_solution(ACflg, usedtime, time_lmt, spj, p_id, infile,
 							   outfile, userfile, PEflg, lang, work_dir, topmemory,
 							   mem_lmt, solution_id, num_of_test,&spj_mark);
-				printf("after judge_solution");
+				printf("after judge_solution\n");
 				/*
 				if(usedtime > time_lmt * 1000) {          // 如果觉得的显示超时结果的计时过长，可以覆盖数据。
 						usedtime = time_lmt * 1000;
