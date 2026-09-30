@@ -492,7 +492,7 @@ for ($i = 0; $i < $rows_cnt; $i++) {
         $view_status[$i][8] = $row['in_date'];
 }
 if ($total_count > 0) $avg_delay /= $total_count;
- $defaultInterval= $avg_delay>1?$avg_delay*1000:800;
+$defaultInterval= $avg_delay<5?100:800;
 /////////////////////////Template
 if (isset($_GET['cid']))
     require("template/" . $OJ_TEMPLATE . "/conteststatus.php");
