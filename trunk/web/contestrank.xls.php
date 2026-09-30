@@ -84,8 +84,10 @@ class TM
  */
 function s_cmp($A, $B)
 {
+    global $manager;
     if($A->user_id === $manager ) return true;
     if($B->user_id === $manager ) return false;
+
     if ($A->solved != $B->solved) return $A->solved < $B->solved;
     else return $A->time > $B->time;
 }
