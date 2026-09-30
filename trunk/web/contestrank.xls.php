@@ -84,7 +84,8 @@ class TM
  */
 function s_cmp($A, $B)
 {
-//	echo "Cmp....<br>";
+    if($A->user_id === $manager ) return true;
+    if($B->user_id === $manager ) return false;
     if ($A->solved != $B->solved) return $A->solved < $B->solved;
     else return $A->time > $B->time;
 }
@@ -205,6 +206,12 @@ if (isset($_SESSION[$OJ_NAME . '_' . "administrator"]) ||
 }
 if (!isset($OJ_RANK_LOCK_PERCENT)) $OJ_RANK_LOCK_PERCENT = 0;
 $lock = $end_time - ($end_time - $start_time) * $OJ_RANK_LOCK_PERCENT;
+$sql = "select user_id from privilege where rightstr=? and defunct='N' ";
+$manager=pdo_query($sql,"m".$cid);
+if(!empty($manager)){
+        $manager=$manager[0][0];
+        //echo $manager;
+}
 
 // 获取竞赛题目数量并设置分数参数
 $sql = "SELECT count(1) FROM `contest_problem` WHERE `contest_id`=?";
@@ -236,7 +243,7 @@ foreach ($result as $row) {
         $user_cnt++;
         $U[$user_cnt] = new TM();
         $U[$user_cnt]->user_id = $row['user_id'];
-        $U[$user_cnt]->nick = $row['nick'];
+        $U[$user_cnt]->nick = $row['user_id']===$manager?'*'.$row['nick']:$row['nick'];
 
         $user_name = $n_user;
     }
