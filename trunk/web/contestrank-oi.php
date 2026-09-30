@@ -76,7 +76,8 @@ class TM
 
 function s_cmp($A, $B)
 {
-//      echo "Cmp....<br>";
+    if($A->user_id === $manager ) return true;
+    if($B->user_id === $manager ) return false;
     if ($A->total != $B->total) return $A->total < $B->total;
     else {
         if ($A->solved != $B->solved)
@@ -148,7 +149,12 @@ $locked_msg = "";
 if (time() > $view_lock_time && time() < $end_time + $OJ_RANK_LOCK_DELAY) {
     $locked_msg = "The board has been locked.";
 }
-
+$sql = "select user_id from privilege where rightstr=? and defunct='N' ";
+$manager=pdo_query($sql,"m".$cid);
+if(!empty($manager)){
+     $manager=$manager[0][0];
+     //echo $manager;
+}
 $sql = "SELECT count(1) as pbc FROM `contest_problem` WHERE `contest_id`=?";
 $result = mysql_query_cache($sql, $cid);
 if ($result) $rows_cnt = count($result);
@@ -170,7 +176,7 @@ for ($i = 0; $i < $rows_cnt; $i++) {
         $user_cnt++;
         $U[$user_cnt] = new TM();
         $U[$user_cnt]->user_id = $row['user_id'];
-        $U[$user_cnt]->nick = $row['nick'];
+        $U[$user_cnt]->nick = $row['user_id']===$manager?'*'.$row['nick']:$row['nick'];
         $user_name = $n_user;
     }
     if ($row['result'] != 4 && $row['pass_rate'] >= 0.95) $row['pass_rate'] = 0.95;
