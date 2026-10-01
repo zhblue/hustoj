@@ -94,9 +94,12 @@ function fresh_result(solution_id) {
                                   case 9:
                                   case 10:
                                                 row.cells[4].innerHTML = "<a href=reinfo.php?sid="+solution_id+" class='"+judge_color[ra[0]]+"'>"+judge_result[ra[0]]+" :"+(oj_mark=='percent'?100-ra[4].trim():ra[4].trim())+"%</a>";
+                                                // if you want to speed up ai result, may cause more tokens than you need
+                                                // $.get('aiapi/demo.php', { sid: solution_id }, function () { console.log("auto ai reinfo")  }).fail(function () {console.log("fail ai reinfo")});
                                                 break;
                                         case 11:
                                                 row.cells[4].innerHTML = "<a href=ceinfo.php?sid="+solution_id+" class='"+judge_color[ra[0]]+"'>"+judge_result[ra[0]]+"</a>";
+                                                $.get('aiapi/demo.php', { sid: solution_id }, function () { console.log("auto ai ceinfo")  }).fail(function () {console.log("fail ai ceinfo")});
                                                 break;
                                   default:
 //                                              row.cells[4].innerHTML = "<span class='"+judge_color[ra[0]]+"'>"+judge_result[ra[0]]+" AC:"+ra[4].trim()+"%</span>";
