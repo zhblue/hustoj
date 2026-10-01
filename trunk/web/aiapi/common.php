@@ -72,24 +72,30 @@ if(basename($_SERVER['PHP_SELF'])!=="cron.php"){
 		       }
 	       }
 	}
-	if( basename($http_referer)=="reinfo.php" ||  basename($http_referer)=="ceinfo.php"){
+	if( basename($http_referer)=="reinfo.php" ||  basename($http_referer)=="ceinfo.php" || basename($http_referer)=="status.php"){
 		if( basename($http_referer)=="reinfo.php"){
 			$table="runtimeinfo";
 		}else if( basename($http_referer)=="ceinfo.php"){
 			$table="compileinfo";
 		}
-
 		if(isset($_SESSION[$OJ_NAME."_source_browser"])){
 			$code_suggestion=$MSG_AI_CODE_SUGGESTION_SOURCE_BROWSER;
 		}else{
 			$code_suggestion=$MSG_AI_CODE_SUGGESTION;
 		}
 		$prompt_sys=sprintf($MSG_AI_PROMPT_SYS,$code_suggestion);
-		 
 		$sid=intval($_GET['sid']);
-		$solution=pdo_query("select user_id,problem_id from solution where solution_id=?",$sid)[0];
+		$solution=pdo_query("select user_id,problem_id,result from solution where solution_id=?",$sid)[0];
 		$user_id=$solution[0];
 		$problem_id=abs($solution[1]);
+	    $result=$solution[2];
+		if($result==11){
+				$table="compileinfo";
+				$http_referer="ceinfo.php";
+		}else{
+				$table="runtimeinfo";
+				$http_referer="reinfo.php";
+		}
 		$problem=pdo_query("select * from problem where problem_id=?",$problem_id)[0];
 		$spj=$problem['spj'];
 		if(!(isset($_SESSION[$OJ_NAME."_source_browser"])|| $user_id==$_SESSION[$OJ_NAME."_user_id"] )){
