@@ -65,7 +65,7 @@ $("document").ready(function (){
 
 </script>
 <?php if (!(isset($_SESSION[$OJ_NAME.'_'.'administrator'])||isset($_SESSION[$OJ_NAME.'_'.'contest_creator'])||isset($_SESSION[$OJ_NAME.'_user_adder'])||isset($_SESSION[$OJ_NAME.'_'.'problem_editor'])||isset($_SESSION[$OJ_NAME.'_'.'password_setter']))){
-	echo "<a href='../loginpage.php'>".(isset($MSG_Login)?$MSG_Login:"Please Login First!")."</a>";
+	echo "<a href='../loginpage.php' target='_top'>".(isset($MSG_Login)?$MSG_Login:"Please Login First!")."</a>";
 	exit(1);
 }
 if(file_exists("../template/$OJ_TEMPLATE/css.php")) require_once("../template/$OJ_TEMPLATE/css.php");
