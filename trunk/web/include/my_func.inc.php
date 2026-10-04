@@ -18,6 +18,12 @@ if (!function_exists('mb_trim')) {
 	    return preg_replace('/^['.$trim_chars.']*(?U)(.*)['.$trim_chars.']*$/u', '\\1',$string);
 	}
 }
+function escape_cpp_headers($code) {
+    // 匹配常见的 C/C++ 头文件，如 <stdio.h>, <vector>, <bits/stdc++.h> 等
+    $pattern = '/<([a-z0-9_+\/]+\.(?:h|hpp|hh|hxx)|vector|string|iostream|fstream|sstream|algorithm|map|set|unordered_map|unordered_set|queue|stack|deque|list|array|bitset|utility|tuple|memory|functional|chrono|thread|mutex|future|numeric|complex|valarray|exception|stdexcept|c[a-z0-9]+)>/i';
+    return preg_replace($pattern, '&lt;$1&gt;', $code);
+}
+
 function normalizeSpaces(string $str): string 
 {
     // 各种 Unicode 空格 -> 普通空格
