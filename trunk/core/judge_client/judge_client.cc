@@ -2151,16 +2151,29 @@ void _get_problem_info_mysql(int p_id, double &time_lmt, int &mem_lmt,
 	sprintf(sql,
 			"SELECT time_limit,memory_limit,spj FROM problem where problem_id=%d",
 			p_id);
-	mysql_real_query(conn, sql, strlen(sql));
-	res = mysql_store_result(conn);
-	row = mysql_fetch_row(res);
-	time_lmt = atof(row[0]);
-	mem_lmt = atoi(row[1]);
-	spj = atoi(row[2]);
-	if (res != NULL)
+	if (mysql_real_query(conn, sql, strlen(sql)) != 0)        // ← 新增：查询失败检查
 	{
-		mysql_free_result(res); // free the memory
-		res = NULL;
+		write_log("query problem %d fail: %s", p_id, mysql_error(conn));
+		time_lmt = 1; mem_lmt = 64; spj = 0;
+		return;
+	}
+	res = mysql_store_result(conn);
+	if(res != NULL){
+		row = mysql_fetch_row(res);
+		if (row == NULL)                                             // ← 新增：row NULL 检查（核心修复）
+		{
+			write_log("problem %d not found, using default limits", p_id);
+			mysql_free_result(res);
+			time_lmt = 1; mem_lmt = 64; spj = 0;
+			return;
+		}
+		if (row[0] != NULL) time_lmt = atof(row[0]); else time_lmt = 1;     // ← 新增：字段 NULL 防御
+		if (row[1] != NULL) mem_lmt = atoi(row[1]); else mem_lmt = 64;
+		if (row[2] != NULL) spj = atoi(row[2]); else spj = 0;
+		mysql_free_result(res);                                      
+	}else{
+		time_lmt=1;
+		mem_lmt=64;
 	}
 }
 #endif
