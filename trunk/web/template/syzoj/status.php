@@ -144,6 +144,7 @@
 </div>
 
 <script>
+        var ai_api_price=<?php echo $OJ_AI_API_PRICE??1 ;?> ;
         var i = 0;
         var judge_result = [<?php
         foreach ($judge_result as $result) {
