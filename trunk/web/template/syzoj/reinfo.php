@@ -127,7 +127,7 @@ function pull_result(id){
         }
       }
        <?php if (!$isAC && isset($OJ_AI_API_URL)&&!empty($OJ_AI_API_URL) && $coin >0){ ?>
-                expmsg+="<input type=button class='ui button primary' onclick='ai_explain()' value='💰AI Help'>";
+                   expmsg+="<input type=button class='ui button primary' onclick='ai_explain()' value='<?php echo $MSG_PAY.$OJ_AI_API_PRICE."💰".$MSG_COIN.$MSG_USE.$MSG_AI_HELP ?>'>";
         <?php } ?>
       document.getElementById("errexp").innerHTML=expmsg;
     }
