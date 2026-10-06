@@ -544,6 +544,8 @@ $MSG_HINT="도움";
   $MSG_FRIENDLY_B1="등록 금지, 강제 로그인";
   $MSG_NO_COIN="{$MSG_COIN} 부족";
   $MSG_PAID="{$MSG_COIN} 지불 완료";
+  $MSG_PAY="결제";
+  $MSG_USE="사용";
   $MSG_SPENT="사용";
 $MSG_NUM="#";
 

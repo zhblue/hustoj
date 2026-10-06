@@ -839,6 +839,8 @@
   $MSG_FRIENDLY_B1="禁止注冊，強制登錄";
   $MSG_NO_COIN="沒有足夠的$MSG_COIN";
   $MSG_PAID="已支付$MSG_COIN";
+  $MSG_PAY="支付";
+  $MSG_USE="使用";
   $MSG_SPENT="消耗";
 $MSG_NUM="序號";
 

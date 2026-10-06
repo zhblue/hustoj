@@ -535,6 +535,8 @@
   $MSG_FRIENDLY_B1="Disable Register,Force Login";
   $MSG_NO_COIN="Insufficient ${MSG_COIN}";
   $MSG_PAID="${MSG_COIN} Paid";
+  $MSG_PAY="Pay";
+  $MSG_USE="Use";
   $MSG_SPENT="Spent";
   $MSG_BONUS="Bonus";
   $MSG_COIN="Coin";

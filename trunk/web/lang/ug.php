@@ -621,6 +621,8 @@ $MSG_CLICK_VIEW_HINT="Click to View Spoiler";
   $MSG_FRIENDLY_B1="Disable Register,Force Login";
   $MSG_NO_COIN="Insufficient {$MSG_COIN}";
   $MSG_PAID="{$MSG_COIN} Paid";
+  $MSG_PAY="تۆلەش";
+  $MSG_USE="ئىشلىتىش";
   $MSG_SPENT="Spent";
 $MSG_NUM="#";
 
