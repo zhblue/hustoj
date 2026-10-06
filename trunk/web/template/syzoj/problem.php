@@ -172,6 +172,7 @@ document.addEventListener('keydown', function(e) {
                                  echo $OJ_BBCODE_IN_PROBLEM?bbcode_to_html($row['description']):$row['description'] ;
                       }
                 ?></div>
+	   </div>
   </div>
   <?php if(!(empty($row['input']) || $row['input']=="<span class='md'>\n</span>" )||isset($_GET['spa'])){ ?>
     <div class="row">
