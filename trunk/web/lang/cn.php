@@ -557,8 +557,9 @@
   $MSG_COIN_BALANCE="当前{$MSG_COIN}余额";
   $MSG_NO_COIN="没有足够的$MSG_COIN";
   $MSG_PAID="已支付$MSG_COIN";
-
-$MSG_NUM="序号";
+  $MSG_PAY="支付";
+  $MSG_USE="使用";
+  $MSG_NUM="序号";
 
 // admin/problem_list.php 批量删除
 $MSG_BATCH_DELETE_EMPTY="请先选择要删除的题目";
