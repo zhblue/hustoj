@@ -103,7 +103,7 @@ if(basename($_SERVER['PHP_SELF'])!=="cron.php"){
 		$sid=intval($_GET['sid']);
 		$solution=pdo_query("select user_id,problem_id,result from solution where solution_id=?",$sid)[0];
 		$user_id=$solution[0];
-		$problem_id=$solution[1];
+		$problem_id=abs($solution[1]);
 		$result=$solution[2];
 		if($result==11){
 			$table="compileinfo";
