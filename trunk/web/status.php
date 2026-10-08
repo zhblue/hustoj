@@ -33,7 +33,7 @@ if (isset($_GET['cid'])) {
     $sql_lock = "SELECT *  FROM `contest` WHERE `contest_id`=?";
 
     $view_cid = $cid;
-    $result = pdo_query($sql_lock, $cid);
+    $result = mysql_query_cache($sql_lock, $cid);
     $rows_cnt = count($result);
     $start_time = 0;
     $end_time = 0;
@@ -237,9 +237,9 @@ $sql = $sql . $order_str . " LIMIT 50";
 
 
 if (!empty($param)) {
-    $result = pdo_query($sql, $param);
+    $result = mysql_query_cache($sql, $param);
 } else {
-    $result = pdo_query($sql);
+    $result = mysql_query_cache($sql);
 }
 
 if (!empty($result))
@@ -271,7 +271,7 @@ if (!isset($cid) && !empty($result)) {
                       WHERE cp.problem_id IN ($pids_str)
                         AND c.defunct = 'N' 
                         AND c.end_time > NOW()";
-        $cache_result = pdo_query($cache_sql);
+        $cache_result = mysql_query_cache($cache_sql);
         $hidden_problems_cache = array_column($cache_result, 'problem_id');
     }
 }
