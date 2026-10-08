@@ -11,6 +11,7 @@ $OJ_CACHE_SHARE = false;
 
 require_once('./include/cache_start.php');
 require_once('./include/db_info.inc.php');
+require_once('./include/memcache.php');
 require_once('./include/setlang.php');
 
 $view_title = "$OJ_NAME";
@@ -34,7 +35,7 @@ else
 if (isset($OJ_NOIP_KEYWORD) && $OJ_NOIP_KEYWORD) {
     $now = date('Y-m-d H:i', time());
     $sql = "select count(contest_id) from contest where start_time<'$now' and end_time>'$now' and title like '%$OJ_NOIP_KEYWORD%'";
-    $row = pdo_query($sql);
+    $row = mysql_query_cache($sql);
     $cols = $row[0];
     if ($cols[0] > 0) {
         $view_errors = "<h2> $MSG_NOIP_WARNING </h2>";
@@ -50,7 +51,7 @@ $view_problem = array();
  */
 // total submit
 $sql = "SELECT count(*) FROM solution WHERE problem_id=?";
-$result = pdo_query($sql, $id);
+$result = mysql_query_cache($sql, $id);
 $row = $result[0];
 $view_problem[0][0] = $MSG_SUBMIT;
 $view_problem[0][1] = $row[0];
@@ -61,14 +62,14 @@ $total = intval($row[0]);
 
 // total users
 $sql = "SELECT count(DISTINCT user_id) FROM solution WHERE problem_id=?";
-$result = pdo_query($sql, $id);
+$result = mysql_query_cache($sql, $id);
 $row = $result[0];
 $view_problem[1][0] = "$MSG_USER($MSG_SUBMIT)";
 $view_problem[1][1] = $row[0];
 
 // ac users
 $sql = "SELECT count(DISTINCT user_id) FROM solution WHERE problem_id=? AND result='4'";
-$result = pdo_query($sql, $id);
+$result = mysql_query_cache($sql, $id);
 $row = $result[0];
 $acuser = intval($row[0]);
 $view_problem[2][0] = "$MSG_USER($MSG_SOVLED)";
@@ -80,7 +81,7 @@ $i = 3;
  * 统计各种评测结果的提交数量
  */
 $sql = "SELECT result, count(1) FROM solution WHERE problem_id=? AND result>=4 GROUP BY result ORDER BY result";
-$result = pdo_query($sql, $id);
+$result = mysql_query_cache($sql, $id);
 
 foreach ($result as $row) {
     $view_problem[$i][0] = $jresult[$row[0]];
@@ -120,7 +121,7 @@ if ($start + $sz > $acuser)
  * 检查问题是否在进行中的比赛中
  */
 $sql = "SELECT 1 FROM `contest_problem` WHERE `problem_id`=$id AND `contest_id` IN (SELECT `contest_id` FROM `contest` WHERE `start_time`<? AND `end_time`>?)";
-$rrs = pdo_query($sql, $now, $now);
+$rrs = mysql_query_cache($sql, $now, $now);
 $flag = count($rrs) == 0;
 
 /**
@@ -129,7 +130,7 @@ $flag = count($rrs) == 0;
 $AC = false;
 if (isset($OJ_AUTO_SHARE) && $OJ_AUTO_SHARE && isset($_SESSION[$OJ_NAME . '_' . 'user_id'])) {
     $sql = "SELECT 1 FROM solution WHERE result=4 AND problem_id=? AND user_id=?";
-    $rrs = pdo_query($sql, $id, $_SESSION[$OJ_NAME . '_' . 'user_id']);
+    $rrs = mysql_query_cache($sql, $id, $_SESSION[$OJ_NAME . '_' . 'user_id']);
     $AC = (intval(count($rrs)) > 0);
 }
 
@@ -142,7 +143,7 @@ if (isset($_SESSION[$OJ_NAME . '_' . 'user_id'])) {
         //echo "Yes";
     } else {
         $sql = "SELECT count(1) FROM privilege WHERE user_id=? AND rightstr=?";
-        $count = pdo_query($sql, $_SESSION[$OJ_NAME . '_' . 'user_id'], "s" . $id);
+        $count = mysql_query_cache($sql, $_SESSION[$OJ_NAME . '_' . 'user_id'], "s" . $id);
 
         if ($count && $count[0][0] > 0) {
             $AC = true;
@@ -171,8 +172,8 @@ $sql = "SELECT * FROM (
 
 //echo $sql;
 
-//$result = pdo_query("SET GLOBAL sql_mode=(SELECT REPLACE(@@sql_mode,'ONLY_FULL_GROUP_BY',''))");
-$result = pdo_query($sql, $id, $id);
+//$result = mysql_query_cache("SET GLOBAL sql_mode=(SELECT REPLACE(@@sql_mode,'ONLY_FULL_GROUP_BY',''))");
+$result = mysql_query_cache($sql, $id, $id);
 
 $view_solution = array();
 $j = 0;
@@ -241,11 +242,11 @@ if (isset($_GET['id'])) {
         $user_id = ($_SESSION[$OJ_NAME . '_' . 'user_id']);
 
     $sql = "SELECT source FROM problem WHERE problem_id=?";
-    $result = pdo_query($sql, $id);
+    $result = mysql_query_cache($sql, $id);
     $source = $result[0][0];
 
     $sql = "SELECT problem_id FROM problem WHERE source LIKE ? AND problem_id!=? LIMIT 10";
-    $result = pdo_query($sql, "%$source%", $id);
+    $result = mysql_query_cache($sql, "%$source%", $id);
 
     $i = 0;
     foreach ($result as $row) {

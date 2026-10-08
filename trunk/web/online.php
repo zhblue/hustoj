@@ -4,6 +4,7 @@ $OJ_CACHE_SHARE = false;
 $debug = false;
 require_once('./include/cache_start.php');
 require_once('./include/db_info.inc.php');
+require_once('./include/memcache.php');
 ini_set("display_errors", "Off");
 require_once('./include/setlang.php');
 require_once('./include/online.php');
@@ -28,11 +29,11 @@ if (isset($_SESSION[$OJ_NAME . '_' . 'administrator'])) {
     }
     $sql = $sql . "  order by `log_id` desc LIMIT 0,50";
 
-    $result = pdo_query($sql, $search);
+    $result = mysql_query_cache($sql, $search);
     $i = 0;
 } else {
     $sql = "SELECT user_id,password,ip,time FROM `loginlog` order by log_id desc limit 20";
-    $result = pdo_query($sql);
+    $result = mysql_query_cache($sql);
 }
 
 foreach ($result as $row) {

@@ -20,7 +20,7 @@ if (isset($OJ_EXAM_CONTEST_ID) && $OJ_EXAM_CONTEST_ID > 0) {
 }
 if (isset($_GET['tid']) && !isset($_GET['cid'])) {
     $tid = intval($_GET['tid']);
-    $cid = pdo_query("select cid from topic where tid=?", $tid)[0][0];
+    $cid = mysql_query_cache("select cid from topic where tid=?", $tid)[0][0];
     if ($cid > 0) $_GET['cid'] = $cid;
 //              echo "cid:".$cid;
 
@@ -71,7 +71,7 @@ if ($_REQUEST['action'] == 'new') {
                 //echo "problem_id:".$problem_id;
                 $num = strpos($PID, $problem_id);
                 //echo "num:$num";
-                $pid = pdo_query("select problem_id from contest_problem where contest_id=? and num=?", $cid, $num)[0][0];
+                $pid = mysql_query_cache("select problem_id from contest_problem where contest_id=? and num=?", $cid, $num)[0][0];
                 //echo "pid:$pid";
             }
         }
@@ -94,7 +94,7 @@ if ($_REQUEST['action'] == 'reply' || !is_null($tid)) {
         $tid = intval($_POST['tid']);
 
     if (!is_null($tid) && isset($_POST['content']) && $_POST['content'] != '') {
-        $rows = pdo_query("SELECT tid FROM topic WHERE tid=?", $tid);
+        $rows = mysql_query_cache("SELECT tid FROM topic WHERE tid=?", $tid);
         if (isset($rows[0]) && $rows[0][0] > 0) {
 
             $sql = "INSERT INTO `reply` (`author_id`, `time`, `content`, `topic_id`,`ip`) VALUES(?,NOW(),?,?,?)";

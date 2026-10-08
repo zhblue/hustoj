@@ -4,6 +4,7 @@ $OJ_CACHE_SHARE = false;
 
 require_once('./include/cache_start.php');
 require_once('./include/db_info.inc.php');
+require_once('./include/memcache.php');
 require_once('./include/bbcode.php');
 require_once('./include/const.inc.php');
 require_once('./include/my_func.inc.php');
@@ -28,15 +29,15 @@ if (isset($_GET['id'])) {
     //require("oj-header.php");
 
     $sql = "select c.contest_id,c.title from contest c inner join contest_problem cp on c.contest_id=cp.contest_id and cp.problem_id=?  WHERE ( c.`end_time`>'$now' and c.defunct='N' ) or c.`private`='1' ";
-    $used_in_contests = pdo_query($sql, $id);
+    $used_in_contests = mysql_query_cache($sql, $id);
 
     if (isset($_SESSION[$OJ_NAME . '_' . 'administrator']) || isset($_SESSION[$OJ_NAME . '_' . 'problem_verifiter']) || isset($_SESSION[$OJ_NAME . '_' . 'contest_creator']) || isset($_SESSION[$OJ_NAME . '_' . 'problem_editor']))
 	{
 		$sql = "SELECT * FROM `problem` WHERE `problem_id`=?";
-		$result = pdo_query($sql, $id);
+		$result = mysql_query_cache($sql, $id);
 	}else if ($OJ_FREE_PRACTICE){
         $sql = "SELECT * FROM `problem` WHERE defunct='N' and `problem_id`=?";
-		$result = pdo_query($sql, $id);
+		$result = mysql_query_cache($sql, $id);
 	}else{
         $sql = "SELECT * FROM `problem` WHERE `problem_id`=? AND `defunct`='N' AND NOT EXISTS (
             SELECT 1 FROM `contest_problem` cp
@@ -46,7 +47,7 @@ if (isset($_GET['id'])) {
     /////////   if you give students opportunities to test their result out side the contest ,they can bypass the penalty time of 20 mins for
     /////////   each non-AC sumbission in contest. if you give them opportunities to view problems before exam ,they will ask classmates to write
     /////////   code for them in advance, if you want to share private contest problem to practice you should modify the contest into public
-		$result = pdo_query($sql, $id, $id);
+		$result = mysql_query_cache($sql, $id, $id);
 	}
     $pr_flag = true;
     
@@ -60,7 +61,7 @@ if (isset($_GET['id'])) {
     else
         $sql = "SELECT langmask,private,defunct FROM `contest` WHERE `defunct`='N' AND `contest_id`=? AND (`start_time`<='$now' AND ('$now'<`end_time` or private='N') )";
 
-    $result = pdo_query($sql, $cid);
+    $result = mysql_query_cache($sql, $cid);
     $rows_cnt = empty($result) ? 0 : count($result);
     if (empty($result) && !$OJ_FREE_PRACTICE && !isset($_SESSION[$OJ_NAME . '_administrator']) && !isset($_SESSION[$OJ_NAME . "_c" . $cid])) {
         $view_errors = "<title>$MSG_CONTEST</title><h2>No such Contest!</h2>";
@@ -96,7 +97,7 @@ if (isset($_GET['id'])) {
 			SELECT `problem_id` FROM `contest_problem` WHERE `contest_id`=? AND `num`=?
 		)";
 
-        $result = pdo_query($sql, $cid, $pid);
+        $result = mysql_query_cache($sql, $cid, $pid);
         $id = $result[0]['problem_id'];
     }
 
@@ -152,7 +153,7 @@ if (isset($OJ_NOIP_KEYWORD) && $OJ_NOIP_KEYWORD) {
     //检查当前题目是不是在NOIP模式比赛中，如果是则不显示AC数量 2020.7.11 by ivan_zhou
     //$now =  date('Y-m-d H:i', time());
     $sql = "select 1 from `contest_problem` where (`problem_id`= ? ) and `contest_id` IN (select `contest_id` from `contest` where `start_time` < ? and `end_time` > ? and `title` like ?)";
-    $rrs = pdo_query($sql, $id, $now, $now, "%$OJ_NOIP_KEYWORD%");
+    $rrs = mysql_query_cache($sql, $id, $now, $now, "%$OJ_NOIP_KEYWORD%");
     $flag = !empty($rrs);
 }
 if ($flag || problem_locked($id, 28)) {

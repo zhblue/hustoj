@@ -22,7 +22,7 @@ echo "<title>$MSG_BBS</title>";
                     $query = "?pid=$pid";
                     if ($cid != 0) {
                         $query .= "&cid=$cid";
-                        $PAL = pdo_query("SELECT num FROM contest_problem WHERE contest_id=? AND problem_id=?", $cid, $pid)[0][0];
+                        $PAL = mysql_query_cache("SELECT num FROM contest_problem WHERE contest_id=? AND problem_id=?", $cid, $pid)[0][0];
                         echo " >> <a href=\"discuss.php" . $query . "\">Problem " . $PID[$PAL] . "</a>";
                     } else {
                         echo " >> <a href=\"discuss.php" . $query . "\">Problem " . $pid . "</a>";
@@ -72,7 +72,7 @@ echo "<title>$MSG_BBS</title>";
         //$sql .= " LIMIT 30";
         //echo $sql;
 
-        $result = pdo_query($sql);
+        $result = mysql_query_cache($sql);
         $rows_cnt = count($result);
         $cnt = 0;
         $isadmin = isset($_SESSION[$OJ_NAME . '_' . 'administrator']);

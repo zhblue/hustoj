@@ -17,7 +17,7 @@ $view_title = "Hello skeleton <br> 每增加一个公式就少一半读者, 每�
 
 //演示如何查询数据库
 $sql = "select count(1) cnt from users where defunct=? ";
-$result = pdo_query($sql, "N");
+$result = mysql_query_cache($sql, "N");
 if (!empty($result))
     $cnt = $result[0]['cnt'];
 
