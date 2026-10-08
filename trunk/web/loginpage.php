@@ -1,5 +1,5 @@
 <?php
-$cache_time = 1;
+$cache_time = 300;
 require_once('./include/cache_start.php');
 require_once('./include/db_info.inc.php');
 require_once('./include/memcache.php');

@@ -1,5 +1,5 @@
 <?php
-$cache_time = 30;
+$cache_time = 120;
 $OJ_CACHE_SHARE = false;
 require_once('./include/cache_start.php');
 require_once('./include/db_info.inc.php');

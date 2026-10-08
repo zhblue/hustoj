@@ -4,9 +4,9 @@
  * 有关键词时缓存时间短，无关键词时缓存时间长
  */
 if (isset($_POST['keyword']))
-    $cache_time = 1;
+    $cache_time = 3;
 else
-    $cache_time = 10;
+    $cache_time = 15;
 
 /**
  * 设置缓存共享标志，当前设置为false

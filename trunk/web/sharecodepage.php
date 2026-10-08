@@ -1,6 +1,6 @@
 <?php
 $OJ_CACHE_SHARE = true;
-$cache_time = 10;
+$cache_time = 30;
 require_once('./include/cache_start.php');
 require_once('./include/db_info.inc.php');
 require_once('./include/setlang.php');

@@ -1,7 +1,7 @@
 <?php
 // 每增加一个公式就少一半读者, 每依赖一种框架就少一半开发者。
 ini_set("display_errors", "Off");  // 当我们需要调试的时候，把这里设成On，在出问题的时候php会尝试在页面上输出错误信息
-$cache_time = 30;    // 缓存时长
+$cache_time = 300;    // 缓存时长
 $OJ_CACHE_SHARE = false;   // 是否跨会话共享
 require_once('include/cache_start.php');   // 缓存开启
 require_once('include/db_info.inc.php');   // 导入基本配置和数据库操作函数
