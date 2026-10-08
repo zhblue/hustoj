@@ -90,7 +90,7 @@ $exceptions = array();
 if (isset($OJ_NOIP_KEYWORD) && $OJ_NOIP_KEYWORD && !isset($_SESSION[$OJ_NAME . "_administrator"])) {  // && !isset($_SESSION[$OJ_NAME."_administrator"])   管理员不受限
 
     $sql = "select contest_id from contest c where  c.start_time<'$now' and c.end_time>'$now' and ( c.title like '%$OJ_NOIP_KEYWORD%' or ((c.contest_type & 20) >0 and end_time>now() ) )";
-    $row = pdo_query($sql);
+    $row = mysql_query_cache($sql);
     if (count($row) > 0) {
         $exceptions = array_column($row, 'contest_id');
     }

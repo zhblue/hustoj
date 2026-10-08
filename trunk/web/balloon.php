@@ -28,7 +28,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
 if (isset($_SESSION[$OJ_NAME . '_' . 'balloon'])) {
 
     // 获取当前用户的学校信息
-    $school = pdo_query("select school from users where user_id=?", $_SESSION[$OJ_NAME . "_user_id"])[0][0];
+    $school = mysql_query_cache("select school from users where user_id=?", $_SESSION[$OJ_NAME . "_user_id"])[0][0];
     $cid = intval($_GET['cid']);
     if ($cid == 0) $cid = 1000;
 
@@ -45,13 +45,13 @@ if (isset($_SESSION[$OJ_NAME . '_' . 'balloon'])) {
 
     // 查询需要发放气球的解决方案（结果为4表示正确提交）
     $sql = "select * from solution where result=4 and contest_id=? and user_id like ? and solution_id not in (select sid from balloon where cid=?) order by solution_id;";
-    $result = pdo_query($sql, $cid, "$school%", $cid);
+    $result = mysql_query_cache($sql, $cid, "$school%", $cid);
     foreach ($result as $row) {
         $user_id = $row['user_id'];
         $sid = $row['solution_id'];
         $pid = $row['num'];
         $sql = "select balloon_id from balloon where user_id=? and cid=? and pid=?";
-        if (count(pdo_query($sql, $user_id, $cid, $pid)) == 0) {
+        if (count(mysql_query_cache($sql, $user_id, $cid, $pid)) == 0) {
             $sql = "insert into balloon(user_id,sid,cid,pid,status) value(?,?,?,?,0)";
             pdo_query($sql, $user_id, $sid, $cid, $pid);
         }
@@ -60,7 +60,7 @@ if (isset($_SESSION[$OJ_NAME . '_' . 'balloon'])) {
     // 查询首次通过问题的用户（First Blood）
     $sql = "select s.num,s.user_id from solution s ,
                 (select num,min(solution_id) minId from solution where contest_id=? and result=4 GROUP BY num ) c where s.solution_id =c.minId";
-    $fb = pdo_query($sql, $cid);
+    $fb = mysql_query_cache($sql, $cid);
     if ($fb) $rows_cnt = count($fb);
     else $rows_cnt = 0;
     for ($i = 0; $i < $rows_cnt; $i++) {
@@ -70,7 +70,7 @@ if (isset($_SESSION[$OJ_NAME . '_' . 'balloon'])) {
 
     // 构建气球列表显示数据
     $view_balloon = array();
-    $result = pdo_query("select * from balloon b left join users u on b.cid= ? and  b.user_id like ? and b.user_id=u.user_id order by status,balloon_id desc limit 50", $cid, "$school%");
+    $result = mysql_query_cache("select * from balloon b left join users u on b.cid= ? and  b.user_id like ? and b.user_id=u.user_id order by status,balloon_id desc limit 50", $cid, "$school%");
     $i = 0;
     foreach ($result as $row) {
         $mypid = chr(ord('A') + $row['pid']);

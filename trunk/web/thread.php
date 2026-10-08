@@ -4,7 +4,7 @@ $tid = intval($_REQUEST['tid']);
 if (isset($_GET['cid']))
     $cid = intval($_GET['cid']);
 $sql = "SELECT t.`title`, `cid`, `pid`, `status`, `top_level` FROM `topic` t LEFT JOIN contest_problem cp on cp.problem_id=t.pid   WHERE `tid`=? AND `status`<=1";
-$result = pdo_query($sql, $tid);
+$result = mysql_query_cache($sql, $tid);
 $rows_cnt = count($result);
 $row = $result[0];
 
@@ -12,7 +12,7 @@ if ($row['cid'] > 0)
     $cid = $row['cid'];
 
 if ($row['pid'] > 0 && $row['cid'] > 0) {
-    $pid = pdo_query("SELECT num FROM contest_problem WHERE problem_id=? AND contest_id=?", $row['pid'], $row['cid'])[0][0];
+    $pid = mysql_query_cache("SELECT num FROM contest_problem WHERE problem_id=? AND contest_id=?", $row['pid'], $row['cid'])[0][0];
     $pid = $PID[$pid];
 } else {
     $pid = $row['pid'];
@@ -37,7 +37,7 @@ $isadmin = isset($_SESSION[$OJ_NAME . '_' . 'administrator']);
         <tbody>
         <?php
         $sql = "SELECT `rid`, `author_id`, `time`, `content`, `status` FROM `reply` WHERE `topic_id`=? AND `status`<=1 ORDER BY `rid` LIMIT 30";
-        $result = pdo_query($sql, $tid);
+        $result = mysql_query_cache($sql, $tid);
         $rows_cnt = count($result);
         $cnt = 0;
         $i = 0;

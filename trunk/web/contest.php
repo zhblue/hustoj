@@ -102,7 +102,7 @@ if (isset($_GET['cid'])) {
 				)
 			)";
 
-            $tresult = pdo_query($sql, $tpid);
+            $tresult = mysql_query_cache($sql, $tpid);
 
             if (intval($tresult) != 0 && !isset($_SESSION[$OJ_NAME . '_' . "m$cid"])) {
                 //如果问题将在其他私有竞赛中使用，不向其他教师和学生显示
@@ -146,7 +146,7 @@ if (isset($_GET['cid'])) {
     $page_cnt = 25;
     $pstart = $page_cnt * $page - $page_cnt;
     $pend = $page_cnt;
-    $rows = pdo_query("select count(1) from contest where defunct='N'");
+    $rows = mysql_query_cache("select count(1) from contest where defunct='N'");
 
     if ($rows)
         $total = $rows[0][0];
@@ -168,7 +168,7 @@ if (isset($_GET['cid'])) {
      */
     if (isset($_SESSION[$OJ_NAME . '_user_id'])) {
         $sql = "select distinct contest_id from solution where contest_id>0 and user_id=?";
-        $result = pdo_query($sql, $_SESSION[$OJ_NAME . '_user_id']);
+        $result = mysql_query_cache($sql, $_SESSION[$OJ_NAME . '_user_id']);
 
         foreach ($result as $row) {
             if (intval($row['contest_id']) > 0)
@@ -181,7 +181,7 @@ if (isset($_GET['cid'])) {
         if ($user_id) {
             // 已登录的
             $sql = "SELECT * FROM `privilege` WHERE `user_id`=?";
-            $result = pdo_query($sql, $user_id);
+            $result = mysql_query_cache($sql, $user_id);
 
             // 刷新各种权限
             foreach ($result as $row) {
@@ -193,7 +193,7 @@ if (isset($_GET['cid'])) {
             }
             if (isset($_SESSION[$OJ_NAME . '_vip'])) {  // VIP mark can access all [VIP] marked contest
                 $sql = "select contest_id from contest where title like '%[VIP]%'";
-                $result = pdo_query($sql);
+                $result = mysql_query_cache($sql);
                 foreach ($result as $row) {
                     $_SESSION[$OJ_NAME . '_c' . $row['contest_id']] = true;
                 }
@@ -221,7 +221,7 @@ if (isset($_GET['cid'])) {
         $sql = "SELECT *  FROM contest WHERE contest.defunct='N' AND contest.title LIKE ? $wheremy  ORDER BY contest_id DESC";
         $sql .= " limit " . strval($pstart) . "," . strval($pend);
 
-        $result = pdo_query($sql, $keyword);
+        $result = mysql_query_cache($sql, $keyword);
     } else {
         $sql = "SELECT *  FROM contest WHERE contest.defunct='N' $wheremy  ORDER BY contest_id DESC";
         $sql .= " limit " . strval($pstart) . "," . strval($pend);

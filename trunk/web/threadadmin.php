@@ -2,7 +2,7 @@
 require_once("include/db_info.inc.php");
 require_once("discuss_func.inc.php");
 $tid = intval($_REQUEST['tid']);
-$cid = pdo_query("SELECT cid FROM topic WHERE tid=?", $tid)[0][0];
+$cid = mysql_query_cache("SELECT cid FROM topic WHERE tid=?", $tid)[0][0];
 if ($_REQUEST['target'] == 'reply') {
     $rid = intval($_REQUEST['rid']);
     $stat = -1;
@@ -50,7 +50,7 @@ if ($_REQUEST['target'] == 'thread') {
     if ($toplevel == -1 && $stat == -1)
         err_msg("Wrong action.");
     if (!isset($_SESSION[$OJ_NAME . '_' . 'administrator'])) {
-        $owner = pdo_query("SELECT author_id FROM topic WHERE tid=?", $tid);
+        $owner = mysql_query_cache("SELECT author_id FROM topic WHERE tid=?", $tid);
         if (empty($owner) || $_SESSION[$OJ_NAME . '_' . 'user_id'] != $owner[0]['author_id'])
             err_msg("Permission denied.");
     }

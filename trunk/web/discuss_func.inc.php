@@ -26,7 +26,7 @@ function problem_exist($pid, $cid)
         return true;
     $sql .= " LIMIT 1";
     //echo $sql;
-    $result = pdo_query($sql);
+    $result = mysql_query_cache($sql);
     return count($result) > 0;
 }
 

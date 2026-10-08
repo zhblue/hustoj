@@ -12,7 +12,7 @@ else
 if (isset($_GET['cid'])) {
     $cid = intval($_GET['cid']);
     if ($pid > 0) {
-        $pid = pdo_query("SELECT num FROM contest_problem WHERE problem_id=? AND contest_id=?", $pid, $cid)[0][0];
+        $pid = mysql_query_cache("SELECT num FROM contest_problem WHERE problem_id=? AND contest_id=?", $pid, $cid)[0][0];
         $pid = $PID[$pid];
     }
 } else {

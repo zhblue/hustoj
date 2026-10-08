@@ -4,7 +4,7 @@ require_once("include/db_info.inc.php");
 $tid = intval($_REQUEST['tid']);
 echo "<title>HUST Online Judge WebBoard</title>";
 $sql = "SELECT `title`, `cid`, `pid`, `status`, `top_level` FROM `topic` WHERE `tid` = ? AND `status` <= 1";
-$result = pdo_query($sql, $tid);
+$result = mysql_query_cache($sql, $tid);
 $rows_cnt = count($result);
 $row = $result[0];
 $isadmin = isset($_SESSION[$OJ_NAME . '_' . 'administrator']);
@@ -34,7 +34,7 @@ $isadmin = isset($_SESSION[$OJ_NAME . '_' . 'administrator']);
 
             <?php
             $sql = "SELECT `rid`, `author_id`, `time`, `content`, `status` FROM `reply` WHERE `topic_id` = ? AND `status` <=2 ORDER BY `rid` LIMIT 30";
-            $result = pdo_query($sql, $tid);
+            $result = mysql_query_cache($sql, $tid);
             $rows_cnt = count($result);
             $cnt = 0;
             $i = 0;
