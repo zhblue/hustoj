@@ -7,7 +7,7 @@
 $OJ_CACHE_SHARE = true;
 
 // 设置缓存时间（秒）
-$cache_time = 10;
+$cache_time = 15;
 
 // 包含缓存开始文件
 require_once('./include/cache_start.php');

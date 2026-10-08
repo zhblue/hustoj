@@ -1,6 +1,6 @@
 <?php
 ////////////////////////////Common head
-$cache_time = 30;
+$cache_time = 60;
 $OJ_CACHE_SHARE = false;
 require_once('./include/cache_start.php');
 require_once('./include/db_info.inc.php');

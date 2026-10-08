@@ -4,7 +4,7 @@ header("Cache-Control: no-cache, must-revalidate"); // HTTP/1.1
 header("Expires: Sat, 26 Jul 1997 05:00:00 GMT"); // Date in the past
 
 ////////////////////////////Common head
-$cache_time = 2;
+$cache_time = 3;
 $OJ_CACHE_SHARE = false;
 
 require_once('./include/db_info.inc.php');

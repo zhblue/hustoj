@@ -1,6 +1,6 @@
 <?php
 ////////////////////////////Common head
-$cache_time = 30;
+$cache_time = 300;
 $OJ_CACHE_SHARE = true;
 $news_id = intval($_GET["id"]);
 require_once('./include/cache_start.php');

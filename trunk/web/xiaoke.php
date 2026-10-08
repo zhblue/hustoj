@@ -15,7 +15,7 @@
  *
  * 数据访问全部走 HUSTOJ 自带 pdo_query（PDO prepared statements）。
  */
-$cache_time = 60;
+$cache_time = 120;
 require_once("./include/db_info.inc.php");
 
 // ============================================================

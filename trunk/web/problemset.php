@@ -10,7 +10,7 @@
  * 全局配置变量
  */
 $OJ_CACHE_SHARE = false;  // 是否共享缓存
-$cache_time = 10;         // 缓存时间设置
+$cache_time = 30;         // 缓存时间设置
 
 /**
  * 引入必要的包含文件
