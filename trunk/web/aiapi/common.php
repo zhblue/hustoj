@@ -157,6 +157,50 @@ if(basename($_SERVER['PHP_SELF'])!=="cron.php"){
 
 	}
 
+	// ---------------------------------------------------------------------------
+	// 题目推荐（recommend.php）：根据近期做题记录与系统分类，给出练习建议
+	// ---------------------------------------------------------------------------
+	if (basename($http_referer) == "recommend.php" || isset($_POST['recent'])) {
+		if (!isset($_SESSION[$OJ_NAME . '_user_id'])) {
+			echo "login required";
+			exit();
+		}
+		$recent     = isset($_POST['recent'])     ? json_decode($_POST['recent'], true)     : array();
+		$categories = isset($_POST['categories']) ? json_decode($_POST['categories'], true) : array();
+		$pc         = isset($_POST['problem_count']) ? intval($_POST['problem_count']) : 0;
+
+		$recent_text = "";
+		if (!empty($recent) && is_array($recent)) {
+			foreach ($recent as $i => $p) {
+				$t = isset($p['title'])  ? $p['title']  : '';
+				$s = isset($p['source']) ? $p['source'] : '';
+				$recent_text .= ($i + 1) . ". 《" . $t . "》 分类：" . $s . "\n";
+			}
+		}
+		$cat_text = !empty($categories) ? implode("、", $categories) : "（暂无分类信息）";
+
+		// 关键约束：只推荐“本系统题库已有的分类/题目”，禁止引用外部 OJ（POJ/HDU/Luogu/CF 等），
+		// 并强制用 [分类](problemset.php?search=分类) 的 Markdown 链接输出，使推荐文本中的链接可点击触发搜索。
+		$prompt_sys = "你是一位经验丰富的算法竞赛教练，熟悉在线评测系统（OJ）上的编程题目。"
+			. "请根据用户最近练习过的题目，分析他的知识掌握情况，并给出针对性的后续练习建议。\n\n"
+			. "【硬性约束】\n"
+			. "1. 你只能基于下方“系统可用的题目分类”来给出建议，严禁推荐任何外部 OJ（如 POJ、HDU、Luogu/洛谷、Codeforces/CF、LeetCode、牛客 等）的题目编号或链接，也不要出现“如 POJ 1321”“HDU 1241”这类外部引用；所有推荐都必须能在【本系统题库】内找到对应题目。\n"
+			. "2. 推荐的练习方向必须是“系统可用的题目分类”中真实存在的分类，不要编造列表外的分类。\n"
+			. "3. 对于每个被推荐的【分类】或【题目方向】，必须用 Markdown 链接格式输出，使其能够可点击跳转到系统题库搜索，链接格式固定为：\n"
+			. "   [分类名](problemset.php?search=分类名)\n"
+			. "   例如推荐“二分查找”时，必须写成：[二分查找](problemset.php?search=二分查找)；推荐“动态规划入门”时，写成：[动态规划入门](problemset.php?search=动态规划入门)。请务必使用这种可点击链接，不要只写纯文本分类名。\n"
+			. "4. 使用简体中文，条理清晰，使用 Markdown 列表呈现。\n\n"
+			. "【建议结构】\n"
+			. "a. 先简要分析用户当前已涉及的知识领域与可能的薄弱环节；\n"
+			. "b. 推荐 5-8 个适合他下一步练习的知识点/题目方向，每个方向给出推荐理由；\n"
+			. "c. 不要输出与建议无关的内容。";
+
+		$prompt_user = "本系统题库目前共有 " . $pc . " 道可做的题目，【系统可用的题目分类】列表如下（你只能从中选择推荐方向，不要编造列表外的分类，也不要引用外部 OJ）：\n"
+			. $cat_text . "\n\n"
+			. "该用户最近做过的 " . count($recent) . " 道题目如下（标题 + 分类）：\n" . $recent_text . "\n"
+			. "请基于以上信息，为我推荐接下来适合练习的题目方向与学习路径，并按照上面要求的 Markdown 链接格式输出每个方向的分类，确保链接可点击触发题库搜索。";
+	}
+
 	$model = $models[array_rand($models)];
 	// 设置请求体
 	$data = [
