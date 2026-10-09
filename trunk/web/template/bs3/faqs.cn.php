@@ -147,6 +147,11 @@ for line in sys.stdin:
     print(int(a[0]) + int(a[1]))
 </pre>
 	    为了方便使用本地文件调试，C/C++也可以用下面的方法来仅在本地运行时进行输入、输出重定向。
+<hr>
+<p><font color=green>Q</font>:请问是否可以在python中使用pandas模块?<br>
+   <font color=red>A</font>:可以。如果评测机环境中安装了Python的pandas库（通常在Python标准/科学计算环境中提供），您可以在代码中直接 `import pandas` 使用。若提示未安装，说明当前评测机基础环境未预装该扩展包。
+</p>
+	    
 <pre>
 #ifdnef ONLINE_JUDGE
     freopen("sample.in", "r", stdin);
