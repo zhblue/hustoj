@@ -138,6 +138,11 @@ for line in sys.stdin:
           
     
 <hr>
+<p><font color=green>Q</font>:请问是否可以在python中使用pandas模块?<br>
+   <font color=red>A</font>:可以。如果评测机环境中安装了Python的pandas库（通常在Python标准/科学计算环境中提供），您可以在代码中直接 `import pandas` 使用。若提示未安装，说明当前评测机基础环境未预装该扩展包。
+</p>
+    
+<hr>
 <font color=green>Q</font>:为什么我的程序在自己的电脑上正常编译，而系统告诉我编译错误!<br>
 <font color=red>A</font>:GCC的编译标准与VC6有些不同，更加符合c/c++标准:<br>
 <ul>
