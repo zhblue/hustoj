@@ -13,7 +13,7 @@
                 <?php
                         if(empty($group_name)) echo "<option value='' selected >请选择</option>";
                         if(empty($_GET['keyword'])){
-                                $groups=pdo_query("select group_name from users group by group_name order by max(accesstime) desc");
+                                $groups=pdo_query("select group_name from users  where defunct='N' and expiry_date >= curdate() group by group_name order by max(accesstime) desc");
                         }else{
                                 $keyword=$_GET['keyword'];
                                 $groups=pdo_query("select distinct group_name from users where group_name like ? ","%".$keyword."%");
