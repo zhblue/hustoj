@@ -3,17 +3,26 @@
 <hr>
 <div class='padding'>
 <div ><h1><?php echo $MSG_GROUP_NAME.$MSG_STATISTICS ?></h1>
-<form action=group_statistics.php method=get ><?php echo $MSG_GROUP_NAME ?>
-	<select name=group_name onchange="$('form').submit()">
-		<?php
-                        if(empty($group_name)) echo "<option value='' />";
-                        $groups=pdo_query("select group_name from users where defunct='N' and expiry_date >= curdate()  group by group_name order by max(accesstime) desc ");
+
+<form action="<?php echo basename(__FILE__)?>" method=get >
+<input name='keyword' type='text' class='ui input' placeholder='小组关键词'  style="width: 80px; "  value='<?php echo htmlentities($_GET['keyword'])??"" ?>'>
+                <?php echo $MSG_GROUP_NAME ?>
+        <select name=group_name onchange="$('form').submit()">
+                <?php
+                        if(empty($group_name)) echo "<option value='' selected >请选择</option>";
+                        if(empty($_GET['keyword'])){
+                                $groups=pdo_query("select group_name from users  where defunct='N' and expiry_date >= curdate() group by group_name order by max(accesstime) desc");
+                        }else{
+                                $keyword=$_GET['keyword'];
+                                $groups=pdo_query("select distinct group_name from users where group_name like ? ","%".$keyword."%");
+                        }
                         $groups=array_column($groups,'group_name');
                         foreach($groups as $group){
                                 echo "<option value='".htmlentities($group)."' ". ($group==$group_name?"selected":"") ."   >$group</option>";
                         }
-		?>
-	</select><a href="javascript:history.go(-1);" >Back</a> &nbsp;&nbsp;&nbsp;&nbsp; <a href="group_total.php?group_name=<?php echo htmlentities($group_name) ?>" >TotalView</a>
+                ?>
+        </select>
+	<a href="javascript:history.go(-1);" >Back</a> &nbsp;&nbsp;&nbsp;&nbsp; <a href="group_total.php?group_name=<?php echo htmlentities($group_name) ?>" >TotalView</a>
 	<input type=hidden name=list value='<?php echo $pids ?>' >
 	<span id="swapButton" type=button class='ui button red' > <?php echo $MSG_TABLE_TRANSPOSE ?> </span>
 </form>
