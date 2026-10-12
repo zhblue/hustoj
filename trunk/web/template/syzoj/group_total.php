@@ -7,7 +7,7 @@
         if(!isset($_GET['down'])){
 ?>
 <form action="<?php echo basename(__FILE__)?>" method=get >
-<input name='keyword' type='text' class='ui mini input' placeholder='小组关键词' value='<?php echo htmlentities($_GET['keyword'])??"" ?>'>
+<input name='keyword' type='text' class='ui input' placeholder='小组关键词'  style="width: 80px; "  value='<?php echo htmlentities($_GET['keyword'])??"" ?>'>
                 <?php echo $MSG_GROUP_NAME ?>
         <select name=group_name onchange="$('form').submit()">
                 <?php
