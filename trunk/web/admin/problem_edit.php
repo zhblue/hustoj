@@ -82,12 +82,12 @@ include_once("kindeditor.php") ;
 
       <p align=left>
         <?php echo "<h4>".$MSG_Sample_Input."</h4>"?>
-        <textarea  class="input input-large" style="width:100%;" rows=13 name=sample_input><?php echo htmlentities($row['sample_input'],ENT_QUOTES,"UTF-8")?></textarea><br><br>
+        <textarea  class="input input-large" style="width:100%;font-family:monospace" rows=13 name=sample_input><?php echo htmlentities($row['sample_input'],ENT_QUOTES,"UTF-8")?></textarea><br><br>
       </p>
 
       <p align=left>
         <?php echo "<h4>".$MSG_Sample_Output."</h4>"?>
-        <textarea  class="input input-large" style="width:100%;" rows=13 name=sample_output><?php echo htmlentities($row['sample_output'],ENT_QUOTES,"UTF-8")?></textarea><br><br>
+        <textarea  class="input input-large" style="width:100%;font-family:monospace" rows=13 name=sample_output><?php echo htmlentities($row['sample_output'],ENT_QUOTES,"UTF-8")?></textarea><br><br>
       </p>
 
       <p align=left>
