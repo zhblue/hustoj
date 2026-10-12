@@ -71,21 +71,21 @@
         </p>
         <p align=left>
           <?php echo "<h4>".$MSG_Sample_Input."(<64kB)</h4>"?>
-          <textarea  class="input input-large" style="width:100%;" rows=13 name=sample_input></textarea><br><br>
+          <textarea  class="input input-large" style="width:100%;font-family:monospace" rows=13 name=sample_input></textarea><br><br>
         </p>
         <p align=left>
           <?php echo "<h4>".$MSG_Sample_Output."(<64kB)</h4>"?>
-          <textarea  class="input input-large" style="width:100%;" rows=13 name=sample_output></textarea><br><br>
+          <textarea  class="input input-large" style="width:100%;font-family:monospace" rows=13 name=sample_output></textarea><br><br>
         </p>
         <p align=left>
           <?php echo "<h4>".$MSG_Test_Input."</h4>"?>
           <?php echo "(".$MSG_HELP_MORE_TESTDATA_LATER.")"?><br>
-          <textarea class="input input-large" style="width:100%;" rows=13 name=test_input></textarea><br><br>
+          <textarea class="input input-large" style="width:100%;font-family:monospace" rows=13 name=test_input></textarea><br><br>
         </p>
         <p align=left>
           <?php echo "<h4>".$MSG_Test_Output."</h4>"?>
           <?php echo "(".$MSG_HELP_MORE_TESTDATA_LATER.")"?><br>
-          <textarea class="input input-large" style="width:100%;" rows=13 name=test_output></textarea><br><br>
+          <textarea class="input input-large" style="width:100%;font-family:monospace" rows=13 name=test_output></textarea><br><br>
         </p>
         <p align=left>
           <?php echo "<h4>".$MSG_HINT."(<64kB)</h4>"?>
