@@ -34,7 +34,13 @@ foreach ($rows as $r) {
         'source' => isset($r['source']) ? $r['source'] : '',
     );
 }
-
+$filter_sql = " `defunct`='N' AND `problem_id` NOT IN (
+					SELECT  `problem_id`
+						FROM contest c
+						INNER JOIN  `contest_problem` cp ON c.`contest_id` = cp.`contest_id` " .
+        " AND (c.`defunct` = 'N' AND '$now'<c.`end_time`)" .    // option style show all non-running contest
+        // " and (c.`end_time` >  '$now'  OR c.private =1)" . // original style , hidden all private contest problems
+        ") ";
 // ---------- 2) 系统中的分类（题目来源 source 标签）与可做题量 ----------
 $categories = array();
 $cat_rows = pdo_query("SELECT source FROM problem WHERE defunct='N' AND source IS NOT NULL AND source<>'' and source not like 'http%' ");
