@@ -43,7 +43,7 @@ $filter_sql = " `defunct`='N' AND `problem_id` NOT IN (
         ") ";
 // ---------- 2) 系统中的分类（题目来源 source 标签）与可做题量 ----------
 $categories = array();
-$cat_rows = pdo_query("SELECT source FROM problem WHERE defunct='N' AND source IS NOT NULL AND source<>'' and source not like 'http%' ");
+$cat_rows = pdo_query("SELECT source FROM problem WHERE  $filter_sql AND source IS NOT NULL AND source<>'' and source not like 'http%' ");
 foreach ($cat_rows as $c) {
     foreach (preg_split('/\s+/', trim($c['source'])) as $tag) {
         $tag = trim($tag);
