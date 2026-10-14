@@ -11,7 +11,7 @@ require_once("../include/my_func.inc.php");
 // 设置请求的URL
 $url = 'http://demo.hustoj.com/aiapi/proxy.php';   // 千问是：'https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions';
 $apiKey = "设置为阿里云的API-KEY";   //https://bailian.console.aliyun.com/?tab=model#/api-key  创建新的API KEY
-$models=array("qwen-turbo");
+$models=array("Qwen3-Coder-30B-A3B-Instruct-Q4_K_M");
 $temperature=0.8;
 if(basename(get_included_files()[0])!="cron.php")
   require_once(dirname(__FILE__)."/common.php");
