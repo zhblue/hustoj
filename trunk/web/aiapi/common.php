@@ -1,4 +1,16 @@
 <?php
+function isBetweenNightHours($startHour = 22, $endHour = 5) {
+    $currentHour = (int)date('H');
+
+    // 如果开始时间小于结束时间（比如09:00到17:00）
+    if ($startHour < $endHour) {
+        return $currentHour >= $startHour && $currentHour <= $endHour;
+    } else {
+        // 跨天情况（比如22:00到05:00）
+        return $currentHour >= $startHour || $currentHour <= $endHour;
+    }
+}
+
 function get_problem_text($pid){
 	global $MSG_Description,$MSG_Input,$MSG_Output,$MSG_Sample_Input,$MSG_Sample_Output,$MSG_HINT;
 		$problem=pdo_query("select * from problem where problem_id=?",$pid)[0];
@@ -209,7 +221,7 @@ if(basename($_SERVER['PHP_SELF'])!=="cron.php"){
 	    "messages" => [
 		[
 		    "role" => "system",
-		    "content" => $prompt_sys
+		    "content" => $prompt_sys. (isBetweenNightHours()?"请在最后提醒同学早点休息。 ":"")
 		],
 		[
 		    "role" => "user",
