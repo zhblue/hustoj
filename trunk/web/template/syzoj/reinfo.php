@@ -84,11 +84,25 @@ td > code {
     startup : { typeset: false  } ,
     tex: {inlineMath: [['$', '$'], ['\\(', '\\)']]}
   };
+// 统一的 MathJax 排版函数：等待 MathJax 异步加载完成后再执行，避免竞态
+function renderMathJax() {
+  if (window.MathJax && MathJax.startup && MathJax.startup.promise) {
+    // MathJax 已就绪，等其启动完成后排版
+    MathJax.startup.promise.then(function() {
+      try { renderMathJax(); } catch (e) { console.error('MathJax typeset error:', e); }
+    });
+  } else if (window.MathJax && typeof MathJax.typeset === 'function') {
+    try { renderMathJax(); } catch (e) { console.error('MathJax typeset error:', e); }
+  } else {
+    // MathJax 仍在异步加载（async 脚本可能晚于此处执行），轮询重试直到就绪
+    setTimeout(renderMathJax, 300);
+  }
+}
 function fill_data(data){
     $("#errexp").html(data);    
     $("#errexp").html(marked.parse($("#errexp").text()));    
     console.log("Mathjax");
-    MathJax.typeset(); 
+    renderMathJax(); 
     const target = document.getElementById('errexp');
 	MathJax.typesetPromise([target]).then(() => {
 	  console.log('局部渲染完成！');
