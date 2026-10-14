@@ -521,15 +521,24 @@ function admin_mod(){
 		$("span[fd="+fd_name+"]").each(db_click_modify);
 	}
 }
-var mathjaxRended=false;
+// 统一的 MathJax 排版函数：等待 MathJax 异步加载完成后再执行，避免竞态
+function renderMathJax() {
+  if (window.MathJax && MathJax.startup && MathJax.startup.promise) {
+    // MathJax 已就绪，等其启动完成后排版
+    MathJax.startup.promise.then(function() {
+      try { MathJax.typeset(); } catch (e) { console.error('MathJax typeset error:', e); }
+    });
+  } else if (window.MathJax && typeof MathJax.typeset === 'function') {
+    try { MathJax.typeset(); } catch (e) { console.error('MathJax typeset error:', e); }
+  } else {
+    // MathJax 仍在异步加载（async 脚本可能晚于此处执行），轮询重试直到就绪
+    setTimeout(renderMathJax, 300);
+  }
+}
   $(document).ready(function(){
     	$("#creator").load("problem-ajax.php?pid=<?php echo $id?>",function(responseTxt, statusTxt, xhr) {
 		if (statusTxt === "success") {
-			if(!mathjaxRended){
-				mathjaxRended=true;
-				window.setTimeout("MathJax.typeset();",800);
-			
-			}
+			renderMathJax();
 		}
 		if (statusTxt === "error") {
 		}
@@ -553,10 +562,7 @@ var mathjaxRended=false;
 			}
 			marked.parse(htm).then(html => { 
 				cur.html(html); 
-				if(!mathjaxRended){
-					mathjaxRended=true;
-					window.setTimeout("MathJax.typeset();",800);
-				}
+				renderMathJax();
 				<?php if ( $row['spj']>1 ){?>
 					window.setTimeout("generateMarkdownAutoSelect();",100);
 				<?php }?>
@@ -592,7 +598,7 @@ var mathjaxRended=false;
 	    transform();
 	<?php }?>
 	admin_mod(); 
-	MathJax.typeset();
+	renderMathJax();
 
 	<?php if ( $row['spj']>1 ){?>
 		window.setTimeout("generateAutoSelect();",100);
