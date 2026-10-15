@@ -15,9 +15,6 @@ if (isset($OJ_LANG)) {
 
 require_once (dirname(dirname(__FILE__))."/include/const.inc.php");
 require_once (dirname(dirname(__FILE__))."/include/my_func.inc.php");
-?>
-
-<?php
 
 function image_save_file($filepath ,$base64_encoded_img) {
 	$dirpath=dirname($filepath);
@@ -217,8 +214,8 @@ function import_fps($tempfile) {
       $basedir = "$OJ_DATA/$pid";
       @mkdir($basedir);
 
-      if (strlen($sample_input)) mkdata($pid,"sample.in",$sample_input,$OJ_DATA);
-      if (strlen($sample_output)) mkdata($pid,"sample.out",$sample_output,$OJ_DATA);
+      if (strlen($sample_input)>0&&$sample_input!="无") mkdata($pid,"sample.in",$sample_input,$OJ_DATA);
+      if (strlen($sample_output)>0&&$sample_output!="无") mkdata($pid,"sample.out",$sample_output,$OJ_DATA);
 
      
       $testinputs = $searchNode->children()->test_input;
