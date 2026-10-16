@@ -1,0 +1,347 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>NOI Linux 2.0 桌面模拟器</title>
+<style>
+*{box-sizing:border-box}html,body{width:100%;height:100%;margin:0;overflow:hidden;font-family:Arial,"Microsoft YaHei",sans-serif}button,input{font:inherit}button{cursor:pointer}
+.desktop{position:relative;width:100%;height:100%;overflow:hidden;background:radial-gradient(ellipse at 52% 56%,#07597c 0,#073653 24%,transparent 62%),radial-gradient(ellipse at 74% 22%,#0a3154 0,#071b39 43%,transparent 69%),linear-gradient(135deg,#071327,#061f3c 52%,#031127)}
+.desktop:after{content:"";position:absolute;inset:0;pointer-events:none;opacity:.28;background:radial-gradient(circle,#30b8e8 1px,transparent 1.4px) 4px 3px/21px 26px,linear-gradient(180deg,transparent 0 60%,#11cafa 60.3%,transparent 60.8%),linear-gradient(160deg,transparent 0 64%,#0d95cd66 64.2%,transparent 64.6%),linear-gradient(18deg,transparent 0 69%,#1688bf66 69.2%,transparent 69.6%)}
+.wallpaper-city{position:absolute;z-index:0;left:17%;right:12%;top:17%;height:48%;opacity:.54;clip-path:polygon(0 78%,3% 61%,5% 69%,8% 48%,10% 70%,13% 54%,15% 68%,17% 42%,18.5% 64%,22% 58%,24% 27%,26% 61%,29% 55%,31% 16%,33% 57%,35% 43%,38% 67%,41% 51%,44% 61%,47% 35%,49% 66%,52% 47%,55% 63%,58% 40%,60% 57%,63% 23%,65% 62%,68% 49%,70% 66%,73% 38%,75% 63%,78% 51%,81% 69%,84% 41%,86% 65%,90% 48%,93% 67%,96% 53%,100% 70%,100% 100%,0 100%);background:radial-gradient(circle,#88e8ff .8px,transparent 1.4px) 0 0/5px 5px,linear-gradient(90deg,#35a9d822,#51c9f155 50%,#1383b822)}
+.wallpaper-city:after{content:"";position:absolute;left:0;right:0;bottom:0;height:2px;background:#18d7ff;box-shadow:0 0 18px 4px #08bcff}
+.wallpaper-logo{position:absolute;z-index:1;left:51%;top:38%;display:flex;flex-direction:column;align-items:center;transform:translate(-50%,-50%);color:#21d9ff;text-align:center;pointer-events:none;text-shadow:0 0 5px #06cfff,0 0 24px #0ca9ff,0 0 60px #008dff}
+.wallpaper-logo strong{font-family:Arial,sans-serif;font-size:clamp(88px,17vw,190px);font-weight:800;letter-spacing:.015em;line-height:.82;-webkit-text-stroke:2px #60e8ff99}
+.wallpaper-logo span{padding-left:17px;font-size:clamp(15px,2vw,25px);font-weight:700;letter-spacing:.75em}
+.topbar{position:absolute;z-index:20;top:0;left:0;right:0;height:34px;display:flex;align-items:center;justify-content:space-between;padding:0 12px;color:#f6f4f8;background:#282630ef;font-size:12px}.top-left,.top-right{height:100%;display:flex;align-items:center;gap:6px}.top-center{position:absolute;left:50%;transform:translateX(-50%)}.panel-btn{height:100%;padding:0 8px;border:0;background:transparent;color:inherit}.panel-btn:hover{background:#ffffff20}.brand{font-weight:bold}.brand-mark{display:inline-grid;place-items:center;width:18px;height:18px;margin-right:5px;border-radius:5px;background:#e95420;font-size:10px}.sys-icons{display:flex;gap:12px;font-size:14px}
+.desktop-icons{position:absolute;z-index:2;top:39px;left:46px;display:grid;gap:7px;width:79px}.desktop-icon{display:flex;flex-direction:column;align-items:center;gap:4px;min-height:64px;padding:4px 2px;border:1px solid transparent;border-radius:7px;background:transparent;color:white;text-shadow:0 1px 4px #151223;font-size:10px}.desktop-icon:hover{border-color:#ffffff45;background:#ffffff1b}.desktop-icon .icon{font-size:27px}
+.dock{position:absolute;z-index:19;top:20px;bottom:0;left:0;display:flex;flex-direction:column;align-items:center;gap:3px;width:37px;padding:5px 2px 4px;border:0;border-radius:0;background:#111720d9;box-shadow:2px 0 8px #0005}.dock button{position:relative;display:grid;place-items:center;width:32px;height:36px;border:0;border-radius:6px;background:transparent;color:white;font-size:20px}.dock button:hover,.dock button.active{background:#ffffff20}.dock button.active:before{content:"";position:absolute;left:-3px;width:3px;height:18px;border-radius:0 3px 3px 0;background:#20caff}.dock .dot{position:absolute;right:2px;bottom:3px;width:4px;height:4px;border-radius:50%;background:#f5f4f7;display:none}.dock button.running .dot{display:block}.dock hr{width:23px;border:0;border-top:1px solid #ffffff35;margin:4px 0}.dock .dock-spacer{flex:1}.dock #dockLauncher{font-size:23px}
+.note{position:absolute;right:20px;bottom:16px;z-index:1;padding:9px 12px;border:1px solid #ffffff25;border-radius:9px;background:#24212b77;color:#eee;font-size:11px}
+.judge-status{font-size:10px;white-space:nowrap}.judge-status:before{content:"";display:inline-block;width:7px;height:7px;margin-right:5px;border-radius:50%;background:#a29eaa}.judge-status.connected:before{background:#67c587;box-shadow:0 0 6px #67c587}.judge-status.error:before{background:#ed746a}
+.terminal-window{left:23%;top:17%;width:min(900px,calc(100vw - 130px));height:min(570px,calc(100vh - 105px));--accent:#52505c}.local-terminal-window{left:27%;top:20%;--accent:#3b7aa8}.terminal-toolbar{height:31px;flex:none;display:flex;justify-content:space-between;align-items:center;gap:8px;padding:0 10px;border-bottom:1px solid #413b46;background:#302b35;color:#d4d0d8;font-size:10px}.terminal-toolbar a{color:#b7c8f4;text-decoration:none}.terminal-toolbar a:hover{text-decoration:underline}.terminal-toolbar button{height:22px;padding:0 7px;border:1px solid #6e6476;border-radius:4px;background:#413947;color:#e5e0ea;font-size:10px}.terminal-toolbar button:hover{background:#51465a}.jslinux-frame{display:block;width:100%;flex:1;min-height:0;border:0;background:#1b1721}.terminal-foot{height:25px;flex:none;padding:5px 9px;background:#29252e;color:#b8b4be;font-size:9px}
+.browser-window{left:14%;top:8%;width:min(1050px,calc(100vw - 130px));height:min(660px,calc(100vh - 95px));--accent:#e95420;background:#fff}.browser-body{display:flex;flex:1;min-height:0;flex-direction:column;background:#fff}.browser-toolbar{height:38px;flex:none;display:flex;align-items:center;gap:5px;padding:4px 8px;border-bottom:1px solid #d6d3d9;background:#f2f1f3}.browser-toolbar button{width:29px;height:27px;padding:0;border:1px solid #d2cfd6;border-radius:5px;background:#fff;color:#4a4650;font-size:13px}.browser-toolbar button:hover{background:#e8e5eb}.browser-toolbar input{height:27px;min-width:0;flex:1;padding:0 9px;border:1px solid #cbc8d0;border-radius:5px;outline:0;background:#fff;color:#34313a;font:11px Consolas,monospace}.browser-toolbar input:focus{border-color:#e95420;box-shadow:0 0 0 2px #e9542022}.browser-toolbar .browser-open{width:auto;padding:0 9px;font-size:10px}.browser-frame{display:block;width:100%;flex:1;min-height:0;border:0;background:#fff}
+.connect-back{position:absolute;z-index:60;inset:34px 0 0;display:none;place-items:center;padding:16px;background:#11101ac9;backdrop-filter:blur(5px)}.connect-back.open{display:grid}.connect-card{position:relative;width:min(420px,100%);padding:25px;border:1px solid #ffffff2d;border-radius:12px;background:#f8f7fa;box-shadow:0 20px 60px #0008;color:#302d35}.connect-x{position:absolute;right:11px;top:8px;border:0;background:transparent;color:#696570;font-size:22px}.connect-icon{display:grid;place-items:center;width:38px;height:38px;border-radius:10px;background:#e95420;color:#fff;font-size:20px}.connect-card h2{margin:13px 0 7px;font-size:17px}.connect-card p{margin:0 0 17px;color:#6d6974;font-size:11px;line-height:1.7}.connect-card code{padding:1px 4px;border-radius:3px;background:#eceaf0}.connect-card label{display:block;margin:11px 0;color:#4e4a54;font-size:11px}.connect-card label input{display:block;width:100%;height:37px;margin-top:5px;padding:0 10px;border:1px solid #d3d0d8;border-radius:5px;outline:0;background:white;font-size:13px}.connect-card label input:focus{border-color:#9a75b7;box-shadow:0 0 0 2px #9a75b722}.connect-error{min-height:18px;color:#bd3e37;font-size:10px;line-height:1.5}.connect-submit,.connect-cancel{width:100%;height:36px;margin-top:7px;border:0;border-radius:5px}.connect-submit{background:#e95420;color:white;font-weight:bold}.connect-submit:disabled{opacity:.6;cursor:wait}.connect-cancel{margin-top:4px;background:transparent;color:#6f6a76;font-size:11px}
+.language-select{height:27px;margin-left:auto;padding:0 7px;border:1px solid #d1ced6;border-radius:4px;background:white;color:#403d46;font-size:10px}
+.statusline{padding:3px 8px;border-radius:4px;background:#f1f0f3;color:#66636d}
+.window{position:absolute;z-index:5;left:12%;top:8%;width:min(1050px,calc(100vw - 130px));height:min(690px,calc(100vh - 95px));min-width:560px;min-height:400px;display:none;overflow:hidden;border:1px solid #ffffffa8;border-radius:9px;background:#fff;box-shadow:0 22px 70px #17132170}.window.open{display:flex;flex-direction:column}.window.codeblocks{left:19%;top:13%;--accent:#286db1}.window.geany{--accent:#83a93b}.window.maximized{left:66px!important;top:38px!important;width:calc(100vw - 76px)!important;height:calc(100vh - 49px)!important}.resize-handle{position:absolute;right:1px;bottom:1px;z-index:30;width:20px;height:20px;cursor:nwse-resize;touch-action:none;background:linear-gradient(135deg,transparent 50%,#8c8792 51%,#8c8792 58%,transparent 59%);background-size:14px 14px;background-repeat:no-repeat;background-position:right bottom;opacity:.68}.resize-handle:hover{opacity:1;background-image:linear-gradient(135deg,transparent 50%,#4f8fc2 51%,#4f8fc2 58%,transparent 59%)}.window.maximized .resize-handle{display:none}
+.titlebar{height:37px;flex:none;display:flex;align-items:center;justify-content:space-between;padding:0 10px 0 14px;border-bottom:1px solid #c9c7ce;background:linear-gradient(#f3f2f4,#e7e5e9);cursor:grab;user-select:none}.titlebar:active{cursor:grabbing}.title-left{display:flex;align-items:center;gap:8px;min-width:0;color:#35323b;font-size:12px;font-weight:bold}.glyph{display:grid;place-items:center;width:20px;height:20px;border-radius:6px;background:var(--accent);color:white}.wtitle{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.controls{display:flex;gap:7px}.control{width:19px;height:19px;border:0;border-radius:50%;background:#d6d4da;color:#514e57;padding:0}.control.close:hover{background:#e2524a;color:white}
+.menurow{height:29px;flex:none;display:flex;gap:1px;padding:2px 6px;border-bottom:1px solid #ebe9ed;background:#fbfafb}.menuholder{position:relative}.menubtn{height:24px;padding:0 8px;border:0;border-radius:4px;background:transparent;color:#37343b;font-size:11px}.menubtn:hover,.menubtn.active{background:#eae8ed}.dropdown{position:absolute;z-index:15;top:25px;left:0;width:190px;display:none;padding:4px;border:1px solid #d7d4db;border-radius:6px;background:#fff;box-shadow:0 8px 22px #26212c35}.dropdown.open{display:block}.menuitem{width:100%;display:flex;justify-content:space-between;padding:7px 8px;border:0;border-radius:3px;background:transparent;text-align:left;font-size:11px;color:#302e36}.menuitem:hover{background:#eeeaf4}.menuitem kbd{color:#888;font:10px Arial}.separator{height:1px;margin:3px 6px;background:#e9e7ec}
+.toolbar{height:39px;flex:none;display:flex;align-items:center;gap:4px;padding:0 8px;border-bottom:1px solid #d9d7dc;background:#f2f1f3}.tool{height:29px;padding:0 7px;border:1px solid transparent;border-radius:4px;background:transparent;color:#48454f;font-size:11px}.tool:hover{border-color:#ccc;background:white}.tool i{font-style:normal;font-size:15px}.toolsep{height:21px;border-left:1px solid #d4d1d8;margin:0 3px}
+.workspace{display:flex;flex:1;min-height:0;background:#f7f6f8}.sidebar{width:184px;flex:none;border-right:1px solid #d7d5dc;background:#f1f0f3;font-size:11px;overflow:auto}.codeblocks .sidebar{width:210px}.sidehead{height:29px;padding:8px 10px;border-bottom:1px solid #dad8df;font-weight:bold}.sidetabs{display:flex;border-bottom:1px solid #dad8df}.sidetab{flex:1;padding:7px;border:0;border-bottom:2px solid transparent;background:transparent;color:#777;font-size:10px}.sidetab.active{border-bottom-color:var(--accent);color:#333}.tree{padding:8px 6px}.treecap{padding:3px 8px 7px;color:#817d87}.treerow{display:block;width:100%;min-height:25px;padding:5px 8px;border:0;border-radius:4px;background:transparent;text-align:left;color:#45414b;font-size:11px}.treerow:hover,.treerow.active{background:#e0dde6}.treerow.indent{padding-left:23px}.fileicon{color:#ca9344;margin-right:5px}
+.editorarea{display:flex;flex:1;min-width:0;min-height:0;flex-direction:column;background:white}.tabs{height:31px;flex:none;display:flex;overflow-x:auto;border-bottom:1px solid #d5d3da;background:#efedf1}.tab{display:flex;align-items:center;gap:7px;min-width:105px;padding:0 11px;border:0;border-right:1px solid #dedce2;border-top:2px solid transparent;background:transparent;color:#67646d;font-size:10px}.tab.active{border-top-color:var(--accent);background:white;color:#35323a}.dirtydot{width:6px;height:6px;border-radius:50%;background:#d09448;visibility:hidden}.tab.dirty .dirtydot{visibility:visible}.editor{flex:1;min-height:0;width:100%;font-size:14px}.fallback{display:none;flex:1;width:100%;resize:none;border:0;outline:0;padding:12px 16px;font:14px/1.55 Consolas,monospace}.status{height:24px;flex:none;display:flex;justify-content:space-between;align-items:center;padding:0 9px;border-top:1px solid #d7d5db;background:#f3f2f5;color:#77747e;font-size:10px}.status span+span{margin-left:12px}
+.output{height:145px;flex:none;display:flex;flex-direction:column;border-top:1px solid #c9c6ce;background:#faf9fb}.geany .output{height:300px}.codeblocks .output{height:164px}.outtabs{height:27px;display:flex;padding:0 7px;border-bottom:1px solid #dad8df;background:#efedf1}.outtab{padding:0 9px;border:0;border-bottom:2px solid transparent;background:transparent;color:#777;font-size:10px}.outtab.active{border-bottom-color:var(--accent);color:#38343e}.outtext{flex:1;overflow:auto;padding:8px 11px;background:#fbfafc;color:#444;font:11px/1.5 Consolas,monospace;white-space:pre-wrap}.ok{color:#37834d}.warn{color:#a66b14}.err{color:#c6423a}.dim{color:#8b8792}
+.dark .editorarea,.dark .tabs,.dark .output,.dark .outtabs,.dark .outtext{background:#292832;color:#ddd}.dark .tab.active{background:#202027}.dark .status{background:#292832;color:#bbb}
+.launcherback{position:absolute;z-index:40;inset:20px 0 0;display:none;align-items:flex-start;justify-content:center;background:#03122570}.launcherback.open{display:flex}.launcher{width:100%;height:100%;padding:38px max(20px,calc((100vw - 810px)/2));border:0;border-radius:0;background:transparent;color:white;box-shadow:none}.launcher h2{display:none}.search{display:block;width:min(420px,80vw);height:37px;margin:0 auto;padding:0 12px;border:1px solid #ffffff4c;border-radius:5px;outline:0;background:#ffffffed;color:#25232c;font-size:13px}.apps{display:grid;grid-template-columns:repeat(6,minmax(78px,1fr));gap:8px;width:min(810px,100%);margin:30px auto 0}.appitem{min-height:83px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;padding:6px 3px;border:1px solid transparent;border-radius:8px;background:transparent;color:white;text-shadow:0 1px 3px #000;font-size:10px}.appitem:hover{border-color:#ffffff3c;background:#ffffff16}.appitem i{font-style:normal;font-size:32px}
+.toast{position:absolute;z-index:45;left:50%;bottom:23px;padding:10px 15px;border:1px solid #ffffff25;border-radius:9px;background:#292631f2;color:white;font-size:12px;opacity:0;pointer-events:none;transform:translate(-50%,15px);transition:.2s}.toast.show{opacity:1;transform:translate(-50%,0)}
+@media(max-width:850px){.window,.window.codeblocks,.terminal-window,.browser-window{left:48px;top:43px;width:calc(100vw - 59px);height:calc(100vh - 57px);min-width:0;min-height:0}.desktop-icons{display:none}.sidebar{width:145px}.codeblocks .sidebar{width:158px}.apps{grid-template-columns:repeat(4,minmax(70px,1fr));width:min(560px,100%)}}
+@media(max-width:580px){.brand{font-size:10px}.topbar{padding:0 4px}.dock{width:35px}.dock button{width:30px;height:34px}.judge-status{max-width:90px;overflow:hidden;text-overflow:ellipsis}.window,.window.codeblocks,.terminal-window{left:37px;top:38px;width:calc(100vw - 42px);height:calc(100vh - 42px)}.sidebar{display:none}.menurow{overflow-x:auto}.toolbar{height:35px}.output,.codeblocks .output{height:122px}.geany .output{height:220px}.apps{grid-template-columns:repeat(3,minmax(65px,1fr));margin-top:19px}.wallpaper-logo{left:55%}}
+</style>
+</head>
+<body>
+<main class="desktop">
+<div class="wallpaper-city"></div><div class="wallpaper-logo"><strong>NOI</strong><span>Linux</span></div>
+<header class="topbar"><div class="top-left"><button class="panel-btn brand" id="launcherButton"><span class="brand-mark">N</span>NOI Linux 2.0</button><button class="panel-btn" id="appsButton">应用程序</button></div><div class="top-center"><button class="panel-btn" id="clock">周一 09:41</button></div><div class="top-right"><button class="panel-btn judge-status" id="judgeStatus" title="连接 HUSTOJ 判题服务">● 判题服务：未连接</button><span class="sys-icons">⌁　◖　▰</span><button class="panel-btn" id="systemButton">▾</button></div></header>
+<div class="desktop-icons"><button class="desktop-icon" data-desktop-action="home"><i class="icon">📁</i>主文件夹</button><button class="desktop-icon" data-desktop-action="trash"><i class="icon">🗑️</i>回收站</button><button class="desktop-icon" data-desktop-action="pdf"><i class="icon">📄</i>NOI Linux 手册.pdf</button></div>
+<nav class="dock"><button id="dockLauncher" title="应用程序">⠿</button><hr><button data-launch="browser" title="Firefox">🦊</button><button data-desktop-action="home" title="文件">📁</button><button data-launch="terminal" title="Alpine JSLinux 终端">▣<span class="dot"></span></button><button data-launch="jslinux-local" title="本地 JSLinux 终端">🐧<span class="dot"></span></button><button data-launch="geany" title="Geany">📝<span class="dot"></span></button><button data-launch="codeblocks" title="Code::Blocks">🧱<span class="dot"></span></button><span class="dock-spacer"></span><button data-desktop-action="launcher" title="应用程序">⠿</button></nav>
+<div class="note"><b>NOI Linux 2.0</b>　Geany / Code::Blocks 桌面示例</div>
+<section class="window geany open" id="window-geany" data-app="geany">
+<div class="titlebar" data-drag><div class="title-left"><span class="glyph">G</span><span class="wtitle">Geany — main.cpp</span></div><div class="controls"><button class="control" data-window="minimize">−</button><button class="control" data-window="maximize">□</button><button class="control close" data-window="close">×</button></div></div><div class="menurow" data-menus="geany"></div><div class="toolbar" data-toolbar="geany"></div>
+<div class="workspace"><aside class="sidebar"><div class="sidetabs"><button class="sidetab active">文档</button><button class="sidetab">文件</button></div><div class="tree" data-tree="geany"></div></aside><div class="editorarea"><div class="tabs" data-tabs="geany"></div><div class="editor" id="editor-geany"></div><textarea class="fallback" id="fallback-geany"></textarea><div class="status"><div><span class="cursor">行 1，列 1</span><span>插入</span></div><div><span>UTF-8</span><span>C++</span><span>空格: 4</span></div></div></div></div>
+<div class="output"><div class="outtabs"><button class="outtab active" data-output-tab="messages">消息</button><button class="outtab" data-output-tab="compiler">编译器</button><button class="outtab" data-output-tab="terminal">终端</button></div><div class="outtext" data-output="geany"></div></div></section>
+<section class="window codeblocks" id="window-codeblocks" data-app="codeblocks">
+<div class="titlebar" data-drag><div class="title-left"><span class="glyph">C</span><span class="wtitle">Code::Blocks — main.cpp</span></div><div class="controls"><button class="control" data-window="minimize">−</button><button class="control" data-window="maximize">□</button><button class="control close" data-window="close">×</button></div></div><div class="menurow" data-menus="codeblocks"></div><div class="toolbar" data-toolbar="codeblocks"></div>
+<div class="workspace"><aside class="sidebar"><div class="sidehead">管理</div><div class="sidetabs"><button class="sidetab active">项目</button><button class="sidetab">符号</button></div><div class="tree" data-tree="codeblocks"></div></aside><div class="editorarea"><div class="tabs" data-tabs="codeblocks"></div><div class="editor" id="editor-codeblocks"></div><textarea class="fallback" id="fallback-codeblocks"></textarea><div class="status"><div><span class="cursor">行 1，列 1</span><span>改写</span></div><div><span>UTF-8</span><span>C++</span><span>CRLF</span></div></div></div></div>
+<div class="output"><div class="outtabs"><button class="outtab active" data-output-tab="build">构建日志</button><button class="outtab" data-output-tab="messages">构建消息</button><button class="outtab" data-output-tab="debug">调试器</button></div><div class="outtext" data-output="codeblocks"></div></div></section>
+<section class="window terminal-window" id="window-terminal" data-app="terminal"><div class="titlebar" data-drag><div class="title-left"><span class="glyph">▣</span><span class="wtitle">Alpine Linux 终端</span></div><div class="controls"><button class="control" data-window="minimize">−</button><button class="control" data-window="maximize">□</button><button class="control close" data-window="close">×</button></div></div><div class="terminal-toolbar"><span>Alpine Linux · x86_64 · JSLinux 官网</span><a href="https://bellard.org/jslinux/vm.html?cpu=x86_64&amp;url=alpine-x86_64.cfg&amp;mem=256" target="_blank" rel="noopener noreferrer">在新标签页打开 ↗</a></div><iframe class="jslinux-frame" title="JSLinux Alpine Linux 终端" data-jslinux-src="https://bellard.org/jslinux/vm.html?cpu=x86_64&amp;url=alpine-x86_64.cfg&amp;mem=256" allow="fullscreen" referrerpolicy="no-referrer"></iframe><div class="terminal-foot">这是独立的 Alpine Linux 虚拟机。可在终端内运行命令；需要 C/C++ 编译器时执行 <code>apk add build-base</code>。</div></section>
+<section class="window terminal-window local-terminal-window" id="window-jslinux-local" data-app="jslinux-local"><div class="titlebar" data-drag><div class="title-left"><span class="glyph">🐧</span><span class="wtitle">本地 JSLinux 终端</span></div><div class="controls"><button class="control" data-window="minimize">−</button><button class="control" data-window="maximize">□</button><button class="control close" data-window="close">×</button></div></div><div class="terminal-toolbar"><span>本地 JSLinux · Linux 2.6.20</span><span><a href="jslinux/index.html" target="_blank" rel="noopener noreferrer">新标签页打开 ↗</a> <button type="button" data-terminal-restart="local">⟳ 重启</button></span></div><iframe class="jslinux-frame" title="本地 JSLinux Linux 2.6.20 终端" data-jslinux-src="jslinux/index.html" allow="fullscreen"></iframe><div class="terminal-foot">本地模拟器直接加载 <code>web/jslinux/</code> 目录；适合练习 Linux 命令，内置 rootfs 不适合完整 C++ 编译。</div></section>
+<section class="window browser-window" id="window-browser" data-app="browser"><div class="titlebar" data-drag><div class="title-left"><span class="glyph">🦊</span><span class="wtitle">Firefox</span></div><div class="controls"><button class="control" data-window="minimize">−</button><button class="control" data-window="maximize">□</button><button class="control close" data-window="close">×</button></div></div><div class="browser-body"><div class="browser-toolbar"><button type="button" title="后退" data-browser-action="back">◀</button><button type="button" title="前进" data-browser-action="forward">▶</button><button type="button" title="刷新" data-browser-action="reload">⟳</button><input id="browserUrl" type="text" value="about:blank" aria-label="地址栏" spellcheck="false"><button type="button" class="browser-open" title="在新标签页打开当前地址" data-browser-action="external">↗</button></div><iframe id="browserFrame" class="browser-frame" title="Firefox iframe 浏览器" src="about:blank"></iframe></div></section>
+<div class="launcherback" id="launcherBack"><div class="launcher"><h2>应用程序</h2><input class="search" id="appSearch" placeholder="搜索应用程序…"><div class="apps"><button class="appitem" data-launch="browser"><i>🦊</i>Firefox</button><button class="appitem" data-launch="geany"><i>📝</i>Geany</button><button class="appitem" data-launch="codeblocks"><i>🧱</i>Code::Blocks</button><button class="appitem" data-launch="terminal"><i>▣</i>Alpine 终端</button><button class="appitem" data-launch="jslinux-local"><i>🐧</i>本地 JSLinux</button><button class="appitem" data-desktop-action="home"><i>📁</i>主文件夹</button></div></div></div>
+<div class="popover" id="popover" style="position:absolute;z-index:25;right:10px;top:39px;width:260px;padding:16px;border-radius:10px;background:#302d3bf5;color:white;display:none">快速设置<div style="margin:14px 0">⌁　有线网络　　◖　声音</div>亮度<input type="range" min="0" max="100" value="80"></div>
+<div class="connect-back" id="connectBack" role="dialog" aria-modal="true" aria-labelledby="connectTitle"><form class="connect-card" id="connectForm"><button type="button" class="connect-x" id="connectClose" aria-label="关闭">×</button><div class="connect-icon">⚙</div><h2 id="connectTitle">连接 HUSTOJ 判题服务</h2><p id="connectDescription">正在以 Guest 身份连接当前站点的 <code>service.php</code>。Guest 仅可进行自定义输入运行，密码不会经过浏览器。</p><div class="connect-error" id="connectError" role="status"></div><button class="connect-submit" id="connectSubmit" type="submit">自动连接 Guest</button><button class="connect-cancel" id="connectCancel" type="button">稍后</button></form></div>
+<input id="fileInput" type="file" style="display:none" accept=".cpp,.cc,.c,.h,.hpp,.txt,.py,.java,.js,.html,.css,.md"><div class="toast" id="toast"></div>
+</main>
+<script src="ace/ace.js"></script><script src="ace/ext-language_tools.js"></script>
+<script>
+ (function(){
+ "use strict";
+ var $=function(s,r){return (r||document).querySelector(s)},$$=function(s,r){return Array.prototype.slice.call((r||document).querySelectorAll(s))};
+ var samples={
+  geany:{"main.cpp":'#include <iostream>\nusing namespace std;\n\nint main() {\n    cout << "Hello, NOI Linux!" << endl;\n    return 0;\n}\n',"hello.cpp":'#include <iostream>\nusing namespace std;\n\nint main() {\n    cout << "Geany is ready." << endl;\n    return 0;\n}\n'},
+  codeblocks:{"main.cpp":'#include <iostream>\nusing namespace std;\n\nint main() {\n    int a, b;\n    cin >> a >> b;\n    cout << a + b << endl;\n    return 0;\n}\n',"utils.h":"#pragma once\n\nint add(int a, int b) {\n    return a + b;\n}\n"}
+ };
+ var state={},z=30,drag=null,resize=null,toastTimer=0,openTarget="",serviceReady=false,serviceConnecting=false,pollDelay=1700,pollTimeout=150000;
+ var menus={
+  geany:{
+   "文件":[["新建","Ctrl+N","new"],["打开…","Ctrl+O","open"],["保存","Ctrl+S","save"],["全部保存","","saveAll"],["-"],["关闭文档","","closeTab"]],
+   "编辑":[["撤销","Ctrl+Z","undo"],["重做","Ctrl+Y","redo"],["-"],["查找…","Ctrl+F","find"],["替换…","Ctrl+H","replace"]],
+   "搜索":[["查找…","Ctrl+F","find"],["查找下一个","F3","findNext"]],
+   "视图":[["切换夜间主题","","theme"],["放大字体","","zoomIn"],["缩小字体","","zoomOut"]],
+   "文档":[["设置文件类型为 C++","","cpp"],["自动换行","","wrap"]],
+   "项目":[["新建项目","","project"]],
+   "构建":[["编译","F8","build"],["执行","F5","run"],["编译并执行","F9","buildRun"]],
+   "工具":[["终端","","terminal"]],
+   "帮助":[["关于 Geany","","about"]]
+  },
+  codeblocks:{
+   "文件":[["新建文件","Ctrl+N","new"],["打开文件…","Ctrl+O","open"],["保存文件","Ctrl+S","save"],["保存所有文件","","saveAll"],["-"],["关闭文件","","closeTab"]],
+   "编辑":[["撤销","Ctrl+Z","undo"],["重做","Ctrl+Y","redo"],["-"],["查找…","Ctrl+F","find"],["替换…","Ctrl+H","replace"]],
+   "视图":[["切换夜间主题","","theme"],["放大字体","","zoomIn"],["缩小字体","","zoomOut"]],
+   "搜索":[["查找…","Ctrl+F","find"],["查找下一个","F3","findNext"]],
+   "项目":[["新建项目","","project"],["添加文件","","open"]],
+   "构建":[["构建","Ctrl+F9","build"],["运行","Ctrl+F10","run"],["构建并运行","F9","buildRun"],["停止","","stop"]],
+   "调试":[["开始调试器","F8","run"]],
+   "插件":[["代码片段","","snippets"]],
+   "设置":[["编辑器设置","","settings"]],
+   "帮助":[["关于 Code::Blocks","","about"]]
+  }
+ };
+ var tools={
+  geany:[["新建","＋","new"],["打开","📂","open"],["保存","▣","save"],["|"],["编译","⚙","build"],["执行","▶","run"],["编译并执行","⚡","buildRun"],["|"],["查找","⌕","find"]],
+  codeblocks:[["新建","＋","new"],["打开","📂","open"],["保存","▣","save"],["|"],["构建","⚙","build"],["运行","▶","run"],["构建并运行","⚡","buildRun"],["停止","■","stop"],["|"],["查找","⌕","find"]]
+ };
+ function escapeHtml(s){return String(s).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]})}
+ function init(app){
+  if(state[app])return state[app];
+  var docs={};Object.keys(samples[app]).forEach(function(n){docs[n]={name:n,content:samples[app][n],saved:samples[app][n],dirty:false}});
+  state[app]={docs:docs,active:"main.cpp",editor:null,font:14,dark:false,built:false,outputs:{},outTab:app==="geany"?"messages":"build",query:"",stdin:"1 2",language:1,busy:false,requestId:0};
+  return state[app];
+ }
+ function current(app){return init(app).docs[init(app).active]}
+ function message(text){var box=$("#toast");box.textContent=text;box.classList.add("show");clearTimeout(toastTimer);toastTimer=setTimeout(function(){box.classList.remove("show")},2400)}
+ function renderMenus(app){
+  var root=$('[data-menus="'+app+'"]');
+  root.innerHTML=Object.keys(menus[app]).map(function(label){return '<div class="menuholder"><button class="menubtn" data-menu="'+label+'">'+label+'</button><div class="dropdown">'+menus[app][label].map(function(item){return item[0]==="-"?'<div class="separator"></div>':'<button class="menuitem" data-command="'+item[2]+'"><span>'+item[0]+'</span><kbd>'+item[1]+"</kbd></button>"}).join("")+"</div></div>"}).join("");
+  $('[data-toolbar="'+app+'"]').innerHTML=tools[app].map(function(item){return item[0]==="|"?"<span class=\"toolsep\"></span>":'<button class="tool" title="'+item[0]+'" data-command="'+item[2]+'"><i>'+item[1]+"</i> "+item[0]+"</button>"}).join("")+'<select class="language-select" aria-label="编程语言"><option value="0">C</option><option value="1">C++</option><option value="6">Python 3</option></select>';
+  $(".language-select",$("#window-"+app)).value=String(init(app).language);
+ }
+ function renderTabs(app){
+  var s=init(app);$('[data-tabs="'+app+'"]').innerHTML=Object.keys(s.docs).map(function(n){return '<button class="tab '+(n===s.active?"active ":"")+(s.docs[n].dirty?"dirty":"")+'" data-open-doc="'+escapeHtml(n)+'"><span class="dirtydot"></span>'+escapeHtml(n)+"</button>"}).join("");
+ }
+ function renderTree(app){
+  var s=init(app),root=$('[data-tree="'+app+'"]');
+  if(app==="geany"){
+   root.innerHTML='<div class="treecap">打开的文档</div>'+Object.keys(s.docs).map(function(n){return '<button class="treerow '+(n===s.active?"active":"")+'" data-open-doc="'+escapeHtml(n)+'"><span class="fileicon">▤</span>'+escapeHtml(n)+"</button>"}).join("")+'<div class="treecap" style="margin-top:12px">符号</div><button class="treerow indent">◆　main()</button>';
+  }else{
+   root.innerHTML='<button class="treerow">▾　工作区</button><button class="treerow indent">▾　NOI 示例项目</button><button class="treerow indent">▾　源文件</button>'+Object.keys(s.docs).map(function(n){return '<button class="treerow indent '+(n===s.active?"active":"")+'" data-open-doc="'+escapeHtml(n)+'"><span class="fileicon">▤</span>'+escapeHtml(n)+"</button>"}).join("")+'<button class="treerow indent"><span class="fileicon">▤</span>README.txt</button>';
+  }
+ }
+ function renderOutput(app){
+  var s=init(app),win=$("#window-"+app),output=$('[data-output="'+app+'"]',win),body=s.outputs[s.outTab]||"";
+  $$(".outtab",win).forEach(function(b){b.classList.toggle("active",b.dataset.outputTab===s.outTab)});
+  if(s.outTab==="terminal"||s.outTab==="debug"){
+   output.innerHTML='<div style="margin-bottom:5px;color:#85818d">标准输入 <span style="float:right">stdin</span></div><textarea class="stdin" aria-label="标准输入" style="width:100%;height:38px;resize:vertical;border:1px solid #d8d5dc;border-radius:3px;padding:4px;background:transparent;color:inherit;font:11px Consolas,monospace">'+escapeHtml(s.stdin)+'</textarea><div style="margin-top:6px;color:#85818d">运行结果</div><div class="run-output" style="padding-top:3px">'+(body||'<span class="dim">输入数据后点击“运行”。</span>')+"</div>";
+   $(".stdin",output).addEventListener("input",function(e){s.stdin=e.target.value});
+  }else output.innerHTML=body||'<span class="dim">就绪。连接 service.php 后选择“构建”或“运行”。</span>';
+  output.scrollTop=output.scrollHeight;
+ }
+ function update(app){
+  var s=init(app),d=current(app),title=$(".wtitle",$("#window-"+app));
+  renderTabs(app);renderTree(app);title.textContent=(app==="geany"?"Geany":"Code::Blocks")+" — "+s.active+(d.dirty?" •":"");
+ }
+ function sync(app){
+  var s=init(app),d=current(app);if(!d)return;
+  d.content=s.editor?s.editor.getValue():$("#fallback-"+app).value;d.dirty=d.content!==d.saved;s.built=false;update(app);
+ }
+ function loadEditor(app){
+  var s=init(app);if(s.editor)return;if(!window.ace){$("#editor-"+app).style.display="none";var plain=$("#fallback-"+app);plain.style.display="block";plain.value=current(app).content;plain.oninput=function(){sync(app)};return}
+  try{
+   var e=ace.edit($("#editor-"+app));s.editor=e;e.setTheme("ace/theme/xcode");e.session.setMode("ace/mode/c_cpp");
+   e.setOptions({fontFamily:"Consolas",fontSize:s.font+"px",showPrintMargin:false,enableBasicAutocompletion:true,enableSnippets:false,enableLiveAutocompletion:false,tabSize:4,useSoftTabs:true});
+   e.session.on("change",function(){sync(app)});
+   e.selection.on("changeCursor",function(){var p=e.getCursorPosition();$(".cursor",$("#window-"+app)).textContent="行 "+(p.row+1)+"，列 "+(p.column+1)});
+   e.commands.addCommand({name:"save",bindKey:{win:"Ctrl-S",mac:"Command-S"},exec:function(){command(app,"save")}});
+   e.commands.addCommand({name:"find",bindKey:{win:"Ctrl-F",mac:"Command-F"},exec:function(){command(app,"find")}});
+   e.commands.addCommand({name:"new",bindKey:{win:"Ctrl-N",mac:"Command-N"},exec:function(){command(app,"new")}});
+   e.setValue(current(app).content,-1);
+  }catch(ex){$("#editor-"+app).style.display="none";var f=$("#fallback-"+app);f.style.display="block";f.value=current(app).content}
+ }
+ function syncEditor(app){
+  var s=init(app);if(s.editor){s.editor.setValue(current(app).content,-1);s.editor.clearSelection();s.editor.resize(true)}else $("#fallback-"+app).value=current(app).content;update(app);
+ }
+ function showWindow(app){
+  var win=$("#window-"+app);win.classList.add("open");win.style.zIndex=++z;
+  $$('.dock button[data-launch="'+app+'"]').forEach(function(b){b.classList.add("running","active")});
+  $$(".window.open").forEach(function(w){if(w!==win)$$('.dock button[data-launch="'+w.dataset.app+'"]').forEach(function(b){b.classList.remove("active")})});
+ }
+ function openApp(app){
+  if(app==="browser"){showWindow(app);setTimeout(function(){$("#browserUrl").focus()},0);return}
+  if(app==="terminal"||app==="jslinux-local"){showWindow(app);var frame=$("#window-"+app+" .jslinux-frame");if(!frame.dataset.loaded){frame.dataset.loaded="true";frame.src=frame.dataset.jslinuxSrc}return}
+  init(app);renderMenus(app);renderTabs(app);renderTree(app);showWindow(app);loadEditor(app);renderOutput(app);update(app);
+  if(state[app].editor){state[app].editor.resize(true);state[app].editor.focus()}
+ }
+ function closeMenus(app){
+  $$(".dropdown.open",$("#window-"+app)).forEach(function(x){x.classList.remove("open")});
+  $$(".menubtn.active",$("#window-"+app)).forEach(function(x){x.classList.remove("active")});
+ }
+ function newFile(app){
+  var s=init(app),i=1,name;do{name="untitled"+i+".cpp";i++}while(s.docs[name]);
+  s.docs[name]={name:name,content:"",saved:"",dirty:false};s.active=name;syncEditor(app);message("已新建："+name);
+ }
+ function save(app,name){
+  var s=init(app);if(!name)sync(app);var d=s.docs[name||s.active];if(!d)return;
+  d.saved=d.content;d.dirty=false;
+  var url=URL.createObjectURL(new Blob([d.content],{type:"text/plain;charset=utf-8"})),a=document.createElement("a");a.href=url;a.download=d.name;document.body.appendChild(a);a.click();a.remove();setTimeout(function(){URL.revokeObjectURL(url)},1000);update(app);message("已下载保存："+d.name);
+ }
+ function closeTab(app){
+  var s=init(app),names=Object.keys(s.docs);if(names.length<2){message("至少保留一个文档标签");return}
+  if(current(app).dirty&&!confirm("当前文档尚未保存，仍要关闭吗？"))return;
+  delete s.docs[s.active];s.active=Object.keys(s.docs)[0];syncEditor(app);
+ }
+ function switchDoc(app,name){
+  var s=init(app);if(!s.docs[name])return;if(s.editor)s.docs[s.active].content=s.editor.getValue();s.active=name;syncEditor(app);if(s.editor)s.editor.focus();
+ }
+ function find(app){
+  var s=init(app),q=prompt("查找：",s.query||"");if(q===null)return;s.query=q;
+  if(s.editor)s.editor.find(q,{wrap:true,caseSensitive:false});else message($("#fallback-"+app).value.indexOf(q)>=0?"找到内容":"没有找到匹配内容");
+ }
+ function replace(app){
+  var s=init(app),q=prompt("查找内容：",s.query||"");if(!q)return;var replacement=prompt("替换为：","");if(replacement===null)return;s.query=q;
+  if(s.editor){s.editor.replaceAll(replacement);message("已替换匹配内容")}else{$("#fallback-"+app).value=$("#fallback-"+app).value.split(q).join(replacement);sync(app);message("已替换匹配内容")}
+ }
+ function theme(app){var s=init(app);s.dark=!s.dark;if(s.editor)s.editor.setTheme(s.dark?"ace/theme/monokai":"ace/theme/xcode");$("#window-"+app).classList.toggle("dark",s.dark);message(s.dark?"已切换深色编辑器":"已切换浅色编辑器")}
+ function zoom(app,delta){var s=init(app);s.font=Math.max(10,Math.min(22,s.font+delta));if(s.editor)s.editor.setFontSize(s.font+"px");else $("#fallback-"+app).style.fontSize=s.font+"px";message("编辑器字号："+s.font+"px")}
+ var resultNames=["等待","等待重判","编译中","运行并评测","答案正确","格式错误","答案错误","时间超限","内存超限","输出超限","运行错误","编译错误","编译成功","运行完成","人工确认","提交中","远程等待","远程判题"];
+ function setServiceStatus(kind,label){var b=$("#judgeStatus");b.classList.toggle("connected",kind==="connected");b.classList.toggle("error",kind==="error");b.textContent="● 判题服务："+label}
+ function showConnect(open){$("#connectBack").classList.toggle("open",open);if(open&&!serviceConnecting){$("#connectError").textContent="";setTimeout(function(){$("#connectSubmit").focus()},0)}}
+ function writeOutput(app,html,tab){var s=init(app);s.outputs[tab||s.outTab]=html;if(tab)s.outTab=tab;renderOutput(app)}
+ function outputText(app,tab,text,kind){writeOutput(app,'<span class="'+(kind||"dim")+'">'+escapeHtml(text)+"</span>",tab)}
+ function serviceError(){return new Error("无法连接 service.php。请确认页面通过 HUSTOJ 网站打开、接口已启用且当前站点允许自定义运行。")}
+ async function serviceRequest(payload,allowOutput){
+  var response;
+  try{response=await fetch("service.php",{method:"POST",credentials:"same-origin",cache:"no-store",headers:{"Content-Type":"application/json"},body:JSON.stringify(payload)})}catch(e){throw serviceError()}
+  var raw=await response.text(),data;
+  try{data=JSON.parse(raw)}catch(e){if(response.status===404||raw.indexOf("404")>=0)throw new Error("service.php 当前返回 404。请管理员确认已启用该判题接口。");throw serviceError()}
+  if(!response.ok)throw new Error("service.php 返回 HTTP "+response.status+"。");
+  if(data.error&&(!allowOutput||data.error==="not found"||data.error==="internal error "))throw new Error(data.error==="not found"?"判题记录未找到，请确认当前浏览器仍使用原连接会话。":"判题服务返回错误："+data.error);
+  return data;
+ }
+ function resultLabel(code){return resultNames[Number(code)]||"判题完成"}
+ function resultTab(app){return app==="geany"?"terminal":"debug"}
+ function busyStatus(app,s,label){$(".wtitle",$("#window-"+app)).textContent=(app==="geany"?"Geany":"Code::Blocks")+" — "+s.active+" · "+label}
+ function finishJob(app,s,id){if(id!==s.requestId)return;s.busy=false;s.timer=0;busyStatus(app,s,s.active);}
+ async function pollJob(app,s,id,solutionId,started){
+  if(id!==s.requestId)return;
+  if(Date.now()-started>pollTimeout){finishJob(app,s,id);outputText(app,resultTab(app),"等待判题超时；提交仍在服务器排队，可重新连接后查看判题状态。","warn");message("判题等待超时");return}
+  try{
+   var result=await serviceRequest({action:"query",solution_id:solutionId});
+   if(id!==s.requestId)return;
+   var code=Number(result.result);
+   if(code===0||code===1||code===2||code===3||code===12||code===15||code===16||code===17){busyStatus(app,s,resultLabel(code));s.timer=setTimeout(function(){pollJob(app,s,id,solutionId,started)},pollDelay);return}
+   if(code===11){var ce=await serviceRequest({action:"ce",solution_id:solutionId},true);if(id!==s.requestId)return;finishJob(app,s,id);var errorText=ce.error||"编译失败（接口未返回详细错误）";writeOutput(app,'<span class="err">'+escapeHtml(errorText)+"</span>",app==="geany"?"compiler":"build");message("编译失败，请查看编译器输出");return}
+   var re=await serviceRequest({action:"re",solution_id:solutionId},true);if(id!==s.requestId)return;finishJob(app,s,id);
+   var output=re.error||"(程序没有产生输出)";var timing="\n\n"+resultLabel(code)+" · "+(Number(result.time)||0)+" ms · "+(Number(result.memory)||0)+" KB";
+   writeOutput(app,escapeHtml(output+timing),resultTab(app));message("程序运行完成："+resultLabel(code));
+  }catch(e){if(id!==s.requestId)return;finishJob(app,s,id);outputText(app,resultTab(app),e.message||"与判题服务通信失败", "err");setServiceStatus("error","连接异常");message("读取判题结果失败")}
+ }
+ async function build(app){return submitProgram(app)}
+ async function run(app){return submitProgram(app)}
+ async function submitProgram(app){
+  var s=init(app);if(s.busy){message("该窗口已有程序正在判题");return}if(!serviceReady){showConnect(true);$("#connectError").textContent="请先连接判题服务，再提交程序。";return}
+   sync(app);var d=current(app),source=d.content;if(!source.trim()){message("代码不能为空");return}
+   var stdin=s.stdin||"";if(new Blob([source]).size>65535||new Blob([stdin]).size>65535){message("代码或输入数据超过 64 KiB");return}
+  var id=++s.requestId,started=Date.now(),tab=app==="geany"?"compiler":"build";s.busy=true;busyStatus(app,s,"提交中");writeOutput(app,'<span class="dim">正在提交到 service.php…（接口会在编译后使用下方自定义输入运行）</span>',tab);$(".language-select",$("#window-"+app)).disabled=true;
+  try{
+   var response=await serviceRequest({action:"submit",problem_id:0,language:Number(s.language),source:source,input_text:stdin});
+   if(id!==s.requestId)return;
+   var solutionId=Number(response.solution_id);if(!Number.isSafeInteger(solutionId)||solutionId<=0)throw new Error("判题服务没有返回有效的 solution_id");
+   setServiceStatus("connected","已连接");busyStatus(app,s,"等待判题 #"+solutionId);writeOutput(app,'<span class="dim">判题记录 #'+solutionId+" · "+escapeHtml(resultLabel(0))+"</span>",app==="geany"?"compiler":"build");
+   pollJob(app,s,id,solutionId,started);
+  }catch(e){if(id!==s.requestId)return;finishJob(app,s,id);outputText(app,tab,e.message||"提交失败", "err");if(/HTTP 404|返回 404/.test(e.message||""))setServiceStatus("error","接口未启用");else if(/service.php/.test(e.message||""))setServiceStatus("error","连接失败");else if(/not implemented yet|not authorized/i.test(e.message||"")){serviceReady=false;setServiceStatus("error","会话过期");showConnect(true);$("#connectError").textContent="判题服务登录状态已失效，请重新连接。"}message("程序提交失败")}
+  finally{if(id===s.requestId)$(".language-select",$("#window-"+app)).disabled=false}
+ }
+  async function connectService(event){
+  event.preventDefault();if(serviceConnecting)return;var button=$("#connectSubmit");
+  serviceConnecting=true;button.disabled=true;button.textContent="连接中…";$("#connectError").textContent="正在建立 Guest 会话…";setServiceStatus("","连接中");
+  try{var credentials={action:"login",user_id:"Guest",guest:true},data=await serviceRequest(credentials);if(data.login!=="ok")throw new Error("Guest 登录被服务端拒绝。请检查 service.php 是否已启用 NOI Linux Guest 模式。");serviceReady=true;$("#connectError").textContent="";showConnect(false);setServiceStatus("connected","Guest 已连接");message("已连接 HUSTOJ 判题服务（Guest）")}
+  catch(e){serviceReady=false;setServiceStatus("error","连接失败");$("#connectError").textContent=e.message||"连接失败，请检查 service.php 是否已启用。";showConnect(true)}
+  finally{serviceConnecting=false;button.disabled=false;button.textContent="自动连接 Guest"}
+ }
+ function command(app,action){
+  var s=init(app);closeMenus(app);
+  if(action==="new")return newFile(app);
+  if(action==="open"){openTarget=app;$("#fileInput").click();return}
+  if(action==="save")return save(app);
+  if(action==="saveAll"){sync(app);Object.keys(s.docs).forEach(function(n){save(app,n)});return}
+  if(action==="closeTab")return closeTab(app);
+  if(action==="undo"){if(s.editor)s.editor.undo();return}
+  if(action==="redo"){if(s.editor)s.editor.redo();return}
+  if(action==="find")return find(app);
+  if(action==="replace")return replace(app);
+  if(action==="findNext"){if(s.editor)s.editor.findNext();return}
+  if(action==="theme")return theme(app);
+  if(action==="zoomIn")return zoom(app,1);
+  if(action==="zoomOut")return zoom(app,-1);
+  if(action==="build")return build(app);
+  if(action==="run")return run(app);
+  if(action==="buildRun")return build(app);
+  if(action==="stop"){if(s.timer)clearTimeout(s.timer);if(s.busy){s.requestId++;s.busy=false;s.timer=0;$(".language-select",$("#window-"+app)).disabled=false;busyStatus(app,s,s.active)}outputText(app,resultTab(app),"已停止本地结果轮询。若判题任务已经提交，HUSTOJ 服务器仍可能继续运行。","warn");return}
+  if(action==="cpp"){if(s.editor)s.editor.session.setMode("ace/mode/c_cpp");message("文件类型：C++");return}
+  if(action==="wrap"){if(s.editor)s.editor.session.setUseWrapMode(!s.editor.session.getUseWrapMode());return}
+  if(action==="terminal"){openApp("terminal");return}
+  if(action==="project"){message("已选中 NOI 示例项目");return}
+  if(action==="about"){message(app==="geany"?"Geany 代码编辑器 · NOI Linux 2.0":"Code::Blocks IDE · NOI Linux 2.0");return}
+  if(action==="settings"){message("编辑器设置：C++ · UTF-8 · 4 空格");return}
+  if(action==="snippets")message("代码片段面板已就绪");
+ }
+ function toggleWindow(app,action){
+  var win=$("#window-"+app);
+  if(action==="minimize"){win.classList.remove("open");$$('.dock button[data-launch="'+app+'"]').forEach(function(b){b.classList.remove("active")})}
+  if(action==="close"){win.classList.remove("open");$$('.dock button[data-launch="'+app+'"]').forEach(function(b){b.classList.remove("active","running")})}
+  if(action==="maximize"){win.classList.toggle("maximized");if(win.classList.contains("maximized")){win.dataset.left=win.style.left;win.dataset.top=win.style.top;win.dataset.width=win.style.width;win.dataset.height=win.style.height}else{win.style.left=win.dataset.left||"";win.style.top=win.dataset.top||"";win.style.width=win.dataset.width||"";win.style.height=win.dataset.height||""}if(state[app]&&state[app].editor)setTimeout(function(){state[app].editor.resize(true)},50)}
+ }
+ function normalizeBrowserUrl(value){
+  var url=String(value||"").trim();if(!url)return "";
+  if(/^(javascript|data):/i.test(url))return "";
+  if(/^about:blank$/i.test(url))return "about:blank";
+  if(!/^https?:\/\//i.test(url))url="https://"+url;
+  try{var parsed=new URL(url);if(parsed.protocol!=="http:"&&parsed.protocol!=="https:")return "";return parsed.href}catch(e){return ""}
+ }
+ function navigateBrowser(value){
+  var url=normalizeBrowserUrl(value);if(!url){message("请输入有效的 HTTP 或 HTTPS 地址");return}
+  var frame=$("#browserFrame");frame.src=url;$("#browserUrl").value=url;
+ }
+ function browserAction(action){
+  var frame=$("#browserFrame");
+  if(action==="external"){var url=normalizeBrowserUrl($("#browserUrl").value);if(!url){message("请输入有效的 HTTP 或 HTTPS 地址");return}window.open(url,"_blank","noopener,noreferrer");return}
+  try{if(action==="back")frame.contentWindow.history.back();else if(action==="forward")frame.contentWindow.history.forward();else if(action==="reload")frame.contentWindow.location.reload()}catch(e){if(action==="reload")frame.src=frame.src}
+ }
+ function showLauncher(open){$("#launcherBack").classList.toggle("open",open);if(open){$("#appSearch").value="";$("#appSearch").focus()}}
+ function home(action){message(action==="trash"?"回收站为空":"主文件夹　/home/noi")}
+ function updateClock(){var d=new Date(),days=["周日","周一","周二","周三","周四","周五","周六"];$("#clock").textContent=days[d.getDay()]+" "+d.toLocaleTimeString("zh-CN",{hour:"2-digit",minute:"2-digit",hour12:false})}
+ document.addEventListener("click",function(e){
+  var launch=e.target.closest("[data-launch]");if(launch){openApp(launch.dataset.launch);showLauncher(false);return}
+  var desktopAction=e.target.closest("[data-desktop-action]");if(desktopAction){home(desktopAction.dataset.desktopAction);showLauncher(false);return}
+  var tool=e.target.closest("[data-command]");if(tool){command(tool.closest(".window").dataset.app,tool.dataset.command);return}
+  var menu=e.target.closest(".menubtn");if(menu){var app=menu.closest(".window").dataset.app,drop=$(".dropdown",menu.parentElement),was=drop.classList.contains("open");closeMenus(app);if(!was){drop.classList.add("open");menu.classList.add("active")}return}
+  var control=e.target.closest("[data-window]");if(control){var win=control.closest(".window");win.style.zIndex=++z;toggleWindow(win.dataset.app,control.dataset.window);return}
+  var tab=e.target.closest("[data-open-doc]");if(tab){switchDoc(tab.closest(".window").dataset.app,tab.dataset.openDoc);return}
+  var outtab=e.target.closest("[data-output-tab]");if(outtab){var oa=outtab.closest(".window").dataset.app;state[oa].outTab=outtab.dataset.outputTab;renderOutput(oa);return}
+  var browserButton=e.target.closest("[data-browser-action]");if(browserButton){browserAction(browserButton.dataset.browserAction);return}
+  var restartButton=e.target.closest("[data-terminal-restart]");if(restartButton){var terminalFrame=$("#window-jslinux-local .jslinux-frame");terminalFrame.src="jslinux/index.html?restart="+Date.now();return}
+  if(e.target.closest("#dockLauncher")||e.target.closest("#launcherButton")||e.target.closest("#appsButton")){showLauncher(true);return}
+  if(e.target.closest("#judgeStatus")){showConnect(true);return}
+  if(e.target.closest("#connectClose")||e.target.closest("#connectCancel")){showConnect(false);return}
+  if(e.target.closest("#systemButton")){$("#popover").style.display=$("#popover").style.display==="block"?"none":"block";return}
+  if(e.target.closest("#clock")){message(new Date().toLocaleDateString("zh-CN"));return}
+  if(e.target.id==="launcherBack")showLauncher(false);
+  if(!e.target.closest(".menuholder"))$$(".dropdown.open").forEach(function(x){x.classList.remove("open")});
+  if(!e.target.closest("#popover")&&!e.target.closest("#systemButton"))$("#popover").style.display="none";
+ });
+ $("#connectForm").addEventListener("submit",connectService);
+ $("#browserUrl").addEventListener("keydown",function(e){if(e.key==="Enter"){e.preventDefault();navigateBrowser(e.currentTarget.value)}});
+ $("#browserFrame").addEventListener("load",function(){try{var current=this.contentWindow.location.href;if(current&&current!=="about:blank")$("#browserUrl").value=current}catch(e){}});
+ $("#connectBack").addEventListener("click",function(e){if(e.target===$("#connectBack"))showConnect(false)});
+ document.addEventListener("change",function(e){var select=e.target.closest(".language-select");if(!select)return;var app=select.closest(".window").dataset.app,s=init(app),language=Number(select.value),modes={0:"c_cpp",1:"c_cpp",6:"python"},labels={0:"C",1:"C++",6:"Python 3"};s.language=language;if(s.editor)s.editor.session.setMode("ace/mode/"+modes[language]);$(".status > div:last-child span:nth-child(2)",$("#window-"+app)).textContent=labels[language];message("编程语言："+labels[language])});
+ document.addEventListener("dblclick",function(e){var bar=e.target.closest("[data-drag]");if(bar){var win=bar.closest(".window");toggleWindow(win.dataset.app,"maximize")}});
+ $$(".window").forEach(function(win){var handle=document.createElement("span");handle.className="resize-handle";handle.dataset.resize="";handle.title="拖动调整窗口大小";handle.setAttribute("aria-label","拖动调整窗口大小");win.appendChild(handle)});
+ document.addEventListener("pointerdown",function(e){var handle=e.target.closest("[data-resize]");if(handle){var win=handle.closest(".window");if(win.classList.contains("maximized"))return;var r=win.getBoundingClientRect();resize={win:win,x:e.clientX,y:e.clientY,width:r.width,height:r.height};win.style.zIndex=++z;e.preventDefault();if(handle.setPointerCapture)handle.setPointerCapture(e.pointerId);return}var bar=e.target.closest("[data-drag]");if(!bar||e.target.closest(".controls"))return;var win=bar.closest(".window");if(win.classList.contains("maximized"))return;var r=win.getBoundingClientRect();drag={win:win,x:e.clientX,y:e.clientY,left:r.left,top:r.top};win.style.zIndex=++z});
+ document.addEventListener("pointermove",function(e){if(resize){var w=resize.win,small=innerWidth<=850,minWidth=small?280:560,minHeight=innerHeight<=500?220:400,maxWidth=innerWidth-w.getBoundingClientRect().left,maxHeight=innerHeight-w.getBoundingClientRect().top;w.style.width=Math.max(Math.min(minWidth,maxWidth),Math.min(maxWidth,resize.width+e.clientX-resize.x))+"px";w.style.height=Math.max(Math.min(minHeight,maxHeight),Math.min(maxHeight,resize.height+e.clientY-resize.y))+"px";var app=w.dataset.app;if(state[app]&&state[app].editor)state[app].editor.resize(true);return}if(!drag)return;var w=drag.win;w.style.left=Math.max(0,Math.min(innerWidth-w.offsetWidth,drag.left+e.clientX-drag.x))+"px";w.style.top=Math.max(34,Math.min(innerHeight-80,drag.top+e.clientY-drag.y))+"px"});
+ document.addEventListener("pointerup",function(){drag=null;resize=null});
+ document.addEventListener("pointercancel",function(){drag=null;resize=null});
+ $("#appSearch").addEventListener("input",function(e){var q=e.target.value.toLowerCase();$$(".appitem").forEach(function(b){b.style.display=b.textContent.toLowerCase().indexOf(q)>=0?"flex":"none"})});
+ $("#fileInput").addEventListener("change",function(e){var file=e.target.files&&e.target.files[0];if(!file)return;var app=openTarget||"geany",s=init(app);file.text().then(function(text){s.docs[file.name]={name:file.name,content:text,saved:text,dirty:false};s.active=file.name;openApp(app);syncEditor(app);message("已打开："+file.name)}).catch(function(){message("无法读取所选文件")});e.target.value=""});
+ document.addEventListener("keydown",function(e){if(e.key==="Escape"){showLauncher(false);$("#popover").style.display="none";$$(".dropdown.open").forEach(function(x){x.classList.remove("open")})}if(e.ctrlKey&&e.key.toLowerCase()==="s"){var win=e.target.closest(".window");if(win&&win.dataset.app!=="terminal"){e.preventDefault();command(win.dataset.app,"save")}}});
+ updateClock();setInterval(updateClock,15000);openApp("geany");connectService({preventDefault:function(){}});
+ })();
+</script>
+</body></html>
