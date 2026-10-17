@@ -8,7 +8,12 @@ service mysql start
 mysql < /trunk/install/db.sql
 apt-get install openssl
 ADMIN_PASSWORD=`openssl rand -base64 12`
-mysql -e "insert into jol.users (user_id,password,nick,reg_time) values('admin', SHA2('$ADMIN_PASSWORD',256), 'admin', now());"
+# Same salted format as pwGen() in web/include/my_func.inc.php:
+# base64( sha1( md5(password) . salt ) . salt ), 32 chars, fits users.password varchar(32)
+ADMIN_SALT=`openssl rand -hex 2`
+ADMIN_MD5=`printf '%s' "$ADMIN_PASSWORD" | openssl md5 -r | cut -d' ' -f1`
+ADMIN_HASH=`{ printf '%s%s' "$ADMIN_MD5" "$ADMIN_SALT" | openssl sha1 -binary; printf '%s' "$ADMIN_SALT"; } | openssl base64 -A`
+mysql -e "insert into jol.users (user_id,password,nick,reg_time) values('admin','$ADMIN_HASH','admin',now());"
 mysql -e "insert into jol.privilege ( user_id, rightstr ) values('admin','administrator');"
 echo "Generated initial admin password (change after first login): $ADMIN_PASSWORD"
 mysql -e "insert into jol.problem(problem_id,title,time_limit,memory_limit,defunct) values(1000,1,1,5,'N');"
