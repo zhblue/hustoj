@@ -186,6 +186,7 @@
                         <div class="menu">
             <?php  } ?>
                         <a class="item" href="/recommend.php"><i class="star icon"></i>推荐自学方向</a>
+                        <a class='item' href='/noilinux.html'><i class='star icon'></i>NOI Linux 2.0模拟器</a>
             <?php echo $sql_news_menu_result_html; ?>
             <?php
             if($OJ_MENU_DROPDOWN){
