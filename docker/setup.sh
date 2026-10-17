@@ -8,7 +8,7 @@ service mysql start
 mysql < /trunk/install/db.sql
 apt-get install openssl
 ADMIN_PASSWORD=`openssl rand -base64 12`
-mysql -e "insert into jol.users (user_id,password,nick,reg_time) values('admin', md5('$ADMIN_PASSWORD'), 'admin', now());"
+mysql -e "insert into jol.users (user_id,password,nick,reg_time) values('admin', SHA2('$ADMIN_PASSWORD',256), 'admin', now());"
 mysql -e "insert into jol.privilege ( user_id, rightstr ) values('admin','administrator');"
 echo "Generated initial admin password (change after first login): $ADMIN_PASSWORD"
 mysql -e "insert into jol.problem(problem_id,title,time_limit,memory_limit,defunct) values(1000,1,1,5,'N');"
