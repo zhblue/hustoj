@@ -11,7 +11,12 @@ ini_set("display_errors", "Off");  //set this to "On" for debugging  ,especially
 function login($m)
 {
     // 拥有service_port权限的账号才能登陆接口
-    global $OJ_NAME, $_SESSION;
+    global $OJ_NAME, $_SESSION, $OJ_GUEST;
+    if($OJ_GUEST){
+        $_SESSION[$OJ_NAME . "_service_port"] = true;
+        if(!isset($_SESSION[$OJ_NAME . "_user_id"])) $_SESSION[$OJ_NAME . "_user_id"] ="Guest";
+        return array("login" => "ok");
+    }
     $sql = "SELECT `user_id`,`password` FROM `users` WHERE `user_id`=? and defunct='N' and expiry_date >= curdate() ";
     $result = pdo_query($sql, $m->user_id);
     if (is_array($result) && count($result) == 1) {
