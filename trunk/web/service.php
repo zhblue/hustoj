@@ -5,19 +5,20 @@ exit();
 // Press F12 to watch network payload in Devtab,if you don't know what to do, you need to learn more before using this page.
 require_once("include/db_info.inc.php");
 require_once("include/my_func.inc.php");
-$OJ_NAME .= "_service_";
+//$OJ_NAME .= "_service_";
 ini_set("display_errors", "Off");  //set this to "On" for debugging  ,especially when no reason blank shows up.
-function login($m){
-    
-    global $OJ_NAME, $_SESSION, $OJ_GUEST;
-    if($OJ_GUEST){ // 若开启GUEST模式，自动登陆
+function login($m)
+{
+    // 拥有service_port权限的账号才能登陆接口
+    global $OJ_NAME, $_SESSION;
+     if(isset($_SESSION[$OJ_NAME . "_user_id"])){ // 开启下面两行，允许已登录的用户使用
+        //$_SESSION[$OJ_NAME . "_service_port"] = true;
+        //return array("login" => "ok");
+     }else if($OJ_GUEST){ // 若开启GUEST模式，自动登陆
         $_SESSION[$OJ_NAME . "_service_port"] = true;
         if(!isset($_SESSION[$OJ_NAME . "_user_id"])) $_SESSION[$OJ_NAME . "_user_id"] ="Guest";
         return array("login" => "ok");
-    }else if(isset($_SESSION[$OJ_NAME . "_user_id"])){ // 开启下面两行，允许已登录的用户使用
-      //  $_SESSION[$OJ_NAME . "_service_port"] = true;
-      //  return array("login" => "ok");
-    }else{
+     }else{
          // 拥有service_port权限的账号才能登陆接口
         $sql = "SELECT `user_id`,`password` FROM `users` WHERE `user_id`=? and defunct='N' and expiry_date >= curdate() ";
         $result = pdo_query($sql, $m->user_id);
@@ -34,8 +35,9 @@ function login($m){
             }
         }
     }
-     return array("login" => "fail");
+    return array("login" => "fail");
 }
+
 
 function submit($m)
 {
