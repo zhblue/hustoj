@@ -10,7 +10,7 @@ ini_set("display_errors", "Off");  //set this to "On" for debugging  ,especially
 function login($m)
 {
     // 拥有service_port权限的账号才能登陆接口
-    global $OJ_NAME, $_SESSION;
+    global $OJ_GUEST,$OJ_NAME, $_SESSION;
      if(isset($_SESSION[$OJ_NAME . "_user_id"])){ // 开启下面两行，允许已登录的用户使用
         //$_SESSION[$OJ_NAME . "_service_port"] = true;
         //return array("login" => "ok");
