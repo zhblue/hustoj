@@ -1,6 +1,5 @@
 <?php
-header("HTTP/1.0 404 Not Found");
-echo $MSG_SERVICE_DISABLED;
+header("HTTP/1.0 404 服务未启用，编辑此文件启用");
 exit();
 // 注释以上代码启用接口，注意这可能是不安全的，仅用于内部调用。
 // Press F12 to watch network payload in Devtab,if you don't know what to do, you need to learn more before using this page.
@@ -8,30 +7,34 @@ require_once("include/db_info.inc.php");
 require_once("include/my_func.inc.php");
 $OJ_NAME .= "_service_";
 ini_set("display_errors", "Off");  //set this to "On" for debugging  ,especially when no reason blank shows up.
-function login($m)
-{
-    // 拥有service_port权限的账号才能登陆接口
+function login($m){
+    
     global $OJ_NAME, $_SESSION, $OJ_GUEST;
-    if($OJ_GUEST){
+    if($OJ_GUEST){ // 若开启GUEST模式，自动登陆
         $_SESSION[$OJ_NAME . "_service_port"] = true;
         if(!isset($_SESSION[$OJ_NAME . "_user_id"])) $_SESSION[$OJ_NAME . "_user_id"] ="Guest";
         return array("login" => "ok");
-    }
-    $sql = "SELECT `user_id`,`password` FROM `users` WHERE `user_id`=? and defunct='N' and expiry_date >= curdate() ";
-    $result = pdo_query($sql, $m->user_id);
-    if (is_array($result) && count($result) == 1) {
-        $row = $result[0];
-        if (pwCheck($m->password, $row['password'])) {
-            $sql = "select * from privilege where rightstr=? and user_id=? ";
-            $result = pdo_query($sql, "service_port", $m->user_id);
-            if (is_array($result) && count($result) > 0) {
-                $_SESSION[$OJ_NAME . "_service_port"] = true;
-                $_SESSION[$OJ_NAME . "_user_id"] = $m->user_id;
-                return array("login" => "ok");
+    }else if(isset($_SESSION[$OJ_NAME . "_user_id"])){ // 开启下面两行，允许已登录的用户使用
+      //  $_SESSION[$OJ_NAME . "_service_port"] = true;
+      //  return array("login" => "ok");
+    }else{
+         // 拥有service_port权限的账号才能登陆接口
+        $sql = "SELECT `user_id`,`password` FROM `users` WHERE `user_id`=? and defunct='N' and expiry_date >= curdate() ";
+        $result = pdo_query($sql, $m->user_id);
+        if (is_array($result) && count($result) == 1) {
+            $row = $result[0];
+            if (pwCheck($m->password, $row['password'])) {
+                $sql = "select * from privilege where rightstr=? and user_id=? ";
+                $result = pdo_query($sql, "service_port", $m->user_id);
+                if (is_array($result) && count($result) > 0) {
+                    $_SESSION[$OJ_NAME . "_service_port"] = true;
+                    $_SESSION[$OJ_NAME . "_user_id"] = $m->user_id;
+                    return array("login" => "ok");
+                }
             }
         }
     }
-    return array("login" => "fail");
+     return array("login" => "fail");
 }
 
 function submit($m)
