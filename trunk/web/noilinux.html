@@ -229,7 +229,7 @@
  }
  function focusWindow(win){if(!win)return;var level=++z;win.style.zIndex=level;if(win.id==="window-exam")$("#docBack").style.zIndex=level}
  function openApp(app){
-  if(app==="browser"){showWindow(app);setTimeout(function(){$("#browserUrl").focus()},0);return}
+  if(app==="browser"){showWindow(app);var frame=$("#browserFrame");if(!frame.dataset.loaded){var home=browserHomeUrl();frame.dataset.loaded="true";frame.src=home;$("#browserUrl").value=home}setTimeout(function(){$("#browserUrl").focus()},0);return}
   if(app==="terminal"||app==="jslinux-local"){showWindow(app);var frame=$("#window-"+app+" .jslinux-frame");if(!frame.dataset.loaded){frame.dataset.loaded="true";frame.src=frame.dataset.jslinuxSrc}return}
   init(app);renderMenus(app);renderTabs(app);renderTree(app);showWindow(app);loadEditor(app);renderOutput(app);update(app);
   if(state[app].editor){state[app].editor.resize(true);state[app].editor.focus()}
@@ -357,6 +357,7 @@
   if(!/^https?:\/\//i.test(url))url="https://"+url;
   try{var parsed=new URL(url);if(parsed.protocol!=="http:"&&parsed.protocol!=="https:")return "";return parsed.href}catch(e){return ""}
  }
+ function browserHomeUrl(){try{var page=new URL(window.location.href);return page.protocol==="http:"||page.protocol==="https:"?page.origin+"/":new URL("./",page.href).href}catch(e){return "about:blank"}}
  function navigateBrowser(value){
   var url=normalizeBrowserUrl(value);if(!url){message("请输入有效的 HTTP 或 HTTPS 地址");return}
   var frame=$("#browserFrame");frame.src=url;$("#browserUrl").value=url;
