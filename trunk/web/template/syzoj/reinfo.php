@@ -102,7 +102,7 @@ function fill_data(data){
     $("#errexp").html(data);    
     $("#errexp").html(marked.parse($("#errexp").text()));    
     console.log("Mathjax");
-    renderMathJax(); 
+    setTimeout(" MathJax.typeset(); ", 2000);
     const target = document.getElementById('errexp');
 	MathJax.typesetPromise([target]).then(() => {
 	  console.log('局部渲染完成！');
