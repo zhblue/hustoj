@@ -24,7 +24,8 @@ if(isset($_POST['startdate'])){
   //echo $endtime;
 
   $title = $_POST['title'];
-  $private = $_POST['private'];
+  $private = intval($_POST['private']);
+  if(!in_array($private, array(0,1,3), true)) $private = 0;
   $password = $_POST['password'];
   $description = $_POST['description'];
   
@@ -253,6 +254,7 @@ else{
               <select name=private style="width:150px;">
                 <option value=0 <?php echo $private=='0'?'selected=selected':''?>><?php echo $MSG_Public?></option>
                 <option value=1 <?php echo $private=='1'?'selected=selected':''?>><?php echo $MSG_Private?></option>
+                <option value=3 <?php echo $private=='3'?'selected=selected':''?>><?php echo $MSG_REGISTERABLE?></option>
               </select>
               <?php echo $MSG_CONTEST."-".$MSG_PASSWORD?>:
               <input type=text name=password style="width:150px;" value="">
