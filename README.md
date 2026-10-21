@@ -2,6 +2,13 @@
 
 > 流行的OJ系统，跨平台、易安装、有题库、二次开发门槛低。
 
+一句话安装
+--
+
+```
+	curl -fsSL http://dl.hustoj.com/install.sh | bash
+```
+
 常见问题请先查阅
 --
 **[FAQ常见问答](http://hustoj.com)**
