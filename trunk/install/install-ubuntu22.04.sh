@@ -158,6 +158,11 @@ fi
 /etc/init.d/nginx restart
 sed -i "s/post_max_size = 8M/post_max_size = 500M/g" /etc/php/$PHP_VER/fpm/php.ini
 sed -i "s/upload_max_filesize = 2M/upload_max_filesize = 500M/g" /etc/php/$PHP_VER/fpm/php.ini
+
+# CVE-2026-109618,CVE-2026-109619
+sed -i 's|session.use_strict_mode = 0|session.use_strict_mode = 1|'  /etc/php/$PHP_VER/fpm/php.ini
+sed -i 's|;session.upload_progress.enabled = On|session.upload_progress.enabled = Off|'  /etc/php/$PHP_VER/fpm/php.ini
+
 if grep "opcache.jit_buffer_size" /etc/php/$PHP_VER/fpm/php.ini ; then
     echo "opcache for jit is already enabled ... "
 else
