@@ -226,6 +226,12 @@
 
   $MSG_Public="Public";
   $MSG_Private="Private";
+  $MSG_REGISTERABLE="Registerable";
+  $MSG_CONTEST_REGISTERED="Registered";
+  $MSG_REGISTERABLE_ONLY="This contest does not allow self-registration.";
+  $MSG_REGISTER_CLOSED="Registration closes when the contest starts.";
+  $MSG_CONTEST_ID_INVALID="Invalid contest ID.";
+  $MSG_CONTEST_NOT_FOUND="Contest not found.";
   $MSG_Running="Running";
   $MSG_Start="Start";
   $MSG_End="End";
