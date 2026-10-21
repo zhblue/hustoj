@@ -229,6 +229,13 @@
  
  $MSG_Public ="公開";
  $MSG_Private ="私有";
+ $MSG_REGISTERABLE="可註冊";
+ $MSG_CONTEST_REGISTERED="已註冊";
+ $MSG_REGISTERABLE_ONLY="該比賽不支援自主註冊。";
+ $MSG_REGISTER_CLOSED="比賽開始後停止註冊。";
+ $MSG_CONTEST_ID_INVALID="比賽編號無效。";
+ $MSG_CONTEST_NOT_FOUND="比賽不存在。";
+ $MSG_REGISTER_REQUIRED="需註冊";
  $MSG_Running ="執行中";
  $MSG_Start ="開始於";
  $MSG_End ="結束於";

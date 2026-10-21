@@ -232,6 +232,7 @@
   $MSG_REGISTER_CLOSED="Registration closes when the contest starts.";
   $MSG_CONTEST_ID_INVALID="Invalid contest ID.";
   $MSG_CONTEST_NOT_FOUND="Contest not found.";
+  $MSG_REGISTER_REQUIRED="Registration required";
   $MSG_Running="Running";
   $MSG_Start="Start";
   $MSG_End="End";

@@ -228,6 +228,13 @@
  
  $MSG_Public = " общедоступный ";
  $MSG_Private = " частный ";
+ $MSG_REGISTERABLE="Регистрируемая";
+ $MSG_CONTEST_REGISTERED="Зарегистрирован";
+ $MSG_REGISTERABLE_ONLY="Этот контест не допускает самостоятельной регистрации.";
+ $MSG_REGISTER_CLOSED="Регистрация закрывается с началом контеста.";
+ $MSG_CONTEST_ID_INVALID="Неверный номер контеста.";
+ $MSG_CONTEST_NOT_FOUND="Контест не найден.";
+ $MSG_REGISTER_REQUIRED="Требуется регистрация";
  $MSG_Running =" Выполняется ";
  $MSG_Start =" начинается с ";
  $MSG_End = " оканчивается на ";
