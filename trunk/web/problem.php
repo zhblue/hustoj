@@ -28,7 +28,7 @@ if (isset($_GET['id'])) {
     $id = intval($_GET['id']);
     //require("oj-header.php");
 
-    $sql = "select c.contest_id,c.title from contest c inner join contest_problem cp on c.contest_id=cp.contest_id and cp.problem_id=?  WHERE ( c.`end_time`>'$now' and c.defunct='N' ) or c.`private`='1' ";
+    $sql = "select c.contest_id,c.title from contest c inner join contest_problem cp on c.contest_id=cp.contest_id and cp.problem_id=?  WHERE ( c.`end_time`>'$now' and c.defunct='N' ) or c.`private` IN ('1','3') ";
     $used_in_contests = mysql_query_cache($sql, $id);
 
     if (isset($_SESSION[$OJ_NAME . '_' . 'administrator']) || isset($_SESSION[$OJ_NAME . '_' . 'problem_verifiter']) || isset($_SESSION[$OJ_NAME . '_' . 'contest_creator']) || isset($_SESSION[$OJ_NAME . '_' . 'problem_editor']))
@@ -42,7 +42,7 @@ if (isset($_GET['id'])) {
         $sql = "SELECT * FROM `problem` WHERE `problem_id`=? AND `defunct`='N' AND NOT EXISTS (
             SELECT 1 FROM `contest_problem` cp
             INNER JOIN `contest` c ON cp.contest_id=c.contest_id
-            WHERE cp.problem_id=? AND (c.end_time>'$now' AND c.defunct='N' OR c.private='1')
+            WHERE cp.problem_id=? AND (c.end_time>'$now' AND c.defunct='N' OR c.private IN ('1','3'))
         )";        //////////  people should not see the problem used in contest before they end by modifying url in browser address bar
     /////////   if you give students opportunities to test their result out side the contest ,they can bypass the penalty time of 20 mins for
     /////////   each non-AC sumbission in contest. if you give them opportunities to view problems before exam ,they will ask classmates to write

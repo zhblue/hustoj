@@ -116,7 +116,7 @@ if (isset($_POST['id'])) {
         $langmask = $row['langmask'];
         $title = $row['title'];
 
-        if ($isprivate == 1 && !isset($_SESSION[$OJ_NAME . '_' . 'c' . $cid])) {
+        if (in_array($isprivate, array(1, 3), true) && !isset($_SESSION[$OJ_NAME . '_' . 'c' . $cid])) {
             $sql = "SELECT count(*) FROM `privilege` WHERE `user_id`=? AND (`rightstr`=? OR `rightstr`=?)";
             $result = pdo_query($sql, $user_id, "c$cid", "m$cid");
         
