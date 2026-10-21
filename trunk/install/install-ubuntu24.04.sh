@@ -163,7 +163,11 @@ sed -i "s/post_max_size = 8M/post_max_size = 500M/g" /etc/php/$PHP_VER/fpm/php.i
 sed -i "s/upload_max_filesize = 2M/upload_max_filesize = 500M/g" /etc/php/$PHP_VER/fpm/php.ini
 
 # 修改 session 存储为 Redis
-sed 's|session.save_handler *= *files|session.save_handler = redis\nsession.save_path="tcp://127.0.0.1:6379"|'  /etc/php/$PHP_VER/fpm/php.ini
+sed -i 's|session.save_handler *= *files|session.save_handler = redis\nsession.save_path="tcp://127.0.0.1:6379"|'  /etc/php/$PHP_VER/fpm/php.ini
+
+# CVE-2026-109618,CVE-2026-109619
+sed -i 's|session.use_strict_mode = 0|session.use_strict_mode = 1|'  /etc/php/$PHP_VER/fpm/php.ini
+sed -i 's|;session.upload_progress.enabled = On|session.upload_progress.enabled = Off|'  /etc/php/$PHP_VER/fpm/php.ini
 
 # 设置时区为Asia/Shanghai
 if grep 'date.timezone = Asia/Shanghai' /etc/php/$PHP_VER/fpm/php.ini ; then

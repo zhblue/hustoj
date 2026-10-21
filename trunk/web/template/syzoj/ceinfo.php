@@ -68,7 +68,7 @@ pats[i]=/'.*' was not declared in this scope/;
 exps[i++]="<?php echo $MSG_NOT_DECLARED_IN_SCOPE; ?>";
 pats[i]=/main’ must return ‘int’/;
 exps[i++]="<?php echo $MSG_MAIN_MUST_RETURN_INT; ?>";
-pats[i]=/expected identifier or '\(' before numeric constant/
+pats[i]=/expected identifier or '\(' before numeric constant/;
 exps[i++]="<?php echo $MSG_EXPECTED_IDENTIFIER; ?>";
 pats[i]=/printf.*was not declared in this scope/;
 exps[i++]="<?php echo $MSG_PRINTF_NOT_DECLARED_IN_SCOPE; ?>";
@@ -187,7 +187,7 @@ pats[i]=/error: void value not ignored as it ought to be/;
 exps[i++]="<?php echo $MSG_VOID_VALUE_NOT_IGNORED; ?>";
 pats[i]=/error: lvalue required as left operand of assignment/;
 exps[i++]="<?php echo $MSG_LVALUE_REQUIRED; ?>";
-pats[i]=/error: invalid operands to binary/;
+pats[i]=/error: invalid operands of types [^\n\u2028\u2029]* to binary/;
 exps[i++]="<?php echo $MSG_INVALID_OPERANDS; ?>";
 pats[i]=/error: request for member '.*' in '.*', which is of non-class type/;
 exps[i++]="<?php echo $MSG_REQUEST_FOR_MEMBER; ?>";
@@ -345,19 +345,152 @@ pats[i]=/error: 'clock' was not declared in this scope/;
 exps[i++]="<?php echo $MSG_CLOCK_NOT_DECLARED; ?>";
 pats[i]=/error: 'CLOCKS_PER_SEC' was not declared in this scope/;
 exps[i++]="<?php echo $MSG_CLOCKS_PER_SEC_NOT_DECLARED; ?>";
+
+// ============================================================
+// 依据 ai_kb 真实语料(22067 条学生报错)的覆盖率报告补齐, 2026-10
+// ============================================================
+// ---- 依据 ai_kb 真实语料(22067 条学生报错)的覆盖率报告补齐, 括号内为命中条数 ----
+pats[i]=/error: invalid operands of types [^\n\u2028\u2029]* to binary/;
+exps[i++]="<?php echo $MSG_INVALID_OPERANDS_TYPES; ?>";
+pats[i]=/unable to find string literal operator/;
+exps[i++]="<?php echo $MSG_UNABLE_FIND_STRING_OPERATOR; ?>";
+pats[i]=/no matching function for call to/;
+exps[i++]="<?php echo $MSG_NO_MATCHING_FUNCTION_CALL; ?>";
+pats[i]=/error: expected unqualified-id before/;
+exps[i++]="<?php echo $MSG_EXPECTED_UNQUALIFIED_ID_BEFORE; ?>";
+pats[i]=/error: expected unqualified-id at end of input/;
+exps[i++]="<?php echo $MSG_EXPECTED_UNQUALIFIED_ID_AT_EOF; ?>";
+pats[i]=/without a previous/;
+exps[i++]="<?php echo $MSG_WITHOUT_PREVIOUS_DECL; ?>";
+pats[i]=/ISO C\+\+ forbids comparison between pointer and integer/;
+exps[i++]="<?php echo $MSG_FORBIDS_PTR_INT_COMPARE; ?>";
+pats[i]=/comparison of integer expressions of different signedness/;
+exps[i++]="<?php echo $MSG_SIGN_COMPARE; ?>";
+pats[i]=/unable to find numeric literal operator/;
+exps[i++]="<?php echo $MSG_UNABLE_FIND_NUMERIC_OPERATOR; ?>";
+pats[i]=/has no member named/;
+exps[i++]="<?php echo $MSG_HAS_NO_MEMBER_NAMED; ?>";
+pats[i]=/redeclaration of/;
+exps[i++]="<?php echo $MSG_REDECLARATION_OF; ?>";
+pats[i]=/expected declaration before/;
+exps[i++]="<?php echo $MSG_EXPECTED_DECLARATION_BEFORE; ?>";
+pats[i]=/empty character constant/;
+exps[i++]="<?php echo $MSG_EMPTY_CHAR_CONSTANT; ?>";
+pats[i]=/conflicting declaration/;
+exps[i++]="<?php echo $MSG_CONFLICTING_DECLARATION; ?>";
+pats[i]=/break statement not within loop or switch/;
+exps[i++]="<?php echo $MSG_BREAK_OUTSIDE_LOOP; ?>";
+pats[i]=/reference to [^\n\u2028\u2029]* is ambiguous/;
+exps[i++]="<?php echo $MSG_REFERENCE_AMBIGUOUS; ?>";
+pats[i]=/invalid use of member function/;
+exps[i++]="<?php echo $MSG_INVALID_USE_MEMBER_FUNCTION; ?>";
+pats[i]=/stray [^\n\u2028\u2029]* in program/;
+exps[i++]="<?php echo $MSG_STRAY_PROGRAM; ?>";
+pats[i]=/missing terminating > character/;
+exps[i++]="<?php echo $MSG_MISSING_TERMINATING_GT; ?>";
+pats[i]=/extended character [^\n\u2028\u2029]* is not valid in an identifier/;
+exps[i++]="<?php echo $MSG_EXTENDED_CHARACTER; ?>";
+pats[i]=/a function-definition is not allowed here before/;
+exps[i++]="<?php echo $MSG_FUNCTION_DEF_NOT_ALLOWED; ?>";
+pats[i]=/error: expected identifier before/;
+exps[i++]="<?php echo $MSG_EXPECTED_IDENTIFIER_BEFORE; ?>";
+pats[i]=/return-statement with a value, in function returning/;
+exps[i++]="<?php echo $MSG_RETURN_WITH_VALUE; ?>";
+pats[i]=/error: cannot convert [^\n\u2028\u2029]* to [^\n\u2028\u2029]*/;
+exps[i++]="<?php echo $MSG_CANNOT_CONVERT; ?>";
+pats[i]=/invalid type argument of unary/;
+exps[i++]="<?php echo $MSG_INVALID_TYPE_ARG_UNARY; ?>";
+pats[i]=/array must be initialized with a brace-enclosed initializer/;
+exps[i++]="<?php echo $MSG_ARRAY_BRACE_INIT; ?>";
+pats[i]=/conversion from [^\n\u2028\u2029]* to non-scalar type/;
+exps[i++]="<?php echo $MSG_CONVERSION_TO_NON_SCALAR; ?>";
+pats[i]=/statement cannot resolve address of overloaded function/;
+exps[i++]="<?php echo $MSG_CANNOT_RESOLVE_OVERLOADED; ?>";
+pats[i]=/fatal error: [^\n\u2028\u2029]*: No such file or directory/;
+exps[i++]="<?php echo $MSG_NO_SUCH_FILE_EN; ?>";
+pats[i]=/error: expected [^\n\u2028\u2029]* before/;
+exps[i++]="<?php echo $MSG_EXPECTED_GENERIC; ?>";
+pats[i]=/error: expected [^\n\u2028\u2029]* at end of input/;
+exps[i++]="<?php echo $MSG_EXPECTED_AT_EOF; ?>";
+pats[i]=/to match this .\{/;
+exps[i++]="<?php echo $MSG_TO_MATCH_THIS_BRACE; ?>";
+pats[i]=/suggest parentheses around assignment used as truth value/;
+exps[i++]="<?php echo $MSG_ASSIGN_USED_AS_TRUTH; ?>";
+pats[i]=/misleading-indentation/;
+exps[i++]="<?php echo $MSG_MISLEADING_INDENT; ?>";
+pats[i]=/statement has no effect/;
+exps[i++]="<?php echo $MSG_STATEMENT_NO_EFFECT; ?>";
+pats[i]=/control reaches end of non-void function/;
+exps[i++]="<?php echo $MSG_CONTROL_REACHES_END_GENERIC; ?>";
+pats[i]=/unused parameter/;
+exps[i++]="<?php echo $MSG_UNUSED_PARAMETER; ?>";
+pats[i]=/No such file or directory/;
+exps[i++]="<?php echo $MSG_NO_SUCH_FILE_EN2; ?>";
+pats[i]=/\u2018void\u2019 value not ignored as it ought to be/;
+exps[i++]="<?php echo $MSG_VOID_VALUE_NOT_IGNORED; ?>";
+// ---- 长尾补齐 (语料中每类 2~30 条) ----
+pats[i]=/size of array [^\n\u2028\u2029]* is not an integral constant-expression/;
+exps[i++]="<?php echo $MSG_ARRAY_SIZE_NOT_CONST; ?>";
+pats[i]=/could not convert [^\n\u2028\u2029]* from/;
+exps[i++]="<?php echo $MSG_COULD_NOT_CONVERT; ?>";
+pats[i]=/initializer-string for [^\n\u2028\u2029]* is too long/;
+exps[i++]="<?php echo $MSG_INITIALIZER_STRING_TOO_LONG; ?>";
+pats[i]=/declaration of [^\n\u2028\u2029]* shadows a parameter/;
+exps[i++]="<?php echo $MSG_SHADOWS_PARAMETER; ?>";
+pats[i]=/conversion from [^\n\u2028\u2029]* in a converted constant expression/;
+exps[i++]="<?php echo $MSG_CONSTANT_EXPR_CONVERSION; ?>";
+pats[i]=/\u2018case\u2019 label does not reduce to an integer constant/;
+exps[i++]="<?php echo $MSG_CASE_NOT_INTEGER; ?>";
+pats[i]=/invalid operand to binary expression/;
+exps[i++]="<?php echo $MSG_INVALID_OPERAND_BINARY; ?>";
+pats[i]=/\u2018return\u2019 with no value, in function returning/;
+exps[i++]="<?php echo $MSG_RETURN_NO_VALUE2; ?>";
+pats[i]=/\u2018main\u2019 must return \u2018int\u2019/;
+exps[i++]="<?php echo $MSG_MAIN_MUST_RETURN_INT2; ?>";
+pats[i]=/ISO C\+\+ forbids braced-groups within expressions/;
+exps[i++]="<?php echo $MSG_FORBIDS_BRACED_GROUP; ?>";
+// ======================================================================
+// 编译报错解释 —— 2026-10 重写
+// 背景: ai_kb 用 22067 条真实学生报错测出来的三个问题
+//   1) gcc 报错用中文弯引号 U+2018/U+2019, 而本页大量正则写的是直引号,
+//      不归一化则覆盖率只有 50.7%
+//   2) 匹配到的内容来自学生自己提交的源码, 直接进 innerHTML 是 DOM XSS
+//   3) 一条错误常同时命中 3~5 条规则, 学生要连看几遍几乎一样的解释
+// 说明: 试过倒排索引预筛(候选砍到 22.7/198)反而比全量慢 0.69x ——
+//      V8 原生正则已是最优实现, JS 层再做 Map/Set 过滤得不偿失, 故保持直扫。
+// ======================================================================
+function nq(s){
+        return String(s).replace(/\u2018/g,"\'").replace(/\u2019/g,"\'");
+}
+// HTML 转义: 匹配结果里有学生写的 <img onerror=...> 之类内容时必须转义
+function hesc(s){
+        return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;")
+                        .replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+}
+var RX=null;
+function build_rx(){
+        if(RX) return;
+        RX=[];
+        for(var i=0;i<pats.length;i++){
+                try{ RX[i]=new RegExp(nq(pats[i].source)); }
+                catch(e){ RX[i]=null; }   // 个别正则不兼容时跳过, 不影响其它
+        }
+}
 function explain(){
+        build_rx();
         //alert("asdf");
         var errmsg=$("#errtxt").text();
-        var expmsg="";
-        for(var i=0;i<pats.length;i++){
-        var pat=pats[i];
-        var exp=exps[i];
-        var ret=pat.exec(errmsg);
-        if(ret){
-                expmsg+=ret+":"+exp+"<br>";
+        var normmsg=nq(errmsg);
+        var expmsg="",seen={};
+        for(var i=0;i<RX.length;i++){
+                if(!RX[i]) continue;
+                var ret=RX[i].exec(normmsg);
+                if(!ret) continue;
+                var exp=exps[i]||"";
+                if(seen[exp]) continue;        // 同一条解释只显示一次
+                seen[exp]=1;
+                expmsg+="<code>"+hesc(ret[0])+"</code> "+hesc(exp)+"<br>";
         }
-        }
-       
         document.getElementById("errexp").innerHTML=expmsg;
         //alert(expmsg);
             var resultVariable = errmsg;

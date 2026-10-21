@@ -1648,6 +1648,7 @@ int compile(int lang, char *work_dir)
 			     (char * const )"GOCACHE=/tmp",
 			     (char * const )"LANG=zh_CN.UTF-8",
 			     (char * const )"LANGUAGE=zh_CN.UTF-8",
+			     (char * const )"JAVA_TOOL_OPTIONS=-Dfile.encoding=UTF-8",
 			     (char * const )"LC_ALL=zh_CN.utf-8",NULL};
 	char javac_buf[7][32];
 	char *CP_J[7];
@@ -2873,6 +2874,7 @@ void run_solution(int &lang, char *work_dir, double &time_lmt, int &usedtime,
 			     (char * const )"LD_LIBRARY_PATH=/opt/cangjie/runtime/lib/linux_x86_64_llvm:/opt/cangjie/tools/lib",
 			     (char * const )"LANG=zh_CN.UTF-8",
 			     (char * const )"LANGUAGE=zh_CN.UTF-8",
+				 (char * const )"JAVA_TOOL_OPTIONS=-Dfile.encoding=UTF-8",
 			     (char * const )"LC_ALL=zh_CN.utf-8",NULL};
 	// if(nice(19)!=19) perror("......................renice fail... \n");
 	// now the user is "judger"
