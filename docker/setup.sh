@@ -13,7 +13,8 @@ ADMIN_PASSWORD=`openssl rand -base64 12`
 ADMIN_SALT=`openssl rand -hex 2`
 ADMIN_MD5=`printf '%s' "$ADMIN_PASSWORD" | openssl md5 -r | cut -d' ' -f1`
 ADMIN_HASH=`{ printf '%s%s' "$ADMIN_MD5" "$ADMIN_SALT" | openssl sha1 -binary; printf '%s' "$ADMIN_SALT"; } | openssl base64 -A`
-mysql -e "insert into jol.users (user_id,password,nick,reg_time) values('admin','$ADMIN_HASH','admin',now());"
+ADMIN_HASH_HEX=`printf '%s' "$ADMIN_HASH" | xxd -p | tr -d '\n'`
+mysql -e "insert into jol.users (user_id,password,nick,reg_time) values('admin',unhex('$ADMIN_HASH_HEX'),'admin',now());"
 mysql -e "insert into jol.privilege ( user_id, rightstr ) values('admin','administrator');"
 echo "Generated initial admin password (change after first login): $ADMIN_PASSWORD"
 mysql -e "insert into jol.problem(problem_id,title,time_limit,memory_limit,defunct) values(1000,1,1,5,'N');"
