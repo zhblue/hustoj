@@ -6,69 +6,20 @@
 	$MSG_Accepted="正确";
 
 
-	//$MSG_TIME="耗时";  // overided by line 236
-
-	//problemstatistics.php
-	
-	//problemset.php
 	
 	//submit.php
 	$MSG_TOO_SHORT="代码太短！";
 	$MSG_TOO_LONG="代码太长！";
 
-	//ranklist.php
+
 
 	//registerpage.php
         $MSG_TOO_LONG="太长";
         $MSG_TOO_SHORT="太短";
 
-	//problem.php
+    $MSG_RECENT_CONTEST="近期比赛";
 
-	//admin menu
-
-
-  //contest.php
-	
-
-  
-
-
-  $MSG_RECENT_CONTEST="近期比赛";
-
-  
- 
-
-
-
-  //discuss.php
-
-
-
-  // template/../reinfo.php
-  
-
-  // template/../ceinfo.php
-
-  
-
- 
-
-  //bbcode.php
-
-  // reinfo.php 
-  // ceinfo.php
-  //contest.php
-  // sourcecompare.php
-
-  
-  //email
-  //SaaS friendly
-
-  //aiapi/common.php
-
-// admin/problem_list.php 批量删除
-<?php
-	//header.php
+   //header.php
 	$MSG_FAQ="常见问答";
 	$MSG_BBS="讨论版";
 	$MSG_HOME="主页";
