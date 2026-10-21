@@ -270,7 +270,7 @@ if (isset($_GET['cid'])) {
         } else if ($private == 3) {
             $register_link = "";
             if ($now < $start_time && $end_time > $now) {
-                if (isset($_SESSION[$OJ_NAME . '_c' . intval($row['contest_id'])))
+                if (isset($_SESSION[$OJ_NAME . '_c' . intval($row['contest_id'])]))
                     $register_link = " <span class='btn btn-default btn-xs disabled'>" . $MSG_CONTEST_REGISTERED . "</span>";
                 else
                     $register_link = " <a class='btn btn-warning btn-xs' href='contest_register.php?cid=" . intval($row['contest_id']) . "'>" . $MSG_REGISTER . "</a>";
