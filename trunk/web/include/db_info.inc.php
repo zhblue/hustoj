@@ -150,7 +150,8 @@ static  $OJ_LOG_TRACE_ENABLED=false;
 
 static $OJ_SaaS_ENABLE=false;
 static $OJ_MENU_NEWS=true;
-static $OJ_MENU_DROPDOWN=false;
+static $OJ_MENU_DROPDOWN=true;
+static $OJ_GUEST=false;
 $gconfig=dirname(dirname(dirname(dirname(__FILE__))))."/global.php";
 if(file_exists($gconfig)) require_once($gconfig);
 
