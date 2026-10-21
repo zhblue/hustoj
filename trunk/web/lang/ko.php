@@ -230,6 +230,13 @@ $MSG_HINT="도움";
 
 	$MSG_Public="공개";
 	$MSG_Private="비공개";
+	$MSG_REGISTERABLE="등록 가능";
+	$MSG_CONTEST_REGISTERED="등록됨";
+	$MSG_REGISTERABLE_ONLY="이 대회는 자체 등록을 지원하지 않습니다.";
+	$MSG_REGISTER_CLOSED="대회 시작 후 등록이 종료됩니다.";
+	$MSG_CONTEST_ID_INVALID="잘못된 대회 번호입니다.";
+	$MSG_CONTEST_NOT_FOUND="대회를 찾을 수 없습니다.";
+	$MSG_REGISTER_REQUIRED="등록 필요";
 	$MSG_Running="대회시작";
 	$MSG_Start="대회예정";
 	$MSG_End="대회종료";

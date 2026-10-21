@@ -137,8 +137,10 @@ foreach ($result as $row) {
     $private = intval($row['private']);
     if ($private == 0)
         $view_contest[$i][4] = "<span class=text-primary>$MSG_Public</span>";
+    else if ($private == 3)
+        $view_contest[$i][4] = "<span class=text-warning>$MSG_REGISTERABLE</span>";
     else
-        $view_contest[$i][5] = "<span class=text-danger>$MSG_Private</span>";
+        $view_contest[$i][4] = "<span class=text-danger>$MSG_Private</span>";
     $view_contest[$i][6] = $row['user_id'];
     $i++;
 }

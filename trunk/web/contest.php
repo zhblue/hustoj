@@ -265,10 +265,22 @@ if (isset($_GET['cid'])) {
         }
 
         $private = intval($row['private']);
-        if ($private == 0)
+        if ($private == 0) {
             $view_contest[$i][4] = "<span class=text-primary>$MSG_Public</span>";
-        else
-            $view_contest[$i][5] = "<span class=text-danger>$MSG_Private</span>";
+        } else if ($private == 3) {
+            $register_link = "";
+            if ($now < $start_time && $end_time > $now) {
+                if (isset($_SESSION[$OJ_NAME . '_c' . intval($row['contest_id'])]))
+                    $register_link = " <span class='btn btn-default btn-xs disabled'>" . $MSG_CONTEST_REGISTERED . "</span>";
+                else
+                    $register_link = " <a class='btn btn-warning btn-xs' href='contest_register.php?cid=" . intval($row['contest_id']) . "'>" . $MSG_REGISTER . "</a>";
+                $view_contest[$i][4] = "<span class=text-warning>$MSG_REGISTERABLE</span>" . $register_link;
+            } else {
+                $view_contest[$i][4] = "<span class=text-warning>$MSG_REGISTER_REQUIRED</span>";
+            }
+        } else {
+            $view_contest[$i][4] = "<span class=text-danger>$MSG_Private</span>";
+        }
 
         $view_contest[$i][6] = $row['user_id'];
 

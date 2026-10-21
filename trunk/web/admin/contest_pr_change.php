@@ -11,10 +11,15 @@ if ($num<1){
 	exit(0);
 }
 $row=$result[0];
-if (intval($row[0])==0) $sql="UPDATE `contest` SET `private`='1' WHERE `contest_id`=?";
-else $sql="UPDATE `contest` SET `private`='0' WHERE `contest_id`=?";
+$private = intval($row[0]);
+if ($private == 0)
+  $next_private = 1;
+else if ($private == 1)
+  $next_private = 3;
+else
+  $next_private = 0;
 
-pdo_query($sql,$cid);
+pdo_query("UPDATE `contest` SET `private`=? WHERE `contest_id`=?",$next_private,$cid);
 ?>
 <script language=javascript>
 	history.go(-1);

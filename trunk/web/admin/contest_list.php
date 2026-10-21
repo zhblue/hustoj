@@ -83,7 +83,8 @@ if(isset($_GET['keyword']) && $_GET['keyword']!=""){
       echo "<td>".$row['end_time']."</td>";
       $cid = $row['contest_id'];
       if(isset($_SESSION[$OJ_NAME.'_'.'administrator']) || isset($_SESSION[$OJ_NAME.'_'."m$cid"])){
-        echo "<td><a href=contest_pr_change.php?cid=".$row['contest_id']."&getkey=".htmlentities($_SESSION[$OJ_NAME.'_'.'getkey'], ENT_QUOTES, 'UTF-8').">".($row['private']=="0"?"<span class=green>$MSG_Public</span>":"<span class=red>$MSG_Private<span>")."</a></td>";
+        $private_label = $row['private']=="0" ? "<span class=green>$MSG_Public</span>" : ($row['private']=="3" ? "<span class=orange>$MSG_REGISTERABLE</span>" : "<span class=red>$MSG_Private</span>");
+        echo "<td><a href=contest_pr_change.php?cid=".$row['contest_id']."&getkey=".htmlentities($_SESSION[$OJ_NAME.'_'.'getkey'], ENT_QUOTES, 'UTF-8').">".$private_label."</a></td>";
         echo "<td><a href=contest_df_change.php?cid=".$row['contest_id']."&getkey=".htmlentities($_SESSION[$OJ_NAME.'_'.'getkey'], ENT_QUOTES, 'UTF-8').">".($row['defunct']=="N"?"<span class=green>$MSG_AVAILABLE </span>":"<span class=red>$MSG_RESERVED </span>")."</a></td>";
         echo "<td><a href=contest_edit.php?cid=".$row['contest_id'].">$MSG_EDIT</a></td>";
         echo "<td><a href=contest_add.php?cid=".$row['contest_id'].">$MSG_COPY</a></td>";

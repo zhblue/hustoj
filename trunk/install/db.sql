@@ -15,7 +15,7 @@ CREATE TABLE IF NOT EXISTS `contest` (
   `end_time` datetime DEFAULT NULL COMMENT '比赛结束时间',
   `defunct` char(1) NOT NULL DEFAULT 'N' COMMENT '已停用标记(N=正常 Y=停用)',
   `description` text COMMENT '比赛说明',
-  `private` tinyint(4) NOT NULL DEFAULT '0' COMMENT '私有标记(0=公开 1=私有)',
+  `private` tinyint(4) NOT NULL DEFAULT '0' COMMENT '私有标记(0=公开 1=私有 3=可注册)',
   `langmask` int NOT NULL DEFAULT '0' COMMENT 'bits for LANG to mask',
   `password` CHAR( 16 ) NOT NULL DEFAULT '' COMMENT '比赛进入密码',
   `contest_type` smallint unsigned NOT NULL DEFAULT '0' COMMENT '比赛类型(0=ACM 1=OI ...)',

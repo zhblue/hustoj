@@ -236,6 +236,13 @@ $MSG_CLICK_VIEW_HINT="Click to View Spoiler";
 	
   $MSG_Public="ئاشكارە";
   $MSG_Private="خۇسۇسىي";
+  $MSG_REGISTERABLE="تىزىملاشتۇرغىلى بولىدۇ";
+  $MSG_CONTEST_REGISTERED="تىزىملاشتۇرۇلدى";
+  $MSG_REGISTERABLE_ONLY="بۇ مۇسابىقە ئۆزىنى تىزىملاشتۇرۇشقا يول قويمايدۇ.";
+  $MSG_REGISTER_CLOSED="مۇسابىقە باشلانغاندا تىزىملاشتۇرۇش تاقالىدۇ.";
+  $MSG_CONTEST_ID_INVALID="مۇسابىقە نومۇرى ئىناۋەتسىز.";
+  $MSG_CONTEST_NOT_FOUND="مۇسابىقە تېپىلمىدى.";
+  $MSG_REGISTER_REQUIRED="تىزىملاشتۇرۇش كېرەك";
   $MSG_Running=" ئىلىپ بېرىلىۋاتىدۇ ";
   $MSG_Start=" باشلاش ";
   $MSG_End=" ئاخىرلاش ";
