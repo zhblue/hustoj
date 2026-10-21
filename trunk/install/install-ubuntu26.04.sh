@@ -38,7 +38,7 @@ apt-get install -y software-properties-common
 add-apt-repository -y universe
 add-apt-repository -y multiverse
 add-apt-repository -y restricted
-
+LC_ALL=C.UTF-8 add-apt-repository ppa:ondrej/php -y
 apt-get update && apt-get -y upgrade
 
 #apt-get install -y subversion
