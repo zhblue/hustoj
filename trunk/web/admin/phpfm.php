@@ -3608,7 +3608,7 @@ function dir_list_form() {
         function is_anything_selected(){
             var selected_dir_list = new Array();
             var selected_file_list = new Array();
-            for(var x=0;x<".(integer)count($entry_list).";x++){
+            for(var x=0;x<".(int)count($entry_list).";x++){
                 if(entry_list['entry'+x].selected){
                     if(entry_list['entry'+x].type == 'dir') selected_dir_list.push(entry_list['entry'+x].name);
                     else selected_file_list.push(entry_list['entry'+x].name);
@@ -3637,7 +3637,7 @@ function dir_list_form() {
         // Select all/none/inverse
         function selectANI(Butt){
         	cancel_copy_move();
-            for(var x=0;x<". (integer)count($entry_list).";x++){
+            for(var x=0;x<". (int)count($entry_list).";x++){
                 var Row = document.getElementById('entry'+x);
                 var newClassName = null;
                 switch (Butt.value){
@@ -4832,9 +4832,10 @@ function server_info(){
 	    $a=ini_get_all();
 	    $output="<table border=1 cellspacing=0 cellpadding=4 align=center>";
 	    $output.="<tr><th colspan=2>ini_get_all()</td></tr>";
-	    while(list($key, $value)=each($a)) {
-	        list($k, $v)= each($a[$key]);
+	    foreach($a as $key => $value) {
+	        foreach($value as $k => $v) {
 	        $output.="<tr><td align=right>$key</td><td>$v</td></tr>";
+	    }
 	    }
 	    $output.="</table>";
 	echo $output;
