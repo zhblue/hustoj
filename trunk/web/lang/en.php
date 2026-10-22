@@ -555,7 +555,7 @@ $MSG_BATCH_DELETE_BACK="Back to problem list";
 
 
 // ======================================================================
-Compile error explanations (English)
+// Compile error explanations (English)
 // 由 ai_kb 的编译报错覆盖率报告生成, 与 include/compile_error_rules.php 配套
 // ======================================================================
 $MSG_EXPECTED_INITIALIZER="You forgot the type when declaring a variable, or something is missing between the type and the name. Correct form: int n=0;";
