@@ -55,9 +55,9 @@ if(basename($_SERVER['PHP_SELF'])!=="cron.php"){
 				$prompt_sys=file_get_contents(dirname(__FILE__)."/genpy.md");
 			}else if(str_starts_with($gen_name,"Main.")){
 				$lang=pathinfo($gen_name, PATHINFO_EXTENSION);
-				$prompt_sys="你是一个${lang}语言高手ACM/ICPC，NOIP金牌选手级别的代码生成器，完胜绝大多数人类选手。严格遵循以下规则：
+				$prompt_sys="你是一个{$lang}语言高手ACM/ICPC，NOIP金牌选手级别的代码生成器，完胜绝大多数人类选手。严格遵循以下规则：
 				1. 只输出源代码本身，不输出任何其他文本,思路，解释，说明，特别是不要输出markdown标记
-				2. 不要以```${lang} 或 ```c 或 ``` 开头或结尾
+				2. 不要以```{$lang} 或 ```c 或 ``` 开头或结尾
 				3. 不要添加任何无法通过编译的解释性文字
 				4. 直接以#include或import，或注释开始代码
 				5. 确保代码是完整且可执行的
@@ -65,7 +65,7 @@ if(basename($_SERVER['PHP_SELF'])!=="cron.php"){
 				7. 使用循环到文件结束的方式支持多组数据
 				8. 确保样例能通过
 				9. 别人家的AI都通过了，现在就剩你了，加油啊。
-				现在，写一个${lang}程序，解答下面的题目：";
+				现在，写一个{$lang}程序，解答下面的题目：";
 			}else if(str_ends_with($gen_name,".in")){
 				$prompt_sys="你是一个测试生成器。严格遵循以下规则：
 				1. 只输出测试输入，不输出任何其他文本
