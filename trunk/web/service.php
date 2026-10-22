@@ -1,7 +1,7 @@
 <?php
 header("HTTP/1.0 404 服务未启用，编辑此文件启用");
 exit();
-// 注释以上代码启用接口，注意这可能是不安全的，仅用于内部调用。
+// 注释以上代码启用接口，注意这可能是不安全的，用户可以通过本接口无限调用服务器资源，仅用于内部调用。
 // Press F12 to watch network payload in Devtab,if you don't know what to do, you need to learn more before using this page.
 require_once("include/db_info.inc.php");
 require_once("include/my_func.inc.php");
@@ -12,8 +12,8 @@ function login($m)
     // 拥有service_port权限的账号才能登陆接口
     global $OJ_GUEST,$OJ_NAME, $_SESSION;
      if(isset($_SESSION[$OJ_NAME . "_user_id"])){ // 开启下面两行，允许已登录的用户使用
-        //$_SESSION[$OJ_NAME . "_service_port"] = true;
-        //return array("login" => "ok");
+        $_SESSION[$OJ_NAME . "_service_port"] = true;
+        return array("login" => "ok");
      }else if($OJ_GUEST){ // 若开启GUEST模式，自动登陆
         $_SESSION[$OJ_NAME . "_service_port"] = true;
         if(!isset($_SESSION[$OJ_NAME . "_user_id"])) $_SESSION[$OJ_NAME . "_user_id"] ="Guest";
