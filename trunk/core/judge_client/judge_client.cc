@@ -2232,7 +2232,7 @@ char *escape(char s[], char t[])
 	return s;
 }
 void fix_mod(char * path){
-        if(chown(path,judge_uid,www_uid));
+        if(chown(path,www_uid,judge_uid));
         chmod(path,0710);
 }
 /* 为单个测试点准备测试数据文件：查找 .in/.out 文件，处理 NOIP 命名，必要时复制数据。 */
