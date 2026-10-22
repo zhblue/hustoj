@@ -2233,7 +2233,7 @@ char *escape(char s[], char t[])
 }
 void fix_mod(char * path){
         if(chown(path,www_uid,judge_uid)) write_log("chown fail:%s\n",path);
-        if(chmod(path,0710) write_log("chmod fail:%s\n",path);
+        if(chmod(path,0710)) write_log("chmod fail:%s\n",path);
 }
 /* 为单个测试点准备测试数据文件：查找 .in/.out 文件，处理 NOIP 命名，必要时复制数据。 */
 void prepare_files(char *filename, int namelen, char *infile, int &p_id,
