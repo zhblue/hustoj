@@ -2267,6 +2267,8 @@ void prepare_files(char *filename, int namelen, char *infile, int &p_id,
 		fclose(fpname);
 	}else{
 		if(copy_data||lang == LANG_R) execute_cmd("/bin/cp '%s' %s/data.in", infile, work_dir);   // 如果开启了COPY_DATA则复制测试数据
+		sprintf(dst, "%s/data.in", work_dir);
+		if(chown(dst, judge_uid, judge_gid)!=0 && DEBUG) printf("chown %s\n",dst) ;
 	}
 	execute_cmd("/bin/cp %s/data/%d/*.dic %s/ 2>/dev/null", oj_home, p_id, work_dir);
 	execute_cmd("/bin/cp %s/data/%d/interactor %s/ 2>/dev/null", oj_home, p_id, work_dir);
