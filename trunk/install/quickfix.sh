@@ -1,4 +1,14 @@
 #!/bin/bash
+if grep security.ubuntu.com/ubuntu  /etc/apt/sources.list 
+then
+    echo "already have repo"
+else
+    echo deb http://security.ubuntu.com/ubuntu `lsb_release -c|awk '{print $2}'`-security main restricted universe multiverse >> /etc/apt/sources.list
+fi
+
+apt-get update 
+apt-get upgrade
+
 PHP_FPM=$(service --status-all|grep php|awk '{print $4}')
 apt-get install redis-server php-redis
 for PHP_INI in `find /etc/php/ -name "php.ini"` 
