@@ -2231,7 +2231,10 @@ char *escape(char s[], char t[])
 	s[j] = '\0';
 	return s;
 }
-
+void fix_mod(char * path){
+        if(chown(path,judge_uid,www_uid));
+        chmod(path,0710);
+}
 /* 为单个测试点准备测试数据文件：查找 .in/.out 文件，处理 NOIP 命名，必要时复制数据。 */
 void prepare_files(char *filename, int namelen, char *infile, int &p_id,
 				   char *work_dir, char *outfile, char *userfile, int runner_id,int lang )
@@ -2245,6 +2248,9 @@ void prepare_files(char *filename, int namelen, char *infile, int &p_id,
 	escape(fname, fname0);
 	//printf("%s\n%s\n",fname0,fname);
 	sprintf(infile, "%s/data/%d/%s.in", oj_home, p_id, fname);
+	sprintf(outfile, "%s/data/%d/%s.out", oj_home, p_id, fname);
+	fix_mod(infile);
+    fix_mod(outfile);
 	char noip_file_name[BUFFER_SIZE];
 	char dst[BUFFER_SIZE*2];
 	sprintf(noip_file_name,"%s/data/%d/input.name",oj_home,p_id);
@@ -2265,7 +2271,7 @@ void prepare_files(char *filename, int namelen, char *infile, int &p_id,
 	execute_cmd("/bin/cp %s/data/%d/*.dic %s/ 2>/dev/null", oj_home, p_id, work_dir);
 	execute_cmd("/bin/cp %s/data/%d/interactor %s/ 2>/dev/null", oj_home, p_id, work_dir);
  	execute_cmd("chown judge %s/*.dic ", work_dir);
-	sprintf(outfile, "%s/data/%d/%s.out", oj_home, p_id, fname0);
+	sprintf(outfile, "%s/data/%d/%s.out", oj_home, p_id, fname);
 
 	sprintf(noip_file_name,"%s/data/%d/output.name",oj_home,p_id);
 	//if(DEBUG) printf("NOIP filename:%s\n",noip_file_name);
