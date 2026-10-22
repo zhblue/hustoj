@@ -53,7 +53,7 @@
                                     .'<td>'
                                     ."<a href=\"userinfo.php?user=".$row["user_id"]."\" class=\"mdui-text-color-theme-accent\">".$row["user_id"]."</a>"
                                     .'</td>'
-                                    ."<td>${row["school"]}</td>"
+                                    ."<td>{$row["school"]}</td>"
                                     .'</tr>';
                             }
                         }
