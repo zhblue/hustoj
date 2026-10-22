@@ -86,7 +86,7 @@
     echo "<div class=am-g>";
 		echo "<div class=am><strong>$MSG_Sample_Input</strong><pre class=content><span class=sampledata>".($soutput)."</span></pre></div>";
 		echo "<div class=am><strong>$MSG_Sample_Output</strong><pre class=content><span class=sampledata>".($soutput)."</span></pre></div>";
-		echo "</div>"
+		echo "</div>";
 
     if($row['hint']){
       echo "<h4>$MSG_HINT</h4><div class='hint content'>".$row['hint']."</div><br>";
