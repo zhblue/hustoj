@@ -403,7 +403,7 @@ if (~$OJ_LANGMASK & (1 << $language)) {
             }
         }
         /*   //prepare system ready for even worse robots
-        $now = strftime("%Y-%m-%d %X", time()-$OJ_SUBMIT_COOLDOWN_TIME * 6 );
+        $now = date("Y-m-d H:i:s", time()-$OJ_SUBMIT_COOLDOWN_TIME * 6 );
         $sql="select count(1) from solution where user_id=? and in_date > ?";
         $count=pdo_query($sql,$user_id,$now);
         if($count>=$OJ_POISON_BOT_COUNT){
