@@ -188,7 +188,7 @@
                         <a class="item" href="/recommend.php"><?php echo xicon('star');?>推荐自学方向</a>
             <?php echo $sql_news_menu_result_html; ?>
             <?php
-			require_once(dirname(dirname(__FILE__))."/menu.php");
+			if(file_exists(dirname(dirname(__FILE__))."/menu.php"))  require_once(dirname(dirname(__FILE__))."/menu.php");
             if($OJ_MENU_DROPDOWN){
                 ?>
                         </div>
