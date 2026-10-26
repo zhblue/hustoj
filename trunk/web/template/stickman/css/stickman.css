@@ -1,0 +1,346 @@
+/* ============================================================
+   HUSTOJ · stickman 模板 · 火柴人主题基础配色
+   以 syzoj 的 white.css 为蓝本，仅替换配色 / 装饰 / 风格，
+   不改动任何功能逻辑。功能 100% 由 syzoj 提供。
+   作者: hustoj-theme-maker skill + 用户定制的火柴人风格
+   ============================================================ */
+
+:root {
+  /* ===== 主题色板（笔记本纸 + 马克笔） ===== */
+  --stickman-primary:   #181818;   /* 主色：墨色（顶栏文字 / 主按钮 / 描边） */
+  --stickman-primary-2: #2c2c2a;   /* 主色深调 */
+  --stickman-accent:    #D85A30;   /* 强调色：马克笔红（关键按钮 / 状态） */
+  --stickman-accent-2:  #FAEEDA;   /* 强调色亮调：荧光黄底（高亮 / 强调） */
+  --stickman-danger:    #D85A30;   /* 危险 / 次按钮（与强调色同） */
+  --stickman-danger-2:  #993C1D;   /* 危险色深调 */
+  --stickman-bg:        #F7F2E5;   /* 页面背景：笔记本纸米色 */
+  --stickman-surface:   #FFFEFA;   /* 卡片表面：更亮的奶白 */
+  --stickman-text:      #181818;   /* 正文 */
+  --stickman-muted:     #555049;   /* 次要文字 */
+  --stickman-blue:      #185FA5;   /* 钢笔蓝（链接） */
+  --stickman-green:     #1D9E75;   /* 绿色（通过状态） */
+  --stickman-yellow:    #EF9F27;   /* 荧光黄 */
+  --stickman-line:      rgba(150, 130, 90, 0.10);  /* 笔记本横线 */
+
+  /* 玻璃拟态（.padding）沿用 syzoj 命名 */
+  --lg-bg-color: rgba(255, 254, 250, 0.78);
+  --lg-highlight: rgba(255, 255, 255, 0.95);
+  --lg-red: var(--stickman-accent);
+  --lg-grey: var(--stickman-primary);
+  --lg-text: var(--stickman-text);
+}
+
+/* ---------- 全局背景：笔记本纸 + 浅横线 ---------- */
+html, body {
+  background-color: var(--stickman-bg);
+  color: var(--stickman-text);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC",
+               "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+}
+body {
+  background-image:
+    repeating-linear-gradient(
+      to bottom,
+      transparent 0,
+      transparent 39px,
+      var(--stickman-line) 39px,
+      var(--stickman-line) 40px
+    );
+}
+
+/* ---------- 语义 UI 固定顶栏（#page-header）主题化 ---------- */
+#page-header.ui.menu {
+  background: var(--stickman-bg) !important;
+  background-image: repeating-linear-gradient(
+    to bottom,
+    transparent 0,
+    transparent 18px,
+    var(--stickman-line) 18px,
+    var(--stickman-line) 19px
+  ) !important;
+  border-bottom: 2.5px dashed var(--stickman-primary) !important;
+  box-shadow: 0 4px 0 -2px var(--stickman-primary);
+}
+#page-header.ui.menu .item,
+#page-header.ui.menu .header.item {
+  color: var(--stickman-primary) !important;
+  font-weight: 500;
+}
+#page-header.ui.menu .item:hover,
+#page-header.ui.menu .item.active {
+  color: var(--stickman-accent) !important;
+  background: transparent !important;
+  position: relative;
+}
+#page-header.ui.menu .item:hover::after,
+#page-header.ui.menu .item.active::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: 4px;
+  width: 24px;
+  height: 2px;
+  background: var(--stickman-accent);
+  transform: translateX(-50%);
+}
+#page-header.ui.menu .header.item span {
+  color: var(--stickman-primary) !important;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", sans-serif !important;
+  font-weight: 700 !important;
+  text-shadow: none !important;
+}
+#page-header .right.menu .ui.button {
+  background: var(--stickman-primary) !important;
+  color: var(--stickman-bg) !important;
+  border-radius: 8px !important;
+  font-weight: 500;
+  transition: all .15s;
+}
+#page-header .right.menu .ui.button:hover {
+  background: var(--stickman-accent) !important;
+  transform: translateY(-1px);
+}
+#page-header .right.menu .ui.primary.button {
+  background: var(--stickman-accent) !important;
+  color: #fff !important;
+  border: 2px solid var(--stickman-accent) !important;
+}
+#page-header .right.menu .ui.primary.button:hover {
+  background: var(--stickman-danger-2) !important;
+  border-color: var(--stickman-danger-2) !important;
+}
+
+/* 品牌 logo 旁的火柴人 SVG */
+.stickman-brand-logo {
+  width: 26px;
+  height: 26px;
+  vertical-align: -6px;
+  margin-right: 8px;
+  stroke: var(--stickman-primary);
+  fill: none;
+  stroke-width: 2.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* ---------- 玻璃卡片 .padding（保留 syzoj 圆角玻璃风，纸张感更明显） ---------- */
+.padding {
+  position: relative;
+  border-radius: 18px !important;
+  overflow: hidden;
+  box-shadow:
+    0 1px 0 rgba(0,0,0,0.04),
+    0 8px 24px -10px rgba(20,20,20,0.18) !important;
+  color: var(--lg-text);
+  background: var(--stickman-surface);
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 2.2);
+  padding: 1.6rem !important;
+  border: 2px solid var(--stickman-primary);
+}
+.padding::before,
+.padding::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+}
+.padding::before {
+  z-index: -2;
+  -webkit-backdrop-filter: blur(2px);
+  backdrop-filter: blur(2px);
+  filter: saturate(108%) brightness(1.02);
+}
+.padding::after {
+  z-index: -1;
+  background:
+    repeating-linear-gradient(
+      to bottom,
+      transparent 0,
+      transparent 19px,
+      rgba(150, 130, 90, 0.05) 19px,
+      rgba(150, 130, 90, 0.05) 20px
+    ),
+    var(--lg-bg-color);
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,0.4);
+}
+.padding > * { position: relative; z-index: 2; }
+
+/* ---------- 链接 / 文字 ---------- */
+a {
+  color: var(--stickman-blue);
+  text-decoration: none;
+  transition: color .15s;
+}
+a:hover {
+  color: var(--stickman-accent);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+a.black-link {
+  color: var(--stickman-primary);
+}
+a.black-link:hover {
+  color: var(--stickman-accent);
+}
+
+/* ---------- Semantic UI 主色覆盖 ---------- */
+.ui.primary.buttons .button,
+.ui.primary.button {
+  background-color: var(--stickman-accent) !important;
+  color: #fff !important;
+  border-radius: 8px !important;
+  font-weight: 500;
+  border: 2px solid var(--stickman-accent);
+  box-shadow: 3px 3px 0 var(--stickman-primary) !important;
+  transition: all .15s;
+}
+.ui.primary.buttons .button:hover,
+.ui.primary.button:hover {
+  background-color: var(--stickman-danger-2) !important;
+  border-color: var(--stickman-danger-2);
+  transform: translate(-1px, -1px);
+  box-shadow: 4px 4px 0 var(--stickman-primary) !important;
+}
+.ui.button:not(.primary):not(.basic) {
+  background: var(--stickman-primary);
+  color: #fff;
+  border-radius: 8px !important;
+  border: 2px solid var(--stickman-primary);
+  box-shadow: 3px 3px 0 var(--stickman-primary) !important;
+}
+.ui.basic.button, .ui.basic.buttons .button {
+  color: var(--stickman-primary) !important;
+  box-shadow: 0 0 0 2px var(--stickman-primary) inset !important;
+  background: transparent !important;
+  border-radius: 8px !important;
+}
+.ui.basic.button:hover, .ui.basic.buttons .button:hover {
+  background: var(--stickman-primary) !important;
+  color: var(--stickman-bg) !important;
+}
+.ui.segment, .ui.segments .segment {
+  border-top: 3px solid var(--stickman-primary) !important;
+  background: var(--stickman-surface) !important;
+  border-radius: 8px !important;
+  border-left: 1.5px solid rgba(0,0,0,0.1);
+  border-right: 1.5px solid rgba(0,0,0,0.1);
+  border-bottom: 1.5px solid rgba(0,0,0,0.1);
+}
+.ui.top.attached.block.header {
+  background: var(--stickman-primary) !important;
+  color: var(--stickman-bg) !important;
+  border-radius: 8px 8px 0 0 !important;
+}
+
+/* ---------- 表格斑马纹 ---------- */
+table.ui.table {
+  background: var(--stickman-surface) !important;
+  border: 1.5px solid var(--stickman-primary) !important;
+  border-radius: 8px !important;
+  overflow: hidden;
+  border-collapse: separate !important;
+  border-spacing: 0;
+}
+table.ui.table th {
+  background: var(--stickman-primary) !important;
+  color: var(--stickman-bg) !important;
+  font-weight: 600 !important;
+  border-bottom: 2px solid var(--stickman-primary) !important;
+}
+table.ui.table tbody tr:nth-child(even) {
+  background: rgba(0, 0, 0, 0.03);
+}
+table.ui.table tbody tr:hover {
+  background: rgba(216, 90, 48, 0.08) !important;
+}
+table.ui.table td {
+  border-bottom: 1px dashed rgba(150, 130, 90, 0.25) !important;
+}
+
+/* ---------- 面板 / 巨幕 ---------- */
+.panel-default, .container .jumbotron {
+  padding: 16px !important;
+  background: var(--stickman-surface) !important;
+  border: 2px solid var(--stickman-primary) !important;
+  border-radius: 12px !important;
+  margin-top: 20px;
+  box-shadow: 4px 4px 0 var(--stickman-primary);
+}
+
+/* ---------- 判题状态语义色 ---------- */
+.red   { color: var(--stickman-accent) !important; }      /* 失败 / WA → 马克笔红 */
+.green { color: var(--stickman-green) !important; }        /* AC / 通过 → 绿 */
+.blue  { color: var(--stickman-blue) !important; }         /* 信息 → 钢笔蓝 */
+.yellow{ color: var(--stickman-yellow) !important; }       /* TLE → 荧光黄 */
+
+/* ---------- 导航图标（替换语义 UI 图标字体） ---------- */
+.stickman-nav-icon {
+  width: 1.18em; height: 1.18em;
+  vertical-align: -0.18em; margin-right: 0.35em;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* ---------- 装饰层：飘动的小火柴人 ---------- */
+#stickman-decor {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 99998;
+  overflow: hidden;
+}
+.stickman-flake {
+  position: absolute;
+  opacity: 0.35;
+  animation: stickman-drift linear infinite;
+  color: var(--stickman-primary);
+}
+.stickman-flake svg {
+  width: 28px; height: 28px;
+  stroke: currentColor; fill: none;
+  stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;
+}
+@keyframes stickman-drift {
+  0%   { transform: translateY(-10vh) rotate(0deg); }
+  100% { transform: translateY(110vh) rotate(360deg); }
+}
+.stickman-flake.t1 { animation-duration: 38s; }
+.stickman-flake.t2 { animation-duration: 52s; opacity: 0.22; }
+.stickman-flake.t3 { animation-duration: 67s; opacity: 0.18; }
+
+/* ---------- 页脚 ---------- */
+.footer {
+  color: var(--stickman-muted) !important;
+  background: transparent !important;
+  padding: 20px 0 30px;
+  font-size: 13px;
+  border-top: 2px dashed var(--stickman-primary);
+  margin-top: 40px;
+}
+.footer a {
+  color: var(--stickman-blue) !important;
+}
+.footer a:hover {
+  color: var(--stickman-accent) !important;
+}
+
+/* ---------- 通用阴影/边框工具 ---------- */
+.ui.message {
+  border-radius: 8px !important;
+  border: 1.5px solid var(--stickman-primary) !important;
+  box-shadow: 3px 3px 0 var(--stickman-primary) !important;
+}
+.ui.menu {
+  border: none !important;
+  box-shadow: none !important;
+}
+
+/* ---------- 移动端微调 ---------- */
+@media (max-width: 768px) {
+  .padding { padding: 1rem !important; border-radius: 14px !important; }
+  .stickman-brand-logo { width: 22px; height: 22px; }
+}

@@ -65,6 +65,7 @@
 #define LOCKMODE (S_IRUSR|S_IWUSR|S_IRGRP|S_IROTH)
 #define FIFO_INTER "p_interactor"
 #define DIFF_FILE "diff.out"
+#define OJ_VERSION "26.10.26"		// shown by "-v", keep in sync with judged.cc
 
 #define OJ_WT0 0     //提交排队
 #define OJ_WT1 1     //重判排队
@@ -517,12 +518,18 @@ void trim(char *c)
 	*end = '\0';
 	strcpy(c, start);
 }
-/* 从配置缓冲区读取 key=value 对。若找到 key 返回 true，并将 '=' 后的值复制到 result。 */
-bool read_buf(char *buf, const char *key, char *value)
+/* 从配置缓冲区读取 key=value 对。若找到 key 返回 true，并将 '=' 后的值复制到 result。
+   value 可能是 data/<pid>/judge.conf 这样的题目侧文件，长度必须按目标缓冲区限制。 */
+bool read_buf(char *buf, const char *key, char *value, size_t size)
 {
 	if (strncmp(buf, key, strlen(key)) == 0)
 	{
-		strcpy(value, buf + after_equal(buf));
+		const char *v = buf + after_equal(buf);
+		size_t len = strlen(v);
+		if (len > size - 1)
+			len = size - 1;
+		memcpy(value, v, len);
+		value[len] = '\0';
 		trim(value);
 		if (DEBUG)
 			printf("%s=%s\n", key, value);
@@ -534,7 +541,7 @@ bool read_buf(char *buf, const char *key, char *value)
 void read_double(char *buf, const char *key, double *value)
 {
 	char buf2[BUFFER_SIZE];
-	if (read_buf(buf, key, buf2))
+	if (read_buf(buf, key, buf2, sizeof(buf2)))
 		if(1!=sscanf(buf2, "%lf", value)) printf("double value read fail\n");
 }
 
@@ -542,7 +549,7 @@ void read_double(char *buf, const char *key, double *value)
 void read_int(char *buf, const char *key, int *value)
 {
 	char buf2[BUFFER_SIZE];
-	if (read_buf(buf, key, buf2))
+	if (read_buf(buf, key, buf2, sizeof(buf2)))
 		if(1!=sscanf(buf2, "%d", value)) printf("int value read fail\n");
 }
 
@@ -571,17 +578,17 @@ void load_conf(const char * judge_path ,int sys ){
 		while (fgets(buf, BUFFER_SIZE - 1, fp))
 		{
 			if(sys){
-				read_buf(buf, "OJ_HOST_NAME", host_name);
-				read_buf(buf, "OJ_USER_NAME", user_name);
-				read_buf(buf, "OJ_PASSWORD", password);
-				read_buf(buf, "OJ_DB_NAME", db_name);
+				read_buf(buf, "OJ_HOST_NAME", host_name, sizeof(host_name));
+				read_buf(buf, "OJ_USER_NAME", user_name, sizeof(user_name));
+				read_buf(buf, "OJ_PASSWORD", password, sizeof(password));
+				read_buf(buf, "OJ_DB_NAME", db_name, sizeof(db_name));
 				read_int(buf, "OJ_PORT_NUMBER", &port_number);
 				read_int(buf, "OJ_HTTP_JUDGE", &http_judge);
-				read_buf(buf, "OJ_HTTP_BASEURL", http_baseurl);
-				read_buf(buf, "OJ_HTTP_APIPATH", http_apipath);
-				read_buf(buf, "OJ_HTTP_LOGINPATH", http_loginpath);
-				read_buf(buf, "OJ_HTTP_USERNAME", http_username);
-				read_buf(buf, "OJ_HTTP_PASSWORD", http_password);
+				read_buf(buf, "OJ_HTTP_BASEURL", http_baseurl, sizeof(http_baseurl));
+				read_buf(buf, "OJ_HTTP_APIPATH", http_apipath, sizeof(http_apipath));
+				read_buf(buf, "OJ_HTTP_LOGINPATH", http_loginpath, sizeof(http_loginpath));
+				read_buf(buf, "OJ_HTTP_USERNAME", http_username, sizeof(http_username));
+				read_buf(buf, "OJ_HTTP_PASSWORD", http_password, sizeof(http_password));
 				read_int(buf, "OJ_HTTP_DOWNLOAD", &http_download);
 				read_int(buf, "OJ_USE_PTRACE", &use_ptrace);
 				read_int(buf, "OJ_COMPILE_CHROOT", &compile_chroot);
@@ -592,8 +599,8 @@ void load_conf(const char * judge_path ,int sys ){
 			read_int(buf, "OJ_JAVA_TIME_BONUS", &java_time_bonus);
 			read_int(buf, "OJ_JAVA_MEMORY_BONUS", &java_memory_bonus);
 			read_int(buf, "OJ_SIM_ENABLE", &sim_enable);
-			read_buf(buf, "OJ_JAVA_XMS", java_xms);
-			read_buf(buf, "OJ_JAVA_XMX", java_xmx);
+			read_buf(buf, "OJ_JAVA_XMS", java_xms, sizeof(java_xms));
+			read_buf(buf, "OJ_JAVA_XMX", java_xmx, sizeof(java_xmx));
 			read_int(buf, "OJ_OI_MODE", &oi_mode);
 			read_int(buf, "OJ_FULL_DIFF", &full_diff);
 			read_int(buf, "OJ_RAW_TEXT_DIFF", &raw_text_diff);
@@ -605,9 +612,9 @@ void load_conf(const char * judge_path ,int sys ){
 			read_int(buf, "OJ_TURBO_MODE", &turbo_mode);
 			read_double(buf, "OJ_CPU_COMPENSATION", &cpu_compensation);
 			read_int(buf, "OJ_COPY_DATA", &copy_data);
-			read_buf(buf, "OJ_CC_STD", cc_std);
-			read_buf(buf, "OJ_CPP_STD", cpp_std);
-			read_buf(buf, "OJ_CC_OPT", cc_opt);
+			read_buf(buf, "OJ_CC_STD", cc_std, sizeof(cc_std));
+			read_buf(buf, "OJ_CPP_STD", cpp_std, sizeof(cpp_std));
+			read_buf(buf, "OJ_CC_OPT", cc_opt, sizeof(cc_opt));
 			read_int(buf, "OJ_AUTO_RESULT", &auto_result);
 		}
 		fclose(fp);
@@ -772,13 +779,13 @@ void make_diff_out_full(FILE *f1, FILE *f2, int c1, int c2, const char *path,con
 {
 	execute_cmd("echo '========[%s]========='>>diff.out", getFileNameFromPath(path));
 	execute_cmd("echo  '\\n------test in top 100 lines------'>>diff.out");
-	execute_cmd("head -100 %s >>diff.out",infile);
+	execute_cmd("head -100 '%s' >>diff.out",infile);
 	execute_cmd("echo  '\\n------test out top 100 lines-----'>>diff.out");
 	execute_cmd("head -100 '%s'>>diff.out", path);
 	execute_cmd("echo  '\\n------user out top 100 lines-----'>>diff.out");
-	execute_cmd("head -100 %s >>diff.out",userfile);
+	execute_cmd("head -100 '%s' >>diff.out",userfile);
 	execute_cmd("echo  '\\n------diff out 200 lines-----'>>diff.out");
-	execute_cmd("diff '%s' %s -y|grep \\||head -200>>diff.out", path,userfile);
+	execute_cmd("diff '%s' '%s' -y|grep \\||head -200>>diff.out", path,userfile);
 	execute_cmd("echo  '\\n=============================='>>diff.out");
 }
 /* 将单个测试文件的紧凑并排 diff 报告追加到 diff.out。 */
@@ -786,7 +793,7 @@ void make_diff_out(FILE *f1, FILE *f2, int c1, int c2, const char *path,const ch
 {
         execute_cmd("echo '%s\n--\n'>>diff.out", getFileNameFromPath(path));
         execute_cmd("echo 'Expected|Yours\n--|--'>>diff.out");
-        execute_cmd("diff '%s' %s -y|head -100|tr '>/\\' ' ||' >>diff.out", path,userfile);
+        execute_cmd("diff '%s' '%s' -y|head -100|tr '>/\\' ' ||' >>diff.out", path,userfile);
         execute_cmd("echo '\n\n'>>diff.out");
 }
 /* 将 'old' 中所有 'search' 替换为 'replace'。返回 'old'。 */
@@ -1881,6 +1888,22 @@ int get_proc_status(int pid, const char *mark)
 }
 
 #ifdef _mysql_h
+/* The run children exec() the submitted program without closing the descriptors
+ * they inherit, so the judge's own MySQL socket has to be marked FD_CLOEXEC;
+ * otherwise the program can send protocol packets on it and run arbitrary SQL.
+ * MariaDB Connector/C does not declare mysql_get_fd(), and MySQL's version only
+ * reads this member, so take the socket from the handle. */
+static void mark_db_fd_cloexec()
+{
+	if (conn == NULL)
+		return;
+	int fd = (int)conn->net.fd;
+	if (fd < 0)
+		return;
+	int flags = fcntl(fd, F_GETFD);
+	if (flags != -1 && fcntl(fd, F_SETFD, flags | FD_CLOEXEC) == -1)
+		write_log("fcntl FD_CLOEXEC on db fd %d failed: %s", fd, strerror(errno));
+}
 /* 初始化并连接 MySQL 数据库。成功返回1，失败返回0。 */
 int init_mysql_conn()   //连接数据库
 {
@@ -1896,6 +1919,7 @@ int init_mysql_conn()   //连接数据库
 		write_log("%s", mysql_error(conn));
 		return 0;
 	}
+	mark_db_fd_cloexec();
 	const char *utf8sql = "set names utf8mb4";
 	if (mysql_real_query(conn, utf8sql, strlen(utf8sql)))
 	{
@@ -2235,6 +2259,66 @@ void fix_mod(char * path){
         if(chown(path,www_uid,judge_uid)) write_log("chown fail:%s\n",path);
         if(chmod(path,0710)) write_log("chmod fail:%s\n",path);
 }
+/* Names taken from input.name/output.name are written by problem authors and by
+ * the data importer, so they are untrusted: keep them usable as a single plain
+ * file name and out of any shell command line. A blacklist is not enough here,
+ * because every consumer of these names puts them between single quotes and a
+ * "'" would close that quote and hand the rest of the line to the shell. */
+static int is_safe_data_name(const char *name)
+{
+	if (name == NULL || name[0] == '\0' || strlen(name) > 255)
+		return 0;
+	if (strcmp(name, ".") == 0 || strcmp(name, "..") == 0)
+		return 0;
+	for (size_t i = 0; name[i] != '\0'; i++)
+	{
+		unsigned char c = (unsigned char)name[i];
+		/* letters, digits, dot, underscore, hyphen; >=0x80 for UTF-8 names */
+		if (!((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z') ||
+			  (c >= '0' && c <= '9') || c == '.' || c == '_' ||
+			  c == '-' || c >= 0x80))
+			return 0;
+	}
+	return 1;
+}
+/* Native replacement for the "/bin/cp" of judge data: the source path comes from
+ * the data directory listing and the destination from input.name content. */
+static int copy_data_file(const char *src, const char *dst)
+{
+	int in = open(src, O_RDONLY);
+	if (in < 0)
+		return -1;
+	int out = open(dst, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	if (out < 0)
+	{
+		close(in);
+		return -1;
+	}
+	char buf[32 * 1024];
+	ssize_t n;
+	int ret = 0;
+	while ((n = read(in, buf, sizeof(buf))) > 0)
+	{
+		ssize_t off = 0;
+		while (off < n)
+		{
+			ssize_t w = write(out, buf + off, (size_t)(n - off));
+			if (w <= 0)
+			{
+				ret = -1;
+				break;
+			}
+			off += w;
+		}
+		if (ret != 0)
+			break;
+	}
+	if (n < 0)
+		ret = -1;
+	close(in);
+	close(out);
+	return ret;
+}
 /* 为单个测试点准备测试数据文件：查找 .in/.out 文件，处理 NOIP 命名，必要时复制数据。 */
 void prepare_files(char *filename, int namelen, char *infile, int &p_id,
 				   char *work_dir, char *outfile, char *userfile, int runner_id,int lang )
@@ -2253,20 +2337,39 @@ void prepare_files(char *filename, int namelen, char *infile, int &p_id,
     fix_mod(outfile);
 	char noip_file_name[BUFFER_SIZE];
 	char dst[BUFFER_SIZE*2];
+	char io_name[BUFFER_SIZE];
+	// infile carries the shell-escaped name; the native copies need the real one.
+	char raw_infile[BUFFER_SIZE*2];
+	sprintf(raw_infile, "%s/data/%d/%s.in", oj_home, p_id, fname0);
 	sprintf(noip_file_name,"%s/data/%d/input.name",oj_home,p_id);
 	//if(DEBUG) printf("NOIP filename:%s\n",noip_file_name);
  	if (access(noip_file_name, R_OK ) != -1){
 		//if(DEBUG) printf("NOIP filename:%s\n",noip_file_name);
 		FILE * fpname=fopen(noip_file_name,"r");
-		if (fscanf(fpname, "%s", noip_file_name) == 1){
-		    execute_cmd("/bin/cp '%s' %s/%s", infile, work_dir,basename(noip_file_name));   // 如果存在input.name则复制测试数据
-		    sprintf(dst, "%s/%s", work_dir, basename(noip_file_name));
-		    if(chown(dst, judge_uid, judge_gid)!=0 && DEBUG) printf("chown %s\n",dst) ;
-		    if(DEBUG) printf("NOIP input :%s\n",noip_file_name);
+		if (fscanf(fpname, "%1023s", noip_file_name) == 1){
+		    char *base = basename(noip_file_name);
+		    strncpy(io_name, base, sizeof(io_name) - 1);
+		    io_name[sizeof(io_name) - 1] = 0;
+		    if (is_safe_data_name(io_name)){
+			    sprintf(dst, "%s/%s", work_dir, io_name);   // 如果存在input.name则复制测试数据
+			    if (copy_data_file(raw_infile, dst) == 0){
+				    if(chown(dst, judge_uid, judge_gid)!=0 && DEBUG) printf("chown %s\n",dst) ;
+			    } else {
+				    write_log("prepare_files: copy [%s] to [%s] failed\n", raw_infile, dst);
+			    }
+			    if(DEBUG) printf("NOIP input :%s\n",io_name);
+		    } else {
+			    write_log("prepare_files: ignored unsafe input.name [%s]\n", noip_file_name);
+		    }
 		}
 		fclose(fpname);
 	}else{
-		if(copy_data||lang == LANG_R) execute_cmd("/bin/cp '%s' %s/data.in", infile, work_dir);   // 如果开启了COPY_DATA则复制测试数据
+		if(copy_data||lang == LANG_R) {   // 如果开启了COPY_DATA则复制测试数据
+			sprintf(dst, "%s/data.in", work_dir);
+			if (copy_data_file(raw_infile, dst) != 0){
+				write_log("prepare_files: copy [%s] to [%s] failed\n", raw_infile, dst);
+			}
+		}
 		sprintf(dst, "%s/data.in", work_dir);
 		if(chown(dst, judge_uid, judge_gid)!=0 && DEBUG) printf("chown %s\n",dst) ;
 	}
@@ -2279,28 +2382,25 @@ void prepare_files(char *filename, int namelen, char *infile, int &p_id,
 	//if(DEBUG) printf("NOIP filename:%s\n",noip_file_name);
 	FILE * fpname = fopen(noip_file_name, "r");
 	if (fpname != NULL){
-		if (fscanf(fpname, "%s", noip_file_name) == 1){
+		if (fscanf(fpname, "%1023s", noip_file_name) == 1){
 		   // if(DEBUG) printf("NOIP filename:%s\n",noip_file_name);
-		    if(!strstr(noip_file_name,"//")){
-                            sprintf(userfile, "%s/run%d/%s", oj_home, runner_id,basename(noip_file_name));
-                            if (strlen(userfile) > 0 && strchr(userfile, ' ') == NULL) {
-                                execute_cmd("rm %s",userfile);
-                            }
-                    }else{
-                            /* Rejected NOIP output.name contains "//", fall back to default userfile */
-                            sprintf(userfile, "%s/run%d/user.out", oj_home, runner_id);
-                            if (strlen(userfile) > 0 && strchr(userfile, ' ') == NULL) {
-                                execute_cmd("rm %s",userfile);
-                            }
-                    }
+		    int named_by_author = strstr(noip_file_name, "//") == NULL;
+		    char *base = basename(noip_file_name);
+		    strncpy(io_name, base, sizeof(io_name) - 1);
+		    io_name[sizeof(io_name) - 1] = 0;
+		    if (named_by_author && is_safe_data_name(io_name)){
+			    sprintf(userfile, "%s/run%d/%s", oj_home, runner_id, io_name);
+		    }else{
+			    /* Rejected NOIP output.name, fall back to default userfile */
+			    sprintf(userfile, "%s/run%d/user.out", oj_home, runner_id);
+		    }
+		    unlink(userfile);   // 清掉上一轮的输出，避免残留文件被判对
 			if(DEBUG) printf("NOIP output :%s\n",userfile);
 		}
 		fclose(fpname);
 	}else{
 		sprintf(userfile, "%s/run%d/user.out", oj_home, runner_id);
-		if (strlen(userfile) > 0 && strchr(userfile, ' ') == NULL) {
-			execute_cmd("rm %s",userfile);
-		}
+		unlink(userfile);
 	}
 }
 // 以下 copy_开头的函数均为准备相应语言的chroot环境，复制动态链接库等，如果使用的系统不是Ubuntu则路径有所区别，可以用ldd/find查看实际位置。
@@ -2871,6 +2971,33 @@ void copy_js_runtime(char *work_dir)
 #endif
 	execute_cmd("/bin/cp /usr/bin/node %s/usr/bin", work_dir);
 }
+/* Drop every descriptor the run child has no business holding: its stdio is
+ * already redirected, and anything else inherited from the judge (sockets,
+ * pipes, the MySQL connection) must stay out of reach of the submitted
+ * program, which runs after chroot/setuid in this same process image. */
+static void close_inherited_fds()
+{
+	DIR *fds = opendir("/proc/self/fd");
+	if (fds != NULL)
+	{
+		int keep = dirfd(fds);
+		struct dirent *ent;
+		while ((ent = readdir(fds)) != NULL)
+		{
+			int fd = atoi(ent->d_name);
+			if (fd > STDERR_FILENO && fd != keep)
+				close(fd);
+		}
+		closedir(fds);
+		return;
+	}
+	long limit = sysconf(_SC_OPEN_MAX);
+	if (limit < STDERR_FILENO + 2 || limit > 65536)
+		limit = 65536;
+	for (int fd = STDERR_FILENO + 1; fd < (int)limit; fd++)
+		close(fd);
+}
+
 /* Fork 出的子进程：设置环境（rlimit、chroot、用户），然后用适当参数 exec 编译后的程序。 */
 void run_solution(int &lang, char *work_dir, double &time_lmt, int &usedtime,
 				  int &mem_lmt,char * data_file_path,int p_id,int spj)   // 为每个测试数据运行一次提交的答案
@@ -2892,7 +3019,7 @@ void run_solution(int &lang, char *work_dir, double &time_lmt, int &usedtime,
 	}
 	// open the files
 	if(lang==18){ 
-		execute_cmd("/usr/bin/sqlite3 %s/data.db < %s", work_dir,data_file_path);
+		execute_cmd("/usr/bin/sqlite3 '%s/data.db' < '%s'", work_dir,data_file_path);
 		sprintf(path, "%s/data.db", work_dir);
 		if(chown(path, judge_uid, judge_gid)!=0 && DEBUG) fprintf(stderr,"chown %s\n",path) ;
 		stdin=freopen("Main.sql", "r", stdin);
@@ -3016,6 +3143,8 @@ void run_solution(int &lang, char *work_dir, double &time_lmt, int &usedtime,
 	LIM.rlim_max = STD_MB * mem_lmt * 2;
 	if (lang < LANG_JAVA || lang == LANG_OBJC || lang == LANG_CLANG || lang == LANG_CLANGPP || lang == LANG_GO)
 		setrlimit(RLIMIT_AS, &LIM);
+
+	close_inherited_fds();
 
 	switch (lang)
 	{
@@ -3359,7 +3488,7 @@ int special_judge(char *oj_home, int problem_id, char *infile, char *outfile,
 		sprintf(spjpath,"%s/data/%d/spj", oj_home, problem_id);
 		sprintf(tpjpath,"%s/data/%d/tpj", oj_home, problem_id);
 		sprintf(upjpath,"%s/data/%d/upj", oj_home, problem_id);
-		execute_cmd("chgrp judge %s/data/%d/?pj %s %s %s", oj_home, problem_id,infile, outfile, userfile);
+		execute_cmd("chgrp judge %s/data/%d/?pj '%s' '%s' '%s'", oj_home, problem_id,infile, outfile, userfile);
 		chmod(spjpath, 0751);
 		chmod(tpjpath, 0751);
 		chmod(upjpath, 0751);
@@ -3930,7 +4059,7 @@ void init_parameters(int argc, char **argv, int &solution_id,
 {
 	if (argc < 3)
 	{
-		fprintf(stderr,"HUSTOJ judge_client ver 20240407\n\n");
+		fprintf(stderr,"HUSTOJ judge_client ver %s\n\n", OJ_VERSION);
 		fprintf(stderr, "Normal Usage:\n\t%s <solution_id> <runner_id>\n\n", argv[0]);
 		fprintf(stderr, "Multi OJ with Specific home :\n\t%s <solution_id> <runner_id> [judge_base_path].\n\n",
 				argv[0]);
@@ -4286,6 +4415,11 @@ int main(int argc, char **argv)
 	char infile[BUFFER_SIZE/10];
 	char outfile[BUFFER_SIZE/10];
 	char userfile[BUFFER_SIZE/10];
+	if (argc == 2 && strcmp(argv[1], "-v") == 0)
+	{
+		printf("HUSTOJ judge_client ver %s\n", OJ_VERSION);
+		return 0;
+	}
         umask(0077);
 	init_parameters(argc, argv, solution_id, runner_id);
 
