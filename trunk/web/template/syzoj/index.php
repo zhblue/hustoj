@@ -2,7 +2,7 @@
 <?php include("template/$OJ_TEMPLATE/header.php");?>
 <head>
 
-<link rel="stylesheet" href="<?php echo "template/$OJ_TEMPLATE";?>/css/slide.css">
+<link rel="stylesheet" href="<?php echo "template/$OJ_TEMPLATE";?>/css/slide.css?v=0.18">
 </head>
 <div class="padding">
     <div class="ui three column grid">
@@ -34,7 +34,7 @@
                     </thead>
                     <tbody>
                         <?php
-                        $sql_news = "select * FROM `news` WHERE `defunct`!='Y' AND `title`!='faqs.cn' ORDER BY `importance` desc,`time` DESC LIMIT $sid,$idsperpage";
+                        $sql_news = "select * FROM `news` WHERE `defunct`!='Y' AND `title`!='faqs.cn' ORDER BY `importance` desc,`time` DESC LIMIT 10";
                         $result_news = mysql_query_cache( $sql_news );
                         if ( $result_news ) {
                             foreach ( $result_news as $row ) {

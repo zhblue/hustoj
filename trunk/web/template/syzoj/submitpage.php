@@ -158,7 +158,7 @@ echo"<option value=$i ".( $lastlang==$i?"selected":"").">
         display: flex;
     border-radius: 8px;
     background-color: rgb(255,255,255,0.4);" id="language_span"><?php echo $MSG_Input?></div>
-         <textarea style="width:100%;font-family:monospace" cols=40 rows=5 id="input_text" name="input_text" ><?php echo $view_sample_input?></textarea>
+         <textarea style="width:100%" cols=40 rows=5 id="input_text" name="input_text" ><?php echo $view_sample_input?></textarea>
     </div>
     <div style="
    
@@ -175,8 +175,9 @@ echo"<option value=$i ".( $lastlang==$i?"selected":"").">
     </div>
 
 	<span id='reinfo' style="display:none"></span>
-          <textarea style="width:100%;background-color:white;font-family:monospace" 
-			  cols=30 rows=5 id="out" name="out" disabled="true" placeholder='<?php echo htmlentities($view_sample_output,ENT_QUOTES,'UTF-8')?>' ></textarea>    
+          <textarea style="
+          width:100%;background-color: white;
+          " cols=30 rows=5 id="out" name="out" disabled="true" placeholder='<?php echo htmlentities($view_sample_output,ENT_QUOTES,'UTF-8')?>' ></textarea>    
      </div>
 <?php }else{  ?>
    <div style="margin-left: 5px; width: 95%; padding: 14px; flex-direction: column;">

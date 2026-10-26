@@ -95,7 +95,7 @@ function renderMathJax() {
     try { MathJax.typeset(); } catch (e) { console.error('MathJax typeset error:', e); }
   } else {
     // MathJax 仍在异步加载（async 脚本可能晚于此处执行），轮询重试直到就绪
-    setTimeout(renderMathJax, 1300);
+    setTimeout(renderMathJax, 300);
   }
 }
 function fill_data(data){

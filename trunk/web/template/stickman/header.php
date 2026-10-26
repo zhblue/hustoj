@@ -1,6 +1,5 @@
 <?php
         require_once(dirname(__FILE__)."/../../include/memcache.php");
-        require_once(dirname(__FILE__)."/stickman_icons.php");
         function checkmail(){  // check if has mail
           global $OJ_NAME;
           $sql="select count(1) cnt FROM `mail` WHERE new_mail=1 AND `to_user`=?";
@@ -18,7 +17,7 @@
             $sql_news_menu_result = mysql_query_cache( $sql_news_menu );
             if ( $sql_news_menu_result ) {
                 foreach ( $sql_news_menu_result as $row ) {
-                    $result .= '<a class="item" href="/viewnews.php?id=' . $row['news_id'] . '">'.xicon('star').$row['title'].'</a>';
+                    $result .= '<a class="item" href="/viewnews.php?id=' . $row['news_id'] . '">' ."<i class='star icon'></i>" . $row['title'] . '</a>';
                 }
             }
             return $result;
@@ -83,7 +82,6 @@
     <meta content="IE=edge" http-equiv="X-UA-Compatible">
     <meta name="viewport" content="width=device-width, initial-scale=0.5">
     <title><?php echo $show_title ?></title>
-    <link rel="icon" href="/template/stickman/favicon.svg" type="image/svg+xml">
     <?php include(dirname(__FILE__)."/css.php");?>
         <style>
 @media (max-width: 991px) {
@@ -113,21 +111,20 @@
 ?>
    
 <body id="MainBg-C" style="position: relative; margin-top: 49px; height: calc(100% - 49px); overflow-y: overlay;">
-    <div id="stickman-decor"></div>
     <div id="page-header" class="ui fixed borderless menu" style="position: fixed; height: 49px; z-index:99999">
         <div id="menu" class="ui stackable mobile ui container computer" style="margin-left:auto;margin-right:auto;">
-            <a class="header item"  href="/"><?php echo xicon('brand');?><span
-                    style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', sans-serif; font-size: 1.3em; font-weight: 700; "><?php echo $domain==$DOMAIN?str_replace('_',' ',$OJ_NAME):ucwords(str_replace('_',' ',$OJ_NAME))."'s OJ"?></span></a>
+            <a class="header item"  href="/"><span
+                    style="font-family: 'Exo 2'; font-size: 1.5em; font-weight: 600; "><?php echo $domain==$DOMAIN?$OJ_NAME:ucwords($OJ_NAME)."'s OJ"?></span></a>
             
           <?php
             if(isset($OJ_AI_HTML)&&$OJ_AI_HTML && !isset($OJ_ON_SITE_CONTEST_ID) ) echo $OJ_AI_HTML;
-            else echo '<a class="desktop-only item" href="/">'.xicon('home').'<span class="desktop-only">'.$MSG_HOME.'</span></a>';
+            else echo '<a class="desktop-only item" href="/"><i class="home icon"></i><span class="desktop-only">'.$MSG_HOME.'</span></a>';
             if(file_exists("moodle")){  // 如果存在moodle目录，自动添加链接
-              echo '<a class="item" href="moodle">'.xicon('group').'<span class="desktop-only">Moodle</span></a>';
+              echo '<a class="item" href="moodle"><i class="group icon"></i><span class="desktop-only">Moodle</span></a>';
             }
             if(file_exists("hello")){  // 如果存在hello目录，自动添加链接
               echo '<a class="item" onclick=\'window.open("/hello/index.html", "_blank",
-        "width=600,height=850,left=" + (window.screen.width-600)  + ",top=0,toolbar=no,menubar=no,location=no,status=no,resizable=yes");\'>'.xicon('book').'<span class="desktop-only">Hello算法</span></a>';
+        "width=600,height=850,left=" + (window.screen.width-600)  + ",top=0,toolbar=no,menubar=no,location=no,status=no,resizable=yes");\'><i class="book icon"></i><span class="desktop-only">Hello算法</span></a>';
             }
 
                 
@@ -135,28 +132,31 @@
           ?>
             <!-- 问题 -->
             <a class="item <?php if ($url=="problemset.php") echo "active";?>"
-                href="<?php echo $path_fix?>problemset.php"><?php echo xicon('list');?><span class="desktop-only"><?php echo $MSG_PROBLEMS?></span></a>
+                href="<?php echo $path_fix?>problemset.php"><i class="list icon"></i><span class="desktop-only"><?php echo $MSG_PROBLEMS?></span></a>
             <!-- 来源/分类 -->
             <a class="item <?php if ($url=="category.php") echo "active";?>"
-                href="<?php echo $path_fix?>category.php"><?php echo xicon('globe');?><span class="desktop-only"><?php echo $MSG_SOURCE?></span></a>
+                href="<?php echo $path_fix?>category.php"><i class="globe icon"></i><span class="desktop-only"><?php echo $MSG_SOURCE?></span></a>
             <!-- 竞赛/作业 -->
-            <a class="item <?php if ($url=="contest.php") echo "active";?>" href="<?php echo $path_fix?>contest.php<?php if(isset($_SESSION[$OJ_NAME."_user_id"])) echo "?my" ?>" ><?php echo xicon('trophy');?><span class="desktop-only"> <?php echo $MSG_CONTEST?></span></a>
+            <a class="item <?php if ($url=="contest.php") echo "active";?>" href="<?php echo $path_fix?>contest.php<?php if(isset($_SESSION[$OJ_NAME."_user_id"])) echo "?my" ?>" ><i
+                    class="trophy icon"></i><span class="desktop-only"> <?php echo $MSG_CONTEST?></span></a>
             <!-- 状态 -->
-            <a class="item <?php if ($url=="status.php") echo "active";?>" href="<?php echo $path_fix?>status.php"><?php echo xicon('tasks');?><span class="desktop-only"><?php echo $MSG_STATUS?></span></a>
+            <a class="item <?php if ($url=="status.php") echo "active";?>" href="<?php echo $path_fix?>status.php"><i
+                    class="tasks icon"></i><span class="desktop-only"><?php echo $MSG_STATUS?></span></a>
             <!-- 排名 -->
             <a class="item <?php if ($url=="ranklist.php") echo "active";?> "
-                href="<?php echo $path_fix?>ranklist.php"><?php echo xicon('signal');?><span class="desktop-only"><?php echo $MSG_RANKLIST?></span></a>
-            <!--<a class="item <?php //if ($url=="contest.php") echo "active";?>" href="/discussion/global"><?php echo xicon('comments');?><span class="desktop-only"><?php echo $MSG_BBS?></span></a>-->
+                href="<?php echo $path_fix?>ranklist.php"><i class="signal icon"></i><span class="desktop-only"><?php echo $MSG_RANKLIST?></span></a>
+            <!--<a class="item <?php //if ($url=="contest.php") echo "active";?>" href="/discussion/global"><i class="comments icon"></i><span class="desktop-only"><?php echo $MSG_BBS?></span></a>-->
             <!-- 近期比赛 -->    
 <?php if(isset($OJ_RECENT_CONTEST)&&$OJ_RECENT_CONTEST){    ?>
             <a class="item <?php if ($url=="recent-contest.php") echo "active";?> "
-                href="<?php echo $path_fix?>recent-contest.php"><?php echo xicon('bullhorn');?> <span class="desktop-only"><?php echo $MSG_RECENT_CONTEST?></span></a>
+                href="<?php echo $path_fix?>recent-contest.php"><i class="bullhorn icon"></i> <span class="desktop-only"><?php echo $MSG_RECENT_CONTEST?></span></a>
 <?php } ?>
             <!-- 常见问答 -->
-            <a class="item <?php if ($url=="faqs.php") echo "active";?>" href="<?php echo $path_fix?>faqs.php"><?php echo xicon('help-circle');?><span class="desktop-only"> <?php echo $MSG_FAQ?></span></a>
+            <a class="item <?php if ($url=="faqs.php") echo "active";?>" href="<?php echo $path_fix?>faqs.php"><i
+                    class="help circle icon"></i><span class="desktop-only"> <?php echo $MSG_FAQ?></span></a>
             <!-- 讨论板 -->
               <?php if (isset($OJ_BBS)&& $OJ_BBS){ ?>
-                  <a class='item' href="discuss.php"><?php echo xicon('clipboard');?> <span class="desktop-only"><?php echo $MSG_BBS?></span></a>
+                  <a class='item' href="discuss.php"><i class="clipboard icon"></i> <span class="desktop-only"><?php echo $MSG_BBS?></span></a>
               <?php }
 
             }
@@ -164,104 +164,39 @@
             <?php if( isset($_GET['cid']) && intval($_GET['cid'])>0 ){
                      $cid=intval($_GET['cid']);
                      if(!isset($OJ_ON_SITE_CONTEST_ID)){   ?>
-                            <a id="" class="item" href="<?php echo $path_fix?>contest.php" ><?php echo xicon('arrow-left');?><span class="desktop-only"><?php echo $MSG_CONTEST.$MSG_LIST?></span></a>
+                            <a id="" class="item" href="<?php echo $path_fix?>contest.php" ><i class="arrow left icon"></i><span class="desktop-only"><?php echo $MSG_CONTEST.$MSG_LIST?></span></a>
             <?php    }      ?>
-            <a id="" class="item active" href="<?php echo $path_fix?>contest.php?cid=<?php echo $cid?>" ><?php echo xicon('list');?><span class="desktop-only"><?php echo $MSG_PROBLEMS.$MSG_LIST?></span></a>
-            <a id="" class="item active" href="<?php echo $path_fix?>status.php?cid=<?php echo $cid?>" ><?php echo xicon('tasks');?><span class="desktop-only"><?php echo $MSG_STATUS.$MSG_LIST?></span></a>
-            <a id="" class="item active" href="<?php echo $path_fix?>contestrank.php?cid=<?php echo $cid?>" ><?php echo xicon('numbered-list');?><span class="desktop-only"><?php echo $MSG_RANKLIST?></span></a>
-            <a id="" class="item active" href="<?php echo $path_fix?>contestrank-oi.php?cid=<?php echo $cid?>" ><?php echo xicon('child');?><span class="desktop-only">OI-<?php echo $MSG_RANKLIST?></span></a>
+            <a id="" class="item active" href="<?php echo $path_fix?>contest.php?cid=<?php echo $cid?>" ><i class="list icon"></i><span class="desktop-only"><?php echo $MSG_PROBLEMS.$MSG_LIST?></span></a>
+            <a id="" class="item active" href="<?php echo $path_fix?>status.php?cid=<?php echo $cid?>" ><i class="tasks icon"></i><span class="desktop-only"><?php echo $MSG_STATUS.$MSG_LIST?></span></a>
+            <a id="" class="item active" href="<?php echo $path_fix?>contestrank.php?cid=<?php echo $cid?>" ><i class="numbered list icon"></i><span class="desktop-only"><?php echo $MSG_RANKLIST?></span></a>
+            <a id="" class="item active" href="<?php echo $path_fix?>contestrank-oi.php?cid=<?php echo $cid?>" ><i class="child icon"></i><span class="desktop-only">OI-<?php echo $MSG_RANKLIST?></span></a>
             <?php if (isset($OJ_BBS)&& $OJ_BBS){ ?>
-                  <a class='item active' href="discuss.php?cid=<?php echo $cid?>"><?php echo xicon('clipboard');?> <span class="desktop-only"><?php echo $MSG_BBS?></span></a>
+                  <a class='item active' href="discuss.php?cid=<?php echo $cid?>"><i class="clipboard icon"></i> <span class="desktop-only"><?php echo $MSG_BBS?></span></a>
              <?php } ?>
 
                     <?php if(isset($_SESSION[$OJ_NAME.'_'.'administrator'])||isset($_SESSION[$OJ_NAME.'_'.'contest_creator'])||isset($_SESSION[$OJ_NAME.'_'.'problem_editor'])){ ?>
-                            <a id="" class="item active" href="<?php echo $path_fix?>conteststatistics.php?cid=<?php echo $cid?>" ><?php echo xicon('eye');?><span class="desktop-only"><?php echo $MSG_STATISTICS?></span></a>
+                            <a id="" class="item active" href="<?php echo $path_fix?>conteststatistics.php?cid=<?php echo $cid?>" ><i class="eye icon"></i><span class="desktop-only"><?php echo $MSG_STATISTICS?></span></a>
                     <?php }  ?>
             <?php }  ?>
             <?php
                 if($OJ_MENU_DROPDOWN){
             ?>
             <div class="ui simple dropdown item">
-                        <?php echo xicon('book');?><span class='desktop-only'>学习资料</span><?php echo xicon('dropdown');?>
+                        <i class="book icon"></i><span class='desktop-only'>学习资料</span><i class="dropdown icon"></i>
                         <div class="menu">
             <?php  } ?>
-                        <a class="item" href="/recommend.php"><?php echo xicon('star');?>推荐自学方向</a>
+			<a class="item" href="/recommend.php"><i class="star icon"></i>推荐自学方向</a>
             <?php echo $sql_news_menu_result_html; ?>
             <?php
-			if(file_exists(dirname(dirname(__FILE__))."/menu.php"))  require_once(dirname(dirname(__FILE__))."/menu.php");
+			if(file_exists(dirname(dirname(__FILE__))."/menu.php")) require_once(dirname(dirname(__FILE__))."/menu.php");
             if($OJ_MENU_DROPDOWN){
                 ?>
                         </div>
             </div>
             <?php } ?>
 
-            <div class="right menu">
-                <?php if(isset($_SESSION[$OJ_NAME.'_'.'user_id'])) {
-                   
-                ?>
-                <a href="<?php echo $path_fix?>/userinfo.php?user=<?php echo htmlentities($_SESSION[$OJ_NAME.'_'.'user_id'])?>"
-                    style="color: inherit; ">
-                    <div class="ui simple dropdown item">
-                        <?php echo htmlentities($_SESSION[$OJ_NAME.'_'.'user_id']); 
-                              if(!empty($_SESSION[$OJ_NAME.'_nick'])) echo "(".htmlentities($_SESSION[$OJ_NAME.'_nick']).")";
-                              if(!empty($_SESSION[$OJ_NAME.'_group_name'])) echo "[".htmlentities($_SESSION[$OJ_NAME.'_group_name'])."]";
-                              if($coin>0) echo "💰️$coin";        
-                        ?>
-                        <?php echo xicon('dropdown');?>
-                        <div class="menu">
-                                <a class="item" href="modifypage.php"><?php echo xicon('edit');?><?php echo $MSG_REG_INFO;?></a>
-                                <a class="item" href="portal.php"><?php echo xicon('tasks');?><?php echo $MSG_TODO;?></a>
-                                <?php if ($OJ_SaaS_ENABLE){ ?>
-                                <?php if($_SERVER['HTTP_HOST']==$DOMAIN)
-                                        echo  "<a class='item' href='http://".htmlentities($_SESSION[$OJ_NAME.'_'.'user_id']).".$DOMAIN'>".xicon('globe')."MyOJ</a>";?>
-                                <?php } ?>
-                            <?php if(isset($_SESSION[$OJ_NAME.'_'.'administrator'])||isset($_SESSION[$OJ_NAME.'_'.'contest_creator'])||isset($_SESSION[$OJ_NAME.'_'.'user_adder'])||isset($_SESSION[$OJ_NAME.'_'.'password_setter'])||isset($_SESSION[$OJ_NAME.'_'.'problem_editor'])){ ?>
-                            <a class="item" href="admin/"><?php echo xicon('settings');?><?php echo $MSG_ADMIN;?></a>
-                            <?php }
-if(isset($_SESSION[$OJ_NAME.'_'.'balloon'])){
-  echo "<a class=item href='balloon.php'>".xicon('golf-ball')."$MSG_BALLOON</a>";
-}
-                              if((isset($OJ_EXAM_CONTEST_ID)&&$OJ_EXAM_CONTEST_ID>0)||
-                                     (isset($OJ_ON_SITE_CONTEST_ID)&&$OJ_ON_SITE_CONTEST_ID>0)||
-                                     (isset($OJ_MAIL)&&!$OJ_MAIL)){
-                                      // mail can not use in contest or mail is turned off
-                              }else{
-                                    $mail=checkmail();
-                                    if($mail) echo "<a class='item mail' href=".$path_fix."mail.php>".xicon('mail')."$MSG_MAIL$mail</a>";
-                              }
-
-
-
-
-                            ?>
-        <?php
-        if(isset($OJ_PRINTER) && $OJ_PRINTER)
-        {
-        ?>
-          <a  class="item"  href="printer.php">
-            <?php echo xicon('print');?> <?php echo $MSG_PRINTER?>
-          </a>
-        <?php
-        }
-        ?>
-                            <a class="item" href="logout.php"><?php echo xicon('power');?><?php echo $MSG_LOGOUT;?></a>
-                        </div>
-                    </div>
-                </a>
-                <?php } else { ?>
-
-
-                <div class="item">
-                    <a class="ui button" style="margin-right: 0.5em; " href="loginpage.php">
-                       <?php echo $MSG_LOGIN?>
-                    </a>
-                    <?php if(isset($OJ_REGISTER)&&$OJ_REGISTER ){ ?>
-                    <a class="ui primary button" href="registerpage.php">
-                       <?php echo $MSG_REGISTER?>
-                    </a>
-                    <?php } ?>
-                </div>
-                <?php } ?>
+            <div id="login_user_id" class="right menu">
+		loading...
             </div>
         </div>
     </div>

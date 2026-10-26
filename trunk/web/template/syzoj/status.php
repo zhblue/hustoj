@@ -144,7 +144,7 @@
 </div>
 
 <script>
-        var ai_api_price=<?php echo $OJ_AI_API_PRICE??1 ;?> ;
+	 var ai_api_price=<?php echo $OJ_AI_API_PRICE??1 ;?> ;
         var i = 0;
         var judge_result = [<?php
         foreach ($judge_result as $result) {
@@ -162,6 +162,6 @@
    var fancy_mp3="<?php if (isset($_SESSION[$OJ_NAME."_user_id"]) && $OJ_FANCY_RESULT ) echo $OJ_FANCY_MP3; ?>";
   
 </script>
-        <script src="template/<?php echo $OJ_TEMPLATE?>/auto_refresh.js?v=0.522" ></script>
+        <script src="template/<?php echo $OJ_TEMPLATE?>/auto_refresh.js?v=0.529" ></script>
 
 <?php include("template/$OJ_TEMPLATE/footer.php");

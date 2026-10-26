@@ -24,6 +24,7 @@ or
 <script src="<?php echo $OJ_CDN_URL.$path_fix."template/bs3/"?>bootstrap.min.js"></script>
 <script>
 $(document).ready(function(){
+	$("#login_user_id").load("template/<?php echo $OJ_TEMPLATE?>/login_user_id.php");
   var msg="<marquee style='margin-top:-10px;margin-bottom:10px' id=broadcast direction='left' scrollamount=3 scrolldelay=50 onMouseOver='this.stop()'"+
       " onMouseOut='this.start()' class='padding' >"+<?php echo json_encode($view_marquee_msg); ?>+"</marquee>";
   <?php if ($view_marquee_msg!="") { ?>
