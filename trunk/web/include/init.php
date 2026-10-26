@@ -46,7 +46,7 @@ if (isset($_GET['tp'])) {
         $tp = strtolower($tp_candidate);
     }
 }
-if ($tp !== '' && is_dir($OJ_TPL_DIR . '/' . $tp)) {
+if ( isset($OJ_CUSTOM_TEMPLATE) && $OJ_CUSTOM_TEMPLATE && $tp !== '' && is_dir($OJ_TPL_DIR . '/' . $tp)) {
     $OJ_TEMPLATE = $tp;
     // 自动加载同名 CSS（dusk.css / bauhaus.css 等），找不到则保留原 CSS
     if (is_file($OJ_TPL_DIR . '/' . $tp . '/css/' . $tp . '.css')) {
