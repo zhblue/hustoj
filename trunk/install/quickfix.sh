@@ -19,6 +19,12 @@ do
     sed -i 's|;session.upload_progress.enabled = On|session.upload_progress.enabled = Off|'  $PHP_INI
     sed -i 's|session.save_handler *= *files|session.save_handler = redis\nsession.save_path="tcp://127.0.0.1:6379"|'  $PHP_INI
 done 
-
+wget -O judged http://dl.hustoj.com/judged
+wget -O judge_client http://dl.hustoj.com/judge_client
+pkill -9 judged 
+cp judged /usr/bin/judged
+cp judge_client /usr/bin/judge_client
+cp judge_client /home/judge/src/core/judge_client/judge_client
+judged
 service $PHP_FPM restart
 /etc/init.d/$PHP_FPM restart

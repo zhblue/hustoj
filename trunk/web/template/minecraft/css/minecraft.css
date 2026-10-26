@@ -1,0 +1,182 @@
+/* ============================================================
+   HUSTOJ · minecraft 模板 · 主题基础配色
+   以 syzoj 的 white.css 为蓝本，仅替换配色 / 装饰，不改动任何功能逻辑。
+   风格：草方块绿 + 泥土棕 + 石头灰 + 钻石青 + 金 + 熔岩橙；像素方块的"石头面板"拟态。
+   作者: hustoj-theme-maker skill
+   ============================================================ */
+
+:root {
+  /* ===== Minecraft 调色板 ===== */
+  --mc-grass:       #6abe30;  /* 草方块顶 */
+  --mc-grass-dark:  #4a7a34;  /* 草绿深 */
+  --mc-dirt:        #7a5230;  /* 泥土棕 */
+  --mc-stone:       #9a9a9a;  /* 石头灰 */
+  --mc-stone-light: #c8c8c8;  /* 石头面板（浅，卡片表面） */
+  --mc-stone-dark:  #6b6b6b;  /* 石头深（斜面阴影） */
+  --mc-diamond:     #3ad6e0;  /* 钻石青 */
+  --mc-gold:        #facc2e;  /* 金 */
+  --mc-gold-light:  #ffe066;  /* 金亮 */
+  --mc-redstone:    #b02e26;  /* 红石红 / 熔岩 */
+  --mc-lava:        #f08030;  /* 熔岩橙 */
+  --mc-bedrock:     #1b1b1b;  /* 基岩黑 */
+
+  /* ===== 语义别名（供下方选择器复用） ===== */
+  --minecraft-primary:   var(--mc-grass-dark);
+  --minecraft-primary-2: var(--mc-grass);
+  --minecraft-accent:    var(--mc-gold);
+  --minecraft-accent-2:  var(--mc-gold-light);
+  --minecraft-danger:    var(--mc-redstone);
+  --minecraft-danger-2:  #7d1f19;
+  --minecraft-bg:        var(--mc-bedrock);
+  --minecraft-surface:   var(--mc-stone-light);
+  --minecraft-text:      #1b1b1b;
+  --minecraft-muted:     #5a5a5a;
+
+  /* 玻璃拟态（.padding）沿用 syzoj 命名，但本主题改用不透明石头面板 */
+  --lg-bg-color: rgba(200, 200, 200, 0.96);
+  --lg-highlight: rgba(255, 255, 255, 0.92);
+  --lg-red: var(--minecraft-danger);
+  --lg-grey: var(--minecraft-primary);
+  --lg-text: var(--minecraft-text);
+
+  /* 像素字体（未加载时回退等宽，仍有方块感） */
+  --mc-pixel: 'Press Start 2P', 'Courier New', monospace;
+}
+
+/* ---------- 全局背景：基岩黑 + 细网格暗示方块 ---------- */
+html, body {
+  background-color: var(--minecraft-bg);
+  color: #e8e8e8;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
+  background-size: 32px 32px;
+}
+
+/* ---------- 语义 UI 固定顶栏（#page-header）：草方块绿 + 泥土棕底边 + 金描边 ---------- */
+#page-header.ui.menu {
+  background: linear-gradient(180deg, var(--mc-grass) 0%, var(--mc-grass-dark) 100%);
+  border-bottom: 3px solid var(--mc-dirt);
+  box-shadow: 0 3px 0 var(--mc-gold), 0 5px 12px rgba(0, 0, 0, 0.45);
+}
+#page-header.ui.menu .item,
+#page-header.ui.menu .header.item {
+  color: #fff !important;
+  text-shadow: 1px 1px 0 var(--mc-bedrock);
+}
+#page-header.ui.menu .item:hover,
+#page-header.ui.menu .item.active {
+  color: var(--mc-gold-light) !important;
+  background: rgba(0, 0, 0, 0.22) !important;
+}
+#page-header.ui.menu .header.item span {
+  font-family: var(--mc-pixel) !important;
+  font-size: 1.05em !important;
+  font-weight: 400 !important;
+  letter-spacing: 1px;
+  color: #fff !important;
+  text-shadow: 2px 2px 0 var(--mc-bedrock);
+}
+#page-header .right.menu .ui.button { background: var(--mc-redstone); color: #fff; }
+#page-header .right.menu .ui.primary.button { background: var(--mc-gold); color: var(--mc-bedrock); }
+
+/* ---------- 石头面板卡片 .padding（覆盖 syzoj 玻璃风，改为不透明方块面板 + 斜面） ---------- */
+.padding {
+  position: relative;
+  border-radius: 4px;
+  background: var(--mc-stone-light);
+  border: 3px solid #fff;
+  border-right-color: var(--mc-stone-dark);
+  border-bottom-color: var(--mc-stone-dark);
+  box-shadow: 5px 5px 0 rgba(0, 0, 0, 0.4);
+  color: var(--lg-text);
+  padding: 1.6rem;
+  overflow: visible;
+}
+.padding::before,
+.padding::after { content: ''; position: absolute; inset: 0; border-radius: inherit; pointer-events: none; }
+.padding::before {
+  z-index: -2;
+  -webkit-backdrop-filter: none; backdrop-filter: none;
+  filter: none;
+}
+.padding::after {
+  z-index: -1;
+  background: var(--mc-stone-light);
+  box-shadow: inset 2px 2px 0 var(--lg-highlight), inset -2px -2px 0 var(--mc-stone-dark);
+}
+.padding > * { position: relative; z-index: 2; }
+
+/* ---------- 链接 / 文字 ---------- */
+a.black-link { color: var(--mc-grass-dark); }
+a.black-link:hover { color: var(--mc-redstone); }
+
+/* ---------- Semantic UI 按钮：方块斜面风 ---------- */
+.ui.button {
+  border-radius: 2px !important;
+  border: 2px solid #fff !important;
+  border-right-color: var(--mc-stone-dark) !important;
+  border-bottom-color: var(--mc-stone-dark) !important;
+  box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.35) !important;
+  transition: transform 0.05s, box-shadow 0.05s;
+}
+.ui.button:active {
+  transform: translate(2px, 2px);
+  box-shadow: 0 0 0 rgba(0, 0, 0, 0.35) !important;
+}
+.ui.primary.buttons .button, .ui.primary.button { background-color: var(--mc-grass) !important; color: #fff !important; }
+.ui.primary.buttons .button:hover, .ui.primary.button:hover { background-color: var(--mc-grass-dark) !important; }
+.ui.button:not(.primary):not(.basic) { background: var(--mc-stone-light); color: var(--mc-bedrock); }
+.ui.basic.button, .ui.basic.buttons .button {
+  color: var(--mc-grass-dark) !important;
+  box-shadow: 0 0 0 2px var(--mc-grass-dark) inset !important;
+}
+.ui.segment, .ui.segments .segment { border-top: 3px solid var(--mc-grass); }
+.ui.top.attached.block.header { background: var(--mc-grass-dark) !important; color: var(--mc-gold-light) !important; }
+
+/* ---------- 表格斑马纹（石头灰） ---------- */
+table.ui.table tbody tr:nth-child(even) { background: rgba(0, 0, 0, 0.06); }
+table.ui.table tbody tr:hover { background: rgba(106, 190, 48, 0.18) !important; }
+
+/* ---------- 面板 / 巨幕 ---------- */
+.panel-default, .container .jumbotron {
+  padding: 5px;
+  background-image: url(../../image/background.jpg);
+  border: 3px solid #fff;
+  border-right-color: var(--mc-stone-dark);
+  border-bottom-color: var(--mc-stone-dark);
+  margin-top: 50px;
+}
+
+/* ---------- 判题状态语义色（保留；红石红/草绿/钻石蓝顺势用） ---------- */
+.red   { color: var(--mc-redstone) !important; }
+.green { color: var(--mc-grass-dark) !important; }
+.blue  { color: #1f8fb2 !important; }
+
+/* ---------- 导航图标（替换语义 UI 图标字体） ---------- */
+.minecraft-nav-icon {
+  width: 1.18em; height: 1.18em;
+  vertical-align: -0.18em; margin-right: 0.35em;
+  fill: currentColor;
+}
+
+/* ---------- 品牌 logo（header 里的草方块 / creeper） ---------- */
+.mc-brand { width: 1.4em; height: 1.4em; vertical-align: -0.28em; margin-right: 0.35em; }
+
+/* ---------- 页脚 ---------- */
+.footer { color: var(--mc-stone-light) !important; text-shadow: 1px 1px 0 var(--mc-bedrock); }
+.footer a { color: var(--mc-gold) !important; }
+
+/* ---------- 装饰层（落方块粒子挂在这里） ---------- */
+#minecraft-decor { position: fixed; inset: 0; pointer-events: none; z-index: 99998; overflow: hidden; }
+.minecraft-block {
+  position: absolute; top: -24px;
+  width: 14px; height: 14px;
+  image-rendering: pixelated;
+  opacity: 0.85;
+  animation: mc-fall linear infinite;
+}
+@keyframes mc-fall {
+  0%   { transform: translateY(-24px) rotate(0deg); }
+  100% { transform: translateY(105vh) rotate(360deg); }
+}
