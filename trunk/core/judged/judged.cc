@@ -25,6 +25,7 @@
 #include <ctype.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <dirent.h>
 #include <syslog.h>
 #include <errno.h>
 #include <fcntl.h>
@@ -45,6 +46,7 @@
 #define LOCKFILE "/var/run/judged.pid"
 #define LOCKMODE (S_IRUSR|S_IWUSR|S_IRGRP|S_IROTH)
 #define STD_MB 1048576LL
+#define OJ_VERSION "26.10.26"		// shown by "-v", keep in sync with judge_client.cc
 
 #define OJ_WT0 0
 #define OJ_WT1 1
@@ -181,9 +183,14 @@ void trim(char * c) {
 	*end = '\0';
 	strcpy(c, start);
 }
-bool read_buf(char * buf, const char * key, char * value) {
+bool read_buf(char * buf, const char * key, char * value, size_t size) {
 	if (strncmp(buf, key, strlen(key)) == 0) {
-		strcpy(value, buf + after_equal(buf));
+		const char * v = buf + after_equal(buf);
+		size_t len = strlen(v);
+		if (len > size - 1)
+			len = size - 1;
+		memcpy(value, v, len);
+		value[len] = '\0';
 		trim(value);
 		if (DEBUG)
 			printf("%s\n", value);
@@ -193,7 +200,7 @@ bool read_buf(char * buf, const char * key, char * value) {
 }
 void read_int(char * buf, const char * key, int * value) {
 	char buf2[BUFFER_SIZE];
-	if (read_buf(buf, key, buf2))
+	if (read_buf(buf, key, buf2, sizeof(buf2)))
 		sscanf(buf2, "%d", value);
 
 }
@@ -217,10 +224,10 @@ void init_judge_conf() {
 	fp = fopen("./etc/judge.conf", "r");
 	if (fp != NULL) {
 		while (fgets(buf, BUFFER_SIZE - 1, fp)) {
-			read_buf(buf, "OJ_HOST_NAME", host_name);
-			read_buf(buf, "OJ_USER_NAME", user_name);
-			read_buf(buf, "OJ_PASSWORD", password);
-			read_buf(buf, "OJ_DB_NAME", db_name);
+			read_buf(buf, "OJ_HOST_NAME", host_name, sizeof(host_name));
+			read_buf(buf, "OJ_USER_NAME", user_name, sizeof(user_name));
+			read_buf(buf, "OJ_PASSWORD", password, sizeof(password));
+			read_buf(buf, "OJ_DB_NAME", db_name, sizeof(db_name));
 			read_int(buf, "OJ_PORT_NUMBER", &port_number);
 			read_int(buf, "OJ_RUNNING", &max_running);
 			read_int(buf, "OJ_SLEEP_TIME", &sleep_time);
@@ -230,29 +237,29 @@ void init_judge_conf() {
 			read_int(buf, "OJ_MOD", &oj_mod);
 
 			read_int(buf, "OJ_HTTP_JUDGE", &http_judge);
-			read_buf(buf, "OJ_HTTP_BASEURL", http_baseurl);
-			read_buf(buf, "OJ_HTTP_APIPATH", http_apipath);
-			read_buf(buf, "OJ_HTTP_LOGINPATH", http_loginpath);
-			read_buf(buf, "OJ_HTTP_USERNAME", http_username);
-			read_buf(buf, "OJ_HTTP_PASSWORD", http_password);
-			read_buf(buf, "OJ_LANG_SET", oj_lang_set);
+			read_buf(buf, "OJ_HTTP_BASEURL", http_baseurl, sizeof(http_baseurl));
+			read_buf(buf, "OJ_HTTP_APIPATH", http_apipath, sizeof(http_apipath));
+			read_buf(buf, "OJ_HTTP_LOGINPATH", http_loginpath, sizeof(http_loginpath));
+			read_buf(buf, "OJ_HTTP_USERNAME", http_username, sizeof(http_username));
+			read_buf(buf, "OJ_HTTP_PASSWORD", http_password, sizeof(http_password));
+			read_buf(buf, "OJ_LANG_SET", oj_lang_set, sizeof(oj_lang_set));
 			
 			
 			read_int(buf, "OJ_UDP_ENABLE", &oj_udp);
-                        read_buf(buf, "OJ_UDP_SERVER", oj_udpserver);
+                        read_buf(buf, "OJ_UDP_SERVER", oj_udpserver, sizeof(oj_udpserver));
                         read_int(buf, "OJ_UDP_PORT", &oj_udpport);
 
 			read_int(buf, "OJ_REDISENABLE", &oj_redis);
-                        read_buf(buf, "OJ_REDISSERVER", oj_redisserver);
+                        read_buf(buf, "OJ_REDISSERVER", oj_redisserver, sizeof(oj_redisserver));
                         read_int(buf, "OJ_REDISPORT", &oj_redisport);
-                        read_buf(buf, "OJ_REDISAUTH", oj_redisauth);
-                        read_buf(buf, "OJ_REDISQNAME", oj_redisqname);
+                        read_buf(buf, "OJ_REDISAUTH", oj_redisauth, sizeof(oj_redisauth));
+                        read_buf(buf, "OJ_REDISQNAME", oj_redisqname, sizeof(oj_redisqname));
                         read_int(buf, "OJ_TURBO_MODE", &turbo_mode);
                         read_int(buf, "OJ_USE_DOCKER", &use_docker);
                         read_int(buf, "OJ_INTERNAL_CLIENT", &internal_client);
 			
-                        read_buf(buf, "OJ_DOCKER_PATH", docker_path);
-                        read_buf(buf, "OJ_PHP_PATH", php_path);
+                        read_buf(buf, "OJ_DOCKER_PATH", docker_path, sizeof(docker_path));
+                        read_buf(buf, "OJ_PHP_PATH", php_path, sizeof(php_path));
 
 			read_int(buf, "OJ_WWW_UID",&www_uid);
 
@@ -370,6 +377,27 @@ void run_php_cron(char * work_dir){
 		if(once==pidApp) pidApp=0;
 	}
 }
+/* The child execs judge_client, which opens its own database connection; nothing
+ * of ours must travel along, whatever the MySQL client library happens to expose. */
+void close_inherited_fds() {
+	DIR *fds = opendir("/proc/self/fd");
+	if (fds != NULL) {
+		int keep = dirfd(fds);
+		struct dirent *ent;
+		while ((ent = readdir(fds)) != NULL) {
+			int fd = atoi(ent->d_name);
+			if (fd > STDERR_FILENO && fd != keep)
+				close(fd);
+		}
+		closedir(fds);
+		return;
+	}
+	long limit = sysconf(_SC_OPEN_MAX);
+	if (limit < STDERR_FILENO + 2 || limit > 65536)
+		limit = 65536;
+	for (int fd = STDERR_FILENO + 1; fd < (int)limit; fd++)
+		close(fd);
+}
 void run_client(int runid, int clientid) {
 	char buf[BUFFER_SIZE], runidstr[BUFFER_SIZE];
 	struct rlimit LIM;
@@ -479,9 +507,11 @@ void run_client(int runid, int clientid) {
 			write_log("--------[%d]----------\n",l);
 			for(i=0;i<l;i++) write_log("%s ",argv[i]);
 		}
+		close_inherited_fds();
 		execv(argv[0],argv);
 		perror("docker fail:");
 	}else{
+		close_inherited_fds();
 		execl("/usr/bin/judge_client", "/usr/bin/judge_client", runidstr, buf,
 				oj_home, (char *) NULL);
 	}
@@ -510,6 +540,21 @@ int executesql(const char * sql) {
 #endif
 
 #ifdef _mysql_h
+/* Judging children are forked from this process and exec() without closing the
+ * descriptors they inherit, so the authenticated MySQL socket has to carry
+ * FD_CLOEXEC or the submitted program can talk to the database on our fd.
+ * MariaDB Connector/C does not declare mysql_get_fd(), and MySQL's version is
+ * only an accessor for this member, so read the socket off the handle. */
+void mark_db_fd_cloexec() {
+	if (conn == NULL)
+		return;
+	int fd = (int)conn->net.fd;
+	if (fd < 0)
+		return;
+	int flags = fcntl(fd, F_GETFD);
+	if (flags != -1 && fcntl(fd, F_SETFD, flags | FD_CLOEXEC) == -1)
+		write_log("fcntl FD_CLOEXEC on db fd %d failed: %s", fd, strerror(errno));
+}
 int init_mysql() {
 	if (conn == NULL) {
 		conn = mysql_init(NULL);		// init the database connection
@@ -524,6 +569,7 @@ int init_mysql() {
 			sleep(2);
 			return 1;
 		} else {
+			mark_db_fd_cloexec();
 			return executesql("set names utf8mb4");
 		}
 	} else {
@@ -870,6 +916,10 @@ void turbo_mode2(){
 int main(int argc, char** argv) {
 	int oj_udp_ret=0;
 	char php_cron[BUFFER_SIZE*3];
+	if (argc == 2 && strcmp(argv[1], "-v") == 0) {
+		printf("HUSTOJ judged ver %s\n", OJ_VERSION);
+		return 0;
+	}
 	DEBUG = (argc > 2);
 	ONCE = (argc > 3);
 	if (argc > 1)

@@ -1,0 +1,163 @@
+/* ============================================================
+   HUSTOJ · hellokity 模板 · 主题配色（Hello Kitty 粉白圆角风）
+   以 syzoj 的 white.css 为蓝本，仅替换配色 / 装饰，不改动任何功能逻辑。
+   作者: hustoj-theme-maker skill
+   ============================================================ */
+
+:root {
+  /* ===== Hello Kitty 主题色板（60-30-10） ===== */
+  --hk-pink:   #F7B9CB;   /* 主粉 Kitty Pink（主色场） */
+  --hk-pink-2: #EE8FB0;   /* 粉亮调（hover / 渐变） */
+  --hk-rose:   #9C2C52;   /* 深玫瑰（顶栏文字 / 强文字） */
+  --hk-red:    #EE334E;   /* 蝴蝶结红 Bow Red（唯一强强调） */
+  --hk-red-2:  #C2185B;   /* 红深调 */
+  --hk-yellow: #FCD133;   /* 暖黄 Nose Yellow（小点缀） */
+  --hk-blue:   #48A5E4;   /* 辅助蓝 Overalls Blue */
+  --hk-bg:     #FFF5F8;   /* 页面背景（极浅粉） */
+  --hk-surface: #FFFFFF;  /* 卡片表面 */
+  --hk-text:   #5A3A47;   /* 正文（深玫瑰棕，保证对比度） */
+  --hk-muted:  #B0849A;   /* 次要文字 */
+
+  /* 玻璃拟态（.padding）沿用 syzoj 命名 */
+  --lg-bg-color: rgba(255, 255, 255, 0.70);
+  --lg-highlight: rgba(255, 255, 255, 0.92);
+  --lg-red: var(--hk-red);
+  --lg-grey: var(--hk-rose);
+  --lg-text: var(--hk-text);
+
+  /* 兼容脚手架默认引用名 */
+  --hellokity-primary:   var(--hk-red);
+  --hellokity-primary-2: var(--hk-pink-2);
+  --hellokity-accent:    var(--hk-pink);
+  --hellokity-accent-2:  var(--hk-rose);
+  --hellokity-danger:    var(--hk-red);
+  --hellokity-danger-2:  var(--hk-red-2);
+  --hellokity-bg:        var(--hk-bg);
+  --hellokity-surface:   var(--hk-surface);
+  --hellokity-text:      var(--hk-text);
+  --hellokity-muted:     var(--hk-muted);
+}
+
+/* ---------- 全局背景（挂 html，body 透明，避免遮挡装饰层） ---------- */
+html {
+  background: var(--hk-bg);
+  background-image:
+    radial-gradient(ellipse 70% 40% at 50% -6%, rgba(247, 185, 203, 0.35), rgba(247, 185, 203, 0) 60%),
+    radial-gradient(ellipse 60% 38% at 50% 108%, rgba(238, 143, 176, 0.30), rgba(238, 143, 176, 0) 64%);
+  background-attachment: fixed;
+}
+body {
+  background: transparent;
+  color: var(--hk-text);
+}
+
+a { color: var(--hk-red-2); }
+a:hover { color: var(--hk-red); }
+
+/* ---------- 语义 UI 固定顶栏（#page-header）主题化 ---------- */
+#page-header.ui.menu {
+  background: linear-gradient(90deg, #FFFFFF 0%, #FFF0F5 45%, #FFFFFF 100%);
+  border-bottom: 3px solid var(--hk-red);
+  box-shadow: 0 2px 12px rgba(238, 51, 78, 0.10);
+}
+#page-header.ui.menu .item,
+#page-header.ui.menu .header.item { color: var(--hk-rose) !important; }
+#page-header.ui.menu .item:hover,
+#page-header.ui.menu .item.active { color: #fff !important; background: rgba(238, 51, 78, 0.90) !important; }
+#page-header.ui.menu .header.item span { color: var(--hk-rose) !important; text-shadow: none; }
+#page-header .right.menu .ui.button { background: var(--hk-red); color: #fff; }
+#page-header .right.menu .ui.primary.button { background: var(--hk-pink); color: var(--hk-rose); }
+
+/* ---------- 玻璃卡片 .padding（保留 syzoj 圆角玻璃风，加粉描边） ---------- */
+.padding {
+  position: relative;
+  border-radius: 3rem;
+  overflow: hidden;
+  color: var(--lg-text);
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 2.2);
+  padding: 2rem;
+  border: 1px solid rgba(238, 143, 176, 0.45);
+  box-shadow: 0 8px 22px rgba(238, 143, 176, 0.28), 0 0 0 1px rgba(238, 143, 176, 0.30) inset;
+}
+.padding::before,
+.padding::after { content: ''; position: absolute; inset: 0; border-radius: inherit; pointer-events: none; }
+.padding::before {
+  z-index: -2;
+  -webkit-backdrop-filter: blur(4px); backdrop-filter: blur(4px);
+  filter: saturate(118%) brightness(1.04);
+}
+.padding::after {
+  z-index: -1;
+  background: var(--lg-bg-color);
+}
+.padding > * { position: relative; z-index: 2; }
+
+/* ---------- 链接 / 文字 ---------- */
+a.black-link { color: var(--hk-rose); }
+a.black-link:hover { color: var(--hk-red); }
+
+/* ---------- Semantic UI 主色覆盖 ---------- */
+.ui.primary.buttons .button, .ui.primary.button { background-color: var(--hk-red) !important; color: #fff !important; }
+.ui.primary.buttons .button:hover, .ui.primary.button:hover { background-color: var(--hk-red-2) !important; }
+.ui.button:not(.primary):not(.basic) { background: var(--hk-pink); color: var(--hk-rose); }
+.ui.button:not(.primary):not(.basic):hover { background: var(--hk-pink-2); }
+.ui.basic.button, .ui.basic.buttons .button {
+  color: var(--hk-rose) !important;
+  box-shadow: 0 0 0 1px var(--hk-rose) inset !important;
+}
+.ui.segment, .ui.segments .segment { border-top: 3px solid var(--hk-pink); }
+.ui.top.attached.block.header { background: var(--hk-red) !important; color: #fff !important; }
+
+/* ---------- 表格斑马纹（粉调） ---------- */
+table.ui.table tbody tr:nth-child(even) { background: rgba(156, 44, 82, 0.05); }
+table.ui.table tbody tr:hover { background: rgba(238, 51, 78, 0.08) !important; }
+
+/* ---------- 判题状态语义色（保留） ---------- */
+.red   { color: var(--hk-red) !important; }
+.green { color: #2E9E5B !important; }
+.blue  { color: var(--hk-blue) !important; }
+
+/* ---------- 导航图标（替换语义 UI 图标字体） ---------- */
+.hellokity-nav-icon {
+  width: 1.18em; height: 1.18em;
+  vertical-align: -0.18em; margin-right: 0.35em;
+  fill: currentColor;
+}
+.hellokity-brand {
+  width: 1.6em; height: 1.6em;
+  vertical-align: -0.3em; margin-right: 0.3em;
+}
+
+/* ---------- 页脚 ---------- */
+.footer { color: var(--hk-rose) !important; }
+.footer a { color: var(--hk-red) !important; }
+
+/* ===== 装饰层：飘落猫头 / 蝴蝶结 / 爱心 / 小爪印（z-index:-1 落在内容之下） ===== */
+#hellokity-decor { position: fixed; inset: 0; pointer-events: none; z-index: -1; overflow: hidden; }
+
+@keyframes hk-fall {
+  0%   { transform: translateY(-14vh) rotate(0deg); opacity: 0; }
+  12%  { opacity: var(--hk-op, 0.55); }
+  88%  { opacity: var(--hk-op, 0.55); }
+  100% { transform: translateY(114vh) rotate(var(--hk-rot, 20deg)); opacity: 0; }
+}
+.hk-sprite { position: absolute; top: 0; will-change: transform, opacity; }
+
+/* 右下角摇摆挂件（穿红结的小猫头） */
+#hellokity-badge {
+  position: fixed; right: 18px; bottom: 18px;
+  width: 60px; height: 60px; pointer-events: none; z-index: 6;
+  transform-origin: top center;
+  animation: hk-swing 3.4s ease-in-out infinite;
+  filter: drop-shadow(0 4px 8px rgba(238, 51, 78, 0.25));
+}
+@keyframes hk-swing {
+  0%, 100% { transform: rotate(-9deg); }
+  50%      { transform: rotate(9deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #hellokity-decor { display: none; }
+  #hellokity-badge { animation: none; }
+  .hellokity-brand { animation: none; }
+}
