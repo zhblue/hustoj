@@ -6,7 +6,7 @@ Ubuntu环境一句话安装
 --
 
 ```
-	curl -fsSL http://dl.hustoj.com/install.sh | bash
+curl -fsSL http://dl.hustoj.com/install.sh | bash
 ```
 
 常见问题请先查阅
@@ -161,6 +161,7 @@ Star us, please!
 	
 日期  | 类型 |  更新内容 | 图
 ------- | :--:  | :--: | :-------
+10-26 | 更新 | 新增多组AI开发的皮肤模板 | http://demo.hustoj.com
 10-18 | 更新 | 增加NOI Linux 2.0 桌面模拟器，支持模拟看试题要求、创建目录结构、创建源码文件，模拟体验Geany和CodeBlockly编译运行程序，体验简单Linux命令行。|<img width="1221" height="768" alt="image" src="https://github.com/user-attachments/assets/34987fc9-ea3c-410a-a1df-b47e7d23d75c" />
 05-17 | 更新 | 支持基于testlib.h的交互器判题| 感谢Firefly提供的交互器例子。
 05-15 | 更新 | 下载测试数据（download.php）和运行错误、错误答案的解析（reinfo.php），升级为收费（积分Coin）服务。|用 🪙 标识
