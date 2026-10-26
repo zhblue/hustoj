@@ -1,0 +1,225 @@
+/* ============================================================
+   HUSTOJ · backrooms 模板 · 主题配色（后室 / 阈限空间风）
+   以 syzoj 的 white.css 为蓝本，仅替换配色 / 装饰，不改动任何功能逻辑。
+   作者: hustoj-theme-maker skill
+   设计要点：单色暖黄墙纸 + 荧光灯带 + 暗角；深棕文字保对比度；
+            飘浮尘埃 / glitch 错位在 z-index:-1 装饰层；闪烁为顶部叠加层。
+   ============================================================ */
+
+:root {
+  /* ===== 后室主题色板（低饱和、克制） ===== */
+  --br-wall:    #D9B25C;   /* 主黄墙纸 Wall Yellow（页面墙纸纹理 / 顶栏） */
+  --br-wall-dk: #C2A05A;   /* 墙纸暗纹描边 / 更深一档 */
+  --br-cream:   #EDE0BE;   /* 背景奶油黄 Cream（大面留白底） */
+  --br-surface: #F4EAC6;   /* 卡片表面（比奶油更亮，保正文可读） */
+  --br-ink:     #2B2620;   /* 深棕墨 Brown Ink（正文 / 描边 / 阴影） */
+  --br-ink-2:   #5A4A36;   /* 次级深棕（次要文字） */
+  --br-fluo:    #FFFDF2;   /* 荧光冷白 Fluo White（灯带高光 / 主按钮亮面） */
+  --br-red:     #C0392B;   /* 警示红 Alert Red（唯一强强调：危险态） */
+  --br-red-dk:  #8F2A1E;   /* 警示红深调 */
+  --br-pool:    #BCD4D8;   /* 浅蓝池水 Pool Blue（链接 hover / 次按钮） */
+  --br-hi:      #F5D76E;   /* 暖黄高光 Hi Yellow（主按钮 / 选中描边） */
+
+  /* 玻璃拟态（.padding）沿用 syzoj 命名 */
+  --lg-bg-color: rgba(244, 234, 198, 0.72);
+  --lg-highlight: rgba(255, 253, 242, 0.55);
+  --lg-red: var(--br-red);
+  --lg-grey: var(--br-ink);
+  --lg-text: var(--br-ink);
+
+  /* 兼容脚手架默认引用名 */
+  --backrooms-primary:   var(--br-wall);
+  --backrooms-primary-2: var(--br-wall-dk);
+  --backrooms-accent:    var(--br-hi);
+  --backrooms-accent-2:  var(--br-fluo);
+  --backrooms-danger:    var(--br-red);
+  --backrooms-danger-2:  var(--br-red-dk);
+  --backrooms-bg:        var(--br-cream);
+  --backrooms-surface:   var(--br-surface);
+  --backrooms-text:      var(--br-ink);
+  --backrooms-muted:     var(--br-ink-2);
+}
+
+/* ---------- 全局背景（html 承载墙纸 + 奶油底，body 透明，避免遮挡装饰层） ---------- */
+html {
+  background-color: var(--br-cream);
+  /* Level 0 标志墙纸：双上箭头 + 线条暗纹，低对比赭黄，平铺 */
+  background-image:
+    url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='60'%20height='60'%3E%3Cg%20fill='none'%20stroke='%23C2A05A'%20stroke-width='2'%20opacity='0.26'%3E%3Cpath%20d='M10%2018%20L20%208%20L30%2018'/%3E%3Cpath%20d='M10%2038%20L20%2028%20L30%2038'/%3E%3Cpath%20d='M40%2018%20L50%208%20L60%2018'/%3E%3Cpath%20d='M40%2038%20L50%2028%20L60%2038'/%3E%3C/g%3E%3C/svg%3E"),
+    radial-gradient(120% 60% at 50% -15%, rgba(255, 253, 242, 0.55), rgba(255, 253, 242, 0) 55%),
+    radial-gradient(120% 55% at 50% 115%, rgba(43, 38, 32, 0.28), rgba(43, 38, 32, 0) 60%);
+  background-attachment: fixed;
+}
+body {
+  background: transparent;
+  color: var(--br-ink);
+}
+
+a { color: var(--br-red-dk); }
+a:hover { color: var(--br-red); }
+
+/* ---------- 语义 UI 固定顶栏（#page-header）墙纸黄 + 荧光底边 ---------- */
+#page-header.ui.menu {
+  background: linear-gradient(180deg, #E7C97E 0%, var(--br-wall) 55%, #CDA852 100%);
+  border-bottom: 3px solid var(--br-hi);
+  box-shadow: 0 2px 14px rgba(43, 38, 32, 0.30), 0 0 18px rgba(255, 253, 242, 0.35);
+}
+#page-header.ui.menu .item,
+#page-header.ui.menu .header.item { color: var(--br-ink) !important; }
+#page-header.ui.menu .item:hover,
+#page-header.ui.menu .item.active { color: #fff !important; background: rgba(43, 38, 32, 0.78) !important; }
+#page-header.ui.menu .header.item span { color: var(--br-ink) !important; text-shadow: 0 1px 1px rgba(255, 253, 242, 0.5); }
+#page-header .right.menu .ui.button { background: var(--br-red); color: #fff; }
+#page-header .right.menu .ui.primary.button { background: var(--br-hi); color: var(--br-ink); }
+
+/* ---------- 玻璃卡片 .padding（保留 syzoj 圆角玻璃风，后室偏小圆角 + 做旧） ---------- */
+.padding {
+  position: relative;
+  border-radius: 8px;
+  overflow: hidden;
+  color: var(--lg-text);
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 2.2);
+  padding: 1.6rem;
+  border: 1px solid rgba(43, 38, 32, 0.35);
+  box-shadow: 0 8px 20px rgba(43, 38, 32, 0.22), inset 0 0 0 1px rgba(255, 253, 242, 0.18);
+}
+.padding::before,
+.padding::after { content: ''; position: absolute; inset: 0; border-radius: inherit; pointer-events: none; }
+.padding::before {
+  z-index: -2;
+  -webkit-backdrop-filter: blur(4px); backdrop-filter: blur(4px);
+  /* 表面叠一层极淡墙纸，做旧 */
+  background-image:
+    url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='60'%20height='60'%3E%3Cg%20fill='none'%20stroke='%23C2A05A'%20stroke-width='2'%20opacity='0.10'%3E%3Cpath%20d='M10%2018%20L20%208%20L30%2018'/%3E%3Cpath%20d='M10%2038%20L20%2028%20L30%2038'/%3E%3Cpath%20d='M40%2018%20L50%208%20L60%2018'/%3E%3Cpath%20d='M40%2038%20L50%2028%20L60%2038'/%3E%3C/g%3E%3C/svg%3E");
+  filter: saturate(96%) brightness(1.02);
+}
+.padding::after {
+  z-index: -1;
+  background: var(--lg-bg-color);
+}
+.padding > * { position: relative; z-index: 2; }
+
+/* ---------- 链接 / 文字 ---------- */
+a.black-link { color: var(--br-ink); }
+a.black-link:hover { color: var(--br-red); }
+
+/* ---------- Semantic UI 主色覆盖（荧光黄主按钮 / 警示红危险） ---------- */
+.ui.primary.buttons .button, .ui.primary.button { background-color: var(--br-hi) !important; color: var(--br-ink) !important; }
+.ui.primary.buttons .button:hover, .ui.primary.button:hover { background-color: #FFE588 !important; }
+.ui.button:not(.primary):not(.basic) { background: var(--br-wall); color: var(--br-ink); }
+.ui.button:not(.primary):not(.basic):hover { background: var(--br-wall-dk); }
+.ui.basic.button, .ui.basic.buttons .button {
+  color: var(--br-ink) !important;
+  box-shadow: 0 0 0 1px var(--br-ink) inset !important;
+}
+.ui.segment, .ui.segments .segment { border-top: 3px solid var(--br-wall-dk); }
+.ui.top.attached.block.header { background: var(--br-wall-dk) !important; color: var(--br-ink) !important; }
+
+/* ---------- 表格斑马纹（黄褐，深行更暗一档） ---------- */
+table.ui.table tbody tr:nth-child(even) { background: rgba(194, 160, 90, 0.28); }
+table.ui.table tbody tr:hover { background: rgba(43, 38, 32, 0.12) !important; }
+
+/* ---------- 面板 / 巨幕 ---------- */
+.panel-default, .container .jumbotron {
+  padding: 5px;
+  background-image: url(../../image/background.jpg);
+  border: 1px solid rgba(43, 38, 32, 0.20);
+  margin-top: 50px;
+}
+
+/* ---------- 判题状态语义色（保留） ---------- */
+.red   { color: var(--br-red) !important; }
+.green { color: #5E7D3A !important; }
+.blue  { color: #3E7C95 !important; }
+
+/* ---------- 导航图标（替换语义 UI 图标字体） ---------- */
+.backrooms-nav-icon {
+  width: 1.18em; height: 1.18em;
+  vertical-align: -0.18em; margin-right: 0.35em;
+  fill: currentColor;
+}
+.backrooms-brand {
+  width: 1.6em; height: 1.6em;
+  vertical-align: -0.3em; margin-right: 0.3em;
+}
+
+/* ---------- 页脚 ---------- */
+.footer { color: var(--br-ink) !important; }
+.footer a { color: var(--br-red-dk) !important; }
+
+/* ============================================================
+   装饰层 ①：飘浮尘埃 / 光斑（z-index:-1，落在内容之下，透过玻璃卡可见）
+   ============================================================ */
+#backrooms-decor { position: fixed; inset: 0; pointer-events: none; z-index: -1; overflow: hidden; }
+
+@keyframes br-dust {
+  0%   { transform: translateY(12vh) translateX(0); opacity: 0; }
+  12%  { opacity: var(--br-op, 0.5); }
+  88%  { opacity: var(--br-op, 0.5); }
+  100% { transform: translateY(-112vh) translateX(var(--br-dx, 14px)); opacity: 0; }
+}
+.br-dust {
+  position: absolute; bottom: 0; will-change: transform, opacity;
+  border-radius: 50%;
+  background: radial-gradient(circle at 40% 35%, var(--br-fluo), var(--br-hi) 70%, rgba(245,215,110,0) 100%);
+  filter: blur(0.4px);
+}
+
+/* ②：偶发墙纸 / 几何 glitch 错位（no-clip 失真感，z-index:-1） */
+@keyframes br-glitch {
+  0%, 86%, 100% { transform: translate(0, 0); opacity: 0; }
+  88% { transform: translate(-6px, 3px); opacity: 0.5; }
+  91% { transform: translate(5px, -2px); opacity: 0.35; }
+  94% { transform: translate(-3px, 1px); opacity: 0.45; }
+}
+.br-glitch {
+  position: absolute; will-change: transform, opacity;
+  background: repeating-linear-gradient(90deg, rgba(43, 38, 32, 0.42) 0 5px, rgba(43, 38, 32, 0) 5px 11px);
+  filter: saturate(0.7);
+  opacity: 0;
+}
+
+/* ③：荧光灯闪烁叠加层（必须在内容之上才可见，顶部叠加，multiply 压暗全屋） */
+#backrooms-flicker {
+  position: fixed; inset: 0; pointer-events: none; z-index: 9990;
+  background: #0d0b08; opacity: 0; mix-blend-mode: multiply;
+}
+#backrooms-flicker.br-flick { animation: br-flick-burst 0.42s steps(1, end); }
+@keyframes br-flick-burst {
+  0%   { opacity: 0; }
+  20%  { opacity: 0.55; }
+  40%  { opacity: 0.06; }
+  60%  { opacity: 0.5; }
+  80%  { opacity: 0.10; }
+  100% { opacity: 0; }
+}
+
+/* ④：右下角荧光灯板挂件（轻微晃动，aria-hidden） */
+#backrooms-badge {
+  position: fixed; right: 16px; bottom: 16px;
+  width: 56px; height: 56px; pointer-events: none; z-index: 6;
+  transform-origin: top center;
+  animation: br-swing 4.2s ease-in-out infinite;
+  filter: drop-shadow(0 4px 8px rgba(43, 38, 32, 0.35));
+}
+@keyframes br-swing {
+  0%, 100% { transform: rotate(-7deg); }
+  50%      { transform: rotate(7deg); }
+}
+
+/* ============================================================
+   暗角 vignette：压抑感（装饰层内侧阴影）
+   ============================================================ */
+#backrooms-decor::after {
+  content: ''; position: fixed; inset: 0; pointer-events: none;
+  box-shadow: inset 0 0 220px rgba(43, 38, 32, 0.40);
+  z-index: -1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  /* 光敏性硬合规：完全关闭所有动态装饰，仅保留静态墙纸 + 暗角 */
+  #backrooms-decor { display: none; }
+  #backrooms-flicker { display: none !important; }
+  #backrooms-badge { animation: none; }
+  .backrooms-brand { animation: none; }
+}

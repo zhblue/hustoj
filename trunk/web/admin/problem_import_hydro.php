@@ -279,6 +279,18 @@ if ($_FILES["fps"]["error"] > 0) {
                     $memory = floatval($hydrop['memory']);
                     $iofile = $hydrop['filename'];
 
+                    // judge_client names the data it copies into the run
+                    // directory after these two files, so the token coming from
+                    // config.yaml has to stay one plain file name. The check is a
+                    // whitelist: judge_client puts this name inside single quotes
+                    // in a shell command line, so a "'" must not be stored.
+                    $iofile = basename(str_replace('\\', '/', (string)$iofile));
+                    if ($iofile === '.' || $iofile === '..' || strlen($iofile) > 128
+                        || !preg_match('/^[A-Za-z0-9._\-\x80-\xFF]+$/', $iofile)) {
+                        if ($iofile !== '') echo "!";
+                        $iofile = "";
+                    }
+
                     if ($pid != "" && $iofile != "") {
                         file_put_contents($OJ_DATA . "/$pid/input.name", $iofile . ".in\n");
                         file_put_contents($OJ_DATA . "/$pid/output.name", $iofile . ".out\n");

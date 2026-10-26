@@ -114,7 +114,7 @@
     <div id="page-header" class="ui fixed borderless menu" style="position: fixed; height: 49px; z-index:99999">
         <div id="menu" class="ui stackable mobile ui container computer" style="margin-left:auto;margin-right:auto;">
             <a class="header item"  href="/"><span
-                    style="font-family: 'Exo 2'; font-size: 1.5em; font-weight: 600; "><?php echo $domain==$DOMAIN?str_replace('_',' ',$OJ_NAME):ucwords(str_replace('_',' ',$OJ_NAME))."'s OJ"?></span></a>
+                    style="font-family: 'Exo 2'; font-size: 1.5em; font-weight: 600; "><?php echo $domain==$DOMAIN?$OJ_NAME:ucwords($OJ_NAME)."'s OJ"?></span></a>
             
           <?php
             if(isset($OJ_AI_HTML)&&$OJ_AI_HTML && !isset($OJ_ON_SITE_CONTEST_ID) ) echo $OJ_AI_HTML;
@@ -122,7 +122,10 @@
             if(file_exists("moodle")){  // 如果存在moodle目录，自动添加链接
               echo '<a class="item" href="moodle"><i class="group icon"></i><span class="desktop-only">Moodle</span></a>';
             }
-           
+            if(file_exists("hello")){  // 如果存在hello目录，自动添加链接
+              echo '<a class="item" onclick=\'window.open("/hello/index.html", "_blank",
+        "width=600,height=850,left=" + (window.screen.width-600)  + ",top=0,toolbar=no,menubar=no,location=no,status=no,resizable=yes");\'><i class="book icon"></i><span class="desktop-only">Hello算法</span></a>';
+            }
 
                 
              if( !isset($OJ_ON_SITE_CONTEST_ID) && (!isset($_GET['cid'])||$cid==0) ){
@@ -182,14 +185,10 @@
                         <i class="book icon"></i><span class='desktop-only'>学习资料</span><i class="dropdown icon"></i>
                         <div class="menu">
             <?php  } ?>
-                        <a class="item" href="/recommend.php"><i class="star icon"></i>推荐自学方向</a>
-                        <a class='item' href='/noilinux.html' target='noilinux' ><i class='star icon'></i>NOI Linux 2.0模拟器</a>
+			<a class="item" href="/recommend.php"><i class="star icon"></i>推荐自学方向</a>
             <?php echo $sql_news_menu_result_html; ?>
             <?php
-            if(file_exists("hello")){  // 如果存在hello目录，自动添加链接
-                      echo '<a class="item" onclick=\'window.open("/hello/index.html", "_blank",
-        "width=600,height=850,left=" + (window.screen.width-600)  + ",top=0,toolbar=no,menubar=no,location=no,status=no,resizable=yes");\'><i class="book icon"></i><span class="desktop-only">Hello算法</span></a>';
-            }
+			if(file_exists(dirname(dirname(__FILE__))."/menu.php")) require_once(dirname(dirname(__FILE__))."/menu.php");
             if($OJ_MENU_DROPDOWN){
                 ?>
                         </div>

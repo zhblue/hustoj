@@ -1,0 +1,393 @@
+/* ============================================================
+   HUSTOJ · matrix 模板 · 主题基础配色（黑客帝国 · 绿色字符雨）
+   以 syzoj 的 white.css 为蓝本，仅替换配色 / 装饰，不改动任何功能逻辑。
+   作者: hustoj-theme-maker skill
+   风格：纯黑底(#000) + 荧光绿(#00FF41) + 等宽字形；
+        全屏 canvas 数字雨（matrix_deco.js）+ CRT 扫描线覆盖层；
+        终端风绿色描边卡片 / 按钮 / 表格。
+   ============================================================ */
+
+:root {
+  /* ===== 主题色板（Matrix） ===== */
+  --matrix-green:       #00FF41;   /* 主荧光绿 */
+  --matrix-green-2:     #39FF14;   /* 亮霓虹绿 */
+  --matrix-green-soft:  #8CFFA8;   /* 浅绿（正文/标题） */
+  --matrix-green-dim:   #00C13A;   /* 绿深调（hover/次级） */
+  --matrix-green-dk:    #008F11;   /* 更深的绿 */
+  --matrix-green-deep:  #003B00;   /* 极暗绿 */
+  --matrix-bg:          #000000;   /* 页面底：纯黑 */
+  --matrix-bg-2:        #010A02;   /* 次底 */
+  --matrix-panel:       rgba(0, 16, 5, 0.86);   /* 卡片 */
+  --matrix-panel-2:     rgba(0, 22, 7, 0.70);   /* 次级面板 */
+  --matrix-line:        rgba(0, 255, 65, 0.34); /* 描边 */
+  --matrix-line-2:      rgba(0, 255, 65, 0.16); /* 弱描边 */
+  --matrix-text:        #C4FFD2;   /* 正文（浅绿白） */
+  --matrix-text-2:      #7EE39A;   /* 次级文字 */
+  --matrix-muted:       #4E9B63;   /* 弱化文字 */
+  --matrix-red:         #FF3B30;   /* 危险 / 判题红 */
+  --matrix-blue:        #4DD2FF;   /* 判题蓝 */
+  --matrix-amber:       #D4FF3F;   /* 提示黄绿 */
+
+  /* 玻璃拟态变量（原定义在 white.css，深色主题需自行接管） */
+  --lg-bg-color:  rgba(0, 14, 4, 0.80);
+  --lg-highlight: rgba(0, 255, 65, 0.14);
+  --lg-red:       var(--matrix-red);
+  --lg-grey:      var(--matrix-green);
+  --lg-text:      var(--matrix-text);
+}
+
+/* ===== 全局：纯黑终端 + 顶部/底部绿光晕 =====
+   背景必须挂在 html 上、body 保持透明：
+   数字雨 canvas 用 z-index:-1（负值），会落在 body 的块级背景之下，
+   若 body 带不透明背景就会把整张画布盖住（这正是"雨不显示"的原因）。 */
+html {
+  background-color: var(--matrix-bg);
+  background-image:
+    radial-gradient(ellipse 72% 46% at 50% -8%, rgba(0, 255, 65, 0.14) 0%, rgba(0, 255, 65, 0) 62%),
+    radial-gradient(ellipse 60% 40% at 50% 108%, rgba(0, 143, 17, 0.16) 0%, rgba(0, 143, 17, 0) 68%);
+  background-attachment: fixed;
+}
+
+body {
+  background: transparent;
+  color: var(--matrix-text);
+  font-family: "JetBrains Mono", "Fira Code", "Cascadia Mono", Consolas, "SFMono-Regular",
+               Menlo, "DejaVu Sans Mono", "Courier New", "Noto Sans Mono CJK SC",
+               "Microsoft YaHei", monospace;
+}
+
+/* ===== 全屏数字雨画布（matrix_deco.js 动态插入 body 首位） ===== */
+#matrix-rain {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.92;
+}
+
+/* ===== 深色主题必修：把 Semantic UI 的深灰文字统一改成浅绿 ===== */
+h1, h2, h3, h4, h5, h6,
+.ui.header, .ui.header > .content, .ui.header .sub.header,
+p, li, dt, dd, label, strong, b, small,
+.ui.segment, .ui.segments .segment,
+.ui.form label, .ui.form .field > label,
+.ui.message, .ui.message .header,
+.ui.list > .item, .ui.card, .ui.cards > .card,
+.ui.modal > .header, .ui.modal > .content,
+.ui.accordion .title, .ui.accordion .content,
+.ui.statistic > .value, .ui.statistics .statistic > .value,
+.ui.items > .item > .content > .header,
+.ui.items > .item > .content > .description,
+table.ui.table, table.ui.table td, table.ui.table th {
+  color: var(--matrix-text);
+}
+
+a, .ui a, a.black-link, .ui.table td a, .ui.list a, .ui.items .item a {
+  color: var(--matrix-green);
+  text-shadow: 0 0 8px rgba(0, 255, 65, 0.35);
+}
+a:hover, .ui a:hover, a.black-link:hover {
+  color: var(--matrix-green-2);
+  text-shadow: 0 0 12px rgba(57, 255, 20, 0.65);
+}
+
+hr, .ui.divider { border-color: var(--matrix-line-2); }
+::selection { background: rgba(0, 255, 65, 0.35); color: #eaffef; }
+
+/* ===== 顶栏：黑金终端条 + 荧光绿底边发光 ===== */
+#page-header.ui.menu {
+  background: linear-gradient(180deg, rgba(0, 22, 7, 0.97) 0%, rgba(0, 9, 3, 0.99) 100%) !important;
+  border: none !important;
+  border-bottom: 2px solid var(--matrix-green) !important;
+  border-radius: 0;
+  box-shadow: 0 0 20px rgba(0, 255, 65, 0.32), 0 2px 12px rgba(0, 0, 0, 0.85);
+}
+#page-header.ui.menu .item,
+#page-header.ui.menu a.item {
+  color: var(--matrix-green) !important;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  text-shadow: 0 0 8px rgba(0, 255, 65, 0.42);
+  transition: background 0.18s ease, color 0.18s ease, transform 0.18s ease;
+}
+#page-header.ui.menu .item:before { background: transparent; }
+#page-header.ui.menu .item:hover,
+#page-header.ui.menu a.item:hover,
+#page-header.ui.menu .item.active {
+  background: rgba(0, 255, 65, 0.14) !important;
+  color: #EFFFF3 !important;
+  transform: translateY(-1px);
+}
+#page-header.ui.menu .item.active {
+  box-shadow: inset 0 -2px 0 var(--matrix-green-2);
+}
+#page-header.ui.menu a.header.item { background: transparent; }
+#page-header.ui.menu a.header.item span {
+  color: #DFFFE8 !important;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-shadow: 0 0 12px rgba(0, 255, 65, 0.75);
+}
+#page-header.ui.menu .right.menu .ui.button {
+  background: rgba(0, 255, 65, 0.10) !important;
+  color: var(--matrix-green) !important;
+  border: 1px solid var(--matrix-line) !important;
+}
+#page-header.ui.menu .right.menu .ui.primary.button {
+  background: var(--matrix-green) !important;
+  color: #001706 !important;
+  border: 1px solid var(--matrix-green) !important;
+  font-weight: 700;
+  box-shadow: 0 0 14px rgba(0, 255, 65, 0.5);
+}
+
+/* ===== 品牌 logo（矩阵数字雨方块） ===== */
+.matrix-brand {
+  width: 1.75em; height: 1.75em;
+  margin-right: 7px;
+  vertical-align: -0.45em;
+  filter: drop-shadow(0 0 6px rgba(0, 255, 65, 0.6));
+}
+.matrix-brand .mx-cursor { animation: matrix-blink 1.15s steps(1) infinite; }
+@keyframes matrix-blink { 0%, 49% { opacity: 1; } 50%, 100% { opacity: 0.05; } }
+
+/* ===== 导航图标统一尺寸 ===== */
+.matrix-nav-icon {
+  width: 1.18em; height: 1.18em;
+  vertical-align: -0.18em;
+  margin-right: 3px;
+  filter: drop-shadow(0 0 4px rgba(0, 255, 65, 0.45));
+}
+
+/* ===== 卡片：深色终端面板 + 绿描边 + 背后雨滴模糊 ===== */
+.padding {
+  background-color: var(--matrix-panel) !important;
+  border: 1px solid var(--matrix-line) !important;
+  border-radius: 8px !important;
+  box-shadow: 0 0 0 1px var(--matrix-line-2), 0 10px 30px rgba(0, 0, 0, 0.72),
+              0 0 26px rgba(0, 255, 65, 0.10);
+  color: var(--matrix-text);
+  -webkit-backdrop-filter: blur(5px) saturate(120%);
+  backdrop-filter: blur(5px) saturate(120%);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+}
+.padding::before, .padding::after {
+  background: transparent !important;
+  box-shadow: none !important;
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+}
+.padding:hover {
+  border-color: var(--matrix-green) !important;
+  transform: translateY(-2px);
+  box-shadow: 0 0 0 1px var(--matrix-line), 0 14px 34px rgba(0, 0, 0, 0.8),
+              0 0 30px rgba(0, 255, 65, 0.24);
+}
+.padding .ui.header, .padding h1, .padding h2, .padding h3 { color: var(--matrix-green-soft); }
+
+/* ===== 段 / 面板 / 巨幕 ===== */
+.ui.segment {
+  background: var(--matrix-panel) !important;
+  border: 1px solid var(--matrix-line) !important;
+  border-top: 3px solid var(--matrix-green) !important;
+  border-radius: 8px !important;
+  color: var(--matrix-text);
+  box-shadow: 0 8px 26px rgba(0, 0, 0, 0.66);
+}
+.panel-default, .jumbotron, .container .jumbotron {
+  background: var(--matrix-panel) !important;
+  border: 1px solid var(--matrix-line) !important;
+  border-radius: 8px !important;
+  color: var(--matrix-text);
+  box-shadow: 0 8px 26px rgba(0, 0, 0, 0.66);
+  background-image: none !important;
+}
+.panel-default > .panel-heading {
+  background: linear-gradient(90deg, rgba(0, 143, 17, 0.45) 0%, rgba(0, 255, 65, 0.22) 100%);
+  color: #EAFFF0;
+  border-bottom: 1px solid var(--matrix-line);
+  font-weight: 700;
+  text-shadow: 0 0 10px rgba(0, 255, 65, 0.5);
+}
+
+/* ===== 下拉菜单 ===== */
+.ui.dropdown .menu,
+.ui.simple.dropdown .menu {
+  background: #021104 !important;
+  border: 1px solid var(--matrix-line) !important;
+  border-radius: 6px !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.85), 0 0 0 1px var(--matrix-line-2) !important;
+}
+.ui.dropdown .menu > .item {
+  color: var(--matrix-text) !important;
+  border-top: 1px solid var(--matrix-line-2) !important;
+}
+.ui.dropdown .menu > .item:hover {
+  background: rgba(0, 255, 65, 0.16) !important;
+  color: var(--matrix-green-2) !important;
+}
+
+/* ===== 按钮 ===== */
+.ui.button {
+  background: rgba(0, 255, 65, 0.08) !important;
+  color: var(--matrix-green) !important;
+  border: 1px solid var(--matrix-line) !important;
+  border-radius: 6px !important;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  transition: all 0.18s ease;
+}
+.ui.button:hover {
+  background: rgba(0, 255, 65, 0.18) !important;
+  border-color: var(--matrix-green) !important;
+  color: #EFFFF3 !important;
+  box-shadow: 0 0 16px rgba(0, 255, 65, 0.42);
+}
+.ui.primary.button, .ui.primary.buttons .button, .ui.positive.button {
+  background: linear-gradient(150deg, var(--matrix-green-2) 0%, var(--matrix-green) 60%, var(--matrix-green-dim) 100%) !important;
+  color: #001706 !important;
+  border: 1px solid var(--matrix-green) !important;
+  font-weight: 700;
+  box-shadow: 0 0 18px rgba(0, 255, 65, 0.45);
+}
+.ui.primary.button:hover, .ui.positive.button:hover {
+  filter: brightness(1.1);
+  color: #001706 !important;
+  box-shadow: 0 0 26px rgba(0, 255, 65, 0.7);
+}
+.ui.basic.button, .ui.basic.buttons .button {
+  background: transparent !important;
+  color: var(--matrix-green) !important;
+  box-shadow: 0 0 0 1px var(--matrix-line) inset !important;
+}
+.ui.basic.button:hover { box-shadow: 0 0 0 1px var(--matrix-green) inset !important; }
+.ui.button:disabled, .ui.button.disabled { opacity: 0.5; }
+
+/* ===== 输入框 / 表单 ===== */
+.ui.input > input, input:not([type="checkbox"]):not([type="radio"]), textarea, select,
+.ui.form input:not([type]), .ui.form textarea, .ui.form select {
+  background: rgba(0, 14, 4, 0.9) !important;
+  color: var(--matrix-text) !important;
+  border: 1px solid var(--matrix-line) !important;
+  border-radius: 5px !important;
+  caret-color: var(--matrix-green);
+}
+input::placeholder, textarea::placeholder { color: var(--matrix-muted) !important; }
+.ui.input > input:focus, input:focus, textarea:focus, select:focus {
+  border-color: var(--matrix-green) !important;
+  box-shadow: 0 0 0 3px rgba(0, 255, 65, 0.16), 0 0 14px rgba(0, 255, 65, 0.3);
+}
+.ui.checkbox label, .ui.checkbox + label, .ui.radio.checkbox label { color: var(--matrix-text) !important; }
+
+/* ===== 表格 ===== */
+table.ui.table {
+  background: rgba(0, 12, 4, 0.72);
+  color: var(--matrix-text) !important;
+  border: 1px solid var(--matrix-line) !important;
+  border-radius: 8px;
+  overflow: hidden;
+}
+table.ui.table thead th {
+  background: linear-gradient(180deg, rgba(0, 143, 17, 0.55) 0%, rgba(0, 60, 8, 0.55) 100%) !important;
+  color: #EAFFF0 !important;
+  border-bottom: 1px solid var(--matrix-line) !important;
+  font-weight: 700;
+  text-shadow: 0 0 8px rgba(0, 255, 65, 0.45);
+}
+table.ui.table tbody tr { background: transparent !important; color: var(--matrix-text); }
+table.ui.table tbody tr:nth-child(even) { background: rgba(0, 255, 65, 0.05) !important; }
+table.ui.table tbody tr:hover { background: rgba(0, 255, 65, 0.12) !important; }
+table.ui.table td, table.ui.table th { border-color: var(--matrix-line-2) !important; }
+table.ui.table td a { color: var(--matrix-green); }
+
+/* ===== 标签 / 消息 / 分页 ===== */
+.ui.label, .ui.labels .label {
+  background: rgba(0, 255, 65, 0.14) !important;
+  color: var(--matrix-green) !important;
+  border: 1px solid var(--matrix-line-2) !important;
+}
+.ui.message {
+  background: rgba(0, 22, 7, 0.8) !important;
+  border: 1px solid var(--matrix-line) !important;
+  border-left: 4px solid var(--matrix-green) !important;
+  border-radius: 6px !important;
+  box-shadow: none !important;
+  color: var(--matrix-text) !important;
+}
+.ui.pagination.menu .item {
+  background: rgba(0, 255, 65, 0.06) !important;
+  color: var(--matrix-green) !important;
+  border: 1px solid var(--matrix-line-2) !important;
+}
+.ui.pagination.menu .item.active {
+  background: var(--matrix-green) !important;
+  color: #001706 !important;
+}
+.ui.tabular.menu .item, .ui.pointing.menu .item { color: var(--matrix-green) !important; }
+.ui.tabular.menu .item.active, .ui.pointing.menu .item.active { color: #EFFFF3 !important; }
+
+/* ===== 判题状态语义色（深底上保持可辨识） ===== */
+.ui.red, .red     { color: #FF5C52 !important; }
+.ui.green, .green { color: var(--matrix-green) !important; text-shadow: 0 0 10px rgba(0, 255, 65, 0.5); }
+.ui.blue, .blue, .ui.blue.text { color: var(--matrix-blue) !important; }
+.ui.orange, .orange, .ui.yellow, .yellow { color: #FFD75E !important; }
+
+/* ===== 代码块 ===== */
+pre, code, kbd, samp {
+  background: #000C03 !important;
+  color: var(--matrix-green) !important;
+  border: 1px solid var(--matrix-line-2);
+  border-radius: 4px;
+}
+pre { padding: 10px 12px; overflow: auto; }
+
+/* ===== 页脚 ===== */
+.footer {
+  color: var(--matrix-muted) !important;
+  background: rgba(0, 10, 3, 0.72);
+  border-top: 1px solid var(--matrix-line);
+  margin-top: 30px;
+}
+.footer a { color: var(--matrix-green) !important; }
+
+/* ===== 装饰层：CRT 扫描线 + 暗角（canvas 雨由 JS 单独插入） ===== */
+#matrix-decor {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 99998;
+}
+#matrix-decor::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0) 0,
+    rgba(0, 0, 0, 0) 2px,
+    rgba(0, 0, 0, 0.30) 2px,
+    rgba(0, 0, 0, 0.30) 3px
+  );
+  opacity: 0.42;
+  animation: matrix-flicker 5.5s ease-in-out infinite;
+}
+#matrix-decor::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 82% 72% at 50% 44%, rgba(0, 0, 0, 0) 56%, rgba(0, 0, 0, 0.62) 100%);
+}
+@keyframes matrix-flicker {
+  0%, 100% { opacity: 0.38; }
+  47%      { opacity: 0.46; }
+  50%      { opacity: 0.30; }
+  53%      { opacity: 0.46; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #matrix-decor::before { animation: none; }
+  .matrix-brand .mx-cursor { animation: none; }
+}

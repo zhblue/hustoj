@@ -1,0 +1,236 @@
+/* ============================================================
+   HUSTOJ · bilibili 模板 · 主题基础配色（高仿 bilibili.com 浅色风）
+   以 syzoj 的 white.css 为蓝本，仅替换配色 / 装饰，不改动任何功能逻辑。
+   作者: hustoj-theme-maker skill
+   风格：B站浅色系 —— 浅灰白底 + 白卡片大圆角 + 淡阴影；
+        主色 B站粉 #FB7299，辅色 B站蓝 #00AEEC；
+        顶栏白底毛玻璃 + 底部细分隔线，hover 文字变粉并滑出粉色指示条。
+   ============================================================ */
+
+:root {
+  /* ===== 主题色板（bilibili 官方色） ===== */
+  --bili-pink:#FB7299;          /* B站粉（主色） */
+  --bili-pink-2:#FF9DB7;        /* 浅粉（渐变亮端） */
+  --bili-pink-deep:#E85A85;     /* 深粉（hover / 底边） */
+  --bili-blue:#00AEEC;          /* B站蓝（辅色） */
+  --bili-blue-2:#40C5F1;        /* 浅蓝 */
+  --bili-bg:#F6F7F8;            /* 页面底（B站灰白） */
+  --bili-card:#FFFFFF;          /* 卡片白 */
+  --bili-line:#E3E5E7;          /* 分隔线灰 */
+  --bili-text:#18191C;          /* 主文字（B站黑） */
+  --bili-text-2:#61666D;        /* 次级文字 */
+  --bili-muted:#9499A0;         /* 弱化文字 */
+  --bili-header:rgba(255,255,255,0.94); /* 顶栏半透白 */
+}
+
+/* ===== 整页背景：灰白 + 顶部极淡粉蓝光晕 ===== */
+body {
+  background:
+    radial-gradient(ellipse 70% 40% at 22% 0%, rgba(251,114,153,0.10) 0%, transparent 62%),
+    radial-gradient(ellipse 60% 36% at 82% 2%, rgba(0,174,236,0.09) 0%, transparent 60%),
+    var(--bili-bg) fixed;
+  color: var(--bili-text);
+  font-family: "PingFang SC", "Microsoft YaHei", "HarmonyOS Sans SC", "Noto Sans CJK SC", "Segoe UI", system-ui, sans-serif;
+}
+
+/* ===== 顶栏：白底毛玻璃 + 细分隔线（B站 header） ===== */
+#page-header.ui.menu {
+  background: var(--bili-header);
+  backdrop-filter: saturate(180%) blur(12px);
+  -webkit-backdrop-filter: saturate(180%) blur(12px);
+  border: none !important;
+  border-bottom: 1px solid var(--bili-line) !important;
+  border-radius: 0;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+}
+#page-header.ui.menu .item,
+#page-header.ui.menu a.item {
+  color: var(--bili-text-2) !important;
+  font-weight: 500;
+  font-size: 14px;
+  border-radius: 6px !important;
+  position: relative;
+}
+#page-header.ui.menu .item:before { background: transparent; }
+#page-header.ui.menu .item:hover,
+#page-header.ui.menu a.item:hover {
+  background: rgba(251,114,153,0.10) !important;
+  color: var(--bili-pink) !important;
+}
+/* hover 时底部滑出粉色指示条（B站导航特征） */
+#page-header.ui.menu .item:hover::after,
+#page-header.ui.menu a.item:hover::after {
+  content: "";
+  position: absolute;
+  left: 12%; right: 12%; bottom: 2px;
+  height: 3px;
+  border-radius: 3px;
+  background: var(--bili-pink);
+}
+#page-header.ui.menu a.header.item {
+  background: transparent;
+  font-family: "PingFang SC", "Microsoft YaHei", sans-serif;
+}
+#page-header.ui.menu a.header.item span {
+  color: var(--bili-pink);
+  font-weight: 800;
+  letter-spacing: 0.02em;
+}
+#page-header.ui.menu a.header.item:hover::after { display: none; }
+
+/* 品牌 logo（小电视） */
+.bilibili-brand {
+  width: 1.6em; height: 1.6em;
+  margin-right: 6px;
+  vertical-align: -0.36em;
+  filter: drop-shadow(0 2px 4px rgba(251,114,153,0.35));
+}
+
+/* ===== 导航图标统一尺寸 ===== */
+.bilibili-nav-icon {
+  width: 1.18em; height: 1.18em;
+  vertical-align: -0.18em;
+  margin-right: 2px;
+}
+
+/* ===== 卡片：白底 + 大圆角 + 淡阴影（B站视频卡风格） ===== */
+.padding {
+  background: var(--bili-card) !important;
+  border: 1px solid var(--bili-line) !important;
+  border-radius: 10px !important;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+  color: var(--bili-text);
+  transition: box-shadow .2s ease, transform .2s ease;
+}
+.padding:hover {
+  box-shadow: 0 6px 20px rgba(0,0,0,0.10);
+  transform: translateY(-1px);
+}
+.padding .ui.header, .padding h1, .padding h2, .padding h3 { color: var(--bili-text); }
+
+/* 段 / 面板 */
+.ui.segment {
+  background: var(--bili-card) !important;
+  border: 1px solid var(--bili-line) !important;
+  border-top: 3px solid var(--bili-pink) !important;
+  border-radius: 10px !important;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+  color: var(--bili-text);
+}
+.panel-default, .jumbotron {
+  background: var(--bili-card) !important;
+  border: 1px solid var(--bili-line) !important;
+  border-radius: 10px !important;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+  color: var(--bili-text);
+}
+.panel-default > .panel-heading {
+  background: linear-gradient(90deg, rgba(251,114,153,0.12), rgba(0,174,236,0.10));
+  color: var(--bili-pink);
+  border-radius: 9px 9px 0 0;
+  border-bottom: 1px solid var(--bili-line);
+  font-weight: 700;
+}
+
+/* ===== 链接 / 按钮 ===== */
+a.black-link, .ui a, a { color: var(--bili-blue); }
+a.black-link:hover, a:hover { color: var(--bili-pink); }
+.ui.primary.button, .ui.buttons .ui.primary.button {
+  background: linear-gradient(90deg, var(--bili-pink) 0%, var(--bili-pink-2) 100%) !important;
+  color: #fff !important;
+  font-weight: 700;
+  border-radius: 6px !important;
+  box-shadow: 0 3px 10px rgba(251,114,153,0.35);
+  border: none !important;
+}
+.ui.primary.button:hover { filter: brightness(1.05); }
+.ui.button {
+  background: #fff !important;
+  color: var(--bili-text-2) !important;
+  border: 1px solid var(--bili-line) !important;
+  border-radius: 6px !important;
+  font-weight: 600;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+}
+.ui.button:hover {
+  background: #fff !important;
+  border-color: var(--bili-pink) !important;
+  color: var(--bili-pink) !important;
+}
+
+/* 输入框（B站搜索框胶囊感） */
+.ui.input > input, input, textarea, select {
+  background: #fff !important;
+  color: var(--bili-text) !important;
+  border: 1px solid var(--bili-line) !important;
+  border-radius: 8px !important;
+}
+.ui.input > input:focus, input:focus {
+  border-color: var(--bili-pink) !important;
+  box-shadow: 0 0 0 3px rgba(251,114,153,0.15);
+}
+
+/* ===== 表格 ===== */
+table.ui.table {
+  background: #fff;
+  color: var(--bili-text);
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid var(--bili-line);
+}
+table.ui.table thead th {
+  background: #F1F2F3 !important;
+  color: var(--bili-text) !important;
+  border-bottom: 2px solid var(--bili-pink) !important;
+  font-weight: 700;
+}
+table.ui.table tbody tr { background: #fff !important; color: var(--bili-text); }
+table.ui.table tbody tr:nth-child(even) { background: #FAFAFA !important; }
+table.ui.table tbody tr:hover { background: rgba(251,114,153,0.07) !important; }
+table.ui.table td a { color: var(--bili-blue); }
+
+/* 判题状态语义色 */
+.ui.red, .red { color: #F85A5A !important; }
+.ui.green, .green { color: #2BA55B !important; }
+.ui.blue, .blue { color: var(--bili-blue) !important; }
+
+/* 页脚 */
+.footer {
+  color: var(--bili-muted) !important;
+  background: #fff;
+  border-top: 1px solid var(--bili-line);
+  margin-top: 28px;
+}
+.footer a { color: var(--bili-pink); }
+
+/* ===== 装饰层：飘落小电视 / 弹幕气泡 / 2233 表情 ===== */
+#bilibili-decor {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 99998;
+}
+.bili-sprite {
+  position: absolute;
+  top: -8%;
+  will-change: transform, opacity;
+  filter: drop-shadow(0 2px 5px rgba(0,0,0,0.10));
+}
+@keyframes bili-fall {
+  0%   { transform: translateY(-10vh) rotate(-6deg); opacity: 0; }
+  10%  { opacity: 0.85; }
+  50%  { transform: translateY(50vh) rotate(6deg); }
+  90%  { opacity: 0.85; }
+  100% { transform: translateY(112vh) rotate(-6deg); opacity: 0; }
+}
+@keyframes bili-wobble {
+  0%,100% { margin-left: 0; }
+  50%     { margin-left: 18px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  #bilibili-decor { display: none; }
+}
+a.label{
+  color:white !important;
+}

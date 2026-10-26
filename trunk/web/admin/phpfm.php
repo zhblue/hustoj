@@ -244,6 +244,16 @@ if (!(isset($_SESSION[$OJ_NAME.'_'.'administrator'])
             basename($name) === $name && !preg_match('/[\\\/]/', $name) &&
             !preg_match('/[\x00-\x1F\x7F]/', $name);
     }
+    // The value stored in input.name/output.name is the name judge_client gives
+    // the data file it copies into the run directory, and that name reaches
+    // shell command lines there. Unlike fm_name(), which is enough for the file
+    // manager's own native file calls, this one takes a whitelist: quotes,
+    // spaces and shell metacharacters must not be written at all.
+    function fm_io_name($name) {
+        return is_string($name) && $name !== '' && $name !== '.' && $name !== '..' &&
+            strlen($name) <= 255 &&
+            preg_match('/^[A-Za-z0-9._\-\x80-\xFF]+\z/', $name) === 1;
+    }
     function fm_relative($path) {
         global $fm_root_real;
         $path = str_replace(array('/', '\\'), DIRECTORY_SEPARATOR, (string)$path);
@@ -4989,6 +4999,10 @@ function frame3(){
             break;
             case 21: // create IOFilename
             if (strlen($cmd_arg)){
+                // judge_client copies data according to these two files; a name
+                // with a path separator, a control byte or a shell metacharacter
+                // would reach the judge.
+                if (!fm_io_name($cmd_arg)) break;
                 $filename = $current_dir."input.name";
 		if ($fh = @fopen($filename, "w")){
 		        fprintf($fh,"%s.in\n",$cmd_arg);	
