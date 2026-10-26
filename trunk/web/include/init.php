@@ -30,6 +30,32 @@ if(in_array($_GET['tp'],$OJ_TP)){
     $OJ_TEMPLATE=$_COOKIE['tp'];
 }
 */
+// 允许用 ?tp=xxx URL 参数 / cookie 'tp' 动态切换主题
+// 1) URL 优先，2) cookie 兜底，3) 默认 $OJ_TEMPLATE
+// 路径白名单：仅允许小写字母/数字/连字符/下划线，且必须存在同名模板目录
+$OJ_TPL_DIR = dirname(__FILE__) . '/../template';
+$tp = '';
+if (isset($_GET['tp'])) {
+    $tp_candidate = (string)$_GET['tp'];
+    if (preg_match('/^[a-z0-9_-]+$/i', $tp_candidate)) {
+        $tp = strtolower($tp_candidate);
+    }
+} elseif (isset($_COOKIE['tp'])) {
+    $tp_candidate = (string)$_COOKIE['tp'];
+    if (preg_match('/^[a-z0-9_-]+$/i', $tp_candidate)) {
+        $tp = strtolower($tp_candidate);
+    }
+}
+if ($tp !== '' && is_dir($OJ_TPL_DIR . '/' . $tp)) {
+    $OJ_TEMPLATE = $tp;
+    // 自动加载同名 CSS（dusk.css / bauhaus.css 等），找不到则保留原 CSS
+    if (is_file($OJ_TPL_DIR . '/' . $tp . '/css/' . $tp . '.css')) {
+        $OJ_CSS = $tp . '.css';
+    }
+    // 记录 cookie：1 天有效，httponly 防 XSS，path=/
+    setcookie('tp', $tp, time() + 60 * 60 * 24 , '/', '', false, true);
+}
+
 
 //自动识别语言
 if (isset($_SESSION[$OJ_NAME . '_' . 'OJ_LANG'])) {
