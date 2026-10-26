@@ -241,7 +241,8 @@ if (!(isset($_SESSION[$OJ_NAME.'_'.'administrator'])
     function fm_name($name) {
         return is_string($name) && $name !== '' && $name !== '.' && $name !== '..' &&
             strlen($name) <= 255 && strpos($name, "\0") === false &&
-            basename($name) === $name && !preg_match('/[\\\/]/', $name);
+            basename($name) === $name && !preg_match('/[\\\/]/', $name) &&
+            !preg_match('/[\x00-\x1F\x7F]/', $name);
     }
     function fm_relative($path) {
         global $fm_root_real;
@@ -249,6 +250,35 @@ if (!(isset($_SESSION[$OJ_NAME.'_'.'administrator'])
         $root = rtrim(str_replace(array('/', '\\'), DIRECTORY_SEPARATOR, $fm_root_real), DIRECTORY_SEPARATOR);
         if (strtolower(substr($path, 0, strlen($root))) !== strtolower($root)) return false;
         return ltrim(substr($path, strlen($root)), DIRECTORY_SEPARATOR);
+    }
+    // Complete RFC 6266 header line: an ASCII-only fallback plus the UTF-8
+    // filename*, so that a name like "测试 1.in" is not saved as
+    // "%E6%B5%8B...%201.in" by the browsers that read the plain filename
+    // parameter. header() ignores a line without the "Content-Disposition: "
+    // name, which makes the browser fall back to the script name.
+    function fm_content_disposition($type, $name) {
+        $name = (string)$name;
+        $fallback = preg_replace('/[^\x20-\x7E]/', '_', $name);
+        $fallback = str_replace(array('"', '\\', '/'), '_', $fallback);
+        if (trim($fallback, " .") === '') $fallback = 'download';
+        $out = 'Content-Disposition: ' . $type . '; filename="' . $fallback . '"';
+        // Only advertise UTF-8 when the name really is valid UTF-8; a legacy
+        // GBK name would otherwise be saved as replacement characters.
+        if ($fallback !== $name && preg_match('/^.{0,255}$/us', $name) === 1) {
+            $out .= "; filename*=UTF-8''" . rawurlencode($name);
+        }
+        return $out;
+    }
+    // Query parameter values must be percent-encoded: paths and names holding
+    // spaces or multibyte characters otherwise reach PHP truncated or mangled.
+    function fm_url($value) {
+        return rawurlencode((string)$value);
+    }
+    function fm_attr($value) {
+        // Byte-wise escaping, like html_encode(): htmlspecialchars() returns an
+        // empty string for names that are not valid UTF-8, which legacy data
+        // stored under a GBK locale still uses.
+        return str_replace(array('&', '<', '>', '"'), array('&amp;', '&lt;', '&gt;', '&quot;'), (string)$value);
     }
     function fm_join_relative($directory, $name) {
         if (!fm_name($name)) return false;
@@ -2625,7 +2655,7 @@ function download(){
             $size = filesize($file);
             header("Content-Type: application/save");
             header("Content-Length: $size");
-            header('Content-Disposition: attachment; filename="' . rawurlencode($filename) . '"; filename*=UTF-8\'\'' . rawurlencode($filename));
+            header(fm_content_disposition('attachment', $filename));
             header("Content-Transfer-Encoding: binary");
             if ($fh = fopen("$file", "rb")){
                 fpassthru($fh);
@@ -2636,13 +2666,20 @@ function download(){
 }
 function is_allowed_upload_filename($filename) {
     // The file manager is for judge data and source files, not arbitrary files.
-    if (!is_string($filename) || $filename === '' || strlen($filename) > 128) {
+    if (!is_string($filename) || $filename === '' || strlen($filename) > 255) {
         return false;
     }
     if (basename($filename) !== $filename || strpos($filename, "\0") !== false) {
         return false;
     }
-    if (!preg_match('/^[A-Za-z0-9][A-Za-z0-9._+\-]{0,127}$/', $filename)) {
+    // Judge data is regularly named in Chinese and with spaces ("测试 1.in").
+    // Multipart filenames arrive as raw bytes in the browser's local encoding,
+    // so match bytes instead of an ASCII-only whitelist: allow anything above
+    // 0x7F and reject everything that is unsafe on Linux or Windows.
+    if (!preg_match('/^[A-Za-z0-9\x80-\xFF][A-Za-z0-9\x80-\xFF ._\-\+]{0,254}\z/', $filename)) {
+        return false;
+    }
+    if (substr($filename, -1) === '.' || substr($filename, -1) === ' ') {
         return false;
     }
 
@@ -3245,18 +3282,18 @@ function show_tree(){
         function go_dir(arg) {
             var setflag;
             setflag = (flag)?1:0;
-            document.location.href='".addslashes($path_info["basename"])."?frame=2&setflag='+setflag+'&current_dir=".addslashes($current_dir)."&ec_dir='+arg;
+            document.location.href='".addslashes($path_info["basename"])."?frame=2&setflag='+setflag+'&current_dir=".fm_url($current_dir)."&ec_dir='+encodeURIComponent(arg);
         }
         function go(arg) {
             if (flag) {
                 parent.frame3.set_dir_dest(arg+'/');
                 flag = false;
             } else {
-                parent.frame3.location.href='".addslashes($path_info["basename"])."?frame=3&current_dir='+arg+'/';
+                parent.frame3.location.href='".addslashes($path_info["basename"])."?frame=3&current_dir='+encodeURIComponent(arg+'/');
             }
         }
         function set_fm_current_root(arg){
-            document.location.href='".addslashes($path_info["basename"])."?frame=2&set_fm_current_root='+escape(arg);
+            document.location.href='".addslashes($path_info["basename"])."?frame=2&set_fm_current_root='+encodeURIComponent(arg);
         }
         function atualizar(){
             document.location.href='".addslashes($path_info["basename"])."?frame=2';
@@ -3381,6 +3418,7 @@ function tips($filename) {
 
 function dir_list_form() {
     global $fm_current_root,$current_dir,$quota_mb,$resolveIDs,$order_dir_list_by,$islinux,$cmd_name,$ip,$path_info,$fm_color,$csrf_query;
+    $dir_url = fm_url($current_dir);
     $ti = getmicrotime();
     clearstatcache();
     $out = "<table border=0 cellspacing=1 cellpadding=4 width=\"100%\" bgcolor=\"#eeeeee\">\n";
@@ -3469,21 +3507,21 @@ function dir_list_form() {
         }
         function ans2out() {
 	    if(confirm('可能覆盖已有.out文件，请三思而行！\\n Are you sure about overwrite all .out files ?')){
-            	document.location.href='".addslashes($path_info["basename"])."?frame=3&ans2out=1&current_dir=".addslashes($current_dir).$csrf_query."';
+            	document.location.href='".addslashes($path_info["basename"])."?frame=3&ans2out=1&current_dir=".fm_url($current_dir).$csrf_query."';
             }
         }
         function confirm_ai() {
 	    if(confirm('当前目录为空，是否生成占位文件以使用AI生成数据？\\n Generate Empty Files for AI  ?')){
-            	document.location.href='".addslashes($path_info["basename"])."?frame=3&generate=1&current_dir=".addslashes($current_dir).$csrf_query."';
+            	document.location.href='".addslashes($path_info["basename"])."?frame=3&generate=1&current_dir=".fm_url($current_dir).$csrf_query."';
             }
         }
         function generate() {
 	    if(confirm('如果目录不为空,将覆盖所有.out文件，请三思而行！\\n Are you sure about overwrite all .out files ?')){
-            	document.location.href='".addslashes($path_info["basename"])."?frame=3&generate=1&current_dir=".addslashes($current_dir).$csrf_query."';
+            	document.location.href='".addslashes($path_info["basename"])."?frame=3&generate=1&current_dir=".fm_url($current_dir).$csrf_query."';
             }
         }
         function resolveIDs() {
-            document.location.href='".addslashes($path_info["basename"])."?frame=3&set_resolveIDs=1&current_dir=".addslashes($current_dir).$csrf_query."';
+            document.location.href='".addslashes($path_info["basename"])."?frame=3&set_resolveIDs=1&current_dir=".fm_url($current_dir).$csrf_query."';
         }
         var entry_list = new Array();
         // Custom object constructor
@@ -3672,12 +3710,12 @@ function dir_list_form() {
             return true;
         }
         function download(arg){
-            location.href='".addslashes($path_info["basename"])."?action=3&current_dir=".addslashes($current_dir).$csrf_query."&filename='+escape(arg);
+            location.href='".addslashes($path_info["basename"])."?action=3&current_dir=".fm_url($current_dir).$csrf_query."&filename='+encodeURIComponent(arg);
         }
         function upload(){
             var w = 600;
             var h = 320;
-            window.open('".addslashes($path_info["basename"])."?action=10&current_dir=".addslashes($current_dir)."', '', 'width='+w+',height='+h+',fullscreen=no,scrollbars=no,resizable=yes,status=no,toolbar=no,menubar=no,location=no');
+            window.open('".addslashes($path_info["basename"])."?action=10&current_dir=".fm_url($current_dir)."', '', 'width='+w+',height='+h+',fullscreen=no,scrollbars=no,resizable=yes,status=no,toolbar=no,menubar=no,location=no');
         }
         function execute_cmd(){
             var arg = prompt('".et('TypeCmd').".');
@@ -3685,7 +3723,7 @@ function dir_list_form() {
                 if(confirm('".et('ConfExec')." \\' '+arg+' \\' ?')) {
                     var w = 800;
                     var h = 600;
-                    window.open('".addslashes($path_info["basename"])."?action=6&current_dir=".addslashes($current_dir)."&cmd='+escape(arg), '', 'width='+w+',height='+h+',fullscreen=no,scrollbars=yes,resizable=yes,status=no,toolbar=no,menubar=no,location=no');
+                    window.open('".addslashes($path_info["basename"])."?action=6&current_dir=".fm_url($current_dir)."&cmd='+encodeURIComponent(arg), '', 'width='+w+',height='+h+',fullscreen=no,scrollbars=yes,resizable=yes,status=no,toolbar=no,menubar=no,location=no');
                 }
             }
         }
@@ -3701,7 +3739,7 @@ function dir_list_form() {
                 if(confirm('".et('ConfExec')." \\' '+arg+' \\' ?')) {
                     var w = 800;
                     var h = 600;
-                    window.open('".addslashes($path_info["basename"])."?action=11&current_dir=".addslashes($current_dir)."&filename='+escape(arg), '', 'width='+w+',height='+h+',fullscreen=no,scrollbars=yes,resizable=yes,status=no,toolbar=no,menubar=no,location=no');
+                    window.open('".addslashes($path_info["basename"])."?action=11&current_dir=".fm_url($current_dir)."&filename='+encodeURIComponent(arg), '', 'width='+w+',height='+h+',fullscreen=no,scrollbars=yes,resizable=yes,status=no,toolbar=no,menubar=no,location=no');
                 }
             }
         }
@@ -3709,7 +3747,7 @@ function dir_list_form() {
             var w = 1150;
             var h = 768;
             // if(confirm('".uppercase(et('Edit'))." \\' '+arg+' \\' ?'))
-            window.open('".addslashes($path_info["basename"])."?action=7&current_dir=".basename($current_dir)."&filename='+escape(arg), '', 'width='+w+',height='+h+',fullscreen=no,scrollbars=no,resizable=yes,status=no,toolbar=no,menubar=no,location=no');
+            window.open('".addslashes($path_info["basename"])."?action=7&current_dir=".basename($current_dir)."&filename='+encodeURIComponent(arg), '', 'width='+w+',height='+h+',fullscreen=no,scrollbars=no,resizable=yes,status=no,toolbar=no,menubar=no,location=no');
         }
         function config(){
             var w = 650;
@@ -3729,11 +3767,11 @@ function dir_list_form() {
         function view(arg){
             var w = 800;
             var h = 600;
-            if(confirm('".uppercase(et('View'))." \\' '+arg+' \\' ?')) window.open('".addslashes($path_info["basename"])."?action=4&current_dir=".addslashes($current_dir)."&filename='+escape(arg), '', 'width='+w+',height='+h+',fullscreen=no,scrollbars=yes,resizable=yes,status=yes,toolbar=no,menubar=no,location=yes');
+            if(confirm('".uppercase(et('View'))." \\' '+arg+' \\' ?')) window.open('".addslashes($path_info["basename"])."?action=4&current_dir=".fm_url($current_dir)."&filename='+encodeURIComponent(arg), '', 'width='+w+',height='+h+',fullscreen=no,scrollbars=yes,resizable=yes,status=yes,toolbar=no,menubar=no,location=yes');
         }
         function rename(arg){
             var nome = '';
-            if (nome = prompt('".uppercase(et('Ren'))." \\' '+arg+' \\' ".et('To')." ...',arg)) document.location.href='".addslashes($path_info["basename"])."?frame=3&action=3&current_dir=".addslashes($current_dir).$csrf_query."&old_name='+escape(arg)+'&new_name='+escape(nome);
+            if (nome = prompt('".uppercase(et('Ren'))." \\' '+arg+' \\' ".et('To')." ...',arg)) document.location.href='".addslashes($path_info["basename"])."?frame=3&action=3&current_dir=".fm_url($current_dir).$csrf_query."&old_name='+encodeURIComponent(arg)+'&new_name='+encodeURIComponent(nome);
         }
         function set_dir_dest(arg){
             document.form_action.dir_dest.value=arg;
@@ -3877,8 +3915,8 @@ function dir_list_form() {
             <input type=hidden name=\"dir_dest\" value=\"\">
             <input type=hidden name=\"chmod_arg\" value=\"\">
             <input type=hidden name=\"cmd_arg\" value=\"\">
-            <input type=hidden name=\"current_dir\" value=\"$current_dir\">
-            <input type=hidden name=\"dir_before\" value=\"$dir_before\">
+            <input type=hidden name=\"current_dir\" value=\"".fm_attr($current_dir)."\">
+            <input type=hidden name=\"dir_before\" value=\"".fm_attr($dir_before)."\">
             <input type=hidden name=\"selected_dir_list\" value=\"\">
             <input type=hidden name=\"selected_file_list\" value=\"\">";
         $out .= "
@@ -3907,7 +3945,7 @@ function dir_list_form() {
             $mat = explode("/",$current_dir);
             $dir_before = "";
             for($x=0;$x<(count($mat)-2);$x++) $dir_before .= $mat[$x]."/";
-            $uplink = "<a href=\"".$path_info["basename"]."?frame=3&current_dir=$dir_before\"><<</a> ";
+            $uplink = "<a href=\"".$path_info["basename"]."?frame=3&current_dir=".fm_url($dir_before)."\"><<</a> ";
         }
         if($entry_count){
             $out .= "
@@ -3958,7 +3996,7 @@ subtask的题目中也可以有不跟其他数据绑定的，认为是自己一�
                     if ($has_files) $dir_out[$dir_count][] = "<td>&nbsp;</td>";
                     // Opções de diretório
                     if ( is_writable($current_dir.$file) ) $dir_out[$dir_count][] = "
-                        <td align=center><a href=\"JavaScript:if(confirm('".et('ConfRem')." \\'".addslashes($file)."\\' ?')) document.location.href='".addslashes($path_info["basename"])."?frame=3&action=8&cmd_arg=".addslashes($file)."&current_dir=".addslashes($current_dir).$csrf_query."'\">".et('Rem')."</a>";
+                        <td align=center><a href=\"JavaScript:if(confirm('".et('ConfRem')." \\'".addslashes($file)."\\' ?')) document.location.href='".addslashes($path_info["basename"])."?frame=3&action=8&cmd_arg=".fm_url($file)."&current_dir=".fm_url($current_dir).$csrf_query."'\">".et('Rem')."</a>";
                     if ( is_writable($current_dir.$file) ) $dir_out[$dir_count][] = "
                         <td align=center><a href=\"JavaScript:rename('".addslashes($file)."')\">".et('Ren')."</a>";
                     if (count($dir_out[$dir_count])>$max_opt){
@@ -3980,7 +4018,7 @@ subtask的题目中也可以有不跟其他数据绑定的，认为是自己一�
                     $file_out[$file_count][] = "<td>".$dir_entry["extt"]."</td>";
                     // Opções de arquivo
                     if ( is_writable($current_dir.$file) ) $file_out[$file_count][] = "
-                                <td align=center><a href=\"javascript:if(confirm('".uppercase(et('Rem'))." \\'".addslashes($file)."\\' ?')) document.location.href='".addslashes($path_info["basename"])."?frame=3&action=8&cmd_arg=".addslashes($file)."&current_dir=".addslashes($current_dir).$csrf_query."'\">".et('Rem')."</a>";
+                                <td align=center><a href=\"javascript:if(confirm('".uppercase(et('Rem'))." \\'".addslashes($file)."\\' ?')) document.location.href='".addslashes($path_info["basename"])."?frame=3&action=8&cmd_arg=".fm_url($file)."&current_dir=".fm_url($current_dir).$csrf_query."'\">".et('Rem')."</a>";
                     else $file_out[$file_count][] = "<td>&nbsp;</td>";
                     if ( is_writable($current_dir.$file) ) $file_out[$file_count][] = "
                                 <td align=center><a href=\"javascript:rename('".addslashes($file)."')\">".et('Ren')."</a>";
@@ -4006,16 +4044,16 @@ subtask的题目中也可以有不跟其他数据绑定的，认为是自己一�
             if ($dir_count){
                 $out .= "
                 <tr>
-                      <td bgcolor=\"#DDDDDD\"><nobr><a href=\"".$path_info["basename"]."?frame=3&or_by=$or1&current_dir=$current_dir\">".et('Name')."</a></nobr></td>
-                      <td bgcolor=\"#DDDDDD\"><nobr><a href=\"".$path_info["basename"]."?frame=3&or_by=$or2&current_dir=$current_dir\">".et('Perm')."</a></nobr></td>";
+                      <td bgcolor=\"#DDDDDD\"><nobr><a href=\"".$path_info["basename"]."?frame=3&or_by=$or1&current_dir=$dir_url\">".et('Name')."</a></nobr></td>
+                      <td bgcolor=\"#DDDDDD\"><nobr><a href=\"".$path_info["basename"]."?frame=3&or_by=$or2&current_dir=$dir_url\">".et('Perm')."</a></nobr></td>";
                 if ($islinux) $out .= "
-                      <td bgcolor=\"#DDDDDD\"><nobr><a href=\"".$path_info["basename"]."?frame=3&or_by=$or3&current_dir=$current_dir\">".et('Owner')."</a></td>
-                      <td bgcolor=\"#DDDDDD\"><nobr><a href=\"".$path_info["basename"]."?frame=3&or_by=$or4&current_dir=$current_dir\">".et('Group')."</a></nobr></td>";
+                      <td bgcolor=\"#DDDDDD\"><nobr><a href=\"".$path_info["basename"]."?frame=3&or_by=$or3&current_dir=$dir_url\">".et('Owner')."</a></td>
+                      <td bgcolor=\"#DDDDDD\"><nobr><a href=\"".$path_info["basename"]."?frame=3&or_by=$or4&current_dir=$dir_url\">".et('Group')."</a></nobr></td>";
                 $out .= "
-                      <td bgcolor=\"#DDDDDD\"><nobr><a href=\"".$path_info["basename"]."?frame=3&or_by=$or5&current_dir=$current_dir\">".et('Size')."</a></nobr></td>
-                      <td bgcolor=\"#DDDDDD\"><nobr><a href=\"".$path_info["basename"]."?frame=3&or_by=$or6&current_dir=$current_dir\">".et('Date')."</a></nobr></td>";
+                      <td bgcolor=\"#DDDDDD\"><nobr><a href=\"".$path_info["basename"]."?frame=3&or_by=$or5&current_dir=$dir_url\">".et('Size')."</a></nobr></td>
+                      <td bgcolor=\"#DDDDDD\"><nobr><a href=\"".$path_info["basename"]."?frame=3&or_by=$or6&current_dir=$dir_url\">".et('Date')."</a></nobr></td>";
                 if ($file_count) $out .= "
-                      <td bgcolor=\"#DDDDDD\"><nobr><a href=\"".$path_info["basename"]."?frame=3&or_by=$or7&current_dir=$current_dir\">".et('Type')."</a></nobr></td>";
+                      <td bgcolor=\"#DDDDDD\"><nobr><a href=\"".$path_info["basename"]."?frame=3&or_by=$or7&current_dir=$dir_url\">".et('Type')."</a></nobr></td>";
                 $out .= "
                       <td bgcolor=\"#DDDDDD\" colspan=50>&nbsp;</td>
                 </tr>";
@@ -4031,15 +4069,15 @@ subtask的题目中也可以有不跟其他数据绑定的，认为是自己一�
             if ($file_count){
                 $out .= "
                 <tr>
-                      <td bgcolor=\"#DDDDDD\"><nobr><a href=\"".$path_info["basename"]."?frame=3&or_by=$or1&current_dir=$current_dir\">".et('Name')."</a></nobr></td>
-                      <td bgcolor=\"#DDDDDD\"><nobr><a href=\"".$path_info["basename"]."?frame=3&or_by=$or2&current_dir=$current_dir\">".et('Perm')."</a></nobr></td>";
+                      <td bgcolor=\"#DDDDDD\"><nobr><a href=\"".$path_info["basename"]."?frame=3&or_by=$or1&current_dir=$dir_url\">".et('Name')."</a></nobr></td>
+                      <td bgcolor=\"#DDDDDD\"><nobr><a href=\"".$path_info["basename"]."?frame=3&or_by=$or2&current_dir=$dir_url\">".et('Perm')."</a></nobr></td>";
                 if ($islinux) $out .= "
-                      <td bgcolor=\"#DDDDDD\"><nobr><a href=\"".$path_info["basename"]."?frame=3&or_by=$or3&current_dir=$current_dir\">".et('Owner')."</a></td>
-                      <td bgcolor=\"#DDDDDD\"><nobr><a href=\"".$path_info["basename"]."?frame=3&or_by=$or4&current_dir=$current_dir\">".et('Group')."</a></nobr></td>";
+                      <td bgcolor=\"#DDDDDD\"><nobr><a href=\"".$path_info["basename"]."?frame=3&or_by=$or3&current_dir=$dir_url\">".et('Owner')."</a></td>
+                      <td bgcolor=\"#DDDDDD\"><nobr><a href=\"".$path_info["basename"]."?frame=3&or_by=$or4&current_dir=$dir_url\">".et('Group')."</a></nobr></td>";
                 $out .= "
-                      <td bgcolor=\"#DDDDDD\"><nobr><a href=\"".$path_info["basename"]."?frame=3&or_by=$or5&current_dir=$current_dir\">".et('Size')."</a></nobr></td>
-                      <td bgcolor=\"#DDDDDD\"><nobr><a href=\"".$path_info["basename"]."?frame=3&or_by=$or6&current_dir=$current_dir\">".et('Date')."</a></nobr></td>
-                      <td bgcolor=\"#DDDDDD\"><nobr><a href=\"".$path_info["basename"]."?frame=3&or_by=$or7&current_dir=$current_dir\">".et('Type')."</a></nobr></td>
+                      <td bgcolor=\"#DDDDDD\"><nobr><a href=\"".$path_info["basename"]."?frame=3&or_by=$or5&current_dir=$dir_url\">".et('Size')."</a></nobr></td>
+                      <td bgcolor=\"#DDDDDD\"><nobr><a href=\"".$path_info["basename"]."?frame=3&or_by=$or6&current_dir=$dir_url\">".et('Date')."</a></nobr></td>
+                      <td bgcolor=\"#DDDDDD\"><nobr><a href=\"".$path_info["basename"]."?frame=3&or_by=$or7&current_dir=$dir_url\">".et('Type')."</a></nobr></td>
                       <td bgcolor=\"#DDDDDD\" colspan=50>&nbsp;</td>
                 </tr>";
 
@@ -4480,7 +4518,7 @@ function view(){
 					header("Cache-Control: public");
 					header("Content-Description: File Transfer");
 					header("Content-Type: ".$ctype);
-				    header("Content-Disposition: inline; filename=\"".pathinfo($file, PATHINFO_BASENAME)."\";");
+				    header(fm_content_disposition('inline', pathinfo($file, PATHINFO_BASENAME)));
 					header("Content-Transfer-Encoding: binary");
 					header("Content-Length: ".filesize($file));
 					@readfile($file);
@@ -4502,9 +4540,10 @@ function view(){
 	        $url = $url_info["scheme"]."://".$url_info["host"];
 	        if (strlen($url_info["port"])) $url .= ":".$url_info["port"];
 	        // Malditas variaveis de sistema!! No windows doc_root é sempre em lowercase... cadê o str_ireplace() ??
-	        $url .= str_replace($doc_root,"","/".$current_dir).$filename;
+	        // Each path segment needs its own encoding, spaces included.
+	        $url .= implode('/', array_map('rawurlencode', explode('/', str_replace('\\', '/', str_replace($doc_root, "", "/".$current_dir))))) . rawurlencode($filename);
 	    } else {
-			$url = addslashes($path_info["basename"])."?action=4&current_dir=".addslashes($current_dir)."&filename=".addslashes($filename)."&passthru=1";
+			$url = addslashes($path_info["basename"])."?action=4&current_dir=".fm_url($current_dir)."&filename=".fm_url($filename)."&passthru=1";
 	    }
         echo "
 	    <script language=\"Javascript\" type=\"text/javascript\">
@@ -4547,8 +4586,8 @@ function edit_file_form(){
     ".fm_csrf_field()."
     <input type=hidden name=action value=\"7\">
     <input type=hidden name=save_file value=\"1\">
-    <input type=hidden name=current_dir value=\"$current_dir\">
-    <input type=hidden name=filename value=\"$filename\">
+    <input type=hidden name=current_dir value=\"".fm_attr($current_dir)."\">
+    <input type=hidden name=filename value=\"".fm_attr($filename)."\">
     <tr><th colspan=2>".$filename."</th></tr>
     <tr><td colspan=2><textarea id='file_data' name='file_data' style='width:1000px;height:500px;'>".html_encode($file_data)."</textarea></td></tr>
     <tr><td>";
@@ -4559,8 +4598,8 @@ function edit_file_form(){
     <form name=\"edit_form_refresh\" action=\"".$path_info["basename"]."\" method=\"post\">
     ".fm_csrf_field()."
     <input type=hidden name=action value=\"7\">
-    <input type=hidden name=current_dir value=\"$current_dir\">
-    <input type=hidden name=filename value=\"$filename\">
+    <input type=hidden name=current_dir value=\"".fm_attr($current_dir)."\">
+    <input type=hidden name=filename value=\"".fm_attr($filename)."\">
     </form>
     </table>
     <script language=\"Javascript\" type=\"text/javascript\">
@@ -5608,10 +5647,8 @@ class archive
         case "tar":
             header("Content-type:application/x-tar");
         }
-        $header = "Content-disposition: attachment; filename=\"";
-        $header .= strstr($this->options['name'],"/")? substr($this->options['name'],strrpos($this->options['name'],"/") + 1) : $this->options['name'];
-        $header .= "\"";
-        header($header);
+        $archive_name = basename(str_replace('\\', '/', $this->options['name']));
+        header(fm_content_disposition('attachment', $archive_name));
         header("Content-length: " . strlen($this->archive));
         header("Content-transfer-encoding: binary");
         header("Cache-control: no-cache, must-revalidate, post-check=0, pre-check=0");
