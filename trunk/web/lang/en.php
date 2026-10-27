@@ -146,6 +146,7 @@
 	$MSG_SPJ= "Special Judger" ;
 	$MSG_RTJ= "Raw Text Judger" ;
 	$MSG_INTERACT= "Interactive Judger" ;
+	$MSG_COMMUNICATION= "Communication Problem" ;
         $MSG_CLICK_VIEW_HINT="Click to View Spoiler";
 	$MSG_HINT= "HINT" ;
 	$MSG_Source= "Source" ;

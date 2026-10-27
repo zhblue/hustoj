@@ -140,6 +140,7 @@ $MSG_TOO_BAD="Please surf the internet in a civilized manner";
 	$MSG_SPJ= "Special Judger" ;
 	$MSG_RTJ= "Raw Text Judger" ;
         	$MSG_INTERACT= "Interactive Judger" ;
+        	$MSG_COMMUNICATION= "Communication Problem" ;
 $MSG_CLICK_VIEW_HINT="Click to View Spoiler";
 	$MSG_HINT= "คำใบ้";
 	$MSG_Source= "แหล่งที่มา" ;

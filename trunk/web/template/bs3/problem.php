@@ -65,7 +65,7 @@
 				echo "<span class=green>$MSG_Time_Limit : </span><span><span fd='time_limit' pid='".$row['problem_id']."'  >" . $row[ 'time_limit' ] . "</span></span> sec&nbsp;&nbsp;";
 				echo "<span class=green>$MSG_Memory_Limit : </span>" . $row[ 'memory_limit' ] . " MiB";
 
-				echo array($MSG_NJ,$MSG_SPJ,$MSG_RTJ)[$row['spj']] ; 
+				echo array($MSG_NJ,$MSG_SPJ,$MSG_RTJ,$MSG_INTERACT,$MSG_COMMUNICATION)[$row['spj']] ; 
 				echo "<br><br>";
 					echo "<div class='btn-group' role='group'>";
         if($pr_flag){

@@ -150,6 +150,7 @@
  $MSG_SPJ = "特殊裁判" ;
  $MSG_RTJ = "文字裁判" ;
 	$MSG_INTERACT = "交互裁判" ;
+	$MSG_COMMUNICATION = "通訊題" ;
  $MSG_HINT = "提示" ;
  $MSG_Source = "來源" ;
  $MSG_Time_Limit ="時間限制";

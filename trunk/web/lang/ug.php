@@ -142,6 +142,7 @@ if(date('m')==4&&date('d')==1&&rand(0,100)<10){
 	$MSG_SPJ= "ئالاھېدە تەكشۈرۈش" ;
 	$MSG_RTJ= "Raw Text Judger" ;
         	$MSG_INTERACT= "Interactive Judger" ;
+        	$MSG_COMMUNICATION= "Communication Problem" ;
 	$MSG_HINT= "كۆرسەتمە";
 	$MSG_Source= "مەنبە";
 	$MSG_Time_Limit="ۋاقىت چەكلىمىسى";

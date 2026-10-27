@@ -149,6 +149,7 @@
 	$MSG_SPJ="특별 채점" ;
 	$MSG_RTJ="텍스트 채점" ;
 		$MSG_INTERACT= "Interactive Judger" ;
+		$MSG_COMMUNICATION= "Communication Problem" ;
 $MSG_HINT="도움";
 	$MSG_Source="출처";
 	$MSG_Time_Limit="시간제한";

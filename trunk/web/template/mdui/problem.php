@@ -18,7 +18,7 @@
                     <div class="mdui-m-x-1" style="display: inline-block;">时间限制：<code><?php echo $row["time_limit"].'s'; ?></code></div>
                     <div class="mdui-m-x-1" style="display: inline-block;">内存限制：<code><?php echo $row["memory_limit"].'MB'; ?></code></div>
                     <?php if($row["spj"]) { ?>
-                        <div class="mdui-color-yellow mdui-m-t-1" style="border: 1px solid transparent; border-radius: 5px; padding: .5px 5px; font-size: 85%; display: inline-block;">Special Judge</div>
+                        <div class="mdui-color-yellow mdui-m-t-1" style="border: 1px solid transparent; border-radius: 5px; padding: .5px 5px; font-size: 85%; display: inline-block;"><?php echo array($MSG_NJ,$MSG_SPJ,$MSG_RTJ,$MSG_INTERACT,$MSG_COMMUNICATION)[$row["spj"]]; ?></div>
                     <?php } ?>
                 </div>
             </div>

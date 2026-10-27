@@ -139,6 +139,7 @@
 	$MSG_SPJ="དམིགས་བསལ་གཏན་།";
 	$MSG_RTJ="རིག་གཏན།";
 		$MSG_INTERACT= "Interactive Judger" ;
+		$MSG_COMMUNICATION= "Communication Problem" ;
 $MSG_CLICK_VIEW_HINT="Click to View Spoiler";
 	$MSG_HINT="གདམ་ང།";
 	$MSG_Source="Source";

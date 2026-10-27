@@ -171,6 +171,7 @@
 	$MSG_SPJ= "特殊裁判(spj.cc/upj.cc/tpj.cc)" ;
 	$MSG_RTJ= "文本裁判" ;
 	$MSG_INTERACT= "交互裁判(interactor.cc)" ;
+	$MSG_COMMUNICATION= "通信题" ;
 	$MSG_HINT= "提示" ;
 	$MSG_Source= "来源" ;
 	$MSG_Time_Limit="时间限制";

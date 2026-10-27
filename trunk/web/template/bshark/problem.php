@@ -59,12 +59,12 @@
 								echo "<h1>$MSG_PROBLEM " . $PID[$pid] . ". " . $row['title'] . "</h1>";
 							}
 							if ($row['spj'])
-								echo $MSG_SPJ . '/';
+								echo array($MSG_NJ,$MSG_SPJ,$MSG_RTJ,$MSG_INTERACT,$MSG_COMMUNICATION)[$row['spj']] . '/';
 							?>
 							<div class="ui teal label vTooltip">
 								<i class="book icon"></i>
-								<?php echo $row['spj'] ? "SPJ" : "传统题"; ?>
-								<span class="vTooltiptext">评测方式</span>
+								<?php echo array($MSG_NJ,$MSG_SPJ,$MSG_RTJ,$MSG_INTERACT,$MSG_COMMUNICATION)[$row['spj']]; ?>
+								<span class="vTooltiptext"><?php echo $MSG_JUDGE_STYLE; ?></span>
 							</div>
 							<div class="ui orange label vTooltip">
 								<i class="clock icon"></i>

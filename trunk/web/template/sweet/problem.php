@@ -39,7 +39,7 @@
       echo "<span class=green>$MSG_Time_Limit: </span>".$row['time_limit']." Sec&nbsp;&nbsp;";
       echo "<span class=green>$MSG_Memory_Limit: </span>".$row['memory_limit']." MB";
 
-      if($row['spj']) echo "&nbsp;&nbsp;<span class=red>Special Judge</span>";
+      if($row['spj']) echo "&nbsp;&nbsp;<span class=red>".array($MSG_NJ,$MSG_SPJ,$MSG_RTJ,$MSG_INTERACT,$MSG_COMMUNICATION)[$row['spj']].'</span>';
       echo "<br><span class=green>$MSG_SUBMIT: </span>".$row['submit']."&nbsp;&nbsp;";
       echo "<span class=green>$MSG_SOVLED: </span>".$row['accepted']."<br>";
 

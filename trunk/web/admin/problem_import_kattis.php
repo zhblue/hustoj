@@ -16,7 +16,7 @@ require_once ("../include/problem.php");
 // ICPC 题目包（Kattis / problem-package-format）导入器，对应命令行脚本
 // kattis_package_to_hustoj_data.py 的网页版：
 //   上传 zip -> 建题 -> 数据摊平成 data/<pid>/N.in(+N.ans) -> 校验器源码放进 data/<pid>/validator.src/
-// validation: custom multi-pass 的通讯题导入后 spj=4，由 judge_client 的 communication_case 逐轮判题。
+// validation: custom multi-pass 的通信题导入后 spj=4，由 judge_client 的 communication_case 逐轮判题。
 //
 // 安全前提：
 //   1) 只按条目从 zip 里读内容，全程不解压到磁盘，所以不存在 zip-slip；
@@ -428,7 +428,7 @@ function import_kattis_problem($zip, $map, $root, $OJ_DATA) {
   }
 
   echo "<hr><b>PID <a href='../problem.php?id=$pid'>" . $pid . "</a></b> " . htmlentities($title, ENT_QUOTES, "UTF-8")
-     . " &mdash; spj=$spj" . ($multi_pass ? "（通讯题，逐轮判题）" : "")
+     . " &mdash; spj=$spj" . ($multi_pass ? "（通信题，逐轮判题）" : "")
      . "，$written 组数据，时限 {$time}s，内存 {$memory}M<br>";
 
   $todo = array();
@@ -495,7 +495,7 @@ if ($_FILES["fps"]["error"] > 0) {
        . htmlentities(implode(', ', array_map(function ($r) { return $r === '' ? '(包根)' : $r; }, $roots)), ENT_QUOTES, 'UTF-8') . "<br>";
     $pids = array();
     foreach ($roots as $root) $pids[] = import_kattis_problem($zip, $map, $root, $OJ_DATA);
-    echo "<hr>已导入 PID：" . implode(', ', $pids) . "<br>通讯题（spj=4）按 data/&lt;pid&gt;/N.in 逐轮运行提交程序，每轮把 user.out 交给 "
+    echo "<hr>已导入 PID：" . implode(', ', $pids) . "<br>通信题（spj=4）按 data/&lt;pid&gt;/N.in 逐轮运行提交程序，每轮把 user.out 交给 "
        . "$OJ_DATA/&lt;pid&gt;/validator 裁决；校验器写出 nextpass.in 就进入下一轮，没写就算这一组过了。";
   }
   $zip->close();

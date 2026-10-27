@@ -139,6 +139,7 @@
 	$MSG_SPJ="שיפוט מיוחד";
 	$MSG_RTJ="שיפוט טקסט";
 		$MSG_INTERACT= "Interactive Judger" ;
+		$MSG_COMMUNICATION= "Communication Problem" ;
 $MSG_CLICK_VIEW_HINT="$MSG_CLICK_VIEW_HINT";
 	$MSG_HINT="רמז";
 	$MSG_Source="$MSG_Source";
