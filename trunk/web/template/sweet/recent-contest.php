@@ -29,49 +29,44 @@ $cur_path = "template/$OJ_TEMPLATE/"
     <?php include("template/$OJ_TEMPLATE/nav.php");?>	    
       <!-- Main component for a primary marketing message or call to action -->
       <div class="jumbotron">
-<div id=main>
-
+<div id="main" style="margin: 10px;">
 <!--
-	<table lay-filter="demo">
-<thead class=toprow>
-	<tr>
-		<th lay-data="{field:'username',}">OJ</th><th lay-data="{field:'username1',}">Name</th><th class="column-3" lay-data="{field:'username2', width:100}">Start Time</th><th class="column-4" lay-data="{field:'username3', width:100}">Week</th><th class="column-5" lay-data="{field:'username4', width:100}">Access</th>
-	</tr>
-</thead>
-<tbody class="row-hover">
-<?php
-//echo $json;
-$odd=true;
-$limit = 0;
- foreach($rows as $row) {
-   $odd=!$odd;
-?>
-  <tr>
-		<td><?php echo$row['oj']?></td><td class="column-2"><a id="name_<?php echo$row['id']?>" href="<?php echo$row['link']?>" target="_blank"><?php echo$row['name']?></a></td><td class="column-3"><?php echo$row['start_time']?></td><td class="column-4"><?php echo$row['week']?></td><td class="column-5"><?php echo$row['access']?></td>
-  </tr>
-<?php
- $limit++;
- } ?>
-</tbody>
-</table>
+    <table width=80% align=center>
+        <thead class=toprow>
+            <tr>
+                <th class="column-1">OJ</th><th class="column-2">Name</th><th class="column-3">Start Time</th><th class="column-4">Week</th><th class="column-5">Access</th>
+            </tr>
+        </thead>
+        <tbody class="row-hover">
+        <?php
+        $odd=true;
+         foreach($rows as $row) {
+           $odd=!$odd;
+        ?>
+        <tr class="<?php echo $odd?"oddrow":"evenrow"  ?>">
+            <td class="column-1"><?php echo$row['oj']?></td><td class="column-2"><a id="name_<?php echo$row['id']?>" href="<?php echo$row['link']?>" target="_blank"><?php echo$row['name']?></a></td><td class="column-3"><?php echo$row['start_time']?></td><td class="column-4"><?php echo$row['week']?></td><td class="column-5"><?php echo$row['access']?></td>
+        </tr>
+        <?php } ?>
+        </tbody>
+    </table>
 -->
+    <table class="table table-striped" align="center">
+    <thead>
+        <tr>
+            <th class="column-1">OJ</th>
+            <th class="column-2">Name</th>
+            <th class="column-3">Start Time</th>
+            <th class="column-4">Week</th>
+            <th class="column-5">Access</th>
+        </tr>
+    </thead>
+    <tbody id="contest-list"></tbody>
+    </table>
 
-<table lay-filter="demo">
-<thead class=toprow>
-	<tr>
-		<th lay-data="{field:'username',}">OJ</th>
-		<th lay-data="{field:'username1',}">Name</th>
-		<th class="column-3" lay-data="{field:'username2', width:100}">Start Time</th>
-		<th class="column-4" lay-data="{field:'username3', width:100}">Week</th>
-		<th class="column-5" lay-data="{field:'username4', width:100}">Access</th>
-	</tr>
-</thead>
-<tbody class="row-hover" id="contest-list"></tbody>
-
-</table>
 </div>
-  
 <div align=center>DataSource:http://algcontest.rainng.com/contests.json  Spider Author:<a href="https://github.com/Azure99/AlgContestInfo" >Azure99</a></div>
+
+      </div>
 
       </div>
 
