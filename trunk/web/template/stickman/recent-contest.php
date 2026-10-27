@@ -32,3 +32,4 @@
     <div>数据来源：<a href="https://algcontest.rainng.com/contests.json" target="_blank">https://algcontest.rainng.com/contests.json</a>&nbsp;&nbsp;&nbsp;&nbsp;作者：<a href="https://www.rainng.com/"  target="_blank" >Azure99</a></div>
     </div>
 <?php include("template/$OJ_TEMPLATE/footer.php");?>
+
