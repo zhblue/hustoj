@@ -100,6 +100,15 @@
       <?php require("../include/set_post_key.php");?>
     </form> <hr>
 
+    - ICPC 题目包 / Kattis - zip（含通讯题 multi-pass）<br><br>
+    <form class='form-inline aj-up' action='problem_import_kattis.php' method=post enctype="multipart/form-data">
+      <div class='form-group'>
+        <input class='form-control' type=file name=fps required>
+        <button class='btn btn-primary btn-sm' type=submit>Upload to HUSTOJ</button>
+      </div>
+      <?php require("../include/set_post_key.php");?>
+    </form> <hr>
+
     - HOJ - zip<br><br>
     <form class='form-inline aj-up' action='problem_import_hoj.php' method=post enctype="multipart/form-data">
       <div class='form-group'>

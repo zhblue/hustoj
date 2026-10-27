@@ -61,6 +61,9 @@
 #define STD_T_LIM 2
 #define STD_F_LIM (STD_MB << 9) //default file size limit 512m ,2^9=512
 #define STD_M_LIM (STD_MB << 8) //default memory limit 256m ,2^8=256
+#define SPJ_COMMUNICATION 4		//通讯题：problem-package-format 的 custom multi-pass，spj=4
+#define COMM_VALIDATOR_AC 42		//校验器返回 42（或 0）表示本轮通过
+#define COMM_MAX_PASS 100			//单组数据最多判多少轮，防止校验器无限索要下一轮
 #define BUFFER_SIZE 4096		//default size of char buffer 5120 bytes
 #define LOCKMODE (S_IRUSR|S_IWUSR|S_IRGRP|S_IROTH)
 #define FIFO_INTER "p_interactor"
@@ -2041,6 +2044,12 @@ void _get_custominput_mysql(int solution_id, char *work_dir)
 			solution_id);
 	mysql_real_query(conn, sql, strlen(sql));
 	res = mysql_store_result(conn);
+	if (res == NULL)
+	{
+		// mysql_fetch_row(NULL) 会解引用空结果集
+		write_log("query custominput %d fail: %s", solution_id, mysql_error(conn));
+		return;
+	}
 	row = mysql_fetch_row(res);
 	if (row != NULL)
 	{
@@ -2121,9 +2130,25 @@ void _get_solution_info_mysql(int solution_id, int & p_id, char * user_id,
 				solution_id);
 	}
 	//printf("%s\n",sql);
-	mysql_real_query(conn, sql, strlen(sql));
+	if (mysql_real_query(conn, sql, strlen(sql)) != 0)
+	{
+		write_log("query solution %d fail: %s, skip judging", solution_id, mysql_error(conn));
+		exit(0);
+	}
 	res = mysql_store_result(conn);
+	if (res == NULL)
+	{
+		write_log("store result of solution %d fail: %s, skip judging", solution_id, mysql_error(conn));
+		exit(0);
+	}
 	row = mysql_fetch_row(res);
+	if (row == NULL)
+	{
+		// 判题期间提交可能被管理员删除，继续解引用会让 judge_client 段错误
+		write_log("solution %d not found, skip judging", solution_id);
+		mysql_free_result(res);
+		exit(0);
+	}
 	p_id = atoi(row[0]);
 	strcpy(user_id, row[1]);
 	lang = atoi(row[2]);
@@ -3026,7 +3051,8 @@ void run_solution(int &lang, char *work_dir, double &time_lmt, int &usedtime,
 	}else if (spj!=3){
 		char noip_file_name[BUFFER_SIZE];
 		sprintf(noip_file_name,"%s/data/%d/input.name",oj_home,p_id);
-		if (p_id==0 || access(noip_file_name, R_OK ) == -1){   //不存在指定文件名，使用标准输入
+		// 通讯题每一轮的输入都由判题机给出，一律走标准输入，不认 input.name。
+		if (p_id==0 || spj==SPJ_COMMUNICATION || access(noip_file_name, R_OK ) == -1){   //通讯题或不存在指定文件名，使用标准输入
 			if(copy_data){
 				stdin=freopen("data.in", "r", stdin);
 			}else{
@@ -3489,6 +3515,26 @@ int special_judge(char *oj_home, int problem_id, char *infile, char *outfile,
 		sprintf(tpjpath,"%s/data/%d/tpj", oj_home, problem_id);
 		sprintf(upjpath,"%s/data/%d/upj", oj_home, problem_id);
 		execute_cmd("chgrp judge %s/data/%d/?pj '%s' '%s' '%s'", oj_home, problem_id,infile, outfile, userfile);
+		/* fix_mod() 把 <case>.in/.out 改成 www_uid 属主 0710，judge 用户只有执行位、
+		 * 读不到标准答案，校验器会恒判 WA。所以校验器改用 www 用户身份运行，
+		 * 并把运行目录与用户输出授权给 www 组。
+		 * 容器镜像里可能没有 www-data 的 passwd 条目，此时 gid 按数值取，
+		 * 与别处 chown(work_dir, judge_uid, www_uid) 的约定一致。 */
+		struct passwd *www_pw = getpwuid((uid_t)www_uid);
+		gid_t www_gid = (www_pw != NULL) ? www_pw->pw_gid : (gid_t)www_uid;
+		char run_dir[BUFFER_SIZE];
+		char *slash = strrchr(userfile, '/');
+		if (chown(spjpath, www_uid, judge_gid) != 0 && DEBUG) printf("chown %s\n", spjpath);
+		if (chown(tpjpath, www_uid, judge_gid) != 0 && DEBUG) printf("chown %s\n", tpjpath);
+		if (chown(upjpath, www_uid, judge_gid) != 0 && DEBUG) printf("chown %s\n", upjpath);
+		if (slash != NULL && slash - userfile + 1 < (int)sizeof(run_dir)){
+			memcpy(run_dir, userfile, slash - userfile);
+			run_dir[slash - userfile] = '\0';
+			if (chown(run_dir, judge_uid, www_gid) != 0 && DEBUG) printf("chown %s\n", run_dir);
+			if (chmod(run_dir, 0770) != 0 && DEBUG) printf("chmod %s\n", run_dir);
+			if (chown(userfile, judge_uid, www_gid) != 0 && DEBUG) printf("chown %s\n", userfile);
+			if (chmod(userfile, 0640) != 0 && DEBUG) printf("chmod %s\n", userfile);
+		}
 		chmod(spjpath, 0751);
 		chmod(tpjpath, 0751);
 		chmod(upjpath, 0751);
@@ -3531,11 +3577,11 @@ int special_judge(char *oj_home, int problem_id, char *infile, char *outfile,
 					
 					if(freopen(DIFF_FILE,"a+",stderr));
 
-					while (setgid(judge_gid) != 0)
+					while (setgid(www_gid) != 0)
 						sleep(1);
-					while (setuid(judge_uid) != 0)
+					while (setuid(www_uid) != 0)
 						sleep(1);
-					while (setresuid(judge_uid, judge_uid, judge_uid) != 0)
+					while (setresuid(www_uid, www_uid, www_uid) != 0)
 						sleep(1);
 					if( access( upjpath , X_OK ) == 0 ){
 						ret = execl(upjpath,upjpath, infile, outfile, userfile,NULL);    // hustoj style 2
@@ -3996,6 +4042,250 @@ void watch_solution(pid_t pidApp, char *infile, int &ACflg, int spj,
 	usedtime += (ruse.ru_stime.tv_sec * 1000 + ruse.ru_stime.tv_usec / 1000) * cpu_compensation; // 统计内核态耗时，在更快速的CPU上加以cpu_compensation倍数放大
 
 	//clean_session(pidApp);
+}
+
+/* 把通讯题校验器留下的否判理由（judgemessage.txt / validator.log）追加到 diff.out，
+ * 供后台与"错误信息"页展示。原生读写，不经过 shell。 */
+static void append_comm_message(const char *file_name)
+{
+	FILE *msg = fopen(file_name, "r");
+	if (msg == NULL)
+		return;
+	FILE *diff = fopen(DIFF_FILE, "a");
+	if (diff == NULL)
+	{
+		fclose(msg);
+		return;
+	}
+	fprintf(diff, "\n------ %s ------\n", getFileNameFromPath(file_name));
+	long sent = 0;
+	char line[BUFFER_SIZE];
+	while (fgets(line, sizeof(line), msg) != NULL && sent < 65536)
+	{
+		size_t len = strlen(line);
+		if (fwrite(line, 1, len, diff) != len)
+			break;
+		sent += (long)len;
+	}
+	fclose(msg);
+	fclose(diff);
+}
+
+/* Fork 出 judge 用户进程运行通讯题的 output validator：
+ *     validator <本轮输入> <答案文件> <feedback 目录> < 团队本轮输出
+ * 这是 ICPC problem-package-format 约定的调用方式，反馈目录就用 work_dir，
+ * 校验器往里写 state.txt / nextpass.in / judgemessage.txt。
+ * 返回校验器的退出码；被信号杀死、超时或启动失败时返回负数。 */
+static int run_output_validator(char *work_dir, const char *validator_path,
+								const char *pass_in, const char *ans_file)
+{
+	pid_t pid = fork();
+	if (pid < 0)
+		return -1;
+	if (pid == 0)
+	{
+		struct rlimit LIM; // time limit, file limit & process limit
+		LIM.rlim_cur = 15;
+		LIM.rlim_max = LIM.rlim_cur;
+		setrlimit(RLIMIT_CPU, &LIM);
+		alarm(0);
+		alarm(10);
+
+		LIM.rlim_max = STD_F_LIM + STD_MB;
+		LIM.rlim_cur = STD_F_LIM;
+		setrlimit(RLIMIT_FSIZE, &LIM);
+
+		LIM.rlim_cur = LIM.rlim_max = 200;
+		setrlimit(RLIMIT_NPROC, &LIM);
+
+		char log_path[BUFFER_SIZE + 64];
+		snprintf(log_path, sizeof(log_path), "%svalidator.log", work_dir);
+		int logfd = open(log_path, O_RDWR | O_CREAT | O_APPEND, 0644);
+		if (logfd >= 0)
+		{
+			dup2(logfd, STDOUT_FILENO);
+			dup2(logfd, STDERR_FILENO);
+			if (logfd > STDERR_FILENO)
+				close(logfd);
+		}
+		// 团队输出仍以 root 身份打开，随后才降权，和提交程序读数据的方式一致。
+		char user_out_path[BUFFER_SIZE + 64];
+		snprintf(user_out_path, sizeof(user_out_path), "%suser.out", work_dir);
+		if (freopen(user_out_path, "r", stdin) == NULL)
+		{ // 本轮没产出：把空输入交给校验器，而不是报崩
+			if (freopen("/dev/null", "r", stdin) == NULL && DEBUG)
+				perror("freopen /dev/null");
+		}
+		// 校验器同样是题目作者提供的程序，不给它继承判题机的数据库连接。
+		close_inherited_fds();
+		while (setgid(judge_gid) != 0)
+			sleep(1);
+		while (setuid(judge_uid) != 0)
+			sleep(1);
+		while (setresuid(judge_uid, judge_uid, judge_uid) != 0)
+			sleep(1);
+		execl(validator_path, validator_path, pass_in, ans_file, work_dir, (char *)NULL);
+		perror("communication validator exec failed");
+		_exit(127);
+	}
+	int status = 0;
+	waitpid(pid, &status, 0);
+	if (WIFSIGNALED(status) || WEXITSTATUS(status) == 127)
+		return -1;
+	return WEXITSTATUS(status);
+}
+
+/* 通讯题（ICPC problem-package-format 的 custom multi-pass，spj=4）判单组数据。
+ * 每轮把当前输入喂给提交程序运行一次，再让 output validator 检查这一轮的输出：
+ * 校验器返回 42（或 0）且在反馈目录里写出 nextpass.in 就进入下一轮，否则本轮定胜负。
+ * 按规范，时限是"每轮"计的，所以每轮重新计时再累加到 usedtime；
+ * work_dir 跨轮保留，程序和校验器写在里面的中间文件（如 state.txt）下一轮仍在。 */
+static void communication_case(int &lang, char *work_dir, double &time_lmt, int &mem_lmt,
+							   int p_id, char *infile, int solution_id,
+							   int &ACflg, int &PEflg, int &usedtime, int &topmemory,
+							   double *spj_mark)
+{
+	// work_dir 已经是 BUFFER_SIZE 量级，拼后缀要多留一点，否则 -Wformat-truncation 报警
+	char pass_in[BUFFER_SIZE + 64], ans_file[BUFFER_SIZE + 64], user_out[BUFFER_SIZE + 64];
+	char next_in[BUFFER_SIZE + 64], ans_src[BUFFER_SIZE + 64], validator_path[BUFFER_SIZE + 64];
+	char judgemsg_path[BUFFER_SIZE + 64], validator_log[BUFFER_SIZE + 64];
+	char message[BUFFER_SIZE];
+	int passes = 0;
+
+	snprintf(pass_in, sizeof(pass_in), "%sdata.in", work_dir);
+	snprintf(ans_file, sizeof(ans_file), "%sjury.ans", work_dir);
+	snprintf(user_out, sizeof(user_out), "%suser.out", work_dir);
+	snprintf(next_in, sizeof(next_in), "%snextpass.in", work_dir);
+	snprintf(judgemsg_path, sizeof(judgemsg_path), "%sjudgemessage.txt", work_dir);
+	snprintf(validator_log, sizeof(validator_log), "%svalidator.log", work_dir);
+
+	// 答案文件和输入同名，后缀换成 .ans；这类题目的 .ans 常常是空文件，缺了就补一个空的。
+	snprintf(ans_src, sizeof(ans_src), "%s", infile);
+	size_t stem = strlen(ans_src);
+	if (stem >= 3 && strcmp(ans_src + stem - 3, ".in") == 0)
+		ans_src[stem - 3] = '\0';
+	strncat(ans_src, ".ans", sizeof(ans_src) - strlen(ans_src) - 1);
+	if (copy_data_file(ans_src, ans_file) != 0)
+	{
+		FILE *empty = fopen(ans_file, "w");
+		if (empty != NULL)
+			fclose(empty);
+	}
+	if (chown(ans_file, judge_uid, judge_gid) != 0 && DEBUG)
+		printf("chown %s\n", ans_file);
+	chmod(ans_file, 0600);
+
+	// 校验器二进制由题目录入者事先编译好放进数据目录；判题机不在 root 下编译作者代码。
+	snprintf(validator_path, sizeof(validator_path), "%s/data/%d/validator", oj_home, p_id);
+	if (access(validator_path, F_OK) != 0)
+		snprintf(validator_path, sizeof(validator_path), "%s/data/%d/output_validator", oj_home, p_id);
+	if (access(validator_path, F_OK) != 0)
+	{
+		snprintf(message, sizeof(message), "missing communication validator: put the built binary at %s/data/%d/validator\n", oj_home, p_id);
+		print_runtimeerror(infile + prelen, message);
+		ACflg = OJ_RE;
+		*spj_mark = 0;
+		return;
+	}
+	// 用原生的 chgrp/chmod 代替 special_judge 里那条 shell 命令：路径全是判题机自己拼的。
+	if (chown(validator_path, -1, judge_gid) != 0 && DEBUG)
+		printf("chown %s\n", validator_path);
+	chmod(validator_path, 0751);
+	unlink(validator_log); // 校验器日志按组数据累积
+	char state_path[BUFFER_SIZE + 64];
+	snprintf(state_path, sizeof(state_path), "%sstate.txt", work_dir);
+	unlink(state_path); // state.txt 是校验器在本组数据内的中间状态
+
+	for (int pass = 1; ACflg == OJ_AC && pass <= COMM_MAX_PASS; pass++)
+	{
+		passes = pass;
+		if (pass == 1)
+		{
+			if (copy_data_file(infile, pass_in) != 0)
+			{
+				write_log("communication_case: copy [%s] to [%s] failed\n", infile, pass_in);
+				ACflg = OJ_RE;
+				break;
+			}
+		}
+		else if (copy_data_file(next_in, pass_in) != 0)
+		{
+			write_log("communication_case: copy [%s] to [%s] failed\n", next_in, pass_in);
+			ACflg = OJ_RE;
+			break;
+		}
+		if (chown(pass_in, judge_uid, judge_gid) != 0 && DEBUG)
+			printf("chown %s\n", pass_in);
+		chmod(pass_in, 0640);
+
+		unlink(user_out); // 校验器只看得到本轮输出
+		// 每一轮都是一次全新的运行：系统调用白名单计数器要重新初始化，
+		// 否则第 2 轮起 execve 的额度已被第 1 轮用完，会被 seccomp 直接杀掉。
+		init_syscalls_limits(lang);
+		int pass_time = 0;
+		pid_t pidApp = fork();
+		if (pidApp == 0)
+		{
+			run_solution(lang, work_dir, time_lmt, pass_time, mem_lmt, pass_in, p_id, SPJ_COMMUNICATION);
+			exit(0);
+		}
+		else if (pidApp > 0)
+		{
+			FILE *pid_file = fopen("user.pid", "w");
+			if (pid_file != NULL)
+			{
+				fprintf(pid_file, "%d", pidApp);
+				fclose(pid_file);
+			}
+			if (topmemory == 0)
+				topmemory = get_proc_status(pidApp, "VmRSS:") << 10;
+			watch_solution(pidApp, infile, ACflg, SPJ_COMMUNICATION, user_out, ans_file,
+						   solution_id, lang, topmemory, mem_lmt, pass_time, time_lmt,
+						   p_id, PEflg, work_dir);
+			if (topmemory == 0)
+				topmemory = get_proc_status(pidApp, "VmPeak:") << 10;
+			kill(pidApp, 9);
+			usedtime += pass_time;
+		}
+		else
+			ACflg = OJ_RE;
+		if (ACflg != OJ_AC)
+			break; // 运行错误/超时/超内存/输出超限，不用再问校验器
+		// 提交程序也在同一个目录里跑，它自己造的 nextpass.in 不算数：在问校验器之前清掉，
+		// 之后还在的只可能是校验器本轮写出的那份。
+		unlink(next_in);
+		unlink(judgemsg_path);
+
+		int vret = run_output_validator(work_dir, validator_path, pass_in, ans_file);
+		if (vret < 0)
+		{
+			snprintf(message, sizeof(message), "communication validator crashed or timed out on pass %d\n", pass);
+			print_runtimeerror(infile + prelen, message);
+			append_comm_message(validator_log);
+			ACflg = OJ_RE;
+			break;
+		}
+		if (vret != COMM_VALIDATOR_AC && vret != 0)
+		{
+			// 校验器判定这轮不过：judgemessage.txt 是作者写的理由，日志里是 validation.h 的期望值提示。
+			append_comm_message(judgemsg_path);
+			append_comm_message(validator_log);
+			ACflg = OJ_WA;
+			break;
+		}
+		if (access(next_in, F_OK) != 0)
+			break; // 本轮通过且校验器不再出题，这一组就算过了
+		if (pass == COMM_MAX_PASS)
+		{
+			snprintf(message, sizeof(message), "validator asked for more than %d passes\n", COMM_MAX_PASS);
+			print_runtimeerror(infile + prelen, message);
+			ACflg = OJ_WA;
+			break;
+		}
+	}
+	*spj_mark = (ACflg == OJ_AC) ? 1.0 : 0.0;
+	if (DEBUG)
+		printf("communication %s: %d passes, result=%d\n", getFileNameFromPath(infile), passes, ACflg);
 }
 
 /* 卸载 chroot 挂载并将 work_dir 中的所有文件移到 log 子目录。 */
@@ -4710,8 +5000,26 @@ int main(int argc, char **argv)
 
 		init_syscalls_limits(lang);
 
-		pid_t pidApp = fork();                  //创建子进程，这里程序将自身复制一份，两份同时运行，进程根据返回值确定自己的身份
-		if (pidApp == 0)                        //返回值是0，我就是子进程 
+		pid_t pidApp;                             //被看护的子进程号；通讯题在 communication_case 里自行 fork
+		if (spj == SPJ_COMMUNICATION)             //通讯题：一轮轮跑提交程序，每轮交给 output validator 裁决
+		{
+			communication_case(lang, work_dir, time_lmt, mem_lmt, p_id, infile,
+							   solution_id, ACflg, PEflg, usedtime, topmemory, &spj_mark);
+			printf("%s: mem=%d time=%d\n",infile+prelen,topmemory,usedtime);
+			total_time+=usedtime;
+			printf("time:%d/%d\n",usedtime,total_time);
+			if(internal_mark)
+			time_space_index+=sprintf(time_space_table+time_space_index,"%s|%ld|%s/%.2f|%dk|%dms\n",infile+prelen,get_file_size(infile),jresult[ACflg],spj_mark,topmemory/1024,usedtime);
+			else
+			time_space_index+=sprintf(time_space_table+time_space_index,"%s|%ld|%s|%dk|%dms\n",infile+prelen,get_file_size(infile),jresult[ACflg],topmemory/1024,usedtime);
+			if (use_max_time)
+			{
+				max_case_time =
+					usedtime > max_case_time ? usedtime : max_case_time;
+			}
+			usedtime = 0;
+		}
+		else if ((pidApp = fork()) == 0)          //程序将自身复制一份，两份同时运行；返回值是0，我就是子进程
 		{
 			if(spj==2){
 			       	exit(0);

@@ -99,6 +99,7 @@
 	  <input type=radio name=spj value='1' ><?php echo $MSG_SPJ?> <?php echo "(".$MSG_HELP_SPJ.")"?><br>
 	  <input type=radio name=spj value='2' ><?php echo $MSG_RTJ?>(用于选择判断填空题，用法见<a target='_blank' href='http://hustoj.com'>hustoj.com</a>)<br>
       <input type=radio name=spj value='3' ><?php echo $MSG_INTERACT?><br>
+      <input type=radio name=spj value='4' >通讯题 (multi-pass)<br>
         </p>
         <p align=left>
           <?php echo "<h4>".$MSG_SOURCE."</h4>"?>

@@ -2700,7 +2700,7 @@ function is_allowed_upload_filename($filename) {
 
     $extension = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
     $allowed_extensions = array(
-        'in', 'out', 'ou', 'ans', 'zip',
+        'in', 'out', 'ou', 'ans', 'zip', 'pdf',
         'c', 'cc', 'pas', 'java', 'rb', 'sh', 'py', 'pl', 'cs', 'm',
         'bas', 'scm', 'lua', 'js', 'go', 'sql', 'f95', 'cob', 'r', 'cpp',
         'sb3', 'cj'
