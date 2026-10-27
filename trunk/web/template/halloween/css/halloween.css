@@ -1,0 +1,209 @@
+/* ============================================================
+   HUSTOJ · halloween 模板 · 主题基础配色（卡通万圣节）
+   以 syzoj 的 white.css 为蓝本，仅替换配色 / 装饰，不改动任何功能逻辑。
+   作者: hustoj-theme-maker skill
+   风格：twilight 紫黑夜空 + 满月辉光，南瓜橙 / 史莱姆绿 / 奶白卡通糖果配色，
+        圆润描边、俏皮弹性的玻璃卡片。
+   ============================================================ */
+
+:root {
+  /* ===== 主题色板 ===== */
+  --hw-bg-1:#1b0f33;            /* 夜空深紫 */
+  --hw-bg-2:#2a1450;            /* 夜空中紫 */
+  --hw-purple:#7b3ff2;          /* 女巫紫 */
+  --hw-purple-deep:#561d9e;     /* 深紫 */
+  --hw-orange:#ff8c1a;          /* 南瓜橙 */
+  --hw-orange-deep:#e8590c;     /* 焦糖橙 */
+  --hw-green:#7cff6b;            /* 史莱姆绿 */
+  --hw-green-deep:#39c94a;      /* 幽灵绿 */
+  --hw-cream:#fff3e0;           /* 奶白 */
+  --hw-text:#f4ebff;            /* 浅薰衣草文字 */
+  --hw-muted:#cbb6ee;           /* 次级文字 */
+  --hw-card:rgba(43,23,78,0.80);/* 玻璃卡片底 */
+  --hw-card-border:rgba(255,140,26,0.40);
+  --hw-glow:rgba(124,255,107,0.25);
+  --hw-brand-grad:linear-gradient(135deg,#7b3ff2 0%,#ff8c1a 100%);
+}
+
+/* ===== 整页背景：夜空 + 满月辉光 + 星点 ===== */
+body {
+  background:
+    radial-gradient(circle at 78% 12%, rgba(255,243,224,0.22) 0 7%, rgba(255,243,224,0.05) 9%, transparent 16%),
+    radial-gradient(circle at 78% 12%, rgba(255,221,150,0.16) 0 16%, transparent 30%),
+    radial-gradient(2px 2px at 18% 22%, rgba(255,255,255,0.55) 50%, transparent 51%),
+    radial-gradient(2px 2px at 32% 38%, rgba(255,255,255,0.45) 50%, transparent 51%),
+    radial-gradient(1.5px 1.5px at 55% 14%, rgba(255,255,255,0.5) 50%, transparent 51%),
+    radial-gradient(2px 2px at 68% 55%, rgba(255,255,255,0.4) 50%, transparent 51%),
+    radial-gradient(1.5px 1.5px at 44% 70%, rgba(255,255,255,0.4) 50%, transparent 51%),
+    radial-gradient(2px 2px at 12% 62%, rgba(255,255,255,0.4) 50%, transparent 51%),
+    linear-gradient(160deg, var(--hw-bg-1) 0%, var(--hw-bg-2) 55%, #1d0e36 100%) fixed;
+  color: var(--hw-text);
+  font-family: "Comic Sans MS", "Exo 2", "PingFang SC", "Microsoft YaHei", "Segoe UI", system-ui, sans-serif;
+}
+
+/* ===== 顶栏：紫->橙渐变 + 橙边 + 圆角 ===== */
+#page-header.ui.menu {
+  background: var(--hw-brand-grad);
+  border: none !important;
+  border-bottom: 3px solid var(--hw-orange) !important;
+  border-radius: 0 0 16px 16px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.45), 0 0 18px rgba(255,140,26,0.35);
+}
+#page-header.ui.menu .item,
+#page-header.ui.menu a.item {
+  color: var(--hw-cream) !important;
+  font-weight: 700;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.35);
+  border-radius: 12px !important;
+}
+#page-header.ui.menu .item:before { background: rgba(255,255,255,0.18); }
+#page-header.ui.menu .item:hover,
+#page-header.ui.menu a.item:hover {
+  background: rgba(255,255,255,0.16) !important;
+  color: #fff !important;
+}
+#page-header.ui.menu a.header.item {
+  background: transparent;
+  font-family: "Comic Sans MS", "Exo 2", sans-serif;
+}
+#page-header.ui.menu a.header.item span { color: var(--hw-cream); text-shadow: 0 2px 6px rgba(0,0,0,0.4); }
+
+/* 品牌 logo（南瓜灯） */
+.halloween-brand {
+  width: 1.5em; height: 1.5em;
+  margin-right: 6px;
+  filter: drop-shadow(0 0 4px rgba(255,140,26,0.8));
+  vertical-align: -0.32em;
+}
+
+/* ===== 导航图标统一尺寸 ===== */
+.halloween-nav-icon {
+  width: 1.18em; height: 1.18em;
+  vertical-align: -0.18em;
+  margin-right: 2px;
+}
+
+/* ===== 玻璃卡片 ===== */
+.padding {
+  background: var(--hw-card) !important;
+  border: 1.5px solid var(--hw-card-border) !important;
+  border-radius: 18px !important;
+  backdrop-filter: blur(8px);
+  box-shadow: 0 10px 26px rgba(0,0,0,0.35), inset 0 0 0 1px rgba(255,255,255,0.04);
+  color: var(--hw-text);
+}
+.padding .ui.header, .padding h1, .padding h2, .padding h3 { color: var(--hw-cream); }
+
+/* 段 / 面板 */
+.ui.segment {
+  background: var(--hw-card) !important;
+  border: 1.5px solid var(--hw-card-border) !important;
+  border-top: 4px solid var(--hw-orange) !important;
+  border-radius: 16px !important;
+  color: var(--hw-text);
+}
+.panel-default, .jumbotron {
+  background: var(--hw-card) !important;
+  border: 1.5px solid var(--hw-card-border) !important;
+  border-radius: 16px !important;
+  color: var(--hw-text);
+}
+.panel-default > .panel-heading {
+  background: linear-gradient(90deg, rgba(123,63,242,0.35), rgba(255,140,26,0.25));
+  color: var(--hw-cream);
+  border-radius: 14px 14px 0 0;
+  border-bottom: 1px solid var(--hw-card-border);
+}
+
+/* ===== 链接 / 按钮 ===== */
+a.black-link, .ui a, a { color: var(--hw-green); }
+a.black-link:hover, a:hover { color: var(--hw-orange); }
+.ui.primary.button, .ui.buttons .ui.primary.button {
+  background: linear-gradient(135deg, var(--hw-orange), var(--hw-orange-deep)) !important;
+  color: #2a1450 !important;
+  font-weight: 800;
+  border-radius: 12px !important;
+  box-shadow: 0 4px 0 var(--hw-orange-deep), 0 6px 14px rgba(255,140,26,0.4);
+  border: none !important;
+}
+.ui.primary.button:hover { filter: brightness(1.06); }
+.ui.button {
+  background: rgba(123,63,242,0.25) !important;
+  color: var(--hw-cream) !important;
+  border: 1.5px solid rgba(123,63,242,0.5) !important;
+  border-radius: 12px !important;
+  font-weight: 700;
+}
+.ui.button:hover { background: rgba(123,63,242,0.45) !important; }
+
+/* 输入框 */
+.ui.input > input, input, textarea, select {
+  background: rgba(20,10,40,0.7) !important;
+  color: var(--hw-text) !important;
+  border: 1.5px solid rgba(123,63,242,0.5) !important;
+  border-radius: 12px !important;
+}
+.ui.input > input:focus, input:focus {
+  border-color: var(--hw-orange) !important;
+  box-shadow: 0 0 0 2px rgba(255,140,26,0.3);
+}
+
+/* ===== 表格 ===== */
+table.ui.table {
+  background: transparent;
+  color: var(--hw-text);
+  border-radius: 14px;
+  overflow: hidden;
+}
+table.ui.table thead th {
+  background: rgba(123,63,242,0.3) !important;
+  color: var(--hw-cream) !important;
+  border-bottom: 2px solid var(--hw-orange) !important;
+}
+table.ui.table tbody tr { background: rgba(43,23,78,0.5) !important; color: var(--hw-text); }
+table.ui.table tbody tr:nth-child(even) { background: rgba(56,30,98,0.55) !important; }
+table.ui.table tbody tr:hover { background: rgba(255,140,26,0.18) !important; }
+table.ui.table td a { color: var(--hw-green); }
+
+/* 判题状态语义色（保留并顺势用节日色） */
+.ui.red, .red { color: #ff5a5a !important; }
+.ui.green, .green { color: var(--hw-green) !important; }
+.ui.blue, .blue { color: #6fb6ff !important; }
+
+/* 页脚 */
+.footer {
+  color: var(--hw-muted) !important;
+  background: linear-gradient(0deg, rgba(27,15,51,0.9), transparent);
+  border-top: 2px dashed rgba(255,140,26,0.35);
+  margin-top: 28px;
+}
+.footer a { color: var(--hw-orange); }
+
+/* ===== 装饰层：飘落卡通幽灵 / 蝙蝠 / 南瓜 ===== */
+#halloween-decor {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 99998;
+}
+.hw-sprite {
+  position: absolute;
+  top: -8%;
+  will-change: transform, opacity;
+  filter: drop-shadow(0 0 6px rgba(255,140,26,0.45));
+}
+@keyframes hw-fall {
+  0%   { transform: translateY(-10vh) rotate(-8deg); opacity: 0; }
+  10%  { opacity: 0.95; }
+  50%  { transform: translateY(50vh) rotate(8deg); }
+  90%  { opacity: 0.95; }
+  100% { transform: translateY(112vh) rotate(-8deg); opacity: 0; }
+}
+@keyframes hw-wobble {
+  0%,100% { margin-left: 0; }
+  50%     { margin-left: 14px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  #halloween-decor { display: none; }
+}
