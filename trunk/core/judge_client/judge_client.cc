@@ -68,7 +68,7 @@
 #define LOCKMODE (S_IRUSR|S_IWUSR|S_IRGRP|S_IROTH)
 #define FIFO_INTER "p_interactor"
 #define DIFF_FILE "diff.out"
-#define OJ_VERSION "26.10.28 (upc) "		// shown by "-v", keep in sync with judged.cc
+#define OJ_VERSION "26.10.28-4"		// shown by "-v", keep in sync with judged.cc
 
 #define OJ_WT0 0     //提交排队
 #define OJ_WT1 1     //重判排队
@@ -2281,8 +2281,11 @@ char *escape(char s[], char t[])
 	return s;
 }
 void fix_mod(char * path){
-        if(chown(path,www_uid,judge_uid)) write_log("chown fail:%s\n",path);
-        if(chmod(path,0710)) write_log("chmod fail:%s\n",path);
+	// 通讯题（spj=4）的数据目录里只有 .in 和 .ans，没有同名的 .out；文件不存在的时候
+	// 不必去刷一对 chown/chmod 失败日志（每组数据两条，一次提交就是上百行噪音）。
+	if (access(path, F_OK) != 0) return;
+	if(chown(path,www_uid,judge_uid)) write_log("chown fail:%s\n",path);
+	if(chmod(path,0710)) write_log("chmod fail:%s\n",path);
 }
 /* Names taken from input.name/output.name are written by problem authors and by
  * the data importer, so they are untrusted: keep them usable as a single plain
@@ -2402,6 +2405,15 @@ void prepare_files(char *filename, int namelen, char *infile, int &p_id,
 	execute_cmd("/bin/cp %s/data/%d/interactor %s/ 2>/dev/null", oj_home, p_id, work_dir);
  	execute_cmd("chown judge %s/*.dic ", work_dir);
 	sprintf(outfile, "%s/data/%d/%s.out", oj_home, p_id, fname);
+	// 只有 .ans、没有 .out 的题目（DOMjudge/Kattis 包）直接用同名的 .ans 当答案文件。
+	if (access(outfile, F_OK) != 0)
+	{
+		sprintf(outfile, "%s/data/%d/%s.ans", oj_home, p_id, fname);
+		if (access(outfile, R_OK) == 0)
+			fix_mod(outfile);
+		else
+			sprintf(outfile, "%s/data/%d/%s.out", oj_home, p_id, fname);
+	}
 
 	sprintf(noip_file_name,"%s/data/%d/output.name",oj_home,p_id);
 	//if(DEBUG) printf("NOIP filename:%s\n",noip_file_name);
@@ -3308,22 +3320,20 @@ int interact(int &lang, char *work_dir, double &time_lmt, int &usedtime,
 			perror("chdir failed");
 			exit(1);
 		}
-		/* Interactor must not use judge_uid: fix_mod() intentionally keeps
-		 * hidden test files unreadable to the contestant (judge_uid).
-		 * Give only the checker UID access to the .in file.  The working
-		 * directory stays owned by judge; checker needs traversal only.
-		 * Checker stderr has already been opened by the privileged parent. */
+		/* 交互器不能再用 judge_uid：fix_mod() 故意让隐藏数据对选手（judge_uid）
+		 * 不可读，只有校验器 UID 能打开 .in。work_dir 仍归 judge，校验器只需要穿越权限。
+		 * 校验器的 stderr 已由特权父进程提前打开。 */
 		struct passwd *checker_pw = getpwuid((uid_t)www_uid);
 		gid_t checker_gid = checker_pw ? checker_pw->pw_gid : (gid_t)www_uid;
 		if(chown(work_dir,judge_uid,judge_gid)!=0 && DEBUG) perror("chown interact work_dir");
 		if(chmod(work_dir,0711)!=0 && DEBUG) perror("chmod interact work_dir");
-		/* Copy is not trusted as a source of secrets; keep it private to checker.
-		 * Execute the original judge-owned data-directory binary instead. */
+		/* work_dir 里的副本选手可写，不可信；执行 data 目录里判题机自己放的
+		 * 原件，选手没有写权限。 */
 		char trusted_interactor[BUFFER_SIZE];
 		snprintf(trusted_interactor,sizeof(trusted_interactor),"%s/data/%d/interactor",oj_home,p_id);
 		if(chown(trusted_interactor,www_uid,judge_gid)!=0 && DEBUG) perror("chown interactor");
 		if(chmod(trusted_interactor,0700)!=0 && DEBUG) perror("chmod interactor");
-		/* The previous work-directory copy is never executed. */
+		/* work_dir 里的旧副本不再执行。 */
 		/* --------- 子进程：运行交互器 (interactor) --------- */
 		
 		// 1. 重定向标准输入：从 p_output 的读端读取（获取用户程序的输出）
@@ -3347,7 +3357,7 @@ int interact(int &lang, char *work_dir, double &time_lmt, int &usedtime,
 			
 			if(chown("./user.out", judge_uid, judge_uid)!=0 && DEBUG>1);
 			if(chmod("./user.out", 0700)!=0 && DEBUG>1) ;
-			/* Checker is a different UID from the contestant. */
+			/* 校验器和选手不是同一个 UID。 */
 			if (setgroups(0, NULL) != 0 ||
 			    setgid(checker_gid) != 0 ||
 			    setresuid(www_uid, www_uid, www_uid) != 0) {
@@ -4095,11 +4105,17 @@ static void append_comm_message(const char *file_name)
 /* Fork 出 judge 用户进程运行通讯题的 output validator：
  *     validator <本轮输入> <答案文件> <feedback 目录> < 团队本轮输出
  * 这是 ICPC problem-package-format 约定的调用方式，反馈目录就用 work_dir，
- * 校验器往里写 state.txt / nextpass.in / judgemessage.txt。
+ * 校验器往里写 nextpass.in / judgemessage.txt / teammessage.txt，
+ * 跨轮的状态文件由各家的 validate.h 自己定（Kattis 用 state.txt，DOMjudge 用 .pass 加 .state0/.state1）。
  * 返回校验器的退出码；被信号杀死、超时或启动失败时返回负数。 */
 static int run_output_validator(char *work_dir, const char *validator_path,
-								const char *pass_in, const char *ans_file)
+								const char *pass_in, const char *ans_file,
+								char *why, size_t why_size)
 {
+	char log_path[BUFFER_SIZE + 64];
+	snprintf(log_path, sizeof(log_path), "%svalidator.log", work_dir);
+	if (why != NULL && why_size > 0)
+		why[0] = '\0';
 	pid_t pid = fork();
 	if (pid < 0)
 		return -1;
@@ -4119,8 +4135,6 @@ static int run_output_validator(char *work_dir, const char *validator_path,
 		LIM.rlim_cur = LIM.rlim_max = 200;
 		setrlimit(RLIMIT_NPROC, &LIM);
 
-		char log_path[BUFFER_SIZE + 64];
-		snprintf(log_path, sizeof(log_path), "%svalidator.log", work_dir);
 		int logfd = open(log_path, O_RDWR | O_CREAT | O_APPEND, 0644);
 		if (logfd >= 0)
 		{
@@ -4139,21 +4153,59 @@ static int run_output_validator(char *work_dir, const char *validator_path,
 		}
 		// 校验器同样是题目作者提供的程序，不给它继承判题机的数据库连接。
 		close_inherited_fds();
-		while (setgid(judge_gid) != 0)
-			sleep(1);
-		while (setuid(judge_uid) != 0)
-			sleep(1);
-		while (setresuid(judge_uid, judge_uid, judge_uid) != 0)
-			sleep(1);
+		/* 和 spj/tpj/upj 一样降到 judge 身份运行（UPC 版行为）：容器里数据目录
+		 * 属于 judge，校验器读输入、写反馈目录都不需要额外授权。
+		 * 代价是 jury.ans 对同账号的提交程序可读，这是为兼容判题容器的文件权限
+		 * 保留的取舍。非 root 环境（正常判题不会出现，chroot 也需要 root）
+		 * 保持当前身份，否则 setuid 必失败。 */
+		uid_t run_uid = (geteuid() == 0) ? judge_uid : geteuid();
+		gid_t run_gid = (geteuid() == 0) ? judge_gid : getegid();
+		if (setgid(run_gid) != 0 || setuid(run_uid) != 0 ||
+			setresuid(run_uid, run_uid, run_uid) != 0)
+		{
+			perror("communication validator drop privileges");
+			_exit(126);
+		}
 		execl(validator_path, validator_path, pass_in, ans_file, work_dir, (char *)NULL);
 		perror("communication validator exec failed");
 		_exit(127);
 	}
 	int status = 0;
-	waitpid(pid, &status, 0);
-	if (WIFSIGNALED(status) || WEXITSTATUS(status) == 127)
+	if (waitpid(pid, &status, 0) < 0)
+	{
+		if (why != NULL && why_size > 0)
+			snprintf(why, why_size, "waitpid failed");
 		return -1;
-	return WEXITSTATUS(status);
+	}
+	if (WIFSIGNALED(status))
+	{
+		if (why != NULL && why_size > 0)
+			snprintf(why, why_size, "killed by signal %d", WTERMSIG(status));
+		return -1;
+	}
+	int code = WEXITSTATUS(status);
+	if (code == 126 || code == 127)
+	{
+		/* 子进程已把原因写进 validator.log；RE 时后台不上传 diff.out，
+		 * 所以把日志首行并进 error.out 的消息里，判题页才看得到起不来的原因。 */
+		char line[256] = "";
+		FILE *plog = fopen(log_path, "r");
+		if (plog != NULL)
+		{
+			if (fgets(line, sizeof(line), plog) != NULL)
+				line[strcspn(line, "\r\n")] = '\0';
+			fclose(plog);
+		}
+		if (why != NULL && why_size > 0)
+		{
+			if (line[0] != '\0')
+				snprintf(why, why_size, "%s", line);
+			else
+				snprintf(why, why_size, "exit %d, no diagnostics in validator.log", code);
+		}
+		return -1;
+	}
+	return code;
 }
 
 /* 通讯题（ICPC problem-package-format 的 custom multi-pass，spj=4）判单组数据。
@@ -4169,7 +4221,7 @@ static void communication_case(int &lang, char *work_dir, double &time_lmt, int 
 	// work_dir 已经是 BUFFER_SIZE 量级，拼后缀要多留一点，否则 -Wformat-truncation 报警
 	char pass_in[BUFFER_SIZE + 64], ans_file[BUFFER_SIZE + 64], user_out[BUFFER_SIZE + 64];
 	char next_in[BUFFER_SIZE + 64], ans_src[BUFFER_SIZE + 64], validator_path[BUFFER_SIZE + 64];
-	char judgemsg_path[BUFFER_SIZE + 64], validator_log[BUFFER_SIZE + 64];
+	char judgemsg_path[BUFFER_SIZE + 64], teammsg_path[BUFFER_SIZE + 64], validator_log[BUFFER_SIZE + 64];
 	char message[BUFFER_SIZE];
 	int passes = 0;
 
@@ -4178,6 +4230,7 @@ static void communication_case(int &lang, char *work_dir, double &time_lmt, int 
 	snprintf(user_out, sizeof(user_out), "%suser.out", work_dir);
 	snprintf(next_in, sizeof(next_in), "%snextpass.in", work_dir);
 	snprintf(judgemsg_path, sizeof(judgemsg_path), "%sjudgemessage.txt", work_dir);
+	snprintf(teammsg_path, sizeof(teammsg_path), "%steammessage.txt", work_dir);
 	snprintf(validator_log, sizeof(validator_log), "%svalidator.log", work_dir);
 
 	// 答案文件和输入同名，后缀换成 .ans；这类题目的 .ans 常常是空文件，缺了就补一个空的。
@@ -4192,6 +4245,8 @@ static void communication_case(int &lang, char *work_dir, double &time_lmt, int 
 		if (empty != NULL)
 			fclose(empty);
 	}
+	// 与 UPC 版一致：jury.ans 归 judge、0600，校验器也以 judge 身份运行。
+	// 代价是同样以 judge 身份运行的提交程序可以读到答案，这是为兼容判题容器的文件权限保留的取舍。
 	if (chown(ans_file, judge_uid, judge_gid) != 0 && DEBUG)
 		printf("chown %s\n", ans_file);
 	chmod(ans_file, 0600);
@@ -4202,13 +4257,16 @@ static void communication_case(int &lang, char *work_dir, double &time_lmt, int 
 		snprintf(validator_path, sizeof(validator_path), "%s/data/%d/output_validator", oj_home, p_id);
 	if (access(validator_path, F_OK) != 0)
 	{
-		snprintf(message, sizeof(message), "missing communication validator: put the built binary at %s/data/%d/validator\n", oj_home, p_id);
+		snprintf(message, sizeof(message), "missing communication validator: run 'bash /usr/bin/makeout.sh Main' in %s/data/%d, or put the built binary at %s/data/%d/validator\n", oj_home, p_id, oj_home, p_id);
 		print_runtimeerror(infile + prelen, message);
 		ACflg = OJ_RE;
 		*spj_mark = 0;
 		return;
 	}
-	// 用原生的 chgrp/chmod 代替 special_judge 里那条 shell 命令：路径全是判题机自己拼的。
+	// 校验器二进制由数据目录里的 makeout.sh 从 validator.src/ 编出来（判题机不在 root 下编译作者代码，
+	// 而绝大多数主机的 PHP 禁用了 exec，导入器也不该起编译器）。编译它的用户是谁不一定，
+	// 这里用一次就把它补成 judge 组、0751，judge 身份的校验器才执行得了。
+	// 用原生的 chown/chmod 代替 special_judge 里那条 shell 命令：路径全是判题机自己拼的。
 	if (chown(validator_path, -1, judge_gid) != 0 && DEBUG)
 		printf("chown %s\n", validator_path);
 	chmod(validator_path, 0751);
@@ -4224,7 +4282,7 @@ static void communication_case(int &lang, char *work_dir, double &time_lmt, int 
 		snprintf(mp_path, sizeof(mp_path), "%s%s", work_dir, mp_states[j]);
 		unlink(mp_path);
 	}
-
+	unlink(teammsg_path); // teammessage.txt 是追加写的，不清就带上上一组的旧内容
 
 	for (int pass = 1; ACflg == OJ_AC && pass <= COMM_MAX_PASS; pass++)
 	{
@@ -4244,6 +4302,7 @@ static void communication_case(int &lang, char *work_dir, double &time_lmt, int 
 			ACflg = OJ_RE;
 			break;
 		}
+		// 本轮输入两边都要读：提交程序和校验器都跑在 judge 身份下。
 		if (chown(pass_in, judge_uid, judge_gid) != 0 && DEBUG)
 			printf("chown %s\n", pass_in);
 		chmod(pass_in, 0640);
@@ -4285,11 +4344,17 @@ static void communication_case(int &lang, char *work_dir, double &time_lmt, int 
 		// 之后还在的只可能是校验器本轮写出的那份。
 		unlink(next_in);
 		unlink(judgemsg_path);
+		unlink(teammsg_path); // 追加写的文件，不清就会带上上一轮的旧内容
 
-		int vret = run_output_validator(work_dir, validator_path, pass_in, ans_file);
+		char why[512] = "";
+		int vret = run_output_validator(work_dir, validator_path, pass_in, ans_file,
+										why, sizeof(why));
 		if (vret < 0)
 		{
-			snprintf(message, sizeof(message), "communication validator crashed or timed out on pass %d\n", pass);
+			if (why[0] != '\0')
+				snprintf(message, sizeof(message), "communication validator crashed or timed out on pass %d: %s\n", pass, why);
+			else
+				snprintf(message, sizeof(message), "communication validator crashed or timed out on pass %d\n", pass);
 			print_runtimeerror(infile + prelen, message);
 			append_comm_message(validator_log);
 			ACflg = OJ_RE;
@@ -4299,6 +4364,7 @@ static void communication_case(int &lang, char *work_dir, double &time_lmt, int 
 		{
 			// 校验器判定这轮不过：judgemessage.txt 是作者写的理由，日志里是 validation.h 的期望值提示。
 			append_comm_message(judgemsg_path);
+			append_comm_message(teammsg_path); // 面向选手的反馈，DOMjudge 的题目大多把判题理由写在这里
 			append_comm_message(validator_log);
 			ACflg = OJ_WA;
 			break;
@@ -4751,6 +4817,16 @@ int main(int argc, char **argv)
 		judge_gid = pw->pw_gid;
 	}else{
 		judge_uid = judge_gid = 1536 ;
+	}
+	/* spj/tpj/upj 和通讯题的 output validator 都以 www 用户身份运行，而判题容器镜像里的
+	 * /home/judge 烘成了 judge:judge 0750：uid 33 连目录都进不去，降权后 access("<data>/spj", X_OK)
+	 * 一律 EACCES，校验器根本执行不起来。这里只补上穿越需要的 r-x，不改属主也不收紧原有权限；
+	 * judged 默认的挂载集下 /home/judge 这一层是容器自己的可写层，改不到宿主机上的同名目录，
+	 * 裸机部署时它本来也是 0755。数据目录、etc 各自的 0750 不受影响，泄露面没有扩大。 */
+	{
+		struct stat oj_st;
+		if (stat(oj_home, &oj_st) == 0 && (oj_st.st_mode & S_IXOTH) == 0)
+			chmod(oj_home, (oj_st.st_mode & 07777) | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH);
 	}
 
 #ifdef _mysql_h
