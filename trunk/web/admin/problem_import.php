@@ -109,6 +109,15 @@
       <?php require("../include/set_post_key.php");?>
     </form> <hr>
 
+    - DOMjudge 题目包 - zip（multi-pass 通信题，数据可藏在 data/secret/secret.zip 里）<br><br>
+    <form class='form-inline aj-up' action='problem_import_domjudge.php' method=post enctype="multipart/form-data">
+      <div class='form-group'>
+        <input class='form-control' type=file name=fps required>
+        <button class='btn btn-success btn-sm' type=submit>Upload to HUSTOJ</button>
+      </div>
+      <?php require("../include/set_post_key.php");?>
+    </form> <hr>
+
     - HOJ - zip<br><br>
     <form class='form-inline aj-up' action='problem_import_hoj.php' method=post enctype="multipart/form-data">
       <div class='form-group'>
