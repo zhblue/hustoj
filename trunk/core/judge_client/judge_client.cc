@@ -68,7 +68,7 @@
 #define LOCKMODE (S_IRUSR|S_IWUSR|S_IRGRP|S_IROTH)
 #define FIFO_INTER "p_interactor"
 #define DIFF_FILE "diff.out"
-#define OJ_VERSION "26.10.26"		// shown by "-v", keep in sync with judged.cc
+#define OJ_VERSION "26.10.28 (upc) "		// shown by "-v", keep in sync with judged.cc
 
 #define OJ_WT0 0     //提交排队
 #define OJ_WT1 1     //重判排队
