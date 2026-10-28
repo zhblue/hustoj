@@ -272,17 +272,20 @@ function kat_sibling($map, $prefix, $case, $ext) {
   return isset($map[$prefix . $name]) ? $name : null;
 }
 
-// 数据目录属主/权限不对时 file_put_contents 只会发 warning，这里统一报出来
-function kat_write($path, $content) {
+// 数据目录属主/权限不对时 file_put_contents 只会发 warning，这里统一报出来。
+// $mode 非 0 时顺手改权限：裁判答案要收权限，见调用处的注释。
+function kat_write($path, $content, $mode = 0) {
   if (file_put_contents($path, str_replace("\r\n", "\n", $content)) === false) {
     kat_notice("写入失败：" . htmlentities($path, ENT_QUOTES, 'UTF-8') . "，请检查 " . "chmod 775 -R \$OJ_DATA 与属组。");
     return false;
   }
+  if ($mode !== 0) @chmod($path, $mode); // .in 不动，judge_client 的 fix_mod() 每轮判题前统一收成 0710 www:judge
   return true;
 }
 
 function import_kattis_problem($zip, $map, $root, $OJ_DATA) {
-  global $KAT_YAML_MAX, $KAT_TEXT_MAX, $KAT_DATA_MAX, $KAT_DESC_MAX, $OJ_NAME;
+  global $KAT_YAML_MAX, $KAT_TEXT_MAX, $KAT_DATA_MAX, $KAT_DESC_MAX, $OJ_NAME, $DB_NAME;
+  if (!isset($DB_NAME) || $DB_NAME === '') $DB_NAME = 'jol';
 
   $prefix = ($root === '' ? '' : $root . '/');
   $yaml_text = kat_read($zip, $map, $prefix . 'problem.yaml', $KAT_YAML_MAX);
@@ -364,6 +367,7 @@ function import_kattis_problem($zip, $map, $root, $OJ_DATA) {
   $_SESSION[$OJ_NAME . '_' . "p$pid"] = true;
 
   $written = 0;
+  $missing_out = 0;
   $sample_case = null;
   foreach ($cases as $i => $case) {
     $n = $i + 1;
@@ -375,21 +379,42 @@ function import_kattis_problem($zip, $map, $root, $OJ_DATA) {
 
     if (!kat_write($OJ_DATA . "/$pid/$n.in", $in)) continue;
     if ($spj == 4 || $spj == 3) {
-      // communication_case 拿同名的 .ans 当 jury.ans；这类题的 .ans 常常是空文件，缺了就补一个空的
+      // communication_case 拿同名的 .ans 当 jury.ans；这类题的 .ans 常常是空文件，缺了就补一个空的。
+      // 权限收成 0600：judged.cc 挂数据目录时没加 :ro（%s:/home/judge/data），容器里的提交程序以
+      // judge 身份跑，能读走同目录下任何它对 judge 可读的文件。判题不受影响：.ans 只在 root 阶段
+      // 被 copy_data_file() 抄进 run<N>/，那份副本归 www 用户，只有以 www 身份跑的校验器读得到。
       $src = ($ans_name !== null) ? $ans_name : $out_name;
       $content = ($src === null) ? null : kat_read($zip, $map, $prefix . $src, $KAT_DATA_MAX);
-      kat_write($OJ_DATA . "/$pid/$n.ans", is_string($content) ? $content : '');
+      kat_write($OJ_DATA . "/$pid/$n.ans", is_string($content) ? $content : '', 0600);
     } else {
       $src = ($out_name !== null) ? $out_name : $ans_name;
       $content = ($src === null) ? null : kat_read($zip, $map, $prefix . $src, $KAT_DATA_MAX);
       if (!is_string($content)) {
         kat_notice(htmlentities("[$title] 第 $n 组缺标准答案（.out/.ans），判题会一律 WA。"));
+        $missing_out++;
         $content = '';
       }
       kat_write($OJ_DATA . "/$pid/$n.out", $content);
     }
     $written++;
     if ($sample_case === null && dirname($case) === 'data/sample') $sample_case = $case;
+  }
+
+  // addproblem() 建出来的题一律 defunct='Y'，能自动判的就在这里放开，省掉后台那次点击。
+  // spj=4 需要 data/<pid>/validator 可执行文件；编译得留在判题机上做（PHP 一般禁用 exec，
+  // web 用户也不该编译作者代码），交给判题机上原本就用来编 spj.cc/tpj.cc 的 makeout.sh，
+  // 下面的手工清单把这一步和放开题目捆成一条可以直接粘贴的命令。
+  $validator_ready = ($spj != 4) || file_exists($OJ_DATA . "/$pid/validator");
+  $defunct = 'Y';
+  if ($written > 0 && $missing_out == 0 && $validator_ready) {
+    // pdo_query() 出错时返回 -1（UPDATE 成功但没有行变化是 0，不会为负）
+    $r = pdo_query("UPDATE problem SET defunct='N' WHERE problem_id=?", $pid);
+    if (is_numeric($r) && $r >= 0) $defunct = 'N';
+    else kat_notice(htmlentities("[$title] 更新 defunct 失败，请到题目编辑里手工公开。"));
+  } else if ($written == 0) {
+    kat_notice(htmlentities("[$title] 没写出任何数据，题目保持未公开。"));
+  } else if (!$validator_ready) {
+    kat_notice(htmlentities("[$title] 缺 $OJ_DATA/$pid/validator 可执行文件，题目先保持未公开；按下面这条命令编好就自动可用了。"));
   }
 
   // 样例只取 data/sample，secret 组的输入不当样例展示
@@ -429,14 +454,21 @@ function import_kattis_problem($zip, $map, $root, $OJ_DATA) {
 
   echo "<hr><b>PID <a href='../problem.php?id=$pid'>" . $pid . "</a></b> " . htmlentities($title, ENT_QUOTES, "UTF-8")
      . " &mdash; spj=$spj" . ($multi_pass ? "（通信题，逐轮判题）" : "")
-     . "，$written 组数据，时限 {$time}s，内存 {$memory}M<br>";
+     . "，$written 组数据，时限 {$time}s，内存 {$memory}M，"
+     . ($defunct === 'N' ? "<span style='color:#080'>已公开</span>" : "<span style='color:#a00'>未公开（defunct=Y）</span>") . "<br>";
 
   $todo = array();
+  // defunct 的放开命令有两种给法：跟编译校验器捆成一条（照着粘一次就完事），或者单独提示。
+  $bundled_publish = false;
   if ($spj == 4) {
     if (count($build) > 0) {
-      foreach ($build as $b) {
-        $todo[] = "cd " . $b[0] . " && g++ -std=c++17 -O2 -static -o " . $OJ_DATA . "/$pid/validator " . $b[1];
-      }
+      // 校验器的编译已经并进 makeout.sh——它原本就负责编 spj.cc/tpj.cc/upj.cc。
+      // 在本题数据目录里跑一次，validator.src/ 下的源码就编成同目录的 ./validator。
+      // 权限不用手工理：judge_client 每次用 validator 前都把属主收成 www 用户、权限收成 0710，
+      // 谁编的都一样。makeout.sh 自己拒绝 root，用平时准备数据的那个用户跑。
+      $todo[] = "在判题机上编校验器：cd " . $OJ_DATA . "/$pid && bash /usr/bin/makeout.sh Main"
+              . ($defunct === 'Y' ? " && mysql $DB_NAME -e \"UPDATE problem SET defunct='N' WHERE problem_id=$pid\"" : "");
+      $bundled_publish = ($defunct === 'Y');
     } else {
       $todo[] = "包里没有 output_validators/<名字>/<名字>.cpp；判题机找不到 $OJ_DATA/$pid/validator 会判 RE";
     }
@@ -444,11 +476,12 @@ function import_kattis_problem($zip, $map, $root, $OJ_DATA) {
     if ($passes === null) $passes = kat_rget($yaml_text, '/^\s*validation_passes\s*:\s*([0-9]+)\s*$/m');
     if ($passes !== null) $todo[] = "problem.yaml 要求 validation_passes={$passes}（judge_client 的轮数上限是 COMM_MAX_PASS=100，不用另外设置）";
   }
-  if ($copied > 0) $todo[] = "校验器源码在 $OJ_DATA/$pid/validator.src/（$copied 个文件），编译产物放 $OJ_DATA/$pid/validator 并保证可执行";
+  if ($defunct === 'Y' && $written > 0 && !$bundled_publish) $todo[] = "放开题目：后台题目编辑改成公开，或 mysql $DB_NAME -e \"UPDATE problem SET defunct='N' WHERE problem_id=$pid\"";
+  if ($copied > 0) $todo[] = "校验器源码在 $OJ_DATA/$pid/validator.src/（$copied 个文件）";
   if ($spj == 3) $todo[] = "spj=3 是 FIFO 交互题路径，需要 $OJ_DATA/$pid/spj.cc；本题包给的是 output validator";
 
   if (count($todo) > 0) {
-    echo "<pre style='background:#f8f8f8;padding:8px;border:1px solid #ddd'>还需要在判题机上手工完成（web 端不以 root 编译作者代码）：<br>";
+    echo "<pre style='background:#f8f8f8;padding:8px;border:1px solid #ddd'>还需要在判题机上手工完成（导入器不在 web 进程里起编译器，绝大多数主机的 PHP 禁用了 exec）：<br>";
     foreach ($todo as $t) echo "&nbsp;&nbsp;" . htmlentities($t, ENT_QUOTES, "UTF-8") . "<br>";
     echo "</pre>";
   }

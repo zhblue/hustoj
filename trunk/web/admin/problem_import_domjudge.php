@@ -28,7 +28,10 @@ require_once ("../include/problem.php");
 //      嵌套的 secret.zip 必须先落成临时文件才能被 ZipArchive 打开（PHP 没有从内存开 zip 的接口），
 //      落成的是这一个整体 blob、权限 0600、导入结束立刻 unlink，包里的路径依然不决定任何落盘路径；
 //   2) 落盘的文件名一律由本程序生成（N.in / N.ans / validator.src/<角色>/<单元>/<白名单 basename>）；
-//   3) 不在 web 端编译作者提供的 C++，编译只在判题机上以普通用户手工完成。
+//   3) 不在 web 端起进程编译作者提供的 C++（绝大多数主机的 PHP 禁用了 exec/shell_exec，而且 web 用户
+//      也不该去编译作者代码）；导入器把数据、答案、校验器源码一次摆好，编译交给判题机上原本就用来
+//      编 spj.cc/tpj.cc 的 makeout.sh，导入页把它打印成一条可直接粘贴的命令。
+//      数据齐全（需要校验器的，校验器二进制也已在位）的题导入完自动置 defunct='N'。
 
 $DOM_YAML_MAX = 65536;        // problem.yaml
 $DOM_TEXT_MAX = 262144;       // 题面 / 校验器源码 / 参考程序
@@ -285,12 +288,14 @@ function dom_tex_to_html($tex) {
   return '<p>' . $tex . '</p>';
 }
 
-// 数据目录属主/权限不对时 file_put_contents 只会发 warning，这里统一报出来
-function dom_write($path, $content) {
+// 数据目录属主/权限不对时 file_put_contents 只会发 warning，这里统一报出来。
+// $mode 非 0 时顺手改权限：裁判答案要收权限，见 dom_write 调用处的注释。
+function dom_write($path, $content, $mode = 0) {
   if (file_put_contents($path, str_replace("\r\n", "\n", $content)) === false) {
     dom_notice("写入失败：" . htmlentities($path, ENT_QUOTES, 'UTF-8') . "，请检查 " . "chmod 775 -R \$OJ_DATA 与属组。");
     return false;
   }
+  if ($mode !== 0) @chmod($path, $mode); // .in 不动，judge_client 的 fix_mod() 每轮判题前统一收成 0710 www:judge
   return true;
 }
 
@@ -334,7 +339,8 @@ function dom_sibling($arch, $case, $ext) {
 }
 
 function import_domjudge_problem($arch, $root, $OJ_DATA) {
-  global $DOM_YAML_MAX, $DOM_TEXT_MAX, $DOM_DATA_MAX, $DOM_DESC_MAX, $OJ_NAME;
+  global $DOM_YAML_MAX, $DOM_TEXT_MAX, $DOM_DATA_MAX, $DOM_DESC_MAX, $OJ_NAME, $DB_NAME;
+  if (!isset($DB_NAME) || $DB_NAME === '') $DB_NAME = 'jol';
 
   $root_prefix = ($root === '' ? '' : $root . '/');
   $yaml_text = dom_read($arch, $root_prefix . 'problem.yaml', $DOM_YAML_MAX);
@@ -491,8 +497,13 @@ function import_domjudge_problem($arch, $root, $OJ_DATA) {
     if ($spj == 4 || $spj == 3) {
       // communication_case 拿同名的 .ans 当 jury.ans；DOMjudge 的 multi-pass 里 .ans 是每轮的
       // 裁判输入（这题是 adversary 的名字），缺了校验器会 judgeAssert 失败，补个空的至少能看清原因。
+      // 权限收成 0600：judged.cc 挂数据目录时没加 :ro（%s:/home/judge/data），容器里的提交程序
+      // 以 judge 身份跑，能读走同目录下任何它可读的文件，68 组裁判输入会一次性泄露。
+      // 判题不受影响——communication_case 里 copy_data_file(ans_src, ans_file) 和随后的 chown
+      // 都发生在父进程（root）里；run<N>/ 里的那份副本归 www 用户，只有同样以 www 身份跑的
+      // 校验器读得到，提交程序（judge 用户）读不到。
       if (!is_string($content)) $missing_ans++;
-      dom_write($OJ_DATA . "/$pid/$n.ans", is_string($content) ? $content : '');
+      dom_write($OJ_DATA . "/$pid/$n.ans", is_string($content) ? $content : '', 0600);
     } else {
       // pass-fail：.ans 就是标准输出，判题机找的是 .out
       if (!is_string($content)) $missing_ans++;
@@ -501,8 +512,31 @@ function import_domjudge_problem($arch, $root, $OJ_DATA) {
     $written++;
     if ($first_sample === null && $case['group'] === 'sample') $first_sample = array('arch' => $A, 'case' => $case);
   }
-  if ($missing_ans > 0 && $spj == 0) {
-    dom_notice(htmlentities("[$title] 有 $missing_ans 组缺标准答案（.ans/.out），判题会一律 WA。"));
+  if ($missing_ans > 0) {
+    dom_notice(htmlentities("[$title] 有 $missing_ans 组没有 .ans/.out，已补空文件。"
+      . ($spj == 4 ? "spj=4 看校验器是否要读裁判输入：DOMjudge 的 validate.h 里读 judgeanswer 会 judgeAssert 失败。"
+                   : "普通判题会一律 WA。")));
+  }
+
+  // addproblem() 建出来的题一律 defunct='Y'，不放开就得再去后台点一次。这里能自动放开的就自动放开：
+  // 数据写出来了、且 spj=4 需要的 data/<pid>/validator 已经存在时才公开，
+  // 缺校验器可执行文件就保持未公开——否则学生提交拿到的是没有意义的 RE。
+  // 编译必须留在判题机上做：导入器不在 web 进程里起编译器（绝大多数主机的 PHP 禁用了 exec/shell_exec，
+  // 而且 web 用户也不该去编译作者提供的代码），下面把这一步打成一条可以直接粘贴的命令。
+  $validator_ready = ($spj != 4) || file_exists($OJ_DATA . "/$pid/validator");
+  $answers_ready = ($spj == 4) || $missing_ans == 0; // 校验器题的答案由 .ans 供，缺不缺由校验器说了算
+  $defunct = 'Y';
+  if ($written > 0 && $answers_ready && $validator_ready) {
+    // pdo_query() 出错时返回 -1（UPDATE 成功但没有行变化是 0，不会为负）
+    $r = pdo_query("UPDATE problem SET defunct='N' WHERE problem_id=?", $pid);
+    if (is_numeric($r) && $r >= 0) $defunct = 'N';
+    else dom_notice(htmlentities("[$title] 更新 defunct 失败，请到题目编辑里手工公开。"));
+  } else if ($written == 0) {
+    dom_notice(htmlentities("[$title] 没写出任何数据，题目保持未公开。"));
+  } else if (!$validator_ready) {
+    dom_notice(htmlentities("[$title] 缺 $OJ_DATA/$pid/validator 可执行文件，题目先保持未公开；按下面这条命令编好就自动可用了。"));
+  } else {
+    dom_notice(htmlentities("[$title] 有缺标准答案的数据，题目保持未公开。"));
   }
 
   // 样例：多轮题的 .ans 是裁判参数（例如 adversary 名字），给选手看的应该是 .interaction
@@ -573,31 +607,36 @@ function import_domjudge_problem($arch, $root, $OJ_DATA) {
 
   echo "<hr><b>PID <a href='../problem.php?id=$pid'>" . $pid . "</a></b> " . htmlentities($title, ENT_QUOTES, "UTF-8")
      . " &mdash; spj=$spj" . ($spj == 4 ? "（" . ($multi_pass ? "通信题，逐轮判题" : "output validator，单轮") . "）" : "")
-     . "，$written 组数据（另有 " . count($nested_list) . " 个嵌套数据包），时限 {$time}s，内存 {$memory}M<br>";
+     . "，$written 组数据（另有 " . count($nested_list) . " 个嵌套数据包），时限 {$time}s，内存 {$memory}M，"
+     . ($defunct === 'N' ? "<span style='color:#080'>已公开</span>" : "<span style='color:#a00'>未公开（defunct=Y）</span>") . "<br>";
   if ($spj_note !== '') echo "<span style='color:#a06'>" . htmlentities($spj_note, ENT_QUOTES, 'UTF-8') . "</span><br>";
 
   $todo = array();
+  // defunct 的放开命令有两种给法：跟编译校验器捆成一条（照着粘一次就完事），或者单独提示。
+  $bundled_publish = false;
   if ($spj == 4) {
     if (count($build) > 0) {
-      foreach ($build as $b) {
-        // validate.h 要 C++17（std::filesystem），题目作者的 interactor 还常用 std::ssize 这类 C++20
-        // 设施，直接给 c++20；老编译器编不过时再退到 c++17 + 改源码。
-        $todo[] = "以 judge 用户执行：cd " . $b[0] . " && g++ -std=c++20 -O2 -static -o " . $OJ_DATA . "/$pid/validator " . $b[1];
-      }
-      $todo[] = "产物要 chgrp judge、chmod 0751 放进 $OJ_DATA/$pid/validator（判题机在容器里以 judge 身份跑它）";
+      // 校验器的编译已经并进 makeout.sh——它原本就负责编 spj.cc/tpj.cc/upj.cc。
+      // 在本题数据目录里跑一次，validator.src/ 下的源码就编成同目录的 ./validator。
+      // 权限不用手工理：judge_client 每次用 validator 前都把属主收成 www 用户、权限收成 0710，
+      // 谁编的都一样。makeout.sh 自己拒绝 root，用平时准备数据的那个用户跑。
+      $todo[] = "在判题机上编校验器：cd " . $OJ_DATA . "/$pid && bash /usr/bin/makeout.sh Main"
+              . ($defunct === 'Y' ? " && mysql $DB_NAME -e \"UPDATE problem SET defunct='N' WHERE problem_id=$pid\"" : "");
+      $bundled_publish = ($defunct === 'Y');
     } else {
       $todo[] = "包里没有 output_validator(s)/*.cpp；判题机找不到 $OJ_DATA/$pid/validator 会判 RE";
     }
     if ($passes !== null) $todo[] = "problem.yaml 要求 validation_passes={$passes}（judge_client 的轮数上限是 COMM_MAX_PASS=100，不用另外设置）";
     $todo[] = "时限 {$time}s 是每轮计的，" . ($multi_pass ? "多轮累加后写进 result.time" : "单轮就是总时限");
   }
-  if ($copied > 0) $todo[] = "校验器源码在 $OJ_DATA/$pid/validator.src/（$copied 个文件），编译产物放 $OJ_DATA/$pid/validator 并保证可执行";
+  if ($defunct === 'Y' && $written > 0 && !$bundled_publish) $todo[] = "放开题目：后台题目编辑改成公开，或 mysql $DB_NAME -e \"UPDATE problem SET defunct='N' WHERE problem_id=$pid\"";
+  if ($copied > 0) $todo[] = "校验器源码在 $OJ_DATA/$pid/validator.src/（$copied 个文件）";
   if ($sol_copied > 0) $todo[] = "参考程序在 $OJ_DATA/$pid/reference.src/（$sol_copied 个文件），自测时编译一份提交即可";
   if ($spj == 3) $todo[] = "spj=3 是 FIFO 交互题路径，需要 $OJ_DATA/$pid/spj.cc；本题包给的是 output validator";
   if (count($nested_list) > 0) $todo[] = "嵌套数据包：" . htmlentities(implode(', ', array_map(function ($n) { return $n['name']; }, $nested_list)), ENT_QUOTES, 'UTF-8');
 
   if (count($todo) > 0) {
-    echo "<pre style='background:#f8f8f8;padding:8px;border:1px solid #ddd'>还需要在判题机上手工完成（web 端不以 root 编译作者代码）：<br>";
+    echo "<pre style='background:#f8f8f8;padding:8px;border:1px solid #ddd'>还需要在判题机上手工完成（导入器不在 web 进程里跑编译器，绝大多数主机的 PHP 禁用了 exec）：<br>";
     foreach ($todo as $t) echo "&nbsp;&nbsp;" . $t . "<br>";
     echo "</pre>";
   }
