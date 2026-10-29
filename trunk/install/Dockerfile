@@ -74,8 +74,8 @@ RUN gcc -x c-header -O2 -std=c99 /usr/include/stdio.h
 COPY testlib.h /usr/include
 COPY makeout.sh /usr/bin/
 
-chown www-data:judge /home/judge
-chmod 751 /home/judge
+RUN chown www-data:judge /home/judge
+RUN chmod 751 /home/judge
 
 #Baota need next two lines
 #RUN useradd -u 1001 www
