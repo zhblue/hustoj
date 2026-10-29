@@ -207,3 +207,6 @@ table.ui.table td a { color: var(--hw-green); }
 @media (prefers-reduced-motion: reduce) {
   #halloween-decor { display: none; }
 }
+.ui.menu .dropdown.item .menu{
+   background-color: #a613a8 ;
+}
