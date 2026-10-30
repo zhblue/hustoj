@@ -39,12 +39,13 @@ ADD COLUMN `coin_spent`  INT NOT NULL DEFAULT 0 COMMENT '已经消耗的积分';
 ALTER TABLE `problem` 
 ADD COLUMN `coin` INT NOT NULL DEFAULT 1 COMMENT 'AC此题可得的金币数';
 
-UPDATE users SET coin_earned = COALESCE((SELECT SUM(coin) FROM problem WHERE problem_id IN (SELECT DISTINCT problem_id FROM solution WHERE user_id=users.user_id AND result=4 AND first_time=1 AND problem_id>0)), 0);
+
 
 delimiter //
 
 drop trigger if exists firstAC//
 UPDATE solution s JOIN (SELECT user_id,problem_id, MIN(solution_id) AS first_solution_id FROM solution WHERE result = 4 GROUP BY user_id, problem_id ) t ON s.solution_id = t.first_solution_id SET s.first_time = 1 //
+UPDATE users SET coin_earned = COALESCE((SELECT SUM(coin) FROM problem WHERE problem_id IN (SELECT DISTINCT problem_id FROM solution WHERE user_id=users.user_id AND result=4 AND first_time=1 AND problem_id>0)), 0) //
 create trigger firstAC
 before update on solution
 for each row
