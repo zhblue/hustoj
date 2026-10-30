@@ -122,10 +122,6 @@
             if(file_exists("moodle")){  // 如果存在moodle目录，自动添加链接
               echo '<a class="item" href="moodle"><i class="group icon"></i><span class="desktop-only">Moodle</span></a>';
             }
-            if(file_exists("hello")){  // 如果存在hello目录，自动添加链接
-              echo '<a class="item" onclick=\'window.open("/hello/index.html", "_blank",
-        "width=600,height=850,left=" + (window.screen.width-600)  + ",top=0,toolbar=no,menubar=no,location=no,status=no,resizable=yes");\'><i class="book icon"></i><span class="desktop-only">Hello算法</span></a>';
-            }
 
                 
              if( !isset($OJ_ON_SITE_CONTEST_ID) && (!isset($_GET['cid'])||$cid==0) ){
