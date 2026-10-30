@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <!-- 背景圆 -->
+  <circle cx="32" cy="32" r="31" fill="#0f5132"/>
+  <!-- 树干 -->
+  <rect x="29" y="46" width="6" height="10" rx="1" fill="#8f5a2b"/>
+  <!-- 树三层 -->
+  <path d="M32 6 L44 24 H20 Z" fill="#1e7a4d" stroke="#0f5132" stroke-width="1"/>
+  <path d="M32 18 L47 38 H17 Z" fill="#1e7a4d" stroke="#0f5132" stroke-width="1"/>
+  <path d="M32 30 L51 52 H13 Z" fill="#1e7a4d" stroke="#0f5132" stroke-width="1"/>
+  <!-- 装饰球 -->
+  <circle cx="32" cy="13" r="2.4" fill="#e3b23c"/>
+  <circle cx="26" cy="30" r="2.4" fill="#c0271f"/>
+  <circle cx="39" cy="33" r="2.4" fill="#e3b23c"/>
+  <circle cx="24" cy="46" r="2.4" fill="#c0271f"/>
+  <circle cx="41" cy="46" r="2.4" fill="#f4d35e"/>
+  <!-- 顶部星星 -->
+  <path d="M32 2 l1.8 4.2 4.6 .4 -3.5 3 1.1 4.4 -4-2.3 -4 2.3 1.1-4.4 -3.5-3 4.6-.4 Z" fill="#f4d35e" stroke="#e3b23c" stroke-width="0.6"/>
+</svg>

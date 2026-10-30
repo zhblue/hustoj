@@ -1,0 +1,245 @@
+/* ============================================================
+   HUSTOJ · xmas 模板 · 圣诞节主题基础配色
+   以 syzoj 的 white.css 为蓝本，仅替换配色 / 装饰，不改动任何功能逻辑。
+   作者: WorkBuddy (Christmas Theme for HUSTOJ)
+   ============================================================ */
+
+:root {
+  /* 圣诞主题色板 */
+  --xmas-red:        #c0271f;   /* 圣诞红 */
+  --xmas-red-deep:   #8f1a13;   /* 深红（按钮按下 / 阴影） */
+  --xmas-green:      #0f5132;   /* 松针绿 */
+  --xmas-green-light:#1e7a4d;   /* 亮绿 */
+  --xmas-gold:       #e3b23c;   /* 金色 */
+  --xmas-gold-light: #f4d35e;   /* 浅金 */
+  --xmas-cream:      #fdf6ec;   /* 奶油白（雪地） */
+  --xmas-snow:       #ffffff;
+  --xmas-night:      #0b2540;   /* 冬夜蓝 */
+
+  /* 玻璃拟态（.padding）变量，沿用 syzoj 命名 */
+  --lg-bg-color: rgba(253, 246, 236, 0.62);
+  --lg-highlight: rgba(255, 255, 255, 0.85);
+  --lg-red: #c0271f;
+  --lg-grey: #0f5132;
+}
+
+/* ---------- 全局背景：雪夜渐变 + 极淡雪花纹理 ---------- */
+html, body {
+  background-color: var(--xmas-cream);
+  background-image:
+    radial-gradient(circle at 20% 18%, rgba(195, 39, 31, 0.05) 0 2px, transparent 3px),
+    radial-gradient(circle at 70% 40%, rgba(15, 81, 50, 0.05) 0 2px, transparent 3px),
+    radial-gradient(circle at 45% 70%, rgba(227, 178, 60, 0.05) 0 2px, transparent 3px),
+    linear-gradient(180deg, #eaf3ee 0%, #fdf6ec 55%, #fbe9e7 100%);
+  background-attachment: fixed;
+}
+
+/* ---------- 顶部导航栏：松针绿 + 金色文字 ---------- */
+.toprow {
+  background-color: var(--xmas-green);
+  white-space: nowrap;
+}
+.toprow, .navbar .navbar-nav li a, .navbar-header .navbar-brand {
+  color: var(--xmas-gold-light);
+}
+.dropdown-menu, .navbar-default {
+  background-color: var(--xmas-green);
+  background-image: linear-gradient(to bottom, var(--xmas-green-light) 0px, var(--xmas-green) 100%);
+  background-repeat: repeat-x;
+  border-radius: 4px;
+  box-shadow: 0px 1px 0px rgba(255, 255, 255, 0.15) inset, 0px 1px 5px rgba(0, 0, 0, 0.35);
+}
+.navbar-default .navbar-nav > li > a,
+.navbar-default .navbar-brand {
+  color: var(--xmas-gold-light);
+}
+.navbar-default .navbar-nav > li > a:hover {
+  color: #fff;
+  background-color: rgba(195, 39, 31, 0.35);
+}
+
+/* ---------- 玻璃卡片 .padding（沿用 syzoj 圆角玻璃风） ---------- */
+.padding {
+  position: relative;
+  border-radius: 3rem;
+  overflow: hidden;
+  box-shadow: 0 6px 6px rgba(15, 81, 50, 0.18), 0 0 20px rgba(195, 39, 31, 0.08);
+  color: var(--lg-text);
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 2.2);
+  padding: 2rem;
+}
+.padding::before,
+.padding::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+}
+.padding::before {
+  z-index: -2;
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
+  filter: saturate(118%) brightness(1.04);
+}
+.padding::after {
+  z-index: -1;
+  background: var(--lg-bg-color);
+  box-shadow: inset 1px 1px 0 var(--lg-highlight), inset 0 0 5px var(--lg-highlight);
+}
+.padding > * {
+  position: relative;
+  z-index: 2;
+}
+
+/* ---------- 语义 UI 固定顶栏（#page-header）圣诞化 ---------- */
+#page-header.ui.menu {
+  background: linear-gradient(90deg, var(--xmas-green) 0%, var(--xmas-green-light) 50%, var(--xmas-green) 100%);
+  border-bottom: 3px solid var(--xmas-gold);
+  box-shadow: 0 2px 10px rgba(15, 81, 50, 0.35);
+}
+#page-header.ui.menu .item,
+#page-header.ui.menu .header.item {
+  color: var(--xmas-gold-light) !important;
+}
+#page-header.ui.menu .item:hover,
+#page-header.ui.menu .item.active {
+  color: #fff !important;
+  background: rgba(195, 39, 31, 0.38) !important;
+}
+#page-header.ui.menu .header.item span {
+  color: var(--xmas-gold-light) !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.45);
+}
+#page-header .right.menu .ui.button {
+  background: var(--xmas-red);
+  color: #fff;
+}
+#page-header .right.menu .ui.primary.button {
+  background: var(--xmas-gold);
+  color: var(--xmas-green);
+}
+
+/* ---------- 链接 / 文字 ---------- */
+a.black-link { color: var(--xmas-green); }
+a.black-link:hover { color: var(--xmas-red); }
+
+/* ---------- Semantic UI 主色覆盖（按钮 / 段） ---------- */
+.ui.primary.buttons .button,
+.ui.primary.button {
+  background-color: var(--xmas-red);
+  color: #fff;
+}
+.ui.primary.buttons .button:hover,
+.ui.primary.button:hover {
+  background-color: var(--xmas-red-deep);
+}
+.ui.button:not(.primary):not(.basic) {
+  background: var(--xmas-green);
+  color: #fff;
+}
+.ui.basic.button, .ui.basic.buttons .button {
+  color: var(--xmas-green) !important;
+  box-shadow: 0 0 0 1px var(--xmas-green) inset !important;
+}
+.ui.segment, .ui.segments .segment {
+  border-top: 3px solid var(--xmas-green);
+}
+.ui.top.attached.block.header {
+  background: var(--xmas-green) !important;
+  color: var(--xmas-gold-light) !important;
+}
+
+/* ---------- 表格斑马纹（淡绿） ---------- */
+table.ui.table tbody tr:nth-child(even) {
+  background: rgba(15, 81, 50, 0.05);
+}
+table.ui.table tbody tr:hover {
+  background: rgba(195, 39, 31, 0.08) !important;
+}
+
+/* ---------- 题目集 / 面板背景（雪地纹理） ---------- */
+.panel-default, .container .jumbotron {
+  padding: 5px;
+  background-image:
+    radial-gradient(circle at 15% 20%, rgba(195,39,31,0.06) 0 3px, transparent 4px),
+    radial-gradient(circle at 80% 60%, rgba(15,81,50,0.06) 0 3px, transparent 4px),
+    url(../../image/background.jpg);
+  border: 1px solid #e7d9c9;
+  margin-top: 50px;
+}
+
+/* ---------- 通用状态色（保留判题语义，但与圣诞色自然契合） ---------- */
+.red   { color: var(--xmas-red) !important; }
+.green { color: var(--xmas-green) !important; }
+.blue  { color: #1f6fb2 !important; }
+
+/* ---------- 圣诞装饰：飘雪层 ---------- */
+#xmas-snow {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 99998;
+  overflow: hidden;
+}
+.xmas-flake {
+  position: absolute;
+  top: -5%;
+  color: #fff;
+  /* 奶油白底上纯白雪花几乎不可见：加深色描边 + 冷蓝光晕保证对比度 */
+  text-shadow:
+    0 0 1px rgba(11, 37, 64, 0.85),
+    0 1px 2px rgba(11, 37, 64, 0.45),
+    0 0 6px rgba(120, 180, 255, 0.65);
+  will-change: transform;
+  animation-name: xmas-fall;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  opacity: 0.9;
+}
+@keyframes xmas-fall {
+  0%   { transform: translateY(-10vh) translateX(0) rotate(0deg); }
+  100% { transform: translateY(110vh) translateX(40px) rotate(360deg); }
+}
+
+/* ---------- 圣诞装饰：顶栏下方串灯 ---------- */
+#xmas-lights {
+  position: fixed;
+  top: 49px;
+  left: 0;
+  width: 100%;
+  height: 14px;
+  z-index: 99997;
+  pointer-events: none;
+  display: flex;
+  justify-content: space-around;
+  padding: 0 6px;
+  background: linear-gradient(180deg, rgba(11,37,64,0.25), transparent);
+}
+#xmas-lights .bulb {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  margin-top: 2px;
+  box-shadow: 0 0 6px 1px currentColor;
+  animation: xmas-twinkle 1.6s infinite ease-in-out;
+}
+@keyframes xmas-twinkle {
+  0%, 100% { opacity: 1; filter: brightness(1); }
+  50%      { opacity: 0.45; filter: brightness(0.7); }
+}
+
+/* ---------- 圣诞导航图标（替换语义 UI 图标） ---------- */
+.xmas-nav-icon {
+  width: 1.18em;
+  height: 1.18em;
+  vertical-align: -0.18em;
+  margin-right: 0.35em;
+  fill: currentColor;
+}
+
+/* ---------- 页脚圣诞化 ---------- */
+.footer {
+  color: var(--xmas-green) !important;
+}
+.footer a { color: var(--xmas-red) !important; }
