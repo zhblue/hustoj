@@ -90,7 +90,7 @@ if(isset($_GET['keyword']) && $_GET['keyword']!=""){
         if($OJ_SaaS_ENABLE && $domain == $DOMAIN){
                 echo "<td><a href='http://".$row['user_id'].".$DOMAIN' target=_blank >".$row['email']."&nbsp;</a></td>";
         }else{
-                echo "<td>".$row['email']." </td>";
+                echo "<td>".($row['email']??"&nbsp;")." </td>";
         }
         if($row['school']=="") $row['school']="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
         echo "<td><span fd='school' user_id='".$row['user_id']."'>".$row['school']."</span></td>";
