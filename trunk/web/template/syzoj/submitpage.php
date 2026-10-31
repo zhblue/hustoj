@@ -1069,4 +1069,4 @@ function pull_result(id){
 
   </body>
 </html>
-<?php //include("template/$OJ_TEMPLATE/footer.php");?>
+<?php include("template/$OJ_TEMPLATE/js.php");?>
