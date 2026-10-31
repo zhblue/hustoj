@@ -93,11 +93,11 @@ if(isset($_GET['keyword']) && $_GET['keyword']!=""){
                 echo "<td fd='email' user_id='".$row['user_id']."'>".$row['email']??"---"." </td>";
         }
         if($row['school']=="") $row['school']="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
-        echo "<td><span fd='school' user_id='".$row['user_id']."'>".$row['school']."</span></td>";
+        echo "<td fd='school' user_id='".$row['user_id']."'>".$row['school']."</td>";
         if($row['group_name']=="") $row['group_name']="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
-        echo "<td><span fd='group_name' user_id='".$row['user_id']."'>".$row['group_name']."</span></td>";
+        echo "<td fd='group_name' user_id='".$row['user_id']."'>".$row['group_name']."</td>";
         if($row['parent_phone']=="") $row['parent_phone']="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
-        echo "<td><span fd='parent_phone' user_id='".$row['user_id']."'>".$row['parent_phone']."</span></td>";
+        echo "<td fd='parent_phone' user_id='".$row['user_id']."'>".$row['parent_phone']."</td>";
         echo "<td>".$row['accesstime']."</td>";
         echo "<td>".$row['reg_time']."</td>";
         $color="red";
@@ -106,11 +106,10 @@ if(isset($_GET['keyword']) && $_GET['keyword']!=""){
         $today= new DateTime(add_days(0));
         if($edate>$tomorrow) $color="green";
         else if($edate>=$today) $color="blue";
-        echo "<td><span fd='expiry_date' user_id='".$row['user_id']."' class='".$color."' >".$row['expiry_date']."</span></td>";
-
+        echo "<td fd='expiry_date' user_id='".$row['user_id']."' class='".$color."' >".$row['expiry_date']."</td>";
         echo "<td>".intval($row['coin_earned'])."</td>";
-        echo "<td><span fd='coin_bonus' user_id='".$row['user_id']."'>".intval($row['coin_bonus'])."</span></td>";
-        echo "<td><span fd='coin_spent' user_id='".$row['user_id']."'>".intval($row['coin_spent'])."</span></td>";
+        echo "<td fd='coin_bonus' user_id='".$row['user_id']."'>".intval($row['coin_bonus'])."</td>";
+        echo "<td fd='coin_spent' user_id='".$row['user_id']."'>".intval($row['coin_spent'])."</td>";
         echo "<td>".intval($row['coin_earned']+$row['coin_bonus']-$row['coin_spent'])."</td>";
         echo "<td>".($row['defunct']=="N"?"<span class=green >$MSG_NORMAL</span>":"<span class=red>$MSG_DELETED</span>")."</td>";
       if(isset($_SESSION[$OJ_NAME.'_'.'administrator']) && $row['user_id']!=$_SESSION[$OJ_NAME."_user_id"]){
@@ -154,7 +153,7 @@ function admin_mod(){
                 let sp=$(this);
                 let user_id=$(this).attr('user_id');
                 let fd=$(this).attr('fd');
-		if( fd == undefined ) return;
+		if( fd == undefined || fd=="expiry_date") return;
 		console.log("field:"+fd);
 
                 $(this).dblclick(function(){
@@ -174,7 +173,7 @@ function admin_mod(){
                 });
         });
 
-        $("span[fd=expiry_date]").each(function(){
+        $("td[fd=expiry_date]").each(function(){
                 let sp=$(this);
                 let user_id=$(this).attr('user_id');
                 $(this).dblclick(function(){
