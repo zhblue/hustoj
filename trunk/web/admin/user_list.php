@@ -90,7 +90,7 @@ if(isset($_GET['keyword']) && $_GET['keyword']!=""){
         if($OJ_SaaS_ENABLE && $domain == $DOMAIN){
                 echo "<td><a href='http://".$row['user_id'].".$DOMAIN' target=_blank >".$row['email']."&nbsp;</a></td>";
         }else{
-                echo "<td>".($row['email']??"&nbsp;")." </td>";
+                echo "<td fd='email' user_id='".$row['user_id']."'>".$row['email']??"---"." </td>";
         }
         if($row['school']=="") $row['school']="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
         echo "<td><span fd='school' user_id='".$row['user_id']."'>".$row['school']."</span></td>";
@@ -150,90 +150,30 @@ if(!(isset($_GET['keyword']) && $_GET['keyword']!=""))
 <script src="../include/qrcode.min.js"></script>
 <script>
 function admin_mod(){
-        $("span[fd=group_name]").each(function(){
+        $("td").each(function(){
                 let sp=$(this);
                 let user_id=$(this).attr('user_id');
-                $(this).dblclick(function(){
-                        let group_name=sp.text();
-                        sp.html("<form onsubmit='return false;'><input type=hidden name='m' value='user_update_group_name'><input type='hidden' name='user_id' value='"+user_id+"'><input type='text' name='group_name' value='"+group_name+"' selected='true' class='input-large' size=20 ></form>");
-                        let ipt=sp.find("input[name=group_name]");
-                        ipt.focus();
-                        ipt[0].select();
-                        sp.find("input").change(function(){
-                                let newgroup_name=sp.find("input[name=group_name]").val();
-                                $.post("ajax.php",sp.find("form").serialize()).done(function(){
-                                        console.log("new group_name"+newgroup_name);
-                                        sp.html(newgroup_name);
-                                });
+                let fd=$(this).attr('fd');
+		if( fd == undefined ) return;
+		console.log("field:"+fd);
 
-                        });
-                });
-        });
-        $("span[fd=parent_phone]").each(function(){
-                let sp=$(this);
-                let user_id=$(this).attr('user_id');
                 $(this).dblclick(function(){
-                        let parent_phone=sp.text().trim();
-                        sp.html("<form onsubmit='return false;'><input type=hidden name='m' value='user_update_parent_phone'><input type='hidden' name='user_id' value='"+user_id+"'><input type='text' name='parent_phone' value='"+parent_phone+"' selected='true' class='input-large' size=20 pattern='1[3-9][0-9]{9}' placeholder='11位手机号'></form>");
-                        let ipt=sp.find("input[name=parent_phone]");
+                        let oldval=sp.text();
+                        sp.html("<form onsubmit='return false;'><input type=hidden name='m' value='user_update_"+fd+"'><input type='hidden' name='user_id' value='"+user_id+"'><input type='text' name='"+fd+"' value='"+oldval+"' selected='true' class='input-large' size=20 ></form>");
+                        let ipt=sp.find("input[name="+fd+"]");
                         ipt.focus();
                         ipt[0].select();
                         sp.find("input").change(function(){
-                                let newphone=sp.find("input[name=parent_phone]").val().trim();
-                                if(newphone!=='' && !/^1[3-9][0-9]{9}$/.test(newphone)){
-                                        alert('<?php echo $MSG_PARENT_PHONE; ?>: ' + newphone);
-                                        sp.html(parent_phone || '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;');
-                                        return;
-                                }
+                                let newval=sp.find("input[name="+fd+"]").val();
                                 $.post("ajax.php",sp.find("form").serialize()).done(function(){
-                                        console.log("new parent_phone"+newphone);
-                                        sp.html(newphone || '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;');
-                                });
-                        });
-                });
-        });
-        $("span[fd=school]").each(function(){
-                let sp=$(this);
-                let user_id=$(this).attr('user_id');
-                $(this).dblclick(function(){
-                        let school=sp.text();
-                        sp.html("<form onsubmit='return false;'><input type=hidden name='m' value='user_update_school'><input type='hidden' name='user_id' value='"+user_id+"'><input type='text' name='school' value='"+school+"' selected='true' class='input-large' size=20 ></form>");
-                        let ipt=sp.find("input[name=school]");
-                        ipt.focus();
-                        ipt[0].select();
-                        sp.find("input").change(function(){
-                                let newschool=sp.find("input[name=school]").val();
-                                $.post("ajax.php",sp.find("form").serialize()).done(function(){
-                                        console.log("new school"+newschool);
-                                        sp.html(newschool);
+                                        console.log("new value:"+newval);
+                                        sp.html(newval);
                                 });
 
                         });
                 });
         });
 
-        $("span[fd=nick]").each(function(){
-                let sp=$(this);
-                let user_id=$(this).attr('user_id');
-                $(this).dblclick(function(){
-                        let nick=sp.text();
-                        console.log("user_id:"+user_id+"  nick:"+nick);
-                        sp.html("<form onsubmit='return false;'><input type=hidden name='m' value='user_update_nick'><input type='hidden' name='user_id' value='"+user_id+"'><input type='text' name='nick' value='"+nick+"' selected='true' class='input-mini' size=2 ></form>");
-                        let ipt=sp.find("input[name=nick]");
-                        ipt.focus();
-                        ipt[0].select();
-                        sp.find("input").change(function(){
-                                let newnick=sp.find("input[name=nick]").val();
-                                $.post("ajax.php",sp.find("form").serialize()).done(function(){
-                                        console.log("new nick:"+newnick);
-                                        sp.html(newnick);
-                                });
-
-                        });
-                });
-
-
-        });
         $("span[fd=expiry_date]").each(function(){
                 let sp=$(this);
                 let user_id=$(this).attr('user_id');
@@ -253,48 +193,6 @@ function admin_mod(){
 
                         });
                 });
-
-        });
-        $("span[fd=coin_bonus]").each(function(){
-                let sp=$(this);
-                let user_id=$(this).attr('user_id');
-                $(this).dblclick(function(){
-                        let val=sp.text();
-                        sp.html("<form onsubmit='return false;'><input type=hidden name='m' value='user_update_coin_bonus'><input type=hidden name='user_id' value='"+user_id+"'><input type='number' name='coin_bonus' value='"+val+"' selected='true' class='input-mini' size=6 ></form>");
-                        let ipt=sp.find("input[name=coin_bonus]");
-                        ipt.focus();
-                        ipt[0].select();
-                        sp.find("input").change(function(){
-                                let newval=sp.find("input[name=coin_bonus]").val();
-                                $.post("ajax.php",sp.find("form").serialize()).done(function(){
-                                        console.log("new coin_bonus:"+newval);
-                                        sp.html(newval);
-                                });
-
-                        });
-                });
-
-
-        });
-        $("span[fd=coin_spent]").each(function(){
-                let sp=$(this);
-                let user_id=$(this).attr('user_id');
-                $(this).dblclick(function(){
-                        let val=sp.text();
-                        sp.html("<form onsubmit='return false;'><input type=hidden name='m' value='user_update_coin_spent'><input type=hidden name='user_id' value='"+user_id+"'><input type='number' name='coin_spent' value='"+val+"' selected='true' class='input-mini' size=6 ></form>");
-                        let ipt=sp.find("input[name=coin_spent]");
-                        ipt.focus();
-                        ipt[0].select();
-                        sp.find("input").change(function(){
-                                let newval=sp.find("input[name=coin_spent]").val();
-                                $.post("ajax.php",sp.find("form").serialize()).done(function(){
-                                        console.log("new coin_spent:"+newval);
-                                        sp.html(newval);
-                                });
-
-                        });
-                });
-
 
         });
 
