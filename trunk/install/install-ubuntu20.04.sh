@@ -116,7 +116,12 @@ sed -i "s/post_max_size = 8M/post_max_size = 80M/g" /etc/php/7.4/fpm/php.ini
 sed -i "s/upload_max_filesize = 2M/upload_max_filesize = 80M/g" /etc/php/7.4/fpm/php.ini
 WWW_CONF=$(find /etc/php -name www.conf)
 sed -i 's/;request_terminate_timeout = 0/request_terminate_timeout = 128/g' "$WWW_CONF"
-sed -i 's/pm.max_children = 5/pm.max_children = 200/g' "$WWW_CONF"
+# php-fpm: cap at 40% of RAM, ~80MB per worker
+PHP_FPM_MEM=$(free -m | awk '/^Mem:/{print $2}')
+PHP_FPM_MAX_CHILDREN=$((PHP_FPM_MEM * 40 / 100 / 80))
+[ "$PHP_FPM_MAX_CHILDREN" -lt 1 ] && PHP_FPM_MAX_CHILDREN=1
+echo "php-fpm max_children = $PHP_FPM_MAX_CHILDREN (${PHP_FPM_MEM}MB RAM * 40% / 80MB)"
+sed -i -E "s|^[[:space:]]*;?[[:space:]]*pm\.max_children[[:space:]]*=.*|pm.max_children = $PHP_FPM_MAX_CHILDREN|" "$WWW_CONF"
  
 COMPENSATION=$(grep 'mips' /proc/cpuinfo|head -1|awk -F: '{printf("%.2f",$2/3000)}')
 sed -i "s/OJ_CPU_COMPENSATION=1.0/OJ_CPU_COMPENSATION=$COMPENSATION/g" etc/judge.conf
