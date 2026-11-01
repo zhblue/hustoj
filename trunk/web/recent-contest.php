@@ -25,7 +25,6 @@ function recent_contest_fetch_json($url) {
         ));
         $body = curl_exec($ch);
         $code = (int)curl_getinfo($ch, CURLINFO_HTTP_CODE);
-        curl_close($ch);
         if ($body !== false && $code >= 200 && $code < 300) {
             $data = json_decode($body, true);
             if (json_last_error() === JSON_ERROR_NONE) return $data;

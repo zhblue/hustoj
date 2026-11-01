@@ -21,7 +21,6 @@ foreach ($remote_ojs as $remote_oj) {
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         curl_exec($ch);
         $curl_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-        curl_close($ch);
         if ($curl_code == 200) {
             echo "<iframe src='$file?check' ></iframe>";
         } else {

@@ -11,7 +11,6 @@ function http_request($url, $is_post = False)
         curl_setopt($ch, CURLOPT_POSTFIELDS, "");
     }
     $resp = curl_exec($ch);
-    curl_close($ch);
     return $resp;
 }
 
