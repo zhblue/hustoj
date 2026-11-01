@@ -309,3 +309,116 @@
     });
   });
 })();
+
+/* ===== 趣味互动 2026-12 =====
+ * ① 雪花靠近鼠标自动减速（Web Animations playbackRate，离开后恢复）
+ * ② window.xmasSantaGift()：AC 时圣诞老人从天而降撒礼物
+ * 均尊重 prefers-reduced-motion。
+ */
+(function () {
+  'use strict';
+  if (typeof window === 'undefined' || typeof document === 'undefined') return;
+  if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  if (window.OJ_THEME_FX && window.OJ_THEME_FX.xmasfun2) return;
+  if (window.OJ_THEME_FX) window.OJ_THEME_FX.xmasfun2 = true;
+
+  // ---------- ① 雪花遇鼠标减速 ----------
+  var mouse = { x: -9999, y: -9999, active: false };
+  window.addEventListener('pointermove', function (e) {
+    mouse.x = e.clientX; mouse.y = e.clientY; mouse.active = true;
+  }, { passive: true });
+  window.addEventListener('pointerleave', function () { mouse.active = false; }, { passive: true });
+
+  var slowed = {};   // element index -> 播放中的 CSSAnimation
+  var flakeSeq = 0;
+  function markFlake(el) {
+    if (!el.dataset.xmasId) el.dataset.xmasId = 'f' + (++flakeSeq);
+    return el.dataset.xmasId;
+  }
+  function within(el, r) {
+    var b = el.getBoundingClientRect();
+    var cx = b.left + b.width / 2, cy = b.top + b.height / 2;
+    return Math.abs(cx - mouse.x) < r + b.width / 2 && Math.abs(cy - mouse.y) < r + b.height / 2;
+  }
+  function tuneSnow() {
+    if (!document.getAnimations) return;   // 老浏览器直接跳过
+    var near = {};
+    if (mouse.active) {
+      var list = document.querySelectorAll('#xmas-snow .xmas-flake, #xmasfx-snow .xmasfx-snowflake');
+      for (var i = 0; i < list.length; i++) {
+        if (within(list[i], 130)) near[markFlake(list[i])] = list[i];
+      }
+    }
+    var anims = document.getAnimations();
+    for (var j = 0; j < anims.length; j++) {
+      var a = anims[j], t = a.effect && a.effect.target;
+      if (!t || !t.dataset || !t.dataset.xmasId) continue;
+      var id = t.dataset.xmasId;
+      if (near[id]) {
+        if (!slowed[id]) { slowed[id] = a; try { a.updatePlaybackRate(0.2); } catch (e) {} }
+      } else if (slowed[id] === a) {
+        try { a.updatePlaybackRate(1); } catch (e) {}
+        delete slowed[id];
+      }
+    }
+  }
+  setInterval(tuneSnow, 160);
+
+  // ---------- ② AC 圣诞老人发礼物 ----------
+  var GIFT_SVG = {
+    gift: '<svg viewBox="0 0 24 24"><rect x="3.5" y="9" width="17" height="12.5" rx="1.6" fill="#c0271f"/><rect x="3.5" y="12.8" width="17" height="2.6" fill="#f4d35e"/><rect x="10.8" y="9" width="2.4" height="12.5" fill="#f4d35e"/><path d="M12 9c-2.6 0-5-1.4-5-3.4S10 3 12 9c2-6 5-5.4 5-3.4S14.6 9 12 9z" fill="#f4d35e" stroke="#c9a227" stroke-width=".8"/></svg>',
+    sock: '<svg viewBox="0 0 24 24"><path d="M9 3h6v11l4.2 4.2a3 3 0 0 1-4.2 4.2L9 17V3z" fill="#c0271f"/><rect x="8" y="3" width="8" height="3.4" rx="1.4" fill="#fff"/><path d="M9 14l4 4.4" stroke="#fff" stroke-width="1.6" stroke-linecap="round"/></svg>',
+    candy: '<svg viewBox="0 0 24 24"><path d="M9 21V8a4.5 4.5 0 0 1 9 0v1.6" fill="none" stroke="#fff" stroke-width="6" stroke-linecap="round"/><path d="M9 21V8a4.5 4.5 0 0 1 9 0v1.6" fill="none" stroke="#c0271f" stroke-width="2.6" stroke-dasharray="2.8 2.8" stroke-linecap="round"/></svg>'
+  };
+  var SANTA_SVG = '<svg viewBox="0 0 64 64"><path d="M14 24C14 13 22 6 32 6s18 7 18 18z" fill="#c0271f"/><path d="M44 9c4 1 6 3 7 6l-7 1z" fill="#c0271f"/><circle cx="53" cy="15" r="5" fill="#fff"/><rect x="12" y="21" width="40" height="7" rx="3.5" fill="#fff"/><circle cx="32" cy="35" r="13" fill="#f6d3b3"/><path d="M19 33c0 13 6 21 13 21s13-8 13-21c-4 4-9 6-13 6s-9-2-13-6z" fill="#fff"/><circle cx="27" cy="31" r="1.7" fill="#3b2b25"/><circle cx="37" cy="31" r="1.7" fill="#3b2b25"/><circle cx="32" cy="36" r="2.2" fill="#e08a7a"/><path d="M29 41q3 2 6 0" stroke="#8f1a13" stroke-width="1.4" fill="none" stroke-linecap="round"/></svg>';
+
+  function injectGiftCss() {
+    if (document.getElementById('xmas-gift-css')) return;
+    var css = [
+      '#xmas-gift-layer{position:fixed;inset:0;z-index:99999;pointer-events:none;overflow:hidden}',
+      '.xmas-gift-santa{position:absolute;top:-160px;left:50%;margin-left:-80px;width:160px;height:160px;animation:xmas-gift-drop 4.2s cubic-bezier(.3,.7,.4,1) forwards;filter:drop-shadow(0 6px 16px rgba(192,39,31,.45))}',
+      '.xmas-gift-santa svg{width:100%;height:100%}',
+      '.xmas-gift-bubble{position:absolute;top:150px;left:50%;transform:translateX(-50%);white-space:nowrap;background:#fff;border:2px solid #c0271f;color:#8f1a13;font-weight:700;font-size:14px;padding:6px 14px;border-radius:14px;box-shadow:0 6px 18px rgba(192,39,31,.25);opacity:0;animation:xmas-gift-bubble 4.2s ease forwards}',
+      '@keyframes xmas-gift-drop{0%{top:-160px;transform:rotate(-8deg)}35%{top:22vh;transform:rotate(4deg)}50%{top:26vh;transform:rotate(-2deg)}100%{top:-160px;transform:rotate(6deg);opacity:1}}',
+      '@keyframes xmas-gift-bubble{0%,20%{opacity:0}30%,80%{opacity:1}100%{opacity:0}}',
+      '.xmas-gift-item{position:absolute;top:-40px;width:26px;height:26px;animation:xmas-gift-fall linear forwards}',
+      '.xmas-gift-item svg{width:100%;height:100%}',
+      '@keyframes xmas-gift-fall{0%{transform:translateY(0) rotate(0deg);opacity:0}8%{opacity:1}100%{transform:translateY(96vh) rotate(var(--rz,300deg));opacity:.9}}'
+    ].join('\n');
+    var st = document.createElement('style');
+    st.id = 'xmas-gift-css';
+    st.textContent = css;
+    document.head.appendChild(st);
+  }
+
+  window.xmasSantaGift = function () {
+    if (document.hidden) return;
+    injectGiftCss();
+    var layer = document.createElement('div');
+    layer.id = 'xmas-gift-layer';
+    layer.setAttribute('aria-hidden', 'true');
+    var santa = document.createElement('div');
+    santa.className = 'xmas-gift-santa';
+    santa.innerHTML = SANTA_SVG + '<div class="xmas-gift-bubble">恭喜 AC！圣诞老人发礼物啦～</div>';
+    layer.appendChild(santa);
+    var keys = Object.keys(GIFT_SVG);
+    for (var i = 0; i < 14; i++) {
+      var g = document.createElement('span');
+      g.className = 'xmas-gift-item';
+      g.innerHTML = GIFT_SVG[keys[i % keys.length]];
+      g.style.left = (4 + Math.random() * 92).toFixed(1) + 'vw';
+      var dur = 1.6 + Math.random() * 1.6;
+      g.style.animationDuration = dur + 's';
+      g.style.animationDelay = (0.7 + Math.random() * 1.8).toFixed(2) + 's';
+      g.style.setProperty('--rz', Math.round(180 + Math.random() * 540) + 'deg');
+      var size = 18 + Math.random() * 18;
+      g.style.width = size + 'px';
+      g.style.height = size + 'px';
+      layer.appendChild(g);
+    }
+    document.body.appendChild(layer);
+    setTimeout(function () {
+      if (layer.parentNode) layer.parentNode.removeChild(layer);
+    }, 4600);
+  };
+})();

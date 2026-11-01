@@ -4,6 +4,10 @@ ini_set("display_errors", "On");  //set this to "On" for debugging  ,especially 
         if(isset($_SESSION[$OJ_NAME.'_'.'user_id'])) {
                    
                 ?>
+			 <script>
+                        var user_id="<?php echo  $_SESSION[$OJ_NAME.'_'.'user_id'] ?>";
+                </script>
+
                 <a href="<?php echo $path_fix?>/userinfo.php?user=<?php echo htmlentities($_SESSION[$OJ_NAME.'_'.'user_id'])?>"
                     style="color: inherit; ">
                     <div class="ui simple dropdown item">

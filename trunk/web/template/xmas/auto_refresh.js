@@ -82,6 +82,7 @@ function fresh_result(solution_id) {
                                         case 14:
                                                 if(user_id==ra[5]){
                                                         fancy(row.cells[4]);
+                                                        if(typeof xmasSantaGift === 'function') xmasSantaGift();
                                                         row.cells[4].innerHTML += "<a href=reinfo.php?sid="+solution_id+" class='"+judge_color[ra[0]]+"'>"+judge_result[ra[0]]+"</a>";
                                                 }else{
                                                         row.cells[4].innerHTML = "<a href=reinfo.php?sid="+solution_id+" class='"+judge_color[ra[0]]+"'>"+judge_result[ra[0]]+"</a>";
