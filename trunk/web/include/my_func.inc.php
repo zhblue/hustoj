@@ -383,7 +383,6 @@ function starred($user_id){
         CURLOPT_TIMEOUT => 10,
     ]);
     $response = curl_exec($ch);
-    curl_close($ch);
 
     if ($response === false) return false;
 

@@ -10,7 +10,7 @@
 		$moodle_db="moodle";
 		$moodle_pass="";
 		//$moodle_conn=mysql_connect($moodle_host.":".$moodle_port,$moodle_user,$moodle_pass);
-		$moodle_dbh=new PDO("mysql:host=".$moodle_host.';dbname='.$moodle_db, $moodle_user, $moodle_pass,array(PDO::ATTR_PERSISTENT=>true,PDO::MYSQL_ATTR_INIT_COMMAND => "set names utf8mb4"));
+		$moodle_dbh=new PDO("mysql:host=".$moodle_host.';dbname='.$moodle_db, $moodle_user, $moodle_pass,array(PDO::ATTR_PERSISTENT=>true,OJ_MYSQL_ATTR_INIT_COMMAND => "set names utf8mb4"));
 		$moodle_dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 		        		
 		$moodle_salt= '-Y9-h0;),c@<i)D~*i/j7.pD6lh/,B';

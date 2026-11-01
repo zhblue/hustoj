@@ -1,4 +1,10 @@
 <?php
+// PHP 8.5 弃用了 PDO::MYSQL_ATTR_*（值不变，迁移到 Pdo\Mysql::ATTR_*），加版本守卫兼容 8.0-8.4
+if (class_exists('Pdo\Mysql')) {
+    define('OJ_MYSQL_ATTR_INIT_COMMAND', Pdo\Mysql::ATTR_INIT_COMMAND);
+} else {
+    define('OJ_MYSQL_ATTR_INIT_COMMAND', PDO::MYSQL_ATTR_INIT_COMMAND);
+}
 function rdo_query($sql){
     $query_start_time=microtime(true);
     $num_args = func_num_args();
@@ -15,11 +21,11 @@ function rdo_query($sql){
 				
 				
 	    		if(stripos($sql,"create") === 0||stripos($sql,"drop") === 0|| stripos($sql,"grant") === 0){
-					$db_ro_h=new PDO("mysql:host=".$DB_RO_HOST, $DB_RO_USER, $DB_RO_PASS,array(PDO::MYSQL_ATTR_INIT_COMMAND => "set names utf8mb4;"));
+					$db_ro_h=new PDO("mysql:host=".$DB_RO_HOST, $DB_RO_USER, $DB_RO_PASS,array(OJ_MYSQL_ATTR_INIT_COMMAND => "set names utf8mb4;"));
 	//					echo "General SQL";
 					$sql="use $DB_NAME; ".$sql;
 			}else{
-				$db_ro_h=new PDO("mysql:host=".$DB_RO_HOST.';dbname='.$DB_RO_NAME, $DB_RO_USER, $DB_RO_PASS,array(PDO::ATTR_PERSISTENT=>true,PDO::MYSQL_ATTR_INIT_COMMAND => "set names utf8mb4",PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC));
+				$db_ro_h=new PDO("mysql:host=".$DB_RO_HOST.';dbname='.$DB_RO_NAME, $DB_RO_USER, $DB_RO_PASS,array(PDO::ATTR_PERSISTENT=>true,OJ_MYSQL_ATTR_INIT_COMMAND => "set names utf8mb4",PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC));
 //					echo "$DB_NAME SQL";
 			}
 			
@@ -60,6 +66,8 @@ function rdo_query($sql){
 
 	if(stripos($sql,"create") === 0||stripos($sql,"drop") === 0) echo "continue\n";
 	//else exit(0);
+	// 关键设计：查询类 SQL 失败返回空数组，避免调用方 foreach/count 收到 -1 抛 TypeError 白屏
+	if(preg_match('/^\s*(select|show|describe|explain)\b/i',$sql)) return array();
 	return -1;
     }
 }
@@ -75,11 +83,11 @@ function pdo_query($sql){
 				
 				
 	    		if(stripos($sql,"create") === 0||stripos($sql,"drop") === 0|| stripos($sql,"grant") === 0){
-					$dbh=new PDO("mysql:host=".$DB_HOST, $DB_USER, $DB_PASS,array(PDO::MYSQL_ATTR_INIT_COMMAND => "set names utf8mb4;"));
+					$dbh=new PDO("mysql:host=".$DB_HOST, $DB_USER, $DB_PASS,array(OJ_MYSQL_ATTR_INIT_COMMAND => "set names utf8mb4;"));
 	//					echo "General SQL";
 					$sql="use $DB_NAME; ".$sql;
 				}else{
-					$dbh=new PDO("mysql:host=".$DB_HOST.';dbname='.$DB_NAME, $DB_USER, $DB_PASS,array(PDO::ATTR_PERSISTENT=>true,PDO::MYSQL_ATTR_INIT_COMMAND => "set names utf8mb4"));
+					$dbh=new PDO("mysql:host=".$DB_HOST.';dbname='.$DB_NAME, $DB_USER, $DB_PASS,array(PDO::ATTR_PERSISTENT=>true,OJ_MYSQL_ATTR_INIT_COMMAND => "set names utf8mb4"));
 //					echo "$DB_NAME SQL";
 				}
 			
@@ -120,6 +128,8 @@ function pdo_query($sql){
 
 	if(stripos($sql,"create") === 0||stripos($sql,"drop") === 0) echo "continue\n";
 	//else exit(0);
+	// 关键设计：查询类 SQL 失败返回空数组，避免调用方 foreach/count 收到 -1 抛 TypeError 白屏
+	if(preg_match('/^\s*(select|show|describe|explain)\b/i',$sql)) return array();
 	return -1;
     }
 }
