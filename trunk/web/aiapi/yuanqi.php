@@ -262,8 +262,6 @@ $response = curl_exec($ch);
 if (curl_errno($ch)) {
     echo 'Curl error: ' . curl_error($ch);
 }
-// 关闭cURL资源
-curl_close($ch);
 // 输出响应结果
 $data=json_decode($response);
 //var_dump($data);

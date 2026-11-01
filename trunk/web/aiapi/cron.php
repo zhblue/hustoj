@@ -114,7 +114,6 @@ do {
         $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
         $curl_errno = curl_errno($ch);
         $curl_error = curl_error($ch);
-        curl_close($ch);
 
         // ---------------------------------------------------------------------------
         // 修复2: 检查 cURL 错误（网络层）

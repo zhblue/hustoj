@@ -113,11 +113,8 @@ class QwenProxy
         
         if (curl_errno($ch)) {
             $error = curl_error($ch);
-            curl_close($ch);
             throw new Exception('千问API请求失败: ' . $error);
         }
-        
-        curl_close($ch);
         
         return [
             'headers' => substr($response, 0, $headerSize),
