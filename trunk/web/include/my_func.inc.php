@@ -346,6 +346,123 @@ function add_days($days) {
     // 返回结果日期
     return $date->format('Y-m-d');
 }
+/**
+ * 检测"明显恶意"的提交代码。
+ *
+ * 评测机与 OJ 同机、用低权限账号跑用户代码，历史上被打过的路数基本都落在下面这些特征里：
+ *   1) #include </home/judge/etc/judge.conf>     —— 把评测机配置（含数据库口令）"编译"进可执行文件后泄出；
+ *   2) #include </bin/urandom>、</dev/zero>      —— 包含字符设备，编译器读无穷流，拖死甚至打死评测机；
+ *   3) 内联汇编 + int $0x80 直接发起 reboot(2)     —— ebx=0xfee1dead、ecx=0x05121996(85072278)、
+ *      edx=0x4321fedc(0x28121969 变体)，把评测机重启/关机，见 https://www.imwxz.com/posts/f0684c6.html ；
+ *   4) system()/popen()/exec*()/Runtime.exec/os.system/subprocess —— 执行外部命令；
+ *   5) 反弹 shell、fork 炸弹、rm -rf /、dd of=/dev/sda、读写 /etc/passwd、/proc/self/environ 等。
+ *
+ * 判定策略：宁可漏报，也不要大面积误报。
+ *   - 命中一条"高危(h)"规则即判定恶意；
+ *   - "可疑(m)"规则只作旁证，命中 2 条以上不同规则才判定恶意（例如 <unistd.h> + fork() 这种组合）。
+ * 注释里的载荷同样会被匹配（注释不可能被执行，但匹配简单可靠的代价只是极个别误报）。
+ *
+ * 可选开关（写在 db_info.inc.php 里）：
+ *   $OJ_MALICIOUS_GUARD = false;              // 整体关闭本检测
+ *   $OJ_GUARD_MEDIUM_THRESHOLD = 3;           // 可疑规则的命中条数阈值，默认 2
+ *   $OJ_GUARD_ALLOW = array("AF_INET");       // 特定题目确实需要这些字样时，匹配前先从代码里剔除
+ *
+ * @param string $code     用户提交的原始源码（不含 prepend/append 的模板代码）
+ * @param int    $language HUSTOJ 语言编号，即 $language_name 的下标；-1 表示未知（只跑通用规则）
+ * @return array 命中说明列表，形如 array("[高危] xxx ： 命中的那一行代码", ...)；空数组表示未发现明显恶意特征
+ */
+function detect_malicious_code($code, $language = -1) {
+    $hits = array();
+    if (!is_string($code) || $code === "") return $hits;
+    if (isset($GLOBALS['OJ_MALICIOUS_GUARD']) && !$GLOBALS['OJ_MALICIOUS_GUARD']) return $hits;
+
+    $lang = intval($language);
+    if ($lang == 23) return $hits;      // Scratch3 交的是文件名/二进制，文本特征匹配没有意义
+
+    if (strlen($code) > 262144) $code = substr($code, 0, 262144);    // 提交上限 64K，截断只为控制正则开销
+
+    $scan = preg_replace('~^\s*#!.*$~mi', '', $code);                        // 剔除 shebang（#!/bin/bash 不是载荷）
+    $scan = preg_replace('~\bsystem\s*\(\s*"(pause|cls|clear|color[^"]*)"\s*\)~i', '', $scan);  // 学生常用的卡窗口写法
+    if (isset($GLOBALS['OJ_GUARD_ALLOW']) && is_array($GLOBALS['OJ_GUARD_ALLOW'])) {
+        foreach ($GLOBALS['OJ_GUARD_ALLOW'] as $allow) {
+            if (is_string($allow) && $allow !== "") $scan = str_replace($allow, "", $scan);
+        }
+    }
+
+    // 语言家族：家族专属规则只在对应语言里生效，避免把 Pascal/Matlab 的常规写法当攻击
+    $families = array(
+        'c'      => array(0, 1, 10, 13, 14),                 // C/C++/Obj-C/Clang/Clang++
+        'java'   => array(3, 9),                             // Java/C#
+        'script' => array(4, 5, 6, 7, 8, 15, 16, 17, 22),     // Ruby/Bash/Python/PHP/Perl/Lua/JS/Go/R
+    );
+
+    // array( 权重, 家族, 规则名, 正则 )
+    $rules = array(
+        // ---------- 高危：一条即判定 ----------
+        array('h', 'any', '绝对路径/上级目录的包含指令', '~^\s*#\s*(include|import)\s*[<"]\s*(/|\./|\.\./)~mi'),
+        array('h', 'any', '引用评测机或系统敏感文件', '~(/home/judge|home/judge|judge\.conf|/etc/(passwd|shadow|group|gshadow|sudoers|crontab|cron\.|motd|issue|ssh/|hosts|my\.cn|profile\b|init\.d|ld\.so)|db_info\.inc|/root/|\.ssh/(id_|authorized_keys|known_hosts)|/proc/(self/(mem|maps|environ|cmdline|exe|fd|task)|sysrq-trigger|sys/kernel|sys/power|cpuinfo|pid/)|/dev/(zero|full|urandom|random|k?mem|kmsg|port|ptmx|sgx|asound|dsp|input|net/|sd[a-z]|hd[0-9]|nvme|loop|fb[0-9]|vcs)|/sys/(class/power|kernel|firmware|power|devices)|/var/(log|spool|www)/|/usr/(s?bin)/(reboot|halt|poweroff|shutdown|init|nc|netcat|nmap|masscan|curl|wget|ssh|scp|telnet|mkfs|dd|mount|umount|useradd|passwd|chroot)|/bin/(sh|bash|dash|ksh|zsh|tcsh|nc|reboot|shutdown)\b)~i'),
+        array('h', 'any', '重启/关机/端口级载荷', '~(0xfee1dead|0x4321fedc|0x28121969|0x05121996|672273769|85072278|1126233820|LINUX_REBOOT|__NR_reboot|SYS_REBOOT|\breboot\s*\(|\bpoweroff\b|\bhalt\s*\(|\bkexec\b|sysrq|int\s+\$0x80|int\s+0x80|\bsysenter\b|\boutb\s*\(|\boutl\s*\(\s*\w+\s*,|\binb\s*\(|\biopl\s*\(|\bioperm\s*\(|rdmsr|wrmsr|\bmovl\s+\$0x)~i'),
+        array('h', 'c', '内联汇编', '~(__asm|_asm\b|\basm\s*[({<]|\basm\s+volatile)~i'),
+        array('h', 'c', 'C/C++ 执行外部命令', '~(\bsystem\s*\(|\bpopen\s*\(|\bexecl[pe]?\s*\(|\bexecv[pe]?\s*\(|\bexecve\s*\(|\bchroot\s*\(|\bunshare\s*\(|\bmount\s*\(\s*")~i'),
+        array('h', 'java', 'Java/C# 执行外部命令或加载本地库', '~(Runtime\s*\.\s*getRuntime|\.getRuntime\s*\(\s*\)|new\s+ProcessBuilder|ProcessBuilder\s*\(|\bProcess\s*\.\s*Start\s*\(|System\s*\.\s*load(Library)?\s*\(|sun\.misc\.Unsafe|Unsafe\.getUnsafe|\.setAccessible\s*\(\s*true)~i'),
+        array('h', 'script', '脚本执行外部命令', '~(\bos\.(system|popen|exec[lv]p?|spawn|kill)\b|\bsubprocess\b|\bpty\.(spawn|fork|open)|shell_exec\s*\(|passthru\s*\(|proc_open\s*\(|\bpopen\s*\(|pcntl_(exec|fork)|child_process|\b__import__\s*\(\s*["\x27](os|subprocess|socket|pty|ctypes)|\brequire(_once)?\s*[<(]?\s*["\x27]\s*(/|\.\./)|\binclude(_once)?\s*[<(]?\s*["\x27]\s*(/|\.\./))~i'),
+        array('h', 'any', '反弹 shell / 远控', '~(/dev/(tcp|udp)/|bash\s+-i\s*>&|\bnc\s+(-\w+\s+)*-e\s+/bin/|\bncat\s+(-\w+\s+)*-e|\bsocat\s+(-\w+\s+)*(exec|system)|pty\.spawn|fromfd\s*\(|reverse[\s_-]?shell|\bnc\s+(-\w+\s+)*-l)~i'),
+        array('h', 'any', 'fork 炸弹', '~(:\s*\(\s*\)\s*\{\s*:\s*\|\s*:\s*&\s*\}\s*;|:\|:&\};:|while\s*\(\s*(1|true)\s*\)\s*(fork|clone|posix_spawn)|for\s*\(\s*;\s*;\s*\)\s*(fork|clone))~i'),
+        array('h', 'any', '破坏文件系统/磁盘', '~(\brm\s+(-\w+\s+)*(-rf|-fr|-r\s+-f|--recursive)\s+(/|~|\*|\.|/home|/var|/etc|/usr|/bin|/root)|dd\s+if=/dev/\w+\s+of=|of=/dev/(sd|hd|nvme|loop|null|zero)|mkfs\.|\bfdisk\b|\bparted\s+|chmod\s+(-\w+\s+)*777\s+/|chown\s+(-\w+\s+)*root\s+/|>\s*/dev/(sd[a-z]|hd[0-9]|nvme))~i'),
+
+        // ---------- 可疑：需两条以上不同规则才判定 ----------
+        array('m', 'any', '进程与信号控制', '~(\bfork\s*\(|\bclone\s*\(|waitpid\s*\(|\bkill\s*\(|\bsetsid\s*\(|\bdaemon\s*\(|\bprctl\s*\(|posix_spawn|CreateProcess|pthread_create)~i'),
+        array('m', 'any', '直接系统调用/动态链接/跟踪', '~(\bsyscall\s*\(\s*(SYS_|__NR_|\w+_NR_)|\bptrace\s*\(|\bdlopen\s*\(|\bdlsym\s*\(|\binit_module\b|\bsysinfo\s*\()~i'),
+        array('m', 'any', '目录遍历与文件操作', '~(\bopendir\s*\(|\breaddir\s*\(|\bscandir\s*\(|\bglob\s*\(|os\.(walk|listdir|remove|rename|truncate)|shutil\.|\bsymlink\s*\(|\bchdir\s*\(|\btruncate\s*\(|\bftruncate)~i'),
+        array('m', 'c', '系统/内核相关头文件', '~#\s*include\s*[<"](sys/|linux/|asm/|unistd\.h|dirent\.h|signal\.h|sched\.h|syscall\.h|termios\.h|pthread\.h|spawn\.h|net/if\.h|arpa/)~i'),
+        array('m', 'any', '套接字与网络访问', '~(\bsocket\s*\(|AF_INET6?|SOCK_(STREAM|DGRAM|RAW)|\bsockaddr|inet_(pton|aton|addr)|requests\.|urllib|http\.client|\bfetch\s*\(\s*["\x27]http)~i'),
+        array('m', 'any', '可执行内存与 shellcode 特征', '~(PROT_EXEC|mprotect\s*\(|MAP_(ANON|JIT|FIXED)|VirtualAlloc|VirtualProtect|shellcode)~i'),
+        array('m', 'any', '动态求值与编码绕过', '~(\beval\s*\(|\bexec\s*\(|atob\s*\(|base64_(decode|encode)|b64decode|b64encode|\bcompile\s*\(\s*["\x27]|chr\s*\(\s*\d+\s*\)\s*\+\s*chr)~i'),
+    );
+
+    $need = 2;
+    if (isset($GLOBALS['OJ_GUARD_MEDIUM_THRESHOLD']) && is_numeric($GLOBALS['OJ_GUARD_MEDIUM_THRESHOLD'])) {
+        $need = intval($GLOBALS['OJ_GUARD_MEDIUM_THRESHOLD']);
+    }
+
+    $suspects = array();
+    foreach ($rules as $rule) {
+        $weight = $rule[0];
+        $family = $rule[1];
+        $name = $rule[2];
+        $pattern = $rule[3];
+
+        if ($family !== 'any') {
+            if ($lang < 0 || !in_array($lang, $families[$family], true)) continue;   // 语言未知时不跑家族专属规则
+        }
+        if (!preg_match($pattern, $scan, $m)) continue;
+
+        // 取出命中的那一行，方便管理员一眼看出问题
+        $line = $m[0];
+        $pos = strpos($scan, $m[0]);
+        if ($pos !== false) {
+            $start = strrpos(substr($scan, 0, $pos), "\n");
+            $start = ($start === false) ? 0 : $start + 1;
+            $end = strpos($scan, "\n", $pos);
+            $end = ($end === false) ? strlen($scan) : $end;
+            $line = trim(substr($scan, $start, $end - $start));
+        }
+        $line = preg_replace('~\s+~', ' ', $line);
+        if (strlen($line) > 160) $line = substr($line, 0, 160) . "...";
+
+        if ($weight === 'h') {
+            $hits[] = "[高危] " . $name . " ： " . $line;
+        } else {
+            $suspects[] = "[可疑] " . $name . " ： " . $line;
+        }
+        if (count($hits) + count($suspects) >= 12) break;    // 够管理员判断即可，避免邮件过长
+    }
+
+    if (empty($hits) && count($suspects) >= $need) $hits = $suspects;
+
+    return $hits;
+}
+
 function has_bad_words($words){
         global $bad_words;
         foreach($bad_words as $bad){
