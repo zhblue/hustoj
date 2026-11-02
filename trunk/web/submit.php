@@ -427,6 +427,50 @@ if (~$OJ_LANGMASK & (1 << $language)) {
         */
     }
 
+    //// 恶意代码检测：命中特征的提交不进评测队列（下面的 redis/UDP 触发都以 $result==0 为条件），
+    //// 直接把 result 置为 10（状态表里显示为 Runtime Error），并给 $OJ_ADMIN 发告警邮件。
+    $guard_hits = detect_malicious_code($source_user, $language);
+    if (!empty($guard_hits)) {
+        $result = 10;
+
+        $user_email = "";
+        $rows = pdo_query("SELECT `email` FROM `users` WHERE `user_id`=?", $user_id);
+        if (!empty($rows) && isset($rows[0][0])) $user_email = $rows[0][0];
+
+        $site = $OJ_NAME;
+        if (isset($DOMAIN) && $DOMAIN != "") $site = $DOMAIN;
+        else if (isset($_SERVER['HTTP_HOST']) && $_SERVER['HTTP_HOST'] != "") $site = $_SERVER['HTTP_HOST'];
+
+        $guard_lang = $language;
+        if (isset($language_name[$language])) $guard_lang = $language_name[$language];
+
+        $guard_warn = (isset($MSG_SYS_WARN) && $MSG_SYS_WARN != "") ? $MSG_SYS_WARN : "System Warning";
+
+        $guard_rules = "";
+        foreach ($guard_hits as $guard_hit) $guard_rules .= "\t" . $guard_hit . "\n";
+
+        $guard_body = "$guard_warn 检测到明显恶意的提交代码，已跳过评测（result=10，请人工复核）。\n"
+            . "站点: $site\n"
+            . "提交编号(solution_id): $insert_id\n"
+            . "题目(problem_id): " . (isset($id) ? $id : 0) . "\n"
+            . "比赛(contest_id): " . (isset($cid) ? $cid : 0) . "\n"
+            . "语言: $guard_lang\n"
+            . "用户名(user_id): $user_id\n"
+            . "昵称(nick): $nick\n"
+            . "邮箱(Email): " . ($user_email == "" ? "(未登记)" : $user_email) . "\n"
+            . "IP: $ip\n"
+            . "代码长度: $len\n"
+            . "提交时间: " . date("Y-m-d H:i:s") . "\n"
+            . "命中规则:\n" . $guard_rules
+            . "源码: $site/showsource.php?id=$insert_id\n";
+
+        if (isset($OJ_ADMIN) && $OJ_ADMIN != "" && $OJ_ADMIN != "root@localhost") {
+            email($OJ_ADMIN, "$guard_warn 恶意提交告警 solution_id=$insert_id user_id=$user_id", $guard_body);
+        }
+        // SMTP 未配置时 email() 会静默跳过，这里留一条服务器日志，保证告警不丢
+        error_log("hustoj guard: malicious submission blocked. " . str_replace("\n", " | ", $guard_body));
+    }
+
     $sql = "UPDATE solution SET result=? WHERE solution_id=?";
     pdo_query($sql, $result, $insert_id);
 
