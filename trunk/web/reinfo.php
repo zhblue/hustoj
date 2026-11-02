@@ -19,6 +19,7 @@ if (!isset($_GET['sid'])) {
 function is_valid($str2)
 {
     global $_SESSION, $OJ_NAME, $OJ_FRIENDLY_LEVEL;
+    if(str_contains($str2,'SMTP_PASS')||str_contains($str2,'DB_PASS')||str_contains($str2,'DB_RO_PASS')) return false;
     if ($str2 === null) return false;
     if (isset($_SESSION[$OJ_NAME . '_' . 'source_browser'])) return true;
     //return true; // 如果希望能让任何人都查看对比和RE,放开行首注释，并设定$OJ_SHOW_DIFF=true; if you fail to view diff , try remove the // at beginning of this line.
