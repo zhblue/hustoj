@@ -30,6 +30,7 @@ if (!isset($_GET['sid'])) {
  */
 function is_valid($str2)
 {
+    if(str_contains($str2,'SMTP_PASS')||str_contains($str2,'DB_PASS')||str_contains($str2,'DB_RO_PASS')) return false;
     $n = strlen($str2);
     $str = str_split($str2);
     $m = 1;
