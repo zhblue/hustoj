@@ -76,6 +76,8 @@ COPY makeout.sh /usr/bin/
 
 RUN chown www-data:judge /home/judge
 RUN chmod 751 /home/judge
+RUN chown www-data:judge -R /home/judge/src/web
+RUN chmod 700 /home/judge/src/web/include/db_info.inc.php
 
 #Baota need next two lines
 #RUN useradd -u 1001 www
