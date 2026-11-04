@@ -179,6 +179,7 @@ switch($OJ_FRIENDLY_LEVEL) {
 	   $OJ_NEED_LOGIN=true;
 	   $OJ_REGISTER=false;
 	   $OJ_PUBLIC_STATUS=false;
+	   $OJ_FREE_PRACTICE=false;
 }
 if(!isset($OJ_SUBMIT_COOLDOWN_TIME)) $OJ_SUBMIT_COOLDOWN_TIME=3;
 // if using EXAM or ON site auto turn off free practice
