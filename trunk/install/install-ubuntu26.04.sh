@@ -197,7 +197,7 @@ sed -i 's/;request_terminate_timeout = 0/request_terminate_timeout = 128/g' "$WW
 # php-fpm: cap at 40% of RAM, ~80MB per worker
 PHP_FPM_MEM=$(free -m | awk '/^Mem:/{print $2}')
 PHP_FPM_MAX_CHILDREN=$((PHP_FPM_MEM * 40 / 100 / 80))
-[ "$PHP_FPM_MAX_CHILDREN" -lt 1 ] && PHP_FPM_MAX_CHILDREN=1
+[ "$PHP_FPM_MAX_CHILDREN" -lt 6 ] && PHP_FPM_MAX_CHILDREN=6
 echo "php-fpm max_children = $PHP_FPM_MAX_CHILDREN (${PHP_FPM_MEM}MB RAM * 40% / 80MB)"
 sed -i -E "s|^[[:space:]]*;?[[:space:]]*pm\.max_children[[:space:]]*=.*|pm.max_children = $PHP_FPM_MAX_CHILDREN|" "$WWW_CONF"
 sed -i 's/;listen.backlog = 511/listen.backlog = 4096/g' "$WWW_CONF"
