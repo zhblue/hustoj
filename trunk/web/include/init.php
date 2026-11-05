@@ -181,6 +181,61 @@ switch($OJ_FRIENDLY_LEVEL) {
 	   $OJ_PUBLIC_STATUS=false;
 	   $OJ_FREE_PRACTICE=false;
 }
+// ---------------------------------------------------------------------------
+// OJ_FRIENDLY_LEVEL == -1 : 私有比赛的成绩单/统计页收口
+// 仅 contestrank*.php 与 conteststatistics.php 生效，按当前脚本文件名 + cid 判定，
+// 只放行 administrator 和该场比赛的创建者 (contest.user_id)。
+// 放在 init.php 里，contestrank/contestrank2/contestrank-oi/contestrank.xls
+// 以及后续新增的同族页面不用各自打补丁。
+// ---------------------------------------------------------------------------
+if (isset($OJ_FRIENDLY_LEVEL) && $OJ_FRIENDLY_LEVEL == -1) {
+	$ojf_script = basename($_SERVER['SCRIPT_NAME'] ?? ($_SERVER['PHP_SELF'] ?? ''));
+	// contestrank.php / contestrank2.php / contestrank-oi.php / contestrank.xls.php
+	// contestrank3.php / contestrank5.php / conteststatistics.php
+	if (preg_match('/^(contestrank[a-z0-9._-]*|conteststatistics)\.php$/i', $ojf_script)) {
+		$ojf_cid = 0;
+		if (isset($_GET['cid']))
+			$ojf_cid = intval($_GET['cid']);
+		else if (isset($_POST['cid']))
+			$ojf_cid = intval($_POST['cid']);
+		else if (isset($_REQUEST['cid']))
+			$ojf_cid = intval($_REQUEST['cid']);
+
+		$ojf_allow = false;
+		if ($ojf_cid > 0) {
+			$ojf_rows = pdo_query("select `contest_id`,`title`,`user_id`,`private`,`defunct` from `contest` where `contest_id`=?", $ojf_cid);
+			if (!empty($ojf_rows)) {
+				$ojf_contest = $ojf_rows[0];
+				// private: 0=公开 1=私有 3=可注册，非 0 一律按私有处理
+				if (intval($ojf_contest['private']) == 0) {
+					$ojf_allow = true; // 公开比赛，成绩单照常
+				} else if (isset($_SESSION[$OJ_NAME . '_' . 'administrator'])) {
+					$ojf_allow = true; // 管理员
+				} else {
+					$ojf_user = $_SESSION[$OJ_NAME . '_' . 'user_id'] ?? "";
+					if ($ojf_user !== "" && $ojf_user === $ojf_contest['user_id'])
+						$ojf_allow = true; // 该场比赛的 contest_creator
+				}
+			}
+		}
+
+		if (!$ojf_allow) {
+			if (isset($logger)) {
+				$logger->logging("warning", "private contest rank blocked: [$ojf_script] cid=$ojf_cid user="
+					. ($_SESSION[$OJ_NAME . '_' . 'user_id'] ?? "guest")
+					. " ip=" . ($_SERVER['REMOTE_ADDR'] ?? "-"));
+			}
+			$ojf_base = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '')), '/');
+			if (!headers_sent()) {
+				header("Location: $ojf_base/contest.php?cid=" . $ojf_cid, true, 302);
+			} else {
+				echo "<script>window.location.href='" . $ojf_base . "/contest.php?cid=" . $ojf_cid . "';</script>";
+			}
+			exit(0);
+		}
+	}
+}
+
 if(!isset($OJ_SUBMIT_COOLDOWN_TIME)) $OJ_SUBMIT_COOLDOWN_TIME=3;
 // if using EXAM or ON site auto turn off free practice
 if(isset($OJ_ON_SITE_CONTEST_ID) || isset($OJ_EXAM_CONTEST_ID)) $OJ_FREE_PRACTICE=false;
