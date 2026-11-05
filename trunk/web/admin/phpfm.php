@@ -383,8 +383,8 @@ if (!(isset($_SESSION[$OJ_NAME.'_'.'administrator'])
            	trigger_judge($insert_id);     // moved to my_func.inc.php
             }else{
                 echo "未找到Main.c或Main.cc,自动生成空文件Gen.py和Main.cc。";
-                file_put_contents("Gen.py","");
-                file_put_contents("Main.cc","");
+                touch("Gen.py");
+                touch("Main.cc");
             }
     }
     if(isset($_GET['ans2out'])){
@@ -2686,7 +2686,8 @@ function is_allowed_upload_filename($filename) {
     // Multipart filenames arrive as raw bytes in the browser's local encoding,
     // so match bytes instead of an ASCII-only whitelist: allow anything above
     // 0x7F and reject everything that is unsafe on Linux or Windows.
-    if (!preg_match('/^[A-Za-z0-9\x80-\xFF][A-Za-z0-9\x80-\xFF ._\-\+]{0,254}\z/', $filename)) {
+    if (!preg_match('/^[A-Za-z0-9\x80-\xFF][A-Za-z0-9\x80-\xFF ._\-\+\[\]]{0,254}\z/', $filename)) {
+    	echo "[$filename]";
         return false;
     }
     if (substr($filename, -1) === '.' || substr($filename, -1) === ' ') {
@@ -2755,6 +2756,91 @@ function save_upload($temp_file,$filename,$dir_dest) {
     } else $out = 4;
     return $out;
 }
+
+/**
+ * 把 zip 内部路径扁平化成一个安全的文件名。
+ *
+ * - 拒绝空串 / NUL / 绝对路径 / Windows 盘符 / '..' 穿越
+ * - 把所有目录段用 '_' 拼成前缀，去掉目录层级
+ * - 目录里有 in/out 段且扩展名是 .txt 时，改成 .in / .out（保留 AtCoder 约定）
+ * - 限制总长度 255，可选去重
+ *
+ * @param string      $entry_name  zip 内部路径，例如 "Sub1.1[2].in" 或 "in/sample.txt"
+ * @param array|null  &$used       已用文件名集合（按引用传递，用于去重；传 null 表示不去重）
+ * @return string|false            安全文件名，或 false 表示丢弃该条目
+ */
+function flatten_zip_entry_name($entry_name, &$used = null)
+{
+    // 1) 统一分隔符
+    $entry_name = str_replace('\\', '/', $entry_name);
+
+    // 2) 空串 / NUL / 绝对路径 / Windows 盘符 —— 直接丢弃
+    if ($entry_name === ''
+        || strpos($entry_name, "\0") !== false
+        || $entry_name[0] === '/'
+        || preg_match('/^[A-Za-z]:\//', $entry_name)) {
+        return false;
+    }
+
+    // 3) 逐段校验并跳过 '' 和 '.'
+    $parts      = explode('/', $entry_name);
+    $safe_parts = array();
+    foreach ($parts as $part) {
+        if ($part === '' || $part === '.') {
+            continue;
+        }
+        // '..' 一律拒绝；其余按白名单校验
+        // 注意：不加 /u，保持字节模式，\x80-\xFF 才能按原始字节工作
+        if ($part === '..'
+            || !preg_match('/^[A-Za-z0-9\x80-\xFF ._\-\+\[\]]+$/', $part)) {
+            $safe_parts = array();
+            break;
+        }
+        $safe_parts[] = $part;
+    }
+    if (count($safe_parts) === 0) {
+        return false;
+    }
+
+    // 4) 拆出 basename，其余目录段拼成前缀
+    $basename      = array_pop($safe_parts);
+    $prefix        = count($safe_parts) ? implode('_', $safe_parts) . '_' : '';
+    $complete_name = $prefix . $basename;
+
+    // 5) 目录里有 in / out 段，且扩展名是 .txt → 改成 .in / .out
+    //    用按段匹配，避免 admin / inline 被误判；
+    //    stem 用 substr 截取，避免 basename('.txt') 大小写不匹配的问题
+    $ext = pathinfo($complete_name, PATHINFO_EXTENSION);
+    if (strtolower($ext) === 'txt') {
+        $stem     = substr($complete_name, 0, -strlen($ext) - 1);
+        $segments = array_map('strtolower', $safe_parts);
+        if (in_array('in', $segments, true) || in_array('input', $segments, true)) {
+            $complete_name = $stem . '.in';
+        } elseif (in_array('out', $segments, true) || in_array('output', $segments, true)) {
+            $complete_name = $stem . '.out';
+        }
+    }
+
+    // 6) 长度限制（多数文件系统上限 255 字节）
+    if (strlen($complete_name) > 255) {
+        return false;
+    }
+
+    // 7) 最终再校验一次：首字符 + 总长 1~255
+    if (!preg_match('/^[A-Za-z0-9\x80-\xFF][A-Za-z0-9\x80-\xFF ._\-\+\[\]]{0,254}\z/', $complete_name)) {
+        return false;
+    }
+
+    // 8) 可选去重
+    if ($used !== null) {
+        if (isset($used[$complete_name])) {
+            return false;
+        }
+        $used[$complete_name] = true;
+    }
+
+    return $complete_name;
+}
 function zip_extract(){
   global $cmd_arg,$current_dir,$islinux,$fm_root_real;
   if (!fm_name($cmd_arg)) return;
@@ -2770,38 +2856,8 @@ function zip_extract(){
         if (!is_string($entry_name) || $entry_name === '' || $entry_size <= 0) {
             continue;
         }
+	$complete_name = flatten_zip_entry_name($entry_name);
 
-        // Never create archive directories. Flatten them into a filename prefix.
-        $entry_name = str_replace('\\', '/', $entry_name);
-        if (strpos($entry_name, "\0") !== false ||
-            $entry_name[0] === '/' || preg_match('/^[A-Za-z]:\//', $entry_name)) {
-            continue;
-        }
-        $parts = explode('/', $entry_name);
-        $safe_parts = array();
-        foreach ($parts as $part) {
-            if ($part === '' || $part === '.') continue;
-            if ($part === '..' || !preg_match('/^[A-Za-z0-9._-]+$/', $part)) {
-                $safe_parts = array();
-                break;
-            }
-            $safe_parts[] = $part;
-        }
-        if (count($safe_parts) === 0) continue;
-
-        $basename = array_pop($safe_parts);
-        $prefix = count($safe_parts) ? implode('_', $safe_parts) . '_' : '';
-        $complete_name = $prefix . $basename;
-
-        // Preserve the existing AtCoder convention while still validating output.
-        if (strtolower(pathinfo($complete_name, PATHINFO_EXTENSION)) === 'txt') {
-            $lower_path = strtolower(implode('/', $safe_parts));
-            if (strpos($lower_path, 'in') !== false) {
-                $complete_name = basename($complete_name, '.txt') . '.in';
-            } elseif (strpos($lower_path, 'out') !== false) {
-                $complete_name = basename($complete_name, '.txt') . '.out';
-            }
-        }
         if (!is_allowed_upload_filename($complete_name)) continue;
 
         if (check_limit($entry_size)) continue;
