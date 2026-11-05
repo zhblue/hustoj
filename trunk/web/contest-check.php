@@ -85,7 +85,7 @@ if ($rows_cnt == 0 || ($row['defunct'] == 'Y' && !isset($_SESSION[$OJ_NAME . '_a
     if (!isset($_SESSION[$OJ_NAME . '_' . 'administrator']) && $unixnow < $start_time) {
         $view_errors = "<center>";
         $view_errors .= "<h3>$MSG_CONTEST_ID : $view_cid - $view_title</h3>";
-        $view_errors .= "<p>$view_description</p>";
+        if($OJ_FRIENDLY_LEVEL>0) $view_errors .= "<p>$view_description</p>";
         $view_errors .= "<br>";
         $view_errors .= "<span class=text-success>$MSG_TIME_WARNING</span>";
         $view_errors .= "</center>";
@@ -130,7 +130,7 @@ if ($contest_ok && str_contains($view_description, $OJ_CONTEST_LIMIT_KEYWORD) &&
 
         $view_errors = "<center>";
         $view_errors .= "<h3>$MSG_CONTEST_ID : $view_cid - $view_title</h3>";
-        $view_errors .= "<p>$view_description</p>";
+        if($OJ_FRIENDLY_LEVEL>0) $view_errors .= "<p>$view_description</p>";
         require("template/" . $OJ_TEMPLATE . "/error.php");
         exit(0);
     } else {
@@ -145,7 +145,7 @@ if ($contest_ok && str_contains($view_description, $OJ_CONTEST_LIMIT_KEYWORD) &&
 if (!$contest_ok) {
     $view_errors = "<center>";
     $view_errors .= "<h3>$MSG_CONTEST_ID : $view_cid - $view_title</h3>";
-    $view_errors .= "<p>$view_description</p>";
+    if($OJ_FRIENDLY_LEVEL>0) $view_errors .= "<p>$view_description</p>";
     $view_errors .= "<span class=text-danger>$MSG_PRIVATE_WARNING</span>";
 
     $view_errors .= "<br><br>";
