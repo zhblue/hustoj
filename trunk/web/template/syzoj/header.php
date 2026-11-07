@@ -10,18 +10,22 @@
           $retmsg="<span id=red>(".$row['cnt'].")</span>";
           return $retmsg;
         }
-
-        function get_menu_news() {
+		function get_menu_news() {
             $result = "";
+            $i=0;
+            $icons=array("heart","star","book","info","tree","lemon","lightbulb","tv","taxi","plane","rocket","car","bus","flag","futbol","bell","child","user");
+            $len=count($icons);
             $sql_news_menu = "select `news_id`,`title` FROM `news` WHERE `menu`=1 AND `title`!='faqs.cn' ORDER BY `importance` ASC,`time` DESC LIMIT 10";
             $sql_news_menu_result = mysql_query_cache( $sql_news_menu );
             if ( $sql_news_menu_result ) {
                 foreach ( $sql_news_menu_result as $row ) {
-                    $result .= '<a class="item" href="/viewnews.php?id=' . $row['news_id'] . '">' ."<i class='star icon'></i>" . $row['title'] . '</a>';
+                    $result .= '<a class="item" href="/viewnews.php?id=' . $row['news_id'] . '">' ."<i class='".($icons[$i%$len])." icon'></i>" . $row['title'] . '</a>';
+                    $i++;
                 }
             }
             return $result;
         }
+
         $url=basename($_SERVER['REQUEST_URI']);
         $dir=basename(getcwd());
         if($dir=="discuss3") $path_fix="../";
