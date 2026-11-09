@@ -62,7 +62,7 @@ TAR_FILE="$BACKUP_DIR/hustoj_${DATE}.tar.bz2"
 mysqldump --default-character-set=utf8mb4 -h$SERVER -P$PORT $DATABASE -u$USER -p$PASSWORD | bzip2 > $SQL_FILE
 
 # 压缩打包
-if tar cjf $TAR_FILE /home/judge/data /home/judge/src/web /home/judge/src/core /home/judge/etc $SQL_FILE; then
+if tar cjf $TAR_FILE /home/judge/data /home/judge/src/web /home/judge/src/core /home/judge/etc $SQL_FILE  --exclude=/home/judge/data/0 ; then
     echo "备份完成: $TAR_FILE"
     # 成功后删除 1 天前的临时数据库文件和 3 天前的旧包
     find $BACKUP_DIR -name "db_*.sql.bz2" -mtime +1 -delete
