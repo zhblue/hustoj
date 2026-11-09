@@ -18,6 +18,15 @@ if (!function_exists('mb_trim')) {
 	    return preg_replace('/^['.$trim_chars.']*(?U)(.*)['.$trim_chars.']*$/u', '\\1',$string);
 	}
 }
+function checkmail(){
+	global $OJ_NAME,$_SESSION;
+	$sql="SELECT count(1) FROM `mail` WHERE new_mail=1 AND `to_user`=?";
+	$result=pdo_query($sql,$_SESSION[$OJ_NAME.'_'.'user_id']);
+	if(!$result) return false;
+	$row=$result[0];
+	$retmsg="<span class=red>(".$row[0].")</span>";
+	return $retmsg;
+}
 function escape_cpp_headers($code) {
     // 匹配常见的 C/C++ 头文件，如 <stdio.h>, <vector>, <bits/stdc++.h> 等
     $pattern = '/<([a-z0-9_+\/]+\.(?:h|hpp|hh|hxx)|vector|string|iostream|fstream|sstream|algorithm|map|set|unordered_map|unordered_set|queue|stack|deque|list|array|bitset|utility|tuple|memory|functional|chrono|thread|mutex|future|numeric|complex|valarray|exception|stdexcept|c[a-z0-9]+)>/i';

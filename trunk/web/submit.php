@@ -467,6 +467,21 @@ if (~$OJ_LANGMASK & (1 << $language)) {
         if (isset($OJ_ADMIN) && $OJ_ADMIN != "" && $OJ_ADMIN != "root@localhost") {
             email($OJ_ADMIN, "$guard_warn 恶意提交告警 solution_id=$insert_id user_id=$user_id", $guard_body);
         }
+	 // 同时给所有管理员发内邮（写 mail 表），不依赖 SMTP，管理员一登录就能看到告警
+        $guard_mail_from = (isset($GLOBALS['OJ_GUARD_MAIL_FROM']) && $GLOBALS['OJ_GUARD_MAIL_FROM'] != "") ? $GLOBALS['OJ_GUARD_MAIL_FROM'] : "admin";
+        $guard_title = mb_strimwidth("$guard_warn 恶意提交告警 solution_id=$insert_id user_id=$user_id", 0, 190, "...", "UTF-8");
+        $admins = pdo_query("SELECT DISTINCT `user_id` FROM `privilege` WHERE `rightstr`='administrator'");
+        $guard_mailed = 0;
+        if (!empty($admins)) {
+            foreach ($admins as $admin) {
+                $admin_id = $admin['user_id'];
+                if ($admin_id == "") continue;
+                if ($guard_mailed >= 32) break;     // 管理员特别多时截断，避免一次提交刷爆 mail 表
+                pdo_query("INSERT INTO `mail`(`to_user`,`from_user`,`title`,`content`,`in_date`) VALUES(?,?,?,?,NOW())",
+                        $admin_id, $guard_mail_from, $guard_title, $guard_body);
+                $guard_mailed++;
+            }
+        }
         // SMTP 未配置时 email() 会静默跳过，这里留一条服务器日志，保证告警不丢
         error_log("hustoj guard: malicious submission blocked. " . str_replace("\n", " | ", $guard_body));
     }
