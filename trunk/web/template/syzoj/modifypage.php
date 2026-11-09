@@ -55,12 +55,14 @@
                 <div class="field">
                     <label for="template"><?php echo $MSG_TEMPLATE ?></label>
                     <select name="template" class="form-control" >
-                                <option>bs3</option>
-                                <option>mdui</option>
-                                <option>syzoj</option>
-                                <option>sweet</option>
-                                <option>bshark</option>
-                                <option>sidebar</option>
+                      <?php 
+                            $currentTemplate="syzoj";                   
+                            foreach ($templates as $tpl): ?>
+                          <option value="<?php echo htmlspecialchars($tpl); ?>"
+                              <?php echo (isset($currentTemplate) && $currentTemplate === $tpl) ? 'selected' : ''; ?>>
+                              <?php echo htmlspecialchars($tpl); ?>
+                          </option>
+                      <?php endforeach; ?>
                     </select>
                 </div>
 
