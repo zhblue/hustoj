@@ -1,16 +1,5 @@
 <?php
         require_once(dirname(__FILE__)."/../../include/memcache.php");
-        function checkmail(){  // check if has mail
-          global $OJ_NAME;
-          $sql="select count(1) cnt FROM `mail` WHERE new_mail=1 AND `to_user`=?";
-          $result=pdo_query($sql,$_SESSION[$OJ_NAME.'_'.'user_id']);
-          if(empty($result)) return false;
-          $row=$result[0];
-          //if(intval($row[0])==0) return false;
-          $retmsg="<span id=red>(".$row['cnt'].")</span>";
-          return $retmsg;
-        }
-
         function get_menu_news() {
             $result = "";
             $sql_news_menu = "select `news_id`,`title` FROM `news` WHERE `menu`=1 AND `title`!='faqs.cn' ORDER BY `importance` ASC,`time` DESC LIMIT 10";
