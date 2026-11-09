@@ -523,7 +523,7 @@ function create_subdomain($user_id,$template="bs3",$friendly="0"){
         $NEW_USER="hustoj_".$user_id;
         $NEW_PASS=substr(pwGen($user_id),10);
         $FARMBASE="/home/saas";
-        $templates=array("bs3","mdui","bshark","sweet","syzoj","sidebar");
+       $templates=array("bs3","mdui","bshark","sweet","syzoj","sidebar","backrooms"."halloween","matrix","bilibili","hellokity","minecraft","stickman");
         if(!in_array($template,$templates)) $template="bs3";
 	$upass=pdo_query("select password from users where user_id=?",$user_id)[0][0];
 	
