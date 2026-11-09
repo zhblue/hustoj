@@ -11,6 +11,7 @@ if($dir=="discuss3") $path_fix="../";
 else $path_fix="";
 
 require_once("../../include/db_info.inc.php");
+require_once("../../include/my_func.inc.php");
 
 if(isset($_SESSION[$OJ_NAME.'_'.'profile_csrf'])&&$_GET['profile_csrf']!=$_SESSION[$OJ_NAME.'_'.'profile_csrf']){
 //    echo "<!--".$_SESSION[$OJ_NAME.'_'.'profile_csrf']."-->";
@@ -22,20 +23,6 @@ if(isset($OJ_LANG)){
   require_once("../../lang/$OJ_LANG.php");
 }else{
   require_once("../../lang/en.php");
-}
-
-function checkmail(){
-  global $OJ_NAME;
-
-  $sql="SELECT count(1) FROM `mail` WHERE new_mail=1 AND `to_user`=?";
-  $result=pdo_query($sql,$_SESSION[$OJ_NAME.'_'.'user_id']);
-
-  if(!$result) return false;
-
-  $row=$result[0];
-  $retmsg="<span id=red>(".$row[0].")</span>";
-        
-  return $retmsg;
 }
 
 $profile='';
