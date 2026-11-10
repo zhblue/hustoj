@@ -34,6 +34,7 @@ foreach ($rows as $r) {
         'source' => isset($r['source']) ? $r['source'] : '',
     );
 }
+$now = date('Y-m-d H:i', time());
 $filter_sql = " `defunct`='N' AND `problem_id` NOT IN (
 					SELECT  `problem_id`
 						FROM contest c
