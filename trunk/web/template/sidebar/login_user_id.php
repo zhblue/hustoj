@@ -1,5 +1,5 @@
 <?php 
-ini_set("display_errors", "On");  //set this to "On" for debugging  ,especially when no reason blank shows up.
+ini_set("display_errors", "Off");  //set this to "On" for debugging  ,especially when no reason blank shows up.
 	require(dirname(dirname(dirname(__FILE__)))."/include/db_info.inc.php");
 	require(dirname(dirname(dirname(__FILE__)))."/include/my_func.inc.php");
         if(isset($_SESSION[$OJ_NAME.'_'.'user_id'])) {
@@ -37,7 +37,7 @@ if(isset($_SESSION[$OJ_NAME.'_'.'balloon'])){
                                       // mail can not use in contest or mail is turned off
                               }else{
                                     $mail=checkmail();
-                                    if($mail) echo "<a class='item mail' href=".$path_fix."mail.php><i class='mail icon'></i>$MSG_MAIL$mail</a>";
+                                    if($mail) echo "<a class='item mail' href='mail.php' ><i class='mail icon'></i>$MSG_MAIL$mail</a>";
                               }
 
 
