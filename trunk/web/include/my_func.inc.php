@@ -28,10 +28,19 @@ function checkmail(){
 	return $retmsg;
 }
 function escape_cpp_headers($code) {
-    // 匹配常见的 C/C++ 头文件，如 <stdio.h>, <vector>, <bits/stdc++.h> 等
-    $pattern = '/<([a-z0-9_+\/]+\.(?:h|hpp|hh|hxx)|vector|string|iostream|fstream|sstream|algorithm|map|set|unordered_map|unordered_set|queue|stack|deque|list|array|bitset|utility|tuple|memory|functional|chrono|thread|mutex|future|numeric|complex|valarray|exception|stdexcept|c[a-z0-9]+)>/i';
+    $pattern = '/<('
+        . '[a-z0-9_+\/]+\.(?:h|hpp|hh|hxx)'
+        . '|vector|string|iostream|fstream|sstream|algorithm|map|set'
+        . '|unordered_map|unordered_set|queue|stack|deque|list|array|bitset'
+        . '|utility|tuple|memory|functional|chrono|thread|mutex|future|numeric'
+        . '|complex|valarray|exception|stdexcept'
+        . '|c(?:stdio|stdlib|string|math|ctype|assert|errno|float|limits|locale'
+        .   '|setjmp|signal|stdarg|stddef|stdint|time|wchar|wctype|uchar'
+        .   '|iso646|inttypes|stdbool|stdalign))'
+        . '>/i';
     return preg_replace($pattern, '&lt;$1&gt;', $code);
 }
+
 
 function normalizeSpaces(string $str): string 
 {
