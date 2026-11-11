@@ -24,7 +24,7 @@ function checkmail(){
 	$result=pdo_query($sql,$_SESSION[$OJ_NAME.'_'.'user_id']);
 	if(!$result) return false;
 	$row=$result[0];
-	$retmsg="<span class=red>(".$row[0].")</span>";
+	if($row['cnt']>0) $retmsg="<span class=red>(".$row['cnt'].")</span>";
 	return $retmsg;
 }
 function escape_cpp_headers($code) {
