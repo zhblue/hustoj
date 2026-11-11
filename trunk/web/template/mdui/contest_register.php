@@ -1,3 +1,10 @@
+<?php
+if (__FILE__ === $_SERVER['SCRIPT_FILENAME']) {
+    // 当前文件就是用户直接请求的入口脚本
+    http_response_code(403);
+    exit('Direct access is not allowed.');
+}
+?>
 <!DOCTYPE html>
 <html lang="cn"><head><?php $page_title = $view_title; include('_includes/head.php'); ?></head>
 <body class="mdui-drawer-body-left mdui-theme-primary-indigo mdui-theme-accent-indigo mdui-appbar-with-toolbar">

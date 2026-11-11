@@ -1,4 +1,10 @@
-<?php $show_title="$view_title - $OJ_NAME"; ?>
+<?php
+if (__FILE__ === $_SERVER['SCRIPT_FILENAME']) {
+    // 当前文件就是用户直接请求的入口脚本
+    http_response_code(403);
+    exit('Direct access is not allowed.');
+}
+$show_title="$view_title - $OJ_NAME"; ?>
 <?php include("template/$OJ_TEMPLATE/header.php");?>
 <div class='padding'>
 <h1><?php echo  $view_title ?></h1>

@@ -1,3 +1,10 @@
+<?php
+if (__FILE__ === $_SERVER['SCRIPT_FILENAME']) {
+    // 当前文件就是用户直接请求的入口脚本
+    http_response_code(403);
+    exit('Direct access is not allowed.');
+}
+?>
 <!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
 <script src="<?php echo $OJ_CDN_URL.$path_fix."include/"?>jquery-latest.js"></script>
 

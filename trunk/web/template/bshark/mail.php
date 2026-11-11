@@ -1,4 +1,9 @@
-<?php 
+<?php
+if (__FILE__ === $_SERVER['SCRIPT_FILENAME']) {
+    // 当前文件就是用户直接请求的入口脚本
+    http_response_code(403);
+    exit('Direct access is not allowed.');
+}
 $user_id = $_SESSION[$OJ_NAME.'_'.'user_id'];
 $sql = 'SELECT * FROM `mail` WHERE `from_user`=? OR `to_user`=? ORDER BY unix_timestamp(in_date) DESC';
 $chats = pdo_query($sql, $user_id, $user_id);

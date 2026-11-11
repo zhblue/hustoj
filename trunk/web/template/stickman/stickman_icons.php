@@ -1,4 +1,9 @@
 <?php
+if (__FILE__ === $_SERVER['SCRIPT_FILENAME']) {
+    // 当前文件就是用户直接请求的入口脚本
+    http_response_code(403);
+    exit('Direct access is not allowed.');
+}
 /* ============================================================
    HUSTOJ · stickman 模板 · 火柴人风格图标库
    用 inline SVG 替换 Semantic UI 图标字体，全部为线稿风格

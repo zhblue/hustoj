@@ -1,4 +1,9 @@
 <?php
+if (__FILE__ === $_SERVER['SCRIPT_FILENAME']) {
+    // 当前文件就是用户直接请求的入口脚本
+    http_response_code(403);
+    exit('Direct access is not allowed.');
+}
 $THEME_SHOW_CATEGORY = false; //Whether to display a list of category on the Problemset page
 $THEME_NEWS_MOD = "list"; // list or show
 $THEME_MOD = "light"; //light or dark

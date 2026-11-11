@@ -1,3 +1,10 @@
+<?php
+if (__FILE__ === $_SERVER['SCRIPT_FILENAME']) {
+    // 当前文件就是用户直接请求的入口脚本
+    http_response_code(403);
+    exit('Direct access is not allowed.');
+}
+?>
 <!-- KaTeX核心js -->
 <!--script src="https://cdn.bootcss.com/KaTeX/0.10.2/katex.min.js"></script-->
 <!--script src="https://cdn.bootcss.com/KaTeX/0.10.2/contrib/auto-render.min.js"></script-->

@@ -1,4 +1,9 @@
 <?php
+if (__FILE__ === $_SERVER['SCRIPT_FILENAME']) {
+    // 当前文件就是用户直接请求的入口脚本
+    http_response_code(403);
+    exit('Direct access is not allowed.');
+}
   $show_title="$MSG_ERROR_INFO - $OJ_NAME";
   if(isset($OJ_MEMCACHE)) include(dirname(__FILE__)."/header.php");
   if(isset($mark)&&$mark==100) {

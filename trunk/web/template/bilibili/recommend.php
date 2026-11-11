@@ -1,4 +1,9 @@
 <?php
+if (__FILE__ === $_SERVER['SCRIPT_FILENAME']) {
+    // 当前文件就是用户直接请求的入口脚本
+    http_response_code(403);
+    exit('Direct access is not allowed.');
+}
 // 题目推荐页视图（syzoj 模板）
 // 结构对齐 template/syzoj/skeleton.php：设置 $show_title -> include header.php -> 页面内容 -> include footer.php
 // 交互内容（按钮 / 结果区）不放入 skeleton 的 .md 容器，避免被 marked 二次解析；

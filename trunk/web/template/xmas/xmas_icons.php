@@ -1,4 +1,9 @@
 <?php
+if (__FILE__ === $_SERVER['SCRIPT_FILENAME']) {
+    // 当前文件就是用户直接请求的入口脚本
+    http_response_code(403);
+    exit('Direct access is not allowed.');
+}
 /* ============================================================
    HUSTOJ · xmas 模板 · 圣诞主题图标库
    以 inline SVG 返回节日图标，fill:currentColor 让其继承导航金色。

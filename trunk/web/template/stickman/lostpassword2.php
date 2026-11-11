@@ -1,4 +1,10 @@
-<?php $show_title="$MSG_LOSTPASSWORD_MAILBOX - $OJ_NAME"; ?>
+<?php
+if (__FILE__ === $_SERVER['SCRIPT_FILENAME']) {
+    // 当前文件就是用户直接请求的入口脚本
+    http_response_code(403);
+    exit('Direct access is not allowed.');
+}
+$show_title="$MSG_LOSTPASSWORD_MAILBOX - $OJ_NAME"; ?>
 <?php include("template/$OJ_TEMPLATE/header.php");?>
 <!DOCTYPE html>
 <html lang="en">

@@ -1,4 +1,9 @@
 <?php
+if (__FILE__ === $_SERVER['SCRIPT_FILENAME']) {
+    // 当前文件就是用户直接请求的入口脚本
+    http_response_code(403);
+    exit('Direct access is not allowed.');
+}
 // 当$OJ_FRIENDLY_LEVEL<0时，关闭所有增加功能。
 if($OJ_FRIENDLY_LEVEL>=0){
     if(file_exists("hello")){  // 如果存在hello目录，自动添加链接

@@ -1,4 +1,9 @@
 <?php
+if (__FILE__ === $_SERVER['SCRIPT_FILENAME']) {
+    // 当前文件就是用户直接请求的入口脚本
+    http_response_code(403);
+    exit('Direct access is not allowed.');
+}
 $calsed = '锦鲤';
 $calledid = -1;
 $acneed = [10, 20, 30, 50, 80, 100, 200, 300, 500, 800, 1000];

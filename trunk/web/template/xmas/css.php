@@ -1,4 +1,9 @@
 <?php
+if (__FILE__ === $_SERVER['SCRIPT_FILENAME']) {
+    // 当前文件就是用户直接请求的入口脚本
+    http_response_code(403);
+    exit('Direct access is not allowed.');
+}
         // [xmas] 以圣诞主题 xmas.css 作为基础配色，避免 white.css 在末尾覆盖节日配色
         $OJ_CSS="xmas.css";
         $dir=basename(getcwd());

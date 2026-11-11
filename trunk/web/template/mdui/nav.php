@@ -1,4 +1,9 @@
-<?php 
+<?php
+if (__FILE__ === $_SERVER['SCRIPT_FILENAME']) {
+    // 当前文件就是用户直接请求的入口脚本
+    http_response_code(403);
+    exit('Direct access is not allowed.');
+}
 if(stripos($_SERVER['REQUEST_URI'],"template")!==false)exit();
   $url=basename($_SERVER['REQUEST_URI']);
   $dir=basename(getcwd());

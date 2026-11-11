@@ -1,4 +1,9 @@
 <?php
+if (__FILE__ === $_SERVER['SCRIPT_FILENAME']) {
+    // 当前文件就是用户直接请求的入口脚本
+    http_response_code(403);
+    exit('Direct access is not allowed.');
+}
 /* backrooms 模板 · 图标助手
  * 用法：在 header.php 里把 <i class="home icon"></i> 替换为 <?php echo xicon('home'); ?>
  * 每个 key 返回一段 inline SVG（class="backrooms-nav-icon"，描边贴 currentColor，

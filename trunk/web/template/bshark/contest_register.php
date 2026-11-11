@@ -1,3 +1,10 @@
+<?php
+if (__FILE__ === $_SERVER['SCRIPT_FILENAME']) {
+    // 当前文件就是用户直接请求的入口脚本
+    http_response_code(403);
+    exit('Direct access is not allowed.');
+}
+?>
 <!DOCTYPE html>
 <html><head><meta charset="utf-8"><title><?php echo htmlentities($view_title, ENT_QUOTES, 'UTF-8'); ?> - <?php echo $OJ_NAME; ?></title><?php require('./template/bshark/header-files.php'); ?></head>
 <body><?php require('./template/bshark/nav.php'); ?><div class="ui container bsharkMain"><div class="card"><div class="card-body"><h2><?php echo htmlentities($view_contest['title'] ?? $view_title, ENT_QUOTES, 'UTF-8'); ?></h2>
