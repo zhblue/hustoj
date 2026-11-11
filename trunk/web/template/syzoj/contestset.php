@@ -1,4 +1,10 @@
-<?php $show_title="$MSG_CONTEST - $OJ_NAME"; ?>
+<?php
+if (__FILE__ === $_SERVER['SCRIPT_FILENAME']) {
+    // 当前文件就是用户直接请求的入口脚本
+    http_response_code(403);
+    exit('Direct access is not allowed.');
+}
+?><?php $show_title="$MSG_CONTEST - $OJ_NAME"; ?>
 <?php include("template/$OJ_TEMPLATE/header.php");?>
 <div class="padding">
 <div class="ui grid" style="margin-bottom: 10px; ">
