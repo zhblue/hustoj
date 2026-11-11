@@ -31,10 +31,14 @@ if (isset($_SESSION[$OJ_NAME . '_' . 'administrator'])) {
 
     $result = mysql_query_cache($sql, $search);
     $i = 0;
-} else {
+} else if($OJ_FRIENDLY_LEVEL>0) {
     $sql = "SELECT user_id,password,ip,time FROM `loginlog` order by log_id desc limit 20";
     $result = mysql_query_cache($sql);
+}else{
+    header("location:index.php");
+    exit();
 }
+
 
 foreach ($result as $row) {
 
