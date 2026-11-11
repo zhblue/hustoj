@@ -235,6 +235,8 @@ if (isset($OJ_FRIENDLY_LEVEL) && $OJ_FRIENDLY_LEVEL == -1) {
 		}
 	}
 }
+//管理员常开内邮，接收入侵警告
+if(isset($_SESSION[$OJ_NAME.'_administrator'])) $OJ_MAIL=true;
 
 if(!isset($OJ_SUBMIT_COOLDOWN_TIME)) $OJ_SUBMIT_COOLDOWN_TIME=3;
 // if using EXAM or ON site auto turn off free practice
