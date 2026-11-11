@@ -29,14 +29,15 @@ $contest_id = intval($row['contest_id']);
 $need_check_using = true;
 if (!(isset($_SESSION[$OJ_NAME . "_source_browser"]) || isset($_SESSION[$OJ_NAME . "_administrator"]))) {
     if ($contest_id > 0) {
-        $sql = "select start_time,end_time from contest where contest_id=?";
+        $sql = "select start_time,end_time,private from contest where contest_id=?";
         $result = pdo_query($sql, $contest_id);
         if ($result) {
             $row = $result[0];
             $start_time = strtotime($row['start_time']);
             $end_time = strtotime($row['end_time']);
             $now = time();
-            if ($end_time < $now) { // 当前提交，属于已经结束的比赛，考察是否有进行中的比赛在使用。
+			$private=$row['private'];
+            if ($end_time < $now || ($private>0 && $OJ_FRIENDLY_LEVEL<0)) { // 当前提交，属于已经结束的比赛，考察是否有进行中的比赛在使用。
                 //echo $now."-".$end_time;
                 $need_check_using = true;
 
