@@ -16,6 +16,10 @@ $pid = 0;
 if (isset($_GET['pid'])) {
     $pid = intval($_GET['pid']);
 }
+if($OJ_FRIENDLY_LEVEL<0 && !isset($_SESSION[$OJ_NAME."_administrator"])&& !isset($_SESSION[$OJ_NAME."_contest_creator"])){
+    //header("location:index.php");
+    exit();
+}
 
 // 查询特权表中指定pid的用户信息
 $sql = "select user_id from privilege where rightstr=?  LIMIT 1";
