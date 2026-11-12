@@ -2285,7 +2285,7 @@ void fix_mod(char * path){
 	// 不必去刷一对 chown/chmod 失败日志（每组数据两条，一次提交就是上百行噪音）。
 	if (access(path, F_OK) != 0) return;
 	if(chown(path,www_uid,judge_uid)) write_log("chown fail:%s\n",path);
-	if(chmod(path,0710)) write_log("chmod fail:%s\n",path);
+	if(chmod(path,0751)) write_log("chmod fail:%s\n",path);
 }
 /* Names taken from input.name/output.name are written by problem authors and by
  * the data importer, so they are untrusted: keep them usable as a single plain
@@ -3540,7 +3540,7 @@ int special_judge(char *oj_home, int problem_id, char *infile, char *outfile,
 		sprintf(tpjpath,"%s/data/%d/tpj", oj_home, problem_id);
 		sprintf(upjpath,"%s/data/%d/upj", oj_home, problem_id);
 		execute_cmd("chgrp judge %s/data/%d/?pj '%s' '%s' '%s'", oj_home, problem_id,infile, outfile, userfile);
-		/* fix_mod() 把 <case>.in/.out 改成 www_uid 属主 0710，judge 用户只有执行位、
+		/* fix_mod() 把 <case>.in/.out 改成 www_uid 属主 0750，judge 用户只有执行位、
 		 * 读不到标准答案，校验器会恒判 WA。所以校验器改用 www 用户身份运行，
 		 * 并把运行目录与用户输出授权给 www 组。
 		 * 容器镜像里可能没有 www-data 的 passwd 条目，此时 gid 按数值取，
