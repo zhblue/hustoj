@@ -1,9 +1,9 @@
-<?php
-if (__FILE__ === $_SERVER['SCRIPT_FILENAME']) {
+<?php if (__FILE__ === $_SERVER['SCRIPT_FILENAME']) {
     // 当前文件就是用户直接请求的入口脚本
     http_response_code(403);
     exit('Direct access is not allowed.');
 }
+$show_title=$id." - $MSG_COMPILE_INFO - $OJ_NAME";
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -14,9 +14,8 @@ if (__FILE__ === $_SERVER['SCRIPT_FILENAME']) {
     <meta name="description" content="">
     <meta name="author" content="">
     <link rel="icon" href="../../favicon.ico">
-    <title><?php echo $OJ_NAME?></title>  
-    <?php include("template/$OJ_TEMPLATE/css.php");?>	    
-
+    <title><?php echo $show_title?></title>
+    <?php include("template/$OJ_TEMPLATE/css.php");?>
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
@@ -25,17 +24,33 @@ if (__FILE__ === $_SERVER['SCRIPT_FILENAME']) {
     <![endif]-->
 <link href='<?php echo $OJ_CDN_URL?>highlight/styles/shCore.css' rel='stylesheet' type='text/css'/>
 <link href='<?php echo $OJ_CDN_URL?>highlight/styles/shThemeDefault.css' rel='stylesheet' type='text/css'/>
+<style>
+/* explain() 会给报错所在行的行号加 .highlighted */
+.syntaxhighlighter .highlighted{background-color:#fcf8e3 !important;color:#c09853 !important;font-weight:bold;}
+#errexp code{white-space:pre-wrap;word-break:break-all;}
+#errtxt{margin-top:0;margin-bottom:0;}
+</style>
   </head>
 
   <body>
 
     <div class="container">
-    <?php include("template/$OJ_TEMPLATE/nav.php");?>	    
+    <?php include("template/$OJ_TEMPLATE/nav.php");?>
       <!-- Main component for a primary marketing message or call to action -->
       <div class="jumbotron">
- <div class="brush:c" id='source' name="source"></div>
-<pre class="brush:c;" id='errtxt' ><?php echo $view_reinfo?></pre>
-<div id='errexp'><!--Explain:--></div>
+
+        <p><strong><?php echo $MSG_SOURCE_CODE?></strong></p>
+        <div class="brush:c" id='source' name="source"></div>
+
+        <p><strong><?php echo $MSG_COMPILE_INFO?></strong></p>
+        <pre id='errtxt'><?php echo $view_reinfo?></pre>
+
+        <p><strong><?php echo $MSG_ERROR_EXPLAIN?></strong></p>
+        <div id='errexp'></div>
+
+      </div>
+
+    </div> <!-- /container -->
 
 <script>
 var i=0;
@@ -75,7 +90,7 @@ pats[i]=/'.*' was not declared in this scope/;
 exps[i++]="<?php echo $MSG_NOT_DECLARED_IN_SCOPE; ?>";
 pats[i]=/main’ must return ‘int’/;
 exps[i++]="<?php echo $MSG_MAIN_MUST_RETURN_INT; ?>";
-pats[i]=/expected identifier or '\(' before numeric constant/
+pats[i]=/expected identifier or '\(' before numeric constant/;
 exps[i++]="<?php echo $MSG_EXPECTED_IDENTIFIER; ?>";
 pats[i]=/printf.*was not declared in this scope/;
 exps[i++]="<?php echo $MSG_PRINTF_NOT_DECLARED_IN_SCOPE; ?>";
@@ -173,47 +188,400 @@ pats[i]=/应在名为.*的文件中声明/;
 exps[i++]="<?php echo $MSG_DECLARED_FILE_NAMED; ?>";
 pats[i]=/variably modified/;
 exps[i++]="<?php echo $MSG_VARIABLY_MODIFIED; ?>";
-pats[i]=/gets' was not declared in this scope/;
-exps[i++]="<?php echo $MSG_FUNCTION_GETS_REMOVIED; ?>";
-pats[i]=/redefinition of/;
-exps[i++]="重复定义了函数，有些题目要求不提交main函数，提交前请进行确认。";
+// 继续添加更多gcc/g++编译错误模式
+pats[i]=/error: expected initializer before/;
+exps[i++]="<?php echo $MSG_EXPECTED_INITIALIZER; ?>";
+pats[i]=/error: '.*' does not name a type/;
+exps[i++]="<?php echo $MSG_DOES_NOT_NAME_A_TYPE; ?>";
+pats[i]=/error: expected constructor, destructor, or type conversion before/;
+exps[i++]="<?php echo $MSG_EXPECTED_CONSTRUCTOR_DESTRUCTOR; ?>";
+pats[i]=/error: '.*' was not declared in this scope/;
+exps[i++]="<?php echo $MSG_VARIABLE_NOT_DECLARED_IN_SCOPE; ?>";
+pats[i]=/error: invalid types/;
+exps[i++]="<?php echo $MSG_INVALID_TYPES; ?>";
+pats[i]=/error: too few arguments to function/;
+exps[i++]="<?php echo $MSG_TOO_FEW_ARGUMENTS; ?>";
+pats[i]=/error: too many arguments to function/;
+exps[i++]="<?php echo $MSG_TOO_MANY_ARGUMENTS; ?>";
+pats[i]=/error: return-statement with no value/;
+exps[i++]="<?php echo $MSG_RETURN_NO_VALUE; ?>";
+pats[i]=/error: void value not ignored as it ought to be/;
+exps[i++]="<?php echo $MSG_VOID_VALUE_NOT_IGNORED; ?>";
+pats[i]=/error: lvalue required as left operand of assignment/;
+exps[i++]="<?php echo $MSG_LVALUE_REQUIRED; ?>";
+pats[i]=/error: invalid operands of types [^\n\u2028\u2029]* to binary/;
+exps[i++]="<?php echo $MSG_INVALID_OPERANDS; ?>";
+pats[i]=/error: request for member '.*' in '.*', which is of non-class type/;
+exps[i++]="<?php echo $MSG_REQUEST_FOR_MEMBER; ?>";
+pats[i]=/error: '.*' cannot be used as a function/;
+exps[i++]="<?php echo $MSG_CANNOT_USE_AS_FUNCTION; ?>";
+pats[i]=/error: new types may not be defined in a return type/;
+exps[i++]="<?php echo $MSG_NEW_TYPES_IN_RETURN; ?>";
+pats[i]=/error: two or more data types in declaration of/;
+exps[i++]="<?php echo $MSG_TWO_OR_MORE_DATA_TYPES; ?>";
+pats[i]=/error: expected ';' after struct definition/;
+exps[i++]="<?php echo $MSG_EXPECTED_SEMICOLON_AFTER_STRUCT; ?>";
+pats[i]=/error: array bound is not an integer constant/;
+exps[i++]="<?php echo $MSG_ARRAY_BOUND_NOT_CONSTANT; ?>";
+pats[i]=/error: storage size of '.*' isn't known/;
+exps[i++]="<?php echo $MSG_STORAGE_SIZE_UNKNOWN; ?>";
+pats[i]=/error: '.*' has incomplete type/;
+exps[i++]="<?php echo $MSG_INCOMPLETE_TYPE; ?>";
+pats[i]=/error: '.*' undeclared \(first use in this function\)/;
+exps[i++]="<?php echo $MSG_UNDECLARED_FIRST_USE; ?>";
+pats[i]=/error: jump to case label/;
+exps[i++]="<?php echo $MSG_JUMP_TO_CASE_LABEL; ?>";
+pats[i]=/error: crosses initialization of/;
+exps[i++]="<?php echo $MSG_CROSSES_INITIALIZATION; ?>";
+pats[i]=/error: invalid conversion from '.*' to '.*'/;
+exps[i++]="<?php echo $MSG_INVALID_CONVERSION_TYPES; ?>";
+pats[i]=/error: cannot convert '.*' to '.*' in assignment/;
+exps[i++]="<?php echo $MSG_CANNOT_CONVERT_IN_ASSIGNMENT; ?>";
+pats[i]=/error: no match for 'operator.*'/;
+exps[i++]="<?php echo $MSG_NO_MATCH_FOR_OPERATOR; ?>";
+pats[i]=/error: template instantiation depth exceeds maximum of/;
+exps[i++]="<?php echo $MSG_TEMPLATE_INSTANTIATION_DEPTH; ?>";
+pats[i]=/error: expected primary-expression before/;
+exps[i++]="<?php echo $MSG_EXPECTED_PRIMARY_EXPRESSION; ?>";
+pats[i]=/error: expected ',' or ';' before/;
+exps[i++]="<?php echo $MSG_EXPECTED_COMMA_OR_SEMICOLON; ?>";
 
+// 添加更多警告信息
+pats[i]=/warning: control reaches end of non-void function/;
+exps[i++]="<?php echo $MSG_CONTROL_REACHES_END; ?>";
+pats[i]=/warning: comparison between signed and unsigned integer/;
+exps[i++]="<?php echo $MSG_SIGNED_UNSIGNED_COMPARISON; ?>";
+pats[i]=/warning: deprecated conversion from string constant to/;
+exps[i++]="<?php echo $MSG_DEPRECATED_CONVERSION; ?>";
+pats[i]=/warning: overflow in implicit constant conversion/;
+exps[i++]="<?php echo $MSG_OVERFLOW_IN_CONVERSION; ?>";
+pats[i]=/warning: non-static data member initializers only available with/;
+exps[i++]="<?php echo $MSG_NON_STATIC_INITIALIZERS; ?>";
+pats[i]=/warning: extended initializer lists only available with/;
+exps[i++]="<?php echo $MSG_EXTENDED_INITIALIZER_LISTS; ?>";
+pats[i]=/warning: 'auto' changes meaning in C\+\+11/;
+exps[i++]="<?php echo $MSG_AUTO_CHANGES_MEANING; ?>";
+pats[i]=/warning: lambda expressions only available with/;
+exps[i++]="<?php echo $MSG_LAMBDA_EXPRESSIONS; ?>";
 
+// 链接器错误
+pats[i]=/undefined reference to/;
+exps[i++]="<?php echo $MSG_UNDEFINED_REFERENCE; ?>";
+pats[i]=/multiple definition of/;
+exps[i++]="<?php echo $MSG_MULTIPLE_DEFINITION; ?>";
+pats[i]=/ld returned 1 exit status/;
+exps[i++]="<?php echo $MSG_LD_RETURNED_EXIT_STATUS; ?>";
+pats[i]=/collect2: error: ld returned 1 exit status/;
+exps[i++]="<?php echo $MSG_COLLECT2_LD_ERROR; ?>";
+
+// C++特定错误
+pats[i]=/error: '.*' is not a member of '.*'/;
+exps[i++]="<?php echo $MSG_NOT_A_MEMBER_OF; ?>";
+pats[i]=/error: '.*' was not declared in this scope/;
+exps[i++]="<?php echo $MSG_NOT_DECLARED_IN_THIS_SCOPE; ?>";
+pats[i]=/error: '.*' has not been declared/;
+exps[i++]="<?php echo $MSG_HAS_NOT_BEEN_DECLARED; ?>";
+pats[i]=/error: expected class-name before '.*' token/;
+exps[i++]="<?php echo $MSG_EXPECTED_CLASS_NAME; ?>";
+pats[i]=/error: expected '\)' before '.*' token/;
+exps[i++]="<?php echo $MSG_EXPECTED_CLOSE_PAREN; ?>";
+pats[i]=/error: expected ',' or '\.\.\.' before '.*' token/;
+exps[i++]="<?php echo $MSG_EXPECTED_COMMA_OR_ELLIPSIS; ?>";
+pats[i]=/error: ISO C\+\+ forbids declaration of '.*' with no type/;
+exps[i++]="<?php echo $MSG_FORBIDS_DECLARATION_NO_TYPE; ?>";
+
+// 模板相关错误
+pats[i]=/error: missing template arguments before/;
+exps[i++]="<?php echo $MSG_MISSING_TEMPLATE_ARGUMENTS; ?>";
+pats[i]=/error: 'template' keyword may not be used in this context/;
+exps[i++]="<?php echo $MSG_TEMPLATE_KEYWORD_CONTEXT; ?>";
+pats[i]=/error: too many template-parameter-lists/;
+exps[i++]="<?php echo $MSG_TOO_MANY_TEMPLATE_PARAMS; ?>";
+
+// 预处理错误
+pats[i]=/error: #error.*/;
+exps[i++]="<?php echo $MSG_PREPROCESSOR_ERROR; ?>";
+pats[i]=/error: missing terminating " character/;
+exps[i++]="<?php echo $MSG_MISSING_TERMINATING_QUOTE; ?>";
+pats[i]=/error: missing terminating ' character/;
+exps[i++]="<?php echo $MSG_MISSING_TERMINATING_APOSTROPHE; ?>";
+pats[i]=/error: unterminated #ifndef/;
+exps[i++]="<?php echo $MSG_UNTERMINATED_IFNDEF; ?>";
+pats[i]=/error: #include expects "FILENAME" or <FILENAME>/;
+exps[i++]="<?php echo $MSG_INCLUDE_EXPECTS; ?>";
+
+// 内存相关错误
+pats[i]=/error: invalid use of void expression/;
+exps[i++]="<?php echo $MSG_INVALID_USE_OF_VOID; ?>";
+pats[i]=/error: double free or corruption/;
+exps[i++]="<?php echo $MSG_DOUBLE_FREE_OR_CORRUPTION; ?>";
+pats[i]=/error: invalid next size/;
+exps[i++]="<?php echo $MSG_INVALID_NEXT_SIZE; ?>";
+pats[i]=/error: corrupted double-linked list/;
+exps[i++]="<?php echo $MSG_CORRUPTED_DOUBLE_LINKED_LIST; ?>";
+
+// 标准库相关错误
+pats[i]=/error: '.*' is not a member of 'std'/;
+exps[i++]="<?php echo $MSG_NOT_MEMBER_OF_STD; ?>";
+pats[i]=/error: 'cout' was not declared in this scope/;
+exps[i++]="<?php echo $MSG_COUT_NOT_DECLARED; ?>";
+pats[i]=/error: 'cin' was not declared in this scope/;
+exps[i++]="<?php echo $MSG_CIN_NOT_DECLARED; ?>";
+pats[i]=/error: 'endl' was not declared in this scope/;
+exps[i++]="<?php echo $MSG_ENDL_NOT_DECLARED; ?>";
+
+// C++11/14/17特性相关错误
+pats[i]=/error: 'nullptr' was not declared in this scope/;
+exps[i++]="<?php echo $MSG_NULLPTR_NOT_DECLARED; ?>";
+pats[i]=/error: 'constexpr' was not declared in this scope/;
+exps[i++]="<?php echo $MSG_CONSTEXPR_NOT_DECLARED; ?>";
+pats[i]=/error: range-based 'for' loops are not allowed in C\+\+98 mode/;
+exps[i++]="<?php echo $MSG_RANGE_BASED_FOR_NOT_ALLOWED; ?>";
+
+// 添加更多中文错误信息（针对中文版编译器）
+pats[i]=/错误：expected/;
+exps[i++]="<?php echo $MSG_CHINESE_EXPECTED; ?>";
+pats[i]=/错误：在.*之前应有/;
+exps[i++]="<?php echo $MSG_CHINESE_SHOULD_HAVE_BEFORE; ?>";
+pats[i]=/错误：无法将.*转换为.*/;
+exps[i++]="<?php echo $MSG_CHINESE_CANNOT_CONVERT; ?>";
+pats[i]=/错误：对.*的引用未定义/;
+exps[i++]="<?php echo $MSG_CHINESE_UNDEFINED_REFERENCE; ?>";
+
+// 数学和算法相关错误
+pats[i]=/error: 'pow' was not declared in this scope/;
+exps[i++]="<?php echo $MSG_POW_NOT_DECLARED; ?>";
+pats[i]=/error: 'sqrt' was not declared in this scope/;
+exps[i++]="<?php echo $MSG_SQRT_NOT_DECLARED; ?>";
+pats[i]=/error: 'abs' was not declared in this scope/;
+exps[i++]="<?php echo $MSG_ABS_NOT_DECLARED; ?>";
+
+// 文件操作错误
+pats[i]=/error: 'fopen' was not declared in this scope/;
+exps[i++]="<?php echo $MSG_FOPEN_NOT_DECLARED; ?>";
+pats[i]=/error: 'FILE' was not declared in this scope/;
+exps[i++]="<?php echo $MSG_FILE_NOT_DECLARED; ?>";
+
+// 时间函数错误
+pats[i]=/error: 'clock' was not declared in this scope/;
+exps[i++]="<?php echo $MSG_CLOCK_NOT_DECLARED; ?>";
+pats[i]=/error: 'CLOCKS_PER_SEC' was not declared in this scope/;
+exps[i++]="<?php echo $MSG_CLOCKS_PER_SEC_NOT_DECLARED; ?>";
+
+// ============================================================
+// 依据 ai_kb 真实语料(22067 条学生报错)的覆盖率报告补齐, 2026-10
+// ============================================================
+// ---- 依据 ai_kb 真实语料(22067 条学生报错)的覆盖率报告补齐, 括号内为命中条数 ----
+pats[i]=/error: invalid operands of types [^\n\u2028\u2029]* to binary/;
+exps[i++]="<?php echo $MSG_INVALID_OPERANDS_TYPES; ?>";
+pats[i]=/unable to find string literal operator/;
+exps[i++]="<?php echo $MSG_UNABLE_FIND_STRING_OPERATOR; ?>";
+pats[i]=/no matching function for call to/;
+exps[i++]="<?php echo $MSG_NO_MATCHING_FUNCTION_CALL; ?>";
+pats[i]=/error: expected unqualified-id before/;
+exps[i++]="<?php echo $MSG_EXPECTED_UNQUALIFIED_ID_BEFORE; ?>";
+pats[i]=/error: expected unqualified-id at end of input/;
+exps[i++]="<?php echo $MSG_EXPECTED_UNQUALIFIED_ID_AT_EOF; ?>";
+pats[i]=/without a previous/;
+exps[i++]="<?php echo $MSG_WITHOUT_PREVIOUS_DECL; ?>";
+pats[i]=/ISO C\+\+ forbids comparison between pointer and integer/;
+exps[i++]="<?php echo $MSG_FORBIDS_PTR_INT_COMPARE; ?>";
+pats[i]=/comparison of integer expressions of different signedness/;
+exps[i++]="<?php echo $MSG_SIGN_COMPARE; ?>";
+pats[i]=/unable to find numeric literal operator/;
+exps[i++]="<?php echo $MSG_UNABLE_FIND_NUMERIC_OPERATOR; ?>";
+pats[i]=/has no member named/;
+exps[i++]="<?php echo $MSG_HAS_NO_MEMBER_NAMED; ?>";
+pats[i]=/redeclaration of/;
+exps[i++]="<?php echo $MSG_REDECLARATION_OF; ?>";
+pats[i]=/expected declaration before/;
+exps[i++]="<?php echo $MSG_EXPECTED_DECLARATION_BEFORE; ?>";
+pats[i]=/empty character constant/;
+exps[i++]="<?php echo $MSG_EMPTY_CHAR_CONSTANT; ?>";
+pats[i]=/conflicting declaration/;
+exps[i++]="<?php echo $MSG_CONFLICTING_DECLARATION; ?>";
+pats[i]=/break statement not within loop or switch/;
+exps[i++]="<?php echo $MSG_BREAK_OUTSIDE_LOOP; ?>";
+pats[i]=/reference to [^\n\u2028\u2029]* is ambiguous/;
+exps[i++]="<?php echo $MSG_REFERENCE_AMBIGUOUS; ?>";
+pats[i]=/invalid use of member function/;
+exps[i++]="<?php echo $MSG_INVALID_USE_MEMBER_FUNCTION; ?>";
+pats[i]=/stray [^\n\u2028\u2029]* in program/;
+exps[i++]="<?php echo $MSG_STRAY_PROGRAM; ?>";
+pats[i]=/missing terminating > character/;
+exps[i++]="<?php echo $MSG_MISSING_TERMINATING_GT; ?>";
+pats[i]=/extended character [^\n\u2028\u2029]* is not valid in an identifier/;
+exps[i++]="<?php echo $MSG_EXTENDED_CHARACTER; ?>";
+pats[i]=/a function-definition is not allowed here before/;
+exps[i++]="<?php echo $MSG_FUNCTION_DEF_NOT_ALLOWED; ?>";
+pats[i]=/error: expected identifier before/;
+exps[i++]="<?php echo $MSG_EXPECTED_IDENTIFIER_BEFORE; ?>";
+pats[i]=/return-statement with a value, in function returning/;
+exps[i++]="<?php echo $MSG_RETURN_WITH_VALUE; ?>";
+pats[i]=/error: cannot convert [^\n\u2028\u2029]* to [^\n\u2028\u2029]*/;
+exps[i++]="<?php echo $MSG_CANNOT_CONVERT; ?>";
+pats[i]=/invalid type argument of unary/;
+exps[i++]="<?php echo $MSG_INVALID_TYPE_ARG_UNARY; ?>";
+pats[i]=/array must be initialized with a brace-enclosed initializer/;
+exps[i++]="<?php echo $MSG_ARRAY_BRACE_INIT; ?>";
+pats[i]=/conversion from [^\n\u2028\u2029]* to non-scalar type/;
+exps[i++]="<?php echo $MSG_CONVERSION_TO_NON_SCALAR; ?>";
+pats[i]=/statement cannot resolve address of overloaded function/;
+exps[i++]="<?php echo $MSG_CANNOT_RESOLVE_OVERLOADED; ?>";
+pats[i]=/fatal error: [^\n\u2028\u2029]*: No such file or directory/;
+exps[i++]="<?php echo $MSG_NO_SUCH_FILE_EN; ?>";
+pats[i]=/error: expected [^\n\u2028\u2029]* before/;
+exps[i++]="<?php echo $MSG_EXPECTED_GENERIC; ?>";
+pats[i]=/error: expected [^\n\u2028\u2029]* at end of input/;
+exps[i++]="<?php echo $MSG_EXPECTED_AT_EOF; ?>";
+pats[i]=/to match this .\{/;
+exps[i++]="<?php echo $MSG_TO_MATCH_THIS_BRACE; ?>";
+pats[i]=/suggest parentheses around assignment used as truth value/;
+exps[i++]="<?php echo $MSG_ASSIGN_USED_AS_TRUTH; ?>";
+pats[i]=/misleading-indentation/;
+exps[i++]="<?php echo $MSG_MISLEADING_INDENT; ?>";
+pats[i]=/statement has no effect/;
+exps[i++]="<?php echo $MSG_STATEMENT_NO_EFFECT; ?>";
+pats[i]=/control reaches end of non-void function/;
+exps[i++]="<?php echo $MSG_CONTROL_REACHES_END_GENERIC; ?>";
+pats[i]=/unused parameter/;
+exps[i++]="<?php echo $MSG_UNUSED_PARAMETER; ?>";
+pats[i]=/No such file or directory/;
+exps[i++]="<?php echo $MSG_NO_SUCH_FILE_EN2; ?>";
+pats[i]=/\u2018void\u2019 value not ignored as it ought to be/;
+exps[i++]="<?php echo $MSG_VOID_VALUE_NOT_IGNORED; ?>";
+// ---- 长尾补齐 (语料中每类 2~30 条) ----
+pats[i]=/size of array [^\n\u2028\u2029]* is not an integral constant-expression/;
+exps[i++]="<?php echo $MSG_ARRAY_SIZE_NOT_CONST; ?>";
+pats[i]=/could not convert [^\n\u2028\u2029]* from/;
+exps[i++]="<?php echo $MSG_COULD_NOT_CONVERT; ?>";
+pats[i]=/initializer-string for [^\n\u2028\u2029]* is too long/;
+exps[i++]="<?php echo $MSG_INITIALIZER_STRING_TOO_LONG; ?>";
+pats[i]=/declaration of [^\n\u2028\u2029]* shadows a parameter/;
+exps[i++]="<?php echo $MSG_SHADOWS_PARAMETER; ?>";
+pats[i]=/conversion from [^\n\u2028\u2029]* in a converted constant expression/;
+exps[i++]="<?php echo $MSG_CONSTANT_EXPR_CONVERSION; ?>";
+pats[i]=/\u2018case\u2019 label does not reduce to an integer constant/;
+exps[i++]="<?php echo $MSG_CASE_NOT_INTEGER; ?>";
+pats[i]=/invalid operand to binary expression/;
+exps[i++]="<?php echo $MSG_INVALID_OPERAND_BINARY; ?>";
+pats[i]=/\u2018return\u2019 with no value, in function returning/;
+exps[i++]="<?php echo $MSG_RETURN_NO_VALUE2; ?>";
+pats[i]=/\u2018main\u2019 must return \u2018int\u2019/;
+exps[i++]="<?php echo $MSG_MAIN_MUST_RETURN_INT2; ?>";
+pats[i]=/ISO C\+\+ forbids braced-groups within expressions/;
+exps[i++]="<?php echo $MSG_FORBIDS_BRACED_GROUP; ?>";
+// ======================================================================
+// 编译报错解释 —— 2026-10 重写
+// 背景: ai_kb 用 22067 条真实学生报错测出来的三个问题
+//   1) gcc 报错用中文弯引号 U+2018/U+2019, 而本页大量正则写的是直引号,
+//      不归一化则覆盖率只有 50.7%
+//   2) 匹配到的内容来自学生自己提交的源码, 直接进 innerHTML 是 DOM XSS
+//   3) 一条错误常同时命中 3~5 条规则, 学生要连看几遍几乎一样的解释
+// 说明: 试过倒排索引预筛(候选砍到 22.7/198)反而比全量慢 0.69x ——
+//      V8 原生正则已是最优实现, JS 层再做 Map/Set 过滤得不偿失, 故保持直扫。
+// ======================================================================
+function nq(s){
+        return String(s).replace(/\u2018/g,"\'").replace(/\u2019/g,"\'");
+}
+// HTML 转义: 匹配结果里有学生写的 <img onerror=...> 之类内容时必须转义
+function hesc(s){
+        return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;")
+                        .replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+}
+var RX=null;
+function build_rx(){
+        if(RX) return;
+        RX=[];
+        for(var i=0;i<pats.length;i++){
+                try{ RX[i]=new RegExp(nq(pats[i].source)); }
+                catch(e){ RX[i]=null; }   // 个别正则不兼容时跳过, 不影响其它
+        }
+}
 function explain(){
-  var errmsg=$("#errtxt").text();
-  var expmsg="<?php echo $MSG_ERROR_EXPLAIN; ?>：<br><hr>";
-  for(var i=0;i<pats.length;i++){
-    var pat=pats[i];
-    var exp=exps[i];
-    var ret=pat.exec(errmsg);
-    if(ret){
-      expmsg+=ret+" : "+exp+"<br><hr>";
-    }
-  }
-           <?php if (isset($OJ_AI_API_URL)&&!empty($OJ_AI_API_URL)){ ?>
-                expmsg+="AI 答疑 ...<img src='image/loader.gif'>";
-                                $("#errexp").html(expmsg);
-                $("#errexp").load("<?php echo $OJ_AI_API_URL ?>?sid=<?php echo $id?>", function(response, status, xhr) {
-                        if (status === "success") {
-                                $("#errexp").html(marked.parse($("#errexp").text()));
-                        } else if (status === "error") {
-                                console.error("加载失败:", xhr.status, xhr.statusText);
-                        }
+        build_rx();
+        //alert("asdf");
+        var errmsg=$("#errtxt").text();
+        var normmsg=nq(errmsg);
+        var expmsg="",seen={};
+        for(var i=0;i<RX.length;i++){
+                if(!RX[i]) continue;
+                var ret=RX[i].exec(normmsg);
+                if(!ret) continue;
+                var exp=exps[i]||"";
+                if(seen[exp]) continue;        // 同一条解释只显示一次
+                seen[exp]=1;
+                expmsg+="<code>"+hesc(ret[0])+"</code> "+hesc(exp)+"<br>";
+        }
+        document.getElementById("errexp").innerHTML=expmsg;
+        //alert(expmsg);
+            var resultVariable = errmsg;
+                var errorLines = [];
+                var regex = /(\w+\.<?php echo $language_ext[$lang]?>):(\d+):\d+:/g;
+                var match;
+                while ((match = regex.exec(resultVariable)) !== null) {
+                    var lineNumber = parseInt(match[2], 10);
+                    errorLines.push(lineNumber);
+                }
+                errorLines.forEach(function(line) {
+                        console.log("line"+line);
+                        $("div .number"+line).addClass("highlighted");
                 });
+         <?php if (isset($OJ_AI_API_URL)&&!empty($OJ_AI_API_URL)){ ?>
+                expmsg+="AI 答疑 ...<img src='image/loader.gif'>";
+				$("#errexp").html(expmsg);
+		    $.ajax({
+			url: '<?php echo $OJ_AI_API_URL ?>?sid=<?php echo $id?>', 
+			type: 'GET',
+			success: function(data) {
+				if(parseInt(data)>0)
+					window.setTimeout('pull_result('+data+')',2000);
+				else{
+					fill_data(data);		
+				}
+			},
+			error: function() {
+			    console.log('获取数据失败');
+			}
+		    });
         <?php } ?>
-  document.getElementById("errexp").innerHTML=expmsg;
+
+}
+
+function fill_data(data){
+    $("#errexp").html(data);    
+    $("#errexp").html(marked.parse($("#errexp").text()));    
+}
+function pull_result(id){
+	console.log(id);
+    $.ajax({
+	url: '../aiapi/ajax.php', 
+	type: 'GET',
+	data: { id: id },
+	success: function(data) {
+		if(data=='waiting'){
+			window.setTimeout('pull_result('+id+')',2000);
+		}else{
+			fill_data(data);
+		    $('#ai_bt').val('再来一次');
+		    $('#ai_bt').prop('disabled', false);
+		}
+	},
+	error: function() {
+	    $('#ai_bt').val('获取数据失败');
+	    $('#ai_bt').prop('disabled', false);
+	}
+    });
 }
 </script>
-
-      </div>
-
-    </div> <!-- /container -->
-
 
     <!-- Bootstrap core JavaScript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
-    <?php include("template/$OJ_TEMPLATE/js.php");?>	    
+    <?php include("template/$OJ_TEMPLATE/js.php");?>
+<?php if(!isset($OJ_MARKDOWN)||!$OJ_MARKDOWN){ // js.php 仅在开启 markdown 时加载 marked, 而 AI 答疑始终需要它 ?>
+<script src="<?php echo $OJ_CDN_URL.$path_fix."template/$OJ_TEMPLATE/"?>marked.min.js"></script>
+<?php } ?>
 <script src='<?php echo $OJ_CDN_URL?>highlight/scripts/shCore.js' type='text/javascript'></script>
 <script src='<?php echo $OJ_CDN_URL?>highlight/scripts/shBrushCpp.js' type='text/javascript'></script>
 <script src='<?php echo $OJ_CDN_URL?>highlight/scripts/shBrushCss.js' type='text/javascript'></script>
@@ -226,14 +594,13 @@ function explain(){
 <script src='<?php echo $OJ_CDN_URL?>highlight/scripts/shBrushPerl.js' type='text/javascript'></script>
 <script src='<?php echo $OJ_CDN_URL?>highlight/scripts/shBrushCSharp.js' type='text/javascript'></script>
 <script src='<?php echo $OJ_CDN_URL?>highlight/scripts/shBrushVb.js' type='text/javascript'></script>
-
 <script>
 $(document).ready(function(){
 	$("#source").load("showsource2.php?id=<?php echo $id?>",function(response,status,xhr){
 
    	if(status=="success"){
 		SyntaxHighlighter.config.bloggerMode = false;
-		SyntaxHighlighter.config.clipboardSwf = 'highlight/scripts/clipboard.swf';
+		SyntaxHighlighter.config.clipboardSwf = '<?php echo $OJ_CDN_URL?>highlight/scripts/clipboard.swf';
 		SyntaxHighlighter.highlight();
 		explain();
    	}
