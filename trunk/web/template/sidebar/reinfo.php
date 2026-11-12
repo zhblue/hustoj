@@ -7,7 +7,7 @@ if (__FILE__ === $_SERVER['SCRIPT_FILENAME']) {
 $show_title=$id." - $MSG_ERROR_INFO - $OJ_NAME"; ?>
 <?php include("template/$OJ_TEMPLATE/header.php");?>
 
-<script src="<?php echo $OJ_CDN_URL."template/bs3/"?>marked.min.js"></script>
+
 <script src="<?php echo $OJ_CDN_URL?>template/<?php echo $OJ_TEMPLATE?>/js/textFit.min.js"></script>
 <style>
 .single-subtask {
@@ -85,17 +85,34 @@ td > code {
     exps[9]="<?php echo $MSG_WRONG_OUTPUT_TYPE_EXCEPTION ?>";
     pats[10]=/non-zero return/;
     exps[10]="<?php echo $MSG_NON_ZERO_RETURN ?>";
-
   MathJax = {
+    startup : { typeset: false  } ,
     tex: {inlineMath: [['$', '$'], ['\\(', '\\)']]}
   };
+// 统一的 MathJax 排版函数：等待 MathJax 异步加载完成后再执行，避免竞态
+function renderMathJax() {
+  if (window.MathJax && MathJax.startup && MathJax.startup.promise) {
+    // MathJax 已就绪，等其启动完成后排版
+    MathJax.startup.promise.then(function() {
+      try { MathJax.typeset(); } catch (e) { console.error('MathJax typeset error:', e); }
+    });
+  } else if (window.MathJax && typeof MathJax.typeset === 'function') {
+    try { MathJax.typeset(); } catch (e) { console.error('MathJax typeset error:', e); }
+  } else {
+    // MathJax 仍在异步加载（async 脚本可能晚于此处执行），轮询重试直到就绪
+    setTimeout(renderMathJax, 300);
+  }
+}
 function fill_data(data){
-    $("#errexp").html(data);    
-    $("#errexp").html(marked.parse($("#errexp").text()));    
-    const target = document.getElementById('errexp');
-	MathJax.typesetPromise([target]).then(() => {
-	  console.log('局部渲染完成！');
-	}).catch((err) => console.log('渲染出错:', err));
+    // AI 回答会整体替换 #errexp, 先把"再来一次"按钮摘出来, 渲染完再放回去,
+    // 否则 pull_result 里的 $('#ai_bt') 会落空(syzoj 原版即如此)。
+    var bt = document.getElementById('ai_bt');
+    var btHtml = bt ? bt.outerHTML : '';
+    $("#errexp").html(data);
+    $("#errexp").html(marked.parse($("#errexp").text()));
+    if (btHtml) $("#errexp").append(btHtml);
+    // MathJax 是 async 加载, 统一走 renderMathJax() 等待就绪, 不直接调 typesetPromise
+    setTimeout(renderMathJax, 200);
 }
 function pull_result(id){
 	console.log(id);
@@ -118,7 +135,7 @@ function pull_result(id){
 	}
     });
 }
-    function explain(){
+   function explain(){
       var errmsg = $("#errtxt").text();
       var expmsg = "";
       for(var i=0; i<pats.length; i++){
@@ -129,44 +146,51 @@ function pull_result(id){
           expmsg += ret+" : "+exp+"<br><hr />";
         }
       }
+       <?php if (!$isAC && isset($OJ_AI_API_URL)&&!empty($OJ_AI_API_URL) && $coin >0){ ?>
+                   expmsg+="<input type=button id='ai_bt' class='ui button primary' onclick='ai_explain()' value='<?php echo $MSG_PAY.$OJ_AI_API_PRICE."💰".$MSG_COIN.$MSG_USE.$MSG_AI_HELP ?>'>";
+        <?php } ?>
       document.getElementById("errexp").innerHTML=expmsg;
-        
-       <?php if (!$isAC && isset($OJ_AI_API_URL)&&!empty($OJ_AI_API_URL)){ ?>
-                expmsg+="AI 答疑 ...<img src='image/loader.gif'>";
-                $("#errexp").html(expmsg);
-		    $.ajax({
-			url: '<?php echo $OJ_AI_API_URL ?>?sid=<?php echo $id?>', 
-			type: 'GET',
-			success: function(data) {
-				if(parseInt(data)>0)
-					window.setTimeout('pull_result('+data+')',2000);
-				else{
-					fill_data(data);		
-				}
-			},
-			error: function() {
-			    console.log('获取数据失败');
-			}
-		    });
-       <?php } ?>
-
     }
     explain();
+    function ai_explain(){
+
+       <?php
+                if (!$isAC && isset($OJ_AI_API_URL)&&!empty($OJ_AI_API_URL)){ ?>
+                let expmsg=document.getElementById("errexp").innerHTML;
+                expmsg+="AI 答疑 ...<img src='image/loader.gif'>";
+                $("#errexp").html(expmsg);
+                $('#ai_bt').prop('disabled', true);
+                    $.ajax({
+                        url: '<?php echo $OJ_AI_API_URL ?>?sid=<?php echo $id?>',
+                        type: 'GET',
+                        success: function(data) {
+                                if(parseInt(data)>0)
+                                        window.setTimeout('pull_result('+data+')',2000);
+                                else{
+                                        fill_data(data);
+                                }
+                        },
+                        error: function() {
+                            console.log('获取数据失败');
+                        }
+                    });
+       <?php } ?>
+    }
 </script>
-<script src="<?php echo $OJ_CDN_URL.$path_fix."template/bs3/"?>marked.min.js"></script>
+    <script src="<?php echo $OJ_CDN_URL.$path_fix."template/$OJ_TEMPLATE/js/"?>marked.min.js"></script>
 <script id="MathJax-script" async src="template/bs3/tex-chtml.js"></script>
 <script>
     $(document).ready(function(){
                 marked.use({
                   // 开启异步渲染
-                  async: true,
+                  async: false,
                   pedantic: false,
                   gfm: true,
                   mangle: false,
                   headerIds: false
                 });
                 $("#errtxt").each(function(){
-                        $(this).html(marked.parse($(this).text()));
+                        $(this).html(marked.parse($(this).html()));
                 });
                 // adding note for ```input1  ```output1 in description
                 for(let i=1;i<10;i++){
@@ -198,12 +222,12 @@ function pull_result(id){
             "text-align": "center"
         });
         <?php
-          if(isset($OJ_DOWNLOAD)&&$OJ_DOWNLOAD){
+          if(isset($OJ_DOWNLOAD)&&$OJ_DOWNLOAD && $coin>0 ){
             if(isset($OJ_DL_1ST_WA_ONLY) && $OJ_DL_1ST_WA_ONLY){
         ?>
            let down=$($("#errtxt").find("h2")[0]);
            let filename=down.text();
-           down.html("<a href='download.php?sid=<?php echo $id?>&name=" + filename+ "'>" + filename+ "</a>");
+           down.html("<a href='download.php?sid=<?php echo $id?>&name=" + filename+ "'>💰" + filename+ "</a>");
         <?php
             }else{
         ?>
