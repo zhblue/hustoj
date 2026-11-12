@@ -11,6 +11,10 @@ if (__FILE__ === $_SERVER['SCRIPT_FILENAME']) {
 <head>
     <?php $page_title = "$id 错误信息"; ?>
     <?php include('_includes/head.php') ?>
+    <script src="<?php echo $OJ_CDN_URL.$path_fix."include/"?>jquery-latest.js"></script>
+    <!-- AI 答疑的 markdown 渲染 -->
+    <script src="<?php echo $OJ_CDN_URL.$path_fix."template/bs3/"?>marked.min.js"></script>
+
 </head>
 
 <body class="mdui-drawer-body-left mdui-theme-primary-indigo mdui-theme-accent-indigo mdui-appbar-with-toolbar">
@@ -29,154 +33,531 @@ if (__FILE__ === $_SERVER['SCRIPT_FILENAME']) {
             <div id='errexp'>无</div>
 
             <script>
-            var i = 0;
-            var pats = new Array();
-            var exps = new Array();
-            pats[0] = /System\.out\.print.*%.*/;
-            exps[0] = "Java中System.out.print用法跟C语言printf不同，请试用System.out.format";
-            pats[1] = /.*没有那个文件或目录.*/;
-            exps[1] = "服务器为Linux系统，不能使用windows下特有的非标准头文件。";
-            pats[2] = /not a statement/;
-            exps[2] = "检查大括号{}匹配情况，eclipse整理代码快捷键Ctrl+Shift+F";
-            pats[3] = /class, interface, or enum expected/;
-            exps[3] = "请不要将java函数（方法）放置在类声明外部，注意大括号的结束位置}";
-            pats[4] = /asm.*java/;
-            exps[4] = "请不要将java程序提交为C语言";
-            pats[5] = /package .* does not exist/;
-            exps[5] = "检测拼写，如：系统对象System为大写S开头";
-            pats[6] = /possible loss of precision/;
-            exps[6] = "赋值将会失去精度，检测数据类型，如确定无误可以使用强制类型转换";
-            pats[7] = /incompatible types/;
-            exps[7] = "Java中不同类型的数据不能互相赋值，整数不能用作布尔值";
-            pats[8] = /illegal start of expression/;
-            exps[8] = "字符串应用英文双引号(\")引起";
-            pats[9] = /cannot find symbol/;
-            exps[9] = "拼写错误或者缺少调用函数所需的对象如println()需对System.out调用";
-            pats[10] = /';' expected/;
-            exps[10] = "缺少分号。";
-            pats[11] = /should be declared in a file named/;
-            exps[11] = "Java必须使用public class Main。";
-            pats[12] = /expected ‘.*’ at end of input/;
-            exps[12] = "代码没有结束，缺少匹配的括号或分号，检查复制时是否选中了全部代码。";
-            pats[13] = /invalid conversion from ‘.*’ to ‘.*’/;
-            exps[13] = "隐含的类型转换无效，尝试用显示的强制类型转换如(int *)malloc(....)";
-            pats[14] = /warning.*declaration of 'main' with no type/;
-            exps[14] = "C++标准中，main函数必须有返回值";
-            pats[15] = /'.*' was not declared in this scope/;
-            exps[15] = "变量没有声明过，检查下是否拼写错误！";
-            pats[16] = /main’ must return ‘int’/;
-            exps[16] = "在标准C语言中，main函数返回值类型必须是int，教材和VC中使用void是非标准的用法";
-            pats[17] = /printf.*was not declared in this scope/;
-            exps[17] = "printf函数没有声明过就进行调用，检查下是否导入了stdio.h或cstdio头文件";
-            pats[18] = /warning: ignoring return value of/;
-            exps[18] = "警告：忽略了函数的返回值，可能是函数用错或者没有考虑到返回值异常的情况";
-            pats[19] = /:.*__int64’ undeclared/;
-            exps[19] = "__int64没有声明，在标准C/C++中不支持微软VC中的__int64,请使用long long来声明64位变量";
-            pats[20] = /:.*expected ‘;’ before/;
-            exps[20] = "前一行缺少分号";
-            pats[21] = / .* undeclared \(first use in this function\)/;
-            exps[21] = "变量使用前必须先进行声明，也有可能是拼写错误，注意大小写区分。";
-            pats[22] = /scanf.*was not declared in this scope/;
-            exps[22] = "scanf函数没有声明过就进行调用，检查下是否导入了stdio.h或cstdio头文件";
-            pats[23] = /memset.*was not declared in this scope/;
-            exps[23] = "memset函数没有声明过就进行调用，检查下是否导入了stdlib.h或cstdlib头文件";
-            pats[24] = /malloc.*was not declared in this scope/;
-            exps[24] = "malloc函数没有声明过就进行调用，检查下是否导入了stdlib.h或cstdlib头文件";
-            pats[25] = /puts.*was not declared in this scope/;
-            exps[25] = "puts函数没有声明过就进行调用，检查下是否导入了stdio.h或cstdio头文件";
-            pats[26] = /gets.*was not declared in this scope/;
-            exps[26] = "gets函数没有声明过就进行调用，检查下是否导入了stdio.h或cstdio头文件";
-            pats[27] = /str.*was not declared in this scope/;
-            exps[27] = "string类函数没有声明过就进行调用，检查下是否导入了string.h或cstring头文件";
-            pats[28] = /‘import’ does not name a type/;
-            exps[28] = "不要将Java语言程序提交为C/C++,提交前注意选择语言类型。";
-            pats[29] = /asm’ undeclared/;
-            exps[29] = "不允许在C/C++中嵌入汇编语言代码。";
-            pats[30] = /redefinition of/;
-            exps[30] = "函数或变量重复定义，看看是否多次粘贴代码。";
-            pats[31] = /expected declaration or statement at end of input/;
-            exps[31] = "程序好像没写完，看看是否复制粘贴时漏掉代码。";
-            pats[32] = /warning: unused variable/;
-            exps[32] = "警告：变量声明后没有使用，检查下是否拼写错误，误用了名称相似的变量。";
-            pats[33] = /implicit declaration of function/;
-            exps[33] = "函数隐性声明，检查下是否导入了正确的头文件。或者缺少了题目要求的指定名称的函数。";
-            pats[34] = /too .* arguments to function/;
-            exps[34] = "函数调用时提供的参数数量不对，检查下是否用错参数。";
-            pats[35] = /expected ‘=’, ‘,’, ‘;’, ‘asm’ or ‘__attribute__’ before ‘namespace’/;
-            exps[35] = "不要将C++语言程序提交为C,提交前注意选择语言类型。";
-            pats[36] = /stray ‘\\[0123456789]*’ in program/;
-            exps[36] = "中文空格、标点等不能出现在程序中注释和字符串以外的部分。编写程序时请关闭中文输入法。请不要使用网上复制来的代码。";
-            pats[37] = /division by zero/;
-            exps[37] = "除以零将导致浮点溢出。";
-            pats[38] = /cannot be used as a function/;
-            exps[38] = "变量不能当成函数用，检查变量名和函数名重复的情况，也可能是拼写错误。";
-            pats[39] = /format .* expects type .* but argument .* has type .*/;
-            exps[39] = "scanf/printf的格式描述和后面的参数表不一致，检查是否多了或少了取址符“&”，也可能是拼写错误。";
-            pats[40] = /类.*是公共的，应在名为 .*java 的文件中声明/;
-            exps[40] = "Java语言提交只能有一个public类，并且类名必须是Main，其他类请不要用public关键词";
-            pats[41] = /expected ‘\)’ before ‘.*’ token/;
-            exps[41] = "缺少右括号";
-            pats[42] = /找不到符号/;
-            exps[42] =
-                "使用了未定义的函数或变量，检出拼写是否有误，不要使用不存在的函数，Java调用方法通常需要给出对象名称如list1.add(...)。Java方法调用时对参数类型敏感，如:不能将整数(int)传送给接受字符串对象(String)的方法";
-            pats[43] = /需要为 class、interface 或 enum/;
-            exps[43] = "缺少关键字，应当声明为class、interface 或 enum";
-            pats[44] = /符号： 类 .*List/;
-            exps[44] = "使用教材上的例子，必须将相关类的代码一并提交，同时去掉其中的public关键词";
-            pats[45] = /方法声明无效；需要返回类型/;
-            exps[45] = "只有跟类名相同的方法为构造方法，不写返回值类型。如果将类名修改为Main,请同时修改构造方法名称。";
-            pats[46] = /expected.*before.*&.*token/;
-            exps[46] = "不要将C++语言程序提交为C,提交前注意选择语言类型。";
-            pats[47] = /非法的表达式开始/;
-            exps[47] = "请注意函数、方法的声明前后顺序，不能在一个方法内出现另一个方法的声明。";
-            pats[48] = /需要 ';'/;
-            exps[48] = "上面标注的这一行，最后缺少分号。";
-            pats[49] = /extra tokens at end of #include directive/;
-            exps[49] = "include语句必须独立一行，不能与后面的语句放在同一行";
-            pats[50] = /int.*hasNext/;
-            exps[50] = "hasNext() 应该改为nextInt()";
-            pats[51] = /unterminated comment/;
-            exps[51] = "注释没有结束，请检查“/*”对应的结束符“*/”是否正确";
-            pats[52] = /expected ‘=’, ‘,’, ‘;’, ‘asm’ or ‘__attribute__’ before ‘{’ token/;
-            exps[52] = "函数声明缺少小括号()，如int main()写成了int main";
-            pats[53] = /进行语法解析时已到达文件结尾/;
-            exps[53] = "检查提交的源码是否没有复制完整，或者缺少了结束的大括号";
-            pats[54] = /subscripted value is neither array nor pointer/;
-            exps[54] = "不能对非数组或指针的变量进行下标访问";
-            pats[55] = /expected expression before ‘%’ token/;
-            exps[55] = "scanf的格式部分需要用双引号引起";
-            pats[56] = / expected expression before ‘.*’ token/;
-            exps[56] = "参数或表达式没写完";
-            pats[57] = /expected but/;
-            exps[57] = "错误的标点或符号";
-            pats[58] = /redefinition of ‘main’/;
-            exps[58] = "这道题目可能是附加代码题，请重新审题，看清题意，不要提交系统已经定义的main函数，而应提交指定格式的某个函数。";
-            pats[59] = /iostream: No such file or directory/;
-            exps[59] = "请不要将C++程序提交为C";
-            pats[60] = /expected unqualified-id before ‘\[’ token/;
-            exps[60] = "留意数组声明后是否少了分号";
-            pats[61] = /解析时已到达文件结尾/;
-            exps[61] = "程序末尾缺少大括号";
-            pats[62] = /非法字符/;
-            exps[62] = "检查是否使用了中文标点或空格";
-            pats[63] = /应在名为.*的文件中声明/;
-            exps[63] = "OJ中public类只能是Main";
+var i=0;
+var pats=new Array();
+var exps=new Array();
+pats[i]=/System\.out\.print.*%.*/;
+exps[i++]="<?php echo $MSG_SYSTEM_OUT_PRINT; ?>";
+pats[i]=/.*没有那个文件或目录.*/;
+exps[i++]="<?php echo $MSG_NO_SUCH_FILE_OR_DIRECTORY; ?>";
+pats[i]=/not a statement/;
+exps[i++]="<?php echo $MSG_NOT_A_STATEMENT; ?>";
+pats[i]=/class, interface, or enum expected/;
+exps[i++]="<?php echo $MSG_EXPECTED_CLASS_INTERFACE_ENUM; ?>";
+pats[i]=/asm.*java/;
+exps[i++]="<?php echo $MSG_SUBMIT_JAVA_AS_C_LANG; ?>";
+pats[i]=/package .* does not exist/;
+exps[i++]="<?php echo $MSG_DOES_NOT_EXIST_PACKAGE; ?>";
+pats[i]=/possible loss of precision/;
+exps[i++]="<?php echo $MSG_POSSIBLE_LOSS_OF_PRECISION; ?>";
+pats[i]=/incompatible types/;
+exps[i++]="<?php echo $MSG_INCOMPATIBLE_TYPES; ?>";
+pats[i]=/illegal start of expression/;
+exps[i++]="<?php echo $MSG_ILLEGAL_START_OF_EXPRESSION; ?>";
+pats[i]=/cannot find symbol/;
+exps[i++]="<?php echo $MSG_CANNOT_FIND_SYMBOL; ?>";
+pats[i]=/';' expected/;
+exps[i++]="<?php echo $MSG_EXPECTED_SEMICOLON; ?>";
+pats[i]=/should be declared in a file named/;
+exps[i++]="<?php echo $MSG_DECLARED_JAVA_FILE_NAMED; ?>";
+pats[i]=/expected ‘.*’ at end of input/;
+exps[i++]="<?php echo $MSG_EXPECTED_WILDCARD_CHARACTER_AT_END_OF_INPUT; ?>";
+pats[i]=/invalid conversion from ‘.*’ to ‘.*’/;
+exps[i++]="<?php echo $MSG_INVALID_CONVERSION; ?>";
+pats[i]=/warning.*declaration of 'main' with no type/;
+exps[i++]="<?php echo $MSG_NO_RETURN_TYPE_IN_MAIN; ?>";
+pats[i]=/'.*' was not declared in this scope/;
+exps[i++]="<?php echo $MSG_NOT_DECLARED_IN_SCOPE; ?>";
+pats[i]=/main’ must return ‘int’/;
+exps[i++]="<?php echo $MSG_MAIN_MUST_RETURN_INT; ?>";
+pats[i]=/expected identifier or '\(' before numeric constant/;
+exps[i++]="<?php echo $MSG_EXPECTED_IDENTIFIER; ?>";
+pats[i]=/printf.*was not declared in this scope/;
+exps[i++]="<?php echo $MSG_PRINTF_NOT_DECLARED_IN_SCOPE; ?>";
+pats[i]=/warning: ignoring return value of/;
+exps[i++]="<?php echo $MSG_IGNOREING_RETURN_VALUE; ?>";
+pats[i]=/:.*__int64’ undeclared/;
+exps[i++]="<?php echo $MSG_NOT_DECLARED_INT64; ?>";
+pats[i]=/:.*expected ‘;’ before/;
+exps[i++]="<?php echo $MSG_EXPECTED_SEMICOLON_BEFORE; ?>";
+pats[i]=/ .* undeclared \(first use in this function\)/;
+exps[i++]="<?php echo $MSG_UNDECLARED_NAME; ?>";
+pats[i]=/scanf.*was not declared in this scope/;
+exps[i++]="<?php echo $MSG_SCANF_NOT_DECLARED_IN_SCOPE; ?>";
+pats[i]=/memset.*was not declared in this scope/;
+exps[i++]="<?php echo $MSG_MEMSET_NOT_DECLARED_IN_SCOPE; ?>";
+pats[i]=/malloc.*was not declared in this scope/;
+exps[i++]="<?php echo $MSG_MALLOC_NOT_DECLARED_IN_SCOPE; ?>";
+pats[i]=/puts.*was not declared in this scope/;
+exps[i++]="<?php echo $MSG_PUTS_NOT_DECLARED_IN_SCOPE; ?>";
+pats[i]=/gets.*was not declared in this scope/;
+exps[i++]="<?php echo $MSG_GETS_NOT_DECLARED_IN_SCOPE; ?>";
+pats[i]=/str.*was not declared in this scope/;
+exps[i++]="<?php echo $MSG_STRING_NOT_DECLARED_IN_SCOPE; ?>";
+pats[i]=/‘import’ does not name a type/;
+exps[i++]="<?php echo $MSG_NO_TYPE_IMPORT_IN_C_CPP; ?>";
+pats[i]=/asm’ undeclared/;
+exps[i++]="<?php echo $MSG_ASM_UNDECLARED; ?>";
+pats[i]=/redefinition of/;
+exps[i++]="<?php echo $MSG_REDEFINITION_OF; ?>";
+pats[i]=/expected declaration or statement at end of input/;
+exps[i++]="<?php echo $MSG_EXPECTED_DECLARATION_OR_STATEMENT; ?>";
+pats[i]=/warning: unused variable/;
+exps[i++]="<?php echo $MSG_UNUSED_VARIABLE; ?>";
+pats[i]=/implicit declaration of function/;
+exps[i++]="<?php echo $MSG_IMPLICIT_DECLARTION_OF_FUNCTION; ?>";
+pats[i]=/too .* arguments to function/;
+exps[i++]="<?php echo $MSG_ARGUMENTS_ERROR_IN_FUNCTION; ?>";
+pats[i]=/expected ‘=’, ‘,’, ‘;’, ‘asm’ or ‘__attribute__’ before ‘namespace’/;
+exps[i++]="<?php echo $MSG_EXPECTED_BEFORE_NAMESPACE; ?>";
+pats[i]=/stray ‘\\[0123456789]*’ in program/;
+exps[i++]="<?php echo $MSG_STRAY_PROGRAM; ?>";
+pats[i]=/division by zero/;
+exps[i++]="<?php echo $MSG_DIVISION_BY_ZERO; ?>";
+pats[i]=/cannot be used as a function/;
+exps[i++]="<?php echo $MSG_CANNOT_BE_USED_AS_A_FUNCTION; ?>";
+pats[i]=/format .* expects type .* but argument .* has type .*/;
+exps[i++]="<?php echo $MSG_CANNOT_FIND_TYPE; ?>";
+pats[i]=/类.*是公共的，应在名为 .*java 的文件中声明/;
+exps[i++]="<?php echo $MSG_JAVA_CLASS_ERROR; ?>";
+pats[i]=/expected ‘\)’ before ‘.*’ token/;
+exps[i++]="<?php echo $MSG_EXPECTED_BRACKETS_TOKEN; ?>";
+pats[i]=/找不到符号/;
+exps[i++]="<?php echo $MSG_NOT_FOUND_SYMBOL; ?>";
+pats[i]=/需要为 class、interface 或 enum/;
+exps[i++]="<?php echo $MSG_NEED_CLASS_INTERFACE_ENUM; ?>";
+pats[i]=/符号： 类 .*List/;
+exps[i++]="<?php echo $MSG_CLASS_SYMBOL_ERROR; ?>";
+pats[i]=/方法声明无效；需要返回类型/;
+exps[i++]="<?php echo $MSG_INVALID_METHOD_DECLARATION; ?>";
+pats[i]=/expected.*before.*&.*token/;
+exps[i++]="<?php echo $MSG_EXPECTED_AMPERSAND_TOKEN; ?>";
+pats[i]=/非法的表达式开始/;
+exps[i++]="<?php echo $MSG_DECLARED_FUNCTION_ORDER; ?>";
+pats[i]=/需要 ';'/;
+exps[i++]="<?php echo $MSG_NEED_SEMICOLON; ?>";
+pats[i]=/extra tokens at end of #include directive/;
+exps[i++]="<?php echo $MSG_EXTRA_TOKEN_AT_END_OF_INCLUDE; ?>";
+pats[i]=/int.*hasNext/;
+exps[i++]="<?php echo $MSG_INT_HAS_NEXT; ?>";
+pats[i]=/unterminated comment/;
+exps[i++]="<?php echo $MSG_UNTERMINATED_COMMENT; ?>";
+pats[i]=/expected '=’, ‘,’, ‘;’, ‘asm’ or ‘__attribute__’ before ‘{’ token/;
+exps[i++]="<?php echo $MSG_EXPECTED_BRACES_TOKEN; ?>";
+pats[i]=/进行语法解析时已到达文件结尾/;
+exps[i++]="<?php echo $MSG_REACHED_END_OF_FILE_1; ?>";
+pats[i]=/subscripted value is neither array nor pointer/;
+exps[i++]="<?php echo $MSG_SUBSCRIPT_ERROR; ?>";
+pats[i]=/expected expression before ‘%’ token/;
+exps[i++]="<?php echo $MSG_EXPECTED_PERCENT_TOKEN; ?>";
+pats[i]=/expected expression before ‘.*’ token/;
+exps[i++]="<?php echo $MSG_EXPECTED_EXPRESSION_TOKEN; ?>";
+pats[i]=/expected but/;
+exps[i++]="<?php echo $MSG_EXPECTED_BUT; ?>";
+pats[i]=/redefinition of ‘main’/;
+exps[i++]="<?php echo $MSG_REDEFINITION_MAIN; ?>";
+pats[i]=/iostream: No such file or directory/;
+exps[i++]="<?php echo $MSG_IOSTREAM_ERROR; ?>";
+pats[i]=/expected unqualified-id before ‘\[’ token/;
+exps[i++]="<?php echo $MSG_EXPECTED_UNQUALIFIED_ID_TOKEN; ?>";
+pats[i]=/解析时已到达文件结尾/;
+exps[i++]="<?php echo $MSG_REACHED_END_OF_FILE_2; ?>";
+pats[i]=/非法字符/;
+exps[i++]="<?php echo $MSG_INVALID_SYMBOL; ?>";
+pats[i]=/应在名为.*的文件中声明/;
+exps[i++]="<?php echo $MSG_DECLARED_FILE_NAMED; ?>";
+pats[i]=/variably modified/;
+exps[i++]="<?php echo $MSG_VARIABLY_MODIFIED; ?>";
+// 继续添加更多gcc/g++编译错误模式
+pats[i]=/error: expected initializer before/;
+exps[i++]="<?php echo $MSG_EXPECTED_INITIALIZER; ?>";
+pats[i]=/error: '.*' does not name a type/;
+exps[i++]="<?php echo $MSG_DOES_NOT_NAME_A_TYPE; ?>";
+pats[i]=/error: expected constructor, destructor, or type conversion before/;
+exps[i++]="<?php echo $MSG_EXPECTED_CONSTRUCTOR_DESTRUCTOR; ?>";
+pats[i]=/error: '.*' was not declared in this scope/;
+exps[i++]="<?php echo $MSG_VARIABLE_NOT_DECLARED_IN_SCOPE; ?>";
+pats[i]=/error: invalid types/;
+exps[i++]="<?php echo $MSG_INVALID_TYPES; ?>";
+pats[i]=/error: too few arguments to function/;
+exps[i++]="<?php echo $MSG_TOO_FEW_ARGUMENTS; ?>";
+pats[i]=/error: too many arguments to function/;
+exps[i++]="<?php echo $MSG_TOO_MANY_ARGUMENTS; ?>";
+pats[i]=/error: return-statement with no value/;
+exps[i++]="<?php echo $MSG_RETURN_NO_VALUE; ?>";
+pats[i]=/error: void value not ignored as it ought to be/;
+exps[i++]="<?php echo $MSG_VOID_VALUE_NOT_IGNORED; ?>";
+pats[i]=/error: lvalue required as left operand of assignment/;
+exps[i++]="<?php echo $MSG_LVALUE_REQUIRED; ?>";
+pats[i]=/error: invalid operands of types [^\n\u2028\u2029]* to binary/;
+exps[i++]="<?php echo $MSG_INVALID_OPERANDS; ?>";
+pats[i]=/error: request for member '.*' in '.*', which is of non-class type/;
+exps[i++]="<?php echo $MSG_REQUEST_FOR_MEMBER; ?>";
+pats[i]=/error: '.*' cannot be used as a function/;
+exps[i++]="<?php echo $MSG_CANNOT_USE_AS_FUNCTION; ?>";
+pats[i]=/error: new types may not be defined in a return type/;
+exps[i++]="<?php echo $MSG_NEW_TYPES_IN_RETURN; ?>";
+pats[i]=/error: two or more data types in declaration of/;
+exps[i++]="<?php echo $MSG_TWO_OR_MORE_DATA_TYPES; ?>";
+pats[i]=/error: expected ';' after struct definition/;
+exps[i++]="<?php echo $MSG_EXPECTED_SEMICOLON_AFTER_STRUCT; ?>";
+pats[i]=/error: array bound is not an integer constant/;
+exps[i++]="<?php echo $MSG_ARRAY_BOUND_NOT_CONSTANT; ?>";
+pats[i]=/error: storage size of '.*' isn't known/;
+exps[i++]="<?php echo $MSG_STORAGE_SIZE_UNKNOWN; ?>";
+pats[i]=/error: '.*' has incomplete type/;
+exps[i++]="<?php echo $MSG_INCOMPLETE_TYPE; ?>";
+pats[i]=/error: '.*' undeclared \(first use in this function\)/;
+exps[i++]="<?php echo $MSG_UNDECLARED_FIRST_USE; ?>";
+pats[i]=/error: jump to case label/;
+exps[i++]="<?php echo $MSG_JUMP_TO_CASE_LABEL; ?>";
+pats[i]=/error: crosses initialization of/;
+exps[i++]="<?php echo $MSG_CROSSES_INITIALIZATION; ?>";
+pats[i]=/error: invalid conversion from '.*' to '.*'/;
+exps[i++]="<?php echo $MSG_INVALID_CONVERSION_TYPES; ?>";
+pats[i]=/error: cannot convert '.*' to '.*' in assignment/;
+exps[i++]="<?php echo $MSG_CANNOT_CONVERT_IN_ASSIGNMENT; ?>";
+pats[i]=/error: no match for 'operator.*'/;
+exps[i++]="<?php echo $MSG_NO_MATCH_FOR_OPERATOR; ?>";
+pats[i]=/error: template instantiation depth exceeds maximum of/;
+exps[i++]="<?php echo $MSG_TEMPLATE_INSTANTIATION_DEPTH; ?>";
+pats[i]=/error: expected primary-expression before/;
+exps[i++]="<?php echo $MSG_EXPECTED_PRIMARY_EXPRESSION; ?>";
+pats[i]=/error: expected ',' or ';' before/;
+exps[i++]="<?php echo $MSG_EXPECTED_COMMA_OR_SEMICOLON; ?>";
 
-            function explain() {
-                //alert("asdf");
-                var errmsg = $("#errtxt").text();
-                var expmsg = "";
-                for (var i = 0; i < pats.length; i++) {
-                    var pat = pats[i];
-                    var exp = exps[i];
-                    var ret = pat.exec(errmsg);
-                    if (ret) {
-                        expmsg += ret + ":" + exp + "<br><hr>";
-                    }
+// 添加更多警告信息
+pats[i]=/warning: control reaches end of non-void function/;
+exps[i++]="<?php echo $MSG_CONTROL_REACHES_END; ?>";
+pats[i]=/warning: comparison between signed and unsigned integer/;
+exps[i++]="<?php echo $MSG_SIGNED_UNSIGNED_COMPARISON; ?>";
+pats[i]=/warning: deprecated conversion from string constant to/;
+exps[i++]="<?php echo $MSG_DEPRECATED_CONVERSION; ?>";
+pats[i]=/warning: overflow in implicit constant conversion/;
+exps[i++]="<?php echo $MSG_OVERFLOW_IN_CONVERSION; ?>";
+pats[i]=/warning: non-static data member initializers only available with/;
+exps[i++]="<?php echo $MSG_NON_STATIC_INITIALIZERS; ?>";
+pats[i]=/warning: extended initializer lists only available with/;
+exps[i++]="<?php echo $MSG_EXTENDED_INITIALIZER_LISTS; ?>";
+pats[i]=/warning: 'auto' changes meaning in C\+\+11/;
+exps[i++]="<?php echo $MSG_AUTO_CHANGES_MEANING; ?>";
+pats[i]=/warning: lambda expressions only available with/;
+exps[i++]="<?php echo $MSG_LAMBDA_EXPRESSIONS; ?>";
+
+// 链接器错误
+pats[i]=/undefined reference to/;
+exps[i++]="<?php echo $MSG_UNDEFINED_REFERENCE; ?>";
+pats[i]=/multiple definition of/;
+exps[i++]="<?php echo $MSG_MULTIPLE_DEFINITION; ?>";
+pats[i]=/ld returned 1 exit status/;
+exps[i++]="<?php echo $MSG_LD_RETURNED_EXIT_STATUS; ?>";
+pats[i]=/collect2: error: ld returned 1 exit status/;
+exps[i++]="<?php echo $MSG_COLLECT2_LD_ERROR; ?>";
+
+// C++特定错误
+pats[i]=/error: '.*' is not a member of '.*'/;
+exps[i++]="<?php echo $MSG_NOT_A_MEMBER_OF; ?>";
+pats[i]=/error: '.*' was not declared in this scope/;
+exps[i++]="<?php echo $MSG_NOT_DECLARED_IN_THIS_SCOPE; ?>";
+pats[i]=/error: '.*' has not been declared/;
+exps[i++]="<?php echo $MSG_HAS_NOT_BEEN_DECLARED; ?>";
+pats[i]=/error: expected class-name before '.*' token/;
+exps[i++]="<?php echo $MSG_EXPECTED_CLASS_NAME; ?>";
+pats[i]=/error: expected '\)' before '.*' token/;
+exps[i++]="<?php echo $MSG_EXPECTED_CLOSE_PAREN; ?>";
+pats[i]=/error: expected ',' or '\.\.\.' before '.*' token/;
+exps[i++]="<?php echo $MSG_EXPECTED_COMMA_OR_ELLIPSIS; ?>";
+pats[i]=/error: ISO C\+\+ forbids declaration of '.*' with no type/;
+exps[i++]="<?php echo $MSG_FORBIDS_DECLARATION_NO_TYPE; ?>";
+
+// 模板相关错误
+pats[i]=/error: missing template arguments before/;
+exps[i++]="<?php echo $MSG_MISSING_TEMPLATE_ARGUMENTS; ?>";
+pats[i]=/error: 'template' keyword may not be used in this context/;
+exps[i++]="<?php echo $MSG_TEMPLATE_KEYWORD_CONTEXT; ?>";
+pats[i]=/error: too many template-parameter-lists/;
+exps[i++]="<?php echo $MSG_TOO_MANY_TEMPLATE_PARAMS; ?>";
+
+// 预处理错误
+pats[i]=/error: #error.*/;
+exps[i++]="<?php echo $MSG_PREPROCESSOR_ERROR; ?>";
+pats[i]=/error: missing terminating " character/;
+exps[i++]="<?php echo $MSG_MISSING_TERMINATING_QUOTE; ?>";
+pats[i]=/error: missing terminating ' character/;
+exps[i++]="<?php echo $MSG_MISSING_TERMINATING_APOSTROPHE; ?>";
+pats[i]=/error: unterminated #ifndef/;
+exps[i++]="<?php echo $MSG_UNTERMINATED_IFNDEF; ?>";
+pats[i]=/error: #include expects "FILENAME" or <FILENAME>/;
+exps[i++]="<?php echo $MSG_INCLUDE_EXPECTS; ?>";
+
+// 内存相关错误
+pats[i]=/error: invalid use of void expression/;
+exps[i++]="<?php echo $MSG_INVALID_USE_OF_VOID; ?>";
+pats[i]=/error: double free or corruption/;
+exps[i++]="<?php echo $MSG_DOUBLE_FREE_OR_CORRUPTION; ?>";
+pats[i]=/error: invalid next size/;
+exps[i++]="<?php echo $MSG_INVALID_NEXT_SIZE; ?>";
+pats[i]=/error: corrupted double-linked list/;
+exps[i++]="<?php echo $MSG_CORRUPTED_DOUBLE_LINKED_LIST; ?>";
+
+// 标准库相关错误
+pats[i]=/error: '.*' is not a member of 'std'/;
+exps[i++]="<?php echo $MSG_NOT_MEMBER_OF_STD; ?>";
+pats[i]=/error: 'cout' was not declared in this scope/;
+exps[i++]="<?php echo $MSG_COUT_NOT_DECLARED; ?>";
+pats[i]=/error: 'cin' was not declared in this scope/;
+exps[i++]="<?php echo $MSG_CIN_NOT_DECLARED; ?>";
+pats[i]=/error: 'endl' was not declared in this scope/;
+exps[i++]="<?php echo $MSG_ENDL_NOT_DECLARED; ?>";
+
+// C++11/14/17特性相关错误
+pats[i]=/error: 'nullptr' was not declared in this scope/;
+exps[i++]="<?php echo $MSG_NULLPTR_NOT_DECLARED; ?>";
+pats[i]=/error: 'constexpr' was not declared in this scope/;
+exps[i++]="<?php echo $MSG_CONSTEXPR_NOT_DECLARED; ?>";
+pats[i]=/error: range-based 'for' loops are not allowed in C\+\+98 mode/;
+exps[i++]="<?php echo $MSG_RANGE_BASED_FOR_NOT_ALLOWED; ?>";
+
+// 添加更多中文错误信息（针对中文版编译器）
+pats[i]=/错误：expected/;
+exps[i++]="<?php echo $MSG_CHINESE_EXPECTED; ?>";
+pats[i]=/错误：在.*之前应有/;
+exps[i++]="<?php echo $MSG_CHINESE_SHOULD_HAVE_BEFORE; ?>";
+pats[i]=/错误：无法将.*转换为.*/;
+exps[i++]="<?php echo $MSG_CHINESE_CANNOT_CONVERT; ?>";
+pats[i]=/错误：对.*的引用未定义/;
+exps[i++]="<?php echo $MSG_CHINESE_UNDEFINED_REFERENCE; ?>";
+
+// 数学和算法相关错误
+pats[i]=/error: 'pow' was not declared in this scope/;
+exps[i++]="<?php echo $MSG_POW_NOT_DECLARED; ?>";
+pats[i]=/error: 'sqrt' was not declared in this scope/;
+exps[i++]="<?php echo $MSG_SQRT_NOT_DECLARED; ?>";
+pats[i]=/error: 'abs' was not declared in this scope/;
+exps[i++]="<?php echo $MSG_ABS_NOT_DECLARED; ?>";
+
+// 文件操作错误
+pats[i]=/error: 'fopen' was not declared in this scope/;
+exps[i++]="<?php echo $MSG_FOPEN_NOT_DECLARED; ?>";
+pats[i]=/error: 'FILE' was not declared in this scope/;
+exps[i++]="<?php echo $MSG_FILE_NOT_DECLARED; ?>";
+
+// 时间函数错误
+pats[i]=/error: 'clock' was not declared in this scope/;
+exps[i++]="<?php echo $MSG_CLOCK_NOT_DECLARED; ?>";
+pats[i]=/error: 'CLOCKS_PER_SEC' was not declared in this scope/;
+exps[i++]="<?php echo $MSG_CLOCKS_PER_SEC_NOT_DECLARED; ?>";
+
+// ============================================================
+// 依据 ai_kb 真实语料(22067 条学生报错)的覆盖率报告补齐, 2026-10
+// ============================================================
+// ---- 依据 ai_kb 真实语料(22067 条学生报错)的覆盖率报告补齐, 括号内为命中条数 ----
+pats[i]=/error: invalid operands of types [^\n\u2028\u2029]* to binary/;
+exps[i++]="<?php echo $MSG_INVALID_OPERANDS_TYPES; ?>";
+pats[i]=/unable to find string literal operator/;
+exps[i++]="<?php echo $MSG_UNABLE_FIND_STRING_OPERATOR; ?>";
+pats[i]=/no matching function for call to/;
+exps[i++]="<?php echo $MSG_NO_MATCHING_FUNCTION_CALL; ?>";
+pats[i]=/error: expected unqualified-id before/;
+exps[i++]="<?php echo $MSG_EXPECTED_UNQUALIFIED_ID_BEFORE; ?>";
+pats[i]=/error: expected unqualified-id at end of input/;
+exps[i++]="<?php echo $MSG_EXPECTED_UNQUALIFIED_ID_AT_EOF; ?>";
+pats[i]=/without a previous/;
+exps[i++]="<?php echo $MSG_WITHOUT_PREVIOUS_DECL; ?>";
+pats[i]=/ISO C\+\+ forbids comparison between pointer and integer/;
+exps[i++]="<?php echo $MSG_FORBIDS_PTR_INT_COMPARE; ?>";
+pats[i]=/comparison of integer expressions of different signedness/;
+exps[i++]="<?php echo $MSG_SIGN_COMPARE; ?>";
+pats[i]=/unable to find numeric literal operator/;
+exps[i++]="<?php echo $MSG_UNABLE_FIND_NUMERIC_OPERATOR; ?>";
+pats[i]=/has no member named/;
+exps[i++]="<?php echo $MSG_HAS_NO_MEMBER_NAMED; ?>";
+pats[i]=/redeclaration of/;
+exps[i++]="<?php echo $MSG_REDECLARATION_OF; ?>";
+pats[i]=/expected declaration before/;
+exps[i++]="<?php echo $MSG_EXPECTED_DECLARATION_BEFORE; ?>";
+pats[i]=/empty character constant/;
+exps[i++]="<?php echo $MSG_EMPTY_CHAR_CONSTANT; ?>";
+pats[i]=/conflicting declaration/;
+exps[i++]="<?php echo $MSG_CONFLICTING_DECLARATION; ?>";
+pats[i]=/break statement not within loop or switch/;
+exps[i++]="<?php echo $MSG_BREAK_OUTSIDE_LOOP; ?>";
+pats[i]=/reference to [^\n\u2028\u2029]* is ambiguous/;
+exps[i++]="<?php echo $MSG_REFERENCE_AMBIGUOUS; ?>";
+pats[i]=/invalid use of member function/;
+exps[i++]="<?php echo $MSG_INVALID_USE_MEMBER_FUNCTION; ?>";
+pats[i]=/stray [^\n\u2028\u2029]* in program/;
+exps[i++]="<?php echo $MSG_STRAY_PROGRAM; ?>";
+pats[i]=/missing terminating > character/;
+exps[i++]="<?php echo $MSG_MISSING_TERMINATING_GT; ?>";
+pats[i]=/extended character [^\n\u2028\u2029]* is not valid in an identifier/;
+exps[i++]="<?php echo $MSG_EXTENDED_CHARACTER; ?>";
+pats[i]=/a function-definition is not allowed here before/;
+exps[i++]="<?php echo $MSG_FUNCTION_DEF_NOT_ALLOWED; ?>";
+pats[i]=/error: expected identifier before/;
+exps[i++]="<?php echo $MSG_EXPECTED_IDENTIFIER_BEFORE; ?>";
+pats[i]=/return-statement with a value, in function returning/;
+exps[i++]="<?php echo $MSG_RETURN_WITH_VALUE; ?>";
+pats[i]=/error: cannot convert [^\n\u2028\u2029]* to [^\n\u2028\u2029]*/;
+exps[i++]="<?php echo $MSG_CANNOT_CONVERT; ?>";
+pats[i]=/invalid type argument of unary/;
+exps[i++]="<?php echo $MSG_INVALID_TYPE_ARG_UNARY; ?>";
+pats[i]=/array must be initialized with a brace-enclosed initializer/;
+exps[i++]="<?php echo $MSG_ARRAY_BRACE_INIT; ?>";
+pats[i]=/conversion from [^\n\u2028\u2029]* to non-scalar type/;
+exps[i++]="<?php echo $MSG_CONVERSION_TO_NON_SCALAR; ?>";
+pats[i]=/statement cannot resolve address of overloaded function/;
+exps[i++]="<?php echo $MSG_CANNOT_RESOLVE_OVERLOADED; ?>";
+pats[i]=/fatal error: [^\n\u2028\u2029]*: No such file or directory/;
+exps[i++]="<?php echo $MSG_NO_SUCH_FILE_EN; ?>";
+pats[i]=/error: expected [^\n\u2028\u2029]* before/;
+exps[i++]="<?php echo $MSG_EXPECTED_GENERIC; ?>";
+pats[i]=/error: expected [^\n\u2028\u2029]* at end of input/;
+exps[i++]="<?php echo $MSG_EXPECTED_AT_EOF; ?>";
+pats[i]=/to match this .\{/;
+exps[i++]="<?php echo $MSG_TO_MATCH_THIS_BRACE; ?>";
+pats[i]=/suggest parentheses around assignment used as truth value/;
+exps[i++]="<?php echo $MSG_ASSIGN_USED_AS_TRUTH; ?>";
+pats[i]=/misleading-indentation/;
+exps[i++]="<?php echo $MSG_MISLEADING_INDENT; ?>";
+pats[i]=/statement has no effect/;
+exps[i++]="<?php echo $MSG_STATEMENT_NO_EFFECT; ?>";
+pats[i]=/control reaches end of non-void function/;
+exps[i++]="<?php echo $MSG_CONTROL_REACHES_END_GENERIC; ?>";
+pats[i]=/unused parameter/;
+exps[i++]="<?php echo $MSG_UNUSED_PARAMETER; ?>";
+pats[i]=/No such file or directory/;
+exps[i++]="<?php echo $MSG_NO_SUCH_FILE_EN2; ?>";
+pats[i]=/\u2018void\u2019 value not ignored as it ought to be/;
+exps[i++]="<?php echo $MSG_VOID_VALUE_NOT_IGNORED; ?>";
+// ---- 长尾补齐 (语料中每类 2~30 条) ----
+pats[i]=/size of array [^\n\u2028\u2029]* is not an integral constant-expression/;
+exps[i++]="<?php echo $MSG_ARRAY_SIZE_NOT_CONST; ?>";
+pats[i]=/could not convert [^\n\u2028\u2029]* from/;
+exps[i++]="<?php echo $MSG_COULD_NOT_CONVERT; ?>";
+pats[i]=/initializer-string for [^\n\u2028\u2029]* is too long/;
+exps[i++]="<?php echo $MSG_INITIALIZER_STRING_TOO_LONG; ?>";
+pats[i]=/declaration of [^\n\u2028\u2029]* shadows a parameter/;
+exps[i++]="<?php echo $MSG_SHADOWS_PARAMETER; ?>";
+pats[i]=/conversion from [^\n\u2028\u2029]* in a converted constant expression/;
+exps[i++]="<?php echo $MSG_CONSTANT_EXPR_CONVERSION; ?>";
+pats[i]=/\u2018case\u2019 label does not reduce to an integer constant/;
+exps[i++]="<?php echo $MSG_CASE_NOT_INTEGER; ?>";
+pats[i]=/invalid operand to binary expression/;
+exps[i++]="<?php echo $MSG_INVALID_OPERAND_BINARY; ?>";
+pats[i]=/\u2018return\u2019 with no value, in function returning/;
+exps[i++]="<?php echo $MSG_RETURN_NO_VALUE2; ?>";
+pats[i]=/\u2018main\u2019 must return \u2018int\u2019/;
+exps[i++]="<?php echo $MSG_MAIN_MUST_RETURN_INT2; ?>";
+pats[i]=/ISO C\+\+ forbids braced-groups within expressions/;
+exps[i++]="<?php echo $MSG_FORBIDS_BRACED_GROUP; ?>";
+// ======================================================================
+// 编译报错解释 —— 2026-10 重写
+// 背景: ai_kb 用 22067 条真实学生报错测出来的三个问题
+//   1) gcc 报错用中文弯引号 U+2018/U+2019, 而本页大量正则写的是直引号,
+//      不归一化则覆盖率只有 50.7%
+//   2) 匹配到的内容来自学生自己提交的源码, 直接进 innerHTML 是 DOM XSS
+//   3) 一条错误常同时命中 3~5 条规则, 学生要连看几遍几乎一样的解释
+// 说明: 试过倒排索引预筛(候选砍到 22.7/198)反而比全量慢 0.69x ——
+//      V8 原生正则已是最优实现, JS 层再做 Map/Set 过滤得不偿失, 故保持直扫。
+// ======================================================================
+function nq(s){
+        return String(s).replace(/\u2018/g,"\'").replace(/\u2019/g,"\'");
+}
+// HTML 转义: 匹配结果里有学生写的 <img onerror=...> 之类内容时必须转义
+function hesc(s){
+        return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;")
+                        .replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+}
+var RX=null;
+function build_rx(){
+        if(RX) return;
+        RX=[];
+        for(var i=0;i<pats.length;i++){
+                try{ RX[i]=new RegExp(nq(pats[i].source)); }
+                catch(e){ RX[i]=null; }   // 个别正则不兼容时跳过, 不影响其它
+        }
+}
+function explain(){
+        build_rx();
+        //alert("asdf");
+        var errmsg=$("#errtxt").text();
+        var normmsg=nq(errmsg);
+        var expmsg="",seen={};
+        for(var i=0;i<RX.length;i++){
+                if(!RX[i]) continue;
+                var ret=RX[i].exec(normmsg);
+                if(!ret) continue;
+                var exp=exps[i]||"";
+                if(seen[exp]) continue;        // 同一条解释只显示一次
+                seen[exp]=1;
+                expmsg+="<code>"+hesc(ret[0])+"</code> "+hesc(exp)+"<br>";
+        }
+        document.getElementById("errexp").innerHTML=expmsg;
+        //alert(expmsg);
+            var resultVariable = errmsg;
+                var errorLines = [];
+                var regex = /(\w+\.<?php echo $language_ext[$lang]?>):(\d+):\d+:/g;
+                var match;
+                while ((match = regex.exec(resultVariable)) !== null) {
+                    var lineNumber = parseInt(match[2], 10);
+                    errorLines.push(lineNumber);
                 }
-                document.getElementById("errexp").innerHTML = expmsg;
-                //alert(expmsg);
-            }
+                errorLines.forEach(function(line) {
+                        console.log("line"+line);
+                        $("div .number"+line).addClass("highlighted");
+                });
+         <?php if (isset($OJ_AI_API_URL)&&!empty($OJ_AI_API_URL)){ ?>
+                expmsg+="AI 答疑 ...<img src='image/loader.gif'>";
+				$("#errexp").html(expmsg);
+		    $.ajax({
+			url: '<?php echo $OJ_AI_API_URL ?>?sid=<?php echo $id?>', 
+			type: 'GET',
+			success: function(data) {
+				if(parseInt(data)>0)
+					window.setTimeout('pull_result('+data+')',2000);
+				else{
+					fill_data(data);		
+				}
+			},
+			error: function() {
+			    console.log('获取数据失败');
+			}
+		    });
+        <?php } ?>
+
+}
+
+function fill_data(data){
+    $("#errexp").html(data);
+    $("#errexp").html(marked.parse($("#errexp").text()));
+    // mdui 用 KaTeX, AI 回答插入后需要重新排版
+    if (typeof renderMathInElement !== 'undefined') {
+        try { renderMathInElement(document.getElementById('errexp'), katex_options); }
+        catch (e) { console.error('KaTeX render error:', e); }
+    }
+}
+function pull_result(id){
+	console.log(id);
+    $.ajax({
+	url: '../aiapi/ajax.php', 
+	type: 'GET',
+	data: { id: id },
+	success: function(data) {
+		if(data=='waiting'){
+			window.setTimeout('pull_result('+id+')',2000);
+		}else{
+			fill_data(data);
+		    $('#ai_bt').val('再来一次');
+		    $('#ai_bt').prop('disabled', false);
+		}
+	},
+	error: function() {
+	    $('#ai_bt').val('获取数据失败');
+	    $('#ai_bt').prop('disabled', false);
+	}
+    });
+}
             </script>
 
         </div>
@@ -190,7 +571,9 @@ if (__FILE__ === $_SERVER['SCRIPT_FILENAME']) {
             url: "showsource2.php?id=<?php echo $id?>",
             success: function(data) {
                 $('#source').html(data);
-                hljs.highlightBlock(document.getElementById('source-code'));
+                explain();
+                var code = document.getElementById('source-code');
+                if (code) hljs.highlightBlock(code);
             }
         });
     });
