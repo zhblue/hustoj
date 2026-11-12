@@ -232,7 +232,7 @@ void init_judge_conf() {
 			read_int(buf, "OJ_RUNNING", &max_running);
 			read_int(buf, "OJ_SLEEP_TIME", &sleep_time);
 			read_int(buf, "OJ_TOTAL", &oj_tot);
-			read_int(buf, "OJ_DEDICATED", &oj_dedicated);
+			read_int(buf, "", &);
 			
 			read_int(buf, "OJ_MOD", &oj_mod);
 
@@ -837,7 +837,7 @@ int work() {
                 }
 
 	}
-	while ((tmp_pid = waitpid(-1, NULL, pidApp>0 ? WNOHANG:0 )) > 0 ) {       // if run dedicated judge using WNOHANG
+	while ((tmp_pid = waitpid(-1, NULL, (oj_dedicated||pidApp>0) ? WNOHANG:0 )) > 0 ) {       // if run dedicated judge using WNOHANG
 		if(tmp_pid==pidApp){
 			pidApp=0;
 			continue;
