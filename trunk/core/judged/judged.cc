@@ -232,7 +232,7 @@ void init_judge_conf() {
 			read_int(buf, "OJ_RUNNING", &max_running);
 			read_int(buf, "OJ_SLEEP_TIME", &sleep_time);
 			read_int(buf, "OJ_TOTAL", &oj_tot);
-			read_int(buf, "", &);
+			read_int(buf, "OJ_DEDICATED", &oj_dedicated);
 			
 			read_int(buf, "OJ_MOD", &oj_mod);
 
