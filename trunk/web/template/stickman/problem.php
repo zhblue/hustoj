@@ -563,7 +563,7 @@ function renderMathJax() {
 			let htm=$(this).html();
 			let cur=$(this);
                         if(htm.indexOf("```")!=-1){
-                                htm=$(this).text();                     
+                              //  htm=$(this).text();                     
 			}
 			marked.parse(htm).then(html => { 
 				cur.html(html); 
