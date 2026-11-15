@@ -1,7 +1,7 @@
 <?php
 ini_set("display_errors", "Off");  // 生产环境应关闭调试
 require_once ("admin-header.php");
-if (!(isset($_SESSION[$OJ_NAME . '_' . 'administrator']) || isset($_SESSION[$OJ_NAME . '_user_adder']))) {
+if (!(isset($_SESSION[$OJ_NAME . '_' . 'administrator']) || isset($_SESSION[$OJ_NAME . '_problem_importer']))) {
     exit(1);
 }
 if (isset($OJ_LANG)) {
@@ -9,6 +9,7 @@ if (isset($OJ_LANG)) {
 }
 require_once ("../include/const.inc.php");
 require_once ("../include/my_func.inc.php");
+require_once("../include/check_post_key.php");
 ?>
 
 <?php
@@ -21,6 +22,11 @@ function import_user($filename) {
 	if(!isset($OJ_EXPIRY_DAYS)) $OJ_EXPIRY_DAYS=365;
     $check=false;
     $expire=false;
+    $admins=array();
+    $adminq=pdo_query("select distinct user_id from privilege where rightstr in('administrator','contest_creator','problem_editor','source_browser','user_adder','password_setter','http_judge','printer','balloon','problem_verifiter')");
+    foreach($adminq as $row){
+    	if(!empty($row['user_id'])) array_push($admins,$row['admin']);
+    }
     if (($h = fopen("{$filename}", "r")) !== FALSE) {
         // 文件中的每一行数据都被转换为我们调用的单个数组$data
         // 数组的每个元素以逗号分隔
@@ -47,6 +53,10 @@ function import_user($filename) {
 	    }
             if($check){
                     $user_id = mb_trim($data[0]);
+		    if(in_array($user_id,$admins)){
+			    echo "Skip ".htmlentities($user_id);
+			    continue;
+		    }
                     $nick = $data[1];
                     $password = pwGen(trim($data[2]));
                     $school = "";
