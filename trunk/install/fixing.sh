@@ -40,7 +40,7 @@ if [ `whoami` = "root" ];then
         cd ../..
 	chown $WWW:$WWW -R src
 	chown $WWW:judge -R data
-	chmod 750 -R /home/judge/data 
+	chmod 751 -R /home/judge/data 
 	chmod 700 /home/judge/etc/judge.conf
 else
 	echo "usage: sudo $0"
