@@ -172,7 +172,7 @@ document.addEventListener('keydown', function(e) {
       <h4 class="ui top attached block header"><?php if(!(str_contains($row['description'],"问题描述")|| str_contains($row['description'],$MSG_Description))) echo $MSG_Description?></h4>
       <div id="description" class="ui bottom attached segment font-content">
 		<?php if (str_contains($row['description'],"md auto_select")|| str_contains($row['description'],"<svg") ){
-                                 echo ($row['description']);
+                                 echo escape_cpp_headers($row['description']);
                       }else{
                                  echo $OJ_BBCODE_IN_PROBLEM?bbcode_to_html($row['description']):$row['description'] ;
                       }
