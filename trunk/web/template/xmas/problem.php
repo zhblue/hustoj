@@ -532,7 +532,7 @@ var mathjaxRended=false;
 		if (statusTxt === "success") {
 			if(!mathjaxRended){
 				mathjaxRended=true;
-				window.setTimeout("MathJax.typeset();",800);
+				//window.setTimeout("MathJax.typeset();",800);
 			
 			}
 		}
@@ -560,7 +560,7 @@ var mathjaxRended=false;
 				cur.html(html); 
 				if(!mathjaxRended){
 					mathjaxRended=true;
-					window.setTimeout("MathJax.typeset();",800);
+					//window.setTimeout("MathJax.typeset();",800);
 				}
 				<?php if ( $row['spj']>1 ){?>
 					window.setTimeout("generateMarkdownAutoSelect();",100);
@@ -597,7 +597,7 @@ var mathjaxRended=false;
 	    transform();
 	<?php }?>
 	admin_mod(); 
-	MathJax.typeset();
+	//MathJax.typeset();
 
 	<?php if ( $row['spj']>1 ){?>
 		window.setTimeout("generateAutoSelect();",100);
@@ -755,7 +755,7 @@ $(document).ready(function () {
     <!--以下为了加载公式的使用而既加入-->
 <script>
   MathJax = {
-    startup : { typeset: false  } ,
+    startup : { typeset: true  } ,
     tex: {inlineMath: [['$', '$'], ['\\(', '\\)'], ['\\[', '\\]']]}
   };
 </script>

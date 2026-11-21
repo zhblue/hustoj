@@ -1,9 +1,4 @@
 <?php
-if (__FILE__ === $_SERVER['SCRIPT_FILENAME']) {
-    // 当前文件就是用户直接请求的入口脚本
-    http_response_code(403);
-    exit('Direct access is not allowed.');
-}
           if($pr_flag){
             $show_title="P$id - ".$row['title']." - $OJ_NAME";
           }else{
@@ -81,7 +76,7 @@ if(file_exists($solution_file)){
       </div>
       <div class="row" style="margin-top: -23px">
         <!--   <span class="ui label">题目类型：传统</span> -->
-          <span class="ui label"><?php echo $MSG_JUDGE_STYLE ?>：<?php echo array($MSG_NJ,$MSG_SPJ,$MSG_RTJ,$MSG_INTERACT,$MSG_COMMUNICATION)[$row['spj']] ; ?> </span>
+          <span class="ui label"><?php echo $MSG_JUDGE_STYLE ?>：<?php echo array($MSG_NJ,$MSG_SPJ,$MSG_RTJ)[$row['spj']] ; ?> </span>
           <span class="ui label"><?php echo $MSG_Creator ?>：<span id='creator'></span></span>
       </div>
       <div class="row" style="margin-top: -23px">
@@ -697,7 +692,8 @@ $(document).ready(function () {
     <!--以下为了加载公式的使用而既加入-->
 <script>
   MathJax = {
-    tex: {inlineMath: [['$', '$'], ['\\(', '\\)']]}
+    startup : { typeset: true  } ,
+    tex: {inlineMath: [['$', '$'], ['\\(', '\\)'], ['\\[', '\\]']]}
   };
 </script>
 
