@@ -84,7 +84,7 @@ function import_user($filename) {
                     }
 
                     $ip = "127.0.0.1";
-                    $sql = "INSERT INTO `users`(" . "`user_id`,`email`,`ip`,`accesstime`,`password`,`reg_time`,`nick`,`school`,`group_name`,`expiry_date`)" . "VALUES(?,?,?,NOW(),?,NOW(),?,?,?,?)on DUPLICATE KEY UPDATE `email`=?,`ip`=?,`accesstime`=NOW(),`password`=?,`reg_time`=now(),nick=?,`school`=?,`group_name`=?,expiry_date=?";
+                    $sql = "insert INTO `users`(" . "`user_id`,`email`,`ip`,`accesstime`,`password`,`reg_time`,`nick`,`school`,`group_name`,`expiry_date`)" . "VALUES(?,?,?,NOW(),?,NOW(),?,?,?,?)on DUPLICATE KEY UPDATE `email`=?,`ip`=?,`accesstime`=NOW(),`password`=?,`reg_time`=now(),nick=?,`school`=?,`group_name`=?,expiry_date=?";
                     $ret=pdo_query($sql, $user_id, $email, $ip, $password, $nick, $school,$group_name,$expiry_date, $email, $ip, $password, $nick, $school,$group_name,$expiry_date);
                     echo "$user_id : $expiry_date : $ret <br>\n";
 
