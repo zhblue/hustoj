@@ -43,28 +43,65 @@ ADD COLUMN `coin` INT NOT NULL DEFAULT 1 COMMENT 'AC此题可得的金币数';
 
 delimiter //
 
-drop trigger if exists firstAC//
-UPDATE solution s JOIN (SELECT user_id,problem_id, MIN(solution_id) AS first_solution_id FROM solution WHERE result = 4 GROUP BY user_id, problem_id ) t ON s.solution_id = t.first_solution_id SET s.first_time = 1 //
-UPDATE users SET coin_earned = COALESCE((SELECT SUM(coin) FROM problem WHERE problem_id IN (SELECT DISTINCT problem_id FROM solution WHERE user_id=users.user_id AND result=4 AND first_time=1 AND problem_id>0)), 0) //
-create trigger firstAC
-before update on solution
-for each row
-begin
- declare acTimes int;
- declare acCoin int;
- if new.result=4 then
-    select count(1) from solution where problem_id=new.problem_id and result=4 and first_time=1 and user_id=new.user_id into acTimes;
-    select ifnull(coin, 1) from problem where  problem_id=new.problem_id into acCoin;
-    if acTimes=0 then
-        set new.first_time=1;
-        if old.first_time=0 then
-            update users 
-                set coin_earned = coin_earned + acCoin 
-                where user_id = new.user_id;
-        end if;
-    end if;
-end if;
-end;//
+-- ============================================================
+-- firstAC 触发器修复版
+--
+-- 目标：NOIP 类比赛（contest_type & 20 > 0）尚未结束时（end_time > now()），
+--       不发放积分，避免学生通过积分变化猜出自己是否 AC。
+--
+-- 策略：比赛期间产生的 AC 保持 first_time = 0（不标记、不发积分）；
+--       比赛结束后运行已有的批量 UPDATE 脚本，触发器会自然补发积分并标记。
+-- ============================================================
+
+DROP TRIGGER IF EXISTS firstAC//
+
+CREATE TRIGGER firstAC
+BEFORE UPDATE ON solution
+FOR EACH ROW
+BEGIN
+    DECLARE acTimes INT DEFAULT 0;
+    DECLARE acCoin INT DEFAULT 1;
+    DECLARE inOngoingNoip INT DEFAULT 0;
+
+    IF NEW.result = 4 THEN
+
+        -- 1. 本次提交是否属于「尚未结束的 NOIP 类比赛」
+        --    contest_id = 0 / NULL 的普通提交不会匹配，inOngoingNoip 保持 0
+        SELECT COUNT(1)
+          INTO inOngoingNoip
+          FROM contest
+         WHERE contest.contest_id = NEW.contest_id
+           AND contest.end_time > NOW()
+           AND (contest.contest_type & 20) > 0;
+
+        -- 2. 该用户该题是否已有「首次 AC」标记
+        SELECT COUNT(1)
+          INTO acTimes
+          FROM solution
+         WHERE problem_id = NEW.problem_id
+           AND result = 4
+           AND first_time = 1
+           AND user_id = NEW.user_id;
+
+        -- 3. 题目积分
+        SELECT IFNULL(coin, 1)
+          INTO acCoin
+          FROM problem
+         WHERE problem_id = NEW.problem_id;
+
+        -- 4. 只有在「未领取过」且「不在未结束的 NOIP 比赛中」时才标记并发积分
+        IF acTimes = 0 AND inOngoingNoip = 0 THEN
+            SET NEW.first_time = 1;
+
+            IF OLD.first_time = 0 THEN
+                UPDATE users
+                   SET coin_earned = coin_earned + acCoin
+                 WHERE user_id = NEW.user_id;
+            END IF;
+        END IF;
+
+    END IF;
+END;//
 
 delimiter ;
 
