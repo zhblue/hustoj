@@ -13,7 +13,7 @@ if (__FILE__ === $_SERVER['SCRIPT_FILENAME']) {
 #source {
     width: 80%;
     height: 600px;
-    background-color:rgb(255,225,225,0.5);
+  /*  background-color:rgb(255,225,225,0.5);  影响深色模式，因此去掉 */
 }
 
 .ace-chrome .ace_marker-layer .ace_active-line{   /*当前行*/
