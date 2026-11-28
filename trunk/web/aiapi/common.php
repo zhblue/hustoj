@@ -31,7 +31,7 @@ function get_problem_text($pid){
 // 去 HTML、截断后才拼进 prompt，总长度受 $max_total_chars 限制，避免撑爆上下文。
 // 查询失败时静默降级（返回空串），不影响原有推荐功能。
 // ---------------------------------------------------------------------------
-function recommend_ai_history_text($user_id, $max_items = 12, $max_answer_chars = 220, $max_total_chars = 3600) {
+function recommend_ai_history_text($user_id, $max_items = 24, $max_answer_chars = 220, $max_total_chars = 13600) {
 	if (empty($user_id)) return '';
 
 	// 白名单：只看围绕题目的求助；排除 recommend.php 自身和管理员功能，避免自我循环
@@ -107,7 +107,7 @@ function recommend_ai_history_text($user_id, $max_items = 12, $max_answer_chars 
 		$answer = $cut($answer, intval($max_answer_chars));
 		if ($answer === '') $answer = '（AI 已给出解答，内容略）';
 
-		// 用户问题要点：只取最后一条 user 消息的前 60 字，绝不把整篇题面塞进 prompt
+		// 用户问题要点：只取最后一条 user 消息的前 120 字，绝不把整篇题面塞进 prompt
 		$question = '';
 		$req = json_decode($row['request_body'], true);
 		if (is_array($req) && !empty($req['messages']) && is_array($req['messages'])) {
@@ -121,7 +121,7 @@ function recommend_ai_history_text($user_id, $max_items = 12, $max_answer_chars 
 		}
 		$question = strip_tags($question);
 		$question = preg_replace('/\s+/', ' ', $question);
-		$question = $cut($question, 60);
+		$question = $cut($question, 120);
 
 		$line = '- ' . $head . ' [' . $label . ']';
 		if ($question !== '') $line .= ' 求助：' . $question;
