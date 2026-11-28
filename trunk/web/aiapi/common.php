@@ -35,7 +35,7 @@ function recommend_ai_history_text($user_id, $max_items = 12, $max_answer_chars 
 	if (empty($user_id)) return '';
 
 	// 白名单：只看围绕题目的求助；排除 recommend.php 自身和管理员功能，避免自我循环
-	$types = array('reinfo.php', 'ceinfo.php', 'submitpage.php', 'phpfm.php', 'problem_list.php', 'problem.php');
+	$types = array('reinfo.php', 'ceinfo.php' );
 	$ph = implode(',', array_fill(0, count($types), '?'));
 	$params = array_merge(array($user_id), $types);
 
